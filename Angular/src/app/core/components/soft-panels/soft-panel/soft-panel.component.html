@@ -1,0 +1,13 @@
+<p-panel class="soft-panel" >
+    <ng-template pTemplate="header">
+        <div style="padding-left: 10px; padding-right: 10px;">
+            <ng-content select="panel-header"></ng-content>
+        </div>
+    </ng-template>
+    <div style="padding: 28px; padding-bottom: 14px;">
+        <ng-content select="panel-body"></ng-content>
+    </div>
+
+    <ng-content select="panel-footer"></ng-content>
+
+</p-panel>

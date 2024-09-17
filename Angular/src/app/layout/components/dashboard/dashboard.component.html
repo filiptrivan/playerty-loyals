@@ -1,0 +1,18 @@
+<div class="card">
+    <h5>Homepage</h5>
+    <div class="grid">
+      <div class="xl:col-4 md:col-6 col-12" *ngFor="let type of reportTypes" [routerLink]="type.link">
+        <div class="c-dashboard-item c-dashboard-item--home">
+          <i class="c-dashboard-item__icon {{ type.Icon }}"></i>
+          <h5 class="c-dashboard-item__title">{{ type.Title }}</h5>
+          <div class="c-dashboard-item__bg">
+            <i class="c-dashboard-item__bg-icon {{ type.Icon }}"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div style="display: flex; gap: 10px;">
+  <p-button label="Call something you need auth" (onClick)="auth()"></p-button>
+</div>

@@ -1,0 +1,20 @@
+<div class="flex flex-column gap-2">
+  <div>
+    <label>{{getTranslatedLabel()}}</label>
+    <required *ngIf="control.required"></required>
+  </div>
+  <div class="p-fluid">
+    <p-autoComplete 
+    [pTooltip]="getValidationErrrorMessages()" tooltipPosition="bottom" [tooltipDisabled]="control.valid" tooltipStyleClass="soft-tooltip-invalid"
+    [id]="label"
+    [formControl]="control"
+    [suggestions]="options"
+    (completeMethod)="search($event)"
+    [forceSelection]="true"
+    [multiple]="true" 
+    [dropdown]="true"
+    [showClear]="true"
+    (onHide)="dropdownMarkAsDirty()"
+    />
+  </div>
+</div>

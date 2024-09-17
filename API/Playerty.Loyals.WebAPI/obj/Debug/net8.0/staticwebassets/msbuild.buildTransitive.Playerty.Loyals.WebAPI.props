@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\Playerty.Loyals.WebAPI.props" />
+</Project>

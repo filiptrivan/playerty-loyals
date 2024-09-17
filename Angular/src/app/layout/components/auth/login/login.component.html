@@ -1,0 +1,24 @@
+@if (showEmailSentDialog == false) {
+    <auth>
+        <form [formGroup]="formGroup" style="margin-bottom: 16px;"> <!-- FT: We are not loading anything from the server here so we don't need defer block -->
+            <div class="col-12" style="padding: 0;">
+                <soft-textbox [control]="control('email')"></soft-textbox>
+            </div>
+            <div class="col-12" style="padding-left: 0; padding-right: 0;">
+                <soft-password [control]="control('password')"></soft-password>
+            </div>
+            
+            <div class="flex align-items-center justify-content-between mb-4 gap-5" style="margin-bottom: 16px;">
+                <a class="link no-underline" routerLink="/auth/forgot-password">Forgot password?</a>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+                <p-button label="Log in" (onClick)="sendLoginVerificationEmail()" [outlined]="true" [style]="{width: '100%'}"></p-button>
+                <p-button *ngIf="usersCanRegister" label="New to {{companyName}}? Join now" routerLink="/auth/registration" [style]="{width: '100%'}"></p-button>
+            </div>
+        </form>
+    </auth>
+}
+@else {
+    <login-verification [email]="model.email" [password]="model.password"></login-verification>
+}

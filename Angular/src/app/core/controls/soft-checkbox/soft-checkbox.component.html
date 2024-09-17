@@ -1,0 +1,10 @@
+<div style="display: flex; align-items: center; height: 100%; margin-top: 12px;">
+    <p-checkbox
+    [pTooltip]="getValidationErrrorMessages()" tooltipPosition="bottom" [tooltipDisabled]="control.valid" tooltipStyleClass="soft-tooltip-invalid" 
+    [formControl]="control"
+    [id]="label"
+    [label]="getTranslatedLabel()"
+    [binary]="true"
+    />
+    <required *ngIf="control.required"></required>
+</div>

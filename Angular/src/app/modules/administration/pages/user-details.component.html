@@ -1,0 +1,35 @@
+@defer (when model != null) {
+    <soft-card [title]="detailsTitle" icon="pi pi-user">
+        <soft-panel>
+            <panel-header title="Details"></panel-header>
+    
+            <panel-body>
+                <form [formGroup]="formGroup" class="grid">
+                    <div class="col-12 sm:col-6">
+                        <soft-textbox [control]="control('email')"></soft-textbox>
+                    </div>
+                    <div class="col-12 sm:col-6">
+                        <soft-password [control]="control('password')"></soft-password>
+                    </div>
+                    <div class="col-12">
+                        <soft-multiselect
+                            [control]="selectedRoles"
+                            label="Roles"
+                            [options]="roleOptions"></soft-multiselect>
+                    </div>
+                </form>
+            </panel-body>
+    
+           <panel-footer>
+                <p-button (onClick)="onSave()" label="Save" icon="pi pi-save"></p-button>
+                <soft-return-button></soft-return-button>
+                <!-- <div footerRight>
+                    Updated {{this.model.modifiedAt | pipeWithLocale}} ago
+                </div> -->
+           </panel-footer>
+    
+        </soft-panel>
+    </soft-card>
+} @placeholder {
+    <card-skeleton [height]="502"></card-skeleton>
+}

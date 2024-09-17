@@ -1,0 +1,15 @@
+<div class="flex flex-column gap-2">
+    <label>{{getTranslatedLabel()}}</label>
+    <p-calendar
+    [style]="{'width':'100%'}"
+    [pTooltip]="getValidationErrrorMessages()"
+    tooltipPosition="bottom"
+    [tooltipDisabled]="control.valid"
+    tooltipStyleClass="soft-tooltip-invalid"
+    [formControl]="control"
+    dateFormat="dd.mm.yy."
+    iconDisplay="input" 
+    [showIcon]="true" 
+    [showTime]="true"
+    />
+</div>
