@@ -29,14 +29,15 @@ export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
         protected override http: HttpClient,
         protected override messageService: SoftMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
-        private route: ActivatedRoute, 
-        private router: Router, 
+        protected override router: Router, 
+        protected override route: ActivatedRoute, 
         private apiService: ApiService) 
         {
-        super(differs, http, messageService, changeDetectorRef);
+        super(differs, http, messageService, changeDetectorRef, router, route);
         }
          
     ngOnInit() {
+        this.controllerName = "Auth";
         this.selectedUsers.setValidators(isArrayEmpty(this.selectedUsers));
 
         this.routeSub = this.route.params.subscribe((params) => {

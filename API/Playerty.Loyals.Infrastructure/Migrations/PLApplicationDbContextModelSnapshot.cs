@@ -40,6 +40,50 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.ToTable("PermissionRole");
                 });
 
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.Extended.UserExtended", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
+
+                    b.Property<bool>("HasLoggedInWithExternalProvider")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("NumberOfFailedAttemptsInARow")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Password")
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("RoleUser", b =>
                 {
                     b.Property<int>("RolesId")
@@ -75,11 +119,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("nvarchar(21)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -88,10 +127,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Permissions");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Permission");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Soft.Generator.Security.Entities.Role", b =>
@@ -125,82 +160,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("Soft.Generator.Security.Entities.User", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(70)
-                        .HasColumnType("nvarchar(70)");
-
-                    b.Property<bool>("HasLoggedInWithExternalProvider")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsVerified")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("NumberOfFailedAttemptsInARow")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Password")
-                        .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
-
-                    b.Property<int>("Version")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Playerty.Loyals.Business.Entities.Extended.PermissionExtended", b =>
-                {
-                    b.HasBaseType("Soft.Generator.Security.Entities.Permission");
-
-                    b.Property<string>("DescriptionLatin")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("NameLatin")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.HasDiscriminator().HasValue("PermissionExtended");
-                });
-
-            modelBuilder.Entity("Playerty.Loyals.Business.Entities.Extended.UserExtended", b =>
-                {
-                    b.HasBaseType("Soft.Generator.Security.Entities.User");
-
-                    b.Property<int>("Points")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue("UserExtended");
-                });
-
             modelBuilder.Entity("PermissionRole", b =>
                 {
                     b.HasOne("Soft.Generator.Security.Entities.Permission", null)
@@ -224,7 +183,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Soft.Generator.Security.Entities.User", null)
+                    b.HasOne("Playerty.Loyals.Business.Entities.Extended.UserExtended", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)

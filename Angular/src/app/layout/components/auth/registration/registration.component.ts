@@ -1,4 +1,4 @@
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SoftMessageService } from '../../../../core/services/soft-message.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
@@ -26,11 +26,12 @@ export class RegistrationComponent extends BaseForm<Registration> implements OnI
       protected override http: HttpClient,
       protected override messageService: SoftMessageService, 
       protected override changeDetectorRef: ChangeDetectorRef,
+      protected override router: Router,
+      protected override route: ActivatedRoute,
       public layoutService: LayoutService, 
       private authService: AuthService, 
-      private router: Router,
     ) { 
-      super(differs, http, messageService, changeDetectorRef);
+        super(differs, http, messageService, changeDetectorRef, router, route);
     }
 
     ngOnInit(){

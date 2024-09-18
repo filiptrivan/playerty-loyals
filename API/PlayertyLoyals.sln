@@ -13,15 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soft.Generator.Infrastructu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Soft.SourceGenerators", "..\..\Soft.Generator\Source\Soft.SourceGenerator.NgTable\Soft.SourceGenerators.csproj", "{A30DFD0D-9EDD-4FD2-8CAF-85492EEEE6F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playerty.Loyals.WebAPI", "Playerty.Loyals.WebAPI\Playerty.Loyals.WebAPI.csproj", "{1063DCDA-9291-4FAA-87B2-555E12511EE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playerty.Loyals.WebAPI", "Playerty.Loyals.WebAPI\Playerty.Loyals.WebAPI.csproj", "{1063DCDA-9291-4FAA-87B2-555E12511EE2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{64603A99-D942-4B6F-9D74-4967E61A0526}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playerty.Loyals.Infrastructure", "Playerty.Loyals.Infrastructure\Playerty.Loyals.Infrastructure.csproj", "{8E0E2A3B-7A46-452E-9695-80E2BB1F4E9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playerty.Loyals.Infrastructure", "Playerty.Loyals.Infrastructure\Playerty.Loyals.Infrastructure.csproj", "{8E0E2A3B-7A46-452E-9695-80E2BB1F4E9C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business", "Business", "{A5EF3D8F-3BFB-4D91-83E5-90BD6EB62969}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business", "Business", "{F2AA00F3-29C7-4A82-B4C0-5BD998C67912}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playerty.Loyals.Business", "Playerty.Loyals.Security\Playerty.Loyals.Business.csproj", "{ABBFA826-EEFE-4C5A-B343-5316BD90B710}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playerty.Loyals", "Playerty.Loyals.Business\Playerty.Loyals.csproj", "{50AD9ADA-4E90-4E69-97BB-92FA455115DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +53,10 @@ Global
 		{8E0E2A3B-7A46-452E-9695-80E2BB1F4E9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E0E2A3B-7A46-452E-9695-80E2BB1F4E9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E0E2A3B-7A46-452E-9695-80E2BB1F4E9C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ABBFA826-EEFE-4C5A-B343-5316BD90B710}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ABBFA826-EEFE-4C5A-B343-5316BD90B710}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ABBFA826-EEFE-4C5A-B343-5316BD90B710}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ABBFA826-EEFE-4C5A-B343-5316BD90B710}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50AD9ADA-4E90-4E69-97BB-92FA455115DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50AD9ADA-4E90-4E69-97BB-92FA455115DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50AD9ADA-4E90-4E69-97BB-92FA455115DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50AD9ADA-4E90-4E69-97BB-92FA455115DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,7 +67,7 @@ Global
 		{587D08A6-A975-4673-90A4-77CF61B7B526} = {D485BCE8-A950-457D-A710-566D559BD585}
 		{A30DFD0D-9EDD-4FD2-8CAF-85492EEEE6F1} = {D485BCE8-A950-457D-A710-566D559BD585}
 		{8E0E2A3B-7A46-452E-9695-80E2BB1F4E9C} = {64603A99-D942-4B6F-9D74-4967E61A0526}
-		{ABBFA826-EEFE-4C5A-B343-5316BD90B710} = {A5EF3D8F-3BFB-4D91-83E5-90BD6EB62969}
+		{50AD9ADA-4E90-4E69-97BB-92FA455115DE} = {F2AA00F3-29C7-4A82-B4C0-5BD998C67912}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {173A0B43-6F68-4847-ABBF-97106E9B08E6}

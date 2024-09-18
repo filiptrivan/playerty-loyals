@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { VerificationTokenRequest } from 'src/app/business/entities/generated/security-entities.generated';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'verification-wrapper',
@@ -34,10 +35,12 @@ export class VerificationWrapperComponent extends BaseForm<VerificationTokenRequ
         protected override http: HttpClient,
         protected override messageService: SoftMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
+        protected override router: Router,
+        protected override route: ActivatedRoute,
         public layoutService: LayoutService, 
         private authService: AuthService, 
     ) { 
-        super(differs, http, messageService, changeDetectorRef);
+        super(differs, http, messageService, changeDetectorRef, router, route);
     }
 
     ngOnInit(){

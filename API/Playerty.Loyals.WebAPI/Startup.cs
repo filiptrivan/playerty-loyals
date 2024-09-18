@@ -16,6 +16,9 @@ using Soft.Generator.Shared.Helpers;
 using Soft.Generator.Shared.Extensions;
 using Playerty.Loyals.WebAPI.DI;
 using Playerty.Loyals.Infrastructure;
+using System.Reflection;
+using Playerty.Loyals.Business.Entities;
+using Soft.Generator.Security.Interface;
 
 
 public class Startup
@@ -24,6 +27,7 @@ public class Startup
     public static string JsonConfigurationFile = "appsettings.json";
 
     private static string _cachedConfigFile = null;
+
     public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
@@ -182,6 +186,7 @@ public class Startup
             });
         });
     }
+
     public static T ReadAssemblyConfiguration<T>()
     {
         string name = typeof(T).Assembly.GetName().Name;
@@ -202,6 +207,7 @@ public class Startup
 
         return default(T);
     }
+
     private static string ReadConfigFile()
     {
         if (!string.IsNullOrEmpty(_cachedConfigFile))
@@ -213,17 +219,19 @@ public class Startup
         return _cachedConfigFile = streamReader.ReadToEnd();
     }
 
+    #region Angular
+
     /// <summary>
     /// This method generates only two methods, which combine individual methods for validation and for translates, because the source generator generates a new file for each project in .NET
     /// </summary>
     private static void GenerateAngularCode()
     {
-        //string baseServicePath = "E:\\Projects\\Soft.Generator\\Source\\Soft.Generator.SPA\\src\\app\\business\\services";
-        string baseServicePath = null;
-        List<string> translationProjectNames = new List<string> { "Security" };
-        List<string> validationProjectNames = new List<string> { "Security" };
+        string baseServicePath = @"E:\Projects\Playerty.Loyals\Angular\src\app\business\services";
+        List<string> translationProjectNames = new List<string> { "Business", "Security" };
+        List<string> validationProjectNames = new List<string> { "Business", "Security" };
         GenerateMergeMethodForTranslates(baseServicePath, translationProjectNames);
         GenerateMergeMethodForValidation(baseServicePath, validationProjectNames);
+        AppendImportsForTheController();
     }
 
     private static void GenerateMergeMethodForTranslates(string baseServicePath, List<string> projectNames)
@@ -326,4 +334,105 @@ export function getValidator(formControl: SoftFormControl, className: string): S
 """;
         Helper.WriteToTheFile(data, $"{baseServicePath}\\validation\\validation-rules.generated.ts");
     }
+
+    private static void AppendImportsForTheController()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+
+        // Find all DTO types in the assembly
+        HashSet<Type> dtoTypes = FindAllDtoTypesInSolution(assembly);
+        List<string> importLines = new List<string>(); 
+        foreach (Type dtoType in dtoTypes)
+        {
+            string[] splitHelper = dtoType.Namespace.Split('.');
+            string projectName = splitHelper[splitHelper.Length - 2];
+            string ngType = dtoType.Name.Replace("DTO", "");
+
+            if (projectName == "Business")
+            {
+                importLines.Add($"import {{ {ngType} }} from '../../entities/generated/{projectName.FromPascalToKebabCase()}-entities.generated';");
+            }
+        }
+
+        string apiPath = @"E:\Projects\Playerty.Loyals\Angular\src\app\business\services\api\api.service.generated.ts";
+
+        string[] lines = File.ReadAllLines(apiPath);
+        File.WriteAllLines(apiPath, new string[] { string.Join("\n", importLines) }.Concat(lines));
+    }
+
+    public static HashSet<Type> FindAllDtoTypesInSolution(Assembly rootAssembly)
+    {
+        var visitedAssemblies = new HashSet<Assembly>();
+        var dtoTypes = new HashSet<Type>();
+
+        // Recursively search through all referenced assemblies
+        FindAllDtoTypesInAssemblies(rootAssembly, visitedAssemblies, dtoTypes);
+
+        return dtoTypes;
+    }
+
+    private static void FindAllDtoTypesInAssemblies(Assembly assembly, HashSet<Assembly> visitedAssemblies, HashSet<Type> dtoTypes)
+    {
+        if (visitedAssemblies.Contains(assembly)) return;
+
+        visitedAssemblies.Add(assembly);
+
+        // Process the current assembly for DTOs
+        foreach (var type in assembly.GetTypes())
+        {
+            if (IsDtoType(type) && !dtoTypes.Contains(type))
+            {
+                dtoTypes.Add(type);
+                FindDtoReferences(type, dtoTypes);
+            }
+        }
+
+        // Recursively process all referenced assemblies
+        foreach (var referencedAssemblyName in assembly.GetReferencedAssemblies())
+        {
+            try
+            {
+                var referencedAssembly = Assembly.Load(referencedAssemblyName);
+                FindAllDtoTypesInAssemblies(referencedAssembly, visitedAssemblies, dtoTypes);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Could not load assembly: {referencedAssemblyName.FullName}. Error: {ex.Message}");
+            }
+        }
+    }
+
+    private static void FindDtoReferences(Type type, HashSet<Type> dtoTypes)
+    {
+        var properties = type.GetProperties();
+        var fields = type.GetFields();
+
+        foreach (var property in properties)
+        {
+            var propertyType = property.PropertyType;
+            if (IsDtoType(propertyType) && !dtoTypes.Contains(propertyType))
+            {
+                dtoTypes.Add(propertyType);
+                FindDtoReferences(propertyType, dtoTypes); // Recursion for nested DTOs
+            }
+        }
+
+        foreach (var field in fields)
+        {
+            var fieldType = field.FieldType;
+            if (IsDtoType(fieldType) && !dtoTypes.Contains(fieldType))
+            {
+                dtoTypes.Add(fieldType);
+                FindDtoReferences(fieldType, dtoTypes); // Recursion for nested DTOs
+            }
+        }
+    }
+
+    private static bool IsDtoType(Type type)
+    {
+        // Example: You can customize this condition based on your DTO naming or base class
+        return type.IsClass && type.Name.EndsWith("DTO");
+    }
+
+    #endregion
 }

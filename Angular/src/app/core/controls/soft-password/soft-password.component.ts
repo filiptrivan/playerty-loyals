@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { BaseControl } from '../base-control';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
@@ -19,6 +19,7 @@ import { CommonModule } from '@angular/common';
     ]
 })
 export class SoftPasswordComponent extends BaseControl implements OnInit {
+    @Input() showPasswordStrength: boolean = true;
 
     constructor() { 
         super();

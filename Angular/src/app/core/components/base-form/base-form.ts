@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 import { SoftMessageService } from '../../services/soft-message.service';
 import { getTranslatedClassName } from 'src/app/business/services/translates/translated-class-names.generated';
 import { getValidator } from 'src/app/business/services/validation/validation-rules.generated';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'base-form',
@@ -26,6 +27,7 @@ export class BaseForm<T extends BaseEntity> {
   controlNamesFromHtml: string[] = [];
   detailsTitle: string;
   invalidForm: boolean = false; // FT: We are using this only if we manualy add some form field on the UI, like multiautocomplete, autocomplete etc...
+  controllerName: string;
 
   private modelDiffer: KeyValueDiffer<string, any>;
 
@@ -34,6 +36,8 @@ export class BaseForm<T extends BaseEntity> {
     protected http: HttpClient, 
     protected messageService: SoftMessageService, 
     protected changeDetectorRef: ChangeDetectorRef,
+    protected router: Router, 
+    protected route: ActivatedRoute
     ) {
   }
 
@@ -114,8 +118,12 @@ export class BaseForm<T extends BaseEntity> {
     let isValid: boolean = this.checkFormGroupValidity();
 
     if(isValid){
-      this.http.put<T>(environment.apiUrl + `/${this.model.typeName}/Save${this.model.typeName}`, this.model, environment.httpOptions).subscribe(res => {
+      let controllerName: string = this.controllerName ?? this.model.typeName;
+      this.http.put<T>(environment.apiUrl + `/${controllerName}/Save${this.model.typeName}`, this.model, environment.httpOptions).subscribe(res => {
         Object.assign(this.model, res) // this.model = res; // FT: we lose typeName like this and everything that res doesn't have but this.model has
+        this.messageService.successMessage("You have successfully saved.");
+        console.log(res)
+        this.rerouteOnTheNewEntity((res as any).id);
         this.onAfterSave();
       });
       this.onAfterSaveRequest();
@@ -135,6 +143,16 @@ export class BaseForm<T extends BaseEntity> {
       return false;
     }
     return true;
+  }
+
+  rerouteOnTheNewEntity(newId: number): void {
+    if(newId == null) return;
+
+    const segments = this.router.url.split('/');
+    segments[segments.length - 1] = newId.toString();
+
+    const newUrl = segments.join('/');
+    this.router.navigateByUrl(newUrl);
   }
 
   onBeforeSave(){}

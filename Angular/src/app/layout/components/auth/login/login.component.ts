@@ -26,12 +26,13 @@ export class LoginComponent extends BaseForm<Login> implements OnInit {
       protected override http: HttpClient,
       protected override messageService: SoftMessageService, 
       protected override changeDetectorRef: ChangeDetectorRef,
+      protected override router: Router, 
+      protected override route: ActivatedRoute,
       public layoutService: LayoutService, 
       private authService: AuthService, 
       private softMessageService: SoftMessageService, 
-      private router: Router, 
-      private route: ActivatedRoute) { 
-      super(differs, http, messageService, changeDetectorRef);
+    ) { 
+      super(differs, http, messageService, changeDetectorRef, router, route);
     }
     clg(){
         console.log("object")

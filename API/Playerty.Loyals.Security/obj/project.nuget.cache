@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mss7/obesF40LC3b3J8GsCcRS77bQQ0MMERPlv872k3Aw84pCFwPet5PUuibPXe2j1XnasIuKelAeV+7dzF0og==",
+  "dgSpecHash": "u+LoW4DcsrDJFnt6+8awKQWbbZO6wrlxyRgx/EkQG/ZBbujljeZiiZJeNaywDHNNt94L+YE5M+OWAwtM+tbuww==",
   "success": true,
-  "projectFilePath": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Security\\Playerty.Loyals.Business.csproj",
+  "projectFilePath": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Security\\Playerty.Loyals.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\user\\.nuget\\packages\\automapper\\9.0.0\\automapper.9.0.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",

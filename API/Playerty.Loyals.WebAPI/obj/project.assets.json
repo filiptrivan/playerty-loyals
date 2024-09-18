@@ -3574,24 +3574,24 @@
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
       },
-      "Playerty.Loyals.Business/1.0.0": {
+      "Playerty.Loyals/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "Soft.Generator.Security": "1.0.0"
         },
         "compile": {
-          "bin/placeholder/Playerty.Loyals.Business.dll": {}
+          "bin/placeholder/Playerty.Loyals.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Playerty.Loyals.Business.dll": {}
+          "bin/placeholder/Playerty.Loyals.dll": {}
         }
       },
       "Playerty.Loyals.Infrastructure/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
-          "Playerty.Loyals.Business": "1.0.0",
+          "Playerty.Loyals": "1.0.0",
           "Soft.Generator.Infrastructure": "1.0.0",
           "Soft.Generator.Shared": "1.0.0"
         },
@@ -10648,10 +10648,10 @@
         "system.xml.xpath.xdocument.nuspec"
       ]
     },
-    "Playerty.Loyals.Business/1.0.0": {
+    "Playerty.Loyals/1.0.0": {
       "type": "project",
-      "path": "../Playerty.Loyals.Security/Playerty.Loyals.Business.csproj",
-      "msbuildProject": "../Playerty.Loyals.Security/Playerty.Loyals.Business.csproj"
+      "path": "../Playerty.Loyals.Business/Playerty.Loyals.csproj",
+      "msbuildProject": "../Playerty.Loyals.Business/Playerty.Loyals.csproj"
     },
     "Playerty.Loyals.Infrastructure/1.0.0": {
       "type": "project",

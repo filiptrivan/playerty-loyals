@@ -9,7 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Soft.Generator\Source\Soft.Generator.Infrastructure\Soft.Generator.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\Soft.Generator\Source\Soft.Generator.Shared\Soft.Generator.Shared.csproj" />
-    <ProjectReference Include="..\Playerty.Loyals.Security\Playerty.Loyals.Business.csproj" />
+    <ProjectReference Include="..\Playerty.Loyals.Business\Playerty.Loyals.csproj" />
   </ItemGroup>
 
 </Project>

@@ -50,40 +50,12 @@ export class ApiSecurityService {
         return this.http.post<LoginResult>(`${environment.apiUrl}/Auth/RefreshToken`, request, environment.httpOptions);
     }
 
-    getCurrentUser(): Observable<User> {
-        return this.http.get<User>(`${environment.apiUrl}/Auth/GetCurrentUser`);
-    }
-
-    loadUserListForTable(dto: TableFilter): Observable<User> { 
-        return this.http.post<User>(`${environment.apiUrl}/Auth/LoadUserListForTable`, dto, environment.httpTableOptions);
-    }
-
-    exportUserListToExcel(dto: TableFilter): Observable<any> { 
-        return this.http.post<any>(`${environment.apiUrl}/Auth/ExportUserListToExcel`, dto, environment.httpOptions);
-    }
-
-    deleteUser(id: number): Observable<any> { 
-        return this.http.delete<any>(`${environment.apiUrl}/Auth/DeleteUser?id=${id}`);
-    }
-
-    getUser(id: number): Observable<User> {
-        return this.http.get<User>(`${environment.apiUrl}/Auth/GetUser?id=${id}`);
-    }
-
-    saveUser(dto: User): Observable<User> { 
-        return this.http.put<User>(`${environment.apiUrl}/Auth/SaveUser`, dto, environment.httpOptions);
-    }
-
     loadRoleListForAutocomplete(limit: number, query: string): Observable<Namebook[]> {
         return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadRoleListForAutocomplete?limit=${limit}&query=${query}`, environment.httpDropdownOptions);
     }
 
     loadRoleListForDropdown(): Observable<Namebook[]> {
         return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadRoleListForDropdown`, environment.httpDropdownOptions);
-    }
-
-    loadRoleListForUser(userId: number): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadRoleListForUser?userId=${userId}`, environment.httpDropdownOptions);
     }
 
     loadRoleListForTable(dto: TableFilter): Observable<Role> { 
@@ -104,18 +76,6 @@ export class ApiSecurityService {
 
     saveRole(dto: Role): Observable<Role> { 
         return this.http.put<Role>(`${environment.apiUrl}/Auth/SaveRole`, dto, environment.httpOptions);
-    }
-
-    loadUserListForAutocomplete(limit: number, query: string): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadUserListForAutocomplete?limit=${limit}&query=${query}`, environment.httpDropdownOptions);
-    }
-
-    loadUserListForDropdown(): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadUserListForDropdown`, environment.httpDropdownOptions);
-    }
-
-    loadUserListForRole(roleId: number): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadUserListForRole?roleId=${roleId}`, environment.httpDropdownOptions);
     }
 
     loadPermissionListForDropdown(): Observable<Namebook[]> {

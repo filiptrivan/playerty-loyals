@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Playerty.Loyals.Business.Entities.Extended;
+using Playerty.Loyals.Business.Entities;
 using Soft.Generator.Infrastructure.Data;
 using Soft.Generator.Shared.Helpers;
 using Soft.Generator.Shared.Interfaces;
@@ -10,15 +10,15 @@ using System.Security;
 
 namespace Playerty.Loyals.Infrastructure
 {
-    public class PLApplicationDbContext : ApplicationDbContext // https://stackoverflow.com/questions/41829229/how-do-i-implement-dbcontext-inheritance-for-multiple-databases-in-ef7-net-co
+    public class PLApplicationDbContext : ApplicationDbContext<UserExtended> // https://stackoverflow.com/questions/41829229/how-do-i-implement-dbcontext-inheritance-for-multiple-databases-in-ef7-net-co
     {
         public PLApplicationDbContext(DbContextOptions<PLApplicationDbContext> options)
                 : base(options)
         {
         }
 
-        public new DbSet<UserExtended> Users { get; set; }
-        public new DbSet<PermissionExtended> Permissions { get; set; }
+        //public DbSet<UserExtended> Users { get; set; }
+        //public new DbSet<PermissionExtended> Permissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

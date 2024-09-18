@@ -2028,17 +2028,17 @@
           "System.Xml.XPath": "4.0.1"
         }
       },
-      "Playerty.Loyals.Business/1.0.0": {
+      "Playerty.Loyals/1.0.0": {
         "dependencies": {
           "Soft.Generator.Security": "1.0.0"
         },
         "runtime": {
-          "Playerty.Loyals.Business.dll": {}
+          "Playerty.Loyals.dll": {}
         }
       },
       "Playerty.Loyals.Infrastructure/1.0.0": {
         "dependencies": {
-          "Playerty.Loyals.Business": "1.0.0",
+          "Playerty.Loyals": "1.0.0",
           "Soft.Generator.Infrastructure": "1.0.0",
           "Soft.Generator.Shared": "1.0.0"
         },
@@ -3437,7 +3437,7 @@
       "path": "system.xml.xpath.xdocument/4.0.1",
       "hashPath": "system.xml.xpath.xdocument.4.0.1.nupkg.sha512"
     },
-    "Playerty.Loyals.Business/1.0.0": {
+    "Playerty.Loyals/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

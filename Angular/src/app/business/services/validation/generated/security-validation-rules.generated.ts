@@ -227,7 +227,7 @@ export function nameRoleValidator(control: SoftFormControl): SoftValidatorFn {
 
 export function descriptionRoleValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
+        const value = control.value ?? "";
 
         const min = 0;
         const max = 1000;
