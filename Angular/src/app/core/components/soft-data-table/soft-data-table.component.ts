@@ -8,6 +8,7 @@ import { SoftDeleteConfirmationComponent } from '../soft-delete-dialog/soft-dele
 import { CommonModule, formatDate } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
+import { SoftMessageService } from '../../services/soft-message.service';
 
 @Component({
   selector: 'soft-data-table',
@@ -55,6 +56,7 @@ export class SoftDataTableComponent implements OnInit {
     private router: Router,
     private dialogService: DialogService,
     private route: ActivatedRoute,
+    private messageService: SoftMessageService,
     @Inject(LOCALE_ID) private locale: string
   ) {}
 
@@ -151,6 +153,7 @@ export class SoftDataTableComponent implements OnInit {
 
       this.deleteRef.onClose.subscribe((deletedSuccessfully: boolean)=>{
         if(deletedSuccessfully == true)
+          this.messageService.successMessage($localize`:@@SuccessfullyDeletedMessage:You have successfully deleted.`);
           this.onLazyLoad(this.lastLazyLoadEvent);
       });
   }

@@ -1,5 +1,3 @@
-import { UserExtended } from '../../entities/generated/business-entities.generated';
-import { UserExtended } from '../../entities/generated/business-entities.generated';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -7,7 +5,22 @@ import { environment } from 'src/environments/environment';
 import { ApiSecurityService } from './api.service.security';
 import { Namebook } from '../../entities/generated/namebook.generated';
 import { TableFilter } from '../../entities/generated/table-filter.generated';
-
+import { UserExtended } from '../../entities/generated/business-entities.generated';
+import { ExternalProvider } from '../../entities/generated/security-entities.generated';
+import { ForgotPassword } from '../../entities/generated/security-entities.generated';
+import { ForgotPasswordVerificationToken } from '../../entities/generated/security-entities.generated';
+import { Permission } from '../../entities/generated/security-entities.generated';
+import { Role } from '../../entities/generated/security-entities.generated';
+import { JwtAuthResult } from '../../entities/generated/security-entities.generated';
+import { Login } from '../../entities/generated/security-entities.generated';
+import { LoginResult } from '../../entities/generated/security-entities.generated';
+import { LoginVerificationToken } from '../../entities/generated/security-entities.generated';
+import { RefreshToken } from '../../entities/generated/security-entities.generated';
+import { RefreshTokenRequest } from '../../entities/generated/security-entities.generated';
+import { Registration } from '../../entities/generated/security-entities.generated';
+import { RegistrationVerificationResult } from '../../entities/generated/security-entities.generated';
+import { RegistrationVerificationToken } from '../../entities/generated/security-entities.generated';
+import { VerificationTokenRequest } from '../../entities/generated/security-entities.generated';
 
 @Injectable()
 export class ApiGeneratedService extends ApiSecurityService {
@@ -37,8 +50,8 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.get<UserExtended>(`${environment.apiUrl}/Auth/GetUser?id=${id}`);
     }
 
-    saveUser(dto: UserExtended): Observable<UserExtended> { 
-        return this.http.put<UserExtended>(`${environment.apiUrl}/Auth/SaveUser`, dto, environment.httpOptions);
+    saveUserExtended(dto: UserExtended): Observable<UserExtended> { 
+        return this.http.put<UserExtended>(`${environment.apiUrl}/Auth/SaveUserExtended`, dto, environment.httpOptions);
     }
 
     loadRoleListForUser(userId: number): Observable<Namebook[]> {

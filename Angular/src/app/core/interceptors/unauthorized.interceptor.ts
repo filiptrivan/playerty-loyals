@@ -57,8 +57,10 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
       return of(err.message);
     } else if (err.status == 401) {
       this.messageService.warningMessage(
-        $localize`:@@SessionExpiredDetails:Your session has expired because of inactivity. To continue, please log in again.`,
-        $localize`:@@SessionExpiredTitle:Session expired. Log in to continue.`,
+        err.error.message, // FT: This is the unauthorized error
+        null,
+        // $localize`:@@SessionExpiredDetails:Your session has expired because of inactivity. To continue, please log in again.`,
+        // $localize`:@@SessionExpiredTitle:Session expired. Log in to continue.`,
       );
       this.logout(err);
     } else if (err.status == 419) {

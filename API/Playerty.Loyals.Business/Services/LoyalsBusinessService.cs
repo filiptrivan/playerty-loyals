@@ -11,32 +11,37 @@ using Soft.Generator.Shared.Extensions;
 using Soft.Generator.Security.Entities;
 using Microsoft.EntityFrameworkCore;
 using Playerty.Loyals.Business.Entities;
+using Soft.Generator.Security.Services;
+using Playerty.Loyals.Enums;
 
 namespace Playerty.Loyals.Services
 {
     public class LoyalsBusinessService : BusinessBusinessServiceGenerated
     {
         private readonly IApplicationDbContext _context;
+        private readonly AuthorizationService _authorizationService;
 
-        public LoyalsBusinessService(IApplicationDbContext context, ExcelService excelService)
-            : base(context, excelService)
+        public LoyalsBusinessService(IApplicationDbContext context, ExcelService excelService, AuthorizationService authorizationService)
+            : base(context, excelService, authorizationService)
         {
             _context = context;
+            _authorizationService = authorizationService;
         }
 
         public async Task<List<NamebookDTO<int>>> LoadRoleListForUserExtended(long userId)
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                return await _context.DbSet<UserExtended>()
-                    .Where(user => user.Id == userId)
-                    .SelectMany(user => user.Roles)
+                UserExtended user = await LoadInstanceAsync<UserExtended, long>(userId, null);
+                //await _authorizationService.AuthorizeAndThrowAsync(user, PermissionCodes.ReadRoles);
+                return user
+                    .Roles
                     .Select(role => new NamebookDTO<int>
                     {
                         Id = role.Id,
                         DisplayName = role.Name,
                     })
-                    .ToListAsync();
+                    .ToList();
             });
         }
 
@@ -44,6 +49,8 @@ namespace Playerty.Loyals.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
+                //await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.ReadRoles);
+
                 return await _context.DbSet<UserExtended>()
                     .Where(x => x.Roles.Any(x => x.Id == roleId))
                     .Select(x => new NamebookDTO<long>

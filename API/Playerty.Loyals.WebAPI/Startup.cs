@@ -140,13 +140,13 @@ public class Startup
                     Exception exception = contextFeature.Error;
                     string exceptionString = "";
                     if (env.IsDevelopment())
-                    {
                         exceptionString = exception.ToString();
-                    }
 
                     string message;
                     if (exception is BusinessException bussinessEx)
+                    {
                         message = bussinessEx.Message;
+                    }
                     else if (exception is UnauthorizedException unauthorizedEx)
                     {
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -158,11 +158,17 @@ public class Startup
                         message = expiredVerificationEx.Message;
                     }
                     else if (exception is SqlException sqlEx && sqlEx.Number == 2627)
+                    {
                         message = sqlEx.Message;
+                    }
                     else if (exception is ValidationException fluentEx)
+                    {
                         message = fluentEx.Message;
+                    }
                     else
+                    {
                         message = $"{SharedTerms.GlobalError} {guid}";
+                    }
 
                     await context.Response.WriteAsJsonAsync(new
                     {
@@ -231,7 +237,7 @@ public class Startup
         List<string> validationProjectNames = new List<string> { "Business", "Security" };
         GenerateMergeMethodForTranslates(baseServicePath, translationProjectNames);
         GenerateMergeMethodForValidation(baseServicePath, validationProjectNames);
-        AppendImportsForTheController();
+        //AppendImportsForTheController(); // FT: Got it work with source generator but this code is valuable if we switch to the reflection
     }
 
     private static void GenerateMergeMethodForTranslates(string baseServicePath, List<string> projectNames)

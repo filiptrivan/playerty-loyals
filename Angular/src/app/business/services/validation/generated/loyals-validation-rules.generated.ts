@@ -2,7 +2,7 @@ import { ValidationErrors } from '@angular/forms';
 import { SoftFormControl, SoftValidatorFn } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { validatePrecisionScale } from '../../../../core/services/helper-functions';
 
-export function getValidatorBusiness(formControl: SoftFormControl, className: string): SoftValidatorFn {
+export function getValidatorLoyals(formControl: SoftFormControl, className: string): SoftValidatorFn {
     switch(formControl.label + className){
         case 'emailUserExtended':
             return emailUserExtendedValidator(formControl);

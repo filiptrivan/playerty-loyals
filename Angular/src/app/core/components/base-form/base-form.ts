@@ -122,7 +122,6 @@ export class BaseForm<T extends BaseEntity> {
       this.http.put<T>(environment.apiUrl + `/${controllerName}/Save${this.model.typeName}`, this.model, environment.httpOptions).subscribe(res => {
         Object.assign(this.model, res) // this.model = res; // FT: we lose typeName like this and everything that res doesn't have but this.model has
         this.messageService.successMessage("You have successfully saved.");
-        console.log(res)
         this.rerouteOnTheNewEntity((res as any).id);
         this.onAfterSave();
       });

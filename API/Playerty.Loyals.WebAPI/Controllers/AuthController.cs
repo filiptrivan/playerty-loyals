@@ -73,13 +73,12 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<UserExtendedDTO> GetUser(long id)
         {
-            var e = await _loyalsBusinessService.GetUserExtendedDTOAsync(id);
             return await _loyalsBusinessService.GetUserExtendedDTOAsync(id);
         }
 
         [HttpPut]
         [AuthGuard]
-        public async Task<UserExtendedDTO> SaveUser(UserExtendedDTO dto)
+        public async Task<UserExtendedDTO> SaveUserExtended(UserExtendedDTO dto)
         {
             return await _loyalsBusinessService.SaveUserExtendedAndReturnDTOAsync(dto);
         }

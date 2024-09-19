@@ -18,6 +18,7 @@ namespace Playerty.Loyals.WebAPI.DI
         {
             // Framework
             registry.Register<AuthenticationService>();
+            registry.Register<AuthorizationService>();
             registry.Register<SecurityBusinessService>();
             registry.Register<SecurityBusinessServiceGenerated>();
             registry.Register<ExcelService>();
