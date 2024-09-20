@@ -19,7 +19,6 @@ namespace Playerty.Loyals.WebAPI.Controllers
     {
         private readonly ILogger<AuthController> _logger;
         private readonly SecurityBusinessService _securityBusinessService;
-        private readonly SecurityBusinessServiceGenerated _securityBusinessServiceGenerated;
         private readonly IJwtAuthManager _jwtAuthManagerService;
         private readonly IApplicationDbContext _context;
         private readonly AuthenticationService _authenticationService;
@@ -27,15 +26,14 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
 
         public AuthController(ILogger<AuthController> logger, SecurityBusinessService securityBusinessService, IJwtAuthManager jwtAuthManagerService, IApplicationDbContext context, AuthenticationService authenticationService, 
-            SecurityBusinessServiceGenerated securityBusinessServiceGenerated, LoyalsBusinessService loyalsBusinessService)
-            : base(securityBusinessService, jwtAuthManagerService, context, authenticationService, securityBusinessServiceGenerated)
+            LoyalsBusinessService loyalsBusinessService)
+            : base(securityBusinessService, jwtAuthManagerService, context, authenticationService)
         {
             _logger = logger;
             _securityBusinessService = securityBusinessService;
             _jwtAuthManagerService = jwtAuthManagerService;
             _context = context;
             _authenticationService = authenticationService;
-            _securityBusinessServiceGenerated = securityBusinessServiceGenerated;
             _loyalsBusinessService = loyalsBusinessService;
         }
 
@@ -66,7 +64,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task DeleteUser(long id)
         {
-            await _loyalsBusinessService.DeleteEntity<UserExtended, long>(id);
+            await _loyalsBusinessService.DeleteUserExtendedAsync(id);
         }
 
         [HttpGet]
@@ -78,16 +76,9 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPut]
         [AuthGuard]
-        public async Task<UserExtendedDTO> SaveUserExtended(UserExtendedDTO dto)
+        public async Task<UserExtendedDTO> SaveUserExtended(UserExtendedSaveBodyDTO dto)
         {
-            return await _loyalsBusinessService.SaveUserExtendedAndReturnDTOAsync(dto);
-        }
-
-        [HttpGet]
-        [AuthGuard]
-        public async Task<List<NamebookDTO<int>>> LoadRoleListForUser(long userId)
-        {
-            return await _loyalsBusinessService.LoadRoleListForUserExtended(userId);
+            return await _loyalsBusinessService.SaveUserExtendedAndReturnDTOExtendedAsync(dto);
         }
 
         [HttpGet]
@@ -102,13 +93,6 @@ namespace Playerty.Loyals.WebAPI.Controllers
         public async Task<List<NamebookDTO<long>>> LoadUserListForDropdown()
         {
             return await _loyalsBusinessService.LoadUserExtendedListForDropdown(_context.DbSet<UserExtended>());
-        }
-
-        [HttpGet]
-        [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> LoadUserListForRole(int roleId)
-        {
-            return await _loyalsBusinessService.LoadUserExtendedListForRole(roleId);
         }
 
     }

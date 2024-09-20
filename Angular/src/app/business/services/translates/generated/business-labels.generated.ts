@@ -20,6 +20,10 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@CreatedAt:CreatedAt`;
         case 'modifiedAt':
             return $localize`:@@ModifiedAt:ModifiedAt`;
+        case 'userExtendedDTO':
+            return $localize`:@@UserExtendedDTO:UserExtendedDTO`;
+        case 'selectedRoleIds':
+            return $localize`:@@SelectedRoleIds:SelectedRoleIds`;
         default:
             return null;
     }

@@ -10,4 +10,8 @@
     <ProjectReference Include="..\..\..\Soft.Generator\Source\Soft.SourceGenerator.NgTable\Soft.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTO\Entities\" />
+  </ItemGroup>
+
 </Project>

@@ -18,10 +18,11 @@ import { SoftFormControl } from '../components/soft-form-control/soft-form-contr
     validationErrorMessage: string;
     
     ngOnInit(){
-        if(this.disabled == true)
-            this.control.disable();
-        if(this.control?.validator?.hasNotEmptyRule == true) // FT HACK: Be carefull with this name, if you change it in generator you need to change it here also
-            this.control.required = true;
+      if(this.disabled == true)
+        this.control.disable();
+
+      if(this.control?.validator?.hasNotEmptyRule == true) // FT HACK: Be carefull with this name, if you change it in generator you need to change it here also
+        this.control.required = true;
     }
 
     getTranslatedLabel(): string{

@@ -25,7 +25,7 @@ export class UserListComponent implements OnInit {
             {name: 'Email', filterType: 'text', field: 'email'},
             {name: 'Created at', filterType: 'date', field: 'createdAt', showMatchModes: true},
             // {name: 'Modified at', filterType: 'date', field: 'modifiedAt', showMatchModes: true},
-            {name: 'Disabled', filterType: 'boolean', field: 'isDisabled'},
+            // {name: 'Disabled', filterType: 'boolean', field: 'isDisabled'},
             // {name: 'Version', filterType: 'text', field: 'version'},
         ]
     }

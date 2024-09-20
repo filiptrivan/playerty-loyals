@@ -5,11 +5,8 @@
     
             <panel-body>
                 <form [formGroup]="formGroup" class="grid">
-                    <div class="col-12 sm:col-6">
-                        <soft-textbox [control]="control('email')"></soft-textbox>
-                    </div>
-                    <div class="col-12 sm:col-6">
-                        <soft-password [control]="control('password')"></soft-password>
+                    <div class="col-12">
+                        <soft-textbox [control]="control('email', false, true)"></soft-textbox>
                     </div>
                     <div class="col-12">
                         <soft-multiselect

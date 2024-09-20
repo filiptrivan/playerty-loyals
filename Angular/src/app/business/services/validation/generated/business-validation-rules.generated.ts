@@ -13,6 +13,7 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
         case 'numberOfFailedAttemptsInARowUserExtended':
             return numberOfFailedAttemptsInARowUserExtendedValidator(formControl);
 
+
         default:
             return null;
     }
@@ -79,6 +80,7 @@ export function numberOfFailedAttemptsInARowUserExtendedValidator(control: SoftF
     validator.hasNotEmptyRule = true;
     return validator;
 }
+
 
 
 

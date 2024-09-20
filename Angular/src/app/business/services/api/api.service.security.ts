@@ -86,5 +86,13 @@ export class ApiSecurityService {
         return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadPermissionListForRole?roleId=${roleId}`, environment.httpDropdownOptions);
     }
 
+    loadUserListForRole(roleId: number): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadUserListForRole?roleId=${roleId}`, environment.httpDropdownOptions);
+    }
+
+    loadRoleNamebookListForUserExtended(userId: number): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadRoleNamebookListForUserExtended?userId=${userId}`, environment.httpDropdownOptions);
+    }
+
 }
 

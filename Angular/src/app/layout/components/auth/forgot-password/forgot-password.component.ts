@@ -29,7 +29,7 @@ export class ForgotPasswordComponent extends BaseForm<ForgotPassword> implements
       super(differs, http, messageService, changeDetectorRef, router, route);
     }
 
-    ngOnInit(){
+    override ngOnInit(){
         this.subscription = this.authService.navigateToDashboardIfLoggedIn();
         this.init(new ForgotPassword());
     }

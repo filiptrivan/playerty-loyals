@@ -14,5 +14,12 @@ namespace Playerty.Loyals.Business.ValidationRules
 			RuleFor(x => x.NumberOfFailedAttemptsInARow).NotEmpty();
         }
     }
+    public class UserExtendedSaveBodyDTOValidationRules : AbstractValidator<UserExtendedSaveBodyDTO>
+    {
+        public UserExtendedSaveBodyDTOValidationRules()
+        {
+            
+        }
+    }
 }
 

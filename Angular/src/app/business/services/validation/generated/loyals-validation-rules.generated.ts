@@ -4,6 +4,7 @@ import { validatePrecisionScale } from '../../../../core/services/helper-functio
 
 export function getValidatorLoyals(formControl: SoftFormControl, className: string): SoftValidatorFn {
     switch(formControl.label + className){
+
         case 'emailUserExtended':
             return emailUserExtendedValidator(formControl);
         case 'passwordUserExtended':
@@ -17,6 +18,7 @@ export function getValidatorLoyals(formControl: SoftFormControl, className: stri
             return null;
     }
 }
+
 
 export function emailUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {

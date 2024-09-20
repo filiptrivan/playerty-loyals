@@ -4,6 +4,7 @@ import {
   KeyValueChanges,
   KeyValueDiffer,
   KeyValueDiffers,
+  OnInit,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BaseEntity } from '../../entities/base-entity';
@@ -20,9 +21,10 @@ import { ActivatedRoute, Router } from '@angular/router';
   template: '',
   styles: [],
 })
-export class BaseForm<T extends BaseEntity> { 
+export class BaseForm<T extends BaseEntity> implements OnInit { 
   formGroup: FormGroup;
   model: T;
+  saveBody: any;
   modelId: number;
   controlNamesFromHtml: string[] = [];
   detailsTitle: string;
@@ -41,12 +43,15 @@ export class BaseForm<T extends BaseEntity> {
     ) {
   }
 
+  ngOnInit(){
+  }
+
   initFormGroup(model: T) {
     this.model = model;
     this.detailsTitle = getTranslatedClassName(this.model.typeName);
 
     this.formGroup = new FormGroup({});
-
+    
     Object.keys(this.model).forEach((key) => {
       let formControl: SoftFormControl = new SoftFormControl(this.model[key]);
       formControl.label = key;
@@ -84,30 +89,30 @@ export class BaseForm<T extends BaseEntity> {
   }
 
   setValidator(formControl: SoftFormControl) {
-    // FT: Adding only validators with controls('...') in html
     formControl.validator = getValidator(formControl, this.model.typeName);
+    if(formControl.validator.hasNotEmptyRule)
+      formControl.required = true;
     // formControl.updateValueAndValidity(); // FT: Check if you need it, i think it's not necessary
-    // if(formControl.validator.toString().includes('notEmptyRule')) // FT HACK: Be carefull with this name, if you change it in generator you need to change it here also
-    //   formControl.required = true; // FT: If you have problem with only putting this in BaseControl, call it here also
   }
 
   ngAfterViewChecked(): void {
     this.changeDetectorRef.detectChanges();
   }
 
-  control(formControlName: string, customValidation: boolean = false) {
+  control(formControlName: string, customValidation: boolean = false, disable: boolean = false) {
     let formControl: SoftFormControl = this.formGroup.controls[formControlName] as SoftFormControl;
     if (formControl == null && environment.production == false)
-      console.error(
-        `formControl with specified name: '${formControlName}' does not exist in DTO.`
-      );
+      console.error(`formControl with specified name: '${formControlName}' does not exist in DTO.`);
+
     if(this.controlNamesFromHtml.find(x => x == formControlName) == null) // FT: Add it only if it's not there already
-    {
       this.controlNamesFromHtml.push(formControlName);
-      if(customValidation == false) {
-        this.setValidator(formControl);
-      }
-    }
+    
+    // FT: Adding only validators with controls('...') in html
+    if(customValidation == false) // FT: if we put it in upper if statement the validation won't work.
+      this.setValidator(formControl);
+
+    if(disable == true)
+      formControl.disable();
     
     return formControl;
   }
@@ -115,14 +120,21 @@ export class BaseForm<T extends BaseEntity> {
   onSave(){
     this.onBeforeSave();
 
+    this.saveBody = this.saveBody ?? this.model;
+    
     let isValid: boolean = this.checkFormGroupValidity();
 
     if(isValid){
       let controllerName: string = this.controllerName ?? this.model.typeName;
-      this.http.put<T>(environment.apiUrl + `/${controllerName}/Save${this.model.typeName}`, this.model, environment.httpOptions).subscribe(res => {
+      this.http.put<T>(environment.apiUrl + `/${controllerName}/Save${this.model.typeName}`, this.saveBody, environment.httpOptions).subscribe(res => {
         Object.assign(this.model, res) // this.model = res; // FT: we lose typeName like this and everything that res doesn't have but this.model has
         this.messageService.successMessage("You have successfully saved.");
-        this.rerouteOnTheNewEntity((res as any).id);
+        if((res as any).id && (res as any).id == 0){
+          this.rerouteOnTheNewEntity((res as any).id);
+        }else{
+          this.controlNamesFromHtml = []; // FT: If we don't do this the validators will be gone
+          this.ngOnInit(); // FT: Only overriden ngOnInit is called if it exists
+        }
         this.onAfterSave();
       });
       this.onAfterSaveRequest();

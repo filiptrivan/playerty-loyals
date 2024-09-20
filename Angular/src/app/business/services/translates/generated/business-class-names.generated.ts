@@ -4,6 +4,8 @@ export function getTranslatedClassNameBusiness(name: string): string
     {
         case 'UserExtended':
             return $localize`:@@UserExtended:UserExtended`;
+        case 'UserExtendedSaveBody':
+            return $localize`:@@UserExtendedSaveBody:UserExtendedSaveBody`;
         default:
             return null;
     }

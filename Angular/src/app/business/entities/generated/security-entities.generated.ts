@@ -470,6 +470,31 @@ export class JwtAuthResult extends BaseEntity
     }
 }
 
+export class RoleSaveBody extends BaseEntity
+{
+    roleExtendedDTO?: Role;
+	selectedUserIds?: number[];
+	selectedPermissionIds?: number[];
+
+    constructor(
+    {
+        roleExtendedDTO,
+		selectedUserIds,
+		selectedPermissionIds
+    }:{
+        roleExtendedDTO?: Role;
+		selectedUserIds?: number[];     
+		selectedPermissionIds?: number[];     
+    } = {}
+    ) {
+        super('RoleSaveBody'); 
+
+        this.roleExtendedDTO = roleExtendedDTO;
+		this.selectedUserIds = selectedUserIds;
+		this.selectedPermissionIds = selectedPermissionIds;
+    }
+}
+
 // FT HACK: Fake generated class, because of api imports
 export class Namebook extends BaseEntity
 {

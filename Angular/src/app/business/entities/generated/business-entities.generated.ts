@@ -53,6 +53,28 @@ export class UserExtended extends BaseEntity
 }
 
 
+export class UserExtendedSaveBody extends BaseEntity
+{
+    userExtendedDTO?: UserExtended;
+	selectedRoleIds?: number[];
+
+    constructor(
+    {
+        userExtendedDTO,
+		selectedRoleIds
+    }:{
+        userExtendedDTO?: UserExtended;
+		selectedRoleIds?: number[];     
+    } = {}
+    ) {
+        super('UserExtendedSaveBody'); 
+
+        this.userExtendedDTO = userExtendedDTO;
+		this.selectedRoleIds = selectedRoleIds;
+    }
+}
+
+
 // FT HACK: Fake generated class, because of api imports
 export class Namebook extends BaseEntity
 {

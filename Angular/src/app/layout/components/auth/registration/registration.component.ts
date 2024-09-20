@@ -34,7 +34,7 @@ export class RegistrationComponent extends BaseForm<Registration> implements OnI
         super(differs, http, messageService, changeDetectorRef, router, route);
     }
 
-    ngOnInit(){
+    override ngOnInit(){
         this.subscription = this.authService.navigateToDashboardIfLoggedIn();
         this.init(new Registration());
     }

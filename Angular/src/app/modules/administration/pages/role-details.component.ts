@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { forkJoin, Subscription } from 'rxjs';
-import { Role } from 'src/app/business/entities/generated/security-entities.generated';
+import { Role, RoleSaveBody } from 'src/app/business/entities/generated/security-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { isArrayEmpty } from 'src/app/business/services/validation/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
@@ -36,9 +36,9 @@ export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
         super(differs, http, messageService, changeDetectorRef, router, route);
         }
          
-    ngOnInit() {
+    override ngOnInit() {
         this.controllerName = "Auth";
-        this.selectedUsers.setValidators(isArrayEmpty(this.selectedUsers));
+        this.selectedUsers.validator = isArrayEmpty(this.selectedUsers);
 
         this.routeSub = this.route.params.subscribe((params) => {
             this.modelId = params['id'];
@@ -81,5 +81,10 @@ export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
     }
     
     override onBeforeSave(): void {
+        this.saveBody = new RoleSaveBody();
+        console.log(this.selectedUsers.value)
+        this.saveBody.selectedUserIds = this.selectedUsers.value.map(x => x.value);
+        this.saveBody.selectedPermissionIds = this.selectedPermissions.value;
+        this.saveBody.roleDTO = this.model;
     }
 }

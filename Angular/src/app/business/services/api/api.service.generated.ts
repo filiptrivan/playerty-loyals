@@ -5,22 +5,24 @@ import { environment } from 'src/environments/environment';
 import { ApiSecurityService } from './api.service.security';
 import { Namebook } from '../../entities/generated/namebook.generated';
 import { TableFilter } from '../../entities/generated/table-filter.generated';
-import { UserExtended } from '../../entities/generated/business-entities.generated';
-import { ExternalProvider } from '../../entities/generated/security-entities.generated';
+import { JwtAuthResult } from '../../entities/generated/security-entities.generated';
 import { ForgotPassword } from '../../entities/generated/security-entities.generated';
-import { ForgotPasswordVerificationToken } from '../../entities/generated/security-entities.generated';
+import { VerificationTokenRequest } from '../../entities/generated/security-entities.generated';
+import { RegistrationVerificationResult } from '../../entities/generated/security-entities.generated';
 import { Permission } from '../../entities/generated/security-entities.generated';
 import { Role } from '../../entities/generated/security-entities.generated';
-import { JwtAuthResult } from '../../entities/generated/security-entities.generated';
-import { Login } from '../../entities/generated/security-entities.generated';
-import { LoginResult } from '../../entities/generated/security-entities.generated';
-import { LoginVerificationToken } from '../../entities/generated/security-entities.generated';
-import { RefreshToken } from '../../entities/generated/security-entities.generated';
-import { RefreshTokenRequest } from '../../entities/generated/security-entities.generated';
-import { Registration } from '../../entities/generated/security-entities.generated';
-import { RegistrationVerificationResult } from '../../entities/generated/security-entities.generated';
 import { RegistrationVerificationToken } from '../../entities/generated/security-entities.generated';
-import { VerificationTokenRequest } from '../../entities/generated/security-entities.generated';
+import { ExternalProvider } from '../../entities/generated/security-entities.generated';
+import { LoginVerificationToken } from '../../entities/generated/security-entities.generated';
+import { Login } from '../../entities/generated/security-entities.generated';
+import { RefreshTokenRequest } from '../../entities/generated/security-entities.generated';
+import { ForgotPasswordVerificationToken } from '../../entities/generated/security-entities.generated';
+import { Registration } from '../../entities/generated/security-entities.generated';
+import { LoginResult } from '../../entities/generated/security-entities.generated';
+import { RefreshToken } from '../../entities/generated/security-entities.generated';
+import { RoleSaveBody } from '../../entities/generated/security-entities.generated';
+import { UserExtended } from '../../entities/generated/business-entities.generated';
+import { UserExtendedSaveBody } from '../../entities/generated/business-entities.generated';
 
 @Injectable()
 export class ApiGeneratedService extends ApiSecurityService {
@@ -50,12 +52,8 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.get<UserExtended>(`${environment.apiUrl}/Auth/GetUser?id=${id}`);
     }
 
-    saveUserExtended(dto: UserExtended): Observable<UserExtended> { 
+    saveUserExtended(dto: UserExtendedSaveBody): Observable<UserExtended> { 
         return this.http.put<UserExtended>(`${environment.apiUrl}/Auth/SaveUserExtended`, dto, environment.httpOptions);
-    }
-
-    loadRoleListForUser(userId: number): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadRoleListForUser?userId=${userId}`, environment.httpDropdownOptions);
     }
 
     loadUserListForAutocomplete(limit: number, query: string): Observable<Namebook[]> {
@@ -64,10 +62,6 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     loadUserListForDropdown(): Observable<Namebook[]> {
         return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadUserListForDropdown`, environment.httpDropdownOptions);
-    }
-
-    loadUserListForRole(roleId: number): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadUserListForRole?roleId=${roleId}`, environment.httpDropdownOptions);
     }
 
 }

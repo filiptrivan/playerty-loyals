@@ -46,7 +46,7 @@ export class SoftDataTableComponent implements OnInit {
     { label: 'More than', value: 'gte' },
     { label: 'Less than', value: 'lte' },
   ];
-  showAddButton: boolean = true; 
+  @Input() showAddButton: boolean = true; 
   showExportToExcelButton: boolean = true;
 
   deleteRef: DynamicDialogRef;

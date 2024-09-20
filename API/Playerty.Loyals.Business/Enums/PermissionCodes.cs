@@ -8,13 +8,9 @@ namespace Playerty.Loyals.Enums
 {
     public enum PermissionCodes
     {
-        ReadRoles,
-        EditRoles,
-        InsertRoles,
-        DeleteRoles,
-        ReadUsers,
-        EditUsers,
-        InsertUsers,
-        DeleteUsers,
+        ReadRole,
+        EditRole,
+        InsertRole,
+        DeleteRole,
     }
 }

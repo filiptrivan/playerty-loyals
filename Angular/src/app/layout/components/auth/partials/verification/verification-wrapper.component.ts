@@ -43,7 +43,7 @@ export class VerificationWrapperComponent extends BaseForm<VerificationTokenRequ
         super(differs, http, messageService, changeDetectorRef, router, route);
     }
 
-    ngOnInit(){
+    override ngOnInit(){
         this.subscription = this.authService.navigateToDashboardIfLoggedIn(); // TODO FT: Make the guard for this
         this.init(new VerificationTokenRequest({email: this.email}));
     }
