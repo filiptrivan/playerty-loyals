@@ -8,7 +8,8 @@
     ".NETCoreApp,Version=v8.0": {
       "Playerty.Loyals.Infrastructure/1.0.0": {
         "dependencies": {
-          "Playerty.Loyals": "1.0.0",
+          "Laraue.EfCoreTriggers.SqlServer": "8.1.0",
+          "Playerty.Loyals.Business": "1.0.0",
           "Soft.Generator.Infrastructure": "1.0.0",
           "Soft.Generator.Shared": "1.0.0"
         },
@@ -129,6 +130,29 @@
           "lib/net6.0/Google.Apis.Core.dll": {
             "assemblyVersion": "1.68.0.0",
             "fileVersion": "1.68.0.0"
+          }
+        }
+      },
+      "Laraue.EfCoreTriggers.Common/8.1.0": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "8.0.2",
+          "Microsoft.EntityFrameworkCore.Relational": "8.0.2"
+        },
+        "runtime": {
+          "lib/net8.0/Laraue.EfCoreTriggers.Common.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Laraue.EfCoreTriggers.SqlServer/8.1.0": {
+        "dependencies": {
+          "Laraue.EfCoreTriggers.Common": "8.1.0"
+        },
+        "runtime": {
+          "lib/net8.0/Laraue.EfCoreTriggers.SqlServer.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
           }
         }
       },
@@ -1780,12 +1804,12 @@
           "System.Xml.XPath": "4.0.1"
         }
       },
-      "Playerty.Loyals/1.0.0": {
+      "Playerty.Loyals.Business/1.0.0": {
         "dependencies": {
           "Soft.Generator.Security": "1.0.0"
         },
         "runtime": {
-          "Playerty.Loyals.dll": {}
+          "Playerty.Loyals.Business.dll": {}
         }
       },
       "Soft.Generator.Infrastructure/1.0.0": {
@@ -1918,6 +1942,20 @@
       "sha512": "sha512-pAqwa6pfu53UXCR2b7A/PAPXeuVg6L1OFw38WckN27NU2+mf+KTjoEg2YGv/f0UyKxzz7DxF1urOTKg/6dTP9g==",
       "path": "google.apis.core/1.68.0",
       "hashPath": "google.apis.core.1.68.0.nupkg.sha512"
+    },
+    "Laraue.EfCoreTriggers.Common/8.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-z/JHgFT/58E6Hn8RutAVBS3z5SwZbmKXHiEXmUrsdvWcmnHzPeyOvvV4ZdOWrd1xKNe0BoNnZe+UVZ2B8Bp9OA==",
+      "path": "laraue.efcoretriggers.common/8.1.0",
+      "hashPath": "laraue.efcoretriggers.common.8.1.0.nupkg.sha512"
+    },
+    "Laraue.EfCoreTriggers.SqlServer/8.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8jIMAo7wS8jPMwjhKk9wEjvWkI+/8/cQhjKGxv3rrAKg9RRHhyce4+b56WFJGO1/LQSnTGQqfkD3hABGla50XA==",
+      "path": "laraue.efcoretriggers.sqlserver/8.1.0",
+      "hashPath": "laraue.efcoretriggers.sqlserver.8.1.0.nupkg.sha512"
     },
     "LinqKit.Core/1.2.5": {
       "type": "package",
@@ -2962,7 +3000,7 @@
       "path": "system.xml.xpath.xdocument/4.0.1",
       "hashPath": "system.xml.xpath.xdocument.4.0.1.nupkg.sha512"
     },
-    "Playerty.Loyals/1.0.0": {
+    "Playerty.Loyals.Business/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

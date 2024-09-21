@@ -1,18 +1,28 @@
-<div class="card">
-    <h5>Homepage</h5>
-    <div class="grid">
-      <div class="xl:col-4 md:col-6 col-12" *ngFor="let type of reportTypes" [routerLink]="type.link">
-        <div class="c-dashboard-item c-dashboard-item--home">
-          <i class="c-dashboard-item__icon {{ type.Icon }}"></i>
-          <h5 class="c-dashboard-item__title">{{ type.Title }}</h5>
-          <div class="c-dashboard-item__bg">
-            <i class="c-dashboard-item__bg-icon {{ type.Icon }}"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-</div>
+<soft-card [title]="cardTitle" icon="pi pi-user">
+  <soft-panel>
+      <panel-header title="Details"></panel-header>
 
-<div style="display: flex; gap: 10px;">
-  <p-button label="Call something you need auth" (onClick)="auth()"></p-button>
-</div>
+      <panel-body>
+          <form class="grid">
+              <!-- <div class="col-12">
+                  <soft-textbox [control]="control('email', false, true)"></soft-textbox>
+              </div>
+              <div class="col-12">
+                  <soft-multiselect
+                      [control]="selectedRoles"
+                      label="Roles"
+                      [options]="roleOptions"></soft-multiselect>
+              </div> -->
+          </form>
+      </panel-body>
+
+     <panel-footer>
+          <!-- <p-button (onClick)="onSave()" label="Save" icon="pi pi-save"></p-button> -->
+          <soft-return-button></soft-return-button>
+          <!-- <div footerRight>
+              Updated {{this.model.modifiedAt | pipeWithLocale}} ago
+          </div> -->
+     </panel-footer>
+
+  </soft-panel>
+</soft-card>

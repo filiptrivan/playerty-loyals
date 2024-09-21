@@ -23,14 +23,16 @@ namespace Playerty.Loyals.Services
     {
         private readonly IApplicationDbContext _context;
         private readonly AuthorizationService _authorizationService;
+        private readonly AuthenticationService _authenticationService;
         private readonly SecurityBusinessService _securityBusinessService;
 
-        public LoyalsBusinessService(IApplicationDbContext context, ExcelService excelService, AuthorizationService authorizationService, SecurityBusinessService securityBusinessService)
+        public LoyalsBusinessService(IApplicationDbContext context, ExcelService excelService, AuthorizationService authorizationService, SecurityBusinessService securityBusinessService, AuthenticationService authenticationService)
             : base(context, excelService, authorizationService)
         {
             _context = context;
             _authorizationService = authorizationService;
             _securityBusinessService = securityBusinessService;
+            _authenticationService = authenticationService;
         }
 
         #region User
@@ -72,69 +74,132 @@ namespace Playerty.Loyals.Services
         }
 
 
-        public async Task AddPointsToTheUser(string email, Guid transactionCode, List<string> productCodes)
+        public async Task AddPointsToTheUser(string email, Guid transactionCode, List<ProductDTO> productsDTO)
         {
-            UserExtended user = _context.DbSet<UserExtended>().Where(x => x.Email == email).SingleOrDefault();
-            // Transaction transaction = new Transaction();
-            // transaction.Code = transactionCode;
-            // transaction.Status = LoadStatus((long)Completed);
-            //List<ProductDTO> productsDTO = productsDTO.Where(x => productCodes.Contains(x.Code)).ToList();
-            //foreach (ProductDTO productDTO in productsDTO)
-            //{
-                // brand = LoadBrand(productDTO.BrandCode);
-                // Product product = new Product
-                // {
-                //      Brand = brand,
-                //      Name = productDTO.Name;
-                //      Price = productDTO.Price;
-                //      Points = (int)productDTO.Price * brand.PointsMultiplier
-                // };
-                // transaction.Products.Add(product);
-                // user.Points += product.Points;
-            //}
-            // Tier tier = LoadTier(ValidFrom <= userPoints < ValidTo)
+            await _context.WithTransactionAsync(async () =>
+            {
+                UserExtended user = await _context.DbSet<UserExtended>().Where(x => x.Email == email).SingleOrDefaultAsync();
+
+                Transaction transaction = new Transaction();
+                transaction.Guid = transactionCode;
+                transaction.Statuses.Add(await LoadInstanceAsync<TransactionStatus, byte>((byte)TransactionStatusCodes.Completed));
+
+                foreach (ProductDTO productDTO in productsDTO)
+                {
+                    TransactionProduct transactionProduct = new TransactionProduct 
+                    {
+                        ProductId = productDTO.Id,
+                        Transaction = transaction,
+                    };
+                    _context.DbSet<TransactionProduct>().Add(transactionProduct);
+                    user.Points += (int)productDTO.Price * (int)productDTO.Brand.PointsMultiplier; // TODO FT: Always round on the upper decimal
+                }
+
+                Tier tier = await GetTierForThePoints(user.Points);
+                user.Tier = tier;
+
+                await _context.SaveChangesAsync();
+            });
         }
 
         // Tabele: sve ok
         public async Task RemovePointsFromTheUser(string email, Guid transactionCode)
         {
-            UserExtended user = _context.DbSet<UserExtended>().Where(x => x.Email == email).SingleOrDefault();
-            // Transaction transaction = LoadTransaction(transactionCode);
-            // transaction.Status = LoadStatus((long)Archived);
-            // user.Points -= (int)transaction.Points;
+            await _context.WithTransactionAsync(async () =>
+            {
+                UserExtended user = await _context.DbSet<UserExtended>().Where(x => x.Email == email).SingleOrDefaultAsync();
+                Transaction transaction = await _context.DbSet<Transaction>().Where(x => x.Guid == transactionCode).SingleOrDefaultAsync();
+                transaction.Statuses.Add(await LoadInstanceAsync<TransactionStatus, byte>((byte)TransactionStatusCodes.Cancelled));
+                user.Points -= (int)transaction.Points;
+            });
         }
 
         //// Maloprodaja
-        //// Tabele: Tier (Name, Discount, Users, ValidFrom, ValidTo) + na user-u TierId;  
-        //public async (string email, Guid transactionCode, int discount) GetQrCodeData()
-        //{
-        //    string email = _authenticationService.GetCurrentUserEmail();
-        //    UserExtended user = _context.DbSet<UserExtended>().Where(x => x.Email == email).SingleOrDefault();
-        //    int discount = user.Tier.Discount;
-        //    Guid transactionCode = new Guid();
-        //    return (email, transactionCode, discount);
-        //}
+        public async Task<QrCodeDTO> GetQrCodeDataForTheCurrentUser()
+        {
+            string email = _authenticationService.GetCurrentUserEmail();
+            int discount = 0;
+
+            await _context.WithTransactionAsync(async () =>
+            {
+                UserExtended user = await _context.DbSet<UserExtended>().Where(x => x.Email == email).SingleOrDefaultAsync();
+                discount = user.Tier.Discount;
+            });
+
+            Guid transactionCode = new Guid();
+
+            return new QrCodeDTO 
+            {
+                Email = email,
+                TransactionCode = transactionCode,
+                Discount = discount
+            };
+        }
 
         //// Internet: Ne treba ni da mi dokazuje i upisuje kod, samo moraju da poboljsaju autentifikaciju
-        //// Tabele: sve ok
-        //public async (Guid transactionCode, int discount) GetDiscountForCurrentUser(string email)
-        //{
-        //    UserExtended user = _context.DbSet<UserExtended>().Where(x => x.Email == email).SingleOrDefault();
-        //    int discount = user.Tier.Discount;
-        //    Guid transactionCode = new Guid();
-        //    return (transactionCode, discount);
-        //}
+        public async Task<OnlineShopDTO> GetDiscountForTheUser(string email)
+        {
+            int discount = 0;
+
+            await _context.WithTransactionAsync(async () =>
+            {
+                UserExtended user = await _context.DbSet<UserExtended>().Where(x => x.Email == email).SingleOrDefaultAsync();
+                discount = user.Tier.Discount;
+            });
+
+            Guid transactionCode = new Guid();
+
+            return new OnlineShopDTO
+            {
+                TransactionCode = transactionCode,
+                Discount = discount
+            };
+        }
+
+        public List<ProductDTO> LoadProductsAsync()
+        {
+            List<ProductDTO> products = new List<ProductDTO>
+            {
+                new ProductDTO { Id = 1, Name = "Bosch Hilti", Brand = new BrandDTO { PointsMultiplier = 1.5M, Name = "Bosch" }, Price = 30000, Code = "B-H-2024" },
+                new ProductDTO { Id = 2, Name = "Makita Drill", Brand = new BrandDTO { PointsMultiplier = 1.2M, Name = "Makita" }, Price = 25000, Code = "M-D-2024" },
+                new ProductDTO { Id = 3, Name = "DeWalt Saw", Brand = new BrandDTO { PointsMultiplier = 1.8M, Name = "DeWalt" }, Price = 35000, Code = "D-S-2024" },
+                new ProductDTO { Id = 4, Name = "Stanley Hammer", Brand = new BrandDTO { PointsMultiplier = 1.1M, Name = "Stanley" }, Price = 5000, Code = "S-H-2024" },
+                new ProductDTO { Id = 5, Name = "Bosch Grinder", Brand = new BrandDTO { PointsMultiplier = 1.5M, Name = "Bosch" }, Price = 15000, Code = "B-G-2024" },
+                new ProductDTO { Id = 6, Name = "Milwaukee Impact Driver", Brand = new BrandDTO { PointsMultiplier = 1.6M, Name = "Milwaukee" }, Price = 32000, Code = "M-I-2024" },
+                new ProductDTO { Id = 7, Name = "Black+Decker Jigsaw", Brand = new BrandDTO { PointsMultiplier = 1.3M, Name = "Black+Decker" }, Price = 12000, Code = "B-J-2024" },
+                new ProductDTO { Id = 8, Name = "Hilti Laser Level", Brand = new BrandDTO { PointsMultiplier = 1.7M, Name = "Hilti" }, Price = 40000, Code = "H-L-2024" },
+                new ProductDTO { Id = 9, Name = "Ryobi Circular Saw", Brand = new BrandDTO { PointsMultiplier = 1.4M, Name = "Ryobi" }, Price = 18000, Code = "R-C-2024" },
+                new ProductDTO { Id = 10, Name = "Festool Sander", Brand = new BrandDTO { PointsMultiplier = 2.0M, Name = "Festool" }, Price = 28000, Code = "F-S-2024" }
+            };
+
+            return products;
+        }
+
+        #region Helpers
+
+
+        public async Task<Tier> GetTierForThePoints(int points)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                Tier tierWithTheMaximumPoints = await _context.DbSet<Tier>().OrderByDescending(x => x.ValidTo).FirstOrDefaultAsync();
+                if (tierWithTheMaximumPoints.ValidTo <= points)
+                {
+                    return tierWithTheMaximumPoints;
+                }
+                else
+                {
+                    Tier tier = await _context.DbSet<Tier>().Where(x => points >= x.ValidFrom && points <= x.ValidTo).SingleOrDefaultAsync();
+                    return tier;
+                }
+            });
+        }
+
+        #endregion
 
         #endregion
 
     }
 
-    public class ProductDTO
-    {
-        public string Code { get; set; }
-        public string Brand { get; set; }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-    }
 }
 

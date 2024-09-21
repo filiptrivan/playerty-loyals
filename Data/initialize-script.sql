@@ -1,6 +1,6 @@
 IF NOT EXISTS (SELECT 1 FROM Roles WHERE Name = N'Admin')
 BEGIN
-    INSERT INTO Roles (Name, CreatedAt, ModifiedAt) VALUES (N'Admin', getdate(), getdate());
+    INSERT INTO Roles (Version, Name, CreatedAt, ModifiedAt) VALUES (1, N'Admin', getdate(), getdate());
 END;
 
 IF NOT EXISTS (SELECT 1 FROM Permissions WHERE Code = N'EditRole')
@@ -17,8 +17,8 @@ END;
 
 IF NOT EXISTS (SELECT 1 FROM Users WHERE Email = N'filiptrivan5@gmail.com')
 BEGIN
-    INSERT INTO Users (Email, Password, HasLoggedInWithExternalProvider, NumberOfFailedAttemptsInARow, Points, Version, CreatedAt, ModifiedAt) 
-    VALUES (N'filiptrivan5@gmail.com', HASHBYTES('SHA2_256', N'Test.123'), 0, 0, 0, 1, getdate(), getdate());
+    INSERT INTO Users (Email, Password, HasLoggedInWithExternalProvider, NumberOfFailedAttemptsInARow, Points, Version, CreatedAt, ModifiedAt, TierId) 
+    VALUES (N'filiptrivan5@gmail.com', HASHBYTES('SHA2_256', N'Test.123'), 0, 0, 0, 1, getdate(), getdate(), null);
 END;
 
 DECLARE @AdminRoleId INT;

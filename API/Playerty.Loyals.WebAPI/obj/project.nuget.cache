@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ym1P0a+2YNwro2ybvqj8MzPYSfwtqNpiu/rjYcalv7B4QuVuUN/vFlJfHrYmR0vZS5TUYvupFGFla+QGQ56P7g==",
+  "dgSpecHash": "jbsS4liNJ6SrkYDr8+yOR2nxOPnBuYRWRnYnS2UxfP0l89FhwQc2omi6/w+eyF2fl0XXAPw22RsiXBOFVdP61g==",
   "success": true,
   "projectFilePath": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.WebAPI\\Playerty.Loyals.WebAPI.csproj",
   "expectedPackageFiles": [
@@ -17,6 +17,8 @@
     "C:\\Users\\user\\.nuget\\packages\\google.apis.auth\\1.68.0\\google.apis.auth.1.68.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\google.apis.core\\1.68.0\\google.apis.core.1.68.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\laraue.efcoretriggers.common\\8.1.0\\laraue.efcoretriggers.common.8.1.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\laraue.efcoretriggers.sqlserver\\8.1.0\\laraue.efcoretriggers.sqlserver.8.1.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\lightinject\\6.6.4\\lightinject.6.6.4.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\lightinject.microsoft.dependencyinjection\\3.7.1\\lightinject.microsoft.dependencyinjection.3.7.1.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\lightinject.microsoft.hosting\\1.6.1\\lightinject.microsoft.hosting.1.6.1.nupkg.sha512",

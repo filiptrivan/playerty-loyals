@@ -3,9 +3,94 @@ import { TableFilterContext } from "src/app/core/entities/table-filter-context";
 import { TableFilterSortMeta } from "src/app/core/entities/table-filter-sort-meta";
 
 
+export class TransactionStatus extends BaseEntity
+{
+    name?: string;
+	nameLatin?: string;
+	code?: string;
+	id?: number;
+	createdAt?: Date;
+
+    constructor(
+    {
+        name,
+		nameLatin,
+		code,
+		id,
+		createdAt
+    }:{
+        name?: string;
+		nameLatin?: string;
+		code?: string;
+		id?: number;
+		createdAt?: Date;     
+    } = {}
+    ) {
+        super('TransactionStatus'); 
+
+        this.name = name;
+		this.nameLatin = nameLatin;
+		this.code = code;
+		this.id = id;
+		this.createdAt = createdAt;
+    }
+}
+
+
+export class Tier extends BaseEntity
+{
+    name?: string;
+	nameLatin?: string;
+	discount?: number;
+	validFrom?: number;
+	validTo?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        name,
+		nameLatin,
+		discount,
+		validFrom,
+		validTo,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        name?: string;
+		nameLatin?: string;
+		discount?: number;
+		validFrom?: number;
+		validTo?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('Tier'); 
+
+        this.name = name;
+		this.nameLatin = nameLatin;
+		this.discount = discount;
+		this.validFrom = validFrom;
+		this.validTo = validTo;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
 export class Brand extends BaseEntity
 {
     name?: string;
+	nameLatin?: string;
 	code?: string;
 	pointsMultiplier?: number;
 	version?: number;
@@ -16,6 +101,7 @@ export class Brand extends BaseEntity
     constructor(
     {
         name,
+		nameLatin,
 		code,
 		pointsMultiplier,
 		version,
@@ -24,6 +110,7 @@ export class Brand extends BaseEntity
 		modifiedAt
     }:{
         name?: string;
+		nameLatin?: string;
 		code?: string;
 		pointsMultiplier?: number;
 		version?: number;
@@ -35,6 +122,7 @@ export class Brand extends BaseEntity
         super('Brand'); 
 
         this.name = name;
+		this.nameLatin = nameLatin;
 		this.code = code;
 		this.pointsMultiplier = pointsMultiplier;
 		this.version = version;
@@ -45,32 +133,44 @@ export class Brand extends BaseEntity
 }
 
 
-export class TransactionStatus extends BaseEntity
+export class Transaction extends BaseEntity
 {
-    name?: string;
-	code?: string;
+    guid?: any;
+	price?: number;
+	points?: number;
+	version?: number;
 	id?: number;
 	createdAt?: Date;
+	modifiedAt?: Date;
 
     constructor(
     {
-        name,
-		code,
+        guid,
+		price,
+		points,
+		version,
 		id,
-		createdAt
+		createdAt,
+		modifiedAt
     }:{
-        name?: string;
-		code?: string;
+        guid?: any;
+		price?: number;
+		points?: number;
+		version?: number;
 		id?: number;
-		createdAt?: Date;     
+		createdAt?: Date;
+		modifiedAt?: Date;     
     } = {}
     ) {
-        super('TransactionStatus'); 
+        super('Transaction'); 
 
-        this.name = name;
-		this.code = code;
+        this.guid = guid;
+		this.price = price;
+		this.points = points;
+		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
     }
 }
 
@@ -125,52 +225,6 @@ export class UserExtended extends BaseEntity
 		this.points = points;
 		this.tierDisplayName = tierDisplayName;
 		this.tierId = tierId;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class Tier extends BaseEntity
-{
-    name?: string;
-	discount?: number;
-	validFrom?: number;
-	validTo?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        name,
-		discount,
-		validFrom,
-		validTo,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        name?: string;
-		discount?: number;
-		validFrom?: number;
-		validTo?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('Tier'); 
-
-        this.name = name;
-		this.discount = discount;
-		this.validFrom = validFrom;
-		this.validTo = validTo;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;

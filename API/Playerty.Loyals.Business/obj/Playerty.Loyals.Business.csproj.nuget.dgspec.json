@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Security\\Playerty.Loyals.Business.csproj": {}
+    "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Business\\Playerty.Loyals.Business.csproj": {}
   },
   "projects": {
-    "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Security\\Playerty.Loyals.Business.csproj": {
+    "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Business\\Playerty.Loyals.Business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Security\\Playerty.Loyals.Business.csproj",
+        "projectUniqueName": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Business\\Playerty.Loyals.Business.csproj",
         "projectName": "Playerty.Loyals.Business",
-        "projectPath": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Security\\Playerty.Loyals.Business.csproj",
+        "projectPath": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Business\\Playerty.Loyals.Business.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Security\\obj\\",
+        "outputPath": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Business\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Playerty.Loyals.Business.Entities
 {
+    // FT: It's business object but only the system can modify it, the system can modify it's statuses
     public class Transaction : BusinessObject<long>
     {
         [SoftDisplayName]
@@ -26,11 +27,12 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public int Points { get; set; }
 
+        [Required]
+        public virtual UserExtended User {  get; set; }
+
         /// <summary>
         /// Making the list because we should show to user statuses like this: Completed -> Returned -> Shipped...
         /// </summary>
-        public virtual List<TransactionStatus> TransactionStatus { get; set; }
-
-        //public virtual List<Product> Products { get; set; }
+        public virtual List<TransactionStatus> Statuses { get; set; }
     }
 }

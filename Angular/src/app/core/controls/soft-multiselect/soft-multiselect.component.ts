@@ -9,17 +9,6 @@ import { BaseDropdownControl } from '../base-dropdown-control';
     selector: 'soft-multiselect',
     templateUrl: './soft-multiselect.component.html',
     styles: [
-`
-::ng-deep .p-multiselect-label-container, .p-multiselect-chip {
-    display: flex;
-  flex-wrap: wrap;
-  align-content: space-between;
-  gap: 10px;
-}
-
-::ng-deep .p-multiselect-token, .p-multiselect-token-label {
-}
-`
     ],
     standalone: true,
     imports: [

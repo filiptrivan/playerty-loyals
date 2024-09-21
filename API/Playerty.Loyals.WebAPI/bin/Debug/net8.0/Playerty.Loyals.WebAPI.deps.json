@@ -175,6 +175,29 @@
           }
         }
       },
+      "Laraue.EfCoreTriggers.Common/8.1.0": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "8.0.2",
+          "Microsoft.EntityFrameworkCore.Relational": "8.0.2"
+        },
+        "runtime": {
+          "lib/net8.0/Laraue.EfCoreTriggers.Common.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Laraue.EfCoreTriggers.SqlServer/8.1.0": {
+        "dependencies": {
+          "Laraue.EfCoreTriggers.Common": "8.1.0"
+        },
+        "runtime": {
+          "lib/net8.0/Laraue.EfCoreTriggers.SqlServer.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "LightInject/6.6.4": {
         "runtime": {
           "lib/net6.0/LightInject.dll": {
@@ -2028,17 +2051,18 @@
           "System.Xml.XPath": "4.0.1"
         }
       },
-      "Playerty.Loyals/1.0.0": {
+      "Playerty.Loyals.Business/1.0.0": {
         "dependencies": {
           "Soft.Generator.Security": "1.0.0"
         },
         "runtime": {
-          "Playerty.Loyals.dll": {}
+          "Playerty.Loyals.Business.dll": {}
         }
       },
       "Playerty.Loyals.Infrastructure/1.0.0": {
         "dependencies": {
-          "Playerty.Loyals": "1.0.0",
+          "Laraue.EfCoreTriggers.SqlServer": "8.1.0",
+          "Playerty.Loyals.Business": "1.0.0",
           "Soft.Generator.Infrastructure": "1.0.0",
           "Soft.Generator.Shared": "1.0.0"
         },
@@ -2197,6 +2221,20 @@
       "sha512": "sha512-lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw==",
       "path": "humanizer.core/2.14.1",
       "hashPath": "humanizer.core.2.14.1.nupkg.sha512"
+    },
+    "Laraue.EfCoreTriggers.Common/8.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-z/JHgFT/58E6Hn8RutAVBS3z5SwZbmKXHiEXmUrsdvWcmnHzPeyOvvV4ZdOWrd1xKNe0BoNnZe+UVZ2B8Bp9OA==",
+      "path": "laraue.efcoretriggers.common/8.1.0",
+      "hashPath": "laraue.efcoretriggers.common.8.1.0.nupkg.sha512"
+    },
+    "Laraue.EfCoreTriggers.SqlServer/8.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8jIMAo7wS8jPMwjhKk9wEjvWkI+/8/cQhjKGxv3rrAKg9RRHhyce4+b56WFJGO1/LQSnTGQqfkD3hABGla50XA==",
+      "path": "laraue.efcoretriggers.sqlserver/8.1.0",
+      "hashPath": "laraue.efcoretriggers.sqlserver.8.1.0.nupkg.sha512"
     },
     "LightInject/6.6.4": {
       "type": "package",
@@ -3437,7 +3475,7 @@
       "path": "system.xml.xpath.xdocument/4.0.1",
       "hashPath": "system.xml.xpath.xdocument.4.0.1.nupkg.sha512"
     },
-    "Playerty.Loyals/1.0.0": {
+    "Playerty.Loyals.Business/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

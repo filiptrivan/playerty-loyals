@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Laraue.EfCoreTriggers.SqlServer" Version="8.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Soft.Generator\Source\Soft.Generator.Infrastructure\Soft.Generator.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\Soft.Generator\Source\Soft.Generator.Shared\Soft.Generator.Shared.csproj" />
-    <ProjectReference Include="..\Playerty.Loyals.Business\Playerty.Loyals.csproj" />
+    <ProjectReference Include="..\Playerty.Loyals.Business\Playerty.Loyals.Business.csproj" />
   </ItemGroup>
 
 </Project>

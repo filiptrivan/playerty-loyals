@@ -25,7 +25,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         private readonly LoyalsBusinessService _loyalsBusinessService;
 
 
-        public AuthController(ILogger<AuthController> logger, SecurityBusinessService securityBusinessService, IJwtAuthManager jwtAuthManagerService, IApplicationDbContext context, AuthenticationService authenticationService, 
+        public AuthController(ILogger<AuthController> logger, SecurityBusinessService securityBusinessService, IJwtAuthManager jwtAuthManagerService, IApplicationDbContext context, AuthenticationService authenticationService,
             LoyalsBusinessService loyalsBusinessService)
             : base(securityBusinessService, jwtAuthManagerService, context, authenticationService)
         {
@@ -93,6 +93,22 @@ namespace Playerty.Loyals.WebAPI.Controllers
         public async Task<List<NamebookDTO<long>>> LoadUserListForDropdown()
         {
             return await _loyalsBusinessService.LoadUserExtendedListForDropdown(_context.DbSet<UserExtended>());
+        }
+
+        // joca puskom uzima podatke -> Za ovo ti ne treba endpoint!!!
+        //[HttpGet]
+        //[AuthGuard]
+        //public async Task<QrCodeDTO> GetRetailQrCodeData()
+        //{
+        //    // 
+        //}
+
+        // na ng on init generisanje qr koda, qr kod mora da bude enkriptovan, kako korisnik sa fronta ne bi mogao sam da ubaci sta zeli, sifra za enkripciju treba da bude na nivou firme (stridon, uradimo sami itd...)
+        [HttpGet]
+        [AuthGuard]
+        public async Task<QrCodeDTO> GetQrCodeDataForTheCurrentUser()
+        {
+            return await _loyalsBusinessService.GetQrCodeDataForTheCurrentUser();
         }
 
     }

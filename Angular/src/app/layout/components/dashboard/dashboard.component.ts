@@ -6,10 +6,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {
-  reportTypes: any[] = [
-    { Icon: 'pi pi-user', Title: 'Administration', link: 'administration/users' },
-    // { Icon: 'pi pi-folder', Title: 'Folder' }
-  ];
+  cardTitle: string = $localize`:@@Homepage:Homepage`
 
   constructor(
     public layoutService: LayoutService,

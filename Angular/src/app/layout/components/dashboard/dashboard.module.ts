@@ -9,6 +9,10 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { DashboardsRoutingModule } from './dashboard-routing.module';
 import { ApiService } from '../../../business/services/api/api.service';
+import { PrimengModule } from '../../modules/primeng.module';
+import { SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';
+import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
+import { CardSkeletonComponent } from 'src/app/core/components/card-skeleton/card-skeleton.component';
 
 @NgModule({
     imports: [
@@ -20,6 +24,10 @@ import { ApiService } from '../../../business/services/api/api.service';
         PanelMenuModule,
         ButtonModule,
         DashboardsRoutingModule,
+        PrimengModule,
+        SoftDataTableComponent,
+        SoftControlsModule,
+        CardSkeletonComponent,
     ],
     declarations: [DashboardComponent],
     providers:[ApiService]

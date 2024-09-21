@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "zSRwNKeBF4r1nE/3cASNq7d9WtxnlUAhfyR/RynpdPmYUs3lc0xc9I2SpP/sy/4vJ0o9jcaMxK6LB0rlOHDgKw==",
+  "dgSpecHash": "G8O1KnMNYZMiHQEHq+Q//0b2jYKergMbs7AMZoWsH9L5ySdcVSzCbC/hiXQTn5FN1aXYIvQ7F0MMn1wPSkPp9A==",
   "success": true,
   "projectFilePath": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Infrastructure\\Playerty.Loyals.Infrastructure.csproj",
   "expectedPackageFiles": [
@@ -14,6 +14,8 @@
     "C:\\Users\\user\\.nuget\\packages\\google.apis\\1.68.0\\google.apis.1.68.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\google.apis.auth\\1.68.0\\google.apis.auth.1.68.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\google.apis.core\\1.68.0\\google.apis.core.1.68.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\laraue.efcoretriggers.common\\8.1.0\\laraue.efcoretriggers.common.8.1.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\laraue.efcoretriggers.sqlserver\\8.1.0\\laraue.efcoretriggers.sqlserver.8.1.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\linqkit.core\\1.2.5\\linqkit.core.1.2.5.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\log4net\\2.0.10\\log4net.2.0.10.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",

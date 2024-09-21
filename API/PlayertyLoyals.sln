@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playerty.Loyals.Infrastruct
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Business", "Business", "{F2AA00F3-29C7-4A82-B4C0-5BD998C67912}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playerty.Loyals", "Playerty.Loyals.Business\Playerty.Loyals.csproj", "{50AD9ADA-4E90-4E69-97BB-92FA455115DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playerty.Loyals.Business", "Playerty.Loyals.Business\Playerty.Loyals.Business.csproj", "{50AD9ADA-4E90-4E69-97BB-92FA455115DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

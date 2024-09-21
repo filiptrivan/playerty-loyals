@@ -8671,9 +8671,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Business\\Playerty.Loyals.csproj",
-      "projectName": "Playerty.Loyals",
-      "projectPath": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Business\\Playerty.Loyals.csproj",
+      "projectUniqueName": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Business\\Playerty.Loyals.Business.csproj",
+      "projectName": "Playerty.Loyals.Business",
+      "projectPath": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Business\\Playerty.Loyals.Business.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
       "outputPath": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Business\\obj\\",
       "projectStyle": "PackageReference",

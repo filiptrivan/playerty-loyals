@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Laraue.EfCoreTriggers.Common.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Playerty.Loyals.Business.Entities;
 using Soft.Generator.Infrastructure.Data;
 using Soft.Generator.Shared.Helpers;
@@ -17,17 +18,37 @@ namespace Playerty.Loyals.Infrastructure
         {
         }
 
-        //public DbSet<UserExtended> Users { get; set; }
-        //public new DbSet<PermissionExtended> Permissions { get; set; }
+        public DbSet<Tier> Tiers { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<TransactionStatus> TransactionStatuses { get; set; }
+        public DbSet<TransactionProduct> TransactionProduct { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
         }
 
-        public override int SaveChanges()
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            return base.SaveChanges();
+            await SetDefaultTierForNewUsers();
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+
+        private async Task SetDefaultTierForNewUsers()
+        {
+            IEnumerable<UserExtended> newUsers = ChangeTracker.Entries<UserExtended>()
+                .Where(e => e.State == EntityState.Added)
+                .Select(e => e.Entity);
+
+            Tier? lowestTier = await Tiers.OrderBy(t => t.ValidTo).FirstOrDefaultAsync();
+
+            foreach (UserExtended user in newUsers)
+            {
+                if (lowestTier != null)
+                {
+                    user.Tier = lowestTier;
+                }
+            }
         }
     }
 }

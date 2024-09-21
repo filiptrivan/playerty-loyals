@@ -8,23 +8,27 @@ namespace Playerty.Loyals.Business.DataMappers
     public static partial class Mapper
     {
 
-        #region Brand
+        #region TransactionProduct
 
-        public static partial Brand Map(BrandDTO dto);
+        public static partial TransactionProduct Map(TransactionProductDTO dto);
 
-                
-        public static partial BrandDTO Map(Brand poco);
+                [MapProperty("Transaction.Id", "TransactionId")]
+[MapProperty("Transaction.Id", "TransactionDisplayName")]
+        public static partial TransactionProductDTO Map(TransactionProduct poco);
 
-                
-        public static partial BrandDTO ExcelMap(Brand poco);
+                [MapProperty("Transaction.Id", "TransactionId")]
+[MapProperty("Transaction.Id", "TransactionDisplayName")]
+        public static partial TransactionProductDTO ExcelMap(TransactionProduct poco);
 
-                
-        public static partial IQueryable<BrandDTO> ProjectTo(this IQueryable<Brand> poco);
+                [MapProperty("Transaction.Id", "TransactionId")]
+[MapProperty("Transaction.Id", "TransactionDisplayName")]
+        public static partial IQueryable<TransactionProductDTO> ProjectTo(this IQueryable<TransactionProduct> poco);
 
-                
-        public static partial IQueryable<BrandDTO> ExcelProjectTo(this IQueryable<Brand> poco);
+                [MapProperty("Transaction.Id", "TransactionId")]
+[MapProperty("Transaction.Id", "TransactionDisplayName")]
+        public static partial IQueryable<TransactionProductDTO> ExcelProjectTo(this IQueryable<TransactionProduct> poco);
 
-        public static partial void MergeMap(BrandDTO dto, Brand poco);
+        public static partial void MergeMap(TransactionProductDTO dto, TransactionProduct poco);
 
         #endregion
 
@@ -75,16 +79,20 @@ namespace Playerty.Loyals.Business.DataMappers
 
         public static partial Transaction Map(TransactionDTO dto);
 
-                
+                [MapProperty("User.Id", "UserId")]
+[MapProperty("User.Id", "UserDisplayName")]
         public static partial TransactionDTO Map(Transaction poco);
 
-                
+                [MapProperty("User.Id", "UserId")]
+[MapProperty("User.Id", "UserDisplayName")]
         public static partial TransactionDTO ExcelMap(Transaction poco);
 
-                
+                [MapProperty("User.Id", "UserId")]
+[MapProperty("User.Id", "UserDisplayName")]
         public static partial IQueryable<TransactionDTO> ProjectTo(this IQueryable<Transaction> poco);
 
-                
+                [MapProperty("User.Id", "UserId")]
+[MapProperty("User.Id", "UserDisplayName")]
         public static partial IQueryable<TransactionDTO> ExcelProjectTo(this IQueryable<Transaction> poco);
 
         public static partial void MergeMap(TransactionDTO dto, Transaction poco);

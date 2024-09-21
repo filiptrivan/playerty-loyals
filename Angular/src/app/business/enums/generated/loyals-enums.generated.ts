@@ -6,4 +6,10 @@ export enum PermissionCodes
 	DeleteRole = Auto-Generated,
 }
 
+export enum TransactionStatusCodes
+{
+    Completed = 1,
+	Cancelled = 2,
+}
+
 

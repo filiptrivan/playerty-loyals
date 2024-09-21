@@ -210,6 +210,39 @@
           }
         }
       },
+      "Laraue.EfCoreTriggers.Common/8.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "8.0.0",
+          "Microsoft.EntityFrameworkCore.Relational": "8.0.0"
+        },
+        "compile": {
+          "lib/net8.0/Laraue.EfCoreTriggers.Common.dll": {
+            "related": ".runtimeconfig.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Laraue.EfCoreTriggers.Common.dll": {
+            "related": ".runtimeconfig.json;.xml"
+          }
+        }
+      },
+      "Laraue.EfCoreTriggers.SqlServer/8.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Laraue.EfCoreTriggers.Common": "8.1.0"
+        },
+        "compile": {
+          "lib/net8.0/Laraue.EfCoreTriggers.SqlServer.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Laraue.EfCoreTriggers.SqlServer.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "LightInject/6.6.4": {
         "type": "package",
         "compile": {
@@ -3574,24 +3607,25 @@
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
       },
-      "Playerty.Loyals/1.0.0": {
+      "Playerty.Loyals.Business/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "Soft.Generator.Security": "1.0.0"
         },
         "compile": {
-          "bin/placeholder/Playerty.Loyals.dll": {}
+          "bin/placeholder/Playerty.Loyals.Business.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Playerty.Loyals.dll": {}
+          "bin/placeholder/Playerty.Loyals.Business.dll": {}
         }
       },
       "Playerty.Loyals.Infrastructure/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
-          "Playerty.Loyals": "1.0.0",
+          "Laraue.EfCoreTriggers.SqlServer": "8.1.0",
+          "Playerty.Loyals.Business": "1.0.0",
           "Soft.Generator.Infrastructure": "1.0.0",
           "Soft.Generator.Shared": "1.0.0"
         },
@@ -3939,6 +3973,33 @@
         "lib/netstandard2.0/Humanizer.dll",
         "lib/netstandard2.0/Humanizer.xml",
         "logo.png"
+      ]
+    },
+    "Laraue.EfCoreTriggers.Common/8.1.0": {
+      "sha512": "z/JHgFT/58E6Hn8RutAVBS3z5SwZbmKXHiEXmUrsdvWcmnHzPeyOvvV4ZdOWrd1xKNe0BoNnZe+UVZ2B8Bp9OA==",
+      "type": "package",
+      "path": "laraue.efcoretriggers.common/8.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "laraue.efcoretriggers.common.8.1.0.nupkg.sha512",
+        "laraue.efcoretriggers.common.nuspec",
+        "lib/net8.0/Laraue.EfCoreTriggers.Common.dll",
+        "lib/net8.0/Laraue.EfCoreTriggers.Common.runtimeconfig.json",
+        "lib/net8.0/Laraue.EfCoreTriggers.Common.xml"
+      ]
+    },
+    "Laraue.EfCoreTriggers.SqlServer/8.1.0": {
+      "sha512": "8jIMAo7wS8jPMwjhKk9wEjvWkI+/8/cQhjKGxv3rrAKg9RRHhyce4+b56WFJGO1/LQSnTGQqfkD3hABGla50XA==",
+      "type": "package",
+      "path": "laraue.efcoretriggers.sqlserver/8.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "laraue.efcoretriggers.sqlserver.8.1.0.nupkg.sha512",
+        "laraue.efcoretriggers.sqlserver.nuspec",
+        "lib/net8.0/Laraue.EfCoreTriggers.SqlServer.dll",
+        "lib/net8.0/Laraue.EfCoreTriggers.SqlServer.xml"
       ]
     },
     "LightInject/6.6.4": {
@@ -10648,10 +10709,10 @@
         "system.xml.xpath.xdocument.nuspec"
       ]
     },
-    "Playerty.Loyals/1.0.0": {
+    "Playerty.Loyals.Business/1.0.0": {
       "type": "project",
-      "path": "../Playerty.Loyals.Business/Playerty.Loyals.csproj",
-      "msbuildProject": "../Playerty.Loyals.Business/Playerty.Loyals.csproj"
+      "path": "../Playerty.Loyals.Business/Playerty.Loyals.Business.csproj",
+      "msbuildProject": "../Playerty.Loyals.Business/Playerty.Loyals.Business.csproj"
     },
     "Playerty.Loyals.Infrastructure/1.0.0": {
       "type": "project",
