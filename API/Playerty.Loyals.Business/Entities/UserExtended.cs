@@ -31,8 +31,12 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public int NumberOfFailedAttemptsInARow { get; set; }
 
-        public virtual List<Role> Roles { get; set; }
-
+        [Required]
         public int Points { get; set; }
+
+        [Required]
+        public virtual Tier Tier { get; set; }
+
+        public virtual List<Role> Roles { get; set; }
     }
 }

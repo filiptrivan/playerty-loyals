@@ -1,17 +1,15 @@
-export function getTranslatedClassNameBusiness(name: string): string
+export function getTranslatedClassNameLoyals(name: string): string
 {
     switch(name) 
     {
         case 'Brand':
             return $localize`:@@Brand:Brand`;
-        case 'Tier':
-            return $localize`:@@Tier:Tier`;
-        case 'Transaction':
-            return $localize`:@@Transaction:Transaction`;
         case 'TransactionStatus':
             return $localize`:@@TransactionStatus:TransactionStatus`;
         case 'UserExtended':
             return $localize`:@@UserExtended:UserExtended`;
+        case 'Tier':
+            return $localize`:@@Tier:Tier`;
         case 'UserExtendedSaveBody':
             return $localize`:@@UserExtendedSaveBody:UserExtendedSaveBody`;
         default:

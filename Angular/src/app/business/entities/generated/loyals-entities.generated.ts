@@ -45,94 +45,6 @@ export class Brand extends BaseEntity
 }
 
 
-export class Tier extends BaseEntity
-{
-    name?: string;
-	discount?: number;
-	validFrom?: number;
-	validTo?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        name,
-		discount,
-		validFrom,
-		validTo,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        name?: string;
-		discount?: number;
-		validFrom?: number;
-		validTo?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('Tier'); 
-
-        this.name = name;
-		this.discount = discount;
-		this.validFrom = validFrom;
-		this.validTo = validTo;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class Transaction extends BaseEntity
-{
-    guid?: any;
-	price?: number;
-	points?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        guid,
-		price,
-		points,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        guid?: any;
-		price?: number;
-		points?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('Transaction'); 
-
-        this.guid = guid;
-		this.price = price;
-		this.points = points;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
 export class TransactionStatus extends BaseEntity
 {
     name?: string;
@@ -213,6 +125,52 @@ export class UserExtended extends BaseEntity
 		this.points = points;
 		this.tierDisplayName = tierDisplayName;
 		this.tierId = tierId;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
+export class Tier extends BaseEntity
+{
+    name?: string;
+	discount?: number;
+	validFrom?: number;
+	validTo?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        name,
+		discount,
+		validFrom,
+		validTo,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        name?: string;
+		discount?: number;
+		validFrom?: number;
+		validTo?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('Tier'); 
+
+        this.name = name;
+		this.discount = discount;
+		this.validFrom = validFrom;
+		this.validTo = validTo;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;

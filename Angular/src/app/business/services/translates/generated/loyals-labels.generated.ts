@@ -1,4 +1,4 @@
-export function getTranslatedLabelBusiness(name: string): string
+export function getTranslatedLabelLoyals(name: string): string
 {
     switch(name) 
     {
@@ -16,18 +16,6 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@CreatedAt:CreatedAt`;
         case 'modifiedAt':
             return $localize`:@@ModifiedAt:ModifiedAt`;
-        case 'discount':
-            return $localize`:@@Discount:Discount`;
-        case 'validFrom':
-            return $localize`:@@ValidFrom:ValidFrom`;
-        case 'validTo':
-            return $localize`:@@ValidTo:ValidTo`;
-        case 'guid':
-            return $localize`:@@Guid:Guid`;
-        case 'price':
-            return $localize`:@@Price:Price`;
-        case 'points':
-            return $localize`:@@Points:Points`;
         case 'email':
             return $localize`:@@Email:Email`;
         case 'password':
@@ -36,8 +24,16 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@HasLoggedInWithExternalProvider:HasLoggedInWithExternalProvider`;
         case 'numberOfFailedAttemptsInARow':
             return $localize`:@@NumberOfFailedAttemptsInARow:NumberOfFailedAttemptsInARow`;
+        case 'points':
+            return $localize`:@@Points:Points`;
         case 'tier':
             return $localize`:@@Tier:Tier`;
+        case 'discount':
+            return $localize`:@@Discount:Discount`;
+        case 'validFrom':
+            return $localize`:@@ValidFrom:ValidFrom`;
+        case 'validTo':
+            return $localize`:@@ValidTo:ValidTo`;
         case 'userExtendedDTO':
             return $localize`:@@UserExtendedDTO:UserExtendedDTO`;
         case 'selectedRoleIds':

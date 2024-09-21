@@ -12,10 +12,10 @@ namespace Playerty.Loyals.Business.DataMappers
         //also you can specify Lists and reference types inside DTO but need to be very careful because of infinite loops
         //public static partial TUser Map<TUser>(UserDTO dto) where TUser : User, IUser, new();
 
-        [MapperIgnoreTarget(nameof(UserExtendedDTO.Password))]
+        [MapperIgnoreTarget("UserExtendedDTO.Password")]
         public static partial UserExtendedDTO Map(UserExtended poco);
 
-        [MapperIgnoreTarget(nameof(UserExtendedDTO.Password))]
+        [MapperIgnoreTarget("UserExtendedDTO.Password")]
         public static partial UserExtendedDTO ExcelMap(UserExtended poco);
 
     }
