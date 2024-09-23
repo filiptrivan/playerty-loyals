@@ -25,11 +25,21 @@ export class AppMenuComponent implements OnInit {
                 label: 'Pages',
                 icon: 'pi pi-fw pi-briefcase',
                 items: [
-                    // {
-                    //     label: 'Landing',
-                    //     icon: 'pi pi-fw pi-globe',
-                    //     routerLink: ['/landing']
-                    // },
+                    {
+                        label: 'Tiers',
+                        icon: 'pi pi-fw pi-sitemap',
+                        routerLink: ['/tiers']
+                    },
+                    {
+                        label: 'Notifications',
+                        icon: 'pi pi-fw pi-bell',
+                        routerLink: ['/notifications']
+                    },
+                    {
+                        label: 'Points',
+                        icon: 'pi pi-fw pi-heart',
+                        routerLink: ['/points']
+                    },
                     // {
                     //     label: 'Auth',
                     //     icon: 'pi pi-fw pi-user',
@@ -57,14 +67,24 @@ export class AppMenuComponent implements OnInit {
                         items: [
                             {
                                 label: 'Users',
-                                icon: PrimeIcons.USER,
+                                icon: 'pi pi-fw pi-user',
                                 routerLink: ['/administration/users']
                             },
                             {
                                 label: 'Roles',
-                                icon: PrimeIcons.ID_CARD,
+                                icon: 'pi pi-fw pi-id-card',
                                 routerLink: ['/administration/roles']
-                            }
+                            },
+                            {
+                                label: 'Tiers',
+                                icon: 'pi pi-fw pi-sitemap',
+                                routerLink: ['/administration/tiers']
+                            },
+                            {
+                                label: 'Notifications',
+                                icon: 'pi pi-fw pi-bell',
+                                routerLink: ['/administration/notifications']
+                            },
                         ]
                     },
                     {

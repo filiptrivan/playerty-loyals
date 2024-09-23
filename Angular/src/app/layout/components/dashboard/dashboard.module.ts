@@ -13,6 +13,7 @@ import { PrimengModule } from '../../modules/primeng.module';
 import { SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
 import { CardSkeletonComponent } from 'src/app/core/components/card-skeleton/card-skeleton.component';
+import { QRCodeModule } from 'angularx-qrcode';
 
 @NgModule({
     imports: [
@@ -25,6 +26,7 @@ import { CardSkeletonComponent } from 'src/app/core/components/card-skeleton/car
         ButtonModule,
         DashboardsRoutingModule,
         PrimengModule,
+        QRCodeModule,
         SoftDataTableComponent,
         SoftControlsModule,
         CardSkeletonComponent,

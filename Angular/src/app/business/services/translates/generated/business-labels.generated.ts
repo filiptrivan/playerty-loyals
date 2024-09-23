@@ -2,6 +2,10 @@ export function getTranslatedLabelBusiness(name: string): string
 {
     switch(name) 
     {
+        case 'selectedUserIds':
+            return $localize`:@@SelectedUserIds:SelectedUserIds`;
+        case 'notificationDTO':
+            return $localize`:@@NotificationDTO:NotificationDTO`;
         case 'id':
             return $localize`:@@Id:Id`;
         case 'name':
@@ -16,12 +20,36 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@NameLatin:NameLatin`;
         case 'pointsMultiplier':
             return $localize`:@@PointsMultiplier:PointsMultiplier`;
+        case 'title':
+            return $localize`:@@Title:Title`;
+        case 'titleLatin':
+            return $localize`:@@TitleLatin:TitleLatin`;
+        case 'description':
+            return $localize`:@@Description:Description`;
+        case 'descriptionLatin':
+            return $localize`:@@DescriptionLatin:DescriptionLatin`;
+        case 'version':
+            return $localize`:@@Version:Version`;
+        case 'createdAt':
+            return $localize`:@@CreatedAt:CreatedAt`;
+        case 'modifiedAt':
+            return $localize`:@@ModifiedAt:ModifiedAt`;
+        case 'discount':
+            return $localize`:@@Discount:Discount`;
+        case 'validFrom':
+            return $localize`:@@ValidFrom:ValidFrom`;
+        case 'validTo':
+            return $localize`:@@ValidTo:ValidTo`;
+        case 'guid':
+            return $localize`:@@Guid:Guid`;
+        case 'points':
+            return $localize`:@@Points:Points`;
+        case 'user':
+            return $localize`:@@User:User`;
         case 'product':
             return $localize`:@@Product:Product`;
         case 'transaction':
             return $localize`:@@Transaction:Transaction`;
-        case 'createdAt':
-            return $localize`:@@CreatedAt:CreatedAt`;
         case 'email':
             return $localize`:@@Email:Email`;
         case 'password':
@@ -30,24 +58,8 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@HasLoggedInWithExternalProvider:HasLoggedInWithExternalProvider`;
         case 'numberOfFailedAttemptsInARow':
             return $localize`:@@NumberOfFailedAttemptsInARow:NumberOfFailedAttemptsInARow`;
-        case 'points':
-            return $localize`:@@Points:Points`;
         case 'tier':
             return $localize`:@@Tier:Tier`;
-        case 'version':
-            return $localize`:@@Version:Version`;
-        case 'modifiedAt':
-            return $localize`:@@ModifiedAt:ModifiedAt`;
-        case 'guid':
-            return $localize`:@@Guid:Guid`;
-        case 'user':
-            return $localize`:@@User:User`;
-        case 'discount':
-            return $localize`:@@Discount:Discount`;
-        case 'validFrom':
-            return $localize`:@@ValidFrom:ValidFrom`;
-        case 'validTo':
-            return $localize`:@@ValidTo:ValidTo`;
         case 'userExtendedDTO':
             return $localize`:@@UserExtendedDTO:UserExtendedDTO`;
         case 'selectedRoleIds':

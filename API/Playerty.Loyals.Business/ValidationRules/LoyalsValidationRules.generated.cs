@@ -4,6 +4,13 @@ using Soft.Generator.Shared.SoftFluentValidation;
 
 namespace Playerty.Loyals.Business.ValidationRules
 {
+    public class NotificationSaveBodyDTOValidationRules : AbstractValidator<NotificationSaveBodyDTO>
+    {
+        public NotificationSaveBodyDTOValidationRules()
+        {
+            
+        }
+    }
     public class ProductDTOValidationRules : AbstractValidator<ProductDTO>
     {
         public ProductDTOValidationRules()
@@ -16,6 +23,37 @@ namespace Playerty.Loyals.Business.ValidationRules
         public BrandDTOValidationRules()
         {
             
+        }
+    }
+    public class NotificationDTOValidationRules : AbstractValidator<NotificationDTO>
+    {
+        public NotificationDTOValidationRules()
+        {
+            RuleFor(x => x.Title).Length(1, 60).NotEmpty();
+			RuleFor(x => x.TitleLatin).Length(1, 60).NotEmpty();
+			RuleFor(x => x.Description).Length(1, 255).NotEmpty();
+			RuleFor(x => x.DescriptionLatin).Length(1, 255).NotEmpty();
+        }
+    }
+    public class TierDTOValidationRules : AbstractValidator<TierDTO>
+    {
+        public TierDTOValidationRules()
+        {
+            RuleFor(x => x.Name).Length(1, 255).NotEmpty();
+			RuleFor(x => x.NameLatin).Length(1, 255).NotEmpty();
+			RuleFor(x => x.Discount).GreaterThanOrEqualTo(0).LessThanOrEqualTo(100).NotEmpty();
+			RuleFor(x => x.ValidFrom).GreaterThanOrEqualTo(0).NotEmpty();
+			RuleFor(x => x.ValidTo).GreaterThanOrEqualTo(0).NotEmpty();
+        }
+    }
+    public class TransactionDTOValidationRules : AbstractValidator<TransactionDTO>
+    {
+        public TransactionDTOValidationRules()
+        {
+            RuleFor(x => x.Guid).NotEmpty();
+			RuleFor(x => x.Price).PrecisionScale(16, 2, false).NotEmpty();
+			RuleFor(x => x.Points).NotEmpty();
+			RuleFor(x => x.UserId).NotEmpty();
         }
     }
     public class TransactionProductDTOValidationRules : AbstractValidator<TransactionProductDTO>
@@ -44,25 +82,6 @@ namespace Playerty.Loyals.Business.ValidationRules
 			RuleFor(x => x.HasLoggedInWithExternalProvider).NotEmpty();
 			RuleFor(x => x.NumberOfFailedAttemptsInARow).NotEmpty();
 			RuleFor(x => x.Points).NotEmpty();
-        }
-    }
-    public class TransactionDTOValidationRules : AbstractValidator<TransactionDTO>
-    {
-        public TransactionDTOValidationRules()
-        {
-            RuleFor(x => x.Guid).NotEmpty();
-			RuleFor(x => x.Price).PrecisionScale(16, 2, false).NotEmpty();
-			RuleFor(x => x.Points).NotEmpty();
-			RuleFor(x => x.UserId).NotEmpty();
-        }
-    }
-    public class TierDTOValidationRules : AbstractValidator<TierDTO>
-    {
-        public TierDTOValidationRules()
-        {
-            RuleFor(x => x.Name).Length(1, 255).NotEmpty();
-			RuleFor(x => x.NameLatin).Length(1, 255).NotEmpty();
-			RuleFor(x => x.Discount).LessThanOrEqualTo(100).NotEmpty();
         }
     }
     public class UserExtendedSaveBodyDTOValidationRules : AbstractValidator<UserExtendedSaveBodyDTO>

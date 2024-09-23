@@ -5,6 +5,7 @@ import { LayoutService } from "./service/app.layout.service";
 import { environment } from 'src/environments/environment';
 import { filter } from 'rxjs';
 import { User } from '../business/entities/generated/security-entities.generated';
+import { Namebook } from '../business/entities/generated/namebook.generated';
 
 interface SoftMenuItem {
   label?: string;
@@ -19,6 +20,7 @@ interface SoftMenuItem {
 })
 export class AppTopBarComponent {
     currentUser: User;
+    currentUserNotifications: Namebook[];
     menuItems: SoftMenuItem[] = [
       {
         label: $localize`:@@Profile:Profile`,
@@ -53,9 +55,13 @@ export class AppTopBarComponent {
     constructor(public layoutService: LayoutService, private authService: AuthService, protected router: Router) { }
 
   ngOnInit(){
-      this.authService.user$.subscribe(res => {
-          this.currentUser = res;
-          this.avatarLabel = res?.email.charAt(0).toLocaleUpperCase();
+    this.authService.user$.subscribe(res => {
+        this.currentUser = res;
+        this.avatarLabel = res?.email.charAt(0).toLocaleUpperCase();
+    });
+    this.authService.notifications$.subscribe(res => {
+      console.log(res)
+        this.currentUserNotifications = res;
     });
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))

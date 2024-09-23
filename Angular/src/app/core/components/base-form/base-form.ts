@@ -90,7 +90,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
   setValidator(formControl: SoftFormControl) {
     formControl.validator = getValidator(formControl, this.model.typeName);
-    if(formControl.validator.hasNotEmptyRule)
+    if(formControl?.validator?.hasNotEmptyRule)
       formControl.required = true;
     // formControl.updateValueAndValidity(); // FT: Check if you need it, i think it's not necessary
   }
@@ -129,7 +129,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
       this.http.put<T>(environment.apiUrl + `/${controllerName}/Save${this.model.typeName}`, this.saveBody, environment.httpOptions).subscribe(res => {
         Object.assign(this.model, res) // this.model = res; // FT: we lose typeName like this and everything that res doesn't have but this.model has
         this.messageService.successMessage("You have successfully saved.");
-        if((res as any).id && (res as any).id == 0){
+        if((res as any).id){
           this.rerouteOnTheNewEntity((res as any).id);
         }else{
           this.controlNamesFromHtml = []; // FT: If we don't do this the validators will be gone

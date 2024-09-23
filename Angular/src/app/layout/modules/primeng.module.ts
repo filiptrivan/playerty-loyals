@@ -22,6 +22,9 @@ import { PanelModule } from 'primeng/panel';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
+import { ProgressBarModule } from 'primeng/progressbar';
+import { DividerModule } from 'primeng/divider';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
   imports: [
@@ -47,7 +50,10 @@ import { AvatarGroupModule } from 'primeng/avatargroup';
     PanelModule,
     AutoCompleteModule,
     AvatarModule,
-    AvatarGroupModule
+    AvatarGroupModule,
+    ProgressBarModule,
+    DividerModule,
+    InputNumberModule,
   ],
   exports: [
     TableModule,
@@ -72,7 +78,10 @@ import { AvatarGroupModule } from 'primeng/avatargroup';
     PanelModule,
     AutoCompleteModule,
     AvatarModule,
-    AvatarGroupModule
+    AvatarGroupModule,
+    ProgressBarModule,
+    DividerModule,
+    InputNumberModule
   ],
   declarations: [],
   providers: [

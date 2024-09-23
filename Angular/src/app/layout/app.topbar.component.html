@@ -13,16 +13,19 @@
   
     <div
       #topbarmenu
-      class="layout-topbar-menu-button layout-topbar-men profile-button"
+      class="profile-button"
       >
       <div
         #topbarprofiledropdownmenubutton
         (click)="layoutService.showProfileDropdownSidebar()"
       >
-        <p-avatar 
+      <p-avatar 
           [label]="avatarLabel"
-          size="large"
-          [style]="{ 'background-color': 'var(--primary-color)', 'color': '#fff', 'cursor': 'pointer', 'width': '38px', 'height': '38px' }"
+          [style]="{ 'background-color': 'var(--primary-color)', 'color': '#fff', 'cursor': 'pointer', 'width': '36px', 'height': '36px', 'font-size': '21px' }"
+          pBadge 
+          [badgeStyleClass]="'p-badge-danger'"
+          [badgeDisabled]="currentUserNotifications.length == 0"
+          [value]="currentUserNotifications.length"
           />
       </div>
       <div

@@ -157,9 +157,16 @@
 	width: 100%;
 }
 
+// FT: You need to manually adjust the height
+.vertical-gray-separator{
+	border-left: 1px solid $shade400;
+}
+
+
+
 .google-signin-button {
 	width: 100%;
-	max-width: 300px; /* Adjust maximum width */
+	max-width: 300px;
 }
 
 .hover-card {
@@ -186,6 +193,29 @@
 	font-size: 17.5px;
 }
 
+.header-separator{
+	margin-top: 7px;
+	border-top: 3px solid $primaryColor;
+	width: 60px;
+}
+
+.big-header{
+	font-size: 34px; 
+	font-weight: 400;
+}
+
+.bold-header-separator{
+	margin-top: 7px;
+	border-top: 6px solid $primaryColor;
+	width: 100px;
+}
+
+@media (max-width: 600px) {
+	.big-header{
+		font-size: 28px;
+	}
+}
+
 .link{
 	color: $primaryColor;
 	cursor: pointer;
@@ -193,4 +223,76 @@
 
 .link:hover {
 	color: $primaryDarkColor;
+}
+
+.blockHead {
+	background-color: $primaryColor;
+	/*width: 150px; */
+	height: 60px;
+	line-height: 60px;
+	display: inline-block;
+	position: relative;
+  }
+  
+.blockHead:after {
+color: $primaryColor;
+border-left: 30px solid;
+border-top: 30px solid transparent;
+border-bottom: 30px solid transparent;
+display: inline-block;
+content: '';
+position: absolute;
+right: -30px;
+top:0
+}
+
+.blocktext{
+	color:white;
+	font-weight:bold;
+	padding-left:10px;
+	font-family:Arial;
+	font-size:11;
+}
+
+.qr-component-wrapper{
+	display: flex; 
+	gap: 13px; 
+	align-items: center;
+	.text-wrapper{
+		width: 60%;
+	}
+}
+
+@media (max-width: 600px) {
+	.qr-component-wrapper{
+		display: flex; 
+		flex-direction: column;
+		gap: 13px;
+		align-items: unset;
+		.text-wrapper{
+			padding-top: 20px;
+			padding-bottom: 20px;
+			margin-bottom: 10px;
+			width: 100%;
+			border-bottom: 1px solid $shade400;
+			width: 100%;
+		}
+	}
+}
+
+@media (max-width: 600px) {
+	.responsive-hidden{
+		display: none;
+	}
+}
+
+.qr-code{
+	border: 2px solid $primaryDarkColor;
+}
+
+.card-overflow-icon{
+    text-align: center;
+	transform: rotate(30deg);
+	color: $primaryLightColor;
+	opacity: 0.2;
 }

@@ -3,6 +3,28 @@ import { TableFilterContext } from "src/app/core/entities/table-filter-context";
 import { TableFilterSortMeta } from "src/app/core/entities/table-filter-sort-meta";
 
 
+export class NotificationSaveBody extends BaseEntity
+{
+    selectedUserIds?: number[];
+	notificationDTO?: Notification;
+
+    constructor(
+    {
+        selectedUserIds,
+		notificationDTO
+    }:{
+        selectedUserIds?: number[];
+		notificationDTO?: Notification;     
+    } = {}
+    ) {
+        super('NotificationSaveBody'); 
+
+        this.selectedUserIds = selectedUserIds;
+		this.notificationDTO = notificationDTO;
+    }
+}
+
+
 export class Product extends BaseEntity
 {
     id?: number;
@@ -63,6 +85,152 @@ export class Brand extends BaseEntity
 		this.nameLatin = nameLatin;
 		this.code = code;
 		this.pointsMultiplier = pointsMultiplier;
+    }
+}
+
+
+export class Notification extends BaseEntity
+{
+    title?: string;
+	titleLatin?: string;
+	description?: string;
+	descriptionLatin?: string;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        title,
+		titleLatin,
+		description,
+		descriptionLatin,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        title?: string;
+		titleLatin?: string;
+		description?: string;
+		descriptionLatin?: string;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('Notification'); 
+
+        this.title = title;
+		this.titleLatin = titleLatin;
+		this.description = description;
+		this.descriptionLatin = descriptionLatin;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
+export class Tier extends BaseEntity
+{
+    name?: string;
+	nameLatin?: string;
+	discount?: number;
+	validFrom?: number;
+	validTo?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        name,
+		nameLatin,
+		discount,
+		validFrom,
+		validTo,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        name?: string;
+		nameLatin?: string;
+		discount?: number;
+		validFrom?: number;
+		validTo?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('Tier'); 
+
+        this.name = name;
+		this.nameLatin = nameLatin;
+		this.discount = discount;
+		this.validFrom = validFrom;
+		this.validTo = validTo;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
+export class Transaction extends BaseEntity
+{
+    guid?: any;
+	price?: number;
+	points?: number;
+	userDisplayName?: string;
+	userId?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        guid,
+		price,
+		points,
+		userDisplayName,
+		userId,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        guid?: any;
+		price?: number;
+		points?: number;
+		userDisplayName?: string;
+		userId?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('Transaction'); 
+
+        this.guid = guid;
+		this.price = price;
+		this.points = points;
+		this.userDisplayName = userDisplayName;
+		this.userId = userId;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
     }
 }
 
@@ -185,106 +353,6 @@ export class UserExtended extends BaseEntity
 		this.points = points;
 		this.tierDisplayName = tierDisplayName;
 		this.tierId = tierId;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class Transaction extends BaseEntity
-{
-    guid?: any;
-	price?: number;
-	points?: number;
-	userDisplayName?: string;
-	userId?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        guid,
-		price,
-		points,
-		userDisplayName,
-		userId,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        guid?: any;
-		price?: number;
-		points?: number;
-		userDisplayName?: string;
-		userId?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('Transaction'); 
-
-        this.guid = guid;
-		this.price = price;
-		this.points = points;
-		this.userDisplayName = userDisplayName;
-		this.userId = userId;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class Tier extends BaseEntity
-{
-    name?: string;
-	nameLatin?: string;
-	discount?: number;
-	validFrom?: number;
-	validTo?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        name,
-		nameLatin,
-		discount,
-		validFrom,
-		validTo,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        name?: string;
-		nameLatin?: string;
-		discount?: number;
-		validFrom?: number;
-		validTo?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('Tier'); 
-
-        this.name = name;
-		this.nameLatin = nameLatin;
-		this.discount = discount;
-		this.validFrom = validFrom;
-		this.validTo = validTo;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;

@@ -18,6 +18,7 @@ namespace Playerty.Loyals.Infrastructure
         {
         }
 
+        public DbSet<Notification> Notifications { get; set; } // FT: Maybe move to framework, i think every app should have notifications?
         public DbSet<Tier> Tiers { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TransactionStatus> TransactionStatuses { get; set; }
@@ -26,6 +27,21 @@ namespace Playerty.Loyals.Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Notification>()
+                .HasMany(n => n.Users)         
+                .WithMany(u => u.Notifications)
+                .UsingEntity<Dictionary<string, object>>(
+                    "NotificationUser",          
+                    join => join.HasOne<UserExtended>()   
+                        .WithMany()
+                        .HasForeignKey("UsersId") 
+                        .OnDelete(DeleteBehavior.Cascade),
+                    join => join.HasOne<Notification>() 
+                        .WithMany()
+                        .HasForeignKey("NotificationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                );
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

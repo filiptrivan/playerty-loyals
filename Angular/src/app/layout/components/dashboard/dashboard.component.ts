@@ -1,3 +1,4 @@
+import { Tier, UserExtended } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from '../../../business/services/api/api.service';
 import { LayoutService } from '../../service/app.layout.service';
 import { Component, OnInit } from '@angular/core';
@@ -6,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {
-  cardTitle: string = $localize`:@@Homepage:Homepage`
+  currentUser: UserExtended;
+  tierForTheCurrentUser: Tier;
+  levelPercentForTheCurrentUser: number;
 
   constructor(
     public layoutService: LayoutService,
@@ -14,10 +17,19 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // throw Error("TEST")
+    this.apiService.getCurrentUser().subscribe(res => {
+      this.currentUser = res;
+
+      this.apiService.getTier(res.tierId).subscribe(res => {
+        this.tierForTheCurrentUser = res;
+        const levelPercentForTheCurrentUserHelper = Number((this.currentUser.points / res.validTo * 100).toFixed(2));
+        if(levelPercentForTheCurrentUserHelper > 100){
+          this.levelPercentForTheCurrentUser = 100;
+        }else{
+          this.levelPercentForTheCurrentUser = levelPercentForTheCurrentUserHelper;
+        }
+      })
+    });
   }
 
-  auth(){
-    this.apiService.getCurrentUser().subscribe();
-  }
 }

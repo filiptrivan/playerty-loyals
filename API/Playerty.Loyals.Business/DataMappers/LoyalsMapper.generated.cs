@@ -4,7 +4,7 @@ using Playerty.Loyals.Business.Entities;
 
 namespace Playerty.Loyals.Business.DataMappers
 {
-    [Mapper]
+    [Mapper(EnabledConversions = MappingConversionType.All)]
     public static partial class Mapper
     {
 
@@ -13,19 +13,19 @@ namespace Playerty.Loyals.Business.DataMappers
         public static partial TransactionProduct Map(TransactionProductDTO dto);
 
                 [MapProperty("Transaction.Id", "TransactionId")]
-[MapProperty("Transaction.Id", "TransactionDisplayName")]
+[MapProperty("Transaction.Guid", "TransactionDisplayName")]
         public static partial TransactionProductDTO Map(TransactionProduct poco);
 
                 [MapProperty("Transaction.Id", "TransactionId")]
-[MapProperty("Transaction.Id", "TransactionDisplayName")]
+[MapProperty("Transaction.Guid", "TransactionDisplayName")]
         public static partial TransactionProductDTO ExcelMap(TransactionProduct poco);
 
                 [MapProperty("Transaction.Id", "TransactionId")]
-[MapProperty("Transaction.Id", "TransactionDisplayName")]
+[MapProperty("Transaction.Guid", "TransactionDisplayName")]
         public static partial IQueryable<TransactionProductDTO> ProjectTo(this IQueryable<TransactionProduct> poco);
 
                 [MapProperty("Transaction.Id", "TransactionId")]
-[MapProperty("Transaction.Id", "TransactionDisplayName")]
+[MapProperty("Transaction.Guid", "TransactionDisplayName")]
         public static partial IQueryable<TransactionProductDTO> ExcelProjectTo(this IQueryable<TransactionProduct> poco);
 
         public static partial void MergeMap(TransactionProductDTO dto, TransactionProduct poco);
@@ -62,13 +62,9 @@ namespace Playerty.Loyals.Business.DataMappers
 
         
 
-                [MapProperty("Tier.Id", "TierId")]
-[MapProperty("Tier.Id", "TierDisplayName")]
-        public static partial IQueryable<UserExtendedDTO> ProjectTo(this IQueryable<UserExtended> poco);
+        
 
-                [MapProperty("Tier.Id", "TierId")]
-[MapProperty("Tier.Id", "TierDisplayName")]
-        public static partial IQueryable<UserExtendedDTO> ExcelProjectTo(this IQueryable<UserExtended> poco);
+        
 
         public static partial void MergeMap(UserExtendedDTO dto, UserExtended poco);
 
@@ -80,22 +76,43 @@ namespace Playerty.Loyals.Business.DataMappers
         public static partial Transaction Map(TransactionDTO dto);
 
                 [MapProperty("User.Id", "UserId")]
-[MapProperty("User.Id", "UserDisplayName")]
+[MapProperty("User.Email", "UserDisplayName")]
         public static partial TransactionDTO Map(Transaction poco);
 
                 [MapProperty("User.Id", "UserId")]
-[MapProperty("User.Id", "UserDisplayName")]
+[MapProperty("User.Email", "UserDisplayName")]
         public static partial TransactionDTO ExcelMap(Transaction poco);
 
                 [MapProperty("User.Id", "UserId")]
-[MapProperty("User.Id", "UserDisplayName")]
+[MapProperty("User.Email", "UserDisplayName")]
         public static partial IQueryable<TransactionDTO> ProjectTo(this IQueryable<Transaction> poco);
 
                 [MapProperty("User.Id", "UserId")]
-[MapProperty("User.Id", "UserDisplayName")]
+[MapProperty("User.Email", "UserDisplayName")]
         public static partial IQueryable<TransactionDTO> ExcelProjectTo(this IQueryable<Transaction> poco);
 
         public static partial void MergeMap(TransactionDTO dto, Transaction poco);
+
+        #endregion
+
+
+        #region Notification
+
+        public static partial Notification Map(NotificationDTO dto);
+
+                
+        public static partial NotificationDTO Map(Notification poco);
+
+                
+        public static partial NotificationDTO ExcelMap(Notification poco);
+
+                
+        public static partial IQueryable<NotificationDTO> ProjectTo(this IQueryable<Notification> poco);
+
+                
+        public static partial IQueryable<NotificationDTO> ExcelProjectTo(this IQueryable<Notification> poco);
+
+        public static partial void MergeMap(NotificationDTO dto, Notification poco);
 
         #endregion
 

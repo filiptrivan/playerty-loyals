@@ -10,6 +10,7 @@ import { SoftTextboxComponent } from './soft-textbox/soft-textbox.component';
 import { SoftCheckboxComponent } from './soft-checkbox/soft-checkbox.component';
 import { SoftMultiselectComponent } from './soft-multiselect/soft-multiselect.component';
 import { SoftTextareaComponent } from './soft-textarea/soft-textarea.component';
+import { SoftNumberComponent } from './soft-number/soft-number.component';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { SoftTextareaComponent } from './soft-textarea/soft-textarea.component';
     SoftPanelsModule,
     SoftPasswordComponent,
     SoftMultiAutocompleteComponent,
-    SoftMultiselectComponent
+    SoftMultiselectComponent,
+    SoftNumberComponent
   ],
   exports: [
     CommonModule,
@@ -38,7 +40,8 @@ import { SoftTextareaComponent } from './soft-textarea/soft-textarea.component';
     SoftPanelsModule,
     SoftPasswordComponent,
     SoftMultiAutocompleteComponent,
-    SoftMultiselectComponent
+    SoftMultiselectComponent,
+    SoftNumberComponent
   ],
   declarations: [
   ],

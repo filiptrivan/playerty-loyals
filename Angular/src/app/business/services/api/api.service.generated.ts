@@ -5,32 +5,34 @@ import { environment } from 'src/environments/environment';
 import { ApiSecurityService } from './api.service.security';
 import { Namebook } from '../../entities/generated/namebook.generated';
 import { TableFilter } from '../../entities/generated/table-filter.generated';
-import { OnlineShop } from '../../entities/generated/business-entities.generated';
-import { UserExtendedSaveBody } from '../../entities/generated/business-entities.generated';
-import { Brand } from '../../entities/generated/business-entities.generated';
-import { Product } from '../../entities/generated/business-entities.generated';
+import { QrCode } from '../../entities/generated/business-entities.generated';
+import { Notification } from '../../entities/generated/business-entities.generated';
+import { Tier } from '../../entities/generated/business-entities.generated';
+import { Transaction } from '../../entities/generated/business-entities.generated';
 import { TransactionProduct } from '../../entities/generated/business-entities.generated';
 import { TransactionStatus } from '../../entities/generated/business-entities.generated';
 import { UserExtended } from '../../entities/generated/business-entities.generated';
-import { Transaction } from '../../entities/generated/business-entities.generated';
-import { Tier } from '../../entities/generated/business-entities.generated';
-import { QrCode } from '../../entities/generated/business-entities.generated';
-import { RegistrationVerificationResult } from '../../entities/generated/security-entities.generated';
-import { JwtAuthResult } from '../../entities/generated/security-entities.generated';
+import { UserExtendedSaveBody } from '../../entities/generated/business-entities.generated';
+import { Brand } from '../../entities/generated/business-entities.generated';
+import { Product } from '../../entities/generated/business-entities.generated';
+import { NotificationSaveBody } from '../../entities/generated/business-entities.generated';
+import { OnlineShop } from '../../entities/generated/business-entities.generated';
+import { ForgotPassword } from '../../entities/generated/security-entities.generated';
 import { RegistrationVerificationToken } from '../../entities/generated/security-entities.generated';
-import { ExternalProvider } from '../../entities/generated/security-entities.generated';
-import { LoginVerificationToken } from '../../entities/generated/security-entities.generated';
 import { ForgotPasswordVerificationToken } from '../../entities/generated/security-entities.generated';
-import { Registration } from '../../entities/generated/security-entities.generated';
+import { LoginVerificationToken } from '../../entities/generated/security-entities.generated';
 import { LoginResult } from '../../entities/generated/security-entities.generated';
+import { Registration } from '../../entities/generated/security-entities.generated';
+import { Login } from '../../entities/generated/security-entities.generated';
+import { RefreshTokenRequest } from '../../entities/generated/security-entities.generated';
+import { JwtAuthResult } from '../../entities/generated/security-entities.generated';
 import { Permission } from '../../entities/generated/security-entities.generated';
 import { Role } from '../../entities/generated/security-entities.generated';
-import { ForgotPassword } from '../../entities/generated/security-entities.generated';
-import { Login } from '../../entities/generated/security-entities.generated';
-import { RefreshToken } from '../../entities/generated/security-entities.generated';
-import { RoleSaveBody } from '../../entities/generated/security-entities.generated';
-import { RefreshTokenRequest } from '../../entities/generated/security-entities.generated';
+import { RegistrationVerificationResult } from '../../entities/generated/security-entities.generated';
 import { VerificationTokenRequest } from '../../entities/generated/security-entities.generated';
+import { RefreshToken } from '../../entities/generated/security-entities.generated';
+import { ExternalProvider } from '../../entities/generated/security-entities.generated';
+import { RoleSaveBody } from '../../entities/generated/security-entities.generated';
 
 @Injectable()
 export class ApiGeneratedService extends ApiSecurityService {
@@ -40,6 +42,50 @@ export class ApiGeneratedService extends ApiSecurityService {
     }
 
     
+    loadTierListForTable(dto: TableFilter): Observable<Tier> { 
+        return this.http.post<Tier>(`${environment.apiUrl}/Tier/LoadTierListForTable`, dto, environment.httpTableOptions);
+    }
+
+    exportTierListToExcel(dto: TableFilter): Observable<any> { 
+        return this.http.post<any>(`${environment.apiUrl}/Tier/ExportTierListToExcel`, dto, environment.httpOptions);
+    }
+
+    deleteTier(id: number): Observable<any> { 
+        return this.http.delete<any>(`${environment.apiUrl}/Tier/DeleteTier?id=${id}`);
+    }
+
+    getTier(id: number): Observable<Tier> {
+        return this.http.get<Tier>(`${environment.apiUrl}/Tier/GetTier?id=${id}`);
+    }
+
+    saveTier(tierDTO: Tier): Observable<Tier> { 
+        return this.http.put<Tier>(`${environment.apiUrl}/Tier/SaveTier`, tierDTO, environment.httpOptions);
+    }
+
+    loadNotificationListForTable(dto: TableFilter): Observable<Notification> { 
+        return this.http.post<Notification>(`${environment.apiUrl}/Notification/LoadNotificationListForTable`, dto, environment.httpTableOptions);
+    }
+
+    exportNotificationListToExcel(dto: TableFilter): Observable<any> { 
+        return this.http.post<any>(`${environment.apiUrl}/Notification/ExportNotificationListToExcel`, dto, environment.httpOptions);
+    }
+
+    deleteNotification(id: number): Observable<any> { 
+        return this.http.delete<any>(`${environment.apiUrl}/Notification/DeleteNotification?id=${id}`);
+    }
+
+    getNotification(id: number): Observable<Notification> {
+        return this.http.get<Notification>(`${environment.apiUrl}/Notification/GetNotification?id=${id}`);
+    }
+
+    saveNotification(notificationSaveBodyDTO: NotificationSaveBody): Observable<Notification> { 
+        return this.http.put<Notification>(`${environment.apiUrl}/Notification/SaveNotification`, notificationSaveBodyDTO, environment.httpOptions);
+    }
+
+    loadUserExtendedNamebookListForNotification(notificationId: number): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Notification/LoadUserExtendedNamebookListForNotification?notificationId=${notificationId}`, environment.httpDropdownOptions);
+    }
+
     getCurrentUser(): Observable<UserExtended> {
         return this.http.get<UserExtended>(`${environment.apiUrl}/Auth/GetCurrentUser`);
     }
@@ -70,6 +116,10 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     loadUserListForDropdown(): Observable<Namebook[]> {
         return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadUserListForDropdown`, environment.httpDropdownOptions);
+    }
+
+    loadNotificationListForTheCurrentUser(): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadNotificationListForTheCurrentUser`, environment.httpDropdownOptions);
     }
 
     getQrCodeDataForTheCurrentUser(): Observable<QrCode> {

@@ -2,6 +2,29 @@ using Soft.Generator.Shared.DTO;
 
 namespace Playerty.Loyals.Business.DTO // FT: Don't change namespace in generator, it's mandatory for partial classes
 {
+    public partial class NotificationDTO : BusinessObjectDTO<long>
+    {
+        public string Title { get; set; }
+		public string TitleLatin { get; set; }
+		public string Description { get; set; }
+		public string DescriptionLatin { get; set; }
+    }
+    public partial class TierDTO : BusinessObjectDTO<int>
+    {
+        public string Name { get; set; }
+		public string NameLatin { get; set; }
+		public int? Discount { get; set; }
+		public int? ValidFrom { get; set; }
+		public int? ValidTo { get; set; }
+    }
+    public partial class TransactionDTO : BusinessObjectDTO<long>
+    {
+        public Guid? Guid { get; set; }
+		public decimal? Price { get; set; }
+		public int? Points { get; set; }
+		public string UserDisplayName { get; set; }
+		public long? UserId { get; set; }
+    }
     public partial class TransactionProductDTO : ReadonlyObjectDTO<long>
     {
         public long? ProductId { get; set; }
@@ -23,22 +46,6 @@ namespace Playerty.Loyals.Business.DTO // FT: Don't change namespace in generato
 		public int? Points { get; set; }
 		public string TierDisplayName { get; set; }
 		public int? TierId { get; set; }
-    }
-    public partial class TransactionDTO : BusinessObjectDTO<long>
-    {
-        public Guid? Guid { get; set; }
-		public decimal? Price { get; set; }
-		public int? Points { get; set; }
-		public string UserDisplayName { get; set; }
-		public long? UserId { get; set; }
-    }
-    public partial class TierDTO : BusinessObjectDTO<int>
-    {
-        public string Name { get; set; }
-		public string NameLatin { get; set; }
-		public int? Discount { get; set; }
-		public int? ValidFrom { get; set; }
-		public int? ValidTo { get; set; }
     }
 }
 

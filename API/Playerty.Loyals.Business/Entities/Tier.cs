@@ -28,11 +28,15 @@ namespace Playerty.Loyals.Business.Entities
         /// <summary>
         /// Points
         /// </summary>
+        [GreaterThanOrEqualTo(0)]
+        [Required]
         public int ValidFrom { get; set; }
 
         /// <summary>
         /// Points
         /// </summary>
+        [GreaterThanOrEqualTo(0)]
+        [Required]
         public int ValidTo { get; set; }
 
         public virtual List<UserExtended> Users { get; set; }

@@ -6,8 +6,14 @@ export function getValidatorLoyals(formControl: SoftFormControl, className: stri
     switch(formControl.label + className){
 
 
-
-
+        case 'titleNotification':
+            return titleNotificationValidator(formControl);
+        case 'titleLatinNotification':
+            return titleLatinNotificationValidator(formControl);
+        case 'descriptionNotification':
+            return descriptionNotificationValidator(formControl);
+        case 'descriptionLatinNotification':
+            return descriptionLatinNotificationValidator(formControl);
 
         case 'nameTier':
             return nameTierValidator(formControl);
@@ -15,6 +21,10 @@ export function getValidatorLoyals(formControl: SoftFormControl, className: stri
             return nameLatinTierValidator(formControl);
         case 'discountTier':
             return discountTierValidator(formControl);
+        case 'validFromTier':
+            return validFromTierValidator(formControl);
+        case 'validToTier':
+            return validToTierValidator(formControl);
 
         case 'guidTransaction':
             return guidTransactionValidator(formControl);
@@ -47,8 +57,10 @@ export function getValidatorLoyals(formControl: SoftFormControl, className: stri
             return numberOfFailedAttemptsInARowUserExtendedValidator(formControl);
         case 'pointsUserExtended':
             return pointsUserExtendedValidator(formControl);
-        case 'tierIdUserExtended':
-            return tierIdUserExtendedValidator(formControl);
+
+
+
+
 
         default:
             return null;
@@ -57,7 +69,73 @@ export function getValidatorLoyals(formControl: SoftFormControl, className: stri
 
 
 
+export function titleNotificationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value ?? "";
 
+        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const min = 1;
+        const max = 60;
+        const stringLengthRule = value?.length >= min && value?.length <= max;
+
+        const titleValid = notEmptyRule && stringLengthRule;
+
+        return titleValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function titleLatinNotificationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value ?? "";
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const min = 1;
+        const max = 60;
+        const stringLengthRule = value?.length >= min && value?.length <= max;
+
+        const titleLatinValid = notEmptyRule && stringLengthRule;
+
+        return titleLatinValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function descriptionNotificationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value ?? "";
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const min = 1;
+        const max = 255;
+        const stringLengthRule = value?.length >= min && value?.length <= max;
+
+        const descriptionValid = notEmptyRule && stringLengthRule;
+
+        return descriptionValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function descriptionLatinNotificationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value ?? "";
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const min = 1;
+        const max = 255;
+        const stringLengthRule = value?.length >= min && value?.length <= max;
+
+        const descriptionLatinValid = notEmptyRule && stringLengthRule;
+
+        return descriptionLatinValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
 
 
 export function nameTierValidator(control: SoftFormControl): SoftValidatorFn {
@@ -99,10 +177,46 @@ export function discountTierValidator(control: SoftFormControl): SoftValidatorFn
         const value = control.value ?? "";
 
         const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const max = 100;
+        const numberMaxRangeRule = value <= max;
+        const min = 0;
+        const numberMinRangeRule = value >= min;
 
-        const discountValid = notEmptyRule;
+        const discountValid = notEmptyRule && numberMaxRangeRule && numberMinRangeRule;
 
-        return discountValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
+        return discountValid ? null : { _ : $localize`:@@NotEmptyNumberRangeMaxNumberRangeMin:The field is mandatory, must be less or equal ${max} and must be greater or equal ${min}.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function validFromTierValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value ?? "";
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const min = 0;
+        const numberMinRangeRule = value >= min;
+
+        const validFromValid = notEmptyRule && numberMinRangeRule;
+
+        return validFromValid ? null : { _ : $localize`:@@NotEmptyNumberRangeMin:The field is mandatory and must be greater or equal ${min}.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function validToTierValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value ?? "";
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const min = 0;
+        const numberMinRangeRule = value >= min;
+
+        const validToValid = notEmptyRule && numberMinRangeRule;
+
+        return validToValid ? null : { _ : $localize`:@@NotEmptyNumberRangeMin:The field is mandatory and must be greater or equal ${min}.` };
     };
     validator.hasNotEmptyRule = true;
     return validator;
@@ -327,19 +441,9 @@ export function pointsUserExtendedValidator(control: SoftFormControl): SoftValid
     return validator;
 }
 
-export function tierIdUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
 
-        const tierIdValid = notEmptyRule;
 
-        return tierIdValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
 
 
 

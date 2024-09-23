@@ -61,10 +61,27 @@ namespace Playerty.Loyals.Services
                 if (userExtendedSaveBodyDTO.UserExtendedDTO.Email != user.Email)
                     throw new HackerException("You can not change email from here.");
 
-                await _securityBusinessService.UpdateRoleListForUser<UserExtended>(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.SelectedRoleIds);
+                if (userExtendedSaveBodyDTO.SelectedRoleIds != null)
+                    await _securityBusinessService.UpdateRoleListForUser<UserExtended>(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.SelectedRoleIds);
 
                 userExtendedSaveBodyDTO.UserExtendedDTO.Password = user.Password;
                 return await SaveUserExtendedAndReturnDTOAsync(userExtendedSaveBodyDTO.UserExtendedDTO); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
+            });
+        }
+
+        public async Task<List<NamebookDTO<long>>> LoadNotificationListForTheCurrentUser()
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                UserExtended user = await _authenticationService.GetCurrentUser<UserExtended>();
+                return user.Notifications
+                    .OrderBy(x => x.CreatedAt)
+                    .Select(x => new NamebookDTO<long>
+                    {
+                        Id = x.Id,
+                        DisplayName = x.Title,
+                    })
+                    .ToList();
             });
         }
 
@@ -182,10 +199,14 @@ namespace Playerty.Loyals.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                Tier tierWithTheMaximumPoints = await _context.DbSet<Tier>().OrderByDescending(x => x.ValidTo).FirstOrDefaultAsync();
-                if (tierWithTheMaximumPoints.ValidTo <= points)
+                Tier greatestTier = await GetTheGreatestTier();
+                if(greatestTier == null)
                 {
-                    return tierWithTheMaximumPoints;
+                    return null;
+                }
+                else if (greatestTier.ValidTo <= points)
+                {
+                    return greatestTier;
                 }
                 else
                 {
@@ -195,7 +216,51 @@ namespace Playerty.Loyals.Services
             });
         }
 
+        public async Task<Tier> GetTheGreatestTier()
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                return await _context.DbSet<Tier>().OrderByDescending(x => x.ValidTo).FirstOrDefaultAsync();
+            });
+        }
+
         #endregion
+
+        #endregion
+
+        #region Tier
+
+        public async Task<TierDTO> SaveTier(TierDTO tierDTO)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                if (tierDTO.ValidTo <= tierDTO.ValidFrom)
+                    throw new BusinessException("You can not add tier which upper bound is greater than lower bound.");
+
+                Tier greatestTier = await GetTheGreatestTier();
+                if(greatestTier != null && greatestTier.ValidTo != tierDTO.ValidFrom)
+                    throw new BusinessException("Tier must be saved sequentialy (Eg. Tier 1: 1p - 10p, Tier 2: 10p - 20p, Tier 3: 20p - 30p).");
+
+                return await SaveTierAndReturnDTOAsync(tierDTO);
+            });
+        }
+
+        #endregion
+
+        #region Notification
+
+        public async Task<NotificationDTO> SaveNotificationAndReturnDTOExtendedAsync(NotificationSaveBodyDTO notificationSaveBodyDTO)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                NotificationDTO savedNotificationDTO = await SaveNotificationAndReturnDTOAsync(notificationSaveBodyDTO.NotificationDTO);
+                
+                await UpdateUserExtendedListForNotification(savedNotificationDTO.Id, notificationSaveBodyDTO.SelectedUserIds);
+
+                return savedNotificationDTO;
+            });
+        }
+
 
         #endregion
 
