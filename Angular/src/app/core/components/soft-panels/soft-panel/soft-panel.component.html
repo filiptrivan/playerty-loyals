@@ -1,4 +1,11 @@
-<p-panel class="soft-panel" >
+<p-panel 
+    [ngClass]="{
+    'multiple-panel-first': isFirstMultiplePanel,
+    'multiple-panel-middle': isMiddleMultiplePanel,
+    'multiple-panel-last': isLastMultiplePanel,
+    'soft-panel': true
+    }"
+    >
     <ng-template pTemplate="header">
         <div style="padding-left: 10px; padding-right: 10px;">
             <ng-content select="panel-header"></ng-content>

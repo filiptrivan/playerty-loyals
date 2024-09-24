@@ -34,4 +34,8 @@ export class SoftMultiAutocompleteComponent extends BaseAutocompleteControl impl
         this.onTextInput.next(event);
     }
 
+    buttonClick(){
+
+    }
+
 }

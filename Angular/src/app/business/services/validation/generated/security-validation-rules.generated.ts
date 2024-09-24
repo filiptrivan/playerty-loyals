@@ -51,7 +51,15 @@ export function getValidatorSecurity(formControl: SoftFormControl, className: st
             return emailForgotPasswordValidator(formControl);
         case 'newPasswordForgotPassword':
             return newPasswordForgotPasswordValidator(formControl);
-
+            
+        case 'titleNotification':
+            return titleNotificationValidator(formControl);
+        case 'titleLatinNotification':
+            return titleLatinNotificationValidator(formControl);
+        case 'descriptionNotification':
+            return descriptionNotificationValidator(formControl);
+        case 'descriptionLatinNotification':
+            return descriptionLatinNotificationValidator(formControl);
 
 
         default:
@@ -349,6 +357,74 @@ export function newPasswordForgotPasswordValidator(control: SoftFormControl): So
         const newPasswordValid = notEmptyRule && stringLengthRule;
 
         return newPasswordValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function titleNotificationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value ?? "";
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const min = 1;
+        const max = 60;
+        const stringLengthRule = value?.length >= min && value?.length <= max;
+
+        const titleValid = notEmptyRule && stringLengthRule;
+
+        return titleValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function titleLatinNotificationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value ?? "";
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const min = 1;
+        const max = 60;
+        const stringLengthRule = value?.length >= min && value?.length <= max;
+
+        const titleLatinValid = notEmptyRule && stringLengthRule;
+
+        return titleLatinValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function descriptionNotificationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value ?? "";
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const min = 1;
+        const max = 255;
+        const stringLengthRule = value?.length >= min && value?.length <= max;
+
+        const descriptionValid = notEmptyRule && stringLengthRule;
+
+        return descriptionValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function descriptionLatinNotificationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value ?? "";
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const min = 1;
+        const max = 255;
+        const stringLengthRule = value?.length >= min && value?.length <= max;
+
+        const descriptionLatinValid = notEmptyRule && stringLengthRule;
+
+        return descriptionLatinValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
     };
     validator.hasNotEmptyRule = true;
     return validator;

@@ -16,17 +16,22 @@ import { AuthGuard } from './core/guards/auth.guard';
                      path: '',
                      loadChildren: () => import('./layout/components/dashboard/dashboard.module').then(m => m.DashboardModule),
                      canActivate: [AuthGuard]
-                     },
+                    },
                     { 
                      path: 'documentation',
                      loadChildren: () => import('./layout/components/documentation/documentation.module').then(m => m.DocumentationModule),
                      canActivate: [AuthGuard]
-                     },
+                    },
                     { 
                      path: 'administration',
                      loadChildren: () => import('./modules/administration/administration.module').then(m => m.AdministrationModule),
                      canActivate: [AuthGuard]
-                     },
+                    },
+                    { 
+                     path: '',
+                     loadChildren: () => import('./modules/notification/notification.module').then(m => m.NotificationModule),
+                     canActivate: [AuthGuard]
+                    },
                 ],
             },
             {

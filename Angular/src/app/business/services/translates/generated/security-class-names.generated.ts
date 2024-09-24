@@ -34,6 +34,8 @@ export function getTranslatedClassNameSecurity(name: string): string
             return $localize`:@@LoginResult:LoginResult`;
         case 'JwtAuthResult':
             return $localize`:@@JwtAuthResult:JwtAuthResult`;
+        case 'Notification':
+            return $localize`:@@Notification:Notification`;
         default:
             return null;
     }

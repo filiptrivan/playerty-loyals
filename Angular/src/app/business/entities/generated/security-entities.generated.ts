@@ -495,6 +495,79 @@ export class RoleSaveBody extends BaseEntity
     }
 }
 
+export class Notification extends BaseEntity
+{
+    title?: string;
+	description?: string;
+    titleLatin?: string;
+	descriptionLatin?: string;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+    isMarkedAsRead?: boolean;
+
+    constructor(
+    {
+        title,
+		description,
+		titleLatin,
+		descriptionLatin,
+		version,
+		id,
+		createdAt,
+		modifiedAt,
+		isMarkedAsRead,
+    }:{
+        title?: string;
+		description?: string;
+		titleLatin?: string;     
+		descriptionLatin?: string;     
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+		isMarkedAsRead?: boolean;     
+    } = {}
+    ) {
+        super('Notification'); 
+
+        this.title = title;
+		this.description = description;
+		this.titleLatin = titleLatin;
+		this.descriptionLatin = descriptionLatin;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+		this.isMarkedAsRead = isMarkedAsRead;
+    }
+}
+export class NotificationSaveBody extends BaseEntity
+{
+    roleExtendedDTO?: Notification;
+	selectedUserIds?: number[];
+    isMarkedAsRead?: boolean;
+
+    constructor(
+    {
+        roleExtendedDTO,
+		selectedUserIds,
+		isMarkedAsRead,
+    }:{
+        roleExtendedDTO?: Notification;
+		selectedUserIds?: number[];     
+		isMarkedAsRead?: boolean;    
+    } = {}
+    ) {
+        super('NotificationSaveBody'); 
+
+        this.roleExtendedDTO = roleExtendedDTO;
+		this.selectedUserIds = selectedUserIds;
+		this.isMarkedAsRead = isMarkedAsRead;
+    }
+}
+
 // FT HACK: Fake generated class, because of api imports
 export class Namebook extends BaseEntity
 {

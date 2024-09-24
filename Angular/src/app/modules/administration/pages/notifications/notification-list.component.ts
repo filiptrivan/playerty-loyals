@@ -9,7 +9,7 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
 export class NotificationListComponent implements OnInit {
     tableTitle: string = $localize`:@@Notifications:Notifications`
     cols: Column[];
-    controllerName: string = 'Notification';
+    controllerName: string = 'Auth';
     objectName: string = 'Notification';
 
     constructor(
@@ -22,9 +22,9 @@ export class NotificationListComponent implements OnInit {
                 {name:"Delete"},
             ]},
             {name: 'Title', filterType: 'text', field: 'title'},
-            {name: 'TitleLatin', filterType: 'text', field: 'titleLatin'},
+            {name: 'Title latin', filterType: 'text', field: 'titleLatin'},
             {name: 'Description', filterType: 'text', field: 'description'},
-            {name: 'DescriptionLatin', filterType: 'text', field: 'descriptionLatin'},
+            {name: 'Description latin', filterType: 'text', field: 'descriptionLatin'},
             {name: 'Created at', filterType: 'date', field: 'createdAt', showMatchModes: true},
         ]
     }

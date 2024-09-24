@@ -95,13 +95,6 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.LoadUserExtendedListForDropdown(_context.DbSet<UserExtended>());
         }
 
-        [HttpGet]
-        [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> LoadNotificationListForTheCurrentUser()
-        {
-            return await _loyalsBusinessService.LoadNotificationListForTheCurrentUser();
-        }
-
         // joca puskom uzima podatke -> Za ovo ti ne treba endpoint!!!
         //[HttpGet]
         //[AuthGuard]

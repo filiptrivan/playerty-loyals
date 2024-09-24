@@ -5,30 +5,40 @@ import { LayoutService } from "./service/app.layout.service";
 import { environment } from 'src/environments/environment';
 import { filter } from 'rxjs';
 import { User } from '../business/entities/generated/security-entities.generated';
-import { Namebook } from '../business/entities/generated/namebook.generated';
 
 interface SoftMenuItem {
   label?: string;
   icon?: string;
   showSeparator?: boolean;
-  onClick?: () => void
+  onClick?: () => void;
+  showNotificationBadge?: boolean;
 }
 
 @Component({
     selector: 'app-topbar',
-    templateUrl: './app.topbar.component.html'
+    templateUrl: './app.topbar.component.html',
+    styles: [
+    ]
 })
 export class AppTopBarComponent {
     currentUser: User;
-    currentUserNotifications: Namebook[];
+    currentUserNotificationsCount: number;
     menuItems: SoftMenuItem[] = [
       {
         label: $localize`:@@Profile:Profile`,
         icon: 'pi-user',
         showSeparator: true,
         onClick: () => {
-          this.goToUser();
+          this.router.navigateByUrl(`/administration/users/${this.currentUser.id}`);
         }
+      },
+      {
+        label: $localize`:@@Notifications:Notifications`,
+        icon: 'pi-bell',
+        showNotificationBadge: true,
+        onClick: () => {
+          this.router.navigateByUrl(`/notifications`);
+        },
       },
       {
         label: $localize`:@@Settings:Settings`,
@@ -39,7 +49,7 @@ export class AppTopBarComponent {
         icon: 'pi-sign-out',
         showSeparator: true,
         onClick: () => {
-          this.logout();
+          this.authService.logout();
         }
       },
     ];
@@ -59,23 +69,14 @@ export class AppTopBarComponent {
         this.currentUser = res;
         this.avatarLabel = res?.email.charAt(0).toLocaleUpperCase();
     });
-    this.authService.notifications$.subscribe(res => {
-      console.log(res)
-        this.currentUserNotifications = res;
+    this.authService.currentUserNotificationCount$.subscribe((count: number) => {
+        this.currentUserNotificationsCount = count;
     });
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         this.layoutService.state.profileDropdownSidebarVisible = false;
       });
-  }
-    
-  logout(){
-    this.authService.logout();
-  }
-
-  goToUser(){
-    this.router.navigateByUrl(`/administration/users/${this.currentUser.id}`);
   }
 
   onDocumentClick(event: any) {

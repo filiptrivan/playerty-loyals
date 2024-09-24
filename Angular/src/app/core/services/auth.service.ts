@@ -7,9 +7,7 @@ import { environment } from '../../../environments/environment';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { SoftMessageService } from './soft-message.service';
 import { SocialUser, SocialAuthService } from '@abacritt/angularx-social-login';
-import { User, ExternalProvider, Login, VerificationTokenRequest, LoginResult, ForgotPassword, Registration, RegistrationVerificationResult, RefreshTokenRequest } from 'src/app/business/entities/generated/security-entities.generated';
-import { NotificationService } from './notification.service';
-import { Namebook } from 'src/app/business/entities/generated/namebook.generated';
+import { User, ExternalProvider, Login, VerificationTokenRequest, LoginResult, ForgotPassword, Registration, RegistrationVerificationResult, RefreshTokenRequest, Notification } from 'src/app/business/entities/generated/security-entities.generated';
 
 
 @Injectable({
@@ -22,8 +20,8 @@ export class AuthService implements OnDestroy {
   private _user = new BehaviorSubject<User | null>(null);
   user$ = this._user.asObservable();
 
-  private _notifications = new BehaviorSubject<Namebook[] | null>(null);
-  notifications$ = this._notifications.asObservable();
+  private _currentUserNotificationCount = new BehaviorSubject<number | null>(null);
+  currentUserNotificationCount$ = this._currentUserNotificationCount.asObservable();
 
   // Google auth
   private authChangeSub = new Subject<boolean>();
@@ -59,7 +57,7 @@ export class AuthService implements OnDestroy {
       if (event.key === 'logout-event') {
         this.stopTokenTimer();
         this._user.next(null);
-        this._notifications.next(null);
+        this._currentUserNotificationCount.next(null);
       }
       if (event.key === 'login-event') {
         this.stopTokenTimer();
@@ -71,8 +69,8 @@ export class AuthService implements OnDestroy {
             });
           });
 
-        this.apiService.loadNotificationListForTheCurrentUser().subscribe(res => {
-          this._notifications.next(res);
+        this.apiService.getUnreadNotificationCountForTheCurrentUser().subscribe(res => {
+          this._currentUserNotificationCount.next(res);
         })
       }
     }
@@ -137,8 +135,8 @@ export class AuthService implements OnDestroy {
         return loginResult;
       }),
       switchMap((loginResult: LoginResult) => 
-        this.apiService.loadNotificationListForTheCurrentUser().pipe(
-          tap(res => this._notifications.next(res)),
+        this.apiService.getUnreadNotificationCountForTheCurrentUser().pipe(
+          tap(res => this._currentUserNotificationCount.next(res)),
           map(() => loginResult)
         )
       )
@@ -187,9 +185,9 @@ export class AuthService implements OnDestroy {
         this.startTokenTimer();
       }),
       switchMap((loginResult: LoginResult) =>
-        this.apiService.loadNotificationListForTheCurrentUser().pipe(
-          tap((notifications) => {
-            this._notifications.next(notifications);
+        this.apiService.getUnreadNotificationCountForTheCurrentUser().pipe(
+          tap((count) => {
+            this._currentUserNotificationCount.next(count);
           }),
           map(() => loginResult)
         )

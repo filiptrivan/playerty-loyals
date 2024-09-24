@@ -51,7 +51,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     this.detailsTitle = getTranslatedClassName(this.model.typeName);
 
     this.formGroup = new FormGroup({});
-    
+    console.log(model)
     Object.keys(this.model).forEach((key) => {
       let formControl: SoftFormControl = new SoftFormControl(this.model[key]);
       formControl.label = key;

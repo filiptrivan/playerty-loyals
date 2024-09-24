@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { forkJoin, Subscription } from 'rxjs';
-import { Notification, NotificationSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
+import { Notification, NotificationSaveBody } from 'src/app/business/entities/generated/security-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
@@ -19,6 +19,9 @@ export class NotificationDetailsComponent extends BaseForm<Notification> impleme
     private routeSub: Subscription;
     userOptions: PrimengOption[];
     selectedUsers = new SoftFormControl<PrimengOption[]>(null, {updateOn: 'change'})
+    isMarkedAsRead = new SoftFormControl<boolean>(null, {updateOn: 'change'})
+
+    text: string;
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -66,9 +69,14 @@ export class NotificationDetailsComponent extends BaseForm<Notification> impleme
         })
     }
 
+    clg(event){
+        console.log(event)
+    }
+
     override onBeforeSave(): void {
         this.saveBody = new NotificationSaveBody();
         this.saveBody.selectedUserIds = this.selectedUsers.value?.map(x => x.value);
+        this.saveBody.isMarkedAsRead = this.isMarkedAsRead;
         this.saveBody.notificationDTO = this.model;
     }
 }

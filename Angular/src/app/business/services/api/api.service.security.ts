@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { Namebook } from '../../entities/generated/namebook.generated';
 import { Login, VerificationTokenRequest, LoginResult, ForgotPassword, ExternalProvider, Registration, RegistrationVerificationResult, RefreshTokenRequest, User, Role } from '../../entities/generated/security-entities.generated';
 import { TableFilter } from '../../entities/generated/table-filter.generated';
+import { TableResult } from 'src/app/core/entities/table-result';
 
 @Injectable()
 export class ApiSecurityService {
@@ -92,6 +93,57 @@ export class ApiSecurityService {
 
     loadRoleNamebookListForUserExtended(userId: number): Observable<Namebook[]> {
         return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadRoleNamebookListForUserExtended?userId=${userId}`, environment.httpDropdownOptions);
+    }
+
+    
+
+
+    loadNotificationListForAutocomplete(limit: number, query: string): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadNotificationListForAutocomplete?limit=${limit}&query=${query}`, environment.httpDropdownOptions);
+    }
+
+    loadNotificationListForDropdown(): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadNotificationListForDropdown`, environment.httpDropdownOptions);
+    }
+
+    loadNotificationListForTable(dto: TableFilter): Observable<Notification[]> { 
+        return this.http.post<Notification[]>(`${environment.apiUrl}/Auth/LoadNotificationListForTable`, dto, environment.httpTableOptions);
+    }
+
+    exportNotificationListToExcel(dto: TableFilter): Observable<any> { 
+        return this.http.post<any>(`${environment.apiUrl}/Auth/ExportNotificationListToExcel`, dto, environment.httpOptions);
+    }
+
+    deleteNotification(id: number): Observable<any> { 
+        return this.http.delete<any>(`${environment.apiUrl}/Auth/DeleteNotification?id=${id}`);
+    }
+
+    getNotification(id: number): Observable<Notification> {
+        return this.http.get<Notification>(`${environment.apiUrl}/Auth/GetNotification?id=${id}`);
+    }
+
+    loadNotificationListForTheCurrentUser(tableFilter: TableFilter): Observable<TableResult> {
+        return this.http.post<TableResult>(`${environment.apiUrl}/Auth/LoadNotificationListForTheCurrentUser`, tableFilter);
+    }
+
+    saveNotification(dto: Notification): Observable<Notification> { 
+        return this.http.put<Notification>(`${environment.apiUrl}/Auth/SaveNotification`, dto, environment.httpOptions);
+    }
+
+    loadPermissionListForNotification(notificationId: number): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadPermissionListForNotification?notificationId=${notificationId}`, environment.httpDropdownOptions);
+    }
+
+    loadUserExtendedNamebookListForNotification(notificationId: number): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadUserListForNotification?notificationId=${notificationId}`, environment.httpDropdownOptions);
+    }
+
+    loadNotificationNamebookListForUserExtended(userId: number): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadNotificationNamebookListForUserExtended?userId=${userId}`, environment.httpDropdownOptions);
+    }
+
+    getUnreadNotificationCountForTheCurrentUser(): Observable<number> {
+        return this.http.get<number>(`${environment.apiUrl}/Auth/GetUnreadNotificationCountForTheCurrentUser`, environment.httpDropdownOptions);
     }
 
 }

@@ -25,6 +25,12 @@ import { AvatarGroupModule } from 'primeng/avatargroup';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { DividerModule } from 'primeng/divider';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { MenuModule } from 'primeng/menu';
+import { PaginatorModule } from 'primeng/paginator';
+import { EditorModule } from 'primeng/editor';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
 @NgModule({
   imports: [
@@ -54,6 +60,12 @@ import { InputNumberModule } from 'primeng/inputnumber';
     ProgressBarModule,
     DividerModule,
     InputNumberModule,
+    OverlayPanelModule,
+    MenuModule,
+    PaginatorModule,
+    EditorModule,
+    InputGroupModule,
+    InputGroupAddonModule
   ],
   exports: [
     TableModule,
@@ -81,7 +93,13 @@ import { InputNumberModule } from 'primeng/inputnumber';
     AvatarGroupModule,
     ProgressBarModule,
     DividerModule,
-    InputNumberModule
+    InputNumberModule,
+    OverlayPanelModule,
+    MenuModule,
+    PaginatorModule,
+    EditorModule,
+    InputGroupModule,
+    InputGroupAddonModule
   ],
   declarations: [],
   providers: [

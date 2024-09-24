@@ -2,13 +2,6 @@ using Soft.Generator.Shared.DTO;
 
 namespace Playerty.Loyals.Business.DTO // FT: Don't change namespace in generator, it's mandatory for partial classes
 {
-    public partial class NotificationDTO : BusinessObjectDTO<long>
-    {
-        public string Title { get; set; }
-		public string TitleLatin { get; set; }
-		public string Description { get; set; }
-		public string DescriptionLatin { get; set; }
-    }
     public partial class TierDTO : BusinessObjectDTO<int>
     {
         public string Name { get; set; }

@@ -1,7 +1,7 @@
 <!-- Can't put (onBlur) in this control -->
 
 <div class="flex flex-column gap-2">
-  <div>
+  <div *ngIf="getTranslatedLabel() != '' && getTranslatedLabel() != null">
     <label>{{getTranslatedLabel()}}</label>
     <required *ngIf="control.required"></required>
   </div>
@@ -14,5 +14,6 @@
     [formControl]="control"
     [id]="control.label"
     (blur)="control.markAsDirty()"
+    [placeholder]="placeholder"
     />
   </div>

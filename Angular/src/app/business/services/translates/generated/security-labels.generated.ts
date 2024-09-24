@@ -56,6 +56,12 @@ export function getTranslatedLabelSecurity(name: string): string
             return $localize`:@@UserEmail:UserEmail`;
         case 'token':
             return $localize`:@@Token:Token`;
+        case 'title':
+            return $localize`:@@Title:Title`;
+        case 'titleLatin':
+            return $localize`:@@TitleLatin:TitleLatin`;
+        case 'descriptionLatin':
+            return $localize`:@@DescriptionLatin:DescriptionLatin`;
         default:
             return null;
     }

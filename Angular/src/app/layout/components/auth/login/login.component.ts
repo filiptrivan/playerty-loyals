@@ -34,9 +34,6 @@ export class LoginComponent extends BaseForm<Login> implements OnInit {
     ) { 
       super(differs, http, messageService, changeDetectorRef, router, route);
     }
-    clg(){
-        console.log("object")
-    }
 
     override ngOnInit(){
         this.subscription = this.authService.navigateToDashboardIfLoggedIn();

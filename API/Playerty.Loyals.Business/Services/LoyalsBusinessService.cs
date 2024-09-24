@@ -69,22 +69,6 @@ namespace Playerty.Loyals.Services
             });
         }
 
-        public async Task<List<NamebookDTO<long>>> LoadNotificationListForTheCurrentUser()
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                UserExtended user = await _authenticationService.GetCurrentUser<UserExtended>();
-                return user.Notifications
-                    .OrderBy(x => x.CreatedAt)
-                    .Select(x => new NamebookDTO<long>
-                    {
-                        Id = x.Id,
-                        DisplayName = x.Title,
-                    })
-                    .ToList();
-            });
-        }
-
         protected override void OnBeforeUserExtendedIsMapped(UserExtendedDTO dto)
         {
             //dto.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(dto.Password); // FT: We don't need this because we will read hashed password from the database
@@ -244,23 +228,6 @@ namespace Playerty.Loyals.Services
                 return await SaveTierAndReturnDTOAsync(tierDTO);
             });
         }
-
-        #endregion
-
-        #region Notification
-
-        public async Task<NotificationDTO> SaveNotificationAndReturnDTOExtendedAsync(NotificationSaveBodyDTO notificationSaveBodyDTO)
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                NotificationDTO savedNotificationDTO = await SaveNotificationAndReturnDTOAsync(notificationSaveBodyDTO.NotificationDTO);
-                
-                await UpdateUserExtendedListForNotification(savedNotificationDTO.Id, notificationSaveBodyDTO.SelectedUserIds);
-
-                return savedNotificationDTO;
-            });
-        }
-
 
         #endregion
 

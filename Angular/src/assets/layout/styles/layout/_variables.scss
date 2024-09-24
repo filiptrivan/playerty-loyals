@@ -9,6 +9,7 @@ $disabled: #f8f9fa;
 /* SAGA */
 $primaryColor: #2196F3 !default;
 $primaryLightColor: scale-color($primaryColor, $lightness: 60%) !default;
+$primaryLighterColor: scale-color($primaryColor, $lightness: 95%) !default;
 $primaryDarkColor: scale-color($primaryColor, $lightness: -10%) !default;
 $primaryDarkerColor: scale-color($primaryColor, $lightness: -20%) !default;
 $primaryTextColor: #ffffff !default;

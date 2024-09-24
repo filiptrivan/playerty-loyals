@@ -4,37 +4,6 @@ using Soft.Generator.Shared.SoftFluentValidation;
 
 namespace Playerty.Loyals.Business.ValidationRules
 {
-    public class NotificationSaveBodyDTOValidationRules : AbstractValidator<NotificationSaveBodyDTO>
-    {
-        public NotificationSaveBodyDTOValidationRules()
-        {
-            
-        }
-    }
-    public class ProductDTOValidationRules : AbstractValidator<ProductDTO>
-    {
-        public ProductDTOValidationRules()
-        {
-            
-        }
-    }
-    public class BrandDTOValidationRules : AbstractValidator<BrandDTO>
-    {
-        public BrandDTOValidationRules()
-        {
-            
-        }
-    }
-    public class NotificationDTOValidationRules : AbstractValidator<NotificationDTO>
-    {
-        public NotificationDTOValidationRules()
-        {
-            RuleFor(x => x.Title).Length(1, 60).NotEmpty();
-			RuleFor(x => x.TitleLatin).Length(1, 60).NotEmpty();
-			RuleFor(x => x.Description).Length(1, 255).NotEmpty();
-			RuleFor(x => x.DescriptionLatin).Length(1, 255).NotEmpty();
-        }
-    }
     public class TierDTOValidationRules : AbstractValidator<TierDTO>
     {
         public TierDTOValidationRules()
@@ -84,9 +53,9 @@ namespace Playerty.Loyals.Business.ValidationRules
 			RuleFor(x => x.Points).NotEmpty();
         }
     }
-    public class UserExtendedSaveBodyDTOValidationRules : AbstractValidator<UserExtendedSaveBodyDTO>
+    public class BrandDTOValidationRules : AbstractValidator<BrandDTO>
     {
-        public UserExtendedSaveBodyDTOValidationRules()
+        public BrandDTOValidationRules()
         {
             
         }
@@ -98,9 +67,23 @@ namespace Playerty.Loyals.Business.ValidationRules
             
         }
     }
+    public class ProductDTOValidationRules : AbstractValidator<ProductDTO>
+    {
+        public ProductDTOValidationRules()
+        {
+            
+        }
+    }
     public class QrCodeDTOValidationRules : AbstractValidator<QrCodeDTO>
     {
         public QrCodeDTOValidationRules()
+        {
+            
+        }
+    }
+    public class UserExtendedSaveBodyDTOValidationRules : AbstractValidator<UserExtendedSaveBodyDTO>
+    {
+        public UserExtendedSaveBodyDTOValidationRules()
         {
             
         }

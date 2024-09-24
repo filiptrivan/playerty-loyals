@@ -14,6 +14,7 @@ import { SoftFormControl } from '../components/soft-form-control/soft-form-contr
     @Input() disabled: boolean = false;
     @Input() label: string = null; // NgModel/Want custom translation
     @Input() controlValid: boolean = true; // NgModel
+    @Input() placeholder: string = "";
 
     validationErrorMessage: string;
     

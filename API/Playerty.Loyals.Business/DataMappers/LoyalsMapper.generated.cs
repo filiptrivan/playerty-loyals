@@ -8,6 +8,52 @@ namespace Playerty.Loyals.Business.DataMappers
     public static partial class Mapper
     {
 
+        #region Tier
+
+        public static partial Tier Map(TierDTO dto);
+
+                
+        public static partial TierDTO Map(Tier poco);
+
+                
+        public static partial TierDTO ExcelMap(Tier poco);
+
+                
+        public static partial IQueryable<TierDTO> ProjectTo(this IQueryable<Tier> poco);
+
+                
+        public static partial IQueryable<TierDTO> ExcelProjectTo(this IQueryable<Tier> poco);
+
+        public static partial void MergeMap(TierDTO dto, Tier poco);
+
+        #endregion
+
+
+        #region Transaction
+
+        public static partial Transaction Map(TransactionDTO dto);
+
+                [MapProperty("User.Id", "UserId")]
+[MapProperty("User.Email", "UserDisplayName")]
+        public static partial TransactionDTO Map(Transaction poco);
+
+                [MapProperty("User.Id", "UserId")]
+[MapProperty("User.Email", "UserDisplayName")]
+        public static partial TransactionDTO ExcelMap(Transaction poco);
+
+                [MapProperty("User.Id", "UserId")]
+[MapProperty("User.Email", "UserDisplayName")]
+        public static partial IQueryable<TransactionDTO> ProjectTo(this IQueryable<Transaction> poco);
+
+                [MapProperty("User.Id", "UserId")]
+[MapProperty("User.Email", "UserDisplayName")]
+        public static partial IQueryable<TransactionDTO> ExcelProjectTo(this IQueryable<Transaction> poco);
+
+        public static partial void MergeMap(TransactionDTO dto, Transaction poco);
+
+        #endregion
+
+
         #region TransactionProduct
 
         public static partial TransactionProduct Map(TransactionProductDTO dto);
@@ -67,73 +113,6 @@ namespace Playerty.Loyals.Business.DataMappers
         
 
         public static partial void MergeMap(UserExtendedDTO dto, UserExtended poco);
-
-        #endregion
-
-
-        #region Transaction
-
-        public static partial Transaction Map(TransactionDTO dto);
-
-                [MapProperty("User.Id", "UserId")]
-[MapProperty("User.Email", "UserDisplayName")]
-        public static partial TransactionDTO Map(Transaction poco);
-
-                [MapProperty("User.Id", "UserId")]
-[MapProperty("User.Email", "UserDisplayName")]
-        public static partial TransactionDTO ExcelMap(Transaction poco);
-
-                [MapProperty("User.Id", "UserId")]
-[MapProperty("User.Email", "UserDisplayName")]
-        public static partial IQueryable<TransactionDTO> ProjectTo(this IQueryable<Transaction> poco);
-
-                [MapProperty("User.Id", "UserId")]
-[MapProperty("User.Email", "UserDisplayName")]
-        public static partial IQueryable<TransactionDTO> ExcelProjectTo(this IQueryable<Transaction> poco);
-
-        public static partial void MergeMap(TransactionDTO dto, Transaction poco);
-
-        #endregion
-
-
-        #region Notification
-
-        public static partial Notification Map(NotificationDTO dto);
-
-                
-        public static partial NotificationDTO Map(Notification poco);
-
-                
-        public static partial NotificationDTO ExcelMap(Notification poco);
-
-                
-        public static partial IQueryable<NotificationDTO> ProjectTo(this IQueryable<Notification> poco);
-
-                
-        public static partial IQueryable<NotificationDTO> ExcelProjectTo(this IQueryable<Notification> poco);
-
-        public static partial void MergeMap(NotificationDTO dto, Notification poco);
-
-        #endregion
-
-
-        #region Tier
-
-        public static partial Tier Map(TierDTO dto);
-
-                
-        public static partial TierDTO Map(Tier poco);
-
-                
-        public static partial TierDTO ExcelMap(Tier poco);
-
-                
-        public static partial IQueryable<TierDTO> ProjectTo(this IQueryable<Tier> poco);
-
-                
-        public static partial IQueryable<TierDTO> ExcelProjectTo(this IQueryable<Tier> poco);
-
-        public static partial void MergeMap(TierDTO dto, Tier poco);
 
         #endregion
 

@@ -21,11 +21,11 @@
       >
       <p-avatar 
           [label]="avatarLabel"
-          [style]="{ 'background-color': 'var(--primary-color)', 'color': '#fff', 'cursor': 'pointer', 'width': '36px', 'height': '36px', 'font-size': '21px' }"
+          [style]="{ 'background-color': 'var(--primary-color)', 'color': '#fff', 'cursor': 'pointer', 'width': '34px', 'height': '34px', 'font-size': '21px' }"
           pBadge 
           [badgeStyleClass]="'p-badge-danger'"
-          [badgeDisabled]="currentUserNotifications.length == 0"
-          [value]="currentUserNotifications.length"
+          [badgeDisabled]="currentUserNotificationsCount == 0"
+          [value]="currentUserNotificationsCount"
           />
       </div>
       <div
@@ -45,7 +45,12 @@
           <div *ngFor="let item of menuItems" [style]="item.showSeparator ? 'margin-top: 5px;' : ''">
             <div *ngIf="item.showSeparator" class="gray-separator"></div>
             <div (click)="item.onClick()" class="hover-card" style="display: flex; align-items: center; gap: 5px; margin-top: 5px;">
-              <i class="pi {{item.icon}} primary-color" style="font-size: 16px;"></i>
+              <i 
+                class="pi pi-fw {{item.icon}} primary-color" 
+                style="font-size: 16px; position: relative;"
+                >
+                <span *ngIf="item.showNotificationBadge && currentUserNotificationsCount != 0" class="badge"></span>
+              </i>
               <div> {{item.label}} </div>
             </div>
           </div>
