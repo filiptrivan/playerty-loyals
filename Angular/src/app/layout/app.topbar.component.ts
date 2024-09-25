@@ -5,6 +5,8 @@ import { LayoutService } from "./service/app.layout.service";
 import { environment } from 'src/environments/environment';
 import { filter } from 'rxjs';
 import { User } from '../business/entities/generated/security-entities.generated';
+import { ApiService } from '../business/services/api/api.service';
+import { CacheService } from '../core/services/cache.service';
 
 interface SoftMenuItem {
   label?: string;
@@ -62,16 +64,24 @@ export class AppTopBarComponent {
 
     @ViewChild('topbarprofiledropdownmenubutton') topbarProfileDropdownMenuButton!: ElementRef;
 
-    constructor(public layoutService: LayoutService, private authService: AuthService, protected router: Router) { }
+    constructor(
+      public layoutService: LayoutService, 
+      private authService: AuthService, 
+      private apiService: ApiService,
+      protected router: Router, 
+    ) { 
+    }
 
   ngOnInit(){
     this.authService.user$.subscribe(res => {
         this.currentUser = res;
         this.avatarLabel = res?.email.charAt(0).toLocaleUpperCase();
     });
-    this.authService.currentUserNotificationCount$.subscribe((count: number) => {
-        this.currentUserNotificationsCount = count;
+
+    this.apiService.getUnreadNotificationCountForTheCurrentUser().subscribe((count) => {
+      this.currentUserNotificationsCount = count;
     });
+
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {

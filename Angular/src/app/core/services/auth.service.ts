@@ -20,9 +20,6 @@ export class AuthService implements OnDestroy {
   private _user = new BehaviorSubject<User | null>(null);
   user$ = this._user.asObservable();
 
-  private _currentUserNotificationCount = new BehaviorSubject<number | null>(null);
-  currentUserNotificationCount$ = this._currentUserNotificationCount.asObservable();
-
   // Google auth
   private authChangeSub = new Subject<boolean>();
   private extAuthChangeSub = new Subject<SocialUser>();
@@ -38,7 +35,7 @@ export class AuthService implements OnDestroy {
     private messageService: SoftMessageService, 
   ) {
     window.addEventListener('storage', this.storageEventListener.bind(this));
-
+console.log("AUTH")
     // Google auth
     this.externalAuthService.authState.subscribe((user) => {
       const externalAuth: ExternalProvider = {
@@ -57,7 +54,6 @@ export class AuthService implements OnDestroy {
       if (event.key === 'logout-event') {
         this.stopTokenTimer();
         this._user.next(null);
-        this._currentUserNotificationCount.next(null);
       }
       if (event.key === 'login-event') {
         this.stopTokenTimer();
@@ -68,10 +64,6 @@ export class AuthService implements OnDestroy {
               email: user.email
             });
           });
-
-        this.apiService.getUnreadNotificationCountForTheCurrentUser().subscribe(res => {
-          this._currentUserNotificationCount.next(res);
-        })
       }
     }
   }
@@ -133,13 +125,7 @@ export class AuthService implements OnDestroy {
         this.setLocalStorage(loginResult);
         this.startTokenTimer();
         return loginResult;
-      }),
-      switchMap((loginResult: LoginResult) => 
-        this.apiService.getUnreadNotificationCountForTheCurrentUser().pipe(
-          tap(res => this._currentUserNotificationCount.next(res)),
-          map(() => loginResult)
-        )
-      )
+      })
     );
   }
 
@@ -176,22 +162,15 @@ export class AuthService implements OnDestroy {
     return this.http
     .post<LoginResult>(`${this.apiUrl}/Auth/RefreshToken`, body, environment.httpSkipSpinnerOptions)
     .pipe(
-      tap((loginResult: LoginResult) => {
+      map((loginResult) => {
         this._user.next({
           id: loginResult.userId,
           email: loginResult.email
         });
         this.setLocalStorage(loginResult);
         this.startTokenTimer();
-      }),
-      switchMap((loginResult: LoginResult) =>
-        this.apiService.getUnreadNotificationCountForTheCurrentUser().pipe(
-          tap((count) => {
-            this._currentUserNotificationCount.next(count);
-          }),
-          map(() => loginResult)
-        )
-      )
+        return loginResult;
+      })
     );
   }
 

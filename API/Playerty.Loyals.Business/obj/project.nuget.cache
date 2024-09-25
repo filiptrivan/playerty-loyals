@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "8ylloRjMTfpwDT9gl78BDjR6wAmojSLgUx81a0bZ/sVDoMw+BFq/AEk4NgIkdPqAWmnULnJjJeKfVSTJQlQ8lw==",
+  "dgSpecHash": "H3Fu9wZpXBo6w9s8gOzjKEOhAfmAZ0BPUkpZE6J666pFJhlEi89JXyF1UWDZq/fK78LW5pmcaAY4N4hpuvKt7Q==",
   "success": true,
   "projectFilePath": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Business\\Playerty.Loyals.Business.csproj",
   "expectedPackageFiles": [
@@ -16,6 +16,8 @@
     "C:\\Users\\user\\.nuget\\packages\\google.apis.core\\1.68.0\\google.apis.core.1.68.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\linqkit.core\\1.2.5\\linqkit.core.1.2.5.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\log4net\\2.0.10\\log4net.2.0.10.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\mapster\\7.4.0\\mapster.7.4.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\mapster.core\\1.2.1\\mapster.core.1.2.1.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\microsoft.aspnetcore.authentication.core\\2.2.0\\microsoft.aspnetcore.authentication.core.2.2.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\microsoft.aspnetcore.authorization\\2.2.0\\microsoft.aspnetcore.authorization.2.2.0.nupkg.sha512",

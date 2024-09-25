@@ -19,6 +19,7 @@ using Playerty.Loyals.Infrastructure;
 using System.Reflection;
 using Playerty.Loyals.Business.Entities;
 using Soft.Generator.Security.Interface;
+using Playerty.Loyals.Business.DataMappers;
 
 
 public class Startup
@@ -61,6 +62,8 @@ public class Startup
 
         services.AddHttpContextAccessor();
         services.AddCors();
+
+        services.RegisterMapsterConfiguration();
 
         services.AddControllers().AddJsonOptions(options =>
         {

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "G8O1KnMNYZMiHQEHq+Q//0b2jYKergMbs7AMZoWsH9L5ySdcVSzCbC/hiXQTn5FN1aXYIvQ7F0MMn1wPSkPp9A==",
+  "dgSpecHash": "nPIAVpR8HNg36V6XkiG9SOt7zCFMaPNW2KFvKEzDG9tXubRh1oD5qm4X7KZA/BLfOSrvdoV53UnOrz2QJisxBA==",
   "success": true,
   "projectFilePath": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Infrastructure\\Playerty.Loyals.Infrastructure.csproj",
   "expectedPackageFiles": [
@@ -18,6 +18,8 @@
     "C:\\Users\\user\\.nuget\\packages\\laraue.efcoretriggers.sqlserver\\8.1.0\\laraue.efcoretriggers.sqlserver.8.1.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\linqkit.core\\1.2.5\\linqkit.core.1.2.5.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\log4net\\2.0.10\\log4net.2.0.10.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\mapster\\7.4.0\\mapster.7.4.0.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\mapster.core\\1.2.1\\mapster.core.1.2.1.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\microsoft.aspnetcore.authentication.core\\2.2.0\\microsoft.aspnetcore.authentication.core.2.2.0.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\microsoft.aspnetcore.authorization\\2.2.0\\microsoft.aspnetcore.authorization.2.2.0.nupkg.sha512",

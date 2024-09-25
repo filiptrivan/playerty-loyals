@@ -1,6 +1,7 @@
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\log4net.config
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\appsettings.Development.json
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\appsettings.json
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Helpers\Menu.json
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Playerty.Loyals.WebAPI.exe
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Excel\ExcelTemplates\TableTemplate.xlsx
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Playerty.Loyals.WebAPI.deps.json
@@ -27,6 +28,8 @@ E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\LightInj
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\LightInject.Microsoft.Hosting.dll
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\LinqKit.Core.dll
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\log4net.dll
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Mapster.dll
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Mapster.Core.dll
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
