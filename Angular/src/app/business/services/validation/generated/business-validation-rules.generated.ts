@@ -9,13 +9,6 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
         case 'transactionIdTransactionProduct':
             return transactionIdTransactionProductValidator(formControl);
 
-        case 'nameTransactionStatus':
-            return nameTransactionStatusValidator(formControl);
-        case 'nameLatinTransactionStatus':
-            return nameLatinTransactionStatusValidator(formControl);
-        case 'codeTransactionStatus':
-            return codeTransactionStatusValidator(formControl);
-
         case 'emailUserExtended':
             return emailUserExtendedValidator(formControl);
         case 'passwordUserExtended':
@@ -24,9 +17,14 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
             return hasLoggedInWithExternalProviderUserExtendedValidator(formControl);
         case 'numberOfFailedAttemptsInARowUserExtended':
             return numberOfFailedAttemptsInARowUserExtendedValidator(formControl);
-        case 'pointsUserExtended':
-            return pointsUserExtendedValidator(formControl);
 
+
+        case 'nameTransactionStatus':
+            return nameTransactionStatusValidator(formControl);
+        case 'nameLatinTransactionStatus':
+            return nameLatinTransactionStatusValidator(formControl);
+        case 'codeTransactionStatus':
+            return codeTransactionStatusValidator(formControl);
 
         case 'guidTransaction':
             return guidTransactionValidator(formControl);
@@ -36,8 +34,6 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
             return pointsTransactionValidator(formControl);
         case 'userIdTransaction':
             return userIdTransactionValidator(formControl);
-
-
 
 
 
@@ -51,6 +47,12 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
             return validFromTierValidator(formControl);
         case 'validToTier':
             return validToTierValidator(formControl);
+
+
+
+
+        case 'pointsPartnerUser':
+            return pointsPartnerUserValidator(formControl);
 
         default:
             return null;
@@ -80,58 +82,6 @@ export function transactionIdTransactionProductValidator(control: SoftFormContro
         const transactionIdValid = notEmptyRule;
 
         return transactionIdValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-
-export function nameTransactionStatusValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-        const min = 1;
-        const max = 255;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
-
-        const nameValid = notEmptyRule && stringLengthRule;
-
-        return nameValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-export function nameLatinTransactionStatusValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-        const min = 1;
-        const max = 255;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
-
-        const nameLatinValid = notEmptyRule && stringLengthRule;
-
-        return nameLatinValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-export function codeTransactionStatusValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-        const min = 1;
-        const max = 255;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
-
-        const codeValid = notEmptyRule && stringLengthRule;
-
-        return codeValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
     };
     validator.hasNotEmptyRule = true;
     return validator;
@@ -200,20 +150,58 @@ export function numberOfFailedAttemptsInARowUserExtendedValidator(control: SoftF
     return validator;
 }
 
-export function pointsUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
+
+
+export function nameTransactionStatusValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
         const value = control.value ?? "";
 
         const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const min = 1;
+        const max = 255;
+        const stringLengthRule = value?.length >= min && value?.length <= max;
 
-        const pointsValid = notEmptyRule;
+        const nameValid = notEmptyRule && stringLengthRule;
 
-        return pointsValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
+        return nameValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
     };
     validator.hasNotEmptyRule = true;
     return validator;
 }
 
+export function nameLatinTransactionStatusValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value ?? "";
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const min = 1;
+        const max = 255;
+        const stringLengthRule = value?.length >= min && value?.length <= max;
+
+        const nameLatinValid = notEmptyRule && stringLengthRule;
+
+        return nameLatinValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function codeTransactionStatusValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value ?? "";
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const min = 1;
+        const max = 255;
+        const stringLengthRule = value?.length >= min && value?.length <= max;
+
+        const codeValid = notEmptyRule && stringLengthRule;
+
+        return codeValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
 
 
 export function guidTransactionValidator(control: SoftFormControl): SoftValidatorFn {
@@ -275,8 +263,6 @@ export function userIdTransactionValidator(control: SoftFormControl): SoftValida
     validator.hasNotEmptyRule = true;
     return validator;
 }
-
-
 
 
 
@@ -360,6 +346,24 @@ export function validToTierValidator(control: SoftFormControl): SoftValidatorFn 
         const validToValid = notEmptyRule && numberMinRangeRule;
 
         return validToValid ? null : { _ : $localize`:@@NotEmptyNumberRangeMin:The field is mandatory and must be greater or equal ${min}.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+
+
+
+
+export function pointsPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value ?? "";
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+
+        const pointsValid = notEmptyRule;
+
+        return pointsValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
     };
     validator.hasNotEmptyRule = true;
     return validator;

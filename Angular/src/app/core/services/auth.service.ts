@@ -20,6 +20,9 @@ export class AuthService implements OnDestroy {
   private _user = new BehaviorSubject<User | null>(null);
   user$ = this._user.asObservable();
 
+  public _currentUserPermissions = new BehaviorSubject<string[] | null>(null); // FT: Can change it from other components
+  currentUserPermissions$ = this._currentUserPermissions.asObservable();
+
   // Google auth
   private authChangeSub = new Subject<boolean>();
   private extAuthChangeSub = new Subject<SocialUser>();
@@ -35,7 +38,7 @@ export class AuthService implements OnDestroy {
     private messageService: SoftMessageService, 
   ) {
     window.addEventListener('storage', this.storageEventListener.bind(this));
-console.log("AUTH")
+
     // Google auth
     this.externalAuthService.authState.subscribe((user) => {
       const externalAuth: ExternalProvider = {
@@ -54,6 +57,7 @@ console.log("AUTH")
       if (event.key === 'logout-event') {
         this.stopTokenTimer();
         this._user.next(null);
+        this._currentUserPermissions.next(null);
       }
       if (event.key === 'login-event') {
         this.stopTokenTimer();
@@ -137,6 +141,7 @@ console.log("AUTH")
         finalize(() => {
           this.clearLocalStorage();
           this._user.next(null);
+          this._currentUserPermissions.next(null);
           this.stopTokenTimer();
           this.router.navigate(['auth/login']);
         })

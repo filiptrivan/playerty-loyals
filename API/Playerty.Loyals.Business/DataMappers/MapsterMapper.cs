@@ -4,6 +4,7 @@ using Playerty.Loyals.Business.DTO;
 using Playerty.Loyals.Business.Entities;
 using Soft.Generator.Security.DTO;
 using Soft.Generator.Security.Entities;
+using Soft.Generator.Shared.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +13,49 @@ using System.Threading.Tasks;
 
 namespace Playerty.Loyals.Business.DataMappers
 {
-    public static partial class MapsterMapper
+    [CustomMapper]
+    public static partial class Mapper
     {
-        public static void AdditionalMappingConfiguration(this IServiceCollection services)
+        public static TypeAdapterConfig UserExtendedToDTOConfig()
         {
-            TypeAdapterConfig<UserExtended, UserExtendedDTO>
-                .NewConfig()
-                .Ignore(x => x.Password);
+            TypeAdapterConfig config = new TypeAdapterConfig();
+
+            config
+                .NewConfig<UserExtended, UserExtendedDTO>()
+                .Map(dest => dest.TierId, src => src.Tier.Id)
+                .Map(dest => dest.TierDisplayName, src => src.Tier.Name)
+                .Ignore(dest => dest.Password)
+                ;
+
+            return config;
+        }
+
+        public static TypeAdapterConfig UserExtendedProjectToConfig()
+        {
+            TypeAdapterConfig config = new TypeAdapterConfig();
+
+            config
+                .NewConfig<UserExtended, UserExtendedDTO>()
+                .Map(dest => dest.TierId, src => src.Tier.Id)
+                .Map(dest => dest.TierDisplayName, src => src.Tier.Name)
+                .Ignore(dest => dest.Password)
+                ;
+
+            return config;
+        }
+
+        public static TypeAdapterConfig UserExtendedExcelProjectToConfig()
+        {
+            TypeAdapterConfig config = new TypeAdapterConfig();
+
+            config
+                .NewConfig<UserExtended, UserExtendedDTO>()
+                .Map(dest => dest.TierId, src => src.Tier.Id)
+                .Map(dest => dest.TierDisplayName, src => src.Tier.Name)
+                .Ignore(dest => dest.Password)
+                ;
+
+            return config;
         }
     }
 }

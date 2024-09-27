@@ -135,7 +135,7 @@ export class ApiSecurityService {
     }
 
     loadUserExtendedNamebookListForNotification(notificationId: number): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadUserListForNotification?notificationId=${notificationId}`, environment.httpDropdownOptions);
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadUserExtendedNamebookListForNotification?notificationId=${notificationId}`, environment.httpDropdownOptions);
     }
 
     loadNotificationNamebookListForUserExtended(userId: number): Observable<Namebook[]> {

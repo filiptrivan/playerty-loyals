@@ -10,6 +10,7 @@ using Playerty.Loyals.Services;
 using Playerty.Loyals.Business.DTO;
 using Soft.NgTable.Models;
 using Soft.Generator.Shared.DTO;
+using Playerty.Loyals.Business.Enums;
 
 namespace Playerty.Loyals.WebAPI.Controllers
 {
@@ -109,6 +110,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
         public async Task<QrCodeDTO> GetQrCodeDataForTheCurrentUser()
         {
             return await _loyalsBusinessService.GetQrCodeDataForTheCurrentUser();
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<string>> GetCurrentUserPermissionCodes()
+        {
+            return await _loyalsBusinessService.GetCurrentUserPermissionCodes();
         }
 
     }

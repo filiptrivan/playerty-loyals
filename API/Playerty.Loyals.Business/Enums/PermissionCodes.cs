@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Playerty.Loyals.Enums
+namespace Playerty.Loyals.Business.Hack.Enums
 {
     public enum PermissionCodes
     {
-        ReadRole,
-        EditRole,
-        InsertRole,
-        DeleteRole,
     }
 }

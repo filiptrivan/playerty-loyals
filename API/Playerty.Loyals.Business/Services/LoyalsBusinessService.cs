@@ -75,67 +75,117 @@ namespace Playerty.Loyals.Services
         }
 
 
-        public async Task AddPointsToTheUser(string email, Guid transactionCode, List<ProductDTO> productsDTO)
+
+        #region Scheduled tasks
+
+        public async Task LoadTransactionsAndAddPointsToUsers()
         {
-            await _context.WithTransactionAsync(async () =>
-            {
-                UserExtended user = await _context.DbSet<UserExtended>().Where(x => x.Email == email).SingleOrDefaultAsync();
-
-                Transaction transaction = new Transaction();
-                transaction.Guid = transactionCode;
-                transaction.Statuses.Add(await LoadInstanceAsync<TransactionStatus, byte>((byte)TransactionStatusCodes.Completed));
-
-                foreach (ProductDTO productDTO in productsDTO)
-                {
-                    TransactionProduct transactionProduct = new TransactionProduct 
-                    {
-                        ProductId = productDTO.Id,
-                        Transaction = transaction,
-                    };
-                    _context.DbSet<TransactionProduct>().Add(transactionProduct);
-                    user.Points += (int)productDTO.Price * (int)productDTO.Brand.PointsMultiplier; // TODO FT: Always round on the upper decimal
-                }
-
-                Tier tier = await GetTierForThePoints(user.Points);
-                user.Tier = tier;
-
-                await _context.SaveChangesAsync();
-            });
+            //_context
         }
+
+        #endregion
+
+        //public async Task AddPointsToTheUser(string email, Guid transactionCode, List<ProductDTO> productsDTO)
+        //{
+        //    await _context.WithTransactionAsync(async () =>
+        //    {
+        //        UserExtended user = await _context.DbSet<UserExtended>().Where(x => x.Email == email).SingleOrDefaultAsync();
+
+        //        Transaction transaction = new Transaction();
+        //        transaction.Guid = transactionCode;
+        //        transaction.Statuses.Add(await LoadInstanceAsync<TransactionStatus, byte>((byte)TransactionStatusCodes.Completed));
+
+        //        foreach (ProductDTO productDTO in productsDTO)
+        //        {
+        //            TransactionProduct transactionProduct = new TransactionProduct 
+        //            {
+        //                ProductId = productDTO.Id,
+        //                Transaction = transaction,
+        //            };
+        //            _context.DbSet<TransactionProduct>().Add(transactionProduct);
+        //            user.Points += (int)productDTO.Price * SettingsProvider.Current.PointsMultiplier; // TODO FT: Always round on the upper decimal
+        //        }
+
+        //        Tier tier = await GetTierForThePoints(user.Points);
+        //        user.Tier = tier;
+
+        //        await _context.SaveChangesAsync();
+        //    });
+        //}
 
         // Tabele: sve ok
-        public async Task RemovePointsFromTheUser(string email, Guid transactionCode)
-        {
-            await _context.WithTransactionAsync(async () =>
-            {
-                UserExtended user = await _context.DbSet<UserExtended>().Where(x => x.Email == email).SingleOrDefaultAsync();
-                Transaction transaction = await _context.DbSet<Transaction>().Where(x => x.Guid == transactionCode).SingleOrDefaultAsync();
-                transaction.Statuses.Add(await LoadInstanceAsync<TransactionStatus, byte>((byte)TransactionStatusCodes.Cancelled));
-                user.Points -= (int)transaction.Points;
-            });
-        }
+        //public async Task RemovePointsFromTheUser(string email, Guid transactionCode)
+        //{
+        //    await _context.WithTransactionAsync(async () =>
+        //    {
+        //        UserExtended user = await _context.DbSet<UserExtended>().Where(x => x.Email == email).SingleOrDefaultAsync();
+        //        Transaction transaction = await _context.DbSet<Transaction>().Where(x => x.Guid == transactionCode).SingleOrDefaultAsync();
+        //        transaction.Statuses.Add(await LoadInstanceAsync<TransactionStatus, byte>((byte)TransactionStatusCodes.Cancelled));
+        //        user.Points -= (int)transaction.Points;
+        //    });
+        //}
 
         //// Maloprodaja
-        public async Task<QrCodeDTO> GetQrCodeDataForTheCurrentUser()
-        {
-            string email = _authenticationService.GetCurrentUserEmail();
-            int discount = 0;
+        //public async Task<QrCodeDTO> GetQrCodeDataForTheCurrentUser()
+        //{
+        //    string email = null;
+        //    int discount = 0;
 
-            await _context.WithTransactionAsync(async () =>
-            {
-                UserExtended user = await _context.DbSet<UserExtended>().Where(x => x.Email == email).SingleOrDefaultAsync();
-                discount = user.Tier.Discount;
-            });
+        //    await _context.WithTransactionAsync(async () =>
+        //    {
+        //        UserExtended user = await _authenticationService.GetCurrentUser<UserExtended>();
+        //        discount = user.Tier.Discount;
+        //        email = user.Email;
+        //    });
 
-            Guid transactionCode = new Guid();
+        //    Guid transactionCode = new Guid();
 
-            return new QrCodeDTO 
-            {
-                Email = email,
-                TransactionCode = transactionCode,
-                Discount = discount
-            };
-        }
+        //    return new QrCodeDTO 
+        //    {
+        //        Email = email,
+        //        TransactionCode = transactionCode,
+        //        Discount = discount
+        //    };
+        //}
+
+        //private bool ExistsInCache(string sixDigitCode)
+        //{
+        //    return true;
+        //}
+
+        //// Maloprodaja - new
+        //public async Task<QrCodeDTO> GetRetailDataForTheCart(string discountVerificationCode, List<ProductDTO> productsDTO)
+        //{
+        //    DiscountVerificationDTO discountVerification = TryGetValue(discountVerificationCode);
+
+        //    if (discountVerification == null)
+        //        throw new Exception("The six digit code you provided doesn't exist.");
+
+        //    Guid transactionCode = new Guid();
+
+        //    decimal priceBeforeDiscount = 0;
+        //    decimal priceAfterDiscount = 0;
+
+        //    foreach (ProductDTO productDTO in productsDTO)
+        //    {
+        //        priceBeforeDiscount += productDTO.Price;
+        //        decimal productDiscount = GetProductDiscountForTheUser();
+        //        priceAfterDiscount += (productDTO.Discount / 100) * productDTO.Price;
+        //        // 1. da li cuvati brednove kod sebe i slati samo brandCode sa svakim proizvodom ili
+        //        // 2. slati productDTO.brand.tiers
+        //        // 3. sa njihovog apija dovucem tiere, pa u tierima trazim tier sa kodom trenutnog korisnika, onda u brendovima trazim brend trenutnog proizvoda
+        //    }
+
+        //    decimal totalDiscount = priceAfterDiscount * 100 / priceAfterDiscount;
+
+        //    return new QrCodeDTO
+        //    {
+        //        Email = discountVerification.Email,
+        //        TransactionCode = transactionCode,
+        //        Discount = discount,
+        //    };
+
+        //}
 
         //// Internet: Ne treba ni da mi dokazuje i upisuje kod, samo moraju da poboljsaju autentifikaciju
         public async Task<OnlineShopDTO> GetDiscountForTheUser(string email)
@@ -174,6 +224,23 @@ namespace Playerty.Loyals.Services
             };
 
             return products;
+        }
+
+        public async Task<List<string>> GetCurrentUserPermissionCodes()
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                UserExtended currentUser = await _authenticationService.GetCurrentUser<UserExtended>();
+
+                if (currentUser == null)
+                    return new List<string>();
+
+                return currentUser.Roles
+                    .SelectMany(x => x.Permissions)
+                    .Select(x => x.Code)
+                    .Distinct()
+                    .ToList();
+            });
         }
 
         #region Helpers

@@ -63,8 +63,6 @@ public class Startup
         services.AddHttpContextAccessor();
         services.AddCors();
 
-        services.RegisterMapsterConfiguration();
-
         services.AddControllers().AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
