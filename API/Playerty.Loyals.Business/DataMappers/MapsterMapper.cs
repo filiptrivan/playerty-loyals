@@ -22,8 +22,6 @@ namespace Playerty.Loyals.Business.DataMappers
 
             config
                 .NewConfig<UserExtended, UserExtendedDTO>()
-                .Map(dest => dest.TierId, src => src.Tier.Id)
-                .Map(dest => dest.TierDisplayName, src => src.Tier.Name)
                 .Ignore(dest => dest.Password)
                 ;
 
@@ -36,8 +34,6 @@ namespace Playerty.Loyals.Business.DataMappers
 
             config
                 .NewConfig<UserExtended, UserExtendedDTO>()
-                .Map(dest => dest.TierId, src => src.Tier.Id)
-                .Map(dest => dest.TierDisplayName, src => src.Tier.Name)
                 .Ignore(dest => dest.Password)
                 ;
 
@@ -50,8 +46,6 @@ namespace Playerty.Loyals.Business.DataMappers
 
             config
                 .NewConfig<UserExtended, UserExtendedDTO>()
-                .Map(dest => dest.TierId, src => src.Tier.Id)
-                .Map(dest => dest.TierDisplayName, src => src.Tier.Name)
                 .Ignore(dest => dest.Password)
                 ;
 

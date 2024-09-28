@@ -16,6 +16,7 @@ using Playerty.Loyals.Enums;
 using Playerty.Loyals.Business.DTO;
 using Playerty.Loyals.Business.Enums;
 using Soft.Generator.Shared.SoftExceptions;
+using Mapster;
 
 namespace Playerty.Loyals.Services
 {
@@ -25,14 +26,17 @@ namespace Playerty.Loyals.Services
         private readonly AuthorizationService _authorizationService;
         private readonly AuthenticationService _authenticationService;
         private readonly SecurityBusinessService _securityBusinessService;
+        private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
 
-        public LoyalsBusinessService(IApplicationDbContext context, ExcelService excelService, AuthorizationService authorizationService, SecurityBusinessService securityBusinessService, AuthenticationService authenticationService)
+        public LoyalsBusinessService(IApplicationDbContext context, ExcelService excelService, AuthorizationService authorizationService, SecurityBusinessService securityBusinessService, AuthenticationService authenticationService,
+            PartnerUserAuthenticationService partnerUserAuthenticationService)
             : base(context, excelService, authorizationService)
         {
             _context = context;
             _authorizationService = authorizationService;
             _securityBusinessService = securityBusinessService;
             _authenticationService = authenticationService;
+            _partnerUserAuthenticationService = partnerUserAuthenticationService;
         }
 
         #region User
@@ -73,8 +77,6 @@ namespace Playerty.Loyals.Services
         {
             //dto.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(dto.Password); // FT: We don't need this because we will read hashed password from the database
         }
-
-
 
         #region Scheduled tasks
 
@@ -188,14 +190,16 @@ namespace Playerty.Loyals.Services
         //}
 
         //// Internet: Ne treba ni da mi dokazuje i upisuje kod, samo moraju da poboljsaju autentifikaciju
+        
+        
         public async Task<OnlineShopDTO> GetDiscountForTheUser(string email)
         {
             int discount = 0;
 
             await _context.WithTransactionAsync(async () =>
             {
-                UserExtended user = await _context.DbSet<UserExtended>().Where(x => x.Email == email).SingleOrDefaultAsync();
-                discount = user.Tier.Discount;
+                PartnerUser partnerUser = await _context.DbSet<PartnerUser>().Where(x => x.User.Email == email).SingleOrDefaultAsync();
+                discount = partnerUser.Tier.Discount;
             });
 
             Guid transactionCode = new Guid();
@@ -236,6 +240,23 @@ namespace Playerty.Loyals.Services
                     return new List<string>();
 
                 return currentUser.Roles
+                    .SelectMany(x => x.Permissions)
+                    .Select(x => x.Code)
+                    .Distinct()
+                    .ToList();
+            });
+        }
+
+        public async Task<List<string>> GetCurrentPartnerUserPermissionCodes()
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                PartnerUser currentPartnerUser = await _partnerUserAuthenticationService.GetCurrentPartnerUser();
+
+                if (currentPartnerUser == null)
+                    return new List<string>();
+
+                return currentPartnerUser.Roles
                     .SelectMany(x => x.Permissions)
                     .Select(x => x.Code)
                     .Distinct()

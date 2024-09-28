@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Playerty.Loyals
+namespace Playerty.Loyals.Business
 {
     public static class SettingsProvider
     {
@@ -13,6 +13,6 @@ namespace Playerty.Loyals
 
     public class Settings
     {
-
+        public string PartnerHeadersKey { get; set; }
     }
 }

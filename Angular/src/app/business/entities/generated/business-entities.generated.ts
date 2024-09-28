@@ -3,218 +3,6 @@ import { TableFilterContext } from "src/app/core/entities/table-filter-context";
 import { TableFilterSortMeta } from "src/app/core/entities/table-filter-sort-meta";
 
 
-export class TransactionProduct extends BaseEntity
-{
-    productId?: number;
-	transactionDisplayName?: string;
-	transactionId?: number;
-	id?: number;
-	createdAt?: Date;
-
-    constructor(
-    {
-        productId,
-		transactionDisplayName,
-		transactionId,
-		id,
-		createdAt
-    }:{
-        productId?: number;
-		transactionDisplayName?: string;
-		transactionId?: number;
-		id?: number;
-		createdAt?: Date;     
-    } = {}
-    ) {
-        super('TransactionProduct'); 
-
-        this.productId = productId;
-		this.transactionDisplayName = transactionDisplayName;
-		this.transactionId = transactionId;
-		this.id = id;
-		this.createdAt = createdAt;
-    }
-}
-
-
-export class UserExtended extends BaseEntity
-{
-    email?: string;
-	password?: string;
-	hasLoggedInWithExternalProvider?: boolean;
-	numberOfFailedAttemptsInARow?: number;
-	tierDisplayName?: string;
-	tierId?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        email,
-		password,
-		hasLoggedInWithExternalProvider,
-		numberOfFailedAttemptsInARow,
-		tierDisplayName,
-		tierId,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        email?: string;
-		password?: string;
-		hasLoggedInWithExternalProvider?: boolean;
-		numberOfFailedAttemptsInARow?: number;
-		tierDisplayName?: string;
-		tierId?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('UserExtended'); 
-
-        this.email = email;
-		this.password = password;
-		this.hasLoggedInWithExternalProvider = hasLoggedInWithExternalProvider;
-		this.numberOfFailedAttemptsInARow = numberOfFailedAttemptsInARow;
-		this.tierDisplayName = tierDisplayName;
-		this.tierId = tierId;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class UserExtendedSaveBody extends BaseEntity
-{
-    userExtendedDTO?: UserExtended;
-
-    constructor(
-    {
-        userExtendedDTO
-    }:{
-        userExtendedDTO?: UserExtended;     
-    } = {}
-    ) {
-        super('UserExtendedSaveBody'); 
-
-        this.userExtendedDTO = userExtendedDTO;
-    }
-}
-
-
-export class TransactionStatus extends BaseEntity
-{
-    name?: string;
-	nameLatin?: string;
-	code?: string;
-	id?: number;
-	createdAt?: Date;
-
-    constructor(
-    {
-        name,
-		nameLatin,
-		code,
-		id,
-		createdAt
-    }:{
-        name?: string;
-		nameLatin?: string;
-		code?: string;
-		id?: number;
-		createdAt?: Date;     
-    } = {}
-    ) {
-        super('TransactionStatus'); 
-
-        this.name = name;
-		this.nameLatin = nameLatin;
-		this.code = code;
-		this.id = id;
-		this.createdAt = createdAt;
-    }
-}
-
-
-export class Transaction extends BaseEntity
-{
-    guid?: any;
-	price?: number;
-	points?: number;
-	userDisplayName?: string;
-	userId?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        guid,
-		price,
-		points,
-		userDisplayName,
-		userId,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        guid?: any;
-		price?: number;
-		points?: number;
-		userDisplayName?: string;
-		userId?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('Transaction'); 
-
-        this.guid = guid;
-		this.price = price;
-		this.points = points;
-		this.userDisplayName = userDisplayName;
-		this.userId = userId;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class OnlineShop extends BaseEntity
-{
-    transactionCode?: any;
-	discount?: number;
-
-    constructor(
-    {
-        transactionCode,
-		discount
-    }:{
-        transactionCode?: any;
-		discount?: number;     
-    } = {}
-    ) {
-        super('OnlineShop'); 
-
-        this.transactionCode = transactionCode;
-		this.discount = discount;
-    }
-}
-
-
 export class Brand extends BaseEntity
 {
     name?: string;
@@ -245,52 +33,24 @@ export class Brand extends BaseEntity
 }
 
 
-export class Tier extends BaseEntity
+export class OnlineShop extends BaseEntity
 {
-    name?: string;
-	nameLatin?: string;
+    transactionCode?: any;
 	discount?: number;
-	validFrom?: number;
-	validTo?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
 
     constructor(
     {
-        name,
-		nameLatin,
-		discount,
-		validFrom,
-		validTo,
-		version,
-		id,
-		createdAt,
-		modifiedAt
+        transactionCode,
+		discount
     }:{
-        name?: string;
-		nameLatin?: string;
-		discount?: number;
-		validFrom?: number;
-		validTo?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
+        transactionCode?: any;
+		discount?: number;     
     } = {}
     ) {
-        super('Tier'); 
+        super('OnlineShop'); 
 
-        this.name = name;
-		this.nameLatin = nameLatin;
+        this.transactionCode = transactionCode;
 		this.discount = discount;
-		this.validFrom = validFrom;
-		this.validTo = validTo;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
     }
 }
 
@@ -355,13 +115,57 @@ export class QrCode extends BaseEntity
 }
 
 
+export class UserExtendedSaveBody extends BaseEntity
+{
+    userExtendedDTO?: UserExtended;
+
+    constructor(
+    {
+        userExtendedDTO
+    }:{
+        userExtendedDTO?: UserExtended;     
+    } = {}
+    ) {
+        super('UserExtendedSaveBody'); 
+
+        this.userExtendedDTO = userExtendedDTO;
+    }
+}
+
+
+export class NotificationPartnerUser extends BaseEntity
+{
+    isMarkedAsRead?: any;
+	notificationsId?: number;
+	partnerUsersId?: number;
+
+    constructor(
+    {
+        isMarkedAsRead,
+		notificationsId,
+		partnerUsersId
+    }:{
+        isMarkedAsRead?: any;
+		notificationsId?: number;
+		partnerUsersId?: number;     
+    } = {}
+    ) {
+        super('NotificationPartnerUser'); 
+
+        this.isMarkedAsRead = isMarkedAsRead;
+		this.notificationsId = notificationsId;
+		this.partnerUsersId = partnerUsersId;
+    }
+}
+
+
 export class Partner extends BaseEntity
 {
     name?: string;
-	url?: string;
+	slug?: string;
 	loadPurchasesEndpoint?: string;
 	loadReversalsEndpoint?: string;
-	updatePointsInterval?: number;
+	updatePointsInterval?: any;
 	version?: number;
 	id?: number;
 	createdAt?: Date;
@@ -370,7 +174,7 @@ export class Partner extends BaseEntity
     constructor(
     {
         name,
-		url,
+		slug,
 		loadPurchasesEndpoint,
 		loadReversalsEndpoint,
 		updatePointsInterval,
@@ -380,10 +184,10 @@ export class Partner extends BaseEntity
 		modifiedAt
     }:{
         name?: string;
-		url?: string;
+		slug?: string;
 		loadPurchasesEndpoint?: string;
 		loadReversalsEndpoint?: string;
-		updatePointsInterval?: number;
+		updatePointsInterval?: any;
 		version?: number;
 		id?: number;
 		createdAt?: Date;
@@ -393,7 +197,7 @@ export class Partner extends BaseEntity
         super('Partner'); 
 
         this.name = name;
-		this.url = url;
+		this.slug = slug;
 		this.loadPurchasesEndpoint = loadPurchasesEndpoint;
 		this.loadReversalsEndpoint = loadReversalsEndpoint;
 		this.updatePointsInterval = updatePointsInterval;
@@ -407,26 +211,294 @@ export class Partner extends BaseEntity
 
 export class PartnerUser extends BaseEntity
 {
-    points?: number;
-	partnersId?: number;
-	usersId?: number;
+    partnerDisplayName?: string;
+	partnerId?: number;
+	userDisplayName?: string;
+	userId?: number;
+	points?: number;
+	tierDisplayName?: string;
+	tierId?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
 
     constructor(
     {
-        points,
-		partnersId,
-		usersId
+        partnerDisplayName,
+		partnerId,
+		userDisplayName,
+		userId,
+		points,
+		tierDisplayName,
+		tierId,
+		version,
+		id,
+		createdAt,
+		modifiedAt
     }:{
-        points?: number;
-		partnersId?: number;
-		usersId?: number;     
+        partnerDisplayName?: string;
+		partnerId?: number;
+		userDisplayName?: string;
+		userId?: number;
+		points?: number;
+		tierDisplayName?: string;
+		tierId?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
     } = {}
     ) {
         super('PartnerUser'); 
 
-        this.points = points;
-		this.partnersId = partnersId;
-		this.usersId = usersId;
+        this.partnerDisplayName = partnerDisplayName;
+		this.partnerId = partnerId;
+		this.userDisplayName = userDisplayName;
+		this.userId = userId;
+		this.points = points;
+		this.tierDisplayName = tierDisplayName;
+		this.tierId = tierId;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
+export class RolePartnerUser extends BaseEntity
+{
+    rolesId?: number;
+	partnerUsersId?: number;
+
+    constructor(
+    {
+        rolesId,
+		partnerUsersId
+    }:{
+        rolesId?: number;
+		partnerUsersId?: number;     
+    } = {}
+    ) {
+        super('RolePartnerUser'); 
+
+        this.rolesId = rolesId;
+		this.partnerUsersId = partnerUsersId;
+    }
+}
+
+
+export class Tier extends BaseEntity
+{
+    name?: string;
+	nameLatin?: string;
+	discount?: number;
+	validFrom?: number;
+	validTo?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        name,
+		nameLatin,
+		discount,
+		validFrom,
+		validTo,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        name?: string;
+		nameLatin?: string;
+		discount?: number;
+		validFrom?: number;
+		validTo?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('Tier'); 
+
+        this.name = name;
+		this.nameLatin = nameLatin;
+		this.discount = discount;
+		this.validFrom = validFrom;
+		this.validTo = validTo;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
+export class Transaction extends BaseEntity
+{
+    guid?: any;
+	price?: number;
+	points?: number;
+	userDisplayName?: string;
+	userId?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        guid,
+		price,
+		points,
+		userDisplayName,
+		userId,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        guid?: any;
+		price?: number;
+		points?: number;
+		userDisplayName?: string;
+		userId?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('Transaction'); 
+
+        this.guid = guid;
+		this.price = price;
+		this.points = points;
+		this.userDisplayName = userDisplayName;
+		this.userId = userId;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
+export class TransactionProduct extends BaseEntity
+{
+    productId?: number;
+	transactionDisplayName?: string;
+	transactionId?: number;
+	id?: number;
+	createdAt?: Date;
+
+    constructor(
+    {
+        productId,
+		transactionDisplayName,
+		transactionId,
+		id,
+		createdAt
+    }:{
+        productId?: number;
+		transactionDisplayName?: string;
+		transactionId?: number;
+		id?: number;
+		createdAt?: Date;     
+    } = {}
+    ) {
+        super('TransactionProduct'); 
+
+        this.productId = productId;
+		this.transactionDisplayName = transactionDisplayName;
+		this.transactionId = transactionId;
+		this.id = id;
+		this.createdAt = createdAt;
+    }
+}
+
+
+export class TransactionStatus extends BaseEntity
+{
+    name?: string;
+	nameLatin?: string;
+	code?: string;
+	id?: number;
+	createdAt?: Date;
+
+    constructor(
+    {
+        name,
+		nameLatin,
+		code,
+		id,
+		createdAt
+    }:{
+        name?: string;
+		nameLatin?: string;
+		code?: string;
+		id?: number;
+		createdAt?: Date;     
+    } = {}
+    ) {
+        super('TransactionStatus'); 
+
+        this.name = name;
+		this.nameLatin = nameLatin;
+		this.code = code;
+		this.id = id;
+		this.createdAt = createdAt;
+    }
+}
+
+
+export class UserExtended extends BaseEntity
+{
+    email?: string;
+	password?: string;
+	hasLoggedInWithExternalProvider?: boolean;
+	numberOfFailedAttemptsInARow?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        email,
+		password,
+		hasLoggedInWithExternalProvider,
+		numberOfFailedAttemptsInARow,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        email?: string;
+		password?: string;
+		hasLoggedInWithExternalProvider?: boolean;
+		numberOfFailedAttemptsInARow?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('UserExtended'); 
+
+        this.email = email;
+		this.password = password;
+		this.hasLoggedInWithExternalProvider = hasLoggedInWithExternalProvider;
+		this.numberOfFailedAttemptsInARow = numberOfFailedAttemptsInARow;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
     }
 }
 

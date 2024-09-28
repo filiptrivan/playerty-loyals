@@ -150,11 +150,11 @@ export class AuthService implements OnDestroy {
   }
 
   refreshToken(): Observable<LoginResult | null> {
-    let refreshToken = localStorage.getItem('refresh_token'); // TODO FT: CHANGE IN PROD, put the let as const
-    refreshToken = "1"; // TODO FT: CHANGE IN PROD
-    if (!localStorage.getItem('access_token')) {
-      localStorage.setItem('access_token', 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3ByaW1hcnlzaWQiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiZmlsaXB0cml2YW41QGdtYWlsLmNvbSIsImV4cCI6MTcyNjYyNjI3NywiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2MDsiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MjYwOyJ9.fjwLE3DyYgnrtFR1zcP6KSoGQkdM4h04dDcpjLZrdLk');  
-    }
+    let refreshToken = localStorage.getItem('refresh_token'); // FT: REFRESH HACK
+    // refreshToken = "1"; // FT: REFRESH HACK
+    // if (!localStorage.getItem('access_token')) { // FT: REFRESH HACK
+    //   localStorage.setItem('access_token', 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3ByaW1hcnlzaWQiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiZmlsaXB0cml2YW41QGdtYWlsLmNvbSIsImV4cCI6MTcyNjYyNjI3NywiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2MDsiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MjYwOyJ9.fjwLE3DyYgnrtFR1zcP6KSoGQkdM4h04dDcpjLZrdLk');  
+    // }
     if (!refreshToken) {
       this.clearLocalStorage();
       return of(null);

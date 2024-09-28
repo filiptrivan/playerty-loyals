@@ -11,6 +11,7 @@ using Playerty.Loyals.Business.DTO;
 using Soft.NgTable.Models;
 using Soft.Generator.Shared.DTO;
 using Playerty.Loyals.Business.Enums;
+using Playerty.Loyals.Business.Services;
 
 namespace Playerty.Loyals.WebAPI.Controllers
 {
@@ -23,11 +24,12 @@ namespace Playerty.Loyals.WebAPI.Controllers
         private readonly IJwtAuthManager _jwtAuthManagerService;
         private readonly IApplicationDbContext _context;
         private readonly AuthenticationService _authenticationService;
+        private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
         private readonly LoyalsBusinessService _loyalsBusinessService;
 
 
         public AuthController(ILogger<AuthController> logger, SecurityBusinessService securityBusinessService, IJwtAuthManager jwtAuthManagerService, IApplicationDbContext context, AuthenticationService authenticationService,
-            LoyalsBusinessService loyalsBusinessService)
+            LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService)
             : base(securityBusinessService, jwtAuthManagerService, context, authenticationService)
         {
             _logger = logger;
@@ -36,6 +38,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
             _context = context;
             _authenticationService = authenticationService;
             _loyalsBusinessService = loyalsBusinessService;
+            _partnerUserAuthenticationService = partnerUserAuthenticationService;
         }
 
         [HttpGet]
@@ -44,6 +47,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
         {
             long userId = _authenticationService.GetCurrentUserId();
             return await _loyalsBusinessService.GetUserExtendedDTOAsync(userId);
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<PartnerUserDTO> GetCurrentPartnerUser()
+        {
+            return await _partnerUserAuthenticationService.GetCurrentPartnerUserDTO();
         }
 
         [HttpPost]
@@ -105,12 +115,12 @@ namespace Playerty.Loyals.WebAPI.Controllers
         //}
 
         // na ng on init generisanje qr koda, qr kod mora da bude enkriptovan, kako korisnik sa fronta ne bi mogao sam da ubaci sta zeli, sifra za enkripciju treba da bude na nivou firme (stridon, uradimo sami itd...)
-        [HttpGet]
-        [AuthGuard]
-        public async Task<QrCodeDTO> GetQrCodeDataForTheCurrentUser()
-        {
-            return await _loyalsBusinessService.GetQrCodeDataForTheCurrentUser();
-        }
+        //[HttpGet]
+        //[AuthGuard]
+        //public async Task<QrCodeDTO> GetQrCodeDataForTheCurrentUser()
+        //{
+        //    return await _loyalsBusinessService.GetQrCodeDataForTheCurrentUser();
+        //}
 
         [HttpGet]
         [AuthGuard]

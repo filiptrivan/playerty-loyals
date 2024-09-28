@@ -33,6 +33,7 @@ public class Startup
     {
         Configuration = configuration;
         Playerty.Loyals.WebAPI.SettingsProvider.Current = ReadAssemblyConfiguration<Playerty.Loyals.WebAPI.Settings>();
+        Playerty.Loyals.Business.SettingsProvider.Current = ReadAssemblyConfiguration<Playerty.Loyals.Business.Settings>();
         Soft.Generator.Infrastructure.SettingsProvider.Current = ReadAssemblyConfiguration<Soft.Generator.Infrastructure.Settings>();
         Soft.Generator.Security.SettingsProvider.Current = ReadAssemblyConfiguration<Soft.Generator.Security.Settings>();
         Soft.Generator.Shared.SettingsProvider.Current = ReadAssemblyConfiguration<Soft.Generator.Shared.Settings>();

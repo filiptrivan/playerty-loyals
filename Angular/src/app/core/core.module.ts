@@ -7,6 +7,7 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { UnauthorizedInterceptor } from './interceptors/unauthorized.interceptor';
 import { HttpLoadingInterceptor } from './interceptors/http-loading.interceptor';
 import { JsonHttpInterceptor } from './interceptors/json-parser.interceptor';
+import { PartnerCodeInterceptor } from './interceptors/partner-code.interceptor';
 
 @NgModule({
   declarations: [],
@@ -22,7 +23,12 @@ import { JsonHttpInterceptor } from './interceptors/json-parser.interceptor';
     },
     { provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
-      multi: true },
+      multi: true 
+    },
+    { provide: HTTP_INTERCEPTORS,
+      useClass: PartnerCodeInterceptor,
+      multi: true 
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: UnauthorizedInterceptor,

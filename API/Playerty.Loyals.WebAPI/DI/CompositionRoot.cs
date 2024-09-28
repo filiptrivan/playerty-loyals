@@ -29,6 +29,7 @@ namespace Playerty.Loyals.WebAPI.DI
             // PL
             registry.Register<LoyalsBusinessService>();
             registry.Register<BusinessBusinessServiceGenerated>();
+            registry.Register<PartnerUserAuthenticationService>();
         }
 
         /// <summary>

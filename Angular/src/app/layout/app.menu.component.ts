@@ -25,7 +25,6 @@ export class AppMenuComponent implements OnInit {
     ) {
         this.apiService.getCurrentUserPermissionCodes().subscribe((permissionCodes: string[]) => {
             this.authService._currentUserPermissions.next(permissionCodes);
-            console.log(permissionCodes)
             this.currentUserPermissions = permissionCodes;
         });
     }
@@ -38,7 +37,7 @@ export class AppMenuComponent implements OnInit {
                     { 
                         label: 'Dashboard', 
                         icon: 'pi pi-fw pi-home', 
-                        routerLink: ['/'],
+                        routerLink: [``],
                         visible: true,
                     }
                 ],
@@ -52,19 +51,19 @@ export class AppMenuComponent implements OnInit {
                     {
                         label: 'Tiers',
                         icon: 'pi pi-fw pi-sitemap',
-                        routerLink: ['/tiers'],
+                        routerLink: [`/tiers`],
                         visible: true
                     },
                     {
                         label: 'Notifications',
                         icon: 'pi pi-fw pi-bell',
-                        routerLink: ['/notifications'],
+                        routerLink: [`/notifications`],
                         visible: true
                     },
                     {
                         label: 'Points',
                         icon: 'pi pi-fw pi-heart',
-                        routerLink: ['/points'],
+                        routerLink: [`/points`],
                         visible: true
                     },
                     {
@@ -114,7 +113,7 @@ export class AppMenuComponent implements OnInit {
                     {
                         label: 'Not Found',
                         icon: 'pi pi-fw pi-exclamation-circle',
-                        routerLink: ['/not-found'],
+                        routerLink: [`/not-found`],
                         visible: true
                     },
                 ]

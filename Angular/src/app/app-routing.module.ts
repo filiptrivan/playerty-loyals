@@ -9,7 +9,7 @@ import { AuthGuard } from './core/guards/auth.guard';
     imports: [
         RouterModule.forRoot([
             {
-                path: '', 
+                path: ':partner', 
                 component: AppLayoutComponent,
                 children: [
                     {
@@ -35,14 +35,14 @@ import { AuthGuard } from './core/guards/auth.guard';
                 ],
             },
             {
-                path: '', 
+                path: ':partner', 
                 children: [
                     { path: 'auth', loadChildren: () => import('./layout/components/auth/auth.module').then(m => m.AuthModule) },
                 ],
             },
-            { path: 'landing', loadChildren: () => import('./layout/components/landing/landing.module').then(m => m.LandingModule) },
-            { path: 'not-found', component: NotfoundComponent },
-            { path: '**', redirectTo: '/not-found' },
+            // { path: 'landing', loadChildren: () => import('./layout/components/landing/landing.module').then(m => m.LandingModule) },
+            { path: ':partner/not-found', component: NotfoundComponent },
+            { path: '**', redirectTo: ':partner/not-found' },
         ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload', preloadingStrategy: PreloadAllModules })
     ],
     exports: [RouterModule]
