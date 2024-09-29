@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Host, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Subscription } from 'rxjs';
@@ -7,37 +7,15 @@ import { MenuService } from './app.menu.service';
 import { LayoutService } from './service/app.layout.service';
 import { AuthService } from '../core/services/auth.service';
 import { SoftMenuItem } from './app.menu.component';
-import { PermissionCodes } from '../business/enums/generated/business-enums.generated';
+import { ApiService } from '../business/services/api/api.service';
+import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
+import { SoftFormControl } from '../core/components/soft-form-control/soft-form-control';
+import { environment } from 'src/environments/environment';
 
 @Component({
     // eslint-disable-next-line @angular-eslint/component-selector
     selector: '[app-menuitem]',
-    template: `
-		<ng-container>
-            <div *ngIf="root && item.visible === true" class="layout-menuitem-root-text">{{item.label}}</div>
-			<a *ngIf="(!item.routerLink || item.items) && item.visible === true" [attr.href]="item.url" (click)="itemClick($event)"
-			   [ngClass]="item.styleClass" [attr.target]="item.target" tabindex="0" pRipple>
-				<i [ngClass]="item.icon" class="layout-menuitem-icon"></i>
-				<span class="layout-menuitem-text">{{item.label}}</span>
-				<i class="pi pi-fw pi-angle-down layout-submenu-toggler" *ngIf="item.items"></i>
-			</a>
-            <!-- [routerLink]="item.routerLink" routerLinkActive="active-route" [routerLinkActiveOptions]="item.routerLinkActiveOptions||{ paths: 'exact', queryParams: 'ignored', matrixParams: 'ignored', fragment: 'ignored' }"
-            [fragment]="item.fragment" [queryParamsHandling]="item.queryParamsHandling" [preserveFragment]="item.preserveFragment"
-            [skipLocationChange]="item.skipLocationChange" [replaceUrl]="item.replaceUrl" [state]="item.state" [queryParams]="item.queryParams" -->
-			<a *ngIf="(item.routerLink && !item.items) && item.visible === true" (click)="itemClick($event)" [ngClass]="item.styleClass" 
-               [attr.target]="item.target" tabindex="0" pRipple>
-				<i [ngClass]="item.icon" class="layout-menuitem-icon"></i>
-				<span class="layout-menuitem-text">{{item.label}}</span>
-				<i class="pi pi-fw pi-angle-down layout-submenu-toggler" *ngIf="item.items"></i>
-			</a>
-
-			<ul *ngIf="item.items && item.visible === true" [@children]="submenuAnimation">
-				<ng-template ngFor let-child let-i="index" [ngForOf]="item.items">
-					<li app-menuitem [item]="child" [index]="i" [parentKey]="key" [class]="child.badgeStyleClass"></li>
-				</ng-template>
-			</ul>
-		</ng-container>
-    `,
+    templateUrl: './app.menuitem.component.html',
     animations: [
         trigger('children', [
             state('collapsed', style({
@@ -70,7 +48,18 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
 
     currentUserPermissionCodes: string[];
 
-    constructor(public layoutService: LayoutService, private cd: ChangeDetectorRef, public router: Router, private menuService: MenuService, private authService: AuthService) {
+    selectedPartner: SoftFormControl = new SoftFormControl<string>(null, { updateOn: 'change' });
+
+    partnerOptions: any[];
+
+    constructor(
+        public layoutService: LayoutService, 
+        private cd: ChangeDetectorRef, 
+        public router: Router, 
+        private menuService: MenuService, 
+        private authService: AuthService,
+        private apiService: ApiService,
+    ) {
         this.menuSourceSubscription = this.menuService.menuSource$.subscribe(value => {
             Promise.resolve(null).then(() => {
                 if (value.routeEvent) {
@@ -109,6 +98,10 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
         if (this.item.routerLink) {
             this.updateActiveStateFromRoute();
         }
+
+        if (this.item.showPartnerDialog) {
+            
+        }
     }
 
     updateActiveStateFromRoute() {
@@ -136,8 +129,8 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
             this.active = !this.active;
         }
         
-        const partnerSlug: string = localStorage.getItem('partner-slug');
-        this.router.navigateByUrl(`${partnerSlug}/${this.item.routerLink}`)
+        // const partnerSlug: string = localStorage.getItem('partner-slug');
+        // this.router.navigateByUrl(`${partnerSlug}/${this.item.routerLink}`)
 
         this.menuService.onMenuStateChange({ key: this.key });
     }
@@ -149,6 +142,19 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
     @HostBinding('class.active-menuitem') 
     get activeClass() {
         return this.active && !this.root;
+    }
+
+    searchPartners(event: AutoCompleteCompleteEvent) {
+        this.apiService.loadPartnerWithSlugListForAutocomplete(50, event?.query).subscribe(cl => {
+            this.partnerOptions = cl.map(c => { return { label: c.displayName, value: c.code }});
+        });
+    }
+
+    moreOptionsClick(){
+        if (this.selectedPartner.value) {
+            localStorage.setItem(environment.partnerSlugKey, this.selectedPartner.value);
+            this.router.navigate(['/'], { queryParams: { [environment.partnerParamKey]: this.selectedPartner.value } });
+        }
     }
 
     ngOnDestroy() {

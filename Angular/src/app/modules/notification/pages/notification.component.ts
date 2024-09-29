@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { Notification } from 'src/app/business/entities/generated/security-entities.generated';
+import { Notification, TableFilter } from 'src/app/business/entities/generated/security-entities.generated';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { MenuItem } from 'primeng/api';
 import { PaginatorState } from 'primeng/paginator';
-import { TableFilter } from 'src/app/business/entities/generated/table-filter.generated';
 import { TableFilterContext } from 'src/app/core/entities/table-filter-context';
 import { TableResult } from 'src/app/core/entities/table-result';
 

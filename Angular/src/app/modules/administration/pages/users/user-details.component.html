@@ -6,11 +6,11 @@
             <panel-body>
                 <form [formGroup]="formGroup" class="grid">
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('email', false, true)"></soft-textbox>
+                        <soft-textbox [control]="control('email', false, false, true)"></soft-textbox>
                     </div>
-                    <div class="col-12 md:col-6">
-                        <soft-number [control]="control('points')"></soft-number>
-                    </div>
+                    <!-- <div class="col-12 md:col-6">
+                        <soft-number [control]="control('pointse')"></soft-number>
+                    </div> -->
                     <div class="col-12">
                         <soft-multiselect
                         [control]="selectedRoles"

@@ -1,9 +1,9 @@
 import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from './../core/services/auth.service';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { LayoutService } from "./service/app.layout.service";
 import { environment } from 'src/environments/environment';
-import { filter } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { User } from '../business/entities/generated/security-entities.generated';
 import { ApiService } from '../business/services/api/api.service';
 import { CacheService } from '../core/services/cache.service';
@@ -22,7 +22,8 @@ interface SoftMenuItem {
     styles: [
     ]
 })
-export class AppTopBarComponent {
+export class AppTopBarComponent implements OnDestroy {
+    private subscription: Subscription | null = null;
     currentUser: User;
     currentUserNotificationsCount: number;
     menuItems: SoftMenuItem[] = [
@@ -73,7 +74,7 @@ export class AppTopBarComponent {
     }
 
   ngOnInit(){
-    this.authService.user$.subscribe(res => {
+    this.subscription = this.authService.user$.subscribe(res => {
         this.currentUser = res;
         this.avatarLabel = res?.email.charAt(0).toLocaleUpperCase();
     });
@@ -96,6 +97,12 @@ export class AppTopBarComponent {
       if (this.layoutService.state.profileDropdownSidebarVisible == true) {
         this.layoutService.state.profileDropdownSidebarVisible = false;
       }
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
 }

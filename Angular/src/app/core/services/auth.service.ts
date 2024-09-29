@@ -2,12 +2,12 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, Subject, Subscription } from 'rxjs';
-import { map, tap, delay, finalize, switchMap } from 'rxjs/operators';
+import { map, tap, delay, finalize } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { SoftMessageService } from './soft-message.service';
 import { SocialUser, SocialAuthService } from '@abacritt/angularx-social-login';
-import { User, ExternalProvider, Login, VerificationTokenRequest, LoginResult, ForgotPassword, Registration, RegistrationVerificationResult, RefreshTokenRequest, Notification } from 'src/app/business/entities/generated/security-entities.generated';
+import { User, ExternalProvider, Login, VerificationTokenRequest, LoginResult, ForgotPassword, Registration, RegistrationVerificationResult, RefreshTokenRequest } from 'src/app/business/entities/generated/security-entities.generated';
 
 
 @Injectable({
@@ -45,8 +45,8 @@ export class AuthService implements OnDestroy {
         // provider: user.provider,
         idToken: user.idToken
       }
-      this.loginExternal(externalAuth).subscribe(()=>{
-        this.router.navigate(['/']);
+      this.loginExternal(externalAuth).subscribe(() => {
+        this.navigateToDashboard();
       });
       this.extAuthChangeSub.next(user);
     })
@@ -81,7 +81,6 @@ export class AuthService implements OnDestroy {
   login(body: VerificationTokenRequest): Observable<LoginResult> {
     const browserId = this.getBrowserId();
     body.browserId = browserId;
-    // const loginResultObservable = this.apiService.login(body);
     const loginResultObservable = this.http.post<LoginResult>(`${this.apiUrl}/Auth/Login`, body);
     return this.handleLoginResult(loginResultObservable);
   }
@@ -143,17 +142,17 @@ export class AuthService implements OnDestroy {
           this._user.next(null);
           this._currentUserPermissions.next(null);
           this.stopTokenTimer();
-          this.router.navigate(['auth/login']);
+          this.router.navigate([environment.loginSlug]);
         })
       )
       .subscribe();
   }
 
   refreshToken(): Observable<LoginResult | null> {
-    let refreshToken = localStorage.getItem('refresh_token'); // FT: REFRESH HACK
+    let refreshToken = localStorage.getItem(environment.refreshTokenKey); // FT: REFRESH HACK
     // refreshToken = "1"; // FT: REFRESH HACK
-    // if (!localStorage.getItem('access_token')) { // FT: REFRESH HACK
-    //   localStorage.setItem('access_token', 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3ByaW1hcnlzaWQiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiZmlsaXB0cml2YW41QGdtYWlsLmNvbSIsImV4cCI6MTcyNjYyNjI3NywiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2MDsiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MjYwOyJ9.fjwLE3DyYgnrtFR1zcP6KSoGQkdM4h04dDcpjLZrdLk');  
+    // if (!localStorage.getItem(environment.accessTokenKey)) { // FT: REFRESH HACK
+    //   localStorage.setItem(environment.accessTokenKey, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3ByaW1hcnlzaWQiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiZmlsaXB0cml2YW41QGdtYWlsLmNvbSIsImV4cCI6MTcyNjYyNjI3NywiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2MDsiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MjYwOyJ9.fjwLE3DyYgnrtFR1zcP6KSoGQkdM4h04dDcpjLZrdLk');  
     // }
     if (!refreshToken) {
       this.clearLocalStorage();
@@ -180,22 +179,22 @@ export class AuthService implements OnDestroy {
   }
 
   setLocalStorage(loginResult: LoginResult) {
-    localStorage.setItem('access_token', loginResult.accessToken);
-    localStorage.setItem('refresh_token', loginResult.refreshToken);
+    localStorage.setItem(environment.accessTokenKey, loginResult.accessToken);
+    localStorage.setItem(environment.refreshTokenKey, loginResult.refreshToken);
     localStorage.setItem('login-event', 'login' + Math.random());
   }
 
   clearLocalStorage() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
+    localStorage.removeItem(environment.accessTokenKey);
+    localStorage.removeItem(environment.refreshTokenKey);
     localStorage.setItem('logout-event', 'logout' + Math.random());
   }
 
   getBrowserId() {
-    let browserId = localStorage.getItem('browser_id'); // FT: We don't need to remove this from the local storage ever, only if the user manuely deletes it, we will handle it
+    let browserId = localStorage.getItem(environment.browserIdKey); // FT: We don't need to remove this from the local storage ever, only if the user manuely deletes it, we will handle it
     if (!browserId) {
       browserId = crypto.randomUUID();
-      localStorage.setItem('browser_id', browserId);
+      localStorage.setItem(environment.browserIdKey, browserId);
     }
     return browserId;
   }
@@ -206,7 +205,7 @@ export class AuthService implements OnDestroy {
   }
 
   getTokenRemainingTime() {
-    const accessToken = localStorage.getItem('access_token');
+    const accessToken = localStorage.getItem(environment.accessTokenKey);
     if (!accessToken) {
       return 0;
     }
@@ -231,18 +230,27 @@ export class AuthService implements OnDestroy {
     this.timer?.unsubscribe();
   }
 
-  navigateToDashboardIfLoggedIn() {
-    let url = this.route.snapshot.url[0]?.path ?? window.location.pathname
-    return this.user$.subscribe((x) => {
-      if (url === 'auth/login') {
-        const accessToken = localStorage.getItem('access_token');
-        const refreshToken = localStorage.getItem('refresh_token');
-        if (x && accessToken && refreshToken) {
-          // const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
-          this.router.navigate(['/']);
-        }
-      }
-    });
+  // navigateToDashboardIfLoggedIn() {
+  //   let url = this.route.snapshot.url[0]?.path ?? window.location.pathname
+  //   return this.user$.subscribe((x) => {
+  //     if (url.startsWith(environment.loginSlug)) {
+  //       const accessToken = localStorage.getItem(environment.accessTokenKey);
+  //       const refreshToken = localStorage.getItem(environment.refreshTokenKey);
+  //       if (x && accessToken && refreshToken) {
+  //         // const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
+  //         this.router.navigate([environment.partnerSelectSlug], { queryParams: { partner: localStorage.getItem(environment.partnerSlugKey) } });
+  //       }
+  //     }
+  //   });
+  // }
+
+  navigateToDashboard(){
+    this.router.navigate(['/']);
+  }
+
+  navigateToSelectPartner(){
+    localStorage.removeItem(environment.partnerSlugKey);
+    this.router.navigate([environment.partnerSelectSlug]);
   }
 
   logoutGoogle = () => {

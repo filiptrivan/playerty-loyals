@@ -3,20 +3,21 @@
 <div class="flex flex-column gap-2">
   <div>
     <label>{{getTranslatedLabel()}}</label>
-    <required *ngIf="control.required"></required>
+    <required *ngIf="control?.required"></required>
   </div>
   <p-inputNumber
     [pTooltip]="getValidationErrrorMessages()"
     tooltipPosition="bottom"
-    [tooltipDisabled]="control.valid"
+    [tooltipDisabled]="control?.valid"
     tooltipStyleClass="soft-tooltip-invalid"
     [formControl]="control"
-    [id]="control.label"
-    (blur)="control.markAsDirty()"
-    inputId="percent" 
+    [id]="control?.label"
+    (blur)="control?.markAsDirty()"
     [prefix]="prefix"
-    [showButtons]="true"
     [style]="{'width':'100%'}"
     [inputStyle]="{'width':'100%'}"
+    [showButtons]="showButtons"
+    buttonLayout="horizontal"
+    [maxFractionDigits]="maxFractionDigits"
     />
   </div>

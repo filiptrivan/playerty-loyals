@@ -1,4 +1,5 @@
-﻿using Soft.Generator.Shared.BaseEntities;
+﻿using Soft.Generator.Shared.Attributes;
+using Soft.Generator.Shared.BaseEntities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,6 +11,9 @@ namespace Playerty.Loyals.Business.Entities
 {
     public class Partner : BusinessObject<int>
     {
+        [SoftDisplayName]
+        [StringLength(255, MinimumLength = 1)]
+        [Required]
         public string Name { get; set; }
 
         [StringLength(100, MinimumLength = 1)]

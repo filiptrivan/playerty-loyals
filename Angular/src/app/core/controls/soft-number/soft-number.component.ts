@@ -20,6 +20,9 @@ import { CommonModule } from '@angular/common';
 })
 export class SoftNumberComponent extends BaseControl implements OnInit {
     @Input() prefix: string;
+    @Input() showButtons: boolean = true;
+    @Input() decimal: boolean;
+    @Input() maxFractionDigits: number = 0;
 
     constructor() { 
         super();

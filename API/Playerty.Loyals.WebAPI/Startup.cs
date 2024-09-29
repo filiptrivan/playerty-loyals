@@ -43,7 +43,8 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        // Add services like controllers, services, etc.
+        services.AddMemoryCache();
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -282,9 +283,6 @@ export function getTranslatedClassName(name: string): string {
 
 {{string.Join("\n\n", dataClassNamesHelper)}}
 
-    if (environment.production == false)
-        console.error(`Class name translate: '${name}' doesn't exist`);
-
     return name;
 }
 """;
@@ -297,9 +295,6 @@ export function getTranslatedLabel(name: string): string {
     let result: string = null;
 
 {{string.Join("\n\n", dataLabelsHelper)}}
-
-    if (environment.production == false)
-        console.error(`Property label translate with specified name: '${name}' doesn't exist.`);
 
     return name;
 }

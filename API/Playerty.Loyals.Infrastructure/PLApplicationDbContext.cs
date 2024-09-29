@@ -32,6 +32,10 @@ namespace Playerty.Loyals.Infrastructure
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Partner>()
+                .HasIndex(u => u.Slug)
+                .IsUnique();
+
             modelBuilder.Entity<RolePartnerUser>()
                 .HasKey(ru => new { ru.RolesId, ru.PartnerUsersId });
 

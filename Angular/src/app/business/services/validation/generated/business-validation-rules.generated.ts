@@ -10,6 +10,8 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
 
 
 
+        case 'namePartner':
+            return namePartnerValidator(formControl);
         case 'slugPartner':
             return slugPartnerValidator(formControl);
 
@@ -68,6 +70,23 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
 
 
 
+
+export function namePartnerValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value ?? "";
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const min = 1;
+        const max = 255;
+        const stringLengthRule = value?.length >= min && value?.length <= max;
+
+        const nameValid = notEmptyRule && stringLengthRule;
+
+        return nameValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
 
 export function slugPartnerValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {

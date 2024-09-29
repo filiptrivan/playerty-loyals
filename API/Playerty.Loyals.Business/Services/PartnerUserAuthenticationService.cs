@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Playerty.Loyals.Business.DTO;
 using Mapster;
 using Playerty.Loyals.Business.DataMappers;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Playerty.Loyals.Business.Services
 {
@@ -24,19 +25,44 @@ namespace Playerty.Loyals.Business.Services
         private readonly IApplicationDbContext _context;
         private readonly AuthenticationService _authenticationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IMemoryCache _cache;
 
-        public PartnerUserAuthenticationService(IApplicationDbContext context, AuthenticationService authenticationService, IHttpContextAccessor httpContextAccessor)
+        public PartnerUserAuthenticationService(IApplicationDbContext context, AuthenticationService authenticationService, IHttpContextAccessor httpContextAccessor, IMemoryCache cache)
             : base(context)
         {
             _context = context;
             _authenticationService = authenticationService;
             _httpContextAccessor = httpContextAccessor;
+            _cache = cache;
         }
 
         public string GetCurrentPartnerCode()
         {
-            string code = _httpContextAccessor.HttpContext.Request.Headers[SettingsProvider.Current.PartnerHeadersKey];
-            return code;
+            return _httpContextAccessor.HttpContext.Request.Headers[SettingsProvider.Current.PartnerHeadersKey];
+        }
+
+        public async Task<PartnerDTO> GetCurrentPartnerDTO()
+        {
+            string cacheKey = $"Partner_{GetCurrentPartnerCode()}";
+
+            if (!_cache.TryGetValue(cacheKey, out PartnerDTO partnerDTO))
+            {
+                partnerDTO = await _context.WithTransactionAsync(async () =>
+                {
+                    string partnerCode = GetCurrentPartnerCode();
+                    return await _context.DbSet<Partner>()
+                        .Where(x => x.Slug == partnerCode)
+                        .ProjectToType<PartnerDTO>(Mapper.PartnerProjectToConfig())
+                        .SingleOrDefaultAsync();
+                });
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(60));
+
+                _cache.Set(cacheKey, partnerDTO, cacheEntryOptions);
+            }
+
+            return partnerDTO;
         }
 
         public async Task<PartnerUser> GetCurrentPartnerUser()

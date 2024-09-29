@@ -1,0 +1,22 @@
+<div class="min-h-screen" style="display: flex; justify-content: center; align-items: center;">
+    <div class="dialog" style="padding: 0px;">
+        <soft-panel>
+            <panel-header title="Choose a partner" [bigTitle]="true" icon="pi pi-at"></panel-header>
+
+            <panel-body>
+                <form class="grid">
+                    <div class="col-12">
+                        <div class="header">{{title}}</div>
+                    </div>
+                    <div class="col-12">
+                        {{description}}
+                    </div>
+
+                    <ng-content></ng-content>
+
+                </form>
+            </panel-body>
+
+        </soft-panel>
+    </div>
+</div>

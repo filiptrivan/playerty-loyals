@@ -4,7 +4,7 @@
     [style]="{'width':'100%'}"
     [pTooltip]="getValidationErrrorMessages()"
     tooltipPosition="bottom"
-    [tooltipDisabled]="control.valid"
+    [tooltipDisabled]="control?.valid"
     tooltipStyleClass="soft-tooltip-invalid"
     [formControl]="control"
     dateFormat="dd.mm.yy."

@@ -1,11 +1,11 @@
 <div class="flex flex-column gap-2">
   <div>
     <label>{{getTranslatedLabel()}}</label>
-    <required *ngIf="control.required"></required>
+    <required *ngIf="control?.required"></required>
   </div>
   <span class="p-fluid">
     <p-multiSelect 
-    [pTooltip]="getValidationErrrorMessages()" tooltipPosition="bottom" [tooltipDisabled]="control.valid" tooltipStyleClass="soft-tooltip-invalid"
+    [pTooltip]="getValidationErrrorMessages()" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
     [id]="label"
     [formControl]="control"
     [options]="options"

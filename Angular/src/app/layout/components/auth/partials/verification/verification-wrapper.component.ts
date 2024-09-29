@@ -1,7 +1,6 @@
 import { AuthService } from '../../../../../core/services/auth.service';
 import { ChangeDetectorRef, Component, EventEmitter, Input, KeyValueDiffers, OnInit, Output } from '@angular/core';
 import { LayoutService } from '../../../../service/app.layout.service';
-import { Subscription } from 'rxjs';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { HttpClient } from '@angular/common/http';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
@@ -25,7 +24,6 @@ import { ActivatedRoute, Router } from '@angular/router';
     ]
 })
 export class VerificationWrapperComponent extends BaseForm<VerificationTokenRequest> implements OnInit {
-    private subscription: Subscription | null = null;
     @Input() email: string;
     @Output() onResendVerificationToken: EventEmitter<any> = new EventEmitter();
     @Output() onCodeSubmit: EventEmitter<string> = new EventEmitter();
@@ -44,7 +42,6 @@ export class VerificationWrapperComponent extends BaseForm<VerificationTokenRequ
     }
 
     override ngOnInit(){
-        this.subscription = this.authService.navigateToDashboardIfLoggedIn(); // TODO FT: Make the guard for this
         this.init(new VerificationTokenRequest({email: this.email}));
     }
 
@@ -64,8 +61,5 @@ export class VerificationWrapperComponent extends BaseForm<VerificationTokenRequ
         this.onResendVerificationToken.next(null);
     }
 
-    ngOnDestroy(): void {
-        this.subscription?.unsubscribe();
-    }
 }
 

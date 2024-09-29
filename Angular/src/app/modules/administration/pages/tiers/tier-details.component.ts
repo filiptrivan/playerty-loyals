@@ -13,7 +13,6 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class TierDetailsComponent extends BaseForm<Tier> implements OnInit {
-    private routeSub: Subscription;
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -28,7 +27,7 @@ export class TierDetailsComponent extends BaseForm<Tier> implements OnInit {
         }
          
     override ngOnInit() {
-        this.routeSub = this.route.params.subscribe((params) => {
+        this.route.params.subscribe((params) => {
             this.modelId = params['id'];
             if(this.modelId > 0){
                 forkJoin({
@@ -45,10 +44,6 @@ export class TierDetailsComponent extends BaseForm<Tier> implements OnInit {
 
     init(model: Tier){
         this.initFormGroup(model);
-    }
-
-    ngOnDestroy() {
-        this.routeSub.unsubscribe();
     }
 
     override onBeforeSave(): void {

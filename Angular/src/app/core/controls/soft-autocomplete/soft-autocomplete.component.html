@@ -1,0 +1,30 @@
+<div class="flex flex-column gap-2">
+  <div *ngIf="getTranslatedLabel() != '' && getTranslatedLabel() != null">
+    <label>{{getTranslatedLabel()}}</label>
+    <required *ngIf="control?.required"></required>
+  </div>
+    <div class="p-inputgroup p-fluid">
+      <p-autoComplete 
+      [pTooltip]="getValidationErrrorMessages()" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
+      [id]="label"
+      [formControl]="control"
+      [placeholder]="placeholder"
+      [suggestions]="options"
+      optionLabel="label"
+      optionValue="value"
+      (completeMethod)="search($event)"
+      [forceSelection]="true"
+      [dropdown]="false"
+      [showClear]="true"
+      (onHide)="dropdownMarkAsDirty()"
+      [completeOnFocus]="true"
+      (onDropdownClick)="buttonClick()"
+      [style]="{'width':'100%'}"
+      [inputStyle]="{'width':'100%'}"
+      appendTo="body"
+      />
+    <span *ngIf="showMoreOptions" (click)="moreOptionsClick()" class="p-inputgroup-addon" style="cursor: pointer; background-color: var(--primary-color); border-color: var(--primary-color);">
+      <i class="pi {{moreOptionsIcon}}" style="color: #fff;"></i>
+    </span>
+  </div>
+</div>

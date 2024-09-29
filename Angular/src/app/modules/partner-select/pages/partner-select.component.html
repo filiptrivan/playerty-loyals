@@ -1,0 +1,16 @@
+<intermediate-step-wrapper [title]="partnerIntermediateStepTitle" [description]="partnerIntermediateStepDescription">
+  <div class="col-12">
+    <soft-autocomplete 
+      [control]="control('partnerSlug', true)"
+      (onTextInput)="searchPartners($event)" 
+      [options]="partnerOptions"
+      label="Partner"></soft-autocomplete>
+  </div>
+  <div class="col-12">
+    <p-button
+      (onClick)="partnerSubmit()"
+      label="Submit"
+      icon="pi pi-check"
+    ></p-button>
+  </div>
+</intermediate-step-wrapper>

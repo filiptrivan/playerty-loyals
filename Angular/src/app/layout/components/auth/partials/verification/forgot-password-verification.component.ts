@@ -40,8 +40,8 @@ export class ForgotPasswordVerificationComponent implements OnInit {
 
     onCodeSubmit(event: string){
         this.authService.forgotPassword({email: this.email, verificationCode: event}).subscribe(() => {
-            this.messageService.successMessage("You have successfully changed your password.")
-            this.router.navigate(['/']);
+            this.messageService.successMessage("You have successfully changed your password.");
+            this.authService.navigateToDashboard();
         });
     }
 }

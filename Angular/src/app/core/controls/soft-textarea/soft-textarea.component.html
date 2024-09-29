@@ -3,15 +3,15 @@
 <div class="flex flex-column gap-2">
   <div>
     <label>{{getTranslatedLabel()}}</label>
-    <required *ngIf="control.required"></required>
+    <required *ngIf="control?.required"></required>
   </div>
   <textarea
-    [pTooltip]="getValidationErrrorMessages()" tooltipPosition="bottom" [tooltipDisabled]="control.valid" tooltipStyleClass="soft-tooltip-invalid"
+    [pTooltip]="getValidationErrrorMessages()" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
     pInputTextarea
     [formControl]="control"
-    [id]="control.label"
-    (blur)="control.markAsDirty()"
+    [id]="control?.label"
+    (blur)="control?.markAsDirty()"
     [autoResize]="true"
-    [class]="control.disabled ? 'disabled' : ''"
+    [class]="control?.disabled ? 'disabled' : ''"
     ></textarea>
   </div>

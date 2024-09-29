@@ -41,7 +41,7 @@ export class LoginVerificationComponent implements OnInit {
     onCodeSubmit(event: string){
         this.authService.login({email: this.email, verificationCode: event}).subscribe(() => {
             this.messageService.successMessage("You have successfully verified your account.")
-            this.router.navigate(['/']);
+            this.authService.navigateToDashboard();
         });
     }
 }

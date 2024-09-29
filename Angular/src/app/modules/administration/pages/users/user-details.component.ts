@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, Subscription } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { UserExtended, UserExtendedSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
@@ -15,7 +15,6 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class UserDetailsComponent extends BaseForm<UserExtended> implements OnInit {
-    private routeSub: Subscription;
     roleOptions: PrimengOption[];
     selectedRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'})
 
@@ -34,7 +33,7 @@ export class UserDetailsComponent extends BaseForm<UserExtended> implements OnIn
     override ngOnInit() {
         this.controllerName = "Auth";
 
-        this.routeSub = this.route.params.subscribe((params) => {
+        this.route.params.subscribe((params) => {
             this.modelId = params['id'];
             this.apiService.loadRoleListForDropdown().subscribe(nl => {
                 this.roleOptions = nl.map(n => { return { label: n.displayName, value: n.id } });
@@ -61,7 +60,6 @@ export class UserDetailsComponent extends BaseForm<UserExtended> implements OnIn
     }
 
     ngOnDestroy() {
-        this.routeSub.unsubscribe();
     }
     
     override onBeforeSave(): void {

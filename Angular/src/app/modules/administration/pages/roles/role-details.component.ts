@@ -17,7 +17,6 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
-    private routeSub: Subscription;
     userOptions: PrimengOption[];
     selectedUsers = new SoftFormControl<PrimengOption[]>(null, {updateOn: 'change'})
 
@@ -40,7 +39,7 @@ export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
         this.controllerName = "Auth";
         // this.selectedUsers.validator = isArrayEmpty(this.selectedUsers);
 
-        this.routeSub = this.route.params.subscribe((params) => {
+        this.route.params.subscribe((params) => {
             this.modelId = params['id'];
             this.apiService.loadPermissionListForDropdown().subscribe(nl => {
                 this.permissionOptions = nl.map(n => { return { label: n.displayName, value: n.id } });
@@ -68,10 +67,6 @@ export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
 
     init(model: Role){
         this.initFormGroup(model);
-    }
-
-    ngOnDestroy() {
-        this.routeSub.unsubscribe();
     }
 
     searchUsers(event: AutoCompleteCompleteEvent){ 

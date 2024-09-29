@@ -24,7 +24,7 @@
           [style]="{ 'background-color': 'var(--primary-color)', 'color': '#fff', 'cursor': 'pointer', 'width': '34px', 'height': '34px', 'font-size': '21px' }"
           pBadge 
           [badgeStyleClass]="'p-badge-danger'"
-          [badgeDisabled]="currentUserNotificationsCount == 0"
+          [badgeDisabled]="currentUserNotificationsCount == 0 || currentUserNotificationsCount == null"
           [value]="currentUserNotificationsCount"
           />
       </div>

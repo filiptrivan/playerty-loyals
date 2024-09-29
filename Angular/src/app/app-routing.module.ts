@@ -4,45 +4,56 @@ import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './layout/components/notfound/notfound.component';
 import { AppLayoutComponent } from "./layout/app.layout.component";
 import { AuthGuard } from './core/guards/auth.guard';
+import { NotAuthGuard } from './core/guards/not-auth.guard';
+import { PartnerGuard } from './core/guards/partner.guard';
 
 @NgModule({
     imports: [
         RouterModule.forRoot([
             {
-                path: ':partner', 
+                path: '', 
                 component: AppLayoutComponent,
                 children: [
                     {
-                     path: '',
-                     loadChildren: () => import('./layout/components/dashboard/dashboard.module').then(m => m.DashboardModule),
-                     canActivate: [AuthGuard]
+                        path: '',
+                        loadChildren: () => import('./layout/components/dashboard/dashboard.module').then(m => m.DashboardModule),
+                        canActivate: [AuthGuard, PartnerGuard]
                     },
                     { 
-                     path: 'documentation',
-                     loadChildren: () => import('./layout/components/documentation/documentation.module').then(m => m.DocumentationModule),
-                     canActivate: [AuthGuard]
+                        path: 'documentation',
+                        loadChildren: () => import('./layout/components/documentation/documentation.module').then(m => m.DocumentationModule),
+                        canActivate: [AuthGuard, PartnerGuard]
                     },
                     { 
-                     path: 'administration',
-                     loadChildren: () => import('./modules/administration/administration.module').then(m => m.AdministrationModule),
-                     canActivate: [AuthGuard]
+                        path: 'administration',
+                        loadChildren: () => import('./modules/administration/administration.module').then(m => m.AdministrationModule),
+                        canActivate: [AuthGuard, PartnerGuard]
                     },
                     { 
-                     path: '',
-                     loadChildren: () => import('./modules/notification/notification.module').then(m => m.NotificationModule),
-                     canActivate: [AuthGuard]
+                        path: '',
+                        loadChildren: () => import('./modules/notification/notification.module').then(m => m.NotificationModule),
+                        canActivate: [AuthGuard, PartnerGuard]
                     },
                 ],
             },
             {
-                path: ':partner', 
+                path: '',
                 children: [
-                    { path: 'auth', loadChildren: () => import('./layout/components/auth/auth.module').then(m => m.AuthModule) },
+                    { 
+                        path: 'auth',
+                        loadChildren: () => import('./layout/components/auth/auth.module').then(m => m.AuthModule),
+                        canActivate: [NotAuthGuard],
+                    },
                 ],
             },
+            {
+                path: '',
+                loadChildren: () => import('./modules/partner-select/partner-select.module').then(m => m.PartnerSelectModule),
+                canActivate: [AuthGuard]
+            },
             // { path: 'landing', loadChildren: () => import('./layout/components/landing/landing.module').then(m => m.LandingModule) },
-            { path: ':partner/not-found', component: NotfoundComponent },
-            { path: '**', redirectTo: ':partner/not-found' },
+            { path: 'not-found', component: NotfoundComponent },
+            { path: '**', redirectTo: 'not-found' },
         ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload', preloadingStrategy: PreloadAllModules })
     ],
     exports: [RouterModule]

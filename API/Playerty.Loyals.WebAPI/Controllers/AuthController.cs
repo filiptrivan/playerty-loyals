@@ -56,6 +56,20 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _partnerUserAuthenticationService.GetCurrentPartnerUserDTO();
         }
 
+        [HttpGet]
+        //[AuthGuard] // FT: We should show login page of the partner to the user which is not logged in also.
+        public async Task<PartnerDTO> GetCurrentPartner()
+        {
+            return await _partnerUserAuthenticationService.GetCurrentPartnerDTO();
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<CodebookDTO>> LoadPartnerWithSlugListForAutocomplete(int limit, string query)
+        {
+            return await _loyalsBusinessService.LoadPartnerWithSlugListForAutocomplete(limit, query, _context.DbSet<Partner>(), false);
+        }
+
         [HttpPost]
         [AuthGuard]
         public async Task<BaseTableResponseEntity<UserExtendedDTO>> LoadUserListForTable(TableFilterDTO dto)

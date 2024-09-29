@@ -11,16 +11,21 @@ export const environment = {
     httpOptions: {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     },
-    httpTableOptions: {
-      headers: new HttpHeaders({ 'Content-Typeeee': 'applicadfation/json' }),
-      params: new HttpParams().set('X-Skip-Spinner', 'true')
-    },
-    httpDropdownOptions: {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-      params: new HttpParams().set('X-Skip-Spinner', 'true')
-    },
     httpSkipSpinnerOptions: {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       params: new HttpParams().set('X-Skip-Spinner', 'true')
     },
+
+    /* URLs */
+    loginSlug: 'auth/login',
+    partnerSelectSlug: 'partner-select',
+
+    /* Local storage */
+    partnerSlugKey: 'partner_slug',
+    accessTokenKey: 'access_token',
+    refreshTokenKey: 'refresh_token',
+    browserIdKey: 'browser_id',
+
+    /* Query params */
+    partnerParamKey: 'partner'
   };

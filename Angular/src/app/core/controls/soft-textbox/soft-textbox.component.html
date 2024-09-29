@@ -3,17 +3,17 @@
 <div class="flex flex-column gap-2">
   <div *ngIf="getTranslatedLabel() != '' && getTranslatedLabel() != null">
     <label>{{getTranslatedLabel()}}</label>
-    <required *ngIf="control.required"></required>
+    <required *ngIf="control?.required"></required>
   </div>
   <input
     [pTooltip]="getValidationErrrorMessages()"
     tooltipPosition="bottom"
-    [tooltipDisabled]="control.valid"
+    [tooltipDisabled]="control?.valid"
     tooltipStyleClass="soft-tooltip-invalid"
     pInputText
     [formControl]="control"
-    [id]="control.label"
-    (blur)="control.markAsDirty()"
+    [id]="control?.label"
+    (blur)="control?.markAsDirty()"
     [placeholder]="placeholder"
     />
   </div>

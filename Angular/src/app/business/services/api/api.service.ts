@@ -17,7 +17,7 @@ export class ApiService extends ApiGeneratedService {
     }
     
     loadListForTable(controllerName: string, methodPartName: string, body: TableLazyLoadEvent): Observable<TableResult> {
-        return this.http.post<TableResult>(`${environment.apiUrl}/${controllerName}/Load${methodPartName}ListForTable`, body, environment.httpTableOptions);
+        return this.http.post<TableResult>(`${environment.apiUrl}/${controllerName}/Load${methodPartName}ListForTable`, body, environment.httpSkipSpinnerOptions);
     }
 
     exportListToExcel(controllerName: string, methodPartName: string, body: TableLazyLoadEvent) {

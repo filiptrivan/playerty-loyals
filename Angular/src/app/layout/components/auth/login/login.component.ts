@@ -4,7 +4,6 @@ import { AuthService } from './../../../../core/services/auth.service';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { LayoutService } from '../../../../layout/service/app.layout.service';
 import { BaseForm } from '../../../../core/components/base-form/base-form';
-import { Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { VerificationTypeCodes } from 'src/app/business/enums/verification-type-codes';
@@ -17,7 +16,6 @@ import { Login } from 'src/app/business/entities/generated/security-entities.gen
 export class LoginComponent extends BaseForm<Login> implements OnInit {
     companyName: string = environment.companyName;
     usersCanRegister: boolean = environment.usersCanRegister;
-    private subscription: Subscription | null = null;
     showEmailSentDialog: boolean = false;
     verificationType: VerificationTypeCodes = VerificationTypeCodes.Login;
 
@@ -25,7 +23,7 @@ export class LoginComponent extends BaseForm<Login> implements OnInit {
       protected override differs: KeyValueDiffers,
       protected override http: HttpClient,
       protected override messageService: SoftMessageService, 
-      protected override changeDetectorRef: ChangeDetectorRef,
+    protected override changeDetectorRef: ChangeDetectorRef,
       protected override router: Router, 
       protected override route: ActivatedRoute,
       public layoutService: LayoutService, 
@@ -36,7 +34,6 @@ export class LoginComponent extends BaseForm<Login> implements OnInit {
     }
 
     override ngOnInit(){
-        this.subscription = this.authService.navigateToDashboardIfLoggedIn();
         this.init(new Login());
     }
     
@@ -53,7 +50,4 @@ export class LoginComponent extends BaseForm<Login> implements OnInit {
         });
     }
 
-    ngOnDestroy(): void {
-        this.subscription?.unsubscribe();
-    }
 }

@@ -13,6 +13,7 @@ import { AppSidebarComponent } from "./app.sidebar.component";
 import { AppLayoutComponent } from "./app.layout.component";
 import { PrimengModule } from './modules/primeng.module';
 import { BrowserModule } from '@angular/platform-browser';
+import { SoftAutocompleteComponent } from "../core/controls/soft-autocomplete/soft-autocomplete.component";
 
 @NgModule({
     declarations: [
@@ -24,14 +25,15 @@ import { BrowserModule } from '@angular/platform-browser';
         AppLayoutComponent,
     ],
     imports: [
-        FormsModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        BrowserModule,
-        RouterModule,
-        AppConfigModule,
-        PrimengModule
-    ],
+    FormsModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    BrowserModule,
+    RouterModule,
+    AppConfigModule,
+    PrimengModule,
+    SoftAutocompleteComponent
+],
     exports: [
         FormsModule,
         AppLayoutComponent,

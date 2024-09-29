@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Observable, map } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -19,9 +20,10 @@ export class AuthGuard implements CanActivate {
           return true;
         } else {
           // const returnUrl = this.router.getCurrentNavigation()?.extractedUrl.toString() || '/';
-          this.router.navigate(['auth/login'], {
-            // queryParams: { returnUrl },
-          });
+          // this.router.navigate(['auth/login'], {
+          //    queryParams: { returnUrl },
+          // });
+          this.router.navigate([environment.loginSlug]);
           return false;
         }
       })
