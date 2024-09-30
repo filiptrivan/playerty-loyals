@@ -13,8 +13,5 @@ export function getTranslatedClassName(name: string): string {
     if (result != null)
         return result;
 
-    if (environment.production == false)
-        console.error(`Class name translate: '${name}' doesn't exist`);
-
     return name;
 }

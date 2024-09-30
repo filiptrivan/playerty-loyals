@@ -25,8 +25,9 @@ namespace Playerty.Loyals.Infrastructure
         public DbSet<TransactionProduct> TransactionProduct { get; set; }
         public DbSet<Partner> Partners { get; set; }
         public DbSet<PartnerUser> PartnerUser { get; set; }
-        public DbSet<RolePartnerUser> RolePartnerUser { get; set; }
-        public DbSet<NotificationPartnerUser> NotificationPartnerUser { get; set; }
+        public DbSet<PartnerNotificationPartnerUser> PartnerNotificationPartnerUser { get; set; }
+        public DbSet<PartnerNotification> PartnerNotifications { get; set; }
+        public DbSet<PartnerRole> PartnerRoles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,31 +37,31 @@ namespace Playerty.Loyals.Infrastructure
                 .HasIndex(u => u.Slug)
                 .IsUnique();
 
-            modelBuilder.Entity<RolePartnerUser>()
-                .HasKey(ru => new { ru.RolesId, ru.PartnerUsersId });
+            //modelBuilder.Entity<RolePartnerUser>()
+            //    .HasKey(ru => new { ru.RolesId, ru.PartnerUsersId });
+
+            //modelBuilder.Entity<PartnerUser>()
+            //    .HasMany(e => e.PartnerRoles)
+            //    .WithMany()
+            //    .UsingEntity<RolePartnerUser>(
+            //        j => j.HasOne<PartnerRole>()
+            //              .WithMany()
+            //              .HasForeignKey(ru => ru.RolesId),
+            //        j => j.HasOne<PartnerUser>()
+            //              .WithMany()
+            //              .HasForeignKey(ru => ru.PartnerUsersId)
+            //    );
+
+            modelBuilder.Entity<PartnerNotificationPartnerUser>()
+                .HasKey(ru => new { ru.PartnerNotificationsId, ru.PartnerUsersId });
 
             modelBuilder.Entity<PartnerUser>()
-                .HasMany(e => e.Roles)
+                .HasMany(e => e.PartnerNotifications)
                 .WithMany()
-                .UsingEntity<RolePartnerUser>(
-                    j => j.HasOne<Role>()
+                .UsingEntity<PartnerNotificationPartnerUser>(
+                    j => j.HasOne<PartnerNotification>()
                           .WithMany()
-                          .HasForeignKey(ru => ru.RolesId),
-                    j => j.HasOne<PartnerUser>()
-                          .WithMany()
-                          .HasForeignKey(ru => ru.PartnerUsersId)
-                );
-
-            modelBuilder.Entity<NotificationPartnerUser>()
-                .HasKey(ru => new { ru.NotificationsId, ru.PartnerUsersId });
-
-            modelBuilder.Entity<PartnerUser>()
-                .HasMany(e => e.Notifications)
-                .WithMany()
-                .UsingEntity<NotificationPartnerUser>(
-                    j => j.HasOne<Notification>()
-                          .WithMany()
-                          .HasForeignKey(ru => ru.NotificationsId),
+                          .HasForeignKey(ru => ru.PartnerNotificationsId),
                     j => j.HasOne<PartnerUser>()
                           .WithMany()
                           .HasForeignKey(ru => ru.PartnerUsersId)
@@ -91,7 +92,8 @@ namespace Playerty.Loyals.Infrastructure
                     {
                         await PartnerUser.AddAsync(new PartnerUser
                         {
-                            User = user,
+                            // FT: I don't wan't to store data that i already got in UserExtended, because when i modify some of those fields i should modify all partner users
+                            Email = user.Email,
                             Partner = partner,
                             Points = 0,
                             Tier = null // FT: There is no tier if partner is newly made
@@ -115,7 +117,8 @@ namespace Playerty.Loyals.Infrastructure
                     {
                         await PartnerUser.AddAsync(new PartnerUser
                         {
-                            User = user,
+                            // FT: I don't wan't to store data that i already got in UserExtended, because when i modify some of those fields i should modify all partner users
+                            Email = user.Email,
                             Partner = partner,
                             Points = 0,
                             Tier = partner.Tiers.OrderBy(t => t.ValidTo).FirstOrDefault() // FT: If exists, saving the lowest tier, else null.

@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Playerty.Loyals.Business.Entities
 {
-    public class NotificationPartnerUser
+    public class PartnerNotificationPartnerUser
     {
         public bool? IsMarkedAsRead { get; set; }
 
-        public long NotificationsId { get; set; }
+        public long PartnerNotificationsId { get; set; }
         public long PartnerUsersId { get; set; }
     }
 }

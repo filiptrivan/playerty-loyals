@@ -25,6 +25,11 @@ import { PartnerGuard } from './core/guards/partner.guard';
                         canActivate: [AuthGuard, PartnerGuard]
                     },
                     { 
+                        path: 'super-administration',
+                        loadChildren: () => import('./modules/super-administration/super-administration.module').then(m => m.SuperAdministrationModule),
+                        canActivate: [AuthGuard]
+                    },
+                    { 
                         path: 'administration',
                         loadChildren: () => import('./modules/administration/administration.module').then(m => m.AdministrationModule),
                         canActivate: [AuthGuard, PartnerGuard]

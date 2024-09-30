@@ -192,24 +192,24 @@ namespace Playerty.Loyals.Services
         //// Internet: Ne treba ni da mi dokazuje i upisuje kod, samo moraju da poboljsaju autentifikaciju
         
         
-        public async Task<OnlineShopDTO> GetDiscountForTheUser(string email)
-        {
-            int discount = 0;
+        //public async Task<OnlineShopDTO> GetDiscountForTheUser(string email)
+        //{
+        //    int discount = 0;
 
-            await _context.WithTransactionAsync(async () =>
-            {
-                PartnerUser partnerUser = await _context.DbSet<PartnerUser>().Where(x => x.User.Email == email).SingleOrDefaultAsync();
-                discount = partnerUser.Tier.Discount;
-            });
+        //    await _context.WithTransactionAsync(async () =>
+        //    {
+        //        PartnerUser partnerUser = await _context.DbSet<PartnerUser>().Where(x => x.User.Email == email).SingleOrDefaultAsync();
+        //        discount = partnerUser.Tier.Discount;
+        //    });
 
-            Guid transactionCode = new Guid();
+        //    Guid transactionCode = new Guid();
 
-            return new OnlineShopDTO
-            {
-                TransactionCode = transactionCode,
-                Discount = discount
-            };
-        }
+        //    return new OnlineShopDTO
+        //    {
+        //        TransactionCode = transactionCode,
+        //        Discount = discount
+        //    };
+        //}
 
         public List<ProductDTO> LoadProductsAsync()
         {

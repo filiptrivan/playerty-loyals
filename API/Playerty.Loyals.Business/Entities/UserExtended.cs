@@ -31,10 +31,14 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public int NumberOfFailedAttemptsInARow { get; set; }
 
+        public virtual Gender Gender { get; set; }
+
+        public DateTime? BirthDate { get; set; }
+
         public virtual List<Role> Roles { get; set; }
 
         public virtual List<Notification> Notifications { get; set; }
 
-        public virtual List<PartnerUser> PartnerUsers { get; set; }
+        //public virtual List<PartnerUser> PartnerUsers { get; set; }
     }
 }

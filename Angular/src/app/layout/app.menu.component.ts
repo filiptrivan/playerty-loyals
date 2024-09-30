@@ -6,6 +6,7 @@ import { LayoutService } from './service/app.layout.service';
 import { MenuItem } from 'primeng/api';
 import { PermissionCodes } from '../business/enums/generated/business-enums.generated';
 import { PartnerService } from '../business/services/helper/partner.service';
+import { environment } from 'src/environments/environment';
 
 export interface SoftMenuItem extends MenuItem{
     hasPermission?: (permissionCodes: string[]) => boolean;
@@ -54,7 +55,6 @@ export class AppMenuComponent implements OnInit {
                                     showPartnerDialog: true,
                                 }
                                 // routerLink: [''],
-                                // queryParams: { [environment.partnerParamKey]: res?.slug },
                             ]
                         }
                     ],
@@ -67,7 +67,6 @@ export class AppMenuComponent implements OnInit {
                             label: 'Dashboard', 
                             icon: 'pi pi-fw pi-home', 
                             routerLink: [''],
-                            // queryParams: { [environment.partnerParamKey]: res?.slug },
                             visible: true,
                         }
                     ],
@@ -82,22 +81,55 @@ export class AppMenuComponent implements OnInit {
                             label: 'Tiers',
                             icon: 'pi pi-fw pi-sitemap',
                             routerLink: [`/tiers`],
-                            // queryParams: { [environment.partnerParamKey]: res?.slug },
                             visible: true
                         },
                         {
                             label: 'Notifications',
                             icon: 'pi pi-fw pi-bell',
                             routerLink: [`/notifications`],
-                            // queryParams: { [environment.partnerParamKey]: res?.slug },
                             visible: true
                         },
                         {
                             label: 'Points',
                             icon: 'pi pi-fw pi-heart',
                             routerLink: [`/points`],
-                            // queryParams: { [environment.partnerParamKey]: res?.slug },
                             visible: true
+                        },
+                        {
+                            label: 'Super administration',
+                            icon: 'pi pi-fw pi-cog',
+                            hasPermission: (permissionCodes: string[]): boolean => { 
+                                return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]) ||
+                                        permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]) ||
+                                        permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]) || 
+                                        permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification])) 
+                            },
+                            items: [
+                                {
+                                    label: 'Users',
+                                    icon: 'pi pi-fw pi-user',
+                                    routerLink: [`/${environment.superAdministrationSlug}/users`],
+                                    hasPermission: (permissionCodes: string[]): boolean => { 
+                                        return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]))
+                                    } 
+                                },
+                                {
+                                    label: 'Roles',
+                                    icon: 'pi pi-fw pi-id-card',
+                                    routerLink: [`/${environment.superAdministrationSlug}/roles`],
+                                    hasPermission: (permissionCodes: string[]): boolean => { 
+                                        return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]))
+                                    }
+                                },
+                                {
+                                    label: 'Notifications',
+                                    icon: 'pi pi-fw pi-bell',
+                                    routerLink: [`/${environment.superAdministrationSlug}/notifications`],
+                                    hasPermission: (permissionCodes: string[]): boolean => { 
+                                        return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
+                                    }
+                                },
+                            ]
                         },
                         {
                             label: 'Administration',
@@ -112,8 +144,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Users',
                                     icon: 'pi pi-fw pi-user',
-                                    routerLink: ['/administration/users'],
-                                    // queryParams: { [environment.partnerParamKey]: res?.slug },
+                                    routerLink: [`/${environment.administrationSlug}/users`],
                                     hasPermission: (permissionCodes: string[]): boolean => { 
                                         return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]))
                                     } 
@@ -121,8 +152,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Roles',
                                     icon: 'pi pi-fw pi-id-card',
-                                    routerLink: ['/administration/roles'],
-                                    // queryParams: { [environment.partnerParamKey]: res?.slug },
+                                    routerLink: [`/${environment.administrationSlug}/roles`],
                                     hasPermission: (permissionCodes: string[]): boolean => { 
                                         return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]))
                                     }
@@ -130,8 +160,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Tiers',
                                     icon: 'pi pi-fw pi-sitemap',
-                                    routerLink: ['/administration/tiers'],
-                                    // queryParams: { [environment.partnerParamKey]: res?.slug },
+                                    routerLink: [`/${environment.administrationSlug}/tiers`],
                                     hasPermission: (permissionCodes: string[]): boolean => { 
                                         return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]))
                                     }
@@ -139,8 +168,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Notifications',
                                     icon: 'pi pi-fw pi-bell',
-                                    routerLink: ['/administration/notifications'],
-                                    // queryParams: { [environment.partnerParamKey]: res?.slug },
+                                    routerLink: [`/${environment.administrationSlug}/notifications`],
                                     hasPermission: (permissionCodes: string[]): boolean => { 
                                         return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
                                     }
@@ -151,7 +179,6 @@ export class AppMenuComponent implements OnInit {
                             label: 'Not Found',
                             icon: 'pi pi-fw pi-exclamation-circle',
                             routerLink: [`/not-found`],
-                            // queryParams: { [environment.partnerParamKey]: res?.slug },
                             visible: true
                         },
                     ]
