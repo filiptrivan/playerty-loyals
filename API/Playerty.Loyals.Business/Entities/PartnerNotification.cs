@@ -10,5 +10,6 @@ namespace Playerty.Loyals.Business.Entities
     public class PartnerNotification : Notification
     {
         public virtual Partner Partner { get; set; }
+        public virtual List<PartnerUser> PartnerUsers { get; set; }
     }
 }

@@ -55,6 +55,8 @@ export class PartnerSelectComponent extends BaseForm<PartnerIntermediateStep> im
   }
   
   searchPartners(event: AutoCompleteCompleteEvent){ 
+    console.log(this.model)
+    console.log(this.formGroup)
       this.apiService.loadPartnerWithSlugListForAutocomplete(50, event?.query).subscribe(cl => {
         this.partnerOptions = cl.map(c => { return { label: c.displayName, value: c.code }});
       })

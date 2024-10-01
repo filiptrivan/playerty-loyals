@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Playerty.Loyals.Infrastructure;
 
@@ -11,9 +12,11 @@ using Playerty.Loyals.Infrastructure;
 namespace Playerty.Loyals.Infrastructure.Migrations
 {
     [DbContext(typeof(PLApplicationDbContext))]
-    partial class PLApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240930145347_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,7 +76,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genders");
+                    b.ToTable("Gender");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Partner", b =>
@@ -131,7 +134,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.Property<long>("PartnerUsersId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("IsMarkedAsRead")
+                    b.Property<bool?>("IsMarkedAsRead")
                         .HasColumnType("bit");
 
                     b.HasKey("PartnerNotificationsId", "PartnerUsersId");

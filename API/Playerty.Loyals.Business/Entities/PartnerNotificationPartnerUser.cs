@@ -11,9 +11,9 @@ namespace Playerty.Loyals.Business.Entities
 {
     public class PartnerNotificationPartnerUser
     {
-        public bool? IsMarkedAsRead { get; set; }
-
         public long PartnerNotificationsId { get; set; }
         public long PartnerUsersId { get; set; }
+
+        public bool IsMarkedAsRead { get; set; }
     }
 }

@@ -10,6 +10,7 @@
     dateFormat="dd.mm.yy."
     iconDisplay="input" 
     [showIcon]="true" 
-    [showTime]="true"
+    [showTime]="false"
+    (onSelect)="setDate($event)"
     />
 </div>

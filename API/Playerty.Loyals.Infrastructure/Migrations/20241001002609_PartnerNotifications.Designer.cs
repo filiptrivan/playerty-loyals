@@ -12,8 +12,8 @@ using Playerty.Loyals.Infrastructure;
 namespace Playerty.Loyals.Infrastructure.Migrations
 {
     [DbContext(typeof(PLApplicationDbContext))]
-    [Migration("20240930003604_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241001002609_PartnerNotifications")]
+    partial class PartnerNotifications
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,9 +66,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Name")
                         .HasMaxLength(70)
                         .HasColumnType("nvarchar(70)");
@@ -79,7 +76,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Gender");
+                    b.ToTable("Genders");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Partner", b =>
@@ -137,7 +134,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.Property<long>("PartnerUsersId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool?>("IsMarkedAsRead")
+                    b.Property<bool>("IsMarkedAsRead")
                         .HasColumnType("bit");
 
                     b.HasKey("PartnerNotificationsId", "PartnerUsersId");
@@ -145,6 +142,46 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.HasIndex("PartnerUsersId");
 
                     b.ToTable("PartnerNotificationPartnerUser");
+                });
+
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerUser", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("PartnerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TierId")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartnerId");
+
+                    b.HasIndex("TierId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PartnerUser");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerUserSegmentation", b =>
@@ -333,9 +370,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
 
@@ -358,9 +392,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -396,11 +427,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -434,10 +460,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.HasIndex("GenderId");
 
                     b.ToTable("Users");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("UserExtended");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Soft.Generator.Security.Entities.Notification", b =>
@@ -522,9 +544,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
@@ -606,26 +625,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.ToTable("RoleUser");
                 });
 
-            modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerUser", b =>
-                {
-                    b.HasBaseType("Playerty.Loyals.Business.Entities.UserExtended");
-
-                    b.Property<int?>("PartnerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Points")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TierId")
-                        .HasColumnType("int");
-
-                    b.HasIndex("PartnerId");
-
-                    b.HasIndex("TierId");
-
-                    b.HasDiscriminator().HasValue("PartnerUser");
-                });
-
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerNotification", b =>
                 {
                     b.HasBaseType("Soft.Generator.Security.Entities.Notification");
@@ -693,6 +692,27 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                         .HasForeignKey("PartnerUsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerUser", b =>
+                {
+                    b.HasOne("Playerty.Loyals.Business.Entities.Partner", "Partner")
+                        .WithMany("Users")
+                        .HasForeignKey("PartnerId");
+
+                    b.HasOne("Playerty.Loyals.Business.Entities.Tier", "Tier")
+                        .WithMany("PartnerUsers")
+                        .HasForeignKey("TierId");
+
+                    b.HasOne("Playerty.Loyals.Business.Entities.UserExtended", "User")
+                        .WithMany("PartnerUsers")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Partner");
+
+                    b.Navigation("Tier");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerUserSegmentation", b =>
@@ -796,21 +816,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerUser", b =>
-                {
-                    b.HasOne("Playerty.Loyals.Business.Entities.Partner", "Partner")
-                        .WithMany("Users")
-                        .HasForeignKey("PartnerId");
-
-                    b.HasOne("Playerty.Loyals.Business.Entities.Tier", "Tier")
-                        .WithMany("PartnerUsers")
-                        .HasForeignKey("TierId");
-
-                    b.Navigation("Partner");
-
-                    b.Navigation("Tier");
-                });
-
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerNotification", b =>
                 {
                     b.HasOne("Playerty.Loyals.Business.Entities.Partner", "Partner")
@@ -840,6 +845,11 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerUser", b =>
+                {
+                    b.Navigation("PartnerUserSegmentations");
+                });
+
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Segmentation", b =>
                 {
                     b.Navigation("SegmentationItems");
@@ -855,9 +865,9 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.Navigation("Statuses");
                 });
 
-            modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerUser", b =>
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.UserExtended", b =>
                 {
-                    b.Navigation("PartnerUserSegmentations");
+                    b.Navigation("PartnerUsers");
                 });
 #pragma warning restore 612, 618
         }

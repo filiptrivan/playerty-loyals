@@ -14,4 +14,10 @@ export class SoftCalendarComponent extends BaseControl implements OnInit {
     override ngOnInit(){
         super.ngOnInit();
     }
+
+    setDate(event:Date) { 
+        // event.setTime(event.getTime() + (new Date().getTimezoneOffset() * 60 * 1000));
+        // console.log(event)
+        // this.control.setValue(event)
+    }
 }

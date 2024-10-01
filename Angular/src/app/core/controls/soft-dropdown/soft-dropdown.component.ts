@@ -1,14 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
-import { BaseAutocompleteControl } from '../base-autocomplete-control';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { RequiredComponent } from '../../components/required/required.component';
+import { BaseDropdownControl } from '../base-dropdown-control';
 
 @Component({
-    selector: 'soft-autocomplete',
-    templateUrl: './soft-autocomplete.component.html',
+    selector: 'soft-dropdown',
+    templateUrl: './soft-dropdown.component.html',
     styles: [],
     standalone: true,
     imports: [
@@ -19,7 +18,7 @@ import { RequiredComponent } from '../../components/required/required.component'
         RequiredComponent
     ]
 })
-export class SoftAutocompleteComponent extends BaseAutocompleteControl implements OnInit {
+export class SoftDropdownComponent extends BaseDropdownControl implements OnInit {
     // @Input() required: boolean = true; // TODO FT: delete if you don't need through whole app
 
     constructor() { 
@@ -30,15 +29,12 @@ export class SoftAutocompleteComponent extends BaseAutocompleteControl implement
         super.ngOnInit();
     }
 
-    search(event: AutoCompleteCompleteEvent){
-        this.onTextInput.next(event);
-    }
-
     buttonClick(){
 
     }
 
     select(event){
+
     }
 
 }

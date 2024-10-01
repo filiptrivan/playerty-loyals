@@ -1,0 +1,101 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Soft.Generator.Security.Interface;
+using Soft.Generator.Security.Services;
+using Soft.Generator.Infrastructure.Data;
+using Soft.Generator.Security.SecurityControllers;
+using Soft.Generator.Shared.Interfaces;
+using Playerty.Loyals.Business.Entities;
+using Soft.Generator.Shared.Attributes;
+using Playerty.Loyals.Services;
+using Playerty.Loyals.Business.DTO;
+using Soft.NgTable.Models;
+using Soft.Generator.Shared.DTO;
+using Playerty.Loyals.Business.Enums;
+using Playerty.Loyals.Business.Services;
+using Soft.Generator.Shared.Helpers;
+
+namespace Playerty.Loyals.WebAPI.Controllers
+{
+    [ApiController]
+    [Route("/api/[controller]/[action]")]
+    public class PartnerUserController : SoftControllerBase
+    {
+        private readonly IApplicationDbContext _context;
+        private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
+        private readonly LoyalsBusinessService _loyalsBusinessService;
+
+
+        public PartnerUserController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService)
+        {
+            _context = context;
+            _loyalsBusinessService = loyalsBusinessService;
+            _partnerUserAuthenticationService = partnerUserAuthenticationService;
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<PartnerUserDTO> GetCurrentPartnerUser()
+        {
+            return await _partnerUserAuthenticationService.GetCurrentPartnerUserDTO();
+        }
+
+
+        [HttpPost]
+        [AuthGuard]
+        public async Task<BaseTableResponseEntity<PartnerUserDTO>> LoadPartnerUserListForTable(TableFilterDTO dto)
+        {
+            return await _loyalsBusinessService.LoadPartnerUserListForTable(dto, false);
+        }
+
+        [HttpPost]
+        [AuthGuard]
+        public async Task<IActionResult> ExportPartnerUserListToExcel(TableFilterDTO dto)
+        {
+            byte[] fileContent = await _loyalsBusinessService.ExportPartnerUserListToExcel(dto, false);
+            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Partner_Users.xlsx"));
+        }
+
+        [HttpDelete]
+        [AuthGuard]
+        public async Task DeletePartnerUser(long id)
+        {
+            await _loyalsBusinessService.DeletePartnerUserAsync(id);
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<PartnerUserDTO> GetPartnerUser(long id)
+        {
+            return await _loyalsBusinessService.GetPartnerUserDTOAsync(id, false);
+        }
+
+        [HttpPut]
+        [AuthGuard]
+        public async Task<PartnerUserDTO> SavePartnerUser(PartnerUserSaveBodyDTO dto)
+        {
+            return await _loyalsBusinessService.SavePartnerUserAndReturnDTOExtendedAsync(dto);
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<NamebookDTO<long>>> LoadPartnerUserListForAutocomplete(int limit, string query)
+        {
+            return await _loyalsBusinessService.LoadPartnerUserListForAutocomplete(limit, query, _context.DbSet<PartnerUser>(), false);
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<NamebookDTO<long>>> LoadPartnerUserListForDropdown()
+        {
+            return await _loyalsBusinessService.LoadPartnerUserListForDropdown(_context.DbSet<PartnerUser>(), false);
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<string>> GetCurrentPartnerUserPermissionCodes()
+        {
+            return await _loyalsBusinessService.GetCurrentPartnerUserPermissionCodes();
+        }
+
+    }
+}

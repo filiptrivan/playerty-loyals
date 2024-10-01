@@ -70,8 +70,8 @@ namespace Playerty.Loyals.Business.Services
             return await _context.WithTransactionAsync(async () =>
             {
                 string partnerCode = GetCurrentPartnerCode();
-                string email = _authenticationService.GetCurrentUserEmail();
-                return await _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == partnerCode && x.Email == email).SingleOrDefaultAsync();
+                long userId = _authenticationService.GetCurrentUserId();
+                return await _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId).SingleOrDefaultAsync();
             });
         }
 
@@ -80,8 +80,8 @@ namespace Playerty.Loyals.Business.Services
             return await _context.WithTransactionAsync(async () =>
             {
                 string partnerCode = GetCurrentPartnerCode();
-                string email = _authenticationService.GetCurrentUserEmail();
-                return await _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == partnerCode && x.Email == email).ProjectToType<PartnerUserDTO>(Mapper.PartnerUserProjectToConfig()).SingleOrDefaultAsync();
+                long userId = _authenticationService.GetCurrentUserId();
+                return await _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId).ProjectToType<PartnerUserDTO>(Mapper.PartnerUserProjectToConfig()).SingleOrDefaultAsync();
             });
         }
 

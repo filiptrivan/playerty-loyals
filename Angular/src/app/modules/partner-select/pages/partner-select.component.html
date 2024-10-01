@@ -1,7 +1,7 @@
 <intermediate-step-wrapper [title]="partnerIntermediateStepTitle" [description]="partnerIntermediateStepDescription">
   <div class="col-12">
     <soft-autocomplete 
-      [control]="control('partnerSlug', true)"
+      [control]="control('partnerSlug', true, true)"
       (onTextInput)="searchPartners($event)" 
       [options]="partnerOptions"
       label="Partner"></soft-autocomplete>

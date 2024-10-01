@@ -20,6 +20,7 @@ using System.Reflection;
 using Playerty.Loyals.Business.Entities;
 using Soft.Generator.Security.Interface;
 using Playerty.Loyals.Business.DataMappers;
+using System.ComponentModel;
 
 
 public class Startup
@@ -68,6 +69,7 @@ public class Startup
         services.AddControllers().AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
+            options.JsonSerializerOptions.Converters.Add(new JsonDateTimeConverter());
         });
 
         services.AddDbContext<IApplicationDbContext, PLApplicationDbContext>( // https://youtu.be/bN57EDYD6M0?si=CVztRqlj0hBSrFXb

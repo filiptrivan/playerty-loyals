@@ -6,41 +6,42 @@ import { ApiSecurityService } from './api.service.security';
 import { Namebook } from '../../entities/namebook';
 import { Codebook } from '../../entities/codebook';
 import { TableFilter } from '../../entities/table-filter';
-import { UserExtendedSaveBody } from '../../entities/generated/business-entities.generated';
-import { QrCode } from '../../entities/generated/business-entities.generated';
 import { Brand } from '../../entities/generated/business-entities.generated';
-import { Product } from '../../entities/generated/business-entities.generated';
 import { OnlineShop } from '../../entities/generated/business-entities.generated';
+import { PartnerUserSaveBody } from '../../entities/generated/business-entities.generated';
+import { Product } from '../../entities/generated/business-entities.generated';
+import { QrCode } from '../../entities/generated/business-entities.generated';
+import { UserExtendedSaveBody } from '../../entities/generated/business-entities.generated';
 import { Gender } from '../../entities/generated/business-entities.generated';
-import { SegmentationItem } from '../../entities/generated/business-entities.generated';
+import { Partner } from '../../entities/generated/business-entities.generated';
+import { PartnerNotification } from '../../entities/generated/business-entities.generated';
 import { PartnerNotificationPartnerUser } from '../../entities/generated/business-entities.generated';
+import { PartnerRole } from '../../entities/generated/business-entities.generated';
+import { PartnerUser } from '../../entities/generated/business-entities.generated';
 import { PartnerUserSegmentation } from '../../entities/generated/business-entities.generated';
+import { Segmentation } from '../../entities/generated/business-entities.generated';
+import { SegmentationItem } from '../../entities/generated/business-entities.generated';
+import { Tier } from '../../entities/generated/business-entities.generated';
+import { Transaction } from '../../entities/generated/business-entities.generated';
 import { TransactionProduct } from '../../entities/generated/business-entities.generated';
 import { TransactionStatus } from '../../entities/generated/business-entities.generated';
 import { UserExtended } from '../../entities/generated/business-entities.generated';
-import { Transaction } from '../../entities/generated/business-entities.generated';
-import { PartnerRole } from '../../entities/generated/business-entities.generated';
-import { PartnerUser } from '../../entities/generated/business-entities.generated';
-import { PartnerNotification } from '../../entities/generated/business-entities.generated';
-import { Partner } from '../../entities/generated/business-entities.generated';
-import { Tier } from '../../entities/generated/business-entities.generated';
-import { Segmentation } from '../../entities/generated/business-entities.generated';
-import { LoginVerificationToken } from '../../entities/generated/security-entities.generated';
-import { RegistrationVerificationToken } from '../../entities/generated/security-entities.generated';
-import { NotificationSaveBody } from '../../entities/generated/security-entities.generated';
-import { RoleSaveBody } from '../../entities/generated/security-entities.generated';
-import { LoginResult } from '../../entities/generated/security-entities.generated';
-import { Login } from '../../entities/generated/security-entities.generated';
+import { Notification } from '../../entities/generated/security-entities.generated';
 import { ExternalProvider } from '../../entities/generated/security-entities.generated';
-import { VerificationTokenRequest } from '../../entities/generated/security-entities.generated';
+import { ForgotPassword } from '../../entities/generated/security-entities.generated';
+import { ForgotPasswordVerificationToken } from '../../entities/generated/security-entities.generated';
+import { JwtAuthResult } from '../../entities/generated/security-entities.generated';
+import { Login } from '../../entities/generated/security-entities.generated';
+import { LoginResult } from '../../entities/generated/security-entities.generated';
+import { LoginVerificationToken } from '../../entities/generated/security-entities.generated';
+import { NotificationSaveBody } from '../../entities/generated/security-entities.generated';
+import { RefreshToken } from '../../entities/generated/security-entities.generated';
+import { RefreshTokenRequest } from '../../entities/generated/security-entities.generated';
 import { Registration } from '../../entities/generated/security-entities.generated';
 import { RegistrationVerificationResult } from '../../entities/generated/security-entities.generated';
-import { JwtAuthResult } from '../../entities/generated/security-entities.generated';
-import { ForgotPasswordVerificationToken } from '../../entities/generated/security-entities.generated';
-import { Notification } from '../../entities/generated/security-entities.generated';
-import { RefreshToken } from '../../entities/generated/security-entities.generated';
-import { ForgotPassword } from '../../entities/generated/security-entities.generated';
-import { RefreshTokenRequest } from '../../entities/generated/security-entities.generated';
+import { RegistrationVerificationToken } from '../../entities/generated/security-entities.generated';
+import { RoleSaveBody } from '../../entities/generated/security-entities.generated';
+import { VerificationTokenRequest } from '../../entities/generated/security-entities.generated';
 import { Permission } from '../../entities/generated/security-entities.generated';
 import { Role } from '../../entities/generated/security-entities.generated';
 
@@ -52,40 +53,8 @@ export class ApiGeneratedService extends ApiSecurityService {
     }
 
     
-    loadTierListForTable(dto: TableFilter): Observable<Tier> { 
-        return this.http.post<Tier>(`${environment.apiUrl}/Tier/LoadTierListForTable`, dto, environment.httpSkipSpinnerOptions);
-    }
-
-    exportTierListToExcel(dto: TableFilter): Observable<any> { 
-        return this.http.post<any>(`${environment.apiUrl}/Tier/ExportTierListToExcel`, dto, environment.httpOptions);
-    }
-
-    deleteTier(id: number): Observable<any> { 
-        return this.http.delete<any>(`${environment.apiUrl}/Tier/DeleteTier?id=${id}`);
-    }
-
-    getTier(id: number): Observable<Tier> {
-        return this.http.get<Tier>(`${environment.apiUrl}/Tier/GetTier?id=${id}`);
-    }
-
-    saveTier(tierDTO: Tier): Observable<Tier> { 
-        return this.http.put<Tier>(`${environment.apiUrl}/Tier/SaveTier`, tierDTO, environment.httpOptions);
-    }
-
     getCurrentUser(): Observable<UserExtended> {
         return this.http.get<UserExtended>(`${environment.apiUrl}/Auth/GetCurrentUser`);
-    }
-
-    getCurrentPartnerUser(): Observable<PartnerUser> {
-        return this.http.get<PartnerUser>(`${environment.apiUrl}/Auth/GetCurrentPartnerUser`);
-    }
-
-    getCurrentPartner(): Observable<Partner> {
-        return this.http.get<Partner>(`${environment.apiUrl}/Auth/GetCurrentPartner`);
-    }
-
-    loadPartnerWithSlugListForAutocomplete(limit: number, query: string): Observable<Codebook[]> {
-        return this.http.get<Codebook[]>(`${environment.apiUrl}/Auth/LoadPartnerWithSlugListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
     }
 
     loadUserListForTable(dto: TableFilter): Observable<UserExtended> { 
@@ -118,6 +87,74 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     getCurrentUserPermissionCodes(): Observable<string[]> {
         return this.http.get<string[]>(`${environment.apiUrl}/Auth/GetCurrentUserPermissionCodes`);
+    }
+
+    loadGenderNamebookListForDropdown(): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadGenderNamebookListForDropdown`, environment.httpSkipSpinnerOptions);
+    }
+
+    getCurrentPartner(): Observable<Partner> {
+        return this.http.get<Partner>(`${environment.apiUrl}/Partner/GetCurrentPartner`);
+    }
+
+    loadPartnerWithSlugListForAutocomplete(limit: number, query: string): Observable<Codebook[]> {
+        return this.http.get<Codebook[]>(`${environment.apiUrl}/Partner/LoadPartnerWithSlugListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
+    }
+
+    getCurrentPartnerUser(): Observable<PartnerUser> {
+        return this.http.get<PartnerUser>(`${environment.apiUrl}/PartnerUser/GetCurrentPartnerUser`);
+    }
+
+    loadPartnerUserListForTable(dto: TableFilter): Observable<PartnerUser> { 
+        return this.http.post<PartnerUser>(`${environment.apiUrl}/PartnerUser/LoadPartnerUserListForTable`, dto, environment.httpSkipSpinnerOptions);
+    }
+
+    exportPartnerUserListToExcel(dto: TableFilter): Observable<any> { 
+        return this.http.post<any>(`${environment.apiUrl}/PartnerUser/ExportPartnerUserListToExcel`, dto, environment.httpOptions);
+    }
+
+    deletePartnerUser(id: number): Observable<any> { 
+        return this.http.delete<any>(`${environment.apiUrl}/PartnerUser/DeletePartnerUser?id=${id}`);
+    }
+
+    getPartnerUser(id: number): Observable<PartnerUser> {
+        return this.http.get<PartnerUser>(`${environment.apiUrl}/PartnerUser/GetPartnerUser?id=${id}`);
+    }
+
+    savePartnerUser(dto: PartnerUserSaveBody): Observable<PartnerUser> { 
+        return this.http.put<PartnerUser>(`${environment.apiUrl}/PartnerUser/SavePartnerUser`, dto, environment.httpOptions);
+    }
+
+    loadPartnerUserListForAutocomplete(limit: number, query: string): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerUser/LoadPartnerUserListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
+    }
+
+    loadPartnerUserListForDropdown(): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerUser/LoadPartnerUserListForDropdown`, environment.httpSkipSpinnerOptions);
+    }
+
+    getCurrentPartnerUserPermissionCodes(): Observable<string[]> {
+        return this.http.get<string[]>(`${environment.apiUrl}/PartnerUser/GetCurrentPartnerUserPermissionCodes`);
+    }
+
+    loadTierListForTable(dto: TableFilter): Observable<Tier> { 
+        return this.http.post<Tier>(`${environment.apiUrl}/Tier/LoadTierListForTable`, dto, environment.httpSkipSpinnerOptions);
+    }
+
+    exportTierListToExcel(dto: TableFilter): Observable<any> { 
+        return this.http.post<any>(`${environment.apiUrl}/Tier/ExportTierListToExcel`, dto, environment.httpOptions);
+    }
+
+    deleteTier(id: number): Observable<any> { 
+        return this.http.delete<any>(`${environment.apiUrl}/Tier/DeleteTier?id=${id}`);
+    }
+
+    getTier(id: number): Observable<Tier> {
+        return this.http.get<Tier>(`${environment.apiUrl}/Tier/GetTier?id=${id}`);
+    }
+
+    saveTier(tierDTO: Tier): Observable<Tier> { 
+        return this.http.put<Tier>(`${environment.apiUrl}/Tier/SaveTier`, tierDTO, environment.httpOptions);
     }
 
 }

@@ -11,6 +11,7 @@ import { SoftCheckboxComponent } from './soft-checkbox/soft-checkbox.component';
 import { SoftMultiselectComponent } from './soft-multiselect/soft-multiselect.component';
 import { SoftTextareaComponent } from './soft-textarea/soft-textarea.component';
 import { SoftNumberComponent } from './soft-number/soft-number.component';
+import { SoftDropdownComponent } from './soft-dropdown/soft-dropdown.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { SoftNumberComponent } from './soft-number/soft-number.component';
     SoftPasswordComponent,
     SoftMultiAutocompleteComponent,
     SoftMultiselectComponent,
-    SoftNumberComponent
+    SoftNumberComponent,
+    SoftDropdownComponent,
   ],
   exports: [
     CommonModule,
@@ -41,7 +43,8 @@ import { SoftNumberComponent } from './soft-number/soft-number.component';
     SoftPasswordComponent,
     SoftMultiAutocompleteComponent,
     SoftMultiselectComponent,
-    SoftNumberComponent
+    SoftNumberComponent,
+    SoftDropdownComponent,
   ],
   declarations: [
   ],

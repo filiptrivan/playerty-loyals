@@ -99,7 +99,11 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
         if (formControl == null)
           return null;
   
-        formControl.label = formControlName;
+        if (formControlName.endsWith('Id') && formControlName.length > 2) {
+          formControl.label = formControlName.substring(0, formControlName.length - 2);
+        } else {
+          formControl.label = formControlName;
+        }
   
         this.formGroup.addControl(formControlName, formControl);
   
@@ -109,11 +113,11 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
         if(disable == true)
           formControl.disable();
         
-        this.onAfterControlInitialization(formControlName);
-
         this.formGroup.controls[formControlName].valueChanges.subscribe(value => {
           this.model[formControlName] = value;
         })
+        
+        this.onAfterControlInitialization(formControlName);
       }
 
       return formControl;
@@ -136,9 +140,9 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
         this.messageService.successMessage("You have successfully saved.");
 
-        if((res as any).id){
+        if((res as any).id)
           this.rerouteOnTheNewEntity((res as any).id);
-        }
+        
         // FT: Only overriden ngOnInit is called if it exists
         // this.ngOnInit(); // Maybe add it, i didn't need for now...
 
@@ -154,9 +158,10 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
       Object.keys(this.formGroup.controls).forEach(key => {
         this.formGroup.controls[key].markAsDirty(); // this.formGroup.markAsDirty(); // FT: For some reason this doesnt work
       });
+
       this.messageService.warningMessage(
-      $localize`:@@YouHaveSomeInvalidFieldsDescription:Some of the fields on the form are not valid, please check which ones and try again.`,
-      $localize`:@@YouHaveSomeInvalidFieldsTitle:You have some invalid fields`, 
+        $localize`:@@YouHaveSomeInvalidFieldsDescription:Some of the fields on the form are not valid, please check which ones and try again.`,
+        $localize`:@@YouHaveSomeInvalidFieldsTitle:You have some invalid fields`, 
       );
 
       return false;

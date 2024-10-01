@@ -17,6 +17,7 @@
       [dropdown]="false"
       [showClear]="true"
       (onHide)="dropdownMarkAsDirty()"
+      (onSelect)="select($event)"
       [completeOnFocus]="true"
       (onDropdownClick)="buttonClick()"
       [style]="{'width':'100%'}"

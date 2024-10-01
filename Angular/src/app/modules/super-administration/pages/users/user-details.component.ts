@@ -16,6 +16,7 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 })
 export class UserDetailsComponent extends BaseForm<UserExtended> implements OnInit {
     roleOptions: PrimengOption[];
+    genderOptions: PrimengOption[];
     selectedRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'})
 
     constructor(
@@ -42,11 +43,13 @@ export class UserDetailsComponent extends BaseForm<UserExtended> implements OnIn
                 forkJoin({
                     user: this.apiService.getUser(this.modelId),
                     roles: this.apiService.loadRoleNamebookListForUserExtended(this.modelId),
-                  }).subscribe(({ user, roles }) => {
+                    genders: this.apiService.loadGenderNamebookListForDropdown(),
+                  }).subscribe(({ user, roles, genders }) => {
                     this.init(new UserExtended(user));
                     this.selectedRoles.setValue(
                       roles.map(role => { return role.id })
                     );
+                    this.genderOptions = genders.map(n => { return { label: n.displayName, value: n.id }});
                   });
             }
             else{

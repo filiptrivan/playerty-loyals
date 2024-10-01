@@ -1,5 +1,6 @@
 ﻿using Laraue.EfCoreTriggers.Common.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Playerty.Loyals.Business.Entities;
 using Soft.Generator.Infrastructure.Data;
 using Soft.Generator.Security.Entities;
@@ -28,6 +29,7 @@ namespace Playerty.Loyals.Infrastructure
         public DbSet<PartnerNotificationPartnerUser> PartnerNotificationPartnerUser { get; set; }
         public DbSet<PartnerNotification> PartnerNotifications { get; set; }
         public DbSet<PartnerRole> PartnerRoles { get; set; }
+        public DbSet<Gender> Genders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,27 +39,12 @@ namespace Playerty.Loyals.Infrastructure
                 .HasIndex(u => u.Slug)
                 .IsUnique();
 
-            //modelBuilder.Entity<RolePartnerUser>()
-            //    .HasKey(ru => new { ru.RolesId, ru.PartnerUsersId });
-
-            //modelBuilder.Entity<PartnerUser>()
-            //    .HasMany(e => e.PartnerRoles)
-            //    .WithMany()
-            //    .UsingEntity<RolePartnerUser>(
-            //        j => j.HasOne<PartnerRole>()
-            //              .WithMany()
-            //              .HasForeignKey(ru => ru.RolesId),
-            //        j => j.HasOne<PartnerUser>()
-            //              .WithMany()
-            //              .HasForeignKey(ru => ru.PartnerUsersId)
-            //    );
-
             modelBuilder.Entity<PartnerNotificationPartnerUser>()
                 .HasKey(ru => new { ru.PartnerNotificationsId, ru.PartnerUsersId });
 
             modelBuilder.Entity<PartnerUser>()
                 .HasMany(e => e.PartnerNotifications)
-                .WithMany()
+                .WithMany(e => e.PartnerUsers)
                 .UsingEntity<PartnerNotificationPartnerUser>(
                     j => j.HasOne<PartnerNotification>()
                           .WithMany()
@@ -66,13 +53,11 @@ namespace Playerty.Loyals.Infrastructure
                           .WithMany()
                           .HasForeignKey(ru => ru.PartnerUsersId)
                 );
-
-            //modelBuilder.Entity<PartnerUser>()
-            //    .HasKey(ru => new { ru.PartnersId, ru.UsersId });
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
+            // FT: Need to call these methods here, because of abstraction with security package
             await AddPartnerUserForEachNewPartner();
             await SaveUserForEachPartnerAndSetDefaultTierForEachUser();
             return await base.SaveChangesAsync(cancellationToken);
@@ -80,20 +65,22 @@ namespace Playerty.Loyals.Infrastructure
 
         private async Task AddPartnerUserForEachNewPartner()
         {
-            IEnumerable<Partner> newPartners = ChangeTracker.Entries<Partner>()
+            List<Partner> newPartners = ChangeTracker.Entries<Partner>() // https://stackoverflow.com/questions/4867602/entity-framework-there-is-already-an-open-datareader-associated-with-this-comma
                 .Where(e => e.State == EntityState.Added)
-                .Select(e => e.Entity);
+                .Select(e => e.Entity)
+                .ToList();
 
-            if (newPartners.Any())
+            if (newPartners.Count != 0)
             {
+                List<UserExtended> users = await Users.ToListAsync();
+
                 foreach (Partner partner in newPartners)
                 {
-                    foreach (UserExtended user in Users)
+                    foreach (UserExtended user in users)
                     {
-                        await PartnerUser.AddAsync(new PartnerUser
+                        await Set<PartnerUser>().AddAsync(new PartnerUser
                         {
-                            // FT: I don't wan't to store data that i already got in UserExtended, because when i modify some of those fields i should modify all partner users
-                            Email = user.Email,
+                            User = user,
                             Partner = partner,
                             Points = 0,
                             Tier = null // FT: There is no tier if partner is newly made
@@ -105,20 +92,22 @@ namespace Playerty.Loyals.Infrastructure
 
         private async Task SaveUserForEachPartnerAndSetDefaultTierForEachUser()
         {
-            IEnumerable<UserExtended> newUsers = ChangeTracker.Entries<UserExtended>()
+            List<UserExtended> newUsers = ChangeTracker.Entries<UserExtended>() // https://stackoverflow.com/questions/4867602/entity-framework-there-is-already-an-open-datareader-associated-with-this-comma
                 .Where(e => e.State == EntityState.Added)
-                .Select(e => e.Entity);
+                .Select(e => e.Entity)
+                .ToList();
 
-            if (newUsers.Any())
+            if (newUsers.Count != 0)
             {
+                List<Partner> partners = await Partners.ToListAsync();
+
                 foreach (UserExtended user in newUsers)
                 {
-                    foreach (Partner partner in Partners)
+                    foreach (Partner partner in partners)
                     {
-                        await PartnerUser.AddAsync(new PartnerUser
+                        await Set<PartnerUser>().AddAsync(new PartnerUser
                         {
-                            // FT: I don't wan't to store data that i already got in UserExtended, because when i modify some of those fields i should modify all partner users
-                            Email = user.Email,
+                            User = user,
                             Partner = partner,
                             Points = 0,
                             Tier = partner.Tiers.OrderBy(t => t.ValidTo).FirstOrDefault() // FT: If exists, saving the lowest tier, else null.

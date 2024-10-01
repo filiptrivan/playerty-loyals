@@ -39,6 +39,6 @@ namespace Playerty.Loyals.Business.Entities
 
         public virtual List<Notification> Notifications { get; set; }
 
-        //public virtual List<PartnerUser> PartnerUsers { get; set; }
+        public virtual List<PartnerUser> PartnerUsers { get; set; }
     }
 }

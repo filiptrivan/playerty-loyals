@@ -31,6 +31,7 @@ export class JsonHttpInterceptor implements HttpInterceptor {
         /**
          * @see https://stackoverflow.com/a/54733846/1306679
          */
+
         parent[key] = new Date(object);
       }
     } else if (Array.isArray(object)) {
@@ -46,4 +47,5 @@ export class JsonHttpInterceptor implements HttpInterceptor {
       }
     }
   }
+
 }

@@ -49,27 +49,6 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.GetUserExtendedDTOAsync(userId);
         }
 
-        [HttpGet]
-        [AuthGuard]
-        public async Task<PartnerUserDTO> GetCurrentPartnerUser()
-        {
-            return await _partnerUserAuthenticationService.GetCurrentPartnerUserDTO();
-        }
-
-        [HttpGet]
-        //[AuthGuard] // FT: We should show login page of the partner to the user which is not logged in also.
-        public async Task<PartnerDTO> GetCurrentPartner()
-        {
-            return await _partnerUserAuthenticationService.GetCurrentPartnerDTO();
-        }
-
-        [HttpGet]
-        [AuthGuard]
-        public async Task<List<CodebookDTO>> LoadPartnerWithSlugListForAutocomplete(int limit, string query)
-        {
-            return await _loyalsBusinessService.LoadPartnerWithSlugListForAutocomplete(limit, query, _context.DbSet<Partner>(), false);
-        }
-
         [HttpPost]
         [AuthGuard]
         public async Task<BaseTableResponseEntity<UserExtendedDTO>> LoadUserListForTable(TableFilterDTO dto)
@@ -120,27 +99,18 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.LoadUserExtendedListForDropdown(_context.DbSet<UserExtended>());
         }
 
-        // joca puskom uzima podatke -> Za ovo ti ne treba endpoint!!!
-        //[HttpGet]
-        //[AuthGuard]
-        //public async Task<QrCodeDTO> GetRetailQrCodeData()
-        //{
-        //    // 
-        //}
-
-        // na ng on init generisanje qr koda, qr kod mora da bude enkriptovan, kako korisnik sa fronta ne bi mogao sam da ubaci sta zeli, sifra za enkripciju treba da bude na nivou firme (stridon, uradimo sami itd...)
-        //[HttpGet]
-        //[AuthGuard]
-        //public async Task<QrCodeDTO> GetQrCodeDataForTheCurrentUser()
-        //{
-        //    return await _loyalsBusinessService.GetQrCodeDataForTheCurrentUser();
-        //}
-
         [HttpGet]
         [AuthGuard]
         public async Task<List<string>> GetCurrentUserPermissionCodes()
         {
             return await _loyalsBusinessService.GetCurrentUserPermissionCodes();
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<NamebookDTO<int>>> LoadGenderNamebookListForDropdown()
+        {
+            return await _loyalsBusinessService.LoadGenderListForDropdown(_context.DbSet<Gender>(), false);
         }
 
     }

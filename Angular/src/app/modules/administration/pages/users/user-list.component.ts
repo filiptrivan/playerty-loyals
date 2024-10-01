@@ -9,8 +9,8 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
 export class UserListComponent implements OnInit {
     tableTitle: string = $localize`:@@Users:Users`
     cols: Column[];
-    controllerName: string = 'Auth';
-    objectName: string = 'User';
+    controllerName: string = 'PartnerUser';
+    objectName: string = 'PartnerUser';
 
     constructor(
     ) { }
@@ -22,7 +22,7 @@ export class UserListComponent implements OnInit {
                 {name:"Delete"},
             ]},
             // {name: 'Test', filterType: 'numeric', field: 'testColumnForGrid'},
-            {name: 'Email', filterType: 'text', field: 'email'},
+            {name: 'UserDisplayName', filterType: 'text', field: 'userDisplayName'},
             {name: 'Created at', filterType: 'date', field: 'createdAt', showMatchModes: true},
             // {name: 'Modified at', filterType: 'date', field: 'modifiedAt', showMatchModes: true},
             // {name: 'Disabled', filterType: 'boolean', field: 'isDisabled'},
