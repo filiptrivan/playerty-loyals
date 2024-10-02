@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { forkJoin, Subscription } from 'rxjs';
-import { Role, RoleSaveBody } from 'src/app/business/entities/generated/security-entities.generated';
+import { PartnerRole, PartnerRoleSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { isArrayEmpty } from 'src/app/business/services/validation/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
@@ -12,13 +12,13 @@ import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
 @Component({
-    selector: 'role-details',
-    templateUrl: './role-details.component.html',
+    selector: 'partner-role-details',
+    templateUrl: './partner-role-details.component.html',
     styles: [],
 })
-export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
+export class PartnerRoleDetailsComponent extends BaseForm<PartnerRole> implements OnInit {
     userOptions: PrimengOption[];
-    selectedUsers = new SoftFormControl<PrimengOption[]>(null, {updateOn: 'change'})
+    selectedPartnerUsers = new SoftFormControl<PrimengOption[]>(null, {updateOn: 'change'})
 
     permissionOptions: PrimengOption[];
     selectedPermissions = new SoftFormControl<number[]>(null, {updateOn: 'change'})
@@ -36,9 +36,6 @@ export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
         }
          
     override ngOnInit() {
-        this.controllerName = "Auth";
-        // this.selectedUsers.validator = isArrayEmpty(this.selectedUsers);
-
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
             this.apiService.loadPermissionListForDropdown().subscribe(nl => {
@@ -46,39 +43,40 @@ export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
             });
             if(this.modelId > 0){
                 forkJoin({
-                    role: this.apiService.getRole(this.modelId),
-                    users: this.apiService.loadUserListForRole(this.modelId),
-                    permissions: this.apiService.loadPermissionListForRole(this.modelId),
-                  }).subscribe(({ role, users, permissions }) => {
-                    this.init(new Role(role));
-                    this.selectedUsers.setValue(
-                        users.map(user => ({ label: user.displayName, value: user.id }))
+                    partnerRole: this.apiService.getPartnerRole(this.modelId),
+                    partnerUsers: this.apiService.loadPartnerUserNamebookListForPartnerRole(this.modelId),
+                    partnerPermissions: this.apiService.loadPermissionNamebookListForPartnerRole(this.modelId),
+                  }).subscribe(({ partnerRole, partnerUsers, partnerPermissions }) => {
+                    this.init(new PartnerRole(partnerRole));
+                    this.selectedPartnerUsers.setValue(
+                        partnerUsers.map(partnerUser => ({ label: partnerUser.displayName, value: partnerUser.id }))
                     );
                     this.selectedPermissions.setValue(
-                        permissions.map(permission => { return permission.id })
+                        partnerPermissions.map(permission => { return permission.id })
                     );
                   });
             }
             else{
-                this.init(new Role({id:0}));
+                this.init(new PartnerRole({id:0}));
             }
         });
     }
 
-    init(model: Role){
+    init(model: PartnerRole){
         this.initFormGroup(model);
     }
 
     searchUsers(event: AutoCompleteCompleteEvent){ 
-        this.apiService.loadUserListForAutocomplete(50, event?.query).subscribe(nl => {
+        this.apiService.loadPartnerUserListForAutocomplete(50, event?.query).subscribe(nl => {
             this.userOptions = nl.map(n => { return { label: n.displayName, value: n.id }});
         })
     }
     
     override onBeforeSave(): void {
-        this.saveBody = new RoleSaveBody();
-        this.saveBody.selectedUserIds = this.selectedUsers.value?.map(x => x.value);
-        this.saveBody.selectedPermissionIds = this.selectedPermissions.value;
-        this.saveBody.roleDTO = this.model;
+        let saveBody: PartnerRoleSaveBody = new PartnerRoleSaveBody();
+        saveBody.selectedPartnerUserIds = this.selectedPartnerUsers.value?.map(x => x.value);
+        saveBody.selectedPermissionIds = this.selectedPermissions.value;
+        saveBody.partnerRoleDTO = this.model;
+        this.saveBody = saveBody;
     }
 }

@@ -2,10 +2,14 @@ export function getTranslatedClassNameBusiness(name: string): string
 {
     switch(name) 
     {
+        case 'UserExtended':
+            return $localize`:@@UserExtended:UserExtended`;
         case 'Brand':
             return $localize`:@@Brand:Brand`;
         case 'OnlineShop':
             return $localize`:@@OnlineShop:OnlineShop`;
+        case 'PartnerRoleSaveBody':
+            return $localize`:@@PartnerRoleSaveBody:PartnerRoleSaveBody`;
         case 'PartnerUserSaveBody':
             return $localize`:@@PartnerUserSaveBody:PartnerUserSaveBody`;
         case 'Product':
@@ -40,8 +44,6 @@ export function getTranslatedClassNameBusiness(name: string): string
             return $localize`:@@TransactionProduct:TransactionProduct`;
         case 'TransactionStatus':
             return $localize`:@@TransactionStatus:TransactionStatus`;
-        case 'UserExtended':
-            return $localize`:@@UserExtended:UserExtended`;
         default:
             return null;
     }

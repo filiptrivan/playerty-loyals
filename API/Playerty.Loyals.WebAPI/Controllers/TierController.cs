@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Playerty.Loyals.Business.DTO;
 using Playerty.Loyals.Business.Entities;
+using Playerty.Loyals.Business.Services;
 using Playerty.Loyals.Services;
 using Soft.Generator.Security.Interface;
 using Soft.Generator.Security.Services;
@@ -20,10 +21,11 @@ namespace Playerty.Loyals.WebAPI.Controllers
         private readonly IApplicationDbContext _context;
         private readonly AuthenticationService _authenticationService;
         private readonly LoyalsBusinessService _loyalsBusinessService;
+        private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
 
 
         public TierController(SecurityBusinessService securityBusinessService, IJwtAuthManager jwtAuthManagerService, IApplicationDbContext context, AuthenticationService authenticationService,
-            LoyalsBusinessService loyalsBusinessService)
+            LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService)
             : base()
         {
             _securityBusinessService = securityBusinessService;
@@ -31,20 +33,21 @@ namespace Playerty.Loyals.WebAPI.Controllers
             _context = context;
             _authenticationService = authenticationService;
             _loyalsBusinessService = loyalsBusinessService;
+            _partnerUserAuthenticationService = partnerUserAuthenticationService;
         }
 
         [HttpPost]
         [AuthGuard]
         public async Task<BaseTableResponseEntity<TierDTO>> LoadTierListForTable(TableFilterDTO dto)
         {
-            return await _loyalsBusinessService.LoadTierListForTable(dto);
+            return await _loyalsBusinessService.LoadTierListForTable(dto, _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpPost]
         [AuthGuard]
         public async Task<IActionResult> ExportTierListToExcel(TableFilterDTO dto)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportTierListToExcel(dto);
+            byte[] fileContent = await _loyalsBusinessService.ExportTierListToExcel(dto, _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Tiers.xlsx"));
         }
 
@@ -66,8 +69,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<TierDTO> SaveTier(TierDTO tierDTO)
         {
-            //return await _loyalsBusinessService.SaveTier(tierDTO);
-            return await _loyalsBusinessService.SaveTierAndReturnDTOAsync(tierDTO);
+            return await _loyalsBusinessService.SaveTier(tierDTO);
         }
 
         //[HttpGet]

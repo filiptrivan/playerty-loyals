@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DTO\Entities\" />
     <Folder Include="ValidationRules\" />
   </ItemGroup>
 

@@ -32,7 +32,6 @@ export class NotificationComponent implements OnInit {
 
   ngOnInit() {
     this.apiService.loadNotificationListForTheCurrentUser(this.tableFilter).subscribe((res) => {
-      console.log(res)
       this.currentUserNotifications = res;
     });
   }

@@ -1,24 +1,29 @@
 @defer (when model != null) {
-    <soft-card [title]="detailsTitle" icon="pi pi-user">
+    <soft-card [title]="detailsTitle" icon="pi pi-id-card">
         <soft-panel>
             <panel-header title="Details"></panel-header>
     
             <panel-body>
                 <form [formGroup]="formGroup" class="grid">
                     <div class="col-12">
-                        <soft-textbox [control]="control('email', false, false, true)"></soft-textbox>
+                        <soft-textbox [control]="control('name')"></soft-textbox>
                     </div>
-                    <div class="col-12 md:col-6">
-                        <soft-calendar [control]="control('birthDate')"></soft-calendar>
+                    <div class="col-12">
+                        <soft-textarea [control]="control('description')"></soft-textarea>
                     </div>
-                    <div class="col-12 md:col-6">
-                        <soft-dropdown [control]="control('genderId')" [options]="genderOptions"></soft-dropdown>
+                    <div class="col-12">
+                        <soft-multiautocomplete 
+                            [control]="selectedPartnerUsers"
+                            (onTextInput)="searchUsers($event)" 
+                            label="Users"
+                            [options]="userOptions"
+                            ></soft-multiautocomplete>
                     </div>
                     <div class="col-12">
                         <soft-multiselect
-                        [control]="selectedRoles"
-                        label="Roles"
-                        [options]="roleOptions"></soft-multiselect>
+                            [control]="selectedPermissions"
+                            label="Permissions"
+                            [options]="permissionOptions"></soft-multiselect>
                     </div>
                 </form>
             </panel-body>

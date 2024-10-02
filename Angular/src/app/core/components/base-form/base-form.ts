@@ -101,6 +101,8 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   
         if (formControlName.endsWith('Id') && formControlName.length > 2) {
           formControl.label = formControlName.substring(0, formControlName.length - 2);
+        } else if (formControlName.endsWith('DisplayName')) {
+          formControl.label = formControlName.replace('DisplayName', '');
         } else {
           formControl.label = formControlName;
         }

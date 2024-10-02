@@ -19,8 +19,8 @@ export const environment = {
     /* URLs */
     loginSlug: 'auth/login',
     partnerSelectSlug: 'partner-select',
-    superAdministrationSlug: 'super-administration',
     administrationSlug: 'administration',
+    partnerAdministrationSlug: 'partner-administration',
 
     /* Local storage */
     partnerSlugKey: 'partner_slug',

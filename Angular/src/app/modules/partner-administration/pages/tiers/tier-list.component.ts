@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 
 @Component({
-    selector: 'role-list',
-    templateUrl: './role-list.component.html',
+    selector: 'tier-list',
+    templateUrl: './tier-list.component.html',
     styles: []
 })
-export class RoleListComponent implements OnInit {
-    tableTitle: string = $localize`:@@Roles:Roles`
+export class TierListComponent implements OnInit {
+    tableTitle: string = $localize`:@@Tiers:Tiers`
     cols: Column[];
-    controllerName: string = 'Auth';
-    objectName: string = 'Role';
+    controllerName: string = 'Tier';
+    objectName: string = 'Tier';
 
     constructor(
     ) { }
@@ -22,6 +22,8 @@ export class RoleListComponent implements OnInit {
                 {name:"Delete"},
             ]},
             {name: 'Name', filterType: 'text', field: 'name'},
+            {name: 'Valid from (points)', filterType: 'numeric', field: 'validFrom'},
+            {name: 'Valid to (points)', filterType: 'numeric', field: 'validTo'},
             {name: 'Created at', filterType: 'date', field: 'createdAt', showMatchModes: true},
         ]
     }

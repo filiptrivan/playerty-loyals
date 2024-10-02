@@ -17,6 +17,7 @@ using Playerty.Loyals.Business.DTO;
 using Playerty.Loyals.Business.Enums;
 using Soft.Generator.Shared.SoftExceptions;
 using Mapster;
+using Soft.Generator.Security.DTO;
 
 namespace Playerty.Loyals.Services
 {
@@ -109,8 +110,55 @@ namespace Playerty.Loyals.Services
             });
         }
 
-        #region Helpers
+        #endregion
 
+        #region Tier
+
+        public async Task<TierDTO> SaveTier(TierDTO tierDTO)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                if (tierDTO.ValidTo <= tierDTO.ValidFrom)
+                    throw new BusinessException("You can not add tier which upper bound is greater than lower bound.");
+
+                Tier greatestTier = await GetTheGreatestTier();
+                if(tierDTO.Id == 0)
+                {
+                    if (greatestTier != null && greatestTier.Id != tierDTO.Id && greatestTier.ValidTo != tierDTO.ValidFrom)
+                        throw new BusinessException("Tier must be saved sequentialy (Eg. Tier 1: 1p - 10p, Tier 2: 10p - 20p, Tier 3: 20p - 30p).");
+                }
+                else
+                {
+                    if (greatestTier != null && greatestTier.Id != tierDTO.Id && greatestTier.ValidFrom != tierDTO.ValidTo)
+                        throw new BusinessException("Tier must be saved sequentialy (Eg. Tier 1: 1p - 10p, Tier 2: 10p - 20p, Tier 3: 20p - 30p).");
+                }
+
+                tierDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
+
+                tierDTO = await SaveTierAndReturnDTOAsync(tierDTO, false, false);
+                
+                await UpdatePartnerUserTiers();
+
+                return tierDTO;
+            });
+        }
+
+        public async Task UpdatePartnerUserTiers()
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                List<PartnerUser> partnerUsers = _context.DbSet<PartnerUser>().ToList();
+
+                foreach (PartnerUser partnerUser in partnerUsers)
+                {
+                    int points = partnerUser.Points;
+                    Tier tier = await GetTierForThePoints(points);
+                    partnerUser.Tier = tier;
+                }
+
+                await _context.SaveChangesAsync();
+            });
+        }
 
         public async Task<Tier> GetTierForThePoints(int points)
         {
@@ -127,7 +175,7 @@ namespace Playerty.Loyals.Services
                 }
                 else
                 {
-                    Tier tier = await _context.DbSet<Tier>().Where(x => points >= x.ValidFrom && points <= x.ValidTo).SingleOrDefaultAsync();
+                    Tier tier = await _context.DbSet<Tier>().Where(x => points >= x.ValidFrom && points < x.ValidTo).SingleOrDefaultAsync();
                     return tier;
                 }
             });
@@ -138,27 +186,6 @@ namespace Playerty.Loyals.Services
             return await _context.WithTransactionAsync(async () =>
             {
                 return await _context.DbSet<Tier>().OrderByDescending(x => x.ValidTo).FirstOrDefaultAsync();
-            });
-        }
-
-        #endregion
-
-        #endregion
-
-        #region Tier
-
-        public async Task<TierDTO> SaveTier(TierDTO tierDTO)
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                if (tierDTO.ValidTo <= tierDTO.ValidFrom)
-                    throw new BusinessException("You can not add tier which upper bound is greater than lower bound.");
-
-                Tier greatestTier = await GetTheGreatestTier();
-                if (greatestTier != null && greatestTier.ValidTo != tierDTO.ValidFrom)
-                    throw new BusinessException("Tier must be saved sequentialy (Eg. Tier 1: 1p - 10p, Tier 2: 10p - 20p, Tier 3: 20p - 30p).");
-
-                return await SaveTierAndReturnDTOAsync(tierDTO);
             });
         }
 
@@ -235,10 +262,124 @@ namespace Playerty.Loyals.Services
             });
         }
 
+        public async override Task<List<NamebookDTO<long>>> LoadPartnerUserNamebookListForPartnerRole(int partnerRoleId, bool authorize = true)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                if (authorize)
+                {
+                    await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.ReadPartnerRole);
+                }
+
+                return await _context.DbSet<PartnerUser>()
+                    .AsNoTracking()
+                    .Where(x => x.PartnerRoles.Any(x => x.Id == partnerRoleId))
+                    .Select(x => new NamebookDTO<long>
+                    {
+                        Id = x.Id,
+                        DisplayName = x.User.Email,
+                    })
+                    .ToListAsync();
+            });
+        }
+
+        public async override Task<List<NamebookDTO<long>>> LoadPartnerUserListForAutocomplete(int limit, string query, IQueryable<PartnerUser> partnerUserQuery, bool authorize = true)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                if (authorize)
+                {
+                    await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.ReadPartnerUser);
+                }
+
+                if (!string.IsNullOrEmpty(query))
+                    partnerUserQuery = partnerUserQuery.Where(x => x.Id.ToString().Contains(query));
+
+                return await partnerUserQuery
+                    .Take(limit)
+                    .Select(x => new NamebookDTO<long>
+                    {
+                        Id = x.Id,
+                        DisplayName = x.User.Email,
+                    })
+                    .ToListAsync();
+            });
+        }
+
         #endregion
 
         #region Gender
 
+
+        #endregion
+
+        #region PartnerRole
+
+        public async Task<PartnerRoleDTO> SavePartnerRoleAndReturnDTOExtendedAsync(PartnerRoleSaveBodyDTO partnerRoleSaveBodyDTO)
+        {
+
+            return await _context.WithTransactionAsync(async () =>
+            {
+                partnerRoleSaveBodyDTO.PartnerRoleDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
+
+                PartnerRoleDTO savedPartnerRoleDTO = await SavePartnerRoleAndReturnDTOAsync(partnerRoleSaveBodyDTO.PartnerRoleDTO, false, false);
+
+                await UpdatePartnerUserListForPartnerRole(savedPartnerRoleDTO.Id, partnerRoleSaveBodyDTO.SelectedPartnerUserIds);
+                await UpdatePermissionListForPartnerRole(savedPartnerRoleDTO.Id, partnerRoleSaveBodyDTO.SelectedPermissionIds);
+
+                return savedPartnerRoleDTO;
+            });
+        }
+
+        public async Task UpdatePermissionListForPartnerRole(int partnerRoleId, List<int> selectedPermissionIds)
+        {
+            if (selectedPermissionIds == null)
+                return;
+
+            await _context.WithTransactionAsync(async () =>
+            {
+                // FT: Not doing authorization here, because we can not figure out here if we are updating while inserting object (eg. User), or updating object, we will always get the id which is not 0 here.
+
+                PartnerRole partnerRole = await LoadInstanceAsync<PartnerRole, int>(partnerRoleId, null); // FT: Version will always be checked before or after this method
+
+                if (partnerRole.Permissions != null)
+                {
+                    foreach (Permission permission in partnerRole.Permissions.ToList())
+                    {
+                        if (selectedPermissionIds.Contains(permission.Id))
+                            selectedPermissionIds.Remove(permission.Id);
+                        else
+                            partnerRole.Permissions.Remove(permission);
+                    }
+                }
+                else
+                {
+                    partnerRole.Permissions = new List<Permission>();
+                }
+
+                List<Permission> permissionListToInsert = await _context.DbSet<Permission>().Where(x => selectedPermissionIds.Contains(x.Id)).ToListAsync();
+
+                partnerRole.Permissions.AddRange(permissionListToInsert);
+                await _context.SaveChangesAsync();
+            });
+        }
+
+        public async Task<List<NamebookDTO<int>>> LoadPermissionNamebookListForPartnerRole(int partnerRoleId)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                return await _context.DbSet<PartnerRole>()
+                    .AsNoTracking()
+                    .Where(x => x.Id == partnerRoleId && x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
+                    .SelectMany(x => x.Permissions)
+                    .Select(x => new NamebookDTO<int>
+                    {
+                        Id = x.Id,
+                        DisplayName = x.Name,
+                    })
+                    .ToListAsync();
+            });
+        }
 
         #endregion
 

@@ -12,6 +12,7 @@ using Soft.NgTable.Models;
 using Soft.Generator.Shared.DTO;
 using Playerty.Loyals.Business.Enums;
 using Playerty.Loyals.Business.Services;
+using Soft.Generator.Security.Entities;
 
 namespace Playerty.Loyals.WebAPI.Controllers
 {
@@ -53,14 +54,14 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<BaseTableResponseEntity<UserExtendedDTO>> LoadUserListForTable(TableFilterDTO dto)
         {
-            return await _loyalsBusinessService.LoadUserExtendedListForTable(dto);
+            return await _loyalsBusinessService.LoadUserExtendedListForTable(dto, _context.DbSet<UserExtended>());
         }
 
         [HttpPost]
         [AuthGuard]
         public async Task<IActionResult> ExportUserListToExcel(TableFilterDTO dto)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportUserExtendedListToExcel(dto);
+            byte[] fileContent = await _loyalsBusinessService.ExportUserExtendedListToExcel(dto, _context.DbSet<UserExtended>());
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Users.xlsx"));
         }
 

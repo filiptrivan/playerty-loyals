@@ -41,8 +41,34 @@ namespace Playerty.Loyals.Business.Services
             return _httpContextAccessor.HttpContext.Request.Headers[SettingsProvider.Current.PartnerHeadersKey];
         }
 
+        public async Task<int> GetCurrentPartnerId()
+        {
+            // TODO FT: Test how will sql break if i get partner code (slug) from the headers which doesn't exist in the database
+            string cacheKey = $"Partner_{GetCurrentPartnerCode()}_Id";
+
+            if (!_cache.TryGetValue(cacheKey, out int partnerId))
+            {
+                partnerId = await _context.WithTransactionAsync(async () =>
+                {
+                    string partnerCode = GetCurrentPartnerCode();
+                    return await _context.DbSet<Partner>()
+                        .Where(x => x.Slug == partnerCode)
+                        .Select(x => x.Id)
+                        .SingleOrDefaultAsync();
+                });
+
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(60)); // TODO FT: Maybe put bigger value?
+
+                _cache.Set(cacheKey, partnerId, cacheEntryOptions);
+            }
+
+            return partnerId;
+        }
+
         public async Task<PartnerDTO> GetCurrentPartnerDTO()
         {
+            // TODO FT: Test how will sql break if i get partner code (slug) from the headers which doesn't exist in the database
             string cacheKey = $"Partner_{GetCurrentPartnerCode()}";
 
             if (!_cache.TryGetValue(cacheKey, out PartnerDTO partnerDTO))

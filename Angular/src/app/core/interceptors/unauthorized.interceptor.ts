@@ -24,6 +24,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
   ) {}
 
   // TODO FT: Handle all on the server
+  // TODO FT: Maybe return the logic for the logout after unauthorized exception
   private handleAuthError(err: HttpErrorResponse): Observable<any> {
     if (!environment.production) {
       console.error(err);
@@ -112,6 +113,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
 
   logout(err: HttpErrorResponse){
     this.authService.clearLocalStorage();
+    console.log("UNAUTHORIZED LOGOUT")
     this.router.navigate(['auth/login'], {
       // queryParams: { returnUrl: this.router.routerState.snapshot.url },
     });

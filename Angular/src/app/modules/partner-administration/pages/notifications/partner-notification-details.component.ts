@@ -11,11 +11,11 @@ import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
 @Component({
-    selector: 'notification-details',
-    templateUrl: './notification-details.component.html',
+    selector: 'partner-notification-details',
+    templateUrl: './partner-notification-details.component.html',
     styles: [],
 })
-export class NotificationDetailsComponent extends BaseForm<Notification> implements OnInit {
+export class PartnerNotificationDetailsComponent extends BaseForm<Notification> implements OnInit {
     userOptions: PrimengOption[];
     selectedUsers = new SoftFormControl<PrimengOption[]>(null, {updateOn: 'change'})
     isMarkedAsRead = new SoftFormControl<boolean>(null, {updateOn: 'change'})

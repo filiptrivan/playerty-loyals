@@ -3,6 +3,72 @@ import { TableFilterContext } from "src/app/core/entities/table-filter-context";
 import { TableFilterSortMeta } from "src/app/core/entities/table-filter-sort-meta";
 
 
+export class UserExtended extends BaseEntity
+{
+    testDisplayName?: string;
+	testttttDN?: string;
+	email?: string;
+	password?: string;
+	hasLoggedInWithExternalProvider?: boolean;
+	numberOfFailedAttemptsInARow?: number;
+	genderDisplayName?: string;
+	genderId?: number;
+	birthDate?: any;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        testDisplayName,
+		testttttDN,
+		email,
+		password,
+		hasLoggedInWithExternalProvider,
+		numberOfFailedAttemptsInARow,
+		genderDisplayName,
+		genderId,
+		birthDate,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        testDisplayName?: string;
+		testttttDN?: string;
+		email?: string;
+		password?: string;
+		hasLoggedInWithExternalProvider?: boolean;
+		numberOfFailedAttemptsInARow?: number;
+		genderDisplayName?: string;
+		genderId?: number;
+		birthDate?: any;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('UserExtended'); 
+
+        this.testDisplayName = testDisplayName;
+		this.testttttDN = testttttDN;
+		this.email = email;
+		this.password = password;
+		this.hasLoggedInWithExternalProvider = hasLoggedInWithExternalProvider;
+		this.numberOfFailedAttemptsInARow = numberOfFailedAttemptsInARow;
+		this.genderDisplayName = genderDisplayName;
+		this.genderId = genderId;
+		this.birthDate = birthDate;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
 export class Brand extends BaseEntity
 {
     name?: string;
@@ -55,20 +121,50 @@ export class OnlineShop extends BaseEntity
 }
 
 
-export class PartnerUserSaveBody extends BaseEntity
+export class PartnerRoleSaveBody extends BaseEntity
 {
-    partnerUserDTO?: PartnerUser;
+    partnerRoleDTO?: PartnerRole;
+	selectedPermissionIds?: number[];
+	selectedPartnerUserIds?: number[];
 
     constructor(
     {
-        partnerUserDTO
+        partnerRoleDTO,
+		selectedPermissionIds,
+		selectedPartnerUserIds
     }:{
-        partnerUserDTO?: PartnerUser;     
+        partnerRoleDTO?: PartnerRole;
+		selectedPermissionIds?: number[];
+		selectedPartnerUserIds?: number[];     
+    } = {}
+    ) {
+        super('PartnerRoleSaveBody'); 
+
+        this.partnerRoleDTO = partnerRoleDTO;
+		this.selectedPermissionIds = selectedPermissionIds;
+		this.selectedPartnerUserIds = selectedPartnerUserIds;
+    }
+}
+
+
+export class PartnerUserSaveBody extends BaseEntity
+{
+    partnerUserDTO?: PartnerUser;
+	selectedPartnerRoleIds?: number[];
+
+    constructor(
+    {
+        partnerUserDTO,
+		selectedPartnerRoleIds
+    }:{
+        partnerUserDTO?: PartnerUser;
+		selectedPartnerRoleIds?: number[];     
     } = {}
     ) {
         super('PartnerUserSaveBody'); 
 
         this.partnerUserDTO = partnerUserDTO;
+		this.selectedPartnerRoleIds = selectedPartnerRoleIds;
     }
 }
 
@@ -136,17 +232,21 @@ export class QrCode extends BaseEntity
 export class UserExtendedSaveBody extends BaseEntity
 {
     userExtendedDTO?: UserExtended;
+	selectedRoleIds?: number[];
 
     constructor(
     {
-        userExtendedDTO
+        userExtendedDTO,
+		selectedRoleIds
     }:{
-        userExtendedDTO?: UserExtended;     
+        userExtendedDTO?: UserExtended;
+		selectedRoleIds?: number[];     
     } = {}
     ) {
         super('UserExtendedSaveBody'); 
 
         this.userExtendedDTO = userExtendedDTO;
+		this.selectedRoleIds = selectedRoleIds;
     }
 }
 
@@ -156,19 +256,16 @@ export class Gender extends BaseEntity
     name?: string;
 	nameLatin?: string;
 	id?: number;
-	createdAt?: Date;
 
     constructor(
     {
         name,
 		nameLatin,
-		id,
-		createdAt
+		id
     }:{
         name?: string;
 		nameLatin?: string;
-		id?: number;
-		createdAt?: Date;     
+		id?: number;     
     } = {}
     ) {
         super('Gender'); 
@@ -176,7 +273,6 @@ export class Gender extends BaseEntity
         this.name = name;
 		this.nameLatin = nameLatin;
 		this.id = id;
-		this.createdAt = createdAt;
     }
 }
 
@@ -659,21 +755,18 @@ export class TransactionProduct extends BaseEntity
 	transactionDisplayName?: string;
 	transactionId?: number;
 	id?: number;
-	createdAt?: Date;
 
     constructor(
     {
         productId,
 		transactionDisplayName,
 		transactionId,
-		id,
-		createdAt
+		id
     }:{
         productId?: number;
 		transactionDisplayName?: string;
 		transactionId?: number;
-		id?: number;
-		createdAt?: Date;     
+		id?: number;     
     } = {}
     ) {
         super('TransactionProduct'); 
@@ -682,7 +775,6 @@ export class TransactionProduct extends BaseEntity
 		this.transactionDisplayName = transactionDisplayName;
 		this.transactionId = transactionId;
 		this.id = id;
-		this.createdAt = createdAt;
     }
 }
 
@@ -693,21 +785,18 @@ export class TransactionStatus extends BaseEntity
 	nameLatin?: string;
 	code?: string;
 	id?: number;
-	createdAt?: Date;
 
     constructor(
     {
         name,
 		nameLatin,
 		code,
-		id,
-		createdAt
+		id
     }:{
         name?: string;
 		nameLatin?: string;
 		code?: string;
-		id?: number;
-		createdAt?: Date;     
+		id?: number;     
     } = {}
     ) {
         super('TransactionStatus'); 
@@ -716,65 +805,6 @@ export class TransactionStatus extends BaseEntity
 		this.nameLatin = nameLatin;
 		this.code = code;
 		this.id = id;
-		this.createdAt = createdAt;
-    }
-}
-
-
-export class UserExtended extends BaseEntity
-{
-    email?: string;
-	password?: string;
-	hasLoggedInWithExternalProvider?: boolean;
-	numberOfFailedAttemptsInARow?: number;
-	genderDisplayName?: string;
-	genderId?: number;
-	birthDate?: any;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        email,
-		password,
-		hasLoggedInWithExternalProvider,
-		numberOfFailedAttemptsInARow,
-		genderDisplayName,
-		genderId,
-		birthDate,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        email?: string;
-		password?: string;
-		hasLoggedInWithExternalProvider?: boolean;
-		numberOfFailedAttemptsInARow?: number;
-		genderDisplayName?: string;
-		genderId?: number;
-		birthDate?: any;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('UserExtended'); 
-
-        this.email = email;
-		this.password = password;
-		this.hasLoggedInWithExternalProvider = hasLoggedInWithExternalProvider;
-		this.numberOfFailedAttemptsInARow = numberOfFailedAttemptsInARow;
-		this.genderDisplayName = genderDisplayName;
-		this.genderId = genderId;
-		this.birthDate = birthDate;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
     }
 }
 

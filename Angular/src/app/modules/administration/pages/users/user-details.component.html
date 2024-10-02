@@ -5,12 +5,15 @@
     
             <panel-body>
                 <form [formGroup]="formGroup" class="grid">
-                    <div class="col-12 md:col-6">
+                    <div class="col-12">
                         <soft-textbox [control]="control('email', false, false, true)"></soft-textbox>
                     </div>
-                    <!-- <div class="col-12 md:col-6">
-                        <soft-number [control]="control('pointse')"></soft-number>
-                    </div> -->
+                    <div class="col-12 md:col-6">
+                        <soft-calendar [control]="control('birthDate')"></soft-calendar>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-dropdown [control]="control('genderId')" [options]="genderOptions"></soft-dropdown>
+                    </div>
                     <div class="col-12">
                         <soft-multiselect
                         [control]="selectedRoles"

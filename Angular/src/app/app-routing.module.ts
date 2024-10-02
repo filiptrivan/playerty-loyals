@@ -1,4 +1,3 @@
-import { AdministrationModule } from './modules/administration/administration.module';
 import { PreloadAllModules, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './layout/components/notfound/notfound.component';
@@ -25,13 +24,13 @@ import { PartnerGuard } from './core/guards/partner.guard';
                         canActivate: [AuthGuard, PartnerGuard]
                     },
                     { 
-                        path: 'super-administration',
-                        loadChildren: () => import('./modules/super-administration/super-administration.module').then(m => m.SuperAdministrationModule),
+                        path: 'administration',
+                        loadChildren: () => import('./modules/administration/administration.module').then(m => m.AdministrationModule),
                         canActivate: [AuthGuard]
                     },
                     { 
-                        path: 'administration',
-                        loadChildren: () => import('./modules/administration/administration.module').then(m => m.AdministrationModule),
+                        path: 'partner-administration',
+                        loadChildren: () => import('./modules/partner-administration/partner-administration.module').then(m => m.PartnerAdministrationModule),
                         canActivate: [AuthGuard, PartnerGuard]
                     },
                     { 

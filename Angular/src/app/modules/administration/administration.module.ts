@@ -31,14 +31,6 @@ const routes: Routes = [
         component: RoleDetailsComponent,
     },
     {
-        path: 'tiers',
-        component: TierListComponent,
-    },
-    {
-        path: 'tiers/:id',
-        component: TierDetailsComponent,
-    },
-    {
         path: 'notifications',
         component: NotificationListComponent,
     },

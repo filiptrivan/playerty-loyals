@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { UserExtended, UserExtendedSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
+import { PartnerUser, PartnerUserSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
@@ -10,13 +10,12 @@ import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
 @Component({
-    selector: 'user-details',
-    templateUrl: './user-details.component.html',
+    selector: 'partner-user-details',
+    templateUrl: './partner-user-details.component.html',
     styles: [],
 })
-export class UserDetailsComponent extends BaseForm<UserExtended> implements OnInit {
+export class PartnerUserDetailsComponent extends BaseForm<PartnerUser> implements OnInit {
     roleOptions: PrimengOption[];
-    genderOptions: PrimengOption[];
     selectedRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'})
 
     constructor(
@@ -32,33 +31,29 @@ export class UserDetailsComponent extends BaseForm<UserExtended> implements OnIn
         }
          
     override ngOnInit() {
-        this.controllerName = "Auth";
-
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
-            this.apiService.loadRoleListForDropdown().subscribe(nl => {
+            this.apiService.loadPartnerRoleListForDropdown().subscribe(nl => {
                 this.roleOptions = nl.map(n => { return { label: n.displayName, value: n.id } });
             });
             if(this.modelId > 0){
                 forkJoin({
-                    user: this.apiService.getUser(this.modelId),
-                    roles: this.apiService.loadRoleNamebookListForUserExtended(this.modelId),
-                    genders: this.apiService.loadGenderNamebookListForDropdown(),
-                  }).subscribe(({ user, roles, genders }) => {
-                    this.init(new UserExtended(user));
+                    partnerUser: this.apiService.getPartnerUser(this.modelId),
+                    roles: this.apiService.loadPartnerRoleNamebookListForPartnerUser(this.modelId),
+                  }).subscribe(({ partnerUser, roles }) => {
+                    this.init(new PartnerUser(partnerUser));
                     this.selectedRoles.setValue(
                       roles.map(role => { return role.id })
                     );
-                    this.genderOptions = genders.map(n => { return { label: n.displayName, value: n.id }});
                   });
             }
             else{
-                this.init(new UserExtended({id:0}));
+                this.init(new PartnerUser({id:0}));
             }
         });
     }
 
-    init(model: UserExtended){
+    init(model: PartnerUser){
         this.initFormGroup(model);
     }
 
@@ -66,7 +61,7 @@ export class UserDetailsComponent extends BaseForm<UserExtended> implements OnIn
     }
     
     override onBeforeSave(): void {
-        this.saveBody = new UserExtendedSaveBody();
+        this.saveBody = new PartnerUserSaveBody();
         this.saveBody.selectedRoleIds = this.selectedRoles.value;
         this.saveBody.userExtendedDTO = this.model;
     }

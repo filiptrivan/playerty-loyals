@@ -13,6 +13,7 @@ using Soft.Generator.Shared.DTO;
 using Playerty.Loyals.Business.Enums;
 using Playerty.Loyals.Business.Services;
 using Soft.Generator.Shared.Helpers;
+using Soft.Generator.Shared.Extensions;
 
 namespace Playerty.Loyals.WebAPI.Controllers
 {
@@ -44,14 +45,14 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<BaseTableResponseEntity<PartnerUserDTO>> LoadPartnerUserListForTable(TableFilterDTO dto)
         {
-            return await _loyalsBusinessService.LoadPartnerUserListForTable(dto, false);
+            return await _loyalsBusinessService.LoadPartnerUserListForTable(dto, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpPost]
         [AuthGuard]
         public async Task<IActionResult> ExportPartnerUserListToExcel(TableFilterDTO dto)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportPartnerUserListToExcel(dto, false);
+            byte[] fileContent = await _loyalsBusinessService.ExportPartnerUserListToExcel(dto, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Partner_Users.xlsx"));
         }
 
@@ -95,6 +96,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
         public async Task<List<string>> GetCurrentPartnerUserPermissionCodes()
         {
             return await _loyalsBusinessService.GetCurrentPartnerUserPermissionCodes();
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<NamebookDTO<int>>> LoadPartnerRoleNamebookListForPartnerUser(long partnerUserId)
+        {
+            return await _loyalsBusinessService.LoadPartnerRoleNamebookListForPartnerUser(partnerUserId, false);
         }
 
     }

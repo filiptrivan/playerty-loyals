@@ -2,6 +2,8 @@ export function getTranslatedLabelBusiness(name: string): string
 {
     switch(name) 
     {
+        case 'testttttDN':
+            return $localize`:@@TestttttDN:TestttttDN`;
         case 'name':
             return $localize`:@@Name:Name`;
         case 'nameLatin':
@@ -14,8 +16,16 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@TransactionCode:TransactionCode`;
         case 'discount':
             return $localize`:@@Discount:Discount`;
+        case 'partnerRoleDTO':
+            return $localize`:@@PartnerRoleDTO:PartnerRoleDTO`;
+        case 'selectedPermissionIds':
+            return $localize`:@@SelectedPermissionIds:SelectedPermissionIds`;
+        case 'selectedPartnerUserIds':
+            return $localize`:@@SelectedPartnerUserIds:SelectedPartnerUserIds`;
         case 'partnerUserDTO':
             return $localize`:@@PartnerUserDTO:PartnerUserDTO`;
+        case 'selectedPartnerRoleIds':
+            return $localize`:@@SelectedPartnerRoleIds:SelectedPartnerRoleIds`;
         case 'id':
             return $localize`:@@Id:Id`;
         case 'price':
@@ -26,8 +36,8 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@Email:Email`;
         case 'userExtendedDTO':
             return $localize`:@@UserExtendedDTO:UserExtendedDTO`;
-        case 'createdAt':
-            return $localize`:@@CreatedAt:CreatedAt`;
+        case 'selectedRoleIds':
+            return $localize`:@@SelectedRoleIds:SelectedRoleIds`;
         case 'slug':
             return $localize`:@@Slug:Slug`;
         case 'loadPurchasesEndpoint':
@@ -38,6 +48,8 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@UpdatePointsInterval:UpdatePointsInterval`;
         case 'version':
             return $localize`:@@Version:Version`;
+        case 'createdAt':
+            return $localize`:@@CreatedAt:CreatedAt`;
         case 'modifiedAt':
             return $localize`:@@ModifiedAt:ModifiedAt`;
         case 'partner':

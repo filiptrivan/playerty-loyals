@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 
 @Component({
-    selector: 'notification-list',
-    templateUrl: './notification-list.component.html',
+    selector: 'partner-notification-list',
+    templateUrl: './partner-notification-list.component.html',
     styles: []
 })
-export class NotificationListComponent implements OnInit {
+export class PartnerNotificationListComponent implements OnInit {
     tableTitle: string = $localize`:@@Notifications:Notifications`
     cols: Column[];
-    controllerName: string = 'Auth';
-    objectName: string = 'Notification';
+    controllerName: string = 'PartnerNotification';
+    objectName: string = 'PartnerNotification';
 
     constructor(
     ) { }

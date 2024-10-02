@@ -108,7 +108,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Users',
                                     icon: 'pi pi-fw pi-user',
-                                    routerLink: [`/${environment.superAdministrationSlug}/users`],
+                                    routerLink: [`/${environment.administrationSlug}/users`],
                                     hasPermission: (permissionCodes: string[]): boolean => { 
                                         return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]))
                                     } 
@@ -116,7 +116,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Roles',
                                     icon: 'pi pi-fw pi-id-card',
-                                    routerLink: [`/${environment.superAdministrationSlug}/roles`],
+                                    routerLink: [`/${environment.administrationSlug}/roles`],
                                     hasPermission: (permissionCodes: string[]): boolean => { 
                                         return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]))
                                     }
@@ -124,7 +124,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Notifications',
                                     icon: 'pi pi-fw pi-bell',
-                                    routerLink: [`/${environment.superAdministrationSlug}/notifications`],
+                                    routerLink: [`/${environment.administrationSlug}/notifications`],
                                     hasPermission: (permissionCodes: string[]): boolean => { 
                                         return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
                                     }
@@ -144,7 +144,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Users',
                                     icon: 'pi pi-fw pi-user',
-                                    routerLink: [`/${environment.administrationSlug}/users`],
+                                    routerLink: [`/${environment.partnerAdministrationSlug}/users`],
                                     hasPermission: (permissionCodes: string[]): boolean => { 
                                         return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]))
                                     } 
@@ -152,7 +152,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Roles',
                                     icon: 'pi pi-fw pi-id-card',
-                                    routerLink: [`/${environment.administrationSlug}/roles`],
+                                    routerLink: [`/${environment.partnerAdministrationSlug}/roles`],
                                     hasPermission: (permissionCodes: string[]): boolean => { 
                                         return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]))
                                     }
@@ -160,7 +160,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Tiers',
                                     icon: 'pi pi-fw pi-sitemap',
-                                    routerLink: [`/${environment.administrationSlug}/tiers`],
+                                    routerLink: [`/${environment.partnerAdministrationSlug}/tiers`],
                                     hasPermission: (permissionCodes: string[]): boolean => { 
                                         return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]))
                                     }
@@ -168,7 +168,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Notifications',
                                     icon: 'pi pi-fw pi-bell',
-                                    routerLink: [`/${environment.administrationSlug}/notifications`],
+                                    routerLink: [`/${environment.partnerAdministrationSlug}/notifications`],
                                     hasPermission: (permissionCodes: string[]): boolean => { 
                                         return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
                                     }

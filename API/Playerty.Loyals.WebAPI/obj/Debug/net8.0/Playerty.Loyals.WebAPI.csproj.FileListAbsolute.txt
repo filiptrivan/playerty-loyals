@@ -1,3 +1,10 @@
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.csproj.AssemblyReference.cache
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.GeneratedMSBuildEditorConfig.editorconfig
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.AssemblyInfoInputs.cache
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.AssemblyInfo.cs
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.csproj.CoreCompileInputs.cache
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.MvcApplicationPartsAssemblyInfo.cache
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.sourcelink.json
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\log4net.config
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\appsettings.Development.json
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\appsettings.json
@@ -169,13 +176,6 @@ E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Playerty
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Playerty.Loyals.Business.pdb
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Soft.NgTable.pdb
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\sr-Latn-RS\Soft.Generator.Shared.resources.dll
-E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.csproj.AssemblyReference.cache
-E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.GeneratedMSBuildEditorConfig.editorconfig
-E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.AssemblyInfoInputs.cache
-E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.AssemblyInfo.cs
-E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.csproj.CoreCompileInputs.cache
-E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.MvcApplicationPartsAssemblyInfo.cache
-E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.sourcelink.json
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\staticwebassets.build.json
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\staticwebassets.development.json
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\staticwebassets\msbuild.Playerty.Loyals.WebAPI.Microsoft.AspNetCore.StaticWebAssets.props
@@ -190,4 +190,3 @@ E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\refint\P
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.pdb
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.genruntimeconfig.cache
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\ref\Playerty.Loyals.WebAPI.dll
-E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.MvcApplicationPartsAssemblyInfo.cs

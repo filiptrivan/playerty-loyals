@@ -45,7 +45,4 @@ export class TierDetailsComponent extends BaseForm<Tier> implements OnInit {
     init(model: Tier){
         this.initFormGroup(model);
     }
-
-    override onBeforeSave(): void {
-    }
 }
