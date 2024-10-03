@@ -1,30 +1,69 @@
-import { Component, OnInit } from '@angular/core';
-import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
+import { SoftFormControl } from './../../../../core/components/soft-form-control/soft-form-control';
+import { HttpClient } from '@angular/common/http';
+import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MenuItem } from 'primeng/api';
+import { forkJoin, Subscription } from 'rxjs';
+import { Tier } from 'src/app/business/entities/generated/business-entities.generated';
+import { ApiService } from 'src/app/business/services/api/api.service';
+import { BaseForm } from 'src/app/core/components/base-form/base-form';
+import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
 @Component({
     selector: 'tier-list',
     templateUrl: './tier-list.component.html',
-    styles: []
+    styles: [],
 })
-export class TierListComponent implements OnInit {
-    tableTitle: string = $localize`:@@Tiers:Tiers`
-    cols: Column[];
-    controllerName: string = 'Tier';
-    objectName: string = 'Tier';
+export class TierListComponent extends BaseForm<Tier> implements OnInit {
+    tiers: Tier[];
+    lastMenuIconIndexClicked: number;
+    crudMenu: MenuItem[] = [
+        {label: $localize`:@@Remove:Remove`, icon: 'pi pi-minus', command: () => {
+            this.removeFormControlFromTheFormArray(this.lastMenuIconIndexClicked);
+        }},
+        {label: $localize`:@@AddAbove:Add above`, icon: 'pi pi-arrow-up', command: () => {
+            this.addNewFormControlToTheFormArray(new Tier({id: 0}), this.lastMenuIconIndexClicked);
+        }},
+        {label: $localize`:@@AddBelow:Add below`, icon: 'pi pi-arrow-down', command: () => {
+            this.addNewFormControlToTheFormArray(new Tier({id: 0}), this.lastMenuIconIndexClicked + 1);
+        }},
+    ];
 
     constructor(
-    ) { }
+        protected override differs: KeyValueDiffers,
+        protected override http: HttpClient,
+        protected override messageService: SoftMessageService, 
+        protected override changeDetectorRef: ChangeDetectorRef,
+        protected override router: Router, 
+        protected override route: ActivatedRoute, 
+        private apiService: ApiService) 
+        {
+        super(differs, http, messageService, changeDetectorRef, router, route);
+        }
+         
+    override ngOnInit() {
+        this.init(new Tier());
 
-    ngOnInit(){
-        this.cols = [
-            {name: 'Actions', actions:[
-                {name:"Details"},
-                {name:"Delete"},
-            ]},
-            {name: 'Name', filterType: 'text', field: 'name'},
-            {name: 'Valid from (points)', filterType: 'numeric', field: 'validFrom'},
-            {name: 'Valid to (points)', filterType: 'numeric', field: 'validTo'},
-            {name: 'Created at', filterType: 'date', field: 'createdAt', showMatchModes: true},
-        ]
+        forkJoin({
+            tiers: this.apiService.getTiersForThePartner(),
+        }).subscribe(({ tiers }) => {
+            this.initFormArray(tiers, new Tier({id: 0}));
+            
+            this.tiers = tiers;
+        });
+    }
+
+    init(model: Tier){
+        this.initFormGroup(model);
+        // FT: I don't like the idea of putting form array inside parent form group because i need to name it somehow
+    }
+
+    addNewTier(index: number){
+        this.addNewFormControlToTheFormArray(new Tier({id: 0}), index);
+    }
+
+    onSaveTiers(){
+        this.onSaveList(new Tier());
     }
 }

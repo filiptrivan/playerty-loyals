@@ -9,7 +9,6 @@ import { SoftDataTableComponent } from 'src/app/core/components/soft-data-table/
 import { PartnerRoleListComponent } from './pages/roles/partner-role-list.component';
 import { PartnerRoleDetailsComponent } from './pages/roles/partner-role-details.component';
 import { TierListComponent } from './pages/tiers/tier-list.component';
-import { TierDetailsComponent } from './pages/tiers/tier-details.component';
 import { PartnerNotificationDetailsComponent } from './pages/notifications/partner-notification-details.component';
 import { PartnerNotificationListComponent } from './pages/notifications/partner-notification-list.component';
 import { IndexCardComponent } from 'src/app/core/components/index-card/index-card.component';
@@ -36,10 +35,6 @@ const routes: Routes = [
         component: TierListComponent,
     },
     {
-        path: 'tiers/:id',
-        component: TierDetailsComponent,
-    },
-    {
         path: 'notifications',
         component: PartnerNotificationListComponent,
     },
@@ -64,7 +59,6 @@ const routes: Routes = [
         PartnerRoleListComponent,
         PartnerRoleDetailsComponent,
         TierListComponent,
-        TierDetailsComponent,
         PartnerNotificationListComponent,
         PartnerNotificationDetailsComponent,
     ],

@@ -23,8 +23,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class BaseForm<T extends BaseEntity> implements OnInit { 
   formGroup: FormGroup;
-  formArray: FormArray = new FormArray([]);
+  formArray: FormArray;
   model: T;
+  modelList: T[];
   saveBody: any;
   modelId: number;
   detailsTitle: string;
@@ -45,6 +46,8 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
   ngOnInit(){
   }
+
+  //#region Model
 
   initFormGroup(model: T) {
     this.model = model;
@@ -77,7 +80,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   setValidator(formControl: SoftFormControl, model: T = null) {
     if (formControl == null) return null;
 
-    formControl.validator = getValidator(formControl, model.typeName ?? this.model.typeName);
+    formControl.validator = getValidator(formControl, model ? model.typeName : this.model.typeName);
   
     if (formControl?.validator?.hasNotEmptyRule)
       formControl.required = true;
@@ -186,10 +189,16 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   onAfterSave(){}
   onAfterSaveRequest(){}
 
-  /* Array control */
-  initFormArray(models: T[], modelConstructor: new (model: T) => T){ // FT HACK: Because generics can't instantiate in TS (because JS)
-    models.forEach(model => {
-      this.formArray.push(this.createFormGroup(new modelConstructor(model)));
+  //#endregion
+
+  //#region Model List
+
+  initFormArray(modelList: T[], modelConstructor: T){ // FT HACK: Because generics can't instantiate in TS (because JS)
+    this.formArray = new FormArray([]);
+    
+    modelList.forEach(model => {
+      Object.assign(modelConstructor, model)
+      this.formArray.push(this.createFormGroup(modelConstructor));
     });
   }
 
@@ -266,18 +275,17 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     this.formArray.removeAt(index);
   }
 
-  onSaveList(){
+  onSaveList(modelConstructor: T){
     this.onBeforeSaveList();
-
-    this.saveBody = this.saveBody ?? this.model;
     
-    let isValid: boolean = this.checkFormGroupValidity();
+    let isValid: boolean = this.checkFormArrayValidity();
 
     if(isValid){
       let controllerName: string = this.controllerName ?? this.model.typeName;
 
-      this.http.put<T>(environment.apiUrl + `/${controllerName}/Save${this.model.typeName}List`, this.saveBody, environment.httpOptions).subscribe(res => {
-        Object.assign(this.model, res) // this.model = res; // FT: we lose typeName like this and everything that res doesn't have but this.model has
+      this.http.put<T[]>(environment.apiUrl + `/${controllerName}/Save${this.model.typeName}List`, this.formArray.value, environment.httpOptions).subscribe((res: T[]) => {
+        this.formArray = null;
+        this.initFormArray(res, modelConstructor);
 
         this.messageService.successMessage("You have successfully saved.");
 
@@ -291,8 +299,28 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     }
   }
 
+  checkFormArrayValidity(): boolean {
+    if (this.formArray.invalid || this.invalidForm) {
+      (this.formArray.controls as FormGroup[]).forEach(formGroup => {
+        Object.keys(formGroup.controls).forEach(key => {
+          formGroup.controls[key].markAsDirty(); // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
+        });
+      });
+
+      this.messageService.warningMessage(
+        $localize`:@@YouHaveSomeInvalidFieldsDescription:Some of the fields on the form are not valid, please check which ones and try again.`,
+        $localize`:@@YouHaveSomeInvalidFieldsTitle:You have some invalid fields`, 
+      );
+
+      return false;
+    }
+    return true;
+  }
+
   onBeforeSaveList(){}
   onAfterSaveList(){}
   onAfterSaveListRequest(){}
+
+  //#endregion
 
 }

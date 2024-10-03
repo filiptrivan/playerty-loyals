@@ -1,66 +1,43 @@
 @defer (when model != null) {
     <soft-card [title]="detailsTitle" icon="pi pi-bell">
-        <soft-panel [isFirstMultiplePanel]="true">
-            <panel-header title="Email notifications" icon="pi pi-envelope"></panel-header>
-    
-            <panel-body>
-                <form [formGroup]="formGroup" class="grid">
-                    <div class="col-12">
-                        <soft-multiautocomplete 
-                            [control]="selectedUsers"
-                            (onTextInput)="searchUsers($event)" 
-                            [options]="userOptions"
-                            placeholder="Recipients"
-                            ></soft-multiautocomplete>
-                    </div>
-                    <div class="col-12">
-                        <soft-textbox [control]="control('title')" label="" placeholder="Subject"></soft-textbox>
-                    </div>
-                    <div class="col-12">
-                        <p-editor [(ngModel)]="text" (ngModelChange)="clg($event)" [style]="{ height: '320px' }" [ngModelOptions]="{standalone: true}"></p-editor>
-                    </div>
-                </form>
-            </panel-body>
-    
-           <panel-footer>
-                <p-button (onClick)="onSave()" label="Save" icon="pi pi-save"></p-button>
-                <soft-return-button></soft-return-button>
-           </panel-footer>
-    
-        </soft-panel>
 
-        <!-- <div style="margin-bottom: 28px;"></div> -->
-
-        <soft-panel [isLastMultiplePanel]="true">
+        <soft-panel>
             <panel-header title="Details"></panel-header>
     
             <panel-body>
                 <form [formGroup]="formGroup" class="grid">
                     <div class="col-12">
+                        <soft-checkbox [control]="isMarkedAsRead" label="Notify users" [initializeToFalse]="false"></soft-checkbox>
+                    </div>
+                    <div class="col-12 md:col-6">
                         <soft-textbox [control]="control('title')"></soft-textbox>
                     </div>
-                    <div class="col-12">
+                    <div class="col-12 md:col-6">
                         <soft-textbox [control]="control('titleLatin')"></soft-textbox>
                     </div>
-                    <div class="col-12">
+                    <div class="col-12 md:col-6">
                         <soft-textarea [control]="control('description')"></soft-textarea>
                     </div>
-                    <div class="col-12">
+                    <div class="col-12 md:col-6">
                         <soft-textarea [control]="control('descriptionLatin')"></soft-textarea>
                     </div>
                     <div class="col-12">
                         <soft-multiautocomplete 
-                            [control]="selectedUsers"
-                            (onTextInput)="searchUsers($event)" 
-                            label="Users"
-                            [options]="userOptions"
-                            ></soft-multiautocomplete>
+                        [control]="selectedPartnerUsersForAppNotification"
+                        (onTextInput)="searchPartnerUsers($event)" 
+                        label="Recipients"
+                        [options]="partnerUserOptions"
+                        ></soft-multiautocomplete>
+                    </div>
+                    <div class="col-12">
+                        <soft-editor [control]="control('emailBody')"></soft-editor>
                     </div>
                 </form>
             </panel-body>
     
            <panel-footer>
                 <p-button (onClick)="onSave()" label="Save" icon="pi pi-save"></p-button>
+                <p-button (onClick)="sendEmailNotification()" label="Send email notification" icon="pi pi-send"></p-button>
                 <soft-return-button></soft-return-button>
                 <!-- <div footerRight>
                     Updated {{this.model.modifiedAt | pipeWithLocale}} ago

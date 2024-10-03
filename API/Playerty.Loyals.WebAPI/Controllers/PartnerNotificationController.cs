@@ -66,12 +66,12 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.LoadPartnerUserNamebookListForPartnerNotification(notificationId, false);
         }
 
-        //[HttpPut]
-        //[AuthGuard]
-        //public async Task<PartnerNotificationDTO> SavePartnerNotification(PartnerNotificationSaveBodyDTO notificationSaveBodyDTO)
-        //{
-        //    return await _loyalsBusinessService.SavePartnerNotificationAndReturnDTOExtendedAsync<TUser>(notificationSaveBodyDTO);
-        //}
+        [HttpPut]
+        [AuthGuard]
+        public async Task<PartnerNotificationDTO> SavePartnerNotification(PartnerNotificationSaveBodyDTO partnerNotificationSaveBodyDTO)
+        {
+            return await _loyalsBusinessService.SavePartnerNotificationAndReturnDTOExtendedAsync(partnerNotificationSaveBodyDTO);
+        }
 
         //[HttpPost]
         //[AuthGuard]

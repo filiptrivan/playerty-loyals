@@ -123,32 +123,78 @@ namespace Playerty.Loyals.Services
             });
         }
 
-        public async Task<TierDTO> SaveTier(TierDTO tierDTO)
+        public async Task<List<TierDTO>> SaveTierList(List<TierDTO> tierListDTO)
         {
-            return await _context.WithTransactionAsync(async () =>
+            List<int> exceptionHelper = new List<int>();
+
+            for (int i = 0; i < tierListDTO.Count; i++)
             {
-                if (tierDTO.ValidTo <= tierDTO.ValidFrom)
-                    throw new BusinessException("You can not add tier which upper bound is greater than lower bound.");
-
-                Tier greatestTier = await GetTheGreatestTier();
-                if (tierDTO.Id == 0)
+                if (tierListDTO[i].ValidTo <= tierListDTO[i].ValidFrom)
                 {
-                    if (greatestTier != null && greatestTier.Id != tierDTO.Id && greatestTier.ValidTo != tierDTO.ValidFrom)
-                        throw new BusinessException("Tier must be saved sequentialy (Eg. Tier 1: 1p - 10p, Tier 2: 10p - 20p, Tier 3: 20p - 30p).");
-                }
-                else
-                {
-                    if (greatestTier != null && greatestTier.Id != tierDTO.Id && greatestTier.ValidFrom != tierDTO.ValidTo)
-                        throw new BusinessException("Tier must be saved sequentialy (Eg. Tier 1: 1p - 10p, Tier 2: 10p - 20p, Tier 3: 20p - 30p).");
+                    exceptionHelper.Add(i+1);
                 }
 
-                tierDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
+                if (i < tierListDTO.Count - 1)
+                {
+                    if (tierListDTO[i].ValidTo != tierListDTO[i + 1].ValidFrom)
+                    {
+                        exceptionHelper.Add(i+2); // FT: If he provided 0 - 10 and 12 - 20, the second is invalid.
+                        i++; // FT: Skip the next one so we don't need to do distinct.
+                    }
+                }
+            }
 
-                tierDTO = await SaveTierAndReturnDTOAsync(tierDTO, false, false);
+            if (exceptionHelper.Count > 0)
+            {
+                string helper = exceptionHelper.Count == 1 ? "tier" : "tiers";
+                throw new BusinessException($"Invalid {helper}: {exceptionHelper.ToCommaSeparatedString()}. Tiers must be saved sequentialy (Eg. Tier 1: 1p - 10p, Tier 2: 10p - 20p, Tier 3: 20p - 30p). You can not add tier which upper bound is greater (or equal) than lower bound. ");
+            }
+
+            List<TierDTO> result = new List<TierDTO>();
+
+            await _context.WithTransactionAsync(async () =>
+            {
+                List<int> tierIdsDTO = tierListDTO.Select(x => x.Id).ToList();
+
+                IQueryable<Tier> tiersForDeleteQuery = _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode() && tierIdsDTO.Contains(x.Id) == false);
+
+                await DeleteTiers(tiersForDeleteQuery);
+
+                foreach (TierDTO tierDTO in tierListDTO)
+                {
+                    tierDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
+                    result.Add(await SaveTierAndReturnDTOAsync(tierDTO, false, false));
+                }
 
                 await UpdatePartnerUserTiers();
+            });
 
-                return tierDTO;
+            return result;
+        }
+
+        public async Task DeleteTiers(IQueryable<Tier> tiersForDeleteQuery)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                await SetEveryUsersTierToNullForTheProvidedTiers(await tiersForDeleteQuery.Select(x => x.Id).ToListAsync());
+
+                // FT: Can't use execute delete because of disabled changes tracker
+                _context.DbSet<Tier>().RemoveRange(await tiersForDeleteQuery.ToListAsync());
+            });
+        }
+
+        public async Task SetEveryUsersTierToNullForTheProvidedTiers(List<int> tierIds)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                List<PartnerUser> partnerUsersToUpdate = await _context.DbSet<PartnerUser>().Where(x => tierIds.Contains(x.Tier.Id)).ToListAsync();
+
+                foreach (PartnerUser partnerUser in partnerUsersToUpdate)
+                {
+                    partnerUser.Tier = null;
+                }
+
+                await _context.SaveChangesAsync();
             });
         }
 
@@ -156,7 +202,7 @@ namespace Playerty.Loyals.Services
         {
             await _context.WithTransactionAsync(async () =>
             {
-                List<PartnerUser> partnerUsers = _context.DbSet<PartnerUser>().ToList();
+                List<PartnerUser> partnerUsers = await _context.DbSet<PartnerUser>().ToListAsync();
 
                 foreach (PartnerUser partnerUser in partnerUsers)
                 {
@@ -292,6 +338,27 @@ namespace Playerty.Loyals.Services
             });
         }
 
+        public async override Task<List<NamebookDTO<long>>> LoadPartnerUserNamebookListForPartnerNotification(long partnerNotificationId, bool authorize = true)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                if (authorize)
+                {
+                    await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.ReadPartnerNotification);
+                }
+
+                return await _context.DbSet<PartnerUser>()
+                    .AsNoTracking()
+                    .Where(x => x.PartnerNotifications.Any(x => x.Id == partnerNotificationId))
+                    .Select(x => new NamebookDTO<long>
+                    {
+                        Id = x.Id,
+                        DisplayName = x.User.Email,
+                    })
+                    .ToListAsync();
+            });
+        }
+
         public async override Task<List<NamebookDTO<long>>> LoadPartnerUserListForAutocomplete(int limit, string query, IQueryable<PartnerUser> partnerUserQuery, bool authorize = true)
         {
             return await _context.WithTransactionAsync(async () =>
@@ -387,6 +454,25 @@ namespace Playerty.Loyals.Services
                         DisplayName = x.Name,
                     })
                     .ToListAsync();
+            });
+        }
+
+        #endregion
+
+        #region PartnerNotification
+
+        public async Task<PartnerNotificationDTO> SavePartnerNotificationAndReturnDTOExtendedAsync(PartnerNotificationSaveBodyDTO partnerNotificationSaveBodyDTO)
+        {
+
+            return await _context.WithTransactionAsync(async () =>
+            {
+                partnerNotificationSaveBodyDTO.PartnerNotificationDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
+
+                PartnerNotificationDTO savedPartnerNotificationDTO = await SavePartnerNotificationAndReturnDTOAsync(partnerNotificationSaveBodyDTO.PartnerNotificationDTO, false, false);
+
+                await UpdatePartnerUserListForPartnerNotification(savedPartnerNotificationDTO.Id, partnerNotificationSaveBodyDTO.SelectedPartnerUserIds);
+
+                return savedPartnerNotificationDTO;
             });
         }
 
