@@ -6,7 +6,7 @@ import {
   KeyValueDiffers,
   OnInit,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { BaseEntity } from '../../entities/base-entity';
 import { SoftFormControl } from '../soft-form-control/soft-form-control';
 import { environment } from 'src/environments/environment';
@@ -23,6 +23,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class BaseForm<T extends BaseEntity> implements OnInit { 
   formGroup: FormGroup;
+  formArray: FormArray = new FormArray([]);
   model: T;
   saveBody: any;
   modelId: number;
@@ -73,10 +74,10 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     }
   }
 
-  setValidator(formControl: SoftFormControl) {
+  setValidator(formControl: SoftFormControl, model: T = null) {
     if (formControl == null) return null;
 
-    formControl.validator = getValidator(formControl, this.model.typeName);
+    formControl.validator = getValidator(formControl, model.typeName ?? this.model.typeName);
   
     if (formControl?.validator?.hasNotEmptyRule)
       formControl.required = true;
@@ -184,4 +185,114 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   onBeforeSave(){}
   onAfterSave(){}
   onAfterSaveRequest(){}
+
+  /* Array control */
+  initFormArray(models: T[], modelConstructor: new (model: T) => T){ // FT HACK: Because generics can't instantiate in TS (because JS)
+    models.forEach(model => {
+      this.formArray.push(this.createFormGroup(new modelConstructor(model)));
+    });
+  }
+
+  createFormGroup(model: T): FormGroup {
+    let formGroup: FormGroup = new FormGroup({});
+
+    Object.keys(model).forEach((key) => {
+      formGroup = this.arrayFormGroup(key, formGroup, model);
+    });
+
+    return formGroup;
+  }
+
+  arrayFormGroup(formControlName: string, formGroup: FormGroup, model: T, updateOnChange: boolean = false, customValidation: boolean = false, disable: boolean = false) {
+    let formControl: SoftFormControl = formGroup.controls[formControlName] as SoftFormControl;
+
+    if (formControl == null) {
+      if (updateOnChange)
+        formControl = new SoftFormControl(model[formControlName], { updateOn: 'change' });
+      else
+        formControl = new SoftFormControl(model[formControlName], { updateOn: 'blur' });
+
+      if (formControl == null)
+        return null;
+
+      if (formControlName.endsWith('Id') && formControlName.length > 2) {
+        formControl.label = formControlName.substring(0, formControlName.length - 2);
+      } else if (formControlName.endsWith('DisplayName')) {
+        formControl.label = formControlName.replace('DisplayName', '');
+      } else {
+        formControl.label = formControlName;
+      }
+
+      formGroup.addControl(formControlName, formControl);
+
+      if(customValidation == false)
+        this.setValidator(formControl, model);
+      
+      if(disable == true)
+        formControl.disable();
+      
+      formGroup.controls[formControlName].valueChanges.subscribe(value => {
+        model[formControlName] = value;
+      })
+      
+      // this.onAfterArrayControlInitialization(formControlName);
+    }
+
+    return formGroup;
+  }
+
+  // FT: Need to use this from html because can't do "as SoftFormControl" there
+  getFormArrayControl(formControlName: string, index: number): SoftFormControl{
+    return (this.formArray.controls[index] as FormGroup).controls[formControlName] as SoftFormControl;
+  }
+
+  getFormArrayGroup(index: number): FormGroup{
+    return this.formArray.controls[index] as FormGroup
+  }
+
+  getFormArrayGroups(): FormGroup[]{
+    return this.formArray.controls as FormGroup[]
+  }
+
+  addNewFormControlToTheFormArray(model:T, index: number) {
+    if (index == null) {
+      this.formArray.push(this.createFormGroup(model));
+    }else{
+      this.formArray.insert(index, this.createFormGroup(model));
+    }
+  }
+
+  removeFormControlFromTheFormArray(index: number) {
+    this.formArray.removeAt(index);
+  }
+
+  onSaveList(){
+    this.onBeforeSaveList();
+
+    this.saveBody = this.saveBody ?? this.model;
+    
+    let isValid: boolean = this.checkFormGroupValidity();
+
+    if(isValid){
+      let controllerName: string = this.controllerName ?? this.model.typeName;
+
+      this.http.put<T>(environment.apiUrl + `/${controllerName}/Save${this.model.typeName}List`, this.saveBody, environment.httpOptions).subscribe(res => {
+        Object.assign(this.model, res) // this.model = res; // FT: we lose typeName like this and everything that res doesn't have but this.model has
+
+        this.messageService.successMessage("You have successfully saved.");
+
+        // FT: Only overriden ngOnInit is called if it exists
+        // this.ngOnInit(); // Maybe add it, i didn't need for now...
+
+        this.onAfterSaveList();
+      });
+      
+      this.onAfterSaveListRequest();
+    }
+  }
+
+  onBeforeSaveList(){}
+  onAfterSaveList(){}
+  onAfterSaveListRequest(){}
+
 }

@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.apiService.getCurrentPartnerUser().subscribe(res => {
       this.currentUser = res;
-console.log(res)
+
       if(res == null){
         this.messageService.warningMessage($localize`:@@ThePartnerDoesNotExist:The partner doesn't exist.`)
         this.authService.navigateToSelectPartner();

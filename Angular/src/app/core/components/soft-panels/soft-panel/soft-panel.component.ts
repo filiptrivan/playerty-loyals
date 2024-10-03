@@ -1,4 +1,6 @@
-import { Component, ContentChild, Input, OnInit, TemplateRef } from '@angular/core';
+import { Component, ContentChild, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { MenuItem } from 'primeng/api';
+import { Menu } from 'primeng/menu';
 
 @Component({
   selector: 'soft-panel',
@@ -10,9 +12,19 @@ export class SoftPanelComponent implements OnInit {
   @Input() isFirstMultiplePanel: boolean = false;
   @Input() isMiddleMultiplePanel: boolean = false;
   @Input() isLastMultiplePanel: boolean = false;
+  @Input() crudMenu: MenuItem[];
+  @Input() index: number;
+  @Output() onMenuIconClick: EventEmitter<number> = new EventEmitter();
 
+  @ViewChild('menu') menu: Menu;
+  
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  menuItemClick(index: number, event){
+    this.menu.toggle(event);
+    this.onMenuIconClick.next(index);
   }
 }

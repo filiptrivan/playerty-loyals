@@ -11,6 +11,14 @@
             <ng-content select="panel-header"></ng-content>
         </div>
     </ng-template>
+
+    <ng-template *ngIf="crudMenu" pTemplate="icons">
+        <div class="mr-2">
+            <i class="pi pi-ellipsis-h icon-hover" (click)="menuItemClick(index, $event)"></i>
+            <p-menu #menu [model]="crudMenu" [popup]="true" appendTo="body"></p-menu>
+        </div>
+    </ng-template>
+
     <div style="padding: 28px; padding-bottom: 14px;">
         <ng-content select="panel-body"></ng-content>
     </div>

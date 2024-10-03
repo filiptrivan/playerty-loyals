@@ -9,9 +9,9 @@ export class SoftFormControl<T = any> extends FormControl<T> {
     public required: boolean;
     private _softValidator: SoftValidatorFn | null;
 
-    constructor(formControl: FormControl, opts: FormControlOptions=null, required:boolean=false) {
+    constructor(value: any, opts: FormControlOptions=null, required:boolean=false) {
         opts = opts ?? {updateOn: 'blur'};
-        super(formControl, opts);
+        super(value, opts);
         this.required = required;
      }
 

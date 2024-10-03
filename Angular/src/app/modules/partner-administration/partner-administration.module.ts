@@ -12,6 +12,7 @@ import { TierListComponent } from './pages/tiers/tier-list.component';
 import { TierDetailsComponent } from './pages/tiers/tier-details.component';
 import { PartnerNotificationDetailsComponent } from './pages/notifications/partner-notification-details.component';
 import { PartnerNotificationListComponent } from './pages/notifications/partner-notification-list.component';
+import { IndexCardComponent } from 'src/app/core/components/index-card/index-card.component';
 
 const routes: Routes = [
     {
@@ -55,6 +56,7 @@ const routes: Routes = [
         SoftDataTableComponent,
         SoftControlsModule,
         CardSkeletonComponent,
+        IndexCardComponent
     ],
     declarations: [
         PartnerUserListComponent,

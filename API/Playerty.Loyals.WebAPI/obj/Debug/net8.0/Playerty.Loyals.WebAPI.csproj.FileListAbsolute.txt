@@ -3,6 +3,7 @@ E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.AssemblyInfoInputs.cache
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.AssemblyInfo.cs
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.csproj.CoreCompileInputs.cache
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.MvcApplicationPartsAssemblyInfo.cs
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.MvcApplicationPartsAssemblyInfo.cache
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.sourcelink.json
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\log4net.config

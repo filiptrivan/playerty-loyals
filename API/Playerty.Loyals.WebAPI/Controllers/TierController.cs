@@ -65,6 +65,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.GetTierDTOAsync(id);
         }
 
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<TierDTO>> GetTiersForThePartner()
+        {
+            return await _loyalsBusinessService.GetTiersForThePartner();
+        }
+
         [HttpPut]
         [AuthGuard]
         public async Task<TierDTO> SaveTier(TierDTO tierDTO)

@@ -18,6 +18,7 @@ using Playerty.Loyals.Business.Enums;
 using Soft.Generator.Shared.SoftExceptions;
 using Mapster;
 using Soft.Generator.Security.DTO;
+using Playerty.Loyals.Business.DataMappers;
 
 namespace Playerty.Loyals.Services
 {
@@ -114,6 +115,14 @@ namespace Playerty.Loyals.Services
 
         #region Tier
 
+        public async Task<List<TierDTO>> GetTiersForThePartner()
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                return await _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom).ProjectToType<TierDTO>(Mapper.TierToDTOConfig()).ToListAsync();
+            });
+        }
+
         public async Task<TierDTO> SaveTier(TierDTO tierDTO)
         {
             return await _context.WithTransactionAsync(async () =>
@@ -122,7 +131,7 @@ namespace Playerty.Loyals.Services
                     throw new BusinessException("You can not add tier which upper bound is greater than lower bound.");
 
                 Tier greatestTier = await GetTheGreatestTier();
-                if(tierDTO.Id == 0)
+                if (tierDTO.Id == 0)
                 {
                     if (greatestTier != null && greatestTier.Id != tierDTO.Id && greatestTier.ValidTo != tierDTO.ValidFrom)
                         throw new BusinessException("Tier must be saved sequentialy (Eg. Tier 1: 1p - 10p, Tier 2: 10p - 20p, Tier 3: 20p - 30p).");
@@ -136,7 +145,7 @@ namespace Playerty.Loyals.Services
                 tierDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
 
                 tierDTO = await SaveTierAndReturnDTOAsync(tierDTO, false, false);
-                
+
                 await UpdatePartnerUserTiers();
 
                 return tierDTO;

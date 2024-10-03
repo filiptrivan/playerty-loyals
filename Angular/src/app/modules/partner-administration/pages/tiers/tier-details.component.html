@@ -1,38 +1,41 @@
-@defer (when model != null) {
-    <soft-card [title]="detailsTitle" icon="pi pi-sitemap">
-        <soft-panel>
-            <panel-header title="Details"></panel-header>
-    
-            <panel-body>
-                <form [formGroup]="formGroup" class="grid">
-                    <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('name')"></soft-textbox>
-                    </div>
-                    <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('nameLatin')"></soft-textbox>
-                    </div>
-                    <div class="col-12 md:col-6">
-                        <soft-number [control]="control('validFrom')"></soft-number>
-                    </div>
-                    <div class="col-12 md:col-6">
-                        <soft-number [control]="control('validTo')"></soft-number>
-                    </div>
-                    <!-- <div class="col-12 md:col-4">
-                        <soft-number [control]="control('discount')" prefix="%"></soft-number>
-                    </div> -->
-                </form>
-            </panel-body>
-    
-           <panel-footer>
-                <p-button (onClick)="onSave()" label="Save" icon="pi pi-save"></p-button>
-                <soft-return-button></soft-return-button>
-                <!-- <div footerRight>
-                    Updated {{this.model.modifiedAt | pipeWithLocale}} ago
-                </div> -->
-           </panel-footer>
-    
-        </soft-panel>
-    </soft-card>
+@defer (when tiers != null) {
+    <soft-panel>
+        <panel-header [title]="detailsTitle" [bigTitle]="true" icon="pi pi-sitemap"></panel-header>
+
+        <panel-body [normalBottomPadding]="true">
+
+            @for (formGroup of getFormArrayGroups(); track formGroup; let index = $index; let last = $last) {
+                <index-card [index]="index" [last]="false" [crudMenu]="crudMenu" (onMenuIconClick)="lastMenuIconIndexClicked = $event">
+                    <form [formGroup]="formGroup" class="grid">
+                        <div class="col-12 md:col-3">
+                            <soft-textbox [control]="getFormArrayControl('name', index)"></soft-textbox>
+                        </div>
+                        <div class="col-12 md:col-3">
+                            <soft-textbox [control]="getFormArrayControl('nameLatin', index)"></soft-textbox>
+                        </div>
+                        <div class="col-12 md:col-3">
+                            <soft-number [control]="getFormArrayControl('validFrom', index)"></soft-number>
+                        </div>
+                        <div class="col-12 md:col-3">
+                            <soft-number [control]="getFormArrayControl('validTo', index)"></soft-number>
+                        </div>
+                    </form>
+                </index-card>
+            }
+
+            <p-button (onClick)="addNewTier(null)" label="Add new tier" icon="pi pi-plus"></p-button>
+
+        </panel-body>
+
+        <panel-footer>
+            <p-button (onClick)="onSaveList()" label="Save" icon="pi pi-save"></p-button>
+            <soft-return-button></soft-return-button>
+            <!-- <div footerRight>
+                Updated {{this.model.modifiedAt | pipeWithLocale}} ago
+            </div> -->
+        </panel-footer>
+
+    </soft-panel>
 } @placeholder {
     <card-skeleton [height]="502"></card-skeleton>
 }

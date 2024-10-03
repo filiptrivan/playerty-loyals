@@ -1,6 +1,9 @@
+import { SoftFormControl } from './../../../../core/components/soft-form-control/soft-form-control';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MenuItem } from 'primeng/api';
 import { forkJoin, Subscription } from 'rxjs';
 import { Tier } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
@@ -13,6 +16,19 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class TierDetailsComponent extends BaseForm<Tier> implements OnInit {
+    tiers: Tier[];
+    lastMenuIconIndexClicked: number;
+    crudMenu: MenuItem[] = [
+        {label: $localize`:@@Remove:Remove`, icon: 'pi pi-minus', command: () => {
+            this.removeFormControlFromTheFormArray(this.lastMenuIconIndexClicked);
+        }},
+        {label: $localize`:@@AddAbove:Add above`, icon: 'pi pi-arrow-up', command: () => {
+            this.addNewFormControlToTheFormArray(new Tier(), this.lastMenuIconIndexClicked);
+        }},
+        {label: $localize`:@@AddBelow:Add below`, icon: 'pi pi-arrow-down', command: () => {
+            this.addNewFormControlToTheFormArray(new Tier(), this.lastMenuIconIndexClicked + 1);
+        }},
+    ];
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -27,22 +43,23 @@ export class TierDetailsComponent extends BaseForm<Tier> implements OnInit {
         }
          
     override ngOnInit() {
-        this.route.params.subscribe((params) => {
-            this.modelId = params['id'];
-            if(this.modelId > 0){
-                forkJoin({
-                    tier: this.apiService.getTier(this.modelId),
-                  }).subscribe(({ tier }) => {
-                    this.init(new Tier(tier));
-                  });
-            }
-            else{
-                this.init(new Tier({id:0}));
-            }
+        this.init(new Tier());
+
+        forkJoin({
+            tiers: this.apiService.getTiersForThePartner(),
+        }).subscribe(({ tiers }) => {
+            this.initFormArray(tiers, Tier);
+            
+            this.tiers = tiers;
         });
     }
 
     init(model: Tier){
         this.initFormGroup(model);
+        // FT: I don't like the idea of putting form array inside parent form group because i need to name it somehow
+    }
+
+    addNewTier(index: number){
+        this.addNewFormControlToTheFormArray(new Tier(), index);
     }
 }

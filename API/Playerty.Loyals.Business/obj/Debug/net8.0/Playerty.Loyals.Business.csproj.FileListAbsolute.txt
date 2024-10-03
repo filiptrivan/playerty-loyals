@@ -1,9 +1,3 @@
-E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\obj\Debug\net8.0\Playerty.Loyals.Business.csproj.AssemblyReference.cache
-E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\obj\Debug\net8.0\Playerty.Loyals.Business.GeneratedMSBuildEditorConfig.editorconfig
-E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\obj\Debug\net8.0\Playerty.Loyals.Business.AssemblyInfoInputs.cache
-E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\obj\Debug\net8.0\Playerty.Loyals.Business.AssemblyInfo.cs
-E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\obj\Debug\net8.0\Playerty.Loyals.Business.csproj.CoreCompileInputs.cache
-E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\obj\Debug\net8.0\Playerty.Loyals.Business.sourcelink.json
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\bin\Debug\net8.0\Excel\ExcelTemplates\TableTemplate.xlsx
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\bin\Debug\net8.0\Playerty.Loyals.Business.deps.json
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\bin\Debug\net8.0\Playerty.Loyals.Business.dll
@@ -15,6 +9,12 @@ E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\bin\Debug\net8.0\Soft.G
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\bin\Debug\net8.0\Soft.Generator.Shared.pdb
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\bin\Debug\net8.0\Soft.NgTable.pdb
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\bin\Debug\net8.0\sr-Latn-RS\Soft.Generator.Shared.resources.dll
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\obj\Debug\net8.0\Playerty.Loyals.Business.csproj.AssemblyReference.cache
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\obj\Debug\net8.0\Playerty.Loyals.Business.GeneratedMSBuildEditorConfig.editorconfig
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\obj\Debug\net8.0\Playerty.Loyals.Business.AssemblyInfoInputs.cache
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\obj\Debug\net8.0\Playerty.Loyals.Business.AssemblyInfo.cs
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\obj\Debug\net8.0\Playerty.Loyals.Business.csproj.CoreCompileInputs.cache
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\obj\Debug\net8.0\Playerty.Loyals.Business.sourcelink.json
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\obj\Debug\net8.0\Playerty.Loyals.Business.csproj.CopyComplete
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\obj\Debug\net8.0\Playerty.Loyals.Business.dll
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\obj\Debug\net8.0\refint\Playerty.Loyals.Business.dll

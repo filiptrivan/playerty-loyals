@@ -1,3 +1,8 @@
-<div class="panel-body">
+<!-- FT: this is selector, not the class -->
+<div class="panel-body"
+    [ngClass]="{
+        'normal-bottom-padding': normalBottomPadding, 
+    }">
+    <!-- 'card': true, -->
     <ng-content></ng-content>
 </div>
