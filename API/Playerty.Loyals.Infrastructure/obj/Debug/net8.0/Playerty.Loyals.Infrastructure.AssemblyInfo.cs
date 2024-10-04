@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Playerty.Loyals.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d6d2082587f3e63661deeb5cbc37d8a3fe8fb02b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ef26364e1216e5de10879a61bac0a7716a9af15d")]
 [assembly: System.Reflection.AssemblyProductAttribute("Playerty.Loyals.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Playerty.Loyals.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

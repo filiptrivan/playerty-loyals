@@ -1,3 +1,4 @@
+import { Segmentation } from './../../business/entities/generated/loyals-entities.generated';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PartnerUserListComponent } from './pages/users/partner-user-list.component';
@@ -12,6 +13,8 @@ import { TierListComponent } from './pages/tiers/tier-list.component';
 import { PartnerNotificationDetailsComponent } from './pages/notifications/partner-notification-details.component';
 import { PartnerNotificationListComponent } from './pages/notifications/partner-notification-list.component';
 import { IndexCardComponent } from 'src/app/core/components/index-card/index-card.component';
+import { SegmentationListComponent } from './pages/segmentations/segmentation-list.component';
+import { SegmentationDetailsComponent } from './pages/segmentations/segmentation-details.component';
 
 const routes: Routes = [
     {
@@ -29,6 +32,14 @@ const routes: Routes = [
     {
         path: 'roles/:id',
         component: PartnerRoleDetailsComponent,
+    },
+    {
+        path: 'segmentations',
+        component: SegmentationListComponent,
+    },
+    {
+        path: 'segmentations/:id',
+        component: SegmentationDetailsComponent,
     },
     {
         path: 'tiers',
@@ -61,6 +72,8 @@ const routes: Routes = [
         TierListComponent,
         PartnerNotificationListComponent,
         PartnerNotificationDetailsComponent,
+        SegmentationListComponent,
+        SegmentationDetailsComponent,
     ],
     providers:[]
 })

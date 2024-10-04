@@ -255,6 +255,28 @@ export class QrCode extends BaseEntity
 }
 
 
+export class SegmentationSaveBody extends BaseEntity
+{
+    segmentationDTO?: Segmentation;
+	segmentationItemsDTO?: SegmentationItem[];
+
+    constructor(
+    {
+        segmentationDTO,
+		segmentationItemsDTO
+    }:{
+        segmentationDTO?: Segmentation;
+		segmentationItemsDTO?: SegmentationItem[];     
+    } = {}
+    ) {
+        super('SegmentationSaveBody'); 
+
+        this.segmentationDTO = segmentationDTO;
+		this.segmentationItemsDTO = segmentationItemsDTO;
+    }
+}
+
+
 export class UserExtendedSaveBody extends BaseEntity
 {
     userExtendedDTO?: UserExtended;
@@ -594,8 +616,12 @@ export class PartnerUserSegmentation extends BaseEntity
 export class Segmentation extends BaseEntity
 {
     name?: string;
+	nameLatin?: string;
 	description?: string;
+	descriptionLatin?: string;
 	pointsForFirstTimeFill?: number;
+	partnerDisplayName?: string;
+	partnerId?: number;
 	version?: number;
 	id?: number;
 	createdAt?: Date;
@@ -604,16 +630,24 @@ export class Segmentation extends BaseEntity
     constructor(
     {
         name,
+		nameLatin,
 		description,
+		descriptionLatin,
 		pointsForFirstTimeFill,
+		partnerDisplayName,
+		partnerId,
 		version,
 		id,
 		createdAt,
 		modifiedAt
     }:{
         name?: string;
+		nameLatin?: string;
 		description?: string;
+		descriptionLatin?: string;
 		pointsForFirstTimeFill?: number;
+		partnerDisplayName?: string;
+		partnerId?: number;
 		version?: number;
 		id?: number;
 		createdAt?: Date;
@@ -623,8 +657,12 @@ export class Segmentation extends BaseEntity
         super('Segmentation'); 
 
         this.name = name;
+		this.nameLatin = nameLatin;
 		this.description = description;
+		this.descriptionLatin = descriptionLatin;
 		this.pointsForFirstTimeFill = pointsForFirstTimeFill;
+		this.partnerDisplayName = partnerDisplayName;
+		this.partnerId = partnerId;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;
@@ -636,6 +674,7 @@ export class Segmentation extends BaseEntity
 export class SegmentationItem extends BaseEntity
 {
     name?: string;
+	orderNumber?: number;
 	segmentationDisplayName?: string;
 	segmentationId?: number;
 	version?: number;
@@ -646,6 +685,7 @@ export class SegmentationItem extends BaseEntity
     constructor(
     {
         name,
+		orderNumber,
 		segmentationDisplayName,
 		segmentationId,
 		version,
@@ -654,6 +694,7 @@ export class SegmentationItem extends BaseEntity
 		modifiedAt
     }:{
         name?: string;
+		orderNumber?: number;
 		segmentationDisplayName?: string;
 		segmentationId?: number;
 		version?: number;
@@ -665,6 +706,7 @@ export class SegmentationItem extends BaseEntity
         super('SegmentationItem'); 
 
         this.name = name;
+		this.orderNumber = orderNumber;
 		this.segmentationDisplayName = segmentationDisplayName;
 		this.segmentationId = segmentationId;
 		this.version = version;

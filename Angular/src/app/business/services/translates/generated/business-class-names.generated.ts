@@ -18,6 +18,8 @@ export function getTranslatedClassNameBusiness(name: string): string
             return $localize`:@@Product:Product`;
         case 'QrCode':
             return $localize`:@@QrCode:QrCode`;
+        case 'SegmentationSaveBody':
+            return $localize`:@@SegmentationSaveBody:SegmentationSaveBody`;
         case 'UserExtendedSaveBody':
             return $localize`:@@UserExtendedSaveBody:UserExtendedSaveBody`;
         case 'Gender':

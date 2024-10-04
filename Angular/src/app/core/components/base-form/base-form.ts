@@ -15,6 +15,7 @@ import { SoftMessageService } from '../../services/soft-message.service';
 import { getTranslatedClassName } from 'src/app/business/services/translates/translated-class-names.generated';
 import { getValidator } from 'src/app/business/services/validation/validation-rules.generated';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'base-form',
@@ -24,6 +25,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class BaseForm<T extends BaseEntity> implements OnInit { 
   formGroup: FormGroup;
   formArray: FormArray;
+  formArrayControlNamesFromHtml: string[] = [];
   model: T;
   modelList: T[];
   saveBody: any;
@@ -131,14 +133,15 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
   onAfterControlInitialization(formControlName: string) { }
 
-  onSave(){
+  onSave(doNgOnInit: boolean = false){
     this.onBeforeSave();
 
     this.saveBody = this.saveBody ?? this.model;
     
-    let isValid: boolean = this.checkFormGroupValidity();
+    let isValid: boolean = this.isFormGroupValid();
+    let isFormArrayValid: boolean = this.isFormArrayValid();
 
-    if(isValid){
+    if(isValid && isFormArrayValid){
       let controllerName: string = this.controllerName ?? this.model.typeName;
 
       this.http.put<T>(environment.apiUrl + `/${controllerName}/Save${this.model.typeName}`, this.saveBody, environment.httpOptions).subscribe(res => {
@@ -150,29 +153,17 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
           this.rerouteOnTheNewEntity((res as any).id);
         
         // FT: Only overriden ngOnInit is called if it exists
-        // this.ngOnInit(); // Maybe add it, i didn't need for now...
+        if (doNgOnInit) {
+          this.ngOnInit(); // TODO FT: Even if working with other objects, try to assign everything with Object.assign. Like this we are having more requests then we need.
+        }
 
         this.onAfterSave();
       });
       
       this.onAfterSaveRequest();
+    }else{
+      this.showInvalidFieldsMessage();
     }
-  }
-
-  checkFormGroupValidity(): boolean {
-    if (this.formGroup.invalid || this.invalidForm) {
-      Object.keys(this.formGroup.controls).forEach(key => {
-        this.formGroup.controls[key].markAsDirty(); // this.formGroup.markAsDirty(); // FT: For some reason this doesnt work
-      });
-
-      this.messageService.warningMessage(
-        $localize`:@@YouHaveSomeInvalidFieldsDescription:Some of the fields on the form are not valid, please check which ones and try again.`,
-        $localize`:@@YouHaveSomeInvalidFieldsTitle:You have some invalid fields`, 
-      );
-
-      return false;
-    }
-    return true;
   }
 
   rerouteOnTheNewEntity(newId: number): void {
@@ -189,6 +180,43 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   onAfterSave(){}
   onAfterSaveRequest(){}
 
+  isFormGroupValid(): boolean {
+    if (this.formGroup.invalid || this.invalidForm) {
+      Object.keys(this.formGroup.controls).forEach(key => {
+        this.formGroup.controls[key].markAsDirty(); // this.formGroup.markAsDirty(); // FT: For some reason this doesnt work
+      });
+
+      return false;
+    }
+
+    return true;
+  }
+
+  showInvalidFieldsMessage(){
+    this.messageService.warningMessage(
+      $localize`:@@YouHaveSomeInvalidFieldsDescription:Some of the fields on the form are not valid, please check which ones and try again.`,
+      $localize`:@@YouHaveSomeInvalidFieldsTitle:You have some invalid fields`, 
+    );
+  }
+
+  // FT: If you want to call single method
+  checkFormGroupValidity(){
+    if (this.formGroup.invalid || this.invalidForm) {
+      Object.keys(this.formGroup.controls).forEach(key => {
+        this.formGroup.controls[key].markAsDirty(); // this.formGroup.markAsDirty(); // FT: For some reason this doesnt work
+      });
+
+      this.messageService.warningMessage(
+        $localize`:@@YouHaveSomeInvalidFieldsDescription:Some of the fields on the form are not valid, please check which ones and try again.`,
+        $localize`:@@YouHaveSomeInvalidFieldsTitle:You have some invalid fields`, 
+      );
+
+      return false;
+    }
+    
+    return true;
+  }
+
   //#endregion
 
   //#region Model List
@@ -196,6 +224,9 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   initFormArray(modelList: T[], modelConstructor: T){ // FT HACK: Because generics can't instantiate in TS (because JS)
     this.formArray = new FormArray([]);
     
+    if (modelList == null)
+      return;
+
     modelList.forEach(model => {
       Object.assign(modelConstructor, model)
       this.formArray.push(this.createFormGroup(modelConstructor));
@@ -252,6 +283,8 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
   // FT: Need to use this from html because can't do "as SoftFormControl" there
   getFormArrayControl(formControlName: string, index: number): SoftFormControl{
+    if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
+      this.formArrayControlNamesFromHtml.push(formControlName);
     return (this.formArray.controls[index] as FormGroup).controls[formControlName] as SoftFormControl;
   }
 
@@ -299,14 +332,46 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     }
   }
 
-  checkFormArrayValidity(): boolean {
-    if (this.formArray.invalid || this.invalidForm) {
-      (this.formArray.controls as FormGroup[]).forEach(formGroup => {
-        Object.keys(formGroup.controls).forEach(key => {
-          formGroup.controls[key].markAsDirty(); // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
-        });
-      });
+  isFormArrayValid(): boolean {
+    if(this.formArray == null)
+      return true;
 
+    let invalid: boolean = false;
+
+    (this.formArray.controls as FormGroup[]).forEach(formGroup => {
+      Object.keys(formGroup.controls).forEach(key => {
+        let formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
+        formControl.markAsDirty();
+        if (formControl.invalid && this.formArrayControlNamesFromHtml.includes(formControl.label)) {
+          invalid = true;
+        }
+      });
+    });
+
+    if (invalid || this.invalidForm) {
+      return false;
+    }
+
+    return true;
+  }
+
+  checkFormArrayValidity(): boolean {
+    if(this.formArray == null)
+      return true;
+
+    let invalid: boolean = false;
+
+    (this.formArray.controls as FormGroup[]).forEach(formGroup => {
+      Object.keys(formGroup.controls).forEach(key => {
+        let formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
+        formControl.markAsDirty();
+        if (formControl.invalid && this.formArrayControlNamesFromHtml.includes(formControl.label)) {
+          invalid = true;
+        }
+      });
+    });
+
+    if (invalid || this.invalidForm) {
       this.messageService.warningMessage(
         $localize`:@@YouHaveSomeInvalidFieldsDescription:Some of the fields on the form are not valid, please check which ones and try again.`,
         $localize`:@@YouHaveSomeInvalidFieldsTitle:You have some invalid fields`, 
@@ -314,12 +379,31 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
       return false;
     }
+
     return true;
   }
 
   onBeforeSaveList(){}
   onAfterSaveList(){}
   onAfterSaveListRequest(){}
+
+  lastMenuIconIndexClicked: number;
+
+  getCrudMenuForOrderedData(instantiatedModel: T){
+    let crudMenuForOrderedData: MenuItem[] = [
+        {label: $localize`:@@Remove:Remove`, icon: 'pi pi-minus', command: () => {
+            this.removeFormControlFromTheFormArray(this.lastMenuIconIndexClicked);
+        }},
+        {label: $localize`:@@AddAbove:Add above`, icon: 'pi pi-arrow-up', command: () => {
+            this.addNewFormControlToTheFormArray(instantiatedModel, this.lastMenuIconIndexClicked);
+        }},
+        {label: $localize`:@@AddBelow:Add below`, icon: 'pi pi-arrow-down', command: () => {
+            this.addNewFormControlToTheFormArray(instantiatedModel, this.lastMenuIconIndexClicked + 1);
+        }},
+    ];
+
+    return crudMenuForOrderedData;
+  }
 
   //#endregion
 

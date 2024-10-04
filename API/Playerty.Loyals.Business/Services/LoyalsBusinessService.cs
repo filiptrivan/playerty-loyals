@@ -19,6 +19,8 @@ using Soft.Generator.Shared.SoftExceptions;
 using Mapster;
 using Soft.Generator.Security.DTO;
 using Playerty.Loyals.Business.DataMappers;
+using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Playerty.Loyals.Services
 {
@@ -478,10 +480,46 @@ namespace Playerty.Loyals.Services
 
         #endregion
 
+        #region Segmentation
+
+        public async Task<SegmentationDTO> SaveSegmentationAndReturnDTOExtendedAsync(SegmentationSaveBodyDTO segmentationSaveBodyDTO)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                segmentationSaveBodyDTO.SegmentationDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
+                SegmentationDTO savedSegmentationDTO = await SaveSegmentationAndReturnDTOAsync(segmentationSaveBodyDTO.SegmentationDTO, false, false);
+
+                List<long> segmentationItemIdsDTO = segmentationSaveBodyDTO.SegmentationItemsDTO.Select(x => x.Id).ToList();
+
+                IQueryable<SegmentationItem> segmentationItemsForDeleteQuery = _context.DbSet<SegmentationItem>()
+                    .Where(x => x.Segmentation.Id == savedSegmentationDTO.Id && segmentationItemIdsDTO.Contains(x.Id) == false);
+
+                _context.DbSet<SegmentationItem>().RemoveRange(await segmentationItemsForDeleteQuery.ToListAsync());
+
+                for (int i = 0; i < segmentationSaveBodyDTO.SegmentationItemsDTO.Count; i++)
+                {
+                    segmentationSaveBodyDTO.SegmentationItemsDTO[i].SegmentationId = savedSegmentationDTO.Id;
+                    segmentationSaveBodyDTO.SegmentationItemsDTO[i].OrderNumber = i + 1;
+                    await SaveSegmentationItemAndReturnDomainAsync(segmentationSaveBodyDTO.SegmentationItemsDTO[i], false, false);
+                }
+
+                return savedSegmentationDTO;
+            });
+        }
+
+        public async Task<List<SegmentationItemDTO>> GetSegmentationItemsForTheSegmentation(int segmentationId)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                return await _context.DbSet<SegmentationItem>().Where(x => x.Segmentation.Id == segmentationId).OrderBy(x => x.OrderNumber).ProjectToType<SegmentationItemDTO>(Mapper.SegmentationToDTOConfig()).ToListAsync();
+            });
+        }
+
+        #endregion
+
     }
 
 }
-
 
 
 //protected override void OnBeforeUserExtendedIsMapped(UserExtendedDTO dto)

@@ -17,18 +17,7 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 })
 export class TierListComponent extends BaseForm<Tier> implements OnInit {
     tiers: Tier[];
-    lastMenuIconIndexClicked: number;
-    crudMenu: MenuItem[] = [
-        {label: $localize`:@@Remove:Remove`, icon: 'pi pi-minus', command: () => {
-            this.removeFormControlFromTheFormArray(this.lastMenuIconIndexClicked);
-        }},
-        {label: $localize`:@@AddAbove:Add above`, icon: 'pi pi-arrow-up', command: () => {
-            this.addNewFormControlToTheFormArray(new Tier({id: 0}), this.lastMenuIconIndexClicked);
-        }},
-        {label: $localize`:@@AddBelow:Add below`, icon: 'pi pi-arrow-down', command: () => {
-            this.addNewFormControlToTheFormArray(new Tier({id: 0}), this.lastMenuIconIndexClicked + 1);
-        }},
-    ];
+    crudMenu: MenuItem[] = this.getCrudMenuForOrderedData(new Tier({id: 0}));
 
     constructor(
         protected override differs: KeyValueDiffers,

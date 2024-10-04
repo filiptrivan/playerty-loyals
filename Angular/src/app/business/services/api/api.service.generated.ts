@@ -14,6 +14,7 @@ import { PartnerRoleSaveBody } from '../../entities/generated/business-entities.
 import { PartnerUserSaveBody } from '../../entities/generated/business-entities.generated';
 import { Product } from '../../entities/generated/business-entities.generated';
 import { QrCode } from '../../entities/generated/business-entities.generated';
+import { SegmentationSaveBody } from '../../entities/generated/business-entities.generated';
 import { UserExtendedSaveBody } from '../../entities/generated/business-entities.generated';
 import { Gender } from '../../entities/generated/business-entities.generated';
 import { Partner } from '../../entities/generated/business-entities.generated';
@@ -197,6 +198,30 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     loadPartnerRoleNamebookListForPartnerUser(partnerUserId: number): Observable<Namebook[]> {
         return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerUser/LoadPartnerRoleNamebookListForPartnerUser?partnerUserId=${partnerUserId}`, environment.httpSkipSpinnerOptions);
+    }
+
+    loadSegmentationListForTable(dto: TableFilter): Observable<Segmentation> { 
+        return this.http.post<Segmentation>(`${environment.apiUrl}/Segmentation/LoadSegmentationListForTable`, dto, environment.httpSkipSpinnerOptions);
+    }
+
+    exportSegmentationListToExcel(dto: TableFilter): Observable<any> { 
+        return this.http.post<any>(`${environment.apiUrl}/Segmentation/ExportSegmentationListToExcel`, dto, environment.httpOptions);
+    }
+
+    deleteSegmentation(id: number): Observable<any> { 
+        return this.http.delete<any>(`${environment.apiUrl}/Segmentation/DeleteSegmentation?id=${id}`);
+    }
+
+    getSegmentation(id: number): Observable<Segmentation> {
+        return this.http.get<Segmentation>(`${environment.apiUrl}/Segmentation/GetSegmentation?id=${id}`);
+    }
+
+    getSegmentationItemsForTheSegmentation(segmentationId: number): Observable<SegmentationItem[]> {
+        return this.http.get<SegmentationItem[]>(`${environment.apiUrl}/Segmentation/GetSegmentationItemsForTheSegmentation?segmentationId=${segmentationId}`);
+    }
+
+    saveSegmentation(segmentationSaveBodyDTO: SegmentationSaveBody): Observable<Segmentation> { 
+        return this.http.put<Segmentation>(`${environment.apiUrl}/Segmentation/SaveSegmentation`, segmentationSaveBodyDTO, environment.httpOptions);
     }
 
     loadTierListForTable(dto: TableFilter): Observable<Tier> { 

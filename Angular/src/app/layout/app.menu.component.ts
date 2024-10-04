@@ -158,6 +158,15 @@ export class AppMenuComponent implements OnInit {
                                     }
                                 },
                                 {
+                                    label: 'Segmentations',
+                                    icon: 'pi pi-fw pi-hashtag',
+                                    routerLink: [`/${environment.partnerAdministrationSlug}/segmentations`],
+                                    visible: true,
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadSegmentation]))
+                                    // }
+                                },
+                                {
                                     label: 'Tiers',
                                     icon: 'pi pi-fw pi-sitemap',
                                     routerLink: [`/${environment.partnerAdministrationSlug}/tiers`],

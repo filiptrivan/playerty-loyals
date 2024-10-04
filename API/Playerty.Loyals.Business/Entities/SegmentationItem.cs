@@ -13,7 +13,11 @@ namespace Playerty.Loyals.Business.Entities
     {
         [SoftDisplayName]
         [StringLength(100, MinimumLength = 1)]
+        [Required]
         public string Name { get; set; }
+
+        [Required]
+        public int OrderNumber { get; set; }
 
         public virtual Segmentation Segmentation { get; set; }
     }

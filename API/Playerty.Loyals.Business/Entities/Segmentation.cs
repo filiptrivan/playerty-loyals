@@ -13,12 +13,27 @@ namespace Playerty.Loyals.Business.Entities
     {
         [SoftDisplayName]
         [StringLength(100, MinimumLength = 1)]
+        [Required]
         public string Name { get; set; }
 
+        [StringLength(100, MinimumLength = 1)]
+        [Required]
+        public string NameLatin { get; set; }
+
+        [StringLength(400, MinimumLength = 1)]
         public string Description { get; set; }
 
+        [StringLength(400, MinimumLength = 1)]
+        public string DescriptionLatin { get; set; }
+
+        [GreaterThanOrEqualTo(0)]
+        [Required]
         public int PointsForFirstTimeFill { get; set; }
 
+        [Required]
+        public virtual Partner Partner { get; set; }
+
+        [Required]
         public virtual List<SegmentationItem> SegmentationItems { get; set; }
     }
 }

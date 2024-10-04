@@ -21,6 +21,7 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
 
 
 
+
         case 'nameGender':
             return nameGenderValidator(formControl);
         case 'nameLatinGender':
@@ -56,9 +57,21 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
 
         case 'nameSegmentation':
             return nameSegmentationValidator(formControl);
+        case 'nameLatinSegmentation':
+            return nameLatinSegmentationValidator(formControl);
+        case 'descriptionSegmentation':
+            return descriptionSegmentationValidator(formControl);
+        case 'descriptionLatinSegmentation':
+            return descriptionLatinSegmentationValidator(formControl);
+        case 'pointsForFirstTimeFillSegmentation':
+            return pointsForFirstTimeFillSegmentationValidator(formControl);
+        case 'partnerIdSegmentation':
+            return partnerIdSegmentationValidator(formControl);
 
         case 'nameSegmentationItem':
             return nameSegmentationItemValidator(formControl);
+        case 'orderNumberSegmentationItem':
+            return orderNumberSegmentationItemValidator(formControl);
 
         case 'nameTier':
             return nameTierValidator(formControl);
@@ -97,12 +110,12 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
 
 export function emailUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 5;
         const max = 70;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
         const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
         const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
@@ -115,11 +128,11 @@ export function emailUserExtendedValidator(control: SoftFormControl): SoftValida
 
 export function passwordUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
         const min = 40;
         const max = 80;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const passwordValid = stringLengthRule;
 
@@ -131,9 +144,9 @@ export function passwordUserExtendedValidator(control: SoftFormControl): SoftVal
 
 export function hasLoggedInWithExternalProviderUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
         const hasLoggedInWithExternalProviderValid = notEmptyRule;
 
@@ -145,9 +158,9 @@ export function hasLoggedInWithExternalProviderUserExtendedValidator(control: So
 
 export function numberOfFailedAttemptsInARowUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
         const numberOfFailedAttemptsInARowValid = notEmptyRule;
 
@@ -166,13 +179,14 @@ export function numberOfFailedAttemptsInARowUserExtendedValidator(control: SoftF
 
 
 
+
 export function nameGenderValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
         const min = 1;
         const max = 70;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const nameValid = stringLengthRule;
 
@@ -184,11 +198,11 @@ export function nameGenderValidator(control: SoftFormControl): SoftValidatorFn {
 
 export function nameLatinGenderValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
         const min = 1;
         const max = 70;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const nameLatinValid = stringLengthRule;
 
@@ -201,12 +215,12 @@ export function nameLatinGenderValidator(control: SoftFormControl): SoftValidato
 
 export function namePartnerValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 255;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const nameValid = notEmptyRule && stringLengthRule;
 
@@ -218,11 +232,11 @@ export function namePartnerValidator(control: SoftFormControl): SoftValidatorFn 
 
 export function slugPartnerValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
         const min = 1;
         const max = 100;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const slugValid = stringLengthRule;
 
@@ -235,12 +249,12 @@ export function slugPartnerValidator(control: SoftFormControl): SoftValidatorFn 
 
 export function titlePartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 0;
         const max = 100;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const titleValid = notEmptyRule && stringLengthRule;
 
@@ -252,12 +266,12 @@ export function titlePartnerNotificationValidator(control: SoftFormControl): Sof
 
 export function titleLatinPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 0;
         const max = 100;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const titleLatinValid = notEmptyRule && stringLengthRule;
 
@@ -269,12 +283,12 @@ export function titleLatinPartnerNotificationValidator(control: SoftFormControl)
 
 export function descriptionPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 0;
         const max = 400;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const descriptionValid = notEmptyRule && stringLengthRule;
 
@@ -286,12 +300,12 @@ export function descriptionPartnerNotificationValidator(control: SoftFormControl
 
 export function descriptionLatinPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 0;
         const max = 400;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const descriptionLatinValid = notEmptyRule && stringLengthRule;
 
@@ -303,11 +317,11 @@ export function descriptionLatinPartnerNotificationValidator(control: SoftFormCo
 
 export function emailBodyPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
         const min = 0;
         const max = 1000;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const emailBodyValid = stringLengthRule;
 
@@ -321,9 +335,9 @@ export function emailBodyPartnerNotificationValidator(control: SoftFormControl):
 
 export function partnerIdPartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
         const partnerIdValid = notEmptyRule;
 
@@ -335,12 +349,12 @@ export function partnerIdPartnerRoleValidator(control: SoftFormControl): SoftVal
 
 export function namePartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 0;
         const max = 100;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const nameValid = notEmptyRule && stringLengthRule;
 
@@ -352,11 +366,11 @@ export function namePartnerRoleValidator(control: SoftFormControl): SoftValidato
 
 export function descriptionPartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
         const min = 0;
         const max = 400;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const descriptionValid = stringLengthRule;
 
@@ -369,9 +383,9 @@ export function descriptionPartnerRoleValidator(control: SoftFormControl): SoftV
 
 export function pointsPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
         const pointsValid = notEmptyRule;
 
@@ -385,46 +399,141 @@ export function pointsPartnerUserValidator(control: SoftFormControl): SoftValida
 
 export function nameSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 100;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
-        const nameValid = stringLengthRule;
+        const nameValid = notEmptyRule && stringLengthRule;
 
-        return nameValid ? null : { _ : $localize`:@@Length:The field must have a minimum of ${min} and a maximum of ${max} characters.` };
+        return nameValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function nameLatinSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+        const nameLatinValid = notEmptyRule && stringLengthRule;
+
+        return nameLatinValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function descriptionSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const min = 1;
+        const max = 400;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+        const descriptionValid = stringLengthRule;
+
+        return descriptionValid ? null : { _ : $localize`:@@Length:The field must have a minimum of ${min} and a maximum of ${max} characters.` };
     };
     
+    return validator;
+}
+
+export function descriptionLatinSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const min = 1;
+        const max = 400;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+        const descriptionLatinValid = stringLengthRule;
+
+        return descriptionLatinValid ? null : { _ : $localize`:@@Length:The field must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    
+    return validator;
+}
+
+export function pointsForFirstTimeFillSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 0;
+        const numberMinRangeRule = value >= min;
+
+        const pointsForFirstTimeFillValid = notEmptyRule && numberMinRangeRule;
+
+        return pointsForFirstTimeFillValid ? null : { _ : $localize`:@@NotEmptyNumberRangeMin:The field is mandatory and must be greater or equal to ${min}.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function partnerIdSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+        const partnerIdValid = notEmptyRule;
+
+        return partnerIdValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
+    };
+    validator.hasNotEmptyRule = true;
     return validator;
 }
 
 
 export function nameSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 100;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
-        const nameValid = stringLengthRule;
+        const nameValid = notEmptyRule && stringLengthRule;
 
-        return nameValid ? null : { _ : $localize`:@@Length:The field must have a minimum of ${min} and a maximum of ${max} characters.` };
+        return nameValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
     };
-    
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function orderNumberSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+        const orderNumberValid = notEmptyRule;
+
+        return orderNumberValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
+    };
+    validator.hasNotEmptyRule = true;
     return validator;
 }
 
 
 export function nameTierValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 255;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const nameValid = notEmptyRule && stringLengthRule;
 
@@ -436,12 +545,12 @@ export function nameTierValidator(control: SoftFormControl): SoftValidatorFn {
 
 export function nameLatinTierValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 255;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const nameLatinValid = notEmptyRule && stringLengthRule;
 
@@ -453,15 +562,15 @@ export function nameLatinTierValidator(control: SoftFormControl): SoftValidatorF
 
 export function validFromTierValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 0;
         const numberMinRangeRule = value >= min;
 
         const validFromValid = notEmptyRule && numberMinRangeRule;
 
-        return validFromValid ? null : { _ : $localize`:@@NotEmptyNumberRangeMin:The field is mandatory and must be greater or equal ${min}.` };
+        return validFromValid ? null : { _ : $localize`:@@NotEmptyNumberRangeMin:The field is mandatory and must be greater or equal to ${min}.` };
     };
     validator.hasNotEmptyRule = true;
     return validator;
@@ -469,15 +578,15 @@ export function validFromTierValidator(control: SoftFormControl): SoftValidatorF
 
 export function validToTierValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 0;
         const numberMinRangeRule = value >= min;
 
         const validToValid = notEmptyRule && numberMinRangeRule;
 
-        return validToValid ? null : { _ : $localize`:@@NotEmptyNumberRangeMin:The field is mandatory and must be greater or equal ${min}.` };
+        return validToValid ? null : { _ : $localize`:@@NotEmptyNumberRangeMin:The field is mandatory and must be greater or equal to ${min}.` };
     };
     validator.hasNotEmptyRule = true;
     return validator;
@@ -486,9 +595,9 @@ export function validToTierValidator(control: SoftFormControl): SoftValidatorFn 
 
 export function guidTransactionValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
         const guidValid = notEmptyRule;
 
@@ -500,9 +609,9 @@ export function guidTransactionValidator(control: SoftFormControl): SoftValidato
 
 export function priceTransactionValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const precision = 16;
         const scale = 2;
         const ignoreTrailingZeros = false;
@@ -518,9 +627,9 @@ export function priceTransactionValidator(control: SoftFormControl): SoftValidat
 
 export function pointsTransactionValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
         const pointsValid = notEmptyRule;
 
@@ -532,9 +641,9 @@ export function pointsTransactionValidator(control: SoftFormControl): SoftValida
 
 export function userIdTransactionValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
         const userIdValid = notEmptyRule;
 
@@ -547,9 +656,9 @@ export function userIdTransactionValidator(control: SoftFormControl): SoftValida
 
 export function productIdTransactionProductValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
         const productIdValid = notEmptyRule;
 
@@ -561,9 +670,9 @@ export function productIdTransactionProductValidator(control: SoftFormControl): 
 
 export function transactionIdTransactionProductValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
         const transactionIdValid = notEmptyRule;
 
@@ -576,12 +685,12 @@ export function transactionIdTransactionProductValidator(control: SoftFormContro
 
 export function nameTransactionStatusValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 255;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const nameValid = notEmptyRule && stringLengthRule;
 
@@ -593,12 +702,12 @@ export function nameTransactionStatusValidator(control: SoftFormControl): SoftVa
 
 export function nameLatinTransactionStatusValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 255;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const nameLatinValid = notEmptyRule && stringLengthRule;
 
@@ -610,12 +719,12 @@ export function nameLatinTransactionStatusValidator(control: SoftFormControl): S
 
 export function codeTransactionStatusValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 255;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
         const codeValid = notEmptyRule && stringLengthRule;
 

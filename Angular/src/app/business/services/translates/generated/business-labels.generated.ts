@@ -38,6 +38,10 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@Brand:Brand`;
         case 'email':
             return $localize`:@@Email:Email`;
+        case 'segmentationDTO':
+            return $localize`:@@SegmentationDTO:SegmentationDTO`;
+        case 'segmentationItemsDTO':
+            return $localize`:@@SegmentationItemsDTO:SegmentationItemsDTO`;
         case 'userExtendedDTO':
             return $localize`:@@UserExtendedDTO:UserExtendedDTO`;
         case 'selectedRoleIds':
@@ -86,6 +90,8 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@Segmentation:Segmentation`;
         case 'pointsForFirstTimeFill':
             return $localize`:@@PointsForFirstTimeFill:PointsForFirstTimeFill`;
+        case 'orderNumber':
+            return $localize`:@@OrderNumber:OrderNumber`;
         case 'validFrom':
             return $localize`:@@ValidFrom:ValidFrom`;
         case 'validTo':
