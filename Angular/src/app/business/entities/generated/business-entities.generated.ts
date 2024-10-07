@@ -99,6 +99,24 @@ export class Brand extends BaseEntity
 }
 
 
+export class MergedPartnerUser extends BaseEntity
+{
+    
+
+    constructor(
+    {
+        
+    }:{
+             
+    } = {}
+    ) {
+        super('MergedPartnerUser'); 
+
+        
+    }
+}
+
+
 export class OnlineShop extends BaseEntity
 {
     transactionCode?: any;
@@ -175,21 +193,29 @@ export class PartnerRoleSaveBody extends BaseEntity
 
 export class PartnerUserSaveBody extends BaseEntity
 {
-    partnerUserDTO?: PartnerUser;
+    userExtendedDTO?: UserExtended;
+	selectedRoleIds?: number[];
+	partnerUserDTO?: PartnerUser;
 	selectedPartnerRoleIds?: number[];
 
     constructor(
     {
-        partnerUserDTO,
+        userExtendedDTO,
+		selectedRoleIds,
+		partnerUserDTO,
 		selectedPartnerRoleIds
     }:{
-        partnerUserDTO?: PartnerUser;
+        userExtendedDTO?: UserExtended;
+		selectedRoleIds?: number[];
+		partnerUserDTO?: PartnerUser;
 		selectedPartnerRoleIds?: number[];     
     } = {}
     ) {
         super('PartnerUserSaveBody'); 
 
-        this.partnerUserDTO = partnerUserDTO;
+        this.userExtendedDTO = userExtendedDTO;
+		this.selectedRoleIds = selectedRoleIds;
+		this.partnerUserDTO = partnerUserDTO;
 		this.selectedPartnerRoleIds = selectedPartnerRoleIds;
     }
 }

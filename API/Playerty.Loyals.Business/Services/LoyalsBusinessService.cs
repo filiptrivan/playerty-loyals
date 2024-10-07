@@ -121,7 +121,7 @@ namespace Playerty.Loyals.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                return await _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom).ProjectToType<TierDTO>(Mapper.TierToDTOConfig()).ToListAsync();
+                return await _context.DbSet<Tier>().AsNoTracking().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom).ProjectToType<TierDTO>(Mapper.TierToDTOConfig()).ToListAsync();
             });
         }
 
@@ -168,7 +168,7 @@ namespace Playerty.Loyals.Services
                     result.Add(await SaveTierAndReturnDTOAsync(tierDTO, false, false));
                 }
 
-                await UpdatePartnerUserTiers();
+                await UpdatePartnerUsersTiers();
             });
 
             return result;
@@ -200,7 +200,7 @@ namespace Playerty.Loyals.Services
             });
         }
 
-        public async Task UpdatePartnerUserTiers()
+        public async Task UpdatePartnerUsersTiers()
         {
             await _context.WithTransactionAsync(async () =>
             {
@@ -212,6 +212,18 @@ namespace Playerty.Loyals.Services
                     Tier tier = await GetTierForThePoints(points);
                     partnerUser.Tier = tier;
                 }
+
+                await _context.SaveChangesAsync();
+            });
+        }
+
+        public async Task UpdatePartnerUserTier(PartnerUser partnerUser)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                int points = partnerUser.Points;
+                Tier tier = await GetTierForThePoints(points);
+                partnerUser.Tier = tier;
 
                 await _context.SaveChangesAsync();
             });
@@ -277,6 +289,22 @@ namespace Playerty.Loyals.Services
 
         #region PartnerUser
 
+        public async Task<PartnerUserDTO> GetPartnerUserForTheUser(long userId)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                //if (authorize)
+                //{
+                //    await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.ReadPartnerUser);
+                //}
+
+                return await _context.DbSet<PartnerUser>().AsNoTracking()
+                    .Where(x => x.User.Id == userId && x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
+                    .ProjectToType<PartnerUserDTO>(Mapper.PartnerUserProjectToConfig())
+                    .SingleOrDefaultAsync();
+            });
+        }
+
         public async Task DeletePartnerUserAsync(long userId)
         {
             await _context.WithTransactionAsync(async () =>
@@ -286,19 +314,27 @@ namespace Playerty.Loyals.Services
             });
         }
 
-        public async Task<PartnerUserDTO> SavePartnerUserAndReturnDTOExtendedAsync(PartnerUserSaveBodyDTO partnerUserSaveBodyDTO)
+        public async Task SavePartnerUserAndReturnDTOExtendedAsync(PartnerUserSaveBodyDTO partnerUserSaveBodyDTO)
         {
-            return await _context.WithTransactionAsync(async () =>
+            await _context.WithTransactionAsync(async () =>
             {
-                if (partnerUserSaveBodyDTO.PartnerUserDTO.Id == 0)
-                    throw new HackerException("You can add new partner user.");
+                UserExtendedSaveBodyDTO userExtendedSaveBodyDTO = new UserExtendedSaveBodyDTO
+                {
+                    UserExtendedDTO = partnerUserSaveBodyDTO.UserExtendedDTO,
+                    SelectedRoleIds = partnerUserSaveBodyDTO.SelectedRoleIds,
+                };
 
-                PartnerUser partnerUser = await LoadInstanceAsync<PartnerUser, long>(partnerUserSaveBodyDTO.PartnerUserDTO.Id, partnerUserSaveBodyDTO.PartnerUserDTO.Version);
+                await SaveUserExtendedAndReturnDTOExtendedAsync(userExtendedSaveBodyDTO);
+
+                if (partnerUserSaveBodyDTO.PartnerUserDTO.Id == 0)
+                    throw new HackerException("You can't add new partner user.");
 
                 if (partnerUserSaveBodyDTO.SelectedPartnerRoleIds != null)
                     await UpdatePartnerRoleListForPartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO.Id, partnerUserSaveBodyDTO.SelectedPartnerRoleIds);
 
-                return await SavePartnerUserAndReturnDTOAsync(partnerUserSaveBodyDTO.PartnerUserDTO, false, false); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
+                PartnerUser partnerUser = await SavePartnerUserAndReturnDomainAsync(partnerUserSaveBodyDTO.PartnerUserDTO, false, false); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
+
+                await UpdatePartnerUserTier(partnerUser);
             });
         }
 

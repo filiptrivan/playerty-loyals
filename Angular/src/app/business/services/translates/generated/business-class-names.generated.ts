@@ -6,6 +6,8 @@ export function getTranslatedClassNameBusiness(name: string): string
             return $localize`:@@UserExtended:UserExtended`;
         case 'Brand':
             return $localize`:@@Brand:Brand`;
+        case 'MergedPartnerUser':
+            return $localize`:@@MergedPartnerUser:MergedPartnerUser`;
         case 'OnlineShop':
             return $localize`:@@OnlineShop:OnlineShop`;
         case 'PartnerNotificationSaveBody':

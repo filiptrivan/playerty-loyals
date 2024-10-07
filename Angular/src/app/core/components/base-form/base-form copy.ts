@@ -22,17 +22,17 @@ import { MenuItem } from 'primeng/api';
   template: '',
   styles: [],
 })
-export class BaseForm<T extends BaseEntity> implements OnInit { 
-  formGroup: FormGroup;
+export class BaseFormCopy implements OnInit { 
+  formGroup: FormGroup = new FormGroup({});
   formArray: FormArray;
   formArrayControlNamesFromHtml: string[] = [];
-  model: T;
-  modelList: T[];
+  modelList: any[];
   saveBody: any;
   modelId: number;
   detailsTitle: string;
   invalidForm: boolean = false; // FT: We are using this only if we manualy add some form field on the UI, like multiautocomplete, autocomplete etc...
   controllerName: string;
+  saveMethodName: string;
 
   private modelDiffer: KeyValueDiffer<string, any>;
 
@@ -51,39 +51,39 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
   //#region Model
 
-  initFormGroup(model: T) {
-    this.model = Object.assign(this.model ? this.model : {}, model);
-    console.log(this.model)
-    this.detailsTitle = getTranslatedClassName(this.model.typeName);
+  initFormGroup(modelList: any[]) {
+    // this.model = Object.assign(this.model ? this.model : {}, model);
 
-    this.formGroup = new FormGroup({});
+    // this.detailsTitle = getTranslatedClassName(this.model.typeName);
+
+    // this.formGroup = new FormGroup({});
     
-    this.modelDiffer = this.differs.find(this.model).create();
+    // this.modelDiffer = this.differs.find(this.model).create();
   }
 
-  subscribeFormToModelChanges(formGroup: FormGroup, model: T) {
-    // both directions
-    Object.keys(formGroup.controls).forEach((key) => {
-      formGroup.controls[key].setValue(model[key]);
-    });
-  }
+  // subscribeFormToModelChanges(formGroup: FormGroup, model: T) {
+  //   // both directions
+  //   Object.keys(formGroup.controls).forEach((key) => {
+  //     formGroup.controls[key].setValue(model[key]);
+  //   });
+  // }
 
-  modelChanged(changes: KeyValueChanges<string, any>) {
-    // https://stackoverflow.com/questions/46330070/angular-4-how-to-watch-an-object-for-changes
-    this.subscribeFormToModelChanges(this.formGroup, this.model);
-  }
+  // modelChanged(changes: KeyValueChanges<string, any>) {
+  //   // https://stackoverflow.com/questions/46330070/angular-4-how-to-watch-an-object-for-changes
+  //   this.subscribeFormToModelChanges(this.formGroup, this.model);
+  // }
 
-  ngDoCheck(): void {
-    const changes = this.modelDiffer?.diff(this.model);
-    if (changes) {
-      this.modelChanged(changes);
-    }
-  }
+  // ngDoCheck(): void {
+  //   const changes = this.modelDiffer?.diff(this.model);
+  //   if (changes) {
+  //     this.modelChanged(changes);
+  //   }
+  // }
 
-  setValidator(formControl: SoftFormControl, model: T = null) {
+  setValidator(formControl: SoftFormControl, model: any) {
     if (formControl == null) return null;
 
-    formControl.validator = getValidator(formControl, model ? model.typeName : this.model.typeName);
+    formControl.validator = getValidator(formControl, model.typeName);
   
     if (formControl?.validator?.hasNotEmptyRule)
       formControl.required = true;
@@ -95,17 +95,28 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
   // FT: If we put onChange to true, we are validating control on change not on blur.
   // FT: If we assign model, we are taking validators for the other class
-  control(formControlName: string, updateOnChange: boolean = false, customValidation: boolean = false, disable: boolean = false, model: T = null) {
-    let formControl: SoftFormControl = this.formGroup.controls[formControlName] as SoftFormControl;
+  control(formControlName: string, model: any, updateOnChange: boolean = false, customValidation: boolean = false, disable: boolean = false) {
+    let formGroup: FormGroup = this.formGroup.controls[model.typeName] as FormGroup;
+    
+    let shouldAddNewFormGroup: boolean = false;
+
+    if (formGroup == null) {
+      formGroup = new FormGroup({});
+      shouldAddNewFormGroup = true;
+    }
+
+    let formControl: SoftFormControl = formGroup.controls[formControlName] as SoftFormControl;
 
     if (formControl == null) {
       if (updateOnChange)
-        formControl = new SoftFormControl(this.model[formControlName], { updateOn: 'change' });
+        formControl = new SoftFormControl(model[formControlName], { updateOn: 'change' });
       else
-        formControl = new SoftFormControl(this.model[formControlName], { updateOn: 'blur' });
+        formControl = new SoftFormControl(model[formControlName], { updateOn: 'blur' });
 
-      if (formControl == null)
+      if (formControl == null){
+        console.error(`The property ${formControlName} in the model ${model.typeName} doesn't exist`);
         return null;
+      }
 
       if (formControlName.endsWith('Id') && formControlName.length > 2) {
         formControl.label = formControlName.substring(0, formControlName.length - 2);
@@ -115,7 +126,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
         formControl.label = formControlName;
       }
 
-      this.formGroup.addControl(formControlName, formControl);
+      formGroup.addControl(formControlName, formControl);
 
       if(customValidation == false)
         this.setValidator(formControl, model);
@@ -123,41 +134,42 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
       if(disable == true)
         formControl.disable();
       
-      this.formGroup.controls[formControlName].valueChanges.subscribe(value => {
-        this.model[formControlName] = value;
+      formGroup.controls[formControlName].valueChanges.subscribe(value => {
+        model[formControlName] = value;
       })
+      // formControl.valueChanges.subscribe(value => {
+      //   model[formControlName] = value;
+      // })
       
       this.onAfterControlInitialization(formControlName);
     }
 
+    if (shouldAddNewFormGroup) {
+      this.formGroup.addControl(model.typeName, formGroup);
+    }
+  
     return formControl;
   }
 
   onAfterControlInitialization(formControlName: string) { }
 
-  onSave(doNgOnInit: boolean = false){
+  onSave(){
     this.onBeforeSave();
 
-    this.saveBody = this.saveBody ?? this.model;
-    
+    this.saveBody = this.saveBody ?? this.formGroup.value;
+
     let isValid: boolean = this.isFormGroupValid();
     let isFormArrayValid: boolean = this.isFormArrayValid();
 
     if(isValid && isFormArrayValid){
-      let controllerName: string = this.controllerName ?? this.model.typeName;
-
-      this.http.put<T>(environment.apiUrl + `/${controllerName}/Save${this.model.typeName}`, this.saveBody, environment.httpOptions).subscribe(res => {
-        Object.assign(this.model, res) // this.model = res; // FT: we lose typeName like this and everything that res doesn't have but this.model has
-
+      this.http.put<any>(environment.apiUrl + `/${this.controllerName}/${this.saveMethodName}`, this.saveBody, environment.httpOptions).subscribe(res => {
         this.messageService.successMessage("You have successfully saved.");
 
-        if((res as any).id)
+        if(res && (res as any).id)
           this.rerouteOnTheNewEntity((res as any).id);
         
         // FT: Only overriden ngOnInit is called if it exists
-        if (doNgOnInit) {
-          this.ngOnInit(); // TODO FT: Even if working with other objects, try to assign everything with Object.assign. Like this we are having more requests then we need.
-        }
+        this.ngOnInit(); // TODO FT: Even if working with other objects, try to assign everything with Object.assign. Like this we are having more requests then we need.
 
         this.onAfterSave();
       });
@@ -223,7 +235,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
   //#region Model List
 
-  initFormArray(modelList: T[], modelConstructor: T){ // FT HACK: Because generics can't instantiate in TS (because JS)
+  initFormArray(modelList: any[], modelConstructor: any){ // FT HACK: Because generics can't instantiate in TS (because JS)
     this.formArray = new FormArray([]);
     
     if (modelList == null)
@@ -235,7 +247,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     });
   }
 
-  createFormGroup(model: T): FormGroup {
+  createFormGroup(model: any): FormGroup {
     let formGroup: FormGroup = new FormGroup({});
 
     Object.keys(model).forEach((key) => {
@@ -245,7 +257,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     return formGroup;
   }
 
-  arrayFormGroup(formControlName: string, formGroup: FormGroup, model: T, updateOnChange: boolean = false, customValidation: boolean = false, disable: boolean = false) {
+  arrayFormGroup(formControlName: string, formGroup: FormGroup, model: any, updateOnChange: boolean = false, customValidation: boolean = false, disable: boolean = false) {
     let formControl: SoftFormControl = formGroup.controls[formControlName] as SoftFormControl;
 
     if (formControl == null) {
@@ -298,7 +310,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     return this.formArray.controls as FormGroup[]
   }
 
-  addNewFormControlToTheFormArray(model:T, index: number) {
+  addNewFormControlToTheFormArray(model:any, index: number) {
     if (index == null) {
       this.formArray.push(this.createFormGroup(model));
     }else{
@@ -310,15 +322,13 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     this.formArray.removeAt(index);
   }
 
-  onSaveList(modelConstructor: T){
+  onSaveList(modelConstructor: any){
     this.onBeforeSaveList();
     
     let isValid: boolean = this.checkFormArrayValidity();
 
     if(isValid){
-      let controllerName: string = this.controllerName ?? this.model.typeName;
-
-      this.http.put<T[]>(environment.apiUrl + `/${controllerName}/Save${this.model.typeName}List`, this.formArray.value, environment.httpOptions).subscribe((res: T[]) => {
+      this.http.put<any[]>(environment.apiUrl + `/${this.controllerName}/${this.saveMethodName}List`, this.formArray.value, environment.httpOptions).subscribe((res: any[]) => {
         this.formArray = null;
         this.initFormArray(res, modelConstructor);
 
@@ -391,7 +401,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
   lastMenuIconIndexClicked: number;
 
-  getCrudMenuForOrderedData(instantiatedModel: T){
+  getCrudMenuForOrderedData(instantiatedModel: any){
     let crudMenuForOrderedData: MenuItem[] = [
         {label: $localize`:@@Remove:Remove`, icon: 'pi pi-minus', command: () => {
             this.removeFormControlFromTheFormArray(this.lastMenuIconIndexClicked);

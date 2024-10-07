@@ -1,24 +1,45 @@
-@defer (when model != null) {
+@defer (when userExtended != null && partnerUser != null) {
     <soft-card [title]="detailsTitle" icon="pi pi-user">
-        <soft-panel>
-            <panel-header title="Details"></panel-header>
+        <soft-panel [isFirstMultiplePanel]="true">
+            <panel-header title="Base details"></panel-header>
     
             <panel-body>
                 <form [formGroup]="formGroup" class="grid">
                     <div class="col-12">
-                        <soft-textbox [control]="control('email', false, false, true)"></soft-textbox>
+                        <soft-textbox [control]="control('email', this.userExtended, false, false, true)"></soft-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-calendar [control]="control('birthDate')"></soft-calendar>
+                        <soft-calendar [control]="control('birthDate', this.userExtended, false, false, false)"></soft-calendar>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-dropdown [control]="control('genderId')" [options]="genderOptions"></soft-dropdown>
+                        <soft-dropdown [control]="control('genderId', this.userExtended, false, false, false)" [options]="genderOptions"></soft-dropdown>
                     </div>
                     <div class="col-12">
                         <soft-multiselect
                         [control]="selectedRoles"
                         label="Roles"
                         [options]="roleOptions"></soft-multiselect>
+                    </div>
+                </form>
+            </panel-body>
+    
+        </soft-panel>
+        <soft-panel [isLastMultiplePanel]="true">
+            <panel-header title="Partner details"></panel-header>
+    
+            <panel-body>
+                <form [formGroup]="formGroup" class="grid">
+                    <div class="col-12 md:col-6">
+                        <soft-number [control]="control('points', this.partnerUser)"></soft-number>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('tierDisplayName', this.partnerUser, false, false, true)"></soft-textbox>
+                    </div>
+                    <div class="col-12">
+                        <soft-multiselect
+                        [control]="selectedPartnerRoles"
+                        label="Roles"
+                        [options]="partnerRoleOptions"></soft-multiselect>
                     </div>
                 </form>
             </panel-body>

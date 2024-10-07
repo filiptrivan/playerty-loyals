@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Playerty.Loyals.Business")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ef26364e1216e5de10879a61bac0a7716a9af15d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5153f8b8efb174265a88dcec2d9d073a4736a05a")]
 [assembly: System.Reflection.AssemblyProductAttribute("Playerty.Loyals.Business")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Playerty.Loyals.Business")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

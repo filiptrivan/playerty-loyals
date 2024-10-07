@@ -22,6 +22,7 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
 
 
 
+
         case 'nameGender':
             return nameGenderValidator(formControl);
         case 'nameLatinGender':
@@ -169,6 +170,7 @@ export function numberOfFailedAttemptsInARowUserExtendedValidator(control: SoftF
     validator.hasNotEmptyRule = true;
     return validator;
 }
+
 
 
 

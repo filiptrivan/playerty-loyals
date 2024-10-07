@@ -107,7 +107,7 @@ namespace Playerty.Loyals.Business.Services
             {
                 string partnerCode = GetCurrentPartnerCode();
                 long userId = _authenticationService.GetCurrentUserId();
-                return await _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId).ProjectToType<PartnerUserDTO>(Mapper.PartnerUserProjectToConfig()).SingleOrDefaultAsync();
+                return await _context.DbSet<PartnerUser>().AsNoTracking().Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId).ProjectToType<PartnerUserDTO>(Mapper.PartnerUserProjectToConfig()).SingleOrDefaultAsync();
             });
         }
 

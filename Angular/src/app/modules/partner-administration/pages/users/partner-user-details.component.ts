@@ -16,7 +16,7 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 })
 export class PartnerUserDetailsComponent extends BaseForm<PartnerUser> implements OnInit {
     roleOptions: PrimengOption[];
-    selectedRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'})
+    selectedPartnerRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'})
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -39,11 +39,11 @@ export class PartnerUserDetailsComponent extends BaseForm<PartnerUser> implement
             if(this.modelId > 0){
                 forkJoin({
                     partnerUser: this.apiService.getPartnerUser(this.modelId),
-                    roles: this.apiService.loadPartnerRoleNamebookListForPartnerUser(this.modelId),
-                  }).subscribe(({ partnerUser, roles }) => {
+                    partnerRoles: this.apiService.loadPartnerRoleNamebookListForPartnerUser(this.modelId),
+                  }).subscribe(({ partnerUser, partnerRoles }) => {
                     this.init(new PartnerUser(partnerUser));
-                    this.selectedRoles.setValue(
-                      roles.map(role => { return role.id })
+                    this.selectedPartnerRoles.setValue(
+                        partnerRoles.map(role => { return role.id })
                     );
                   });
             }
@@ -62,7 +62,7 @@ export class PartnerUserDetailsComponent extends BaseForm<PartnerUser> implement
     
     override onBeforeSave(): void {
         this.saveBody = new PartnerUserSaveBody();
-        this.saveBody.selectedRoleIds = this.selectedRoles.value;
+        this.saveBody.selectedRoleIds = this.selectedPartnerRoles.value;
         this.saveBody.userExtendedDTO = this.model;
     }
 }

@@ -26,6 +26,10 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@PartnerRoleDTO:PartnerRoleDTO`;
         case 'selectedPermissionIds':
             return $localize`:@@SelectedPermissionIds:SelectedPermissionIds`;
+        case 'userExtendedDTO':
+            return $localize`:@@UserExtendedDTO:UserExtendedDTO`;
+        case 'selectedRoleIds':
+            return $localize`:@@SelectedRoleIds:SelectedRoleIds`;
         case 'partnerUserDTO':
             return $localize`:@@PartnerUserDTO:PartnerUserDTO`;
         case 'selectedPartnerRoleIds':
@@ -42,10 +46,6 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@SegmentationDTO:SegmentationDTO`;
         case 'segmentationItemsDTO':
             return $localize`:@@SegmentationItemsDTO:SegmentationItemsDTO`;
-        case 'userExtendedDTO':
-            return $localize`:@@UserExtendedDTO:UserExtendedDTO`;
-        case 'selectedRoleIds':
-            return $localize`:@@SelectedRoleIds:SelectedRoleIds`;
         case 'slug':
             return $localize`:@@Slug:Slug`;
         case 'loadPurchasesEndpoint':

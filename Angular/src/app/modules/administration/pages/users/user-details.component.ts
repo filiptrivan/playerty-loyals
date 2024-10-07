@@ -2,9 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { UserExtended, UserExtendedSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
+import { PartnerUser, PartnerUserSaveBody, UserExtended, UserExtendedSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
+import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
@@ -14,10 +15,17 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     templateUrl: './user-details.component.html',
     styles: [],
 })
-export class UserDetailsComponent extends BaseForm<UserExtended> implements OnInit {
+
+// FT: Putting any because we are merging UserExtended and PartnerUser
+export class UserDetailsComponent extends BaseFormCopy implements OnInit {
     roleOptions: PrimengOption[];
+    partnerRoleOptions: PrimengOption[];
     genderOptions: PrimengOption[];
-    selectedRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'})
+    selectedRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
+    selectedPartnerRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
+    loading: boolean;
+    userExtended: UserExtended;
+    partnerUser: PartnerUser;
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -32,42 +40,56 @@ export class UserDetailsComponent extends BaseForm<UserExtended> implements OnIn
         }
          
     override ngOnInit() {
-        this.controllerName = "Auth";
+        this.loading = true;
+
+        this.controllerName = 'PartnerUser';
+        this.saveMethodName = 'SavePartnerUser';
 
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
-            this.apiService.loadRoleListForDropdown().subscribe(nl => {
-                this.roleOptions = nl.map(n => { return { label: n.displayName, value: n.id } });
-            });
-            if(this.modelId > 0){
-                forkJoin({
-                    user: this.apiService.getUser(this.modelId),
-                    roles: this.apiService.loadRoleNamebookListForUserExtended(this.modelId),
-                    genders: this.apiService.loadGenderNamebookListForDropdown(),
-                  }).subscribe(({ user, roles, genders }) => {
-                    this.init(new UserExtended(user));
-                    this.selectedRoles.setValue(
-                      roles.map(role => { return role.id })
-                    );
-                    this.genderOptions = genders.map(n => { return { label: n.displayName, value: n.id }});
-                  });
-            }
-            else{
-                this.init(new UserExtended({id:0}));
-            }
-        });
-    }
 
-    init(model: UserExtended){
-        this.initFormGroup(model);
+            forkJoin({
+                rolesForTheUser: this.apiService.loadRoleNamebookListForUserExtended(this.modelId),
+                roleOptions: this.apiService.loadRoleListForDropdown(),
+                genderOptions: this.apiService.loadGenderNamebookListForDropdown(),                  
+                partnerRoleOptions: this.apiService.loadPartnerRoleListForDropdown(),
+                }).subscribe(({ rolesForTheUser, roleOptions, genderOptions, partnerRoleOptions }) => {
+                    this.selectedRoles.setValue(
+                        rolesForTheUser.map(role => { return role.id })
+                    );
+                    this.roleOptions = roleOptions.map(n => { return { label: n.displayName, value: n.id } });
+                    this.genderOptions = genderOptions.map(n => { return { label: n.displayName, value: n.id }});
+                    this.partnerRoleOptions = partnerRoleOptions.map(n => { return { label: n.displayName, value: n.id } });
+                });
+
+            this.apiService.getUser(this.modelId).subscribe(user => {
+                this.userExtended = new UserExtended(user);
+                this.apiService.getPartnerUserForTheUser(this.modelId).subscribe(partnerUser => {
+                    this.partnerUser = new PartnerUser(partnerUser);
+                    this.apiService.loadPartnerRoleNamebookListForPartnerUser(partnerUser.id).subscribe(partnerRoles => {
+                        this.selectedPartnerRoles.setValue(
+                            partnerRoles.map(role => { return role.id })
+                        );
+                        this.loading = false;
+                    });
+                });
+            });
+        });
     }
 
     ngOnDestroy() {
     }
     
     override onBeforeSave(): void {
-        this.saveBody = new UserExtendedSaveBody();
-        this.saveBody.selectedRoleIds = this.selectedRoles.value;
-        this.saveBody.userExtendedDTO = this.model;
+        let saveBody: PartnerUserSaveBody = new PartnerUserSaveBody();
+
+        saveBody.userExtendedDTO = this.userExtended;
+        saveBody.selectedRoleIds = this.selectedRoles.value;
+
+        saveBody.partnerUserDTO = this.partnerUser;
+        saveBody.selectedPartnerRoleIds = this.selectedPartnerRoles.value;
+
+        this.saveBody = saveBody;
+        return;
     }
 }
