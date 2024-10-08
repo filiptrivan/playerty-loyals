@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { PartnerUser, PartnerUserSaveBody, UserExtended, UserExtendedSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
+import { PartnerUser, PartnerUserSaveBody, Segmentation, UserExtended, UserExtendedSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
@@ -23,9 +23,10 @@ export class UserDetailsComponent extends BaseFormCopy implements OnInit {
     genderOptions: PrimengOption[];
     selectedRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
     selectedPartnerRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
-    loading: boolean;
     userExtended: UserExtended;
     partnerUser: PartnerUser;
+    segmentations: Segmentation[] = [];
+    selectedSegmentationItemIds: number[];
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -40,8 +41,6 @@ export class UserDetailsComponent extends BaseFormCopy implements OnInit {
         }
          
     override ngOnInit() {
-        this.loading = true;
-
         this.controllerName = 'PartnerUser';
         this.saveMethodName = 'SavePartnerUser';
 
@@ -53,13 +52,15 @@ export class UserDetailsComponent extends BaseFormCopy implements OnInit {
                 roleOptions: this.apiService.loadRoleListForDropdown(),
                 genderOptions: this.apiService.loadGenderNamebookListForDropdown(),                  
                 partnerRoleOptions: this.apiService.loadPartnerRoleListForDropdown(),
-                }).subscribe(({ rolesForTheUser, roleOptions, genderOptions, partnerRoleOptions }) => {
+                segmentations: this.apiService.getSegmentationListForTheCurrentPartner(),
+                }).subscribe(({ rolesForTheUser, roleOptions, genderOptions, partnerRoleOptions, segmentations }) => {
                     this.selectedRoles.setValue(
                         rolesForTheUser.map(role => { return role.id })
                     );
                     this.roleOptions = roleOptions.map(n => { return { label: n.displayName, value: n.id } });
                     this.genderOptions = genderOptions.map(n => { return { label: n.displayName, value: n.id }});
                     this.partnerRoleOptions = partnerRoleOptions.map(n => { return { label: n.displayName, value: n.id } });
+                    this.segmentations = segmentations;
                 });
 
             this.apiService.getUser(this.modelId).subscribe(user => {
@@ -70,7 +71,6 @@ export class UserDetailsComponent extends BaseFormCopy implements OnInit {
                         this.selectedPartnerRoles.setValue(
                             partnerRoles.map(role => { return role.id })
                         );
-                        this.loading = false;
                     });
                 });
             });
@@ -80,6 +80,10 @@ export class UserDetailsComponent extends BaseFormCopy implements OnInit {
     ngOnDestroy() {
     }
     
+    selectedSegmentationItemIdsChange(event: number[]){
+        this.selectedSegmentationItemIds = event;
+    }
+
     override onBeforeSave(): void {
         let saveBody: PartnerUserSaveBody = new PartnerUserSaveBody();
 
@@ -88,6 +92,8 @@ export class UserDetailsComponent extends BaseFormCopy implements OnInit {
 
         saveBody.partnerUserDTO = this.partnerUser;
         saveBody.selectedPartnerRoleIds = this.selectedPartnerRoles.value;
+
+        saveBody.selectedSegmentationItemIds = this.selectedSegmentationItemIds;
 
         this.saveBody = saveBody;
         return;

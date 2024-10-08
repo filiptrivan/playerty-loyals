@@ -35,6 +35,18 @@
                     <div class="col-12 md:col-6">
                         <soft-textbox [control]="control('tierDisplayName', this.partnerUser, false, false, true)"></soft-textbox>
                     </div>
+
+                    @for (segmentation of segmentations; track $index) {
+                        <div class="col-12">
+                            <div class="flex flex-column gap-2">
+                                <div>
+                                    {{segmentation.name}}
+                                </div>
+                                <segmentation-select [formGroup]="formGroup" [partnerUserId]="partnerUser.id" (onIdsChange)="selectedSegmentationItemIdsChange($event)" [segmentation]="segmentation"></segmentation-select>
+                            </div>
+                        </div>
+                    }
+                            
                     <div class="col-12">
                         <soft-multiselect
                         [control]="selectedPartnerRoles"

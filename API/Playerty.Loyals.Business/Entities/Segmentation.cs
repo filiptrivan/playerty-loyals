@@ -35,5 +35,7 @@ namespace Playerty.Loyals.Business.Entities
 
         [Required]
         public virtual List<SegmentationItem> SegmentationItems { get; set; }
+
+        public virtual List<PartnerUser> PartnerUsersThatHasFilledSegmentation { get; set; }
     }
 }

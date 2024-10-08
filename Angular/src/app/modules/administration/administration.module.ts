@@ -12,6 +12,7 @@ import { TierListComponent } from './pages/tiers/tier-list.component';
 import { TierDetailsComponent } from './pages/tiers/tier-details.component';
 import { NotificationDetailsComponent } from './pages/notifications/notification-details.component';
 import { NotificationListComponent } from './pages/notifications/notification-list.component';
+import { SegmentationSelectComponent } from './partials/segmentation-select.component';
 
 const routes: Routes = [
     {
@@ -47,6 +48,7 @@ const routes: Routes = [
         SoftDataTableComponent,
         SoftControlsModule,
         CardSkeletonComponent,
+        SegmentationSelectComponent,
     ],
     declarations: [
         UserListComponent,

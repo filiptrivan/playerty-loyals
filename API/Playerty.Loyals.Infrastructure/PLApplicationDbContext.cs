@@ -53,6 +53,7 @@ namespace Playerty.Loyals.Infrastructure
                           .WithMany()
                           .HasForeignKey(ru => ru.PartnerUsersId)
                 );
+
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

@@ -1,0 +1,11 @@
+@defer (when segmentationItems != null) {
+    @defer (when segmentationItems.length > 0) {
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            @for (segmentationItem of segmentationItems; track segmentationItem.id; let index = $index) {
+                <soft-checkbox [control]="getFormArrayControlById('checked', segmentationItemModel, segmentationItem.id)" [label]="segmentationItem.name" [initializeToFalse]="false"></soft-checkbox>
+            }
+        </div>
+    }
+} @placeholder {
+    <card-skeleton [height]="120"></card-skeleton> <!-- TODO FT: Change the card-skeleton, because it's not compatible with this UI -->
+}

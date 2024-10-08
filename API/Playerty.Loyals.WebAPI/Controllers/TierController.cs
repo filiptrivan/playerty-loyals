@@ -55,7 +55,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task DeleteTier(int id)
         {
-            await _loyalsBusinessService.DeleteEntity<Tier, int>(id);
+            await _loyalsBusinessService.DeleteEntityAsync<Tier, int>(id);
         }
 
         [HttpGet]

@@ -26,7 +26,9 @@ namespace Playerty.Loyals.Business.Entities
 
         public virtual List<PartnerNotification> PartnerNotifications { get; set; }
 
-        public virtual List<PartnerUserSegmentation> PartnerUserSegmentations { get; set; }
+        public virtual List<Segmentation> AlreadyFilledSegmentations { get; set; }
+
+        public virtual List<SegmentationItem> CheckedSegmentationItems { get; set; }
 
     }
 }

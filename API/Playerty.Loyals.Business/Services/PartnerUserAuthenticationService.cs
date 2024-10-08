@@ -52,6 +52,7 @@ namespace Playerty.Loyals.Business.Services
                 {
                     string partnerCode = GetCurrentPartnerCode();
                     return await _context.DbSet<Partner>()
+                        .AsNoTracking()
                         .Where(x => x.Slug == partnerCode)
                         .Select(x => x.Id)
                         .SingleOrDefaultAsync();
@@ -77,6 +78,7 @@ namespace Playerty.Loyals.Business.Services
                 {
                     string partnerCode = GetCurrentPartnerCode();
                     return await _context.DbSet<Partner>()
+                        .AsNoTracking()
                         .Where(x => x.Slug == partnerCode)
                         .ProjectToType<PartnerDTO>(Mapper.PartnerProjectToConfig())
                         .SingleOrDefaultAsync();

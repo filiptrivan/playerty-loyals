@@ -107,7 +107,7 @@ export class BaseFormCopy implements OnInit {
 
     let formControl: SoftFormControl = formGroup.controls[formControlName] as SoftFormControl;
 
-    if (formControl == null) {
+    if (formControl == null || model[formControlName] != formControl.value) {
       if (updateOnChange)
         formControl = new SoftFormControl(model[formControlName], { updateOn: 'change' });
       else
@@ -236,15 +236,27 @@ export class BaseFormCopy implements OnInit {
   //#region Model List
 
   initFormArray(modelList: any[], modelConstructor: any){ // FT HACK: Because generics can't instantiate in TS (because JS)
-    this.formArray = new FormArray([]);
-    
     if (modelList == null)
-      return;
+      return null;
+
+    let formArray: FormArray = this.formGroup.controls[`${modelConstructor.typeName}List`] as FormArray;
+    let shouldAddNewFormArray: boolean = false;
+
+    if (formArray == null) {
+      formArray = new FormArray([]);
+      shouldAddNewFormArray = true;
+    }
 
     modelList.forEach(model => {
-      Object.assign(modelConstructor, model)
-      this.formArray.push(this.createFormGroup(modelConstructor));
+      Object.assign(modelConstructor, model);
+      formArray.push(this.createFormGroup(modelConstructor));
     });
+
+    if (shouldAddNewFormArray) {
+      this.formGroup.addControl(`${modelConstructor.typeName}List`, formArray);
+    }
+
+    return formArray;
   }
 
   createFormGroup(model: any): FormGroup {
@@ -296,10 +308,19 @@ export class BaseFormCopy implements OnInit {
   }
 
   // FT: Need to use this from html because can't do "as SoftFormControl" there
-  getFormArrayControl(formControlName: string, index: number): SoftFormControl{
+  getFormArrayControlByIndex(formControlName: string, modelConstructor: any, index: number): SoftFormControl{
     if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
       this.formArrayControlNamesFromHtml.push(formControlName);
-    return (this.formArray.controls[index] as FormGroup).controls[formControlName] as SoftFormControl;
+    
+    return ((this.formGroup.controls[`${modelConstructor.typeName}List`] as FormArray).controls[index] as FormGroup).controls[formControlName] as SoftFormControl;
+  }
+  
+  // FT: Need to use this from html because can't do "as SoftFormControl" there
+  getFormArrayControlById(formControlName: string, modelConstructor: any, id: number): SoftFormControl{
+    if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
+      this.formArrayControlNamesFromHtml.push(formControlName);
+
+    return ((this.formGroup.controls[`${modelConstructor.typeName}List`] as FormArray).controls.filter(x => x.value.id == id)[0] as FormGroup).controls[formControlName] as SoftFormControl;
   }
 
   getFormArrayGroup(index: number): FormGroup{

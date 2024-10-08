@@ -13,5 +13,6 @@ namespace Playerty.Loyals.Business.DTO
 
         public PartnerUserDTO PartnerUserDTO { get; set; }
         public List<int> SelectedPartnerRoleIds { get; set; }
+        public List<long> SelectedSegmentationItemIds { get; set; }
     }
 }

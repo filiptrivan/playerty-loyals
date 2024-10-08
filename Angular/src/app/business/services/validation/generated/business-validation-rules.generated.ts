@@ -4,6 +4,26 @@ import { validatePrecisionScale } from '../../../../core/services/helper-functio
 
 export function getValidatorBusiness(formControl: SoftFormControl, className: string): SoftValidatorFn {
     switch(formControl.label + className){
+        case 'nameSegmentation':
+            return nameSegmentationValidator(formControl);
+        case 'nameLatinSegmentation':
+            return nameLatinSegmentationValidator(formControl);
+        case 'descriptionSegmentation':
+            return descriptionSegmentationValidator(formControl);
+        case 'descriptionLatinSegmentation':
+            return descriptionLatinSegmentationValidator(formControl);
+        case 'pointsForFirstTimeFillSegmentation':
+            return pointsForFirstTimeFillSegmentationValidator(formControl);
+        case 'partnerIdSegmentation':
+            return partnerIdSegmentationValidator(formControl);
+
+        case 'nameSegmentationItem':
+            return nameSegmentationItemValidator(formControl);
+        case 'orderNumberSegmentationItem':
+            return orderNumberSegmentationItemValidator(formControl);
+        case 'segmentationIdSegmentationItem':
+            return segmentationIdSegmentationItemValidator(formControl);
+
         case 'emailUserExtended':
             return emailUserExtendedValidator(formControl);
         case 'passwordUserExtended':
@@ -55,25 +75,6 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
         case 'pointsPartnerUser':
             return pointsPartnerUserValidator(formControl);
 
-
-        case 'nameSegmentation':
-            return nameSegmentationValidator(formControl);
-        case 'nameLatinSegmentation':
-            return nameLatinSegmentationValidator(formControl);
-        case 'descriptionSegmentation':
-            return descriptionSegmentationValidator(formControl);
-        case 'descriptionLatinSegmentation':
-            return descriptionLatinSegmentationValidator(formControl);
-        case 'pointsForFirstTimeFillSegmentation':
-            return pointsForFirstTimeFillSegmentationValidator(formControl);
-        case 'partnerIdSegmentation':
-            return partnerIdSegmentationValidator(formControl);
-
-        case 'nameSegmentationItem':
-            return nameSegmentationItemValidator(formControl);
-        case 'orderNumberSegmentationItem':
-            return orderNumberSegmentationItemValidator(formControl);
-
         case 'nameTier':
             return nameTierValidator(formControl);
         case 'nameLatinTier':
@@ -108,6 +109,149 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
             return null;
     }
 }
+
+export function nameSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+        const nameValid = notEmptyRule && stringLengthRule;
+
+        return nameValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function nameLatinSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+        const nameLatinValid = notEmptyRule && stringLengthRule;
+
+        return nameLatinValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function descriptionSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const min = 1;
+        const max = 400;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+        const descriptionValid = stringLengthRule;
+
+        return descriptionValid ? null : { _ : $localize`:@@Length:The field must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    
+    return validator;
+}
+
+export function descriptionLatinSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const min = 1;
+        const max = 400;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+        const descriptionLatinValid = stringLengthRule;
+
+        return descriptionLatinValid ? null : { _ : $localize`:@@Length:The field must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    
+    return validator;
+}
+
+export function pointsForFirstTimeFillSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 0;
+        const numberMinRangeRule = value >= min;
+
+        const pointsForFirstTimeFillValid = notEmptyRule && numberMinRangeRule;
+
+        return pointsForFirstTimeFillValid ? null : { _ : $localize`:@@NotEmptyNumberRangeMin:The field is mandatory and must be greater or equal to ${min}.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function partnerIdSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+        const partnerIdValid = notEmptyRule;
+
+        return partnerIdValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+
+export function nameSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+        const nameValid = notEmptyRule && stringLengthRule;
+
+        return nameValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function orderNumberSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+        const orderNumberValid = notEmptyRule;
+
+        return orderNumberValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function segmentationIdSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+        const segmentationIdValid = notEmptyRule;
+
+        return segmentationIdValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
 
 export function emailUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
@@ -392,136 +536,6 @@ export function pointsPartnerUserValidator(control: SoftFormControl): SoftValida
         const pointsValid = notEmptyRule;
 
         return pointsValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-
-
-export function nameSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
-        const max = 100;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-        const nameValid = notEmptyRule && stringLengthRule;
-
-        return nameValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-export function nameLatinSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
-        const max = 100;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-        const nameLatinValid = notEmptyRule && stringLengthRule;
-
-        return nameLatinValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-export function descriptionSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const min = 1;
-        const max = 400;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-        const descriptionValid = stringLengthRule;
-
-        return descriptionValid ? null : { _ : $localize`:@@Length:The field must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    
-    return validator;
-}
-
-export function descriptionLatinSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const min = 1;
-        const max = 400;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-        const descriptionLatinValid = stringLengthRule;
-
-        return descriptionLatinValid ? null : { _ : $localize`:@@Length:The field must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    
-    return validator;
-}
-
-export function pointsForFirstTimeFillSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 0;
-        const numberMinRangeRule = value >= min;
-
-        const pointsForFirstTimeFillValid = notEmptyRule && numberMinRangeRule;
-
-        return pointsForFirstTimeFillValid ? null : { _ : $localize`:@@NotEmptyNumberRangeMin:The field is mandatory and must be greater or equal to ${min}.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-export function partnerIdSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-        const partnerIdValid = notEmptyRule;
-
-        return partnerIdValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-
-export function nameSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
-        const max = 100;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-        const nameValid = notEmptyRule && stringLengthRule;
-
-        return nameValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-export function orderNumberSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-        const orderNumberValid = notEmptyRule;
-
-        return orderNumberValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
     };
     validator.hasNotEmptyRule = true;
     return validator;

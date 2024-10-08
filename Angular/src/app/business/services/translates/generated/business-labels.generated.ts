@@ -2,6 +2,8 @@ export function getTranslatedLabelBusiness(name: string): string
 {
     switch(name) 
     {
+        case 'checked':
+            return $localize`:@@Checked:Checked`;
         case 'testttttDN':
             return $localize`:@@TestttttDN:TestttttDN`;
         case 'name':
@@ -34,6 +36,8 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@PartnerUserDTO:PartnerUserDTO`;
         case 'selectedPartnerRoleIds':
             return $localize`:@@SelectedPartnerRoleIds:SelectedPartnerRoleIds`;
+        case 'selectedSegmentationItemIds':
+            return $localize`:@@SelectedSegmentationItemIds:SelectedSegmentationItemIds`;
         case 'id':
             return $localize`:@@Id:Id`;
         case 'price':
@@ -82,16 +86,12 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@Tier:Tier`;
         case 'user':
             return $localize`:@@User:User`;
-        case 'isFilledFirstTime':
-            return $localize`:@@IsFilledFirstTime:IsFilledFirstTime`;
-        case 'partnerUser':
-            return $localize`:@@PartnerUser:PartnerUser`;
-        case 'segmentation':
-            return $localize`:@@Segmentation:Segmentation`;
         case 'pointsForFirstTimeFill':
             return $localize`:@@PointsForFirstTimeFill:PointsForFirstTimeFill`;
         case 'orderNumber':
             return $localize`:@@OrderNumber:OrderNumber`;
+        case 'segmentation':
+            return $localize`:@@Segmentation:Segmentation`;
         case 'validFrom':
             return $localize`:@@ValidFrom:ValidFrom`;
         case 'validTo':

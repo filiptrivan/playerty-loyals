@@ -3,6 +3,114 @@ import { TableFilterContext } from "src/app/core/entities/table-filter-context";
 import { TableFilterSortMeta } from "src/app/core/entities/table-filter-sort-meta";
 
 
+export class Segmentation extends BaseEntity
+{
+    name?: string;
+	nameLatin?: string;
+	description?: string;
+	descriptionLatin?: string;
+	pointsForFirstTimeFill?: number;
+	partnerDisplayName?: string;
+	partnerId?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        name,
+		nameLatin,
+		description,
+		descriptionLatin,
+		pointsForFirstTimeFill,
+		partnerDisplayName,
+		partnerId,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        name?: string;
+		nameLatin?: string;
+		description?: string;
+		descriptionLatin?: string;
+		pointsForFirstTimeFill?: number;
+		partnerDisplayName?: string;
+		partnerId?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('Segmentation'); 
+
+        this.name = name;
+		this.nameLatin = nameLatin;
+		this.description = description;
+		this.descriptionLatin = descriptionLatin;
+		this.pointsForFirstTimeFill = pointsForFirstTimeFill;
+		this.partnerDisplayName = partnerDisplayName;
+		this.partnerId = partnerId;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
+export class SegmentationItem extends BaseEntity
+{
+    checked?: boolean;
+	name?: string;
+	orderNumber?: number;
+	segmentationDisplayName?: string;
+	segmentationId?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        checked,
+		name,
+		orderNumber,
+		segmentationDisplayName,
+		segmentationId,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        checked?: boolean;
+		name?: string;
+		orderNumber?: number;
+		segmentationDisplayName?: string;
+		segmentationId?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('SegmentationItem'); 
+
+        this.checked = checked;
+		this.name = name;
+		this.orderNumber = orderNumber;
+		this.segmentationDisplayName = segmentationDisplayName;
+		this.segmentationId = segmentationId;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
 export class UserExtended extends BaseEntity
 {
     testDisplayName?: string;
@@ -197,18 +305,21 @@ export class PartnerUserSaveBody extends BaseEntity
 	selectedRoleIds?: number[];
 	partnerUserDTO?: PartnerUser;
 	selectedPartnerRoleIds?: number[];
+	selectedSegmentationItemIds?: number[];
 
     constructor(
     {
         userExtendedDTO,
 		selectedRoleIds,
 		partnerUserDTO,
-		selectedPartnerRoleIds
+		selectedPartnerRoleIds,
+		selectedSegmentationItemIds
     }:{
         userExtendedDTO?: UserExtended;
 		selectedRoleIds?: number[];
 		partnerUserDTO?: PartnerUser;
-		selectedPartnerRoleIds?: number[];     
+		selectedPartnerRoleIds?: number[];
+		selectedSegmentationItemIds?: number[];     
     } = {}
     ) {
         super('PartnerUserSaveBody'); 
@@ -217,6 +328,7 @@ export class PartnerUserSaveBody extends BaseEntity
 		this.selectedRoleIds = selectedRoleIds;
 		this.partnerUserDTO = partnerUserDTO;
 		this.selectedPartnerRoleIds = selectedPartnerRoleIds;
+		this.selectedSegmentationItemIds = selectedSegmentationItemIds;
     }
 }
 
@@ -581,160 +693,6 @@ export class PartnerUser extends BaseEntity
 		this.tierId = tierId;
 		this.userDisplayName = userDisplayName;
 		this.userId = userId;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class PartnerUserSegmentation extends BaseEntity
-{
-    isFilledFirstTime?: boolean;
-	partnerUserDisplayName?: string;
-	partnerUserId?: number;
-	segmentationDisplayName?: string;
-	segmentationId?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        isFilledFirstTime,
-		partnerUserDisplayName,
-		partnerUserId,
-		segmentationDisplayName,
-		segmentationId,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        isFilledFirstTime?: boolean;
-		partnerUserDisplayName?: string;
-		partnerUserId?: number;
-		segmentationDisplayName?: string;
-		segmentationId?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('PartnerUserSegmentation'); 
-
-        this.isFilledFirstTime = isFilledFirstTime;
-		this.partnerUserDisplayName = partnerUserDisplayName;
-		this.partnerUserId = partnerUserId;
-		this.segmentationDisplayName = segmentationDisplayName;
-		this.segmentationId = segmentationId;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class Segmentation extends BaseEntity
-{
-    name?: string;
-	nameLatin?: string;
-	description?: string;
-	descriptionLatin?: string;
-	pointsForFirstTimeFill?: number;
-	partnerDisplayName?: string;
-	partnerId?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        name,
-		nameLatin,
-		description,
-		descriptionLatin,
-		pointsForFirstTimeFill,
-		partnerDisplayName,
-		partnerId,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        name?: string;
-		nameLatin?: string;
-		description?: string;
-		descriptionLatin?: string;
-		pointsForFirstTimeFill?: number;
-		partnerDisplayName?: string;
-		partnerId?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('Segmentation'); 
-
-        this.name = name;
-		this.nameLatin = nameLatin;
-		this.description = description;
-		this.descriptionLatin = descriptionLatin;
-		this.pointsForFirstTimeFill = pointsForFirstTimeFill;
-		this.partnerDisplayName = partnerDisplayName;
-		this.partnerId = partnerId;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class SegmentationItem extends BaseEntity
-{
-    name?: string;
-	orderNumber?: number;
-	segmentationDisplayName?: string;
-	segmentationId?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        name,
-		orderNumber,
-		segmentationDisplayName,
-		segmentationId,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        name?: string;
-		orderNumber?: number;
-		segmentationDisplayName?: string;
-		segmentationId?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('SegmentationItem'); 
-
-        this.name = name;
-		this.orderNumber = orderNumber;
-		this.segmentationDisplayName = segmentationDisplayName;
-		this.segmentationId = segmentationId;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;

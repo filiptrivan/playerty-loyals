@@ -21,6 +21,7 @@ using Soft.Generator.Security.DTO;
 using Playerty.Loyals.Business.DataMappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Playerty.Loyals.Services
 {
@@ -50,7 +51,7 @@ namespace Playerty.Loyals.Services
             await _context.WithTransactionAsync(async () =>
             {
                 await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(Business.Enums.PermissionCodes.DeleteUserExtended);
-                await DeleteEntity<UserExtended, long>(userId);
+                await DeleteEntityAsync<UserExtended, long>(userId);
             });
         }
 
@@ -174,18 +175,20 @@ namespace Playerty.Loyals.Services
             return result;
         }
 
-        public async Task DeleteTiers(IQueryable<Tier> tiersForDeleteQuery)
+        private async Task DeleteTiers(IQueryable<Tier> tiersForDeleteQuery)
         {
             await _context.WithTransactionAsync(async () =>
             {
                 await SetEveryUsersTierToNullForTheProvidedTiers(await tiersForDeleteQuery.Select(x => x.Id).ToListAsync());
 
-                // FT: Can't use execute delete because of disabled changes tracker
+                // FT: Can't use execute delete because of disabled changes tracker, we need to know which tiers are deleted so we can update partner users.
                 _context.DbSet<Tier>().RemoveRange(await tiersForDeleteQuery.ToListAsync());
+
+                await _context.SaveChangesAsync();
             });
         }
 
-        public async Task SetEveryUsersTierToNullForTheProvidedTiers(List<int> tierIds)
+        private async Task SetEveryUsersTierToNullForTheProvidedTiers(List<int> tierIds)
         {
             await _context.WithTransactionAsync(async () =>
             {
@@ -297,7 +300,6 @@ namespace Playerty.Loyals.Services
                 //{
                 //    await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.ReadPartnerUser);
                 //}
-
                 return await _context.DbSet<PartnerUser>().AsNoTracking()
                     .Where(x => x.User.Id == userId && x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
                     .ProjectToType<PartnerUserDTO>(Mapper.PartnerUserProjectToConfig())
@@ -310,31 +312,54 @@ namespace Playerty.Loyals.Services
             await _context.WithTransactionAsync(async () =>
             {
                 await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(Business.Enums.PermissionCodes.DeletePartnerUser);
-                await DeleteEntity<PartnerUser, long>(userId);
+                await DeleteEntityAsync<PartnerUser, long>(userId);
             });
         }
 
         public async Task SavePartnerUserAndReturnDTOExtendedAsync(PartnerUserSaveBodyDTO partnerUserSaveBodyDTO)
         {
+            UserExtendedSaveBodyDTO userExtendedSaveBodyDTO = new UserExtendedSaveBodyDTO
+            {
+                UserExtendedDTO = partnerUserSaveBodyDTO.UserExtendedDTO,
+                SelectedRoleIds = partnerUserSaveBodyDTO.SelectedRoleIds,
+            };
+
             await _context.WithTransactionAsync(async () =>
             {
-                UserExtendedSaveBodyDTO userExtendedSaveBodyDTO = new UserExtendedSaveBodyDTO
-                {
-                    UserExtendedDTO = partnerUserSaveBodyDTO.UserExtendedDTO,
-                    SelectedRoleIds = partnerUserSaveBodyDTO.SelectedRoleIds,
-                };
-
                 await SaveUserExtendedAndReturnDTOExtendedAsync(userExtendedSaveBodyDTO);
 
                 if (partnerUserSaveBodyDTO.PartnerUserDTO.Id == 0)
                     throw new HackerException("You can't add new partner user.");
 
-                if (partnerUserSaveBodyDTO.SelectedPartnerRoleIds != null)
-                    await UpdatePartnerRoleListForPartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO.Id, partnerUserSaveBodyDTO.SelectedPartnerRoleIds);
+                await UpdatePartnerRoleListForPartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO.Id, partnerUserSaveBodyDTO.SelectedPartnerRoleIds);
+
+                await UpdateSegmentationItemListForPartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO.Id, partnerUserSaveBodyDTO.SelectedSegmentationItemIds);
 
                 PartnerUser partnerUser = await SavePartnerUserAndReturnDomainAsync(partnerUserSaveBodyDTO.PartnerUserDTO, false, false); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
 
-                await UpdatePartnerUserTier(partnerUser);
+                await UpdateFirstTimeFilledSegmentationsForTheUser(partnerUser, partnerUserSaveBodyDTO.SelectedSegmentationItemIds);
+
+                if (partnerUser.Points != partnerUserSaveBodyDTO.PartnerUserDTO.Points)
+                    await UpdatePartnerUserTier(partnerUser);
+            });
+        }
+
+        private async Task UpdateFirstTimeFilledSegmentationsForTheUser(PartnerUser partnerUser, List<long> segmentationItemIdsToCheck)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                List<Segmentation> segmentationsToCheck = await _context.DbSet<Segmentation>().Where(x => x.SegmentationItems.Any(x => segmentationItemIdsToCheck.Contains(x.Id))).ToListAsync();
+
+                foreach (Segmentation segmentation in segmentationsToCheck)
+                {
+                    if (partnerUser.AlreadyFilledSegmentations.Any(x => x.Id == segmentation.Id) == false)
+                    {
+                        partnerUser.AlreadyFilledSegmentations.Add(segmentation);
+                        partnerUser.Points += segmentation.PointsForFirstTimeFill;
+                    }
+                }
+
+                await _context.SaveChangesAsync();
             });
         }
 
@@ -420,6 +445,19 @@ namespace Playerty.Loyals.Services
             });
         }
 
+        public async Task<List<long>> GetCheckedSegmentationItemIdsForThePartnerUser(long partnerUserId)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                return await _context.DbSet<PartnerUser>()
+                    .AsNoTracking()
+                    .Where(x => x.Id == partnerUserId)
+                    .SelectMany(x => x.CheckedSegmentationItems)
+                    .Select(x => x.Id)
+                    .ToListAsync();
+            });
+        }
+
         #endregion
 
         #region Gender
@@ -450,6 +488,8 @@ namespace Playerty.Loyals.Services
             if (selectedPermissionIds == null)
                 return;
 
+            List<int> selectedIdsHelper = selectedPermissionIds.ToList();
+
             await _context.WithTransactionAsync(async () =>
             {
                 // FT: Not doing authorization here, because we can not figure out here if we are updating while inserting object (eg. User), or updating object, we will always get the id which is not 0 here.
@@ -460,8 +500,8 @@ namespace Playerty.Loyals.Services
                 {
                     foreach (Permission permission in partnerRole.Permissions.ToList())
                     {
-                        if (selectedPermissionIds.Contains(permission.Id))
-                            selectedPermissionIds.Remove(permission.Id);
+                        if (selectedIdsHelper.Contains(permission.Id))
+                            selectedIdsHelper.Remove(permission.Id);
                         else
                             partnerRole.Permissions.Remove(permission);
                     }
@@ -471,7 +511,7 @@ namespace Playerty.Loyals.Services
                     partnerRole.Permissions = new List<Permission>();
                 }
 
-                List<Permission> permissionListToInsert = await _context.DbSet<Permission>().Where(x => selectedPermissionIds.Contains(x.Id)).ToListAsync();
+                List<Permission> permissionListToInsert = await _context.DbSet<Permission>().Where(x => selectedIdsHelper.Contains(x.Id)).ToListAsync();
 
                 partnerRole.Permissions.AddRange(permissionListToInsert);
                 await _context.SaveChangesAsync();
@@ -527,10 +567,11 @@ namespace Playerty.Loyals.Services
 
                 List<long> segmentationItemIdsDTO = segmentationSaveBodyDTO.SegmentationItemsDTO.Select(x => x.Id).ToList();
 
-                IQueryable<SegmentationItem> segmentationItemsForDeleteQuery = _context.DbSet<SegmentationItem>()
-                    .Where(x => x.Segmentation.Id == savedSegmentationDTO.Id && segmentationItemIdsDTO.Contains(x.Id) == false);
+                List<SegmentationItem> segmentationItemsForDelete = await _context.DbSet<SegmentationItem>()
+                    .Where(x => x.Segmentation.Id == savedSegmentationDTO.Id && segmentationItemIdsDTO.Contains(x.Id) == false)
+                    .ToListAsync();
 
-                _context.DbSet<SegmentationItem>().RemoveRange(await segmentationItemsForDeleteQuery.ToListAsync());
+                await _context.DbSet<SegmentationItem>().Where(x => x.Segmentation.Id == savedSegmentationDTO.Id && segmentationItemIdsDTO.Contains(x.Id) == false).ExecuteDeleteAsync();
 
                 for (int i = 0; i < segmentationSaveBodyDTO.SegmentationItemsDTO.Count; i++)
                 {
@@ -547,7 +588,25 @@ namespace Playerty.Loyals.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                return await _context.DbSet<SegmentationItem>().Where(x => x.Segmentation.Id == segmentationId).OrderBy(x => x.OrderNumber).ProjectToType<SegmentationItemDTO>(Mapper.SegmentationToDTOConfig()).ToListAsync();
+                return await _context.DbSet<SegmentationItem>().Where(x => x.Segmentation.Id == segmentationId).OrderBy(x => x.OrderNumber).ProjectToType<SegmentationItemDTO>(Mapper.SegmentationItemToDTOConfig()).ToListAsync();
+            });
+        }
+
+        public async Task<List<SegmentationDTO>> GetSegmentationListForTheCurrentPartner()
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                return await _context.DbSet<Segmentation>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.Id).ProjectToType<SegmentationDTO>(Mapper.SegmentationToDTOConfig()).ToListAsync();
+            });
+        }
+
+        public async Task DeleteSegmentation(int segmentationId)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                // TODO FT: Add authorization
+
+                await DeleteEntityAsync<Segmentation, int>(segmentationId);
             });
         }
 

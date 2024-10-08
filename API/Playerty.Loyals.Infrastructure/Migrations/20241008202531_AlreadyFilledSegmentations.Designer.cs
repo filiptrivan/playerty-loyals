@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Playerty.Loyals.Infrastructure;
 
@@ -11,9 +12,11 @@ using Playerty.Loyals.Infrastructure;
 namespace Playerty.Loyals.Infrastructure.Migrations
 {
     [DbContext(typeof(PLApplicationDbContext))]
-    partial class PLApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241008202531_AlreadyFilledSegmentations")]
+    partial class AlreadyFilledSegmentations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -776,8 +779,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                 {
                     b.HasOne("Playerty.Loyals.Business.Entities.Segmentation", "Segmentation")
                         .WithMany("SegmentationItems")
-                        .HasForeignKey("SegmentationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SegmentationId");
 
                     b.Navigation("Segmentation");
                 });

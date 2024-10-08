@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Playerty.Loyals.Infrastructure;
 
@@ -11,9 +12,11 @@ using Playerty.Loyals.Infrastructure;
 namespace Playerty.Loyals.Infrastructure.Migrations
 {
     [DbContext(typeof(PLApplicationDbContext))]
-    partial class PLApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241008105651_CheckedSegmentationItems")]
+    partial class CheckedSegmentationItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,21 +41,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.HasIndex("PartnerUsersId");
 
                     b.ToTable("PartnerRolePartnerUser");
-                });
-
-            modelBuilder.Entity("PartnerUserSegmentation", b =>
-                {
-                    b.Property<int>("AlreadyFilledSegmentationsId")
-                        .HasColumnType("int");
-
-                    b.Property<long>("PartnerUsersThatHasFilledSegmentationId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("AlreadyFilledSegmentationsId", "PartnerUsersThatHasFilledSegmentationId");
-
-                    b.HasIndex("PartnerUsersThatHasFilledSegmentationId");
-
-                    b.ToTable("PartnerUserSegmentation");
                 });
 
             modelBuilder.Entity("PartnerUserSegmentationItem", b =>
@@ -209,6 +197,41 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("PartnerUser");
+                });
+
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerUserSegmentation", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsFilledFirstTime")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("PartnerUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("SegmentationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartnerUserId");
+
+                    b.HasIndex("SegmentationId");
+
+                    b.ToTable("PartnerUserSegmentation");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Segmentation", b =>
@@ -680,21 +703,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PartnerUserSegmentation", b =>
-                {
-                    b.HasOne("Playerty.Loyals.Business.Entities.Segmentation", null)
-                        .WithMany()
-                        .HasForeignKey("AlreadyFilledSegmentationsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Playerty.Loyals.Business.Entities.PartnerUser", null)
-                        .WithMany()
-                        .HasForeignKey("PartnerUsersThatHasFilledSegmentationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("PartnerUserSegmentationItem", b =>
                 {
                     b.HasOne("Playerty.Loyals.Business.Entities.SegmentationItem", null)
@@ -761,6 +769,21 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerUserSegmentation", b =>
+                {
+                    b.HasOne("Playerty.Loyals.Business.Entities.PartnerUser", "PartnerUser")
+                        .WithMany("PartnerUserSegmentations")
+                        .HasForeignKey("PartnerUserId");
+
+                    b.HasOne("Playerty.Loyals.Business.Entities.Segmentation", "Segmentation")
+                        .WithMany()
+                        .HasForeignKey("SegmentationId");
+
+                    b.Navigation("PartnerUser");
+
+                    b.Navigation("Segmentation");
+                });
+
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Segmentation", b =>
                 {
                     b.HasOne("Playerty.Loyals.Business.Entities.Partner", "Partner")
@@ -776,8 +799,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                 {
                     b.HasOne("Playerty.Loyals.Business.Entities.Segmentation", "Segmentation")
                         .WithMany("SegmentationItems")
-                        .HasForeignKey("SegmentationId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SegmentationId");
 
                     b.Navigation("Segmentation");
                 });
@@ -888,6 +910,11 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.Navigation("Tiers");
 
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerUser", b =>
+                {
+                    b.Navigation("PartnerUserSegmentations");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Segmentation", b =>
