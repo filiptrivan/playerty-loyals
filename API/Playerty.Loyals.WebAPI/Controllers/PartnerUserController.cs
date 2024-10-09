@@ -8,7 +8,6 @@ using Playerty.Loyals.Business.Entities;
 using Soft.Generator.Shared.Attributes;
 using Playerty.Loyals.Services;
 using Playerty.Loyals.Business.DTO;
-using Soft.NgTable.Models;
 using Soft.Generator.Shared.DTO;
 using Playerty.Loyals.Business.Enums;
 using Playerty.Loyals.Business.Services;
@@ -43,7 +42,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<BaseTableResponseEntity<PartnerUserDTO>> LoadPartnerUserListForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserListForTable(TableFilterDTO dto)
         {
             return await _loyalsBusinessService.LoadPartnerUserListForTable(dto, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }

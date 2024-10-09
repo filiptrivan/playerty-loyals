@@ -6,9 +6,9 @@ using Playerty.Loyals.Services;
 using Soft.Generator.Security.Interface;
 using Soft.Generator.Security.Services;
 using Soft.Generator.Shared.Attributes;
+using Soft.Generator.Shared.DTO;
 using Soft.Generator.Shared.Helpers;
 using Soft.Generator.Shared.Interfaces;
-using Soft.NgTable.Models;
 
 namespace Playerty.Loyals.WebAPI.Controllers
 {
@@ -38,7 +38,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<BaseTableResponseEntity<TierDTO>> LoadTierListForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<TierDTO>> LoadTierListForTable(TableFilterDTO dto)
         {
             return await _loyalsBusinessService.LoadTierListForTable(dto, _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }

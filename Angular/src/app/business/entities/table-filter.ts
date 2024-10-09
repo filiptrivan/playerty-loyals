@@ -11,6 +11,8 @@ export class TableFilter extends BaseEntity
     sortField?: string;
     sortOrder?: number;
     multiSortMeta?: TableFilterSortMeta[];
+    additionalFilterIdInt?: number;
+    additionalFilterIdLong?: number;
   
     constructor(
     {
@@ -19,7 +21,9 @@ export class TableFilter extends BaseEntity
         rows,
         sortField,
         sortOrder,
-        multiSortMeta
+        multiSortMeta,
+        additionalFilterIdInt,
+        additionalFilterIdLong,
     }:{
         filters?: Map<string, TableFilterContext[]>;
         first?: number;
@@ -27,6 +31,8 @@ export class TableFilter extends BaseEntity
         sortField?: string;
         sortOrder?: number;
         multiSortMeta?: TableFilterSortMeta[];
+        additionalFilterIdInt?: number;
+        additionalFilterIdLong?: number;
     } = {}
     ) {
         super('TableFilter');
@@ -37,5 +43,7 @@ export class TableFilter extends BaseEntity
         this.sortField = sortField;
         this.sortOrder = sortOrder;
         this.multiSortMeta = multiSortMeta;
+        this.additionalFilterIdInt = additionalFilterIdInt;
+        this.additionalFilterIdLong = additionalFilterIdLong;
     }
 }

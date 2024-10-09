@@ -9,7 +9,6 @@ using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.DTO;
 using Soft.Generator.Shared.Helpers;
 using Soft.Generator.Shared.Interfaces;
-using Soft.NgTable.Models;
 
 namespace Playerty.Loyals.WebAPI.Controllers
 {

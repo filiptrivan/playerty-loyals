@@ -8,6 +8,7 @@ import { environment } from '../../../../environments/environment';
 import { TableResult } from 'src/app/core/entities/table-result';
 import * as FileSaver from 'file-saver';
 import { TableLazyLoadEvent } from 'primeng/table';
+import { TableFilter } from '../../entities/table-filter';
 
 @Injectable()
 export class ApiService extends ApiGeneratedService {
@@ -16,7 +17,7 @@ export class ApiService extends ApiGeneratedService {
         super(http);
     }
     
-    loadListForTable(controllerName: string, methodPartName: string, body: TableLazyLoadEvent): Observable<TableResult> {
+    loadListForTable(controllerName: string, methodPartName: string, body: TableFilter): Observable<TableResult> {
         return this.http.post<TableResult>(`${environment.apiUrl}/${controllerName}/Load${methodPartName}ListForTable`, body, environment.httpSkipSpinnerOptions);
     }
 

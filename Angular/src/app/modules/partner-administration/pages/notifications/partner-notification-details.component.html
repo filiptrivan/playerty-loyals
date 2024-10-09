@@ -22,12 +22,15 @@
                         <soft-textarea [control]="control('descriptionLatin')"></soft-textarea>
                     </div>
                     <div class="col-12">
-                        <soft-multiautocomplete 
+                        <!-- <soft-multiautocomplete 
                         [control]="selectedPartnerUsersForAppNotification"
                         (onTextInput)="searchPartnerUsers($event)" 
                         label="Recipients"
                         [options]="partnerUserOptions"
-                        ></soft-multiautocomplete>
+                        ></soft-multiautocomplete> -->
+                        <soft-data-table [tableTitle]="tableTitle" [cols]="cols" [controllerName]="tableControllerName" [objectName]="objectName" [showAddButton]="false" selectionMode="multiple"
+                        [selectedItems]="selectedPartnerUsersForAppNotification" [unselectedItems]="unselectedPartnerUsersForAppNotification" (onLazyLoad)="selectedPartnerUserLazyLoad($event)"
+                        [rowsSelectedNumber]="partnerUsersSelectedNumber"></soft-data-table>
                     </div>
                     <div class="col-12">
                         <soft-editor [control]="control('emailBody')"></soft-editor>

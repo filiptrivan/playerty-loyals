@@ -10,7 +10,6 @@ using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.DTO;
 using Soft.Generator.Shared.Helpers;
 using Soft.Generator.Shared.Interfaces;
-using Soft.NgTable.Models;
 
 namespace Playerty.Loyals.WebAPI.Controllers
 {
@@ -32,7 +31,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<BaseTableResponseEntity<PartnerNotificationDTO>> LoadPartnerNotificationListForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<PartnerNotificationDTO>> LoadPartnerNotificationListForTable(TableFilterDTO dto)
         {
             return await _loyalsBusinessService.LoadPartnerNotificationListForTable(dto, _context.DbSet<PartnerNotification>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
@@ -61,9 +60,17 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> LoadPartnerUserNamebookListForPartnerNotification(long notificationId)
+        public async Task<List<NamebookDTO<long>>> LoadPartnerUserNamebookListForPartnerNotification(long partnerNotificationId)
         {
-            return await _loyalsBusinessService.LoadPartnerUserNamebookListForPartnerNotification(notificationId, false);
+            return await _loyalsBusinessService.LoadPartnerUserNamebookListForPartnerNotification(partnerNotificationId, false);
+        }
+
+        [HttpPost]
+        [AuthGuard]
+        public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserListForPartnerNotificationForTable(TableFilterDTO dto)
+        {
+            return await _loyalsBusinessService.LoadPartnerUserListForPartnerNotificationForTable(dto);
+
         }
 
         [HttpPut]
@@ -75,7 +82,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         //[HttpPost]
         //[AuthGuard]
-        //public async Task<BaseTableResponseEntity<PartnerNotificationDTO>> LoadPartnerNotificationListForTheCurrentUser(TableFilterDTO tableFilterDTO)
+        //public async Task<TableResponseDTO<PartnerNotificationDTO>> LoadPartnerNotificationListForTheCurrentUser(TableFilterDTO tableFilterDTO)
         //{
         //    return await _loyalsBusinessService.LoadPartnerNotificationListForTheCurrentUser<TUser>(tableFilterDTO);
         //}

@@ -1,7 +1,7 @@
-import { Component, Inject, Input, LOCALE_ID, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SelectItem } from 'primeng/api';
-import { Table, TableLazyLoadEvent } from 'primeng/table';
+import { LazyLoadEvent, SelectItem } from 'primeng/api';
+import { Table, TableLazyLoadEvent, TableRowSelectEvent, TableRowUnSelectEvent, TableSelectAllChangeEvent } from 'primeng/table';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SoftDeleteConfirmationComponent } from '../soft-delete-dialog/soft-delete-confirmation.component';
@@ -9,6 +9,7 @@ import { CommonModule, formatDate } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { SoftMessageService } from '../../services/soft-message.service';
+import { TableFilter } from 'src/app/business/entities/table-filter';
 
 @Component({
   selector: 'soft-data-table',
@@ -36,6 +37,12 @@ export class SoftDataTableComponent implements OnInit {
   totalRecords: number;
   lastLazyLoadEvent: TableLazyLoadEvent;
   loading: boolean = true;
+
+  @Input() selectedItems: any[] = [];
+  @Input() unselectedItems: any[] = [];
+  @Input() selectionMode: 'single' | 'multiple' | undefined | null;
+  @Output() onLazyLoad: EventEmitter<TableLazyLoadEvent> = new EventEmitter();
+  @Input() rowsSelectedNumber: number = 0;
 
   matchModeDateOptions: SelectItem[] = [
     { label: 'Dates before', value: 'dateBefore' },
@@ -65,9 +72,13 @@ export class SoftDataTableComponent implements OnInit {
         this.controllerName = this.objectName;
   }
 
-  onLazyLoad(event: TableLazyLoadEvent) {
+  lazyLoad(event: TableLazyLoadEvent) {
     this.lastLazyLoadEvent = event;
-    this.apiService.loadListForTable(this.controllerName,this.objectName,event).subscribe({
+    this.onLazyLoad.next(event);
+    
+    let tableFilter: TableFilter = event as unknown as TableFilter;
+
+    this.apiService.loadListForTable(this.controllerName, this.objectName, tableFilter).subscribe({
       next: (res) => {
         this.items = res.data;
         this.totalRecords = res.totalRecords;
@@ -154,7 +165,7 @@ export class SoftDataTableComponent implements OnInit {
       this.deleteRef.onClose.subscribe((deletedSuccessfully: boolean)=>{
         if(deletedSuccessfully == true)
           this.messageService.successMessage($localize`:@@SuccessfullyDeletedMessage:You have successfully deleted.`);
-          this.onLazyLoad(this.lastLazyLoadEvent);
+          this.lazyLoad(this.lastLazyLoadEvent);
       });
   }
 
@@ -200,6 +211,34 @@ export class SoftDataTableComponent implements OnInit {
         default:
           return null;
       }
+  }
+
+  selectAll(){
+    if (this.selectedItems.length == this.totalRecords) {
+      this.rowsSelectedNumber = this.totalRecords;
+    }else{
+      this.rowsSelectedNumber = 0;
+    }
+  }
+
+  onRowSelect(event: TableRowSelectEvent){
+    this.selectedItems.push(event.data);
+    this.rowsSelectedNumber++;
+
+    const index = this.unselectedItems.indexOf(event.data);
+    if (index !== -1) {
+      this.unselectedItems.splice(index, 1); // FT: Splice is mutating the array
+    }
+  }
+  
+  onRowUnselect(event: TableRowUnSelectEvent) {
+    this.unselectedItems.push(event.data);
+    this.rowsSelectedNumber--;
+
+    const index = this.selectedItems.indexOf(event.data);
+    if (index !== -1) {
+      this.selectedItems.splice(index, 1); // FT: Splice is mutating the array
+    }
   }
 
   exportListToExcel() {

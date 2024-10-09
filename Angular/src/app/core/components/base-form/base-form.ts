@@ -53,7 +53,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
   initFormGroup(model: T) {
     this.model = Object.assign(this.model ? this.model : {}, model);
-    console.log(this.model)
+    
     this.detailsTitle = getTranslatedClassName(this.model.typeName);
 
     this.formGroup = new FormGroup({});
@@ -140,6 +140,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
     this.saveBody = this.saveBody ?? this.model;
     
+    return;
     let isValid: boolean = this.isFormGroupValid();
     let isFormArrayValid: boolean = this.isFormArrayValid();
 

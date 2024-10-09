@@ -21,7 +21,6 @@ using Soft.Generator.Security.DTO;
 using Playerty.Loyals.Business.DataMappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Playerty.Loyals.Services
 {
@@ -419,6 +418,16 @@ namespace Playerty.Loyals.Services
                         DisplayName = x.User.Email,
                     })
                     .ToListAsync();
+            });
+        }
+
+        public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserListForPartnerNotificationForTable(TableFilterDTO tableFilterPayload)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                IQueryable<PartnerUser> query = _context.DbSet<PartnerUser>().Where(x => x.PartnerNotifications.Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)); // partnerNotificationId
+
+                return await LoadPartnerUserListForTable(tableFilterPayload, query, false);
             });
         }
 

@@ -7,7 +7,6 @@ using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.DTO;
 using Soft.Generator.Shared.Helpers;
 using Soft.Generator.Shared.Interfaces;
-using Soft.NgTable.Models;
 
 namespace Playerty.Loyals.WebAPI.Controllers
 {
@@ -29,7 +28,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<BaseTableResponseEntity<SegmentationDTO>> LoadSegmentationListForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<SegmentationDTO>> LoadSegmentationListForTable(TableFilterDTO dto)
         {
             return await _loyalsBusinessService.LoadSegmentationListForTable(dto, _context.DbSet<Segmentation>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
@@ -79,7 +78,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         //[HttpPost]
         //[AuthGuard]
-        //public async Task<BaseTableResponseEntity<SegmentationDTO>> LoadSegmentationListForTheCurrentUser(TableFilterDTO tableFilterDTO)
+        //public async Task<TableResponseDTO<SegmentationDTO>> LoadSegmentationListForTheCurrentUser(TableFilterDTO tableFilterDTO)
         //{
         //    return await _loyalsBusinessService.LoadSegmentationListForTheCurrentUser<TUser>(tableFilterDTO);
         //}
