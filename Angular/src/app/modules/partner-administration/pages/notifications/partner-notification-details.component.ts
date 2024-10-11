@@ -3,13 +3,13 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { TableLazyLoadEvent } from 'primeng/table';
-import { forkJoin } from 'rxjs';
+import { forkJoin, map, Observable, tap } from 'rxjs';
 import { PartnerNotification, PartnerNotificationSaveBody, PartnerUser } from 'src/app/business/entities/generated/business-entities.generated';
 import { TableFilter } from 'src/app/business/entities/table-filter';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { isArrayEmpty } from 'src/app/business/services/validation/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
-import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
+import { Column, SelectedRowsMethodResult } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
@@ -20,11 +20,6 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotification> implements OnInit {
-    partnerUserOptions: PrimengOption[];
-    // selectedPartnerUsersForAppNotification = new SoftFormControl<PrimengOption[]>(null, {updateOn: 'change'})
-    selectedPartnerUsersForAppNotification: PartnerUser[];
-    unselectedPartnerUsersForAppNotification: PartnerUser[] = [];
-    // selectedPartnerUsersForEmailNotification = new SoftFormControl<PrimengOption[]>(null, {updateOn: 'change'})
     isMarkedAsRead = new SoftFormControl<boolean>(true, {updateOn: 'change'})
 
     text: string;
@@ -33,7 +28,10 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
     cols: Column[];
     tableControllerName: string = 'PartnerUser';
     objectName: string = 'PartnerUser';
-    partnerUsersSelectedNumber: number = 0;
+    
+    newlySelectedPartnerUserList: number[] = [];
+    unselectedPartnerUserList: number[] = [];
+    isAllSelected: boolean = null;
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -41,7 +39,7 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
         protected override messageService: SoftMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
-        protected override route: ActivatedRoute, 
+        protected override route: ActivatedRoute,
         private apiService: ApiService) 
         {
         super(differs, http, messageService, changeDetectorRef, router, route);
@@ -79,12 +77,6 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
         this.initFormGroup(model);
     }
 
-    searchPartnerUsers(event: AutoCompleteCompleteEvent){ 
-        this.apiService.loadPartnerUserListForAutocomplete(50, event?.query).subscribe(nl => {
-            this.partnerUserOptions = nl.map(n => { return { label: n.displayName, value: n.id }});
-        })
-    }
-
     sendEmailNotification(){
 
     }
@@ -103,20 +95,34 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
         ]
     }
 
-    selectedPartnerUserLazyLoad(event: TableLazyLoadEvent){
-        let tableFilter: TableFilter = event as unknown as TableFilter;
+    selectedPartnerUserLazyLoad(event: TableFilter): Observable<SelectedRowsMethodResult> {
+        let tableFilter: TableFilter = event;
         tableFilter.additionalFilterIdLong = this.modelId;
-
-        this.apiService.loadListForTable(this.tableControllerName, this.objectName, tableFilter).subscribe(res => {
-            this.selectedPartnerUsersForAppNotification = res.data;
-            this.partnerUsersSelectedNumber = res.totalRecords;
-        });
+        
+        return this.apiService.loadListForTable('PartnerUser', 'PartnerUser', tableFilter).pipe(
+            map(res => {
+                let result = new SelectedRowsMethodResult();
+                result.fakeSelectedItems = res.data.map(x => x.id);
+                result.selectedTotalRecords = res.totalRecords;
+                return result;
+            })
+        );
     }
 
+    // this.fakeSelectedPartnerUserList = res.data.map(x => x.id);
+    // this.partnerUserListSelectedNumber = res.totalRecords;
+
+    isAllSelectedChange(event: boolean){
+        this.isAllSelected = event;
+    }
+    
     override onBeforeSave(): void {
         let saveBody: PartnerNotificationSaveBody = new PartnerNotificationSaveBody();
-        // saveBody.selectedPartnerUserIds = this.selectedPartnerUsersForAppNotification.value?.map(x => x.value);
-        console.log(this.selectedPartnerUsersForAppNotification)
+
+        saveBody.selectedIds = this.newlySelectedPartnerUserList;
+        saveBody.unselectedIds = this.unselectedPartnerUserList;
+        saveBody.isAllSelected = this.isAllSelected;
+
         saveBody.isMarkedAsRead = this.isMarkedAsRead.value;
         saveBody.partnerNotificationDTO = this.model;
         this.saveBody = saveBody;

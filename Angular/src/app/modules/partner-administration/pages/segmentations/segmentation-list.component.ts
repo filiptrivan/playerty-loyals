@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Segmentation } from 'src/app/business/entities/generated/business-entities.generated';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 
 @Component({
@@ -13,6 +14,7 @@ export class SegmentationListComponent implements OnInit {
     objectName: string = 'Segmentation';
 
     constructor(
+        private cdr: ChangeDetectorRef
     ) { }
 
     ngOnInit(){

@@ -553,11 +553,15 @@ namespace Playerty.Loyals.Services
 
             return await _context.WithTransactionAsync(async () =>
             {
-                partnerNotificationSaveBodyDTO.PartnerNotificationDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
+                int currentPartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
+                partnerNotificationSaveBodyDTO.PartnerNotificationDTO.PartnerId = currentPartnerId;
 
                 PartnerNotificationDTO savedPartnerNotificationDTO = await SavePartnerNotificationAndReturnDTOAsync(partnerNotificationSaveBodyDTO.PartnerNotificationDTO, false, false);
 
-                await UpdatePartnerUserListForPartnerNotification(savedPartnerNotificationDTO.Id, partnerNotificationSaveBodyDTO.SelectedPartnerUserIds);
+                IQueryable<PartnerUser> allPartnerUsers = _context.DbSet<PartnerUser>()
+                    .Where(x => x.Partner.Id == currentPartnerId);
+
+                await UpdatePartnerUserListForPartnerNotificationTableSelection(allPartnerUsers, partnerNotificationSaveBodyDTO.PartnerNotificationDTO.Id, partnerNotificationSaveBodyDTO);
 
                 return savedPartnerNotificationDTO;
             });

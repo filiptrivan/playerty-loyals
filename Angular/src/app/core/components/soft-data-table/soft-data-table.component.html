@@ -1,7 +1,6 @@
     <div class="card overflow-auto">
       <p-table #dt [value]="items" [rows]="rows" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="showPaginator" responsiveLayout="scroll" [lazy]="isLazyLoadTable"
-      (onLazyLoad)="lazyLoad($event)" [totalRecords]="totalRecords" class="soft-table" [loading]="loading" [selectionMode]="selectionMode" [(selection)]="selectedItems" (onRowSelect)="onRowSelect($event)" 
-      (onRowUnselect)="onRowUnselect($event)"
+      (onLazyLoad)="lazyLoad($event)" [totalRecords]="totalRecords" class="soft-table" [loading]="loading" [selectionMode]="selectionMode" dataKey="id"
       > 
       <ng-template pTemplate="caption">
         <div class="table-header">
@@ -19,7 +18,7 @@
           <tr>
             <th style="width: 0rem;" *ngIf="selectionMode == 'multiple'">
               <div style="display: flex; gap: 8px;">
-                <p-tableHeaderCheckbox  (click)="selectAll()"></p-tableHeaderCheckbox> ({{rowsSelectedNumber}})
+                <p-checkbox (onChange)="selectAll($event.checked)" [(ngModel)]="fakeIsAllSelected" [binary]="true"></p-checkbox> ({{rowsSelectedNumber}})
               </div>
             </th>
             <ng-container *ngFor="let col of cols">
@@ -56,7 +55,10 @@
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-index="rowIndex">
           <tr>
-            <td><p-tableCheckbox *ngIf="selectionMode == 'multiple'" [value]="rowData"></p-tableCheckbox></td>
+            <td *ngIf="selectionMode == 'multiple'">
+              <!-- <p-tableCheckbox [value]="rowData.id"></p-tableCheckbox> -->
+               <p-checkbox (onChange)="selectRow(rowData.id)" [ngModel]="isRowSelected(rowData.id)" [binary]="true"></p-checkbox>
+            </td>
             <ng-container *ngFor="let col of cols">
               <td [pTooltip]="getRowData(rowData, col)">
                 <div style="display: flex; align-items: center; gap: 18px;">

@@ -28,9 +28,13 @@
                         label="Recipients"
                         [options]="partnerUserOptions"
                         ></soft-multiautocomplete> -->
-                        <soft-data-table [tableTitle]="tableTitle" [cols]="cols" [controllerName]="tableControllerName" [objectName]="objectName" [showAddButton]="false" selectionMode="multiple"
-                        [selectedItems]="selectedPartnerUsersForAppNotification" [unselectedItems]="unselectedPartnerUsersForAppNotification" (onLazyLoad)="selectedPartnerUserLazyLoad($event)"
-                        [rowsSelectedNumber]="partnerUsersSelectedNumber"></soft-data-table>
+                        <!-- <soft-data-table [tableTitle]="tableTitle" [cols]="cols" [controllerName]="tableControllerName" [objectName]="objectName" [showAddButton]="false" selectionMode="multiple"
+                        [newlySelectedItems]="selectedPartnerUsersForAppNotification" [unselectedItems]="unselectedPartnerUsersForAppNotification" (onLazyLoad)="selectedPartnerUserLazyLoad($event)"
+                        [rowsSelectedNumber]="partnerUsersSelectedNumber"></soft-data-table> -->
+
+                        <soft-data-table [tableTitle]="tableTitle" [cols]="cols" [controllerName]="controllerName" [objectName]="objectName" [showAddButton]="false" selectionMode="multiple"
+                        [newlySelectedItems]="newlySelectedPartnerUserList" [unselectedItems]="unselectedPartnerUserList"
+                        [selectedLazyLoadObservableMethod]="selectedPartnerUserLazyLoad" (onIsAllSelectedChange)="isAllSelectedChange($event)"></soft-data-table>
                     </div>
                     <div class="col-12">
                         <soft-editor [control]="control('emailBody')"></soft-editor>

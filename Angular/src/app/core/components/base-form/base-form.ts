@@ -140,7 +140,6 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
     this.saveBody = this.saveBody ?? this.model;
     
-    return;
     let isValid: boolean = this.isFormGroupValid();
     let isFormArrayValid: boolean = this.isFormArrayValid();
 
