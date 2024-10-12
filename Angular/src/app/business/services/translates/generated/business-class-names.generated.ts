@@ -2,6 +2,8 @@ export function getTranslatedClassNameBusiness(name: string): string
 {
     switch(name) 
     {
+        case 'PartnerUser':
+            return $localize`:@@PartnerUser:PartnerUser`;
         case 'Segmentation':
             return $localize`:@@Segmentation:Segmentation`;
         case 'SegmentationItem':
@@ -38,8 +40,6 @@ export function getTranslatedClassNameBusiness(name: string): string
             return $localize`:@@PartnerNotificationPartnerUser:PartnerNotificationPartnerUser`;
         case 'PartnerRole':
             return $localize`:@@PartnerRole:PartnerRole`;
-        case 'PartnerUser':
-            return $localize`:@@PartnerUser:PartnerUser`;
         case 'Tier':
             return $localize`:@@Tier:Tier`;
         case 'Transaction':

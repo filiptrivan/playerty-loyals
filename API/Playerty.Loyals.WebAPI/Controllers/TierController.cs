@@ -79,6 +79,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.SaveTierList(tierListDTO);
         }
 
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<NamebookDTO<int>>> LoadTierListForDropdown()
+        {
+            return await _loyalsBusinessService.LoadTierListForDropdown(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+        }
+
         //[HttpGet]
         //[AuthGuard]
         //public async Task<List<NamebookDTO<long>>> LoadUserListForTier(int roleId)

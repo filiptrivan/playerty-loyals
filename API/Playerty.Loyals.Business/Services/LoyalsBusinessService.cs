@@ -21,6 +21,8 @@ using Soft.Generator.Security.DTO;
 using Playerty.Loyals.Business.DataMappers;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Soft.Generator.Shared.Emailing;
 
 namespace Playerty.Loyals.Services
 {
@@ -31,9 +33,10 @@ namespace Playerty.Loyals.Services
         private readonly AuthenticationService _authenticationService;
         private readonly SecurityBusinessService _securityBusinessService;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
+        private readonly EmailingService _emailingService;
 
         public LoyalsBusinessService(IApplicationDbContext context, ExcelService excelService, AuthorizationService authorizationService, SecurityBusinessService securityBusinessService, AuthenticationService authenticationService,
-            PartnerUserAuthenticationService partnerUserAuthenticationService)
+            PartnerUserAuthenticationService partnerUserAuthenticationService, EmailingService emailingService)
             : base(context, excelService, authorizationService)
         {
             _context = context;
@@ -41,6 +44,7 @@ namespace Playerty.Loyals.Services
             _securityBusinessService = securityBusinessService;
             _authenticationService = authenticationService;
             _partnerUserAuthenticationService = partnerUserAuthenticationService;
+            _emailingService = emailingService;
         }
 
         #region User
@@ -421,14 +425,25 @@ namespace Playerty.Loyals.Services
             });
         }
 
-        public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserListForPartnerNotificationForTable(TableFilterDTO tableFilterPayload)
+        public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserForPartnerNotificationListForTable(TableFilterDTO tableFilterPayload)
         {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                IQueryable<PartnerUser> query = _context.DbSet<PartnerUser>().Where(x => x.PartnerNotifications.Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)); // partnerNotificationId
+            TableResponseDTO<PartnerUserDTO> tableResponse = new TableResponseDTO<PartnerUserDTO>();
 
-                return await LoadPartnerUserListForTable(tableFilterPayload, query, false);
+            await _context.WithTransactionAsync(async () =>
+            {
+                IQueryable<PartnerUser> query = _context.DbSet<PartnerUser>().Skip(tableFilterPayload.First).Take(tableFilterPayload.Rows).Where(x => x.PartnerNotifications.Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)); // partnerNotificationId
+                PaginationResult<PartnerUser> paginationResult = await LoadPartnerUserListForPagination(tableFilterPayload, query);
+
+                tableResponse.Data = await paginationResult.Query
+                    .ProjectToType<PartnerUserDTO>(Mapper.PartnerUserProjectToConfig())
+                    .ToListAsync();
+
+                int count = await _context.DbSet<PartnerUser>().Where(x => x.PartnerNotifications.Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)).CountAsync();
+
+                tableResponse.TotalRecords = count;
             });
+
+            return tableResponse;
         }
 
         public async override Task<List<NamebookDTO<long>>> LoadPartnerUserListForAutocomplete(int limit, string query, IQueryable<PartnerUser> partnerUserQuery, bool authorize = true)
@@ -558,12 +573,26 @@ namespace Playerty.Loyals.Services
 
                 PartnerNotificationDTO savedPartnerNotificationDTO = await SavePartnerNotificationAndReturnDTOAsync(partnerNotificationSaveBodyDTO.PartnerNotificationDTO, false, false);
 
-                IQueryable<PartnerUser> allPartnerUsers = _context.DbSet<PartnerUser>()
+                IQueryable<PartnerUser> allPartnerUsersQuery = _context.DbSet<PartnerUser>()
                     .Where(x => x.Partner.Id == currentPartnerId);
 
-                await UpdatePartnerUserListForPartnerNotificationTableSelection(allPartnerUsers, partnerNotificationSaveBodyDTO.PartnerNotificationDTO.Id, partnerNotificationSaveBodyDTO);
+                PaginationResult<PartnerUser> paginationResult = await LoadPartnerUserListForPagination(partnerNotificationSaveBodyDTO.TableFilter, allPartnerUsersQuery);
+
+                await UpdatePartnerUserListForPartnerNotificationTableSelection(paginationResult.Query, partnerNotificationSaveBodyDTO.PartnerNotificationDTO.Id, partnerNotificationSaveBodyDTO);
 
                 return savedPartnerNotificationDTO;
+            });
+        }
+
+        public async Task SendNotificationEmail(long partnerNotificationId, int partnerNotificationVersion)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                PartnerNotification partnerNotification = await LoadInstanceAsync<PartnerNotification, long>(partnerNotificationId, partnerNotificationVersion); // FT: Checking version because if the user didn't save and some other user changed the version, he will send emails to wrong users
+
+                List<string> recipients = partnerNotification.PartnerUsers.Select(x => x.User.Email).ToList();
+
+                await _emailingService.SendEmailAsync(recipients, partnerNotification.Title, partnerNotification.EmailBody);
             });
         }
 

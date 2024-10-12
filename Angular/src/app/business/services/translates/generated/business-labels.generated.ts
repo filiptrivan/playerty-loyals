@@ -22,6 +22,8 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@PartnerNotificationDTO:PartnerNotificationDTO`;
         case 'isMarkedAsRead':
             return $localize`:@@IsMarkedAsRead:IsMarkedAsRead`;
+        case 'tableFilter':
+            return $localize`:@@TableFilter:TableFilter`;
         case 'selectedIds':
             return $localize`:@@SelectedIds:SelectedIds`;
         case 'unselectedIds':
@@ -92,6 +94,8 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@Tier:Tier`;
         case 'user':
             return $localize`:@@User:User`;
+        case 'checkedSegmentationItems':
+            return $localize`:@@CheckedSegmentationItems:CheckedSegmentationItems`;
         case 'pointsForFirstTimeFill':
             return $localize`:@@PointsForFirstTimeFill:PointsForFirstTimeFill`;
         case 'orderNumber':

@@ -10,6 +10,7 @@ using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.DTO;
 using Soft.Generator.Shared.Helpers;
 using Soft.Generator.Shared.Interfaces;
+using Soft.Generator.Shared.Emailing;
 
 namespace Playerty.Loyals.WebAPI.Controllers
 {
@@ -20,7 +21,6 @@ namespace Playerty.Loyals.WebAPI.Controllers
         private readonly IApplicationDbContext _context;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
         private readonly LoyalsBusinessService _loyalsBusinessService;
-
 
         public PartnerNotificationController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService)
         {
@@ -67,9 +67,9 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserListForPartnerNotificationForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserForPartnerNotificationListForTable(TableFilterDTO dto)
         {
-            return await _loyalsBusinessService.LoadPartnerUserListForPartnerNotificationForTable(dto);
+            return await _loyalsBusinessService.LoadPartnerUserForPartnerNotificationListForTable(dto);
 
         }
 
@@ -80,18 +80,12 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.SavePartnerNotificationAndReturnDTOExtendedAsync(partnerNotificationSaveBodyDTO);
         }
 
-        //[HttpPost]
-        //[AuthGuard]
-        //public async Task<TableResponseDTO<PartnerNotificationDTO>> LoadPartnerNotificationListForTheCurrentUser(TableFilterDTO tableFilterDTO)
-        //{
-        //    return await _loyalsBusinessService.LoadPartnerNotificationListForTheCurrentUser<TUser>(tableFilterDTO);
-        //}
+        [HttpGet]
+        [AuthGuard]
+        public async Task SendNotificationEmail(long partnerNotificationId, int partnerNotificationVersion)
+        {
+            await _loyalsBusinessService.SendNotificationEmail(partnerNotificationId, partnerNotificationVersion);
+        }
 
-        //[HttpGet]
-        //[AuthGuard]
-        //public async Task<int> GetUnreadPartnerNotificationCountForTheCurrentUser()
-        //{
-        //    return await _loyalsBusinessService.GetUnreadPartnerNotificationCountForTheCurrentUser();
-        //}
     }
 }

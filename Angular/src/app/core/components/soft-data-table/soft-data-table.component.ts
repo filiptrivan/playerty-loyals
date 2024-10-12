@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/api';
-import { Table, TableLazyLoadEvent, TableRowSelectEvent, TableRowUnSelectEvent, TableSelectAllChangeEvent } from 'primeng/table';
+import { Table, TableFilterEvent, TableLazyLoadEvent, TableRowSelectEvent, TableRowUnSelectEvent, TableSelectAllChangeEvent } from 'primeng/table';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SoftDeleteConfirmationComponent } from '../soft-delete-dialog/soft-delete-confirmation.component';
@@ -12,6 +12,7 @@ import { SoftMessageService } from '../../services/soft-message.service';
 import { TableFilter } from 'src/app/business/entities/table-filter';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
 import { firstValueFrom, Observable } from 'rxjs';
+import { PrimengOption } from '../../entities/primeng-option';
 
 @Component({
   selector: 'soft-data-table',
@@ -77,48 +78,47 @@ export class SoftDataTableComponent implements OnInit {
     @Inject(LOCALE_ID) private locale: string
   ) {}
 
-    ngOnInit(): void {
-      if (this.controllerName == null)
-        this.controllerName = this.objectName;
-    }
+  ngOnInit(): void {
+    if (this.controllerName == null)
+      this.controllerName = this.objectName;
+  }
     
-    async lazyLoad(event: TableLazyLoadEvent) {
+  lazyLoad(event: TableLazyLoadEvent) {
     this.lastLazyLoadEvent = event;
 
     let tableFilter: TableFilter = event as unknown as TableFilter;
 
     this.onLazyLoad.next(tableFilter);
-    
-    let selectedRowsMethodResult: SelectedRowsMethodResult = await firstValueFrom(this.selectedLazyLoadObservableMethod(tableFilter));
-
-    this.currentPageSelectedItemsFromDb = [...selectedRowsMethodResult.fakeSelectedItems];
 
     this.apiService.loadListForTable(this.controllerName, this.objectName, tableFilter).subscribe({
-      next: (res) => {
+      next: async (res) => {
         this.items = res.data;
         this.totalRecords = res.totalRecords;
         
-        if (this.isFirstTimeLazyLoad == true) {
-          this.rowsSelectedNumber = selectedRowsMethodResult.selectedTotalRecords;
-          this.setFakeIsAllSelected();
-          this.isFirstTimeLazyLoad = false;
-        }
-        else if (this.rowsSelectedNumber != selectedRowsMethodResult.selectedTotalRecords && this.isFirstTimeLazyLoad == false) {
-          this.selectAll(true); // FT: Because we can't update rowsSelectedNumber based on filter, we automaticaly mark him everything
-        }
+        if (this.selectedLazyLoadObservableMethod != null) {
+          let selectedRowsMethodResult: SelectedRowsMethodResult = await firstValueFrom(this.selectedLazyLoadObservableMethod(tableFilter));
+  
+          this.currentPageSelectedItemsFromDb = [...selectedRowsMethodResult.fakeSelectedItems];
 
-        if (this.isAllSelected == true) {
-          let idsToInsert = [...this.items.map(x => x.id)];
-          idsToInsert = idsToInsert.filter(x => this.unselectedItems.includes(x) == false);
-          this.fakeSelectedItems = [...idsToInsert]; // FT: Only for showing checkboxes, we will not send this to the backend
-        }
-        else if (this.isAllSelected == false) {
-          this.fakeSelectedItems = [...this.newlySelectedItems]; // FT: Only for showing checkboxes, we will not send this to the backend
-        }
-        else if (this.isAllSelected == null) {
-          let idsToInsert = [...selectedRowsMethodResult.fakeSelectedItems];
-          idsToInsert = idsToInsert.filter(x => this.unselectedItems.includes(x) == false);
-          this.fakeSelectedItems = [...idsToInsert];
+          if (this.isFirstTimeLazyLoad == true) {
+            this.rowsSelectedNumber = selectedRowsMethodResult.selectedTotalRecords;
+            this.setFakeIsAllSelected();
+            this.isFirstTimeLazyLoad = false;
+          }
+  
+          if (this.isAllSelected == true) {
+            let idsToInsert = [...this.items.map(x => x.id)];
+            idsToInsert = idsToInsert.filter(x => this.unselectedItems.includes(x) == false);
+            this.fakeSelectedItems = [...idsToInsert]; // FT: Only for showing checkboxes, we will not send this to the backend
+          }
+          else if (this.isAllSelected == false) {
+            this.fakeSelectedItems = [...this.newlySelectedItems]; // FT: Only for showing checkboxes, we will not send this to the backend
+          }
+          else if (this.isAllSelected == null) {
+            let idsToInsert = [...selectedRowsMethodResult.fakeSelectedItems, ...this.newlySelectedItems];
+            idsToInsert = idsToInsert.filter(x => this.unselectedItems.includes(x) == false);
+            this.fakeSelectedItems = [...idsToInsert];
+          }
         }
 
         this.loading = false;
@@ -129,6 +129,15 @@ export class SoftDataTableComponent implements OnInit {
     });
   }
 
+  filter(event: TableFilterEvent){
+    console.log(event)
+    this.selectAll(false); // FT: We need to do it like this because: totalRecords: 1 -> selectedRecords from earlyer selection 2 -> unselect current -> all checkbox is set to true
+  }
+  clck(a, b, c){
+console.log(a)
+console.log(b)
+console.log(c)
+  }
   getColHeaderWidth(filterType: string) {
     switch (filterType) {
       case 'text':
@@ -252,6 +261,7 @@ export class SoftDataTableComponent implements OnInit {
       }
   }
 
+  //#region Selection
   setFakeIsAllSelected(){
     if(this.rowsSelectedNumber == this.totalRecords)
       this.fakeIsAllSelected = true;
@@ -259,13 +269,7 @@ export class SoftDataTableComponent implements OnInit {
       this.fakeIsAllSelected = false;
   }
 
-  clck(){
-    console.log(this.newlySelectedItems)
-    console.log(this.unselectedItems)
-    console.log(this.isAllSelected)
-}
-
-  selectAll(checked){
+  selectAll(checked: boolean){
     this.unselectedItems.length = 0;
     this.newlySelectedItems.length = 0;
 
@@ -331,6 +335,7 @@ export class SoftDataTableComponent implements OnInit {
 
     this.setFakeIsAllSelected();
   }
+  //#endregion
 
   exportListToExcel() {
     this.apiService.exportListToExcel(this.controllerName, this.objectName, this.lastLazyLoadEvent);
@@ -339,11 +344,6 @@ export class SoftDataTableComponent implements OnInit {
   clear(table: Table) {
     table.clear();
   }
-}
-
-
-export class DropOrMultiValue {
-  name: string;
 }
 
 export class Action {
@@ -355,11 +355,12 @@ export class Action {
 export class Column {
   name: string;
   field?: string;
+  filterField?: string; // FT: Made specificaly for multiautocomplete, maybe for something more in the future
   filterType?: string;
   filterPlaceholder?: string;
   showMatchModes?: boolean;
   showAddButton?: boolean;
-  dropdownOrMultiselectValues?: DropOrMultiValue[];
+  dropdownOrMultiselectValues?: PrimengOption[];
   actions?: Action[];
 }
 

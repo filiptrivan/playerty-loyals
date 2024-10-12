@@ -4,6 +4,9 @@ import { validatePrecisionScale } from '../../../../core/services/helper-functio
 
 export function getValidatorBusiness(formControl: SoftFormControl, className: string): SoftValidatorFn {
     switch(formControl.label + className){
+        case 'pointsPartnerUser':
+            return pointsPartnerUserValidator(formControl);
+
         case 'nameSegmentation':
             return nameSegmentationValidator(formControl);
         case 'nameLatinSegmentation':
@@ -72,9 +75,6 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
         case 'descriptionPartnerRole':
             return descriptionPartnerRoleValidator(formControl);
 
-        case 'pointsPartnerUser':
-            return pointsPartnerUserValidator(formControl);
-
         case 'nameTier':
             return nameTierValidator(formControl);
         case 'nameLatinTier':
@@ -109,6 +109,21 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
             return null;
     }
 }
+
+export function pointsPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+        const pointsValid = notEmptyRule;
+
+        return pointsValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
 
 export function nameSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
@@ -525,21 +540,6 @@ export function descriptionPartnerRoleValidator(control: SoftFormControl): SoftV
         return descriptionValid ? null : { _ : $localize`:@@Length:The field must have a minimum of ${min} and a maximum of ${max} characters.` };
     };
     
-    return validator;
-}
-
-
-export function pointsPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-        const pointsValid = notEmptyRule;
-
-        return pointsValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
-    };
-    validator.hasNotEmptyRule = true;
     return validator;
 }
 

@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { TableLazyLoadEvent } from 'primeng/table';
-import { forkJoin, map, Observable, tap } from 'rxjs';
+import { firstValueFrom, forkJoin, map, Observable, tap } from 'rxjs';
 import { PartnerNotification, PartnerNotificationSaveBody, PartnerUser } from 'src/app/business/entities/generated/business-entities.generated';
 import { TableFilter } from 'src/app/business/entities/table-filter';
 import { ApiService } from 'src/app/business/services/api/api.service';
@@ -24,7 +24,7 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
 
     text: string;
 
-    tableTitle: string = $localize`:@@Users:Users`
+    tableTitle: string = $localize`:@@Recipients:Recipients`
     cols: Column[];
     tableControllerName: string = 'PartnerUser';
     objectName: string = 'PartnerUser';
@@ -32,6 +32,7 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
     newlySelectedPartnerUserList: number[] = [];
     unselectedPartnerUserList: number[] = [];
     isAllSelected: boolean = null;
+    lastLazyLoadTableFilter: TableFilter;
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -78,28 +79,43 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
     }
 
     sendEmailNotification(){
-
+        this.apiService.sendNotificationEmail(this.modelId, this.model.version).subscribe(() => {
+            this.messageService.successMessage($localize`:@@SuccessfulEmailAttempt:Your email attempt has been processed.`);
+        });
     }
 
-    populatePartnerUserTableCols(){
+    async populatePartnerUserTableCols(){
         this.cols = [
-            // {name: 'Actions', actions:[
-            //     {name:"Select"},
-            // ]},
-            // {name: 'Test', filterType: 'numeric', field: 'testColumnForGrid'},
-            {name: 'UserDisplayName', filterType: 'text', field: 'userDisplayName'},
+            {name: 'User', filterType: 'text', field: 'userDisplayName'},
+            {name: 'Points', filterType: 'numeric', field: 'points', showMatchModes: true},
+            {name: 'Tier', filterType: 'multiselect', field: 'tierDisplayName', filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(this.loadTierListForDropdown()) },
+            {name: 'Segmentation', filterType: 'multiselect', field: 'checkedSegmentationItemsCommaSeparated', dropdownOrMultiselectValues: await firstValueFrom(this.loadSegmentationItemListForPartnerForDropdown()) },
             {name: 'Created at', filterType: 'date', field: 'createdAt', showMatchModes: true},
-            // {name: 'Modified at', filterType: 'date', field: 'modifiedAt', showMatchModes: true},
-            // {name: 'Disabled', filterType: 'boolean', field: 'isDisabled'},
-            // {name: 'Version', filterType: 'text', field: 'version'},
         ]
     }
 
-    selectedPartnerUserLazyLoad(event: TableFilter): Observable<SelectedRowsMethodResult> {
+    loadTierListForDropdown(): Observable<PrimengOption[]>{
+        return this.apiService.loadTierListForDropdown().pipe(
+            map(res => {
+                return res.map(x => ({ label: x.displayName, value: x.id }));
+            })
+        );
+    }
+
+    loadSegmentationItemListForPartnerForDropdown(): Observable<PrimengOption[]>{
+        return this.apiService.loadSegmentationItemListForDropdown().pipe(
+            map(res => {
+                return res.map(x => ({ label: x.displayName, value: x.id }));
+            })
+        );
+    }
+
+    // FT: Using arrow function solved the problem with undefined this.modelId
+    selectedPartnerUserLazyLoad = (event: TableFilter): Observable<SelectedRowsMethodResult> => {
         let tableFilter: TableFilter = event;
         tableFilter.additionalFilterIdLong = this.modelId;
         
-        return this.apiService.loadListForTable('PartnerUser', 'PartnerUser', tableFilter).pipe(
+        return this.apiService.loadListForTable('PartnerNotification', 'PartnerUserForPartnerNotification', tableFilter).pipe(
             map(res => {
                 let result = new SelectedRowsMethodResult();
                 result.fakeSelectedItems = res.data.map(x => x.id);
@@ -109,11 +125,12 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
         );
     }
 
-    // this.fakeSelectedPartnerUserList = res.data.map(x => x.id);
-    // this.partnerUserListSelectedNumber = res.totalRecords;
-
     isAllSelectedChange(event: boolean){
         this.isAllSelected = event;
+    }
+
+    onLazyLoad(event: TableFilter){
+        this.lastLazyLoadTableFilter = event;
     }
     
     override onBeforeSave(): void {
@@ -122,6 +139,7 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
         saveBody.selectedIds = this.newlySelectedPartnerUserList;
         saveBody.unselectedIds = this.unselectedPartnerUserList;
         saveBody.isAllSelected = this.isAllSelected;
+        saveBody.tableFilter = this.lastLazyLoadTableFilter;
 
         saveBody.isMarkedAsRead = this.isMarkedAsRead.value;
         saveBody.partnerNotificationDTO = this.model;

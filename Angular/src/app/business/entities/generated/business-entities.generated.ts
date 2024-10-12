@@ -3,6 +3,68 @@ import { TableFilterContext } from "src/app/core/entities/table-filter-context";
 import { TableFilterSortMeta } from "src/app/core/entities/table-filter-sort-meta";
 
 
+export class PartnerUser extends BaseEntity
+{
+    partnerDisplayName?: string;
+	partnerId?: number;
+	points?: number;
+	tierDisplayName?: string;
+	tierId?: number;
+	userDisplayName?: string;
+	userId?: number;
+	checkedSegmentationItemsCommaSeparated?: string;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        partnerDisplayName,
+		partnerId,
+		points,
+		tierDisplayName,
+		tierId,
+		userDisplayName,
+		userId,
+		checkedSegmentationItemsCommaSeparated,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        partnerDisplayName?: string;
+		partnerId?: number;
+		points?: number;
+		tierDisplayName?: string;
+		tierId?: number;
+		userDisplayName?: string;
+		userId?: number;
+		checkedSegmentationItemsCommaSeparated?: string;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('PartnerUser'); 
+
+        this.partnerDisplayName = partnerDisplayName;
+		this.partnerId = partnerId;
+		this.points = points;
+		this.tierDisplayName = tierDisplayName;
+		this.tierId = tierId;
+		this.userDisplayName = userDisplayName;
+		this.userId = userId;
+		this.checkedSegmentationItemsCommaSeparated = checkedSegmentationItemsCommaSeparated;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
 export class Segmentation extends BaseEntity
 {
     name?: string;
@@ -251,6 +313,7 @@ export class PartnerNotificationSaveBody extends BaseEntity
 {
     partnerNotificationDTO?: PartnerNotification;
 	isMarkedAsRead?: boolean;
+	tableFilter?: TableFilter;
 	selectedIds?: number[];
 	unselectedIds?: number[];
 	isAllSelected?: boolean;
@@ -259,12 +322,14 @@ export class PartnerNotificationSaveBody extends BaseEntity
     {
         partnerNotificationDTO,
 		isMarkedAsRead,
+		tableFilter,
 		selectedIds,
 		unselectedIds,
 		isAllSelected
     }:{
         partnerNotificationDTO?: PartnerNotification;
 		isMarkedAsRead?: boolean;
+		tableFilter?: TableFilter;
 		selectedIds?: number[];
 		unselectedIds?: number[];
 		isAllSelected?: boolean;     
@@ -274,6 +339,7 @@ export class PartnerNotificationSaveBody extends BaseEntity
 
         this.partnerNotificationDTO = partnerNotificationDTO;
 		this.isMarkedAsRead = isMarkedAsRead;
+		this.tableFilter = tableFilter;
 		this.selectedIds = selectedIds;
 		this.unselectedIds = unselectedIds;
 		this.isAllSelected = isAllSelected;
@@ -643,64 +709,6 @@ export class PartnerRole extends BaseEntity
 		this.partnerId = partnerId;
 		this.name = name;
 		this.description = description;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class PartnerUser extends BaseEntity
-{
-    partnerDisplayName?: string;
-	partnerId?: number;
-	points?: number;
-	tierDisplayName?: string;
-	tierId?: number;
-	userDisplayName?: string;
-	userId?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        partnerDisplayName,
-		partnerId,
-		points,
-		tierDisplayName,
-		tierId,
-		userDisplayName,
-		userId,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        partnerDisplayName?: string;
-		partnerId?: number;
-		points?: number;
-		tierDisplayName?: string;
-		tierId?: number;
-		userDisplayName?: string;
-		userId?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('PartnerUser'); 
-
-        this.partnerDisplayName = partnerDisplayName;
-		this.partnerId = partnerId;
-		this.points = points;
-		this.tierDisplayName = tierDisplayName;
-		this.tierId = tierId;
-		this.userDisplayName = userDisplayName;
-		this.userId = userId;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;

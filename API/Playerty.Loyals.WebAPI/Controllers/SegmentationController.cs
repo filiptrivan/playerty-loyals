@@ -76,12 +76,12 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.GetSegmentationListForTheCurrentPartner();
         }
 
-        //[HttpPost]
-        //[AuthGuard]
-        //public async Task<TableResponseDTO<SegmentationDTO>> LoadSegmentationListForTheCurrentUser(TableFilterDTO tableFilterDTO)
-        //{
-        //    return await _loyalsBusinessService.LoadSegmentationListForTheCurrentUser<TUser>(tableFilterDTO);
-        //}
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<NamebookDTO<long>>> LoadSegmentationItemListForDropdown()
+        {
+            return await _loyalsBusinessService.LoadSegmentationItemListForDropdown(_context.DbSet<SegmentationItem>().Where(x => x.Segmentation.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+        }
 
     }
 }

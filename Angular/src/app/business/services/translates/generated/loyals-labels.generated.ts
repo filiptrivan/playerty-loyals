@@ -2,14 +2,46 @@ export function getTranslatedLabelLoyals(name: string): string
 {
     switch(name) 
     {
+        case 'partnerRoleDTO':
+            return $localize`:@@PartnerRoleDTO:PartnerRoleDTO`;
+        case 'selectedPermissionIds':
+            return $localize`:@@SelectedPermissionIds:SelectedPermissionIds`;
+        case 'selectedPartnerUserIds':
+            return $localize`:@@SelectedPartnerUserIds:SelectedPartnerUserIds`;
+        case 'transactionCode':
+            return $localize`:@@TransactionCode:TransactionCode`;
+        case 'discount':
+            return $localize`:@@Discount:Discount`;
+        case 'segmentationDTO':
+            return $localize`:@@SegmentationDTO:SegmentationDTO`;
+        case 'segmentationItemsDTO':
+            return $localize`:@@SegmentationItemsDTO:SegmentationItemsDTO`;
+        case 'partnerNotifications':
+            return $localize`:@@PartnerNotifications:PartnerNotifications`;
+        case 'partnerUsers':
+            return $localize`:@@PartnerUsers:PartnerUsers`;
+        case 'isMarkedAsRead':
+            return $localize`:@@IsMarkedAsRead:IsMarkedAsRead`;
         case 'testttttDN':
             return $localize`:@@TestttttDN:TestttttDN`;
-        case 'partnerUserDTO':
-            return $localize`:@@PartnerUserDTO:PartnerUserDTO`;
-        case 'selectedPartnerRoleIds':
-            return $localize`:@@SelectedPartnerRoleIds:SelectedPartnerRoleIds`;
         case 'name':
             return $localize`:@@Name:Name`;
+        case 'nameLatin':
+            return $localize`:@@NameLatin:NameLatin`;
+        case 'id':
+            return $localize`:@@Id:Id`;
+        case 'validFrom':
+            return $localize`:@@ValidFrom:ValidFrom`;
+        case 'validTo':
+            return $localize`:@@ValidTo:ValidTo`;
+        case 'partner':
+            return $localize`:@@Partner:Partner`;
+        case 'version':
+            return $localize`:@@Version:Version`;
+        case 'createdAt':
+            return $localize`:@@CreatedAt:CreatedAt`;
+        case 'modifiedAt':
+            return $localize`:@@ModifiedAt:ModifiedAt`;
         case 'slug':
             return $localize`:@@Slug:Slug`;
         case 'loadPurchasesEndpoint':
@@ -18,78 +50,40 @@ export function getTranslatedLabelLoyals(name: string): string
             return $localize`:@@LoadReversalsEndpoint:LoadReversalsEndpoint`;
         case 'updatePointsInterval':
             return $localize`:@@UpdatePointsInterval:UpdatePointsInterval`;
-        case 'version':
-            return $localize`:@@Version:Version`;
-        case 'id':
-            return $localize`:@@Id:Id`;
-        case 'createdAt':
-            return $localize`:@@CreatedAt:CreatedAt`;
-        case 'modifiedAt':
-            return $localize`:@@ModifiedAt:ModifiedAt`;
-        case 'partnerRoleDTO':
-            return $localize`:@@PartnerRoleDTO:PartnerRoleDTO`;
-        case 'selectedPermissionIds':
-            return $localize`:@@SelectedPermissionIds:SelectedPermissionIds`;
-        case 'selectedPartnerUserIds':
-            return $localize`:@@SelectedPartnerUserIds:SelectedPartnerUserIds`;
-        case 'partner':
-            return $localize`:@@Partner:Partner`;
-        case 'title':
-            return $localize`:@@Title:Title`;
-        case 'titleLatin':
-            return $localize`:@@TitleLatin:TitleLatin`;
-        case 'description':
-            return $localize`:@@Description:Description`;
-        case 'descriptionLatin':
-            return $localize`:@@DescriptionLatin:DescriptionLatin`;
-        case 'points':
-            return $localize`:@@Points:Points`;
-        case 'tier':
-            return $localize`:@@Tier:Tier`;
-        case 'user':
-            return $localize`:@@User:User`;
-        case 'nameLatin':
-            return $localize`:@@NameLatin:NameLatin`;
-        case 'code':
-            return $localize`:@@Code:Code`;
+        case 'email':
+            return $localize`:@@Email:Email`;
         case 'userExtendedDTO':
             return $localize`:@@UserExtendedDTO:UserExtendedDTO`;
         case 'selectedRoleIds':
             return $localize`:@@SelectedRoleIds:SelectedRoleIds`;
-        case 'isFilledFirstTime':
-            return $localize`:@@IsFilledFirstTime:IsFilledFirstTime`;
-        case 'partnerUser':
-            return $localize`:@@PartnerUser:PartnerUser`;
-        case 'segmentation':
-            return $localize`:@@Segmentation:Segmentation`;
+        case 'partnerUserDTO':
+            return $localize`:@@PartnerUserDTO:PartnerUserDTO`;
+        case 'selectedPartnerRoleIds':
+            return $localize`:@@SelectedPartnerRoleIds:SelectedPartnerRoleIds`;
+        case 'selectedSegmentationItemIds':
+            return $localize`:@@SelectedSegmentationItemIds:SelectedSegmentationItemIds`;
+        case 'code':
+            return $localize`:@@Code:Code`;
+        case 'guid':
+            return $localize`:@@Guid:Guid`;
         case 'price':
             return $localize`:@@Price:Price`;
-        case 'brand':
-            return $localize`:@@Brand:Brand`;
-        case 'partnerNotifications':
-            return $localize`:@@PartnerNotifications:PartnerNotifications`;
-        case 'partnerUsers':
-            return $localize`:@@PartnerUsers:PartnerUsers`;
-        case 'isMarkedAsRead':
-            return $localize`:@@IsMarkedAsRead:IsMarkedAsRead`;
-        case 'transactionCode':
-            return $localize`:@@TransactionCode:TransactionCode`;
-        case 'discount':
-            return $localize`:@@Discount:Discount`;
-        case 'pointsForFirstTimeFill':
-            return $localize`:@@PointsForFirstTimeFill:PointsForFirstTimeFill`;
-        case 'validFrom':
-            return $localize`:@@ValidFrom:ValidFrom`;
-        case 'validTo':
-            return $localize`:@@ValidTo:ValidTo`;
-        case 'product':
-            return $localize`:@@Product:Product`;
-        case 'transaction':
-            return $localize`:@@Transaction:Transaction`;
+        case 'points':
+            return $localize`:@@Points:Points`;
+        case 'user':
+            return $localize`:@@User:User`;
         case 'pointsMultiplier':
             return $localize`:@@PointsMultiplier:PointsMultiplier`;
-        case 'email':
-            return $localize`:@@Email:Email`;
+        case 'partnerNotificationDTO':
+            return $localize`:@@PartnerNotificationDTO:PartnerNotificationDTO`;
+        case 'tableFilter':
+            return $localize`:@@TableFilter:TableFilter`;
+        case 'selectedIds':
+            return $localize`:@@SelectedIds:SelectedIds`;
+        case 'unselectedIds':
+            return $localize`:@@UnselectedIds:UnselectedIds`;
+        case 'isAllSelected':
+            return $localize`:@@IsAllSelected:IsAllSelected`;
         case 'password':
             return $localize`:@@Password:Password`;
         case 'hasLoggedInWithExternalProvider':
@@ -100,8 +94,34 @@ export function getTranslatedLabelLoyals(name: string): string
             return $localize`:@@Gender:Gender`;
         case 'birthDate':
             return $localize`:@@BirthDate:BirthDate`;
-        case 'guid':
-            return $localize`:@@Guid:Guid`;
+        case 'checked':
+            return $localize`:@@Checked:Checked`;
+        case 'description':
+            return $localize`:@@Description:Description`;
+        case 'descriptionLatin':
+            return $localize`:@@DescriptionLatin:DescriptionLatin`;
+        case 'pointsForFirstTimeFill':
+            return $localize`:@@PointsForFirstTimeFill:PointsForFirstTimeFill`;
+        case 'tier':
+            return $localize`:@@Tier:Tier`;
+        case 'checkedSegmentationItems':
+            return $localize`:@@CheckedSegmentationItems:CheckedSegmentationItems`;
+        case 'brand':
+            return $localize`:@@Brand:Brand`;
+        case 'product':
+            return $localize`:@@Product:Product`;
+        case 'transaction':
+            return $localize`:@@Transaction:Transaction`;
+        case 'title':
+            return $localize`:@@Title:Title`;
+        case 'titleLatin':
+            return $localize`:@@TitleLatin:TitleLatin`;
+        case 'emailBody':
+            return $localize`:@@EmailBody:EmailBody`;
+        case 'orderNumber':
+            return $localize`:@@OrderNumber:OrderNumber`;
+        case 'segmentation':
+            return $localize`:@@Segmentation:Segmentation`;
         default:
             return null;
     }

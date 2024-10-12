@@ -1,4 +1,5 @@
 ﻿using Soft.Generator.Security.Entities;
+using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.BaseEntities;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,7 @@ namespace Playerty.Loyals.Business.Entities
 
         public virtual List<Segmentation> AlreadyFilledSegmentations { get; set; }
 
+        [GenerateCommaSeparatedDisplayName]
         public virtual List<SegmentationItem> CheckedSegmentationItems { get; set; }
 
     }
