@@ -147,6 +147,10 @@
 	color: $primaryColor;
 }
 
+.primary-color-background{
+	background-color: $primaryColor;
+}
+
 .primary-lighter-color-background{
 	background-color: $primaryLighterColor;
 }
@@ -313,6 +317,14 @@
 	transform: rotate(30deg);
 	color: $primaryLightColor;
 	opacity: 0.2;
+	position: absolute; 
+	overflow: hidden; 
+	right: -30px; 
+	top: -25px; 
+	z-index: 1;
+	i {
+		font-size: 270px;
+	}
 }
 
 .badge {
@@ -418,4 +430,12 @@
 
 .card-margin{
 	margin-bottom: 28px;
+}
+
+
+.customized-timeline{
+	.p-timeline-event-opposite{
+		display: none;
+	}
+	// background-color: ;
 }

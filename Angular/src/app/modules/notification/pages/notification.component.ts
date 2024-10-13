@@ -5,13 +5,13 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { MenuItem } from 'primeng/api';
 import { PaginatorState } from 'primeng/paginator';
 import { TableFilterContext } from 'src/app/core/entities/table-filter-context';
-import { TableResult } from 'src/app/core/entities/table-result';
+import { TableResponse } from 'src/app/core/entities/table-response';
 
 @Component({
   templateUrl: './notification.component.html',
 })
 export class NotificationComponent implements OnInit {
-  currentUserNotifications: TableResult;
+  currentUserNotifications: TableResponse;
 
   crudMenu: MenuItem[] = [
     {label: $localize`:@@Delete:Delete`, icon: 'pi pi-trash'},
@@ -31,15 +31,17 @@ export class NotificationComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.apiService.loadNotificationListForTheCurrentUser(this.tableFilter).subscribe((res) => {
-      this.currentUserNotifications = res;
-    });
+    this.loadNotifications();
   }
 
   onLazyLoad(event: PaginatorState){
     this.tableFilter.first = event.first;
     this.tableFilter.rows = event.rows;
-    this.apiService.loadNotificationListForTheCurrentUser(this.tableFilter).subscribe((res) => {
+    this.loadNotifications();
+  }
+  
+  loadNotifications(){
+    this.apiService.loadNotificationListForTheCurrentPartnerUser(this.tableFilter).subscribe((res) => {
       this.currentUserNotifications = res;
     });
   }

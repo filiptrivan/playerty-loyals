@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Playerty.Loyals.Business.Entities
 {
-    public class PartnerNotificationPartnerUser
+    public class PartnerNotificationPartnerUser 
     {
         public long PartnerNotificationsId { get; set; }
         public long PartnerUsersId { get; set; }

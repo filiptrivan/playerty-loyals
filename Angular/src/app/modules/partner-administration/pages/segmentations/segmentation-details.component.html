@@ -1,4 +1,4 @@
-@defer (when model != null) {
+@defer (when segmentationItems != null && segmentation != null) {
     <soft-card [title]="detailsTitle" icon="pi pi-hashtag">
         <soft-panel>
             <panel-header></panel-header>
@@ -6,34 +6,31 @@
             <panel-body>
                 <form [formGroup]="formGroup" class="grid">
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('name')"></soft-textbox>
+                        <soft-textbox [control]="control('name', this.segmentation)"></soft-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('nameLatin')"></soft-textbox>
+                        <soft-textbox [control]="control('nameLatin', this.segmentation)"></soft-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-textarea [control]="control('description')"></soft-textarea>
+                        <soft-textarea [control]="control('description', this.segmentation)"></soft-textarea>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-textarea [control]="control('descriptionLatin')"></soft-textarea>
+                        <soft-textarea [control]="control('descriptionLatin', this.segmentation)"></soft-textarea>
                     </div>
                     <div class="col-12">
-                        <soft-number [control]="control('pointsForFirstTimeFill')"></soft-number>
+                        <soft-number [control]="control('pointsForFirstTimeFill', this.segmentation)"></soft-number>
                     </div>
                     
                     <div class="col-12">
                         <soft-panel>
                             <panel-header title="Segmentation items" icon="pi pi-tags"></panel-header>
                             <panel-body [normalBottomPadding]="true">
-                                @for (formGroup of getFormArrayGroups(); track formGroup; let index = $index; let last = $last) {
+                                @for (formGroup of getFormArrayGroups(segmentationItemsFormArray); track formGroup; let index = $index; let last = $last) {
                                     <index-card [index]="index" [last]="false" [crudMenu]="crudMenu" (onMenuIconClick)="lastMenuIconIndexClicked = $event">
                                         <form [formGroup]="formGroup" class="grid">
                                             <div class="col-12">
-                                                <soft-textbox [control]="getFormArrayControl('name', index)"></soft-textbox>
+                                                <soft-textbox [control]="getFormArrayControlByIndex('name', segmentationItemModel, index)"></soft-textbox>
                                             </div>
-                                            <!-- <div class="col-12 md:col-3">
-                                                <soft-textbox [control]="getFormArrayControl('nameLatin', index)"></soft-textbox>
-                                            </div> -->
                                         </form>
                                     </index-card>
                                 }
@@ -46,11 +43,8 @@
             </panel-body>
 
             <panel-footer>
-                <p-button (onClick)="onSave(true)" label="Save" icon="pi pi-save"></p-button>
+                <p-button (onClick)="onSave()" label="Save" icon="pi pi-save"></p-button>
                 <soft-return-button></soft-return-button>
-                <!-- <div footerRight>
-                    Updated {{this.model.modifiedAt | pipeWithLocale}} ago
-                </div> -->
             </panel-footer>
 
         </soft-panel>

@@ -79,7 +79,7 @@ export class AppTopBarComponent implements OnDestroy {
         this.avatarLabel = res?.email.charAt(0).toLocaleUpperCase();
     });
 
-    this.apiService.getUnreadNotificationCountForTheCurrentUser().subscribe((count) => {
+    this.apiService.getUnreadNotificationCountForTheCurrentPartnerUser().subscribe((count) => {
       this.currentUserNotificationsCount = count;
     });
 

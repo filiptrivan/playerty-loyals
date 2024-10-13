@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { PartnerUser, PartnerUserSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
+import { PartnerUser, PartnerUserSaveBody, Segmentation, UserExtended } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { BaseForm } from 'src/app/core/components/base-form/base-form';
+import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
@@ -14,9 +14,16 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     templateUrl: './partner-user-details.component.html',
     styles: [],
 })
-export class PartnerUserDetailsComponent extends BaseForm<PartnerUser> implements OnInit {
+export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit {
     roleOptions: PrimengOption[];
-    selectedPartnerRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'})
+    partnerRoleOptions: PrimengOption[];
+    genderOptions: PrimengOption[];
+    selectedRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
+    selectedPartnerRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
+    userExtended: UserExtended;
+    partnerUser: PartnerUser;
+    segmentations: Segmentation[] = [];
+    selectedSegmentationItemIds: number[];
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -25,44 +32,69 @@ export class PartnerUserDetailsComponent extends BaseForm<PartnerUser> implement
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 
-        private apiService: ApiService) 
-        {
+        private apiService: ApiService,
+    ) {
         super(differs, http, messageService, changeDetectorRef, router, route);
-        }
-         
+    }
+
+
     override ngOnInit() {
+        this.controllerName = 'PartnerUser';
+        this.saveMethodName = 'SavePartnerUser';
+        this.detailsTitle = $localize`:@@User:User`;
+
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
-            this.apiService.loadPartnerRoleListForDropdown().subscribe(nl => {
-                this.roleOptions = nl.map(n => { return { label: n.displayName, value: n.id } });
+
+            forkJoin({
+                rolesForThePartnerUser: this.apiService.loadPartnerRoleNamebookListForPartnerUser(this.modelId),
+                roleOptions: this.apiService.loadRoleListForDropdown(),
+                genderOptions: this.apiService.loadGenderNamebookListForDropdown(),                  
+                partnerRoleOptions: this.apiService.loadPartnerRoleListForDropdown(),
+                segmentations: this.apiService.getSegmentationListForTheCurrentPartner(),
+            })
+            .subscribe(({ rolesForThePartnerUser, roleOptions, genderOptions, partnerRoleOptions, segmentations }) => {
+                this.selectedPartnerRoles.setValue(
+                    rolesForThePartnerUser.map(role => { return role.id })
+                );
+                this.roleOptions = roleOptions.map(n => { return { label: n.displayName, value: n.id } });
+                this.genderOptions = genderOptions.map(n => { return { label: n.displayName, value: n.id }});
+                this.partnerRoleOptions = partnerRoleOptions.map(n => { return { label: n.displayName, value: n.id } });
+                this.segmentations = segmentations;
             });
-            if(this.modelId > 0){
-                forkJoin({
-                    partnerUser: this.apiService.getPartnerUser(this.modelId),
-                    partnerRoles: this.apiService.loadPartnerRoleNamebookListForPartnerUser(this.modelId),
-                  }).subscribe(({ partnerUser, partnerRoles }) => {
-                    this.init(new PartnerUser(partnerUser));
-                    this.selectedPartnerRoles.setValue(
-                        partnerRoles.map(role => { return role.id })
-                    );
-                  });
-            }
-            else{
-                this.init(new PartnerUser({id:0}));
-            }
+
+            this.apiService.getPartnerUser(this.modelId).subscribe(partnerUser => {
+                this.partnerUser = new PartnerUser(partnerUser);
+                
+                this.apiService.getUser(partnerUser.userId).subscribe(user => {
+                    this.userExtended = new UserExtended(user);
+
+                    this.apiService.loadRoleNamebookListForUserExtended(user.id).subscribe(rolesForTheUser => {
+                        this.selectedRoles.setValue(
+                            rolesForTheUser.map(role => { return role.id })
+                        );
+                    });
+                });
+            });
         });
     }
 
-    init(model: PartnerUser){
-        this.initFormGroup(model);
+    selectedSegmentationItemIdsChange(event: number[]){
+        this.selectedSegmentationItemIds = event;
     }
 
-    ngOnDestroy() {
-    }
-    
     override onBeforeSave(): void {
-        this.saveBody = new PartnerUserSaveBody();
-        this.saveBody.selectedRoleIds = this.selectedPartnerRoles.value;
-        this.saveBody.userExtendedDTO = this.model;
+        let saveBody: PartnerUserSaveBody = new PartnerUserSaveBody();
+
+        saveBody.userExtendedDTO = this.userExtended;
+        saveBody.selectedRoleIds = this.selectedRoles.value;
+
+        saveBody.partnerUserDTO = this.partnerUser;
+        saveBody.selectedPartnerRoleIds = this.selectedPartnerRoles.value;
+
+        saveBody.selectedSegmentationItemIds = this.selectedSegmentationItemIds;
+
+        this.saveBody = saveBody;
+        return;
     }
 }

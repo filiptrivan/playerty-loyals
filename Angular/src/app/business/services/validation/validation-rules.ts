@@ -1,9 +1,23 @@
 import { ValidationErrors } from "@angular/forms";
-import { SoftFormControl, SoftValidatorFn } from "src/app/core/components/soft-form-control/soft-form-control";
+import { SoftFormArray, SoftFormControl, SoftValidatorFn } from "src/app/core/components/soft-form-control/soft-form-control";
 
 export function isArrayEmpty(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
         const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value.length !== 0;
+
+        const arrayValid = notEmptyRule;
+
+        return arrayValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function isFormArrayEmpty(control: SoftFormArray): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value.length !== 0;
 

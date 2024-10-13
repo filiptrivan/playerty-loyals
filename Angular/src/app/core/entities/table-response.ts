@@ -1,4 +1,4 @@
-export class TableResult {
+export class TableResponse {
     data?: any[];
     totalRecords: number;
 }

@@ -111,5 +111,12 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.GetCheckedSegmentationItemIdsForThePartnerUser(partnerUserId);
         }
 
+        [HttpGet]
+        [AuthGuard]
+        public async Task<PartnerUserDTO> GetPartnerUserForTheUser(long id)
+        {
+            return await _loyalsBusinessService.GetPartnerUserForTheUser(id);
+        }
+
     }
 }

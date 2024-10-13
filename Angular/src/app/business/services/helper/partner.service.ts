@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api/api.service';
 import { environment } from 'src/environments/environment';
+import { map, Observable } from 'rxjs';
+import { PrimengOption } from 'src/app/core/entities/primeng-option';
 
 @Injectable({
   providedIn: 'root' // FT: Ensures the service is available application-wide
@@ -22,4 +24,21 @@ export class PartnerService {
           }
       });
   }
+
+  loadTierListForDropdown(): Observable<PrimengOption[]>{
+    return this.apiService.loadTierListForDropdown().pipe(
+        map(res => {
+            return res.map(x => ({ label: x.displayName, value: x.id }));
+        })
+    );
+  }
+
+  loadSegmentationItemListForPartnerForDropdown(): Observable<PrimengOption[]>{
+    return this.apiService.loadSegmentationItemListForDropdown().pipe(
+        map(res => {
+            return res.map(x => ({ label: x.displayName, value: x.id }));
+        })
+    );
+  }
+  
 }

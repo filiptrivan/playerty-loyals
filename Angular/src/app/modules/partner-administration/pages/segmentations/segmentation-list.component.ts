@@ -25,8 +25,6 @@ export class SegmentationListComponent implements OnInit {
             ]},
             {name: 'Name', filterType: 'text', field: 'name'},
             {name: 'Name latin', filterType: 'text', field: 'nameLatin'},
-            {name: 'Description', filterType: 'text', field: 'description'},
-            {name: 'Description latin', filterType: 'text', field: 'descriptionLatin'},
             {name: 'Points for the first time fill', filterType: 'numeric', field: 'pointsForFirstTimeFill', showMatchModes: true},
         ]
     }

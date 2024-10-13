@@ -596,33 +596,127 @@ namespace Playerty.Loyals.Services
             });
         }
 
+        public async Task<TableResponseDTO<NotificationDTO>> LoadNotificationListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
+        {
+            TableResponseDTO<NotificationDTO> result = new TableResponseDTO<NotificationDTO>();
+            long currentUserId = _authenticationService.GetCurrentUserId(); // FT: Not doing user.Notifications, because he could have a lot of them.
+
+            await _context.WithTransactionAsync(async () =>
+            {
+                long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
+
+                var notificationUsersQuery = _context.DbSet<NotificationUser>()
+                    .Where(x => x.UsersId == currentUserId)
+                    .Select(x => new {
+                        UserId = x.UsersId,
+                        NotificationId = x.NotificationsId,
+                        IsMarkedAsRead = x.IsMarkedAsRead,
+                        Discriminator = nameof(NotificationUser),
+                    });
+
+                var partnerNotificationPartnerUsersQuery = _context.DbSet<PartnerNotificationPartnerUser>()
+                    .Where(x => x.PartnerUsersId == currentPartnerUserId)
+                    .Select(x => new {
+                        UserId = x.PartnerUsersId,
+                        NotificationId = x.PartnerNotificationsId,
+                        IsMarkedAsRead = x.IsMarkedAsRead,
+                        Discriminator = nameof(PartnerNotificationPartnerUser),
+                    });
+
+                var combinedQuery = notificationUsersQuery.Concat(partnerNotificationPartnerUsersQuery); // FT: Concat instead of union because it includes duplicates
+
+                int count = await combinedQuery.CountAsync();
+
+                var notificationUsers = await combinedQuery
+                    .Skip(tableFilterDTO.First)
+                    .Take(tableFilterDTO.Rows)
+                    .ToListAsync();
+
+                var notificationTasks = notificationUsers.Select(async x =>
+                {
+                    NotificationDTO notificationDTO = new NotificationDTO();
+
+                    if (x.Discriminator == nameof(NotificationUser))
+                    {
+                        Notification notification = await LoadInstanceAsync<Notification, long>(x.NotificationId, null);
+                        notificationDTO.Id = notification.Id;
+                        notificationDTO.Title = notification.Title;
+                        notificationDTO.Description = notification.Description;
+                        notificationDTO.IsMarkedAsRead = x.IsMarkedAsRead;
+                    }
+                    else if (x.Discriminator == nameof(PartnerNotificationPartnerUser))
+                    {
+                        PartnerNotification partnerNotification = await LoadInstanceAsync<PartnerNotification, long>(x.NotificationId, null);
+                        notificationDTO.Id = partnerNotification.Id;
+                        notificationDTO.Title = partnerNotification.Title;
+                        notificationDTO.Description = partnerNotification.Description;
+                        notificationDTO.IsMarkedAsRead = x.IsMarkedAsRead;
+                    }
+
+                    return notificationDTO;
+                });
+
+                NotificationDTO[] notificationsArrayDTO = await Task.WhenAll(notificationTasks);
+
+                List<NotificationDTO> notificationsDTO = notificationsArrayDTO.ToList();
+
+                notificationsDTO = notificationsDTO.OrderByDescending(x => x.CreatedAt).ToList();
+
+                result.Data = notificationsDTO;
+                result.TotalRecords = count;
+            });
+
+            return result;
+        }
+
+        public async Task<int> GetUnreadNotificationCountForTheCurrentPartnerUser()
+        {
+            long currentUserId = _authenticationService.GetCurrentUserId();
+
+            return await _context.WithTransactionAsync(async () =>
+            {
+                long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
+
+                var notificationUsersQuery = _context.DbSet<NotificationUser>()
+                    .Where(x => x.UsersId == currentUserId && x.IsMarkedAsRead == false);
+
+                var partnerNotificationPartnerUsersQuery = _context.DbSet<PartnerNotificationPartnerUser>()
+                    .Where(x => x.PartnerUsersId == currentPartnerUserId && x.IsMarkedAsRead == false);
+
+                int count = await notificationUsersQuery.CountAsync() + await partnerNotificationPartnerUsersQuery.CountAsync();
+
+                return count;
+            });
+        }
+
         #endregion
 
         #region Segmentation
 
-        public async Task<SegmentationDTO> SaveSegmentationAndReturnDTOExtendedAsync(SegmentationSaveBodyDTO segmentationSaveBodyDTO)
+        public async Task SaveSegmentationExtendedAsync(SegmentationSaveBodyDTO segmentationSaveBodyDTO)
         {
-            return await _context.WithTransactionAsync(async () =>
+            await _context.WithTransactionAsync(async () =>
             {
                 segmentationSaveBodyDTO.SegmentationDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
-                SegmentationDTO savedSegmentationDTO = await SaveSegmentationAndReturnDTOAsync(segmentationSaveBodyDTO.SegmentationDTO, false, false);
+                Segmentation savedSegmentation = await SaveSegmentationAndReturnDomainAsync(segmentationSaveBodyDTO.SegmentationDTO, false, false);
 
                 List<long> segmentationItemIdsDTO = segmentationSaveBodyDTO.SegmentationItemsDTO.Select(x => x.Id).ToList();
 
+                if (segmentationItemIdsDTO.Count == 0)
+                    throw new HackerException("The segmentation item list can't be empty.");
+
                 List<SegmentationItem> segmentationItemsForDelete = await _context.DbSet<SegmentationItem>()
-                    .Where(x => x.Segmentation.Id == savedSegmentationDTO.Id && segmentationItemIdsDTO.Contains(x.Id) == false)
+                    .Where(x => x.Segmentation.Id == savedSegmentation.Id && segmentationItemIdsDTO.Contains(x.Id) == false)
                     .ToListAsync();
 
-                await _context.DbSet<SegmentationItem>().Where(x => x.Segmentation.Id == savedSegmentationDTO.Id && segmentationItemIdsDTO.Contains(x.Id) == false).ExecuteDeleteAsync();
+                await _context.DbSet<SegmentationItem>().Where(x => x.Segmentation.Id == savedSegmentation.Id && segmentationItemIdsDTO.Contains(x.Id) == false).ExecuteDeleteAsync();
 
                 for (int i = 0; i < segmentationSaveBodyDTO.SegmentationItemsDTO.Count; i++)
                 {
-                    segmentationSaveBodyDTO.SegmentationItemsDTO[i].SegmentationId = savedSegmentationDTO.Id;
+                    segmentationSaveBodyDTO.SegmentationItemsDTO[i].SegmentationId = savedSegmentation.Id;
                     segmentationSaveBodyDTO.SegmentationItemsDTO[i].OrderNumber = i + 1;
                     await SaveSegmentationItemAndReturnDomainAsync(segmentationSaveBodyDTO.SegmentationItemsDTO[i], false, false);
                 }
-
-                return savedSegmentationDTO;
             });
         }
 

@@ -40,14 +40,14 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<TableResponseDTO<TierDTO>> LoadTierListForTable(TableFilterDTO dto)
         {
-            return await _loyalsBusinessService.LoadTierListForTable(dto, _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.LoadTierListForTable(dto, _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
         }
 
         [HttpPost]
         [AuthGuard]
         public async Task<IActionResult> ExportTierListToExcel(TableFilterDTO dto)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportTierListToExcel(dto, _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            byte[] fileContent = await _loyalsBusinessService.ExportTierListToExcel(dto, _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Tiers.xlsx"));
         }
 
@@ -83,7 +83,14 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<List<NamebookDTO<int>>> LoadTierListForDropdown()
         {
-            return await _loyalsBusinessService.LoadTierListForDropdown(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.LoadTierListForDropdown(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<TierDTO>> LoadTierList()
+        {
+            return await _loyalsBusinessService.LoadTierDTOList(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
         }
 
         //[HttpGet]

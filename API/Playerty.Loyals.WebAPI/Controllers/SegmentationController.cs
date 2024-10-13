@@ -64,9 +64,9 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPut]
         [AuthGuard]
-        public async Task<SegmentationDTO> SaveSegmentation(SegmentationSaveBodyDTO segmentationSaveBodyDTO)
+        public async Task SaveSegmentation(SegmentationSaveBodyDTO segmentationSaveBodyDTO)
         {
-            return await _loyalsBusinessService.SaveSegmentationAndReturnDTOExtendedAsync(segmentationSaveBodyDTO);
+            await _loyalsBusinessService.SaveSegmentationExtendedAsync(segmentationSaveBodyDTO);
         }
 
         [HttpGet]

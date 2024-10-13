@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { Namebook } from '../../entities/namebook';
 import { Login, VerificationTokenRequest, LoginResult, ForgotPassword, ExternalProvider, Registration, RegistrationVerificationResult, RefreshTokenRequest, User, Role } from '../../entities/generated/security-entities.generated';
 import { TableFilter } from '../../entities/table-filter';
-import { TableResult } from 'src/app/core/entities/table-result';
+import { TableResponse } from 'src/app/core/entities/table-response';
 
 @Injectable()
 export class ApiSecurityService {
@@ -122,8 +122,8 @@ export class ApiSecurityService {
         return this.http.get<Notification>(`${environment.apiUrl}/Auth/GetNotification?id=${id}`);
     }
 
-    loadNotificationListForTheCurrentUser(tableFilter: TableFilter): Observable<TableResult> {
-        return this.http.post<TableResult>(`${environment.apiUrl}/Auth/LoadNotificationListForTheCurrentUser`, tableFilter);
+    loadNotificationListForTheCurrentUser(tableFilter: TableFilter): Observable<TableResponse> {
+        return this.http.post<TableResponse>(`${environment.apiUrl}/Auth/LoadNotificationListForTheCurrentUser`, tableFilter);
     }
 
     saveNotification(dto: Notification): Observable<Notification> { 

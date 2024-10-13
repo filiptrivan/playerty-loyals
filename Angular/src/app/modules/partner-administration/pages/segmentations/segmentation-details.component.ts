@@ -1,4 +1,4 @@
-import { SoftFormControl } from './../../../../core/components/soft-form-control/soft-form-control';
+import { SoftFormArray, SoftFormControl } from './../../../../core/components/soft-form-control/soft-form-control';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
@@ -7,7 +7,9 @@ import { MenuItem } from 'primeng/api';
 import { forkJoin, Subscription } from 'rxjs';
 import { Segmentation, SegmentationItem, SegmentationSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
+import { isArrayEmpty, isFormArrayEmpty } from 'src/app/business/services/validation/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
+import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
 @Component({
@@ -15,9 +17,15 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     templateUrl: './segmentation-details.component.html',
     styles: [],
 })
-export class SegmentationDetailsComponent extends BaseForm<Segmentation> implements OnInit {
+export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit {
     segmentationItems: SegmentationItem[];
-    crudMenu: MenuItem[] = this.getCrudMenuForOrderedData(new SegmentationItem({id: 0}));
+    segmentationItemModel: SegmentationItem = new SegmentationItem();
+    segmentationItemsFormArray: SoftFormArray;
+    
+    segmentation: Segmentation;
+    segmentationModel: SegmentationItem = new SegmentationItem();
+
+    crudMenu: MenuItem[] = [];
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -26,42 +34,56 @@ export class SegmentationDetailsComponent extends BaseForm<Segmentation> impleme
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 
-        private apiService: ApiService) 
-        {
+        private apiService: ApiService,
+    ) {
         super(differs, http, messageService, changeDetectorRef, router, route);
-        }
+    }
          
     override ngOnInit() {
-        
+        this.controllerName = 'Segmentation';
+        this.saveMethodName = 'SaveSegmentation';
+        this.detailsTitle = $localize`:@@Segmentation:Segmentation`
+
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
+
             if (this.modelId > 0) {
                 forkJoin({
                     segmentation: this.apiService.getSegmentation(this.modelId),
                     segmentationItems: this.apiService.getSegmentationItemsForTheSegmentation(this.modelId),
-                }).subscribe(({ segmentation, segmentationItems }) => {
-                    this.init(new Segmentation(segmentation));
-                    this.initFormArray(segmentationItems, new SegmentationItem({id: 0}));
+                })
+                .subscribe(({ segmentation, segmentationItems }) => {
+                    this.segmentationItems = segmentationItems;
+                    this.initSegmentationItemsFormArray();
+
+                    this.segmentation = new Segmentation(segmentation);
                 });
             }else{
-                this.init(new Segmentation({id: 0}));
-                this.initFormArray(null, new SegmentationItem({id: 0}));
+                this.segmentationItems = [];
+                this.initSegmentationItemsFormArray();
+
+                this.segmentation = new Segmentation({id: 0});
             }
         });
     }
 
-    init(model: Segmentation){
-        this.initFormGroup(model);
+    initSegmentationItemsFormArray(){
+        this.segmentationItemsFormArray = this.initFormArray(this.segmentationItems, this.segmentationItemModel, true);
+        this.crudMenu = this.getCrudMenuForOrderedData(this.segmentationItemsFormArray, new SegmentationItem({id: 0}));
+        this.segmentationItemsFormArray.validator = isFormArrayEmpty(this.segmentationItemsFormArray);
     }
 
     addNewSegmentationItem(index: number){
-        this.addNewFormControlToTheFormArray(new SegmentationItem({id: 0}), index);
+        this.addNewFormControlToTheFormArray(this.segmentationItemsFormArray, new SegmentationItem({id: 0}), index);
     }
 
     override onBeforeSave(): void {
         let saveBody: SegmentationSaveBody = new SegmentationSaveBody();
-        saveBody.segmentationDTO = this.model;
-        saveBody.segmentationItemsDTO = this.formArray.value;
+
+        saveBody.segmentationDTO = this.segmentation;
+
+        saveBody.segmentationItemsDTO = this.segmentationItemsFormArray.value;
+
         this.saveBody = saveBody;
     }
 }

@@ -31,6 +31,8 @@ import { PaginatorModule } from 'primeng/paginator';
 import { EditorModule } from 'primeng/editor';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { TimelineModule } from 'primeng/timeline';
+import { CardModule } from 'primeng/card';
 
 @NgModule({
   imports: [
@@ -65,7 +67,9 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
     PaginatorModule,
     EditorModule,
     InputGroupModule,
-    InputGroupAddonModule
+    InputGroupAddonModule,
+    TimelineModule,
+    CardModule,
   ],
   exports: [
     TableModule,
@@ -99,7 +103,9 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
     PaginatorModule,
     EditorModule,
     InputGroupModule,
-    InputGroupAddonModule
+    InputGroupAddonModule,
+    TimelineModule,
+    CardModule,
   ],
   declarations: [],
   providers: [

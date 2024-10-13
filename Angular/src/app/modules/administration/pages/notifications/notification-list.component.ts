@@ -22,9 +22,6 @@ export class NotificationListComponent implements OnInit {
                 {name:"Delete"},
             ]},
             {name: 'Title', filterType: 'text', field: 'title'},
-            {name: 'Title latin', filterType: 'text', field: 'titleLatin'},
-            {name: 'Description', filterType: 'text', field: 'description'},
-            {name: 'Description latin', filterType: 'text', field: 'descriptionLatin'},
             {name: 'Created at', filterType: 'date', field: 'createdAt', showMatchModes: true},
         ]
     }

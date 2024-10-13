@@ -1,4 +1,4 @@
-import { FormControl, FormControlOptions, FormGroup, ValidatorFn } from '@angular/forms';
+import { FormArray, FormControl, FormControlOptions, FormGroup, ValidatorFn } from '@angular/forms';
 
 export interface SoftValidatorFn extends ValidatorFn {
     hasNotEmptyRule?: boolean;
@@ -27,4 +27,10 @@ export class SoftFormControl<T = any> extends FormControl<T> {
 
 export class SoftFormGroup extends FormGroup {
 
+}
+
+export class SoftFormArray extends FormArray {
+    public required: boolean;
+
+    
 }

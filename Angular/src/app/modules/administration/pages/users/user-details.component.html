@@ -1,18 +1,18 @@
-@defer (when userExtended != null && partnerUser != null) {
+@defer (when model != null) {
     <soft-card [title]="detailsTitle" icon="pi pi-user">
-        <soft-panel [isFirstMultiplePanel]="true">
+        <soft-panel>
             <panel-header title="Base details"></panel-header>
     
             <panel-body>
                 <form [formGroup]="formGroup" class="grid">
                     <div class="col-12">
-                        <soft-textbox [control]="control('email', this.userExtended, false, false, true)"></soft-textbox>
+                        <soft-textbox [control]="control('email', false, false, true)"></soft-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-calendar [control]="control('birthDate', this.userExtended, false, false, false)"></soft-calendar>
+                        <soft-calendar [control]="control('birthDate', false, false, false)"></soft-calendar>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-dropdown [control]="control('genderId', this.userExtended, false, false, false)" [options]="genderOptions"></soft-dropdown>
+                        <soft-dropdown [control]="control('genderId', false, false, false)" [options]="genderOptions"></soft-dropdown>
                     </div>
                     <div class="col-12">
                         <soft-multiselect
@@ -23,48 +23,12 @@
                 </form>
             </panel-body>
     
-        </soft-panel>
-        <soft-panel [isLastMultiplePanel]="true">
-            <panel-header title="Partner details"></panel-header>
-    
-            <panel-body>
-                <form [formGroup]="formGroup" class="grid">
-                    <div class="col-12 md:col-6">
-                        <soft-number [control]="control('points', this.partnerUser)"></soft-number>
-                    </div>
-                    <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('tierDisplayName', this.partnerUser, false, false, true)"></soft-textbox>
-                    </div>
-
-                    @for (segmentation of segmentations; track $index) {
-                        <div class="col-12">
-                            <div class="flex flex-column gap-2">
-                                <div>
-                                    {{segmentation.name}}
-                                </div>
-                                <segmentation-select [formGroup]="formGroup" [partnerUserId]="partnerUser.id" (onIdsChange)="selectedSegmentationItemIdsChange($event)" [segmentation]="segmentation"></segmentation-select>
-                            </div>
-                        </div>
-                    }
-                            
-                    <div class="col-12">
-                        <soft-multiselect
-                        [control]="selectedPartnerRoles"
-                        label="Roles"
-                        [options]="partnerRoleOptions"></soft-multiselect>
-                    </div>
-                </form>
-            </panel-body>
-    
-           <panel-footer>
+            <panel-footer>
                 <p-button (onClick)="onSave()" label="Save" icon="pi pi-save"></p-button>
                 <soft-return-button></soft-return-button>
-                <!-- <div footerRight>
-                    Updated {{this.model.modifiedAt | pipeWithLocale}} ago
-                </div> -->
-           </panel-footer>
-    
+            </panel-footer>
         </soft-panel>
+
     </soft-card>
 } @placeholder {
     <card-skeleton [height]="502"></card-skeleton>

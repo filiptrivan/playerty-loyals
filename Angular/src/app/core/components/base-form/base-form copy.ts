@@ -6,9 +6,9 @@ import {
   KeyValueDiffers,
   OnInit,
 } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { BaseEntity } from '../../entities/base-entity';
-import { SoftFormControl } from '../soft-form-control/soft-form-control';
+import { SoftFormArray, SoftFormControl } from '../soft-form-control/soft-form-control';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { SoftMessageService } from '../../services/soft-message.service';
@@ -24,7 +24,6 @@ import { MenuItem } from 'primeng/api';
 })
 export class BaseFormCopy implements OnInit { 
   formGroup: FormGroup = new FormGroup({});
-  formArray: FormArray;
   formArrayControlNamesFromHtml: string[] = [];
   modelList: any[];
   saveBody: any;
@@ -159,7 +158,7 @@ export class BaseFormCopy implements OnInit {
     this.saveBody = this.saveBody ?? this.formGroup.value;
 
     let isValid: boolean = this.isFormGroupValid();
-    let isFormArrayValid: boolean = this.isFormArrayValid();
+    let isFormArrayValid: boolean = this.areFormArraysValid();
 
     if(isValid && isFormArrayValid){
       this.http.put<any>(environment.apiUrl + `/${this.controllerName}/${this.saveMethodName}`, this.saveBody, environment.httpOptions).subscribe(res => {
@@ -235,15 +234,16 @@ export class BaseFormCopy implements OnInit {
 
   //#region Model List
 
-  initFormArray(modelList: any[], modelConstructor: any){ // FT HACK: Because generics can't instantiate in TS (because JS)
+  initFormArray(modelList: any[], modelConstructor: any, required: boolean = false){ // FT HACK: Because generics can't instantiate in TS (because JS)
     if (modelList == null)
       return null;
 
-    let formArray: FormArray = this.formGroup.controls[`${modelConstructor.typeName}List`] as FormArray;
+    let formArray = this.formGroup.controls[`${modelConstructor.typeName}List`] as SoftFormArray;
     let shouldAddNewFormArray: boolean = false;
 
     if (formArray == null) {
-      formArray = new FormArray([]);
+      formArray = new SoftFormArray([]);
+      formArray.required = required;
       shouldAddNewFormArray = true;
     }
 
@@ -261,7 +261,7 @@ export class BaseFormCopy implements OnInit {
 
   createFormGroup(model: any): FormGroup {
     let formGroup: FormGroup = new FormGroup({});
-
+    
     Object.keys(model).forEach((key) => {
       formGroup = this.arrayFormGroup(key, formGroup, model);
     });
@@ -312,7 +312,7 @@ export class BaseFormCopy implements OnInit {
     if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
       this.formArrayControlNamesFromHtml.push(formControlName);
     
-    return ((this.formGroup.controls[`${modelConstructor.typeName}List`] as FormArray).controls[index] as FormGroup).controls[formControlName] as SoftFormControl;
+    return ((this.formGroup.controls[`${modelConstructor.typeName}List`] as SoftFormArray).controls[index] as FormGroup).controls[formControlName] as SoftFormControl;
   }
   
   // FT: Need to use this from html because can't do "as SoftFormControl" there
@@ -320,65 +320,53 @@ export class BaseFormCopy implements OnInit {
     if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
       this.formArrayControlNamesFromHtml.push(formControlName);
 
-    return ((this.formGroup.controls[`${modelConstructor.typeName}List`] as FormArray).controls.filter(x => x.value.id == id)[0] as FormGroup).controls[formControlName] as SoftFormControl;
+    return ((this.formGroup.controls[`${modelConstructor.typeName}List`] as SoftFormArray).controls.filter(x => x.value.id == id)[0] as FormGroup).controls[formControlName] as SoftFormControl;
   }
 
-  getFormArrayGroup(index: number): FormGroup{
-    return this.formArray.controls[index] as FormGroup
+  // getFormArrayGroup(index: number): FormGroup{
+  //   return this.formArray.controls[index] as FormGroup
+  // }
+
+  getFormArrayGroups(formArray: SoftFormArray): FormGroup[]{
+    return formArray.controls as FormGroup[]
   }
 
-  getFormArrayGroups(): FormGroup[]{
-    return this.formArray.controls as FormGroup[]
-  }
-
-  addNewFormControlToTheFormArray(model:any, index: number) {
+  addNewFormControlToTheFormArray(formArray: SoftFormArray, model: any, index: number) {
     if (index == null) {
-      this.formArray.push(this.createFormGroup(model));
+      formArray.push(this.createFormGroup(model));
     }else{
-      this.formArray.insert(index, this.createFormGroup(model));
+      formArray.insert(index, this.createFormGroup(model));
     }
   }
 
-  removeFormControlFromTheFormArray(index: number) {
-    this.formArray.removeAt(index);
+  removeFormControlFromTheFormArray(formArray: SoftFormArray, index: number) {
+    formArray.removeAt(index);
   }
 
-  onSaveList(modelConstructor: any){
-    this.onBeforeSaveList();
-    
-    let isValid: boolean = this.checkFormArrayValidity();
-
-    if(isValid){
-      this.http.put<any[]>(environment.apiUrl + `/${this.controllerName}/${this.saveMethodName}List`, this.formArray.value, environment.httpOptions).subscribe((res: any[]) => {
-        this.formArray = null;
-        this.initFormArray(res, modelConstructor);
-
-        this.messageService.successMessage("You have successfully saved.");
-
-        // FT: Only overriden ngOnInit is called if it exists
-        // this.ngOnInit(); // Maybe add it, i didn't need for now...
-
-        this.onAfterSaveList();
-      });
-      
-      this.onAfterSaveListRequest();
-    }
-  }
-
-  isFormArrayValid(): boolean {
-    if(this.formArray == null)
+  areFormArraysValid(): boolean {
+    if(this.formGroup.controls == null)
       return true;
 
     let invalid: boolean = false;
 
-    (this.formArray.controls as FormGroup[]).forEach(formGroup => {
-      Object.keys(formGroup.controls).forEach(key => {
-        let formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
-        formControl.markAsDirty();
-        if (formControl.invalid && this.formArrayControlNamesFromHtml.includes(formControl.label)) {
+    Object.keys(this.formGroup.controls).forEach(key => {
+      const formArray = this.formGroup.controls[key] as SoftFormArray;
+      if (formArray instanceof SoftFormArray){
+        (formArray.controls as FormGroup[]).forEach(formGroup => {
+          Object.keys(formGroup.controls).forEach(key => {
+            const formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
+            formControl.markAsDirty();
+            if (this.formArrayControlNamesFromHtml.includes(formControl.label) && formControl.invalid) {
+              invalid = true;
+            }
+          });
+        });
+
+        if (formArray.required == true && formArray.length == 0) {
           invalid = true;
+          this.messageService.warningMessage($localize`:@@ListCanNotBeEmpty:Can not be empty list ` + getTranslatedClassName(key.replace('List', '')))
         }
-      });
+      }
     });
 
     if (invalid || this.invalidForm) {
@@ -389,20 +377,20 @@ export class BaseFormCopy implements OnInit {
   }
 
   checkFormArrayValidity(): boolean {
-    if(this.formArray == null)
+    // if(this.formArray == null)
       return true;
 
     let invalid: boolean = false;
 
-    (this.formArray.controls as FormGroup[]).forEach(formGroup => {
-      Object.keys(formGroup.controls).forEach(key => {
-        let formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
-        formControl.markAsDirty();
-        if (formControl.invalid && this.formArrayControlNamesFromHtml.includes(formControl.label)) {
-          invalid = true;
-        }
-      });
-    });
+    // (this.formArray.controls as FormGroup[]).forEach(formGroup => {
+    //   Object.keys(formGroup.controls).forEach(key => {
+    //     let formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
+    //     formControl.markAsDirty();
+    //     if (formControl.invalid && this.formArrayControlNamesFromHtml.includes(formControl.label)) {
+    //       invalid = true;
+    //     }
+    //   });
+    // });
 
     if (invalid || this.invalidForm) {
       this.messageService.warningMessage(
@@ -422,16 +410,16 @@ export class BaseFormCopy implements OnInit {
 
   lastMenuIconIndexClicked: number;
 
-  getCrudMenuForOrderedData(instantiatedModel: any){
+  getCrudMenuForOrderedData(formArray: SoftFormArray, instantiatedModel: any){
     let crudMenuForOrderedData: MenuItem[] = [
         {label: $localize`:@@Remove:Remove`, icon: 'pi pi-minus', command: () => {
-            this.removeFormControlFromTheFormArray(this.lastMenuIconIndexClicked);
+            this.removeFormControlFromTheFormArray(formArray, this.lastMenuIconIndexClicked);
         }},
         {label: $localize`:@@AddAbove:Add above`, icon: 'pi pi-arrow-up', command: () => {
-            this.addNewFormControlToTheFormArray(instantiatedModel, this.lastMenuIconIndexClicked);
+            this.addNewFormControlToTheFormArray(formArray, instantiatedModel, this.lastMenuIconIndexClicked);
         }},
         {label: $localize`:@@AddBelow:Add below`, icon: 'pi pi-arrow-down', command: () => {
-            this.addNewFormControlToTheFormArray(instantiatedModel, this.lastMenuIconIndexClicked + 1);
+            this.addNewFormControlToTheFormArray(formArray, instantiatedModel, this.lastMenuIconIndexClicked + 1);
         }},
     ];
 

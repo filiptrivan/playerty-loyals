@@ -15,18 +15,10 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     templateUrl: './user-details.component.html',
     styles: [],
 })
-
-// FT: Putting any because we are merging UserExtended and PartnerUser
-export class UserDetailsComponent extends BaseFormCopy implements OnInit {
+export class UserDetailsComponent extends BaseForm<UserExtended> implements OnInit {
     roleOptions: PrimengOption[];
-    partnerRoleOptions: PrimengOption[];
     genderOptions: PrimengOption[];
     selectedRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
-    selectedPartnerRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
-    userExtended: UserExtended;
-    partnerUser: PartnerUser;
-    segmentations: Segmentation[] = [];
-    selectedSegmentationItemIds: number[];
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -41,59 +33,37 @@ export class UserDetailsComponent extends BaseFormCopy implements OnInit {
         }
          
     override ngOnInit() {
-        this.controllerName = 'PartnerUser';
-        this.saveMethodName = 'SavePartnerUser';
+        this.controllerName = 'Auth';
 
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
 
             forkJoin({
+                userExtended: this.apiService.getUser(this.modelId),
                 rolesForTheUser: this.apiService.loadRoleNamebookListForUserExtended(this.modelId),
                 roleOptions: this.apiService.loadRoleListForDropdown(),
                 genderOptions: this.apiService.loadGenderNamebookListForDropdown(),                  
-                partnerRoleOptions: this.apiService.loadPartnerRoleListForDropdown(),
-                segmentations: this.apiService.getSegmentationListForTheCurrentPartner(),
-                }).subscribe(({ rolesForTheUser, roleOptions, genderOptions, partnerRoleOptions, segmentations }) => {
-                    this.selectedRoles.setValue(
-                        rolesForTheUser.map(role => { return role.id })
-                    );
-                    this.roleOptions = roleOptions.map(n => { return { label: n.displayName, value: n.id } });
-                    this.genderOptions = genderOptions.map(n => { return { label: n.displayName, value: n.id }});
-                    this.partnerRoleOptions = partnerRoleOptions.map(n => { return { label: n.displayName, value: n.id } });
-                    this.segmentations = segmentations;
-                });
-
-            this.apiService.getUser(this.modelId).subscribe(user => {
-                this.userExtended = new UserExtended(user);
-                this.apiService.getPartnerUserForTheUser(this.modelId).subscribe(partnerUser => {
-                    this.partnerUser = new PartnerUser(partnerUser);
-                    this.apiService.loadPartnerRoleNamebookListForPartnerUser(partnerUser.id).subscribe(partnerRoles => {
-                        this.selectedPartnerRoles.setValue(
-                            partnerRoles.map(role => { return role.id })
-                        );
-                    });
-                });
+            })
+            .subscribe(({ userExtended, rolesForTheUser, roleOptions, genderOptions}) => {
+                this.init(new UserExtended(userExtended));
+                this.selectedRoles.setValue(
+                    rolesForTheUser.map(role => { return role.id })
+                );
+                this.roleOptions = roleOptions.map(n => { return { label: n.displayName, value: n.id } });
+                this.genderOptions = genderOptions.map(n => { return { label: n.displayName, value: n.id }});
             });
         });
     }
 
-    ngOnDestroy() {
-    }
-    
-    selectedSegmentationItemIdsChange(event: number[]){
-        this.selectedSegmentationItemIds = event;
+    init(model: UserExtended){
+        this.initFormGroup(model);
     }
 
     override onBeforeSave(): void {
-        let saveBody: PartnerUserSaveBody = new PartnerUserSaveBody();
+        let saveBody: UserExtendedSaveBody = new UserExtendedSaveBody();
 
-        saveBody.userExtendedDTO = this.userExtended;
+        saveBody.userExtendedDTO = this.model;
         saveBody.selectedRoleIds = this.selectedRoles.value;
-
-        saveBody.partnerUserDTO = this.partnerUser;
-        saveBody.selectedPartnerRoleIds = this.selectedPartnerRoles.value;
-
-        saveBody.selectedSegmentationItemIds = this.selectedSegmentationItemIds;
 
         this.saveBody = saveBody;
         return;

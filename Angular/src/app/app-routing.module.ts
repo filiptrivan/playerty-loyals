@@ -38,6 +38,11 @@ import { PartnerGuard } from './core/guards/partner.guard';
                         loadChildren: () => import('./modules/notification/notification.module').then(m => m.NotificationModule),
                         canActivate: [AuthGuard, PartnerGuard]
                     },
+                    { 
+                        path: '',
+                        loadChildren: () => import('./modules/tiers/tiers.module').then(m => m.TiersModule),
+                        canActivate: [AuthGuard, PartnerGuard]
+                    },
                 ],
             },
             {

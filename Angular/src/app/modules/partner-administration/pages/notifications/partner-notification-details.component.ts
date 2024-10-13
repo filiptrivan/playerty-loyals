@@ -1,17 +1,14 @@
+import { PartnerService } from './../../../../business/services/helper/partner.service';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
-import { TableLazyLoadEvent } from 'primeng/table';
-import { firstValueFrom, forkJoin, map, Observable, tap } from 'rxjs';
-import { PartnerNotification, PartnerNotificationSaveBody, PartnerUser } from 'src/app/business/entities/generated/business-entities.generated';
+import { firstValueFrom, forkJoin, map, Observable } from 'rxjs';
+import { PartnerNotification, PartnerNotificationSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
 import { TableFilter } from 'src/app/business/entities/table-filter';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { isArrayEmpty } from 'src/app/business/services/validation/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { Column, SelectedRowsMethodResult } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
-import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
 @Component({
@@ -41,14 +38,13 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute,
-        private apiService: ApiService) 
-        {
+        private apiService: ApiService,
+        private partnerService: PartnerService
+    ) {
         super(differs, http, messageService, changeDetectorRef, router, route);
-        }
+    }
          
     override ngOnInit() {
-        // this.selectedPartnerUsersForAppNotification.validator = isArrayEmpty(this.selectedPartnerUsersForAppNotification);
-        // this.selectedPartnerUsersForEmailNotification.validator = isArrayEmpty(this.selectedPartnerUsersForEmailNotification);
         this.populatePartnerUserTableCols();
         
         this.route.params.subscribe((params) => {
@@ -56,16 +52,8 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
             if(this.modelId > 0){
                 forkJoin({
                     partnerNotification: this.apiService.getPartnerNotification(this.modelId),
-                    // partnerUsers: this.apiService.loadPartnerUserNamebookListForPartnerNotification(this.modelId),
-                    // partnerUsers: this.apiService.loadPartnerUserListForPartnerNotificationForTable(this.modelId),
                   }).subscribe(({ partnerNotification }) => {
                     this.init(new PartnerNotification(partnerNotification));
-                    // this.selectedPartnerUsersForAppNotification.setValue(
-                    //     partnerUsers.map(partnerUser => ({ label: partnerUser.displayName, value: partnerUser.id }))
-                    // );
-                    // this.selectedPartnerUsersForEmailNotification.setValue(
-                    //     partnerUsers.map(partnerUser => ({ label: partnerUser.displayName, value: partnerUser.id }))
-                    // );
                   });
             }
             else{
@@ -88,29 +76,13 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
         this.cols = [
             {name: 'User', filterType: 'text', field: 'userDisplayName'},
             {name: 'Points', filterType: 'numeric', field: 'points', showMatchModes: true},
-            {name: 'Tier', filterType: 'multiselect', field: 'tierDisplayName', filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(this.loadTierListForDropdown()) },
-            {name: 'Segmentation', filterType: 'multiselect', field: 'checkedSegmentationItemsCommaSeparated', dropdownOrMultiselectValues: await firstValueFrom(this.loadSegmentationItemListForPartnerForDropdown()) },
+            {name: 'Tier', filterType: 'multiselect', field: 'tierDisplayName', filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(this.partnerService.loadTierListForDropdown()) },
+            {name: 'Segmentation', filterType: 'multiselect', field: 'checkedSegmentationItemsCommaSeparated', dropdownOrMultiselectValues: await firstValueFrom(this.partnerService.loadSegmentationItemListForPartnerForDropdown()) },
             {name: 'Created at', filterType: 'date', field: 'createdAt', showMatchModes: true},
         ]
     }
 
-    loadTierListForDropdown(): Observable<PrimengOption[]>{
-        return this.apiService.loadTierListForDropdown().pipe(
-            map(res => {
-                return res.map(x => ({ label: x.displayName, value: x.id }));
-            })
-        );
-    }
-
-    loadSegmentationItemListForPartnerForDropdown(): Observable<PrimengOption[]>{
-        return this.apiService.loadSegmentationItemListForDropdown().pipe(
-            map(res => {
-                return res.map(x => ({ label: x.displayName, value: x.id }));
-            })
-        );
-    }
-
-    // FT: Using arrow function solved the problem with undefined this.modelId
+    // FT HACK: Using arrow function solved the problem with undefined this.modelId
     selectedPartnerUserLazyLoad = (event: TableFilter): Observable<SelectedRowsMethodResult> => {
         let tableFilter: TableFilter = event;
         tableFilter.additionalFilterIdLong = this.modelId;

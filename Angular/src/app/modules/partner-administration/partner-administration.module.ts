@@ -15,6 +15,7 @@ import { PartnerNotificationListComponent } from './pages/notifications/partner-
 import { IndexCardComponent } from 'src/app/core/components/index-card/index-card.component';
 import { SegmentationListComponent } from './pages/segmentations/segmentation-list.component';
 import { SegmentationDetailsComponent } from './pages/segmentations/segmentation-details.component';
+import { SegmentationSelectComponent } from '../administration/partials/segmentation-select.component';
 
 const routes: Routes = [
     {
@@ -62,7 +63,8 @@ const routes: Routes = [
         SoftDataTableComponent,
         SoftControlsModule,
         CardSkeletonComponent,
-        IndexCardComponent
+        IndexCardComponent,
+        SegmentationSelectComponent,
     ],
     declarations: [
         PartnerUserListComponent,

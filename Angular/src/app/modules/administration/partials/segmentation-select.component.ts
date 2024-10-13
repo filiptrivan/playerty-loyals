@@ -4,8 +4,8 @@ import { Segmentation, SegmentationItem } from 'src/app/business/entities/genera
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { CardSkeletonComponent } from "../../../core/components/card-skeleton/card-skeleton.component";
 import { SoftCheckboxComponent } from 'src/app/core/controls/soft-checkbox/soft-checkbox.component';
-import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
-import { FormArray, FormGroup } from '@angular/forms';
+import { SoftFormArray, SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { FormGroup } from '@angular/forms';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -28,7 +28,7 @@ export class SegmentationSelectComponent extends BaseFormCopy implements OnInit 
     @Input() override formGroup: FormGroup;
     @Output() onIdsChange: EventEmitter<number[]> = new EventEmitter();
     segmentationItems: SegmentationItem[] = [];
-    segmentationItemsFormArray: FormArray;
+    segmentationItemsFormArray: SoftFormArray;
     segmentationItemModel: SegmentationItem = new SegmentationItem();
 
     constructor(
