@@ -98,45 +98,45 @@ export class ApiSecurityService {
     
 
 
-    loadNotificationListForAutocomplete(limit: number, query: string): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadNotificationListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
-    }
+    // loadNotificationListForAutocomplete(limit: number, query: string): Observable<Namebook[]> {
+    //     return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadNotificationListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
+    // }
 
-    loadNotificationListForDropdown(): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadNotificationListForDropdown`, environment.httpSkipSpinnerOptions);
-    }
+    // loadNotificationListForDropdown(): Observable<Namebook[]> {
+    //     return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadNotificationListForDropdown`, environment.httpSkipSpinnerOptions);
+    // }
 
-    loadNotificationListForTable(dto: TableFilter): Observable<Notification[]> { 
-        return this.http.post<Notification[]>(`${environment.apiUrl}/Auth/LoadNotificationListForTable`, dto, environment.httpSkipSpinnerOptions);
-    }
+    // loadNotificationListForTable(dto: TableFilter): Observable<Notification[]> { 
+    //     return this.http.post<Notification[]>(`${environment.apiUrl}/Auth/LoadNotificationListForTable`, dto, environment.httpSkipSpinnerOptions);
+    // }
 
-    exportNotificationListToExcel(dto: TableFilter): Observable<any> { 
-        return this.http.post<any>(`${environment.apiUrl}/Auth/ExportNotificationListToExcel`, dto, environment.httpOptions);
-    }
+    // exportNotificationListToExcel(dto: TableFilter): Observable<any> { 
+    //     return this.http.post<any>(`${environment.apiUrl}/Auth/ExportNotificationListToExcel`, dto, environment.httpOptions);
+    // }
 
-    deleteNotification(id: number): Observable<any> { 
-        return this.http.delete<any>(`${environment.apiUrl}/Auth/DeleteNotification?id=${id}`);
-    }
+    // deleteNotification(id: number): Observable<any> { 
+    //     return this.http.delete<any>(`${environment.apiUrl}/Auth/DeleteNotification?id=${id}`);
+    // }
 
-    getNotification(id: number): Observable<Notification> {
-        return this.http.get<Notification>(`${environment.apiUrl}/Auth/GetNotification?id=${id}`);
-    }
+    // getNotification(id: number): Observable<Notification> {
+    //     return this.http.get<Notification>(`${environment.apiUrl}/Auth/GetNotification?id=${id}`);
+    // }
 
-    loadNotificationListForTheCurrentUser(tableFilter: TableFilter): Observable<TableResponse> {
-        return this.http.post<TableResponse>(`${environment.apiUrl}/Auth/LoadNotificationListForTheCurrentUser`, tableFilter);
-    }
+    // loadNotificationListForTheCurrentUser(tableFilter: TableFilter): Observable<TableResponse> {
+    //     return this.http.post<TableResponse>(`${environment.apiUrl}/Auth/LoadNotificationListForTheCurrentUser`, tableFilter);
+    // }
 
-    saveNotification(dto: Notification): Observable<Notification> { 
-        return this.http.put<Notification>(`${environment.apiUrl}/Auth/SaveNotification`, dto, environment.httpOptions);
-    }
+    // saveNotification(dto: Notification): Observable<Notification> { 
+    //     return this.http.put<Notification>(`${environment.apiUrl}/Auth/SaveNotification`, dto, environment.httpOptions);
+    // }
 
-    loadPermissionListForNotification(notificationId: number): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadPermissionListForNotification?notificationId=${notificationId}`, environment.httpSkipSpinnerOptions);
-    }
+    // loadPermissionListForNotification(notificationId: number): Observable<Namebook[]> {
+    //     return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadPermissionListForNotification?notificationId=${notificationId}`, environment.httpSkipSpinnerOptions);
+    // }
 
-    loadUserExtendedNamebookListForNotification(notificationId: number): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadUserExtendedNamebookListForNotification?notificationId=${notificationId}`, environment.httpSkipSpinnerOptions);
-    }
+    // loadUserExtendedNamebookListForNotification(notificationId: number): Observable<Namebook[]> {
+    //     return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadUserExtendedNamebookListForNotification?notificationId=${notificationId}`, environment.httpSkipSpinnerOptions);
+    // }
 
     loadNotificationNamebookListForUserExtended(userId: number): Observable<Namebook[]> {
         return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadNotificationNamebookListForUserExtended?userId=${userId}`, environment.httpSkipSpinnerOptions);

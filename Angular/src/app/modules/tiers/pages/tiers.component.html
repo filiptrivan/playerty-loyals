@@ -4,41 +4,9 @@
       <div class="bold-header-separator"></div>
     </div>
     <div style="display: flex; flex-direction: column; position: relative; z-index: 2;">
-      <div style="display: flex; justify-content: space-between;">
-        <!-- <div>{{tierForTheCurrentUser?.name}}</div>
-        <div>{{tierForTheCurrentUser?.validTo}} points</div> -->
-      </div>
-      <!-- @for (tier of tiers; track $index) {
-        <div class="notification-border" style="padding: 18px; margin: 0px;">
-          <div class="text-wrapper">
-            <div class="header" style="margin-bottom: 10px; display: flex; justify-content: space-between; position: relative;">
-              <div>
-                <div>{{tier.name}}</div>
-                <div class="header-separator"></div>
-              </div>
-            </div>
-            <div>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos voluptas beatae maxime vero est magnam dolorem minima optio adipisci, dignissimos esse repellat cum reprehenderit aliquam perferendis natus libero at ut.
-            </div>
-          </div>
-        </div>
-      } -->
-      <p-timeline [value]="tiers" align="left" styleClass="customized-timeline">
-        <ng-template pTemplate="marker" let-tier let-i="index">
-          <span class="flex z-1 w-2rem h-2rem align-items-center justify-content-center text-white border-circle shadow-2 primary-color-background">
-              {{i}}
-          </span>
-        </ng-template>
-        <ng-template pTemplate="content" let-tier>
-            <p-card [header]="tier.status" [subheader]="tier.date">
-                <img *ngIf="tier.image" [src]="'assets/demo/images/product/' + tier.image" [alt]="tier.name" width="200" class="shadow-2" />
-                <p class="line-height-3 my-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
-                    quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
-                <button pButton label="Read more" class="p-button-outlined mb-5"></button>
-            </p-card>
-        </ng-template>
-    </p-timeline>
-      <!-- <p-progressBar [value]="levelPercentForTheCurrentUser" color="var(--primary-dark-color)"/> -->
+      
+    <timeline-index-progressbar [items]="tiers" [currentItem]="tierForTheCurrentPartnerUser" [currentUserPoints]="currentPartnerUser?.points" [connectorMethod]="connectorMethod"></timeline-index-progressbar>
+
     </div>
     <div class="card-overflow-icon">
       <i class="pi pi-sitemap"></i>

@@ -70,7 +70,6 @@ namespace Playerty.Loyals.WebAPI.Controllers
         public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserForPartnerNotificationListForTable(TableFilterDTO dto)
         {
             return await _loyalsBusinessService.LoadPartnerUserForPartnerNotificationListForTable(dto);
-
         }
 
         [HttpPut]
@@ -82,9 +81,9 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task SendNotificationEmail(long partnerNotificationId, int partnerNotificationVersion)
+        public async Task SendPartnerNotificationEmail(long partnerNotificationId, int partnerNotificationVersion)
         {
-            await _loyalsBusinessService.SendNotificationEmail(partnerNotificationId, partnerNotificationVersion);
+            await _loyalsBusinessService.SendPartnerNotificationEmail(partnerNotificationId, partnerNotificationVersion);
         }
 
         [HttpPost]

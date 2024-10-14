@@ -12,6 +12,7 @@ using Soft.Generator.Shared.DTO;
 using Playerty.Loyals.Business.Enums;
 using Playerty.Loyals.Business.Services;
 using Soft.Generator.Security.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Playerty.Loyals.WebAPI.Controllers
 {
@@ -113,6 +114,82 @@ namespace Playerty.Loyals.WebAPI.Controllers
         {
             return await _loyalsBusinessService.LoadGenderListForDropdown(_context.DbSet<Gender>(), false);
         }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task SendNotificationEmail(long notificationId, int notificationVersion)
+        {
+            await _loyalsBusinessService.SendNotificationEmail(notificationId, notificationVersion);
+        }
+
+        #region Notification
+
+        [HttpPost]
+        [AuthGuard]
+        public async Task<TableResponseDTO<NotificationDTO>> LoadNotificationListForTable(TableFilterDTO dto)
+        {
+            return await _loyalsBusinessService.LoadNotificationListForTable(dto, _context.DbSet<Notification>().Where(a => EF.Property<string>(a, "Discriminator") == nameof(Notification)));
+        }
+
+        [HttpPost]
+        [AuthGuard]
+        public async Task<IActionResult> ExportNotificationListToExcel(TableFilterDTO dto)
+        {
+            byte[] fileContent = await _loyalsBusinessService.ExportNotificationListToExcel(dto, _context.DbSet<Notification>().Where(a => EF.Property<string>(a, "Discriminator") == nameof(Notification)));
+            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Notifications.xlsx"));
+        }
+
+        [HttpDelete]
+        [AuthGuard]
+        public async Task DeleteNotification(long id)
+        {
+            await _loyalsBusinessService.DeleteEntityAsync<Notification, long>(id);
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<NotificationDTO> GetNotification(long id)
+        {
+            return await _loyalsBusinessService.GetNotificationDTOAsync(id);
+        }
+
+        [HttpPut]
+        [AuthGuard]
+        public async Task<NotificationDTO> SaveNotification(NotificationSaveBodyDTO notificationSaveBodyDTO)
+        {
+            return await _loyalsBusinessService.SaveNotificationAndReturnDTOExtendedAsync(notificationSaveBodyDTO);
+        }
+
+        [HttpPost]
+        [AuthGuard]
+        public async Task<TableResponseDTO<UserExtendedDTO>> LoadUserForNotificationListForTable(TableFilterDTO dto)
+        {
+            return await _loyalsBusinessService.LoadUserForNotificationListForTable(dto);
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<NamebookDTO<long>>> LoadUserExtendedNamebookListForNotification(long notificationId)
+        {
+            return await _loyalsBusinessService.LoadUserExtendedNamebookListForNotification(notificationId);
+        }
+
+        //[HttpPost]
+        //[AuthGuard]
+        //public async Task<TableResponseDTO<NotificationDTO>> LoadNotificationListForTheCurrentUser(TableFilterDTO tableFilterDTO)
+        //{
+        //    return await _loyalsBusinessService.LoadNotificationListForTheCurrentUser(tableFilterDTO);
+        //}
+
+        // TODO FT: This should exist in other systems
+        //[HttpGet]
+        //[AuthGuard]
+        //public async Task<int> GetUnreadNotificationCountForTheCurrentUser()
+        //{
+        //    return await _loyalsBusinessService.GetUnreGetUnreadNotificationCountForTheCurrentUser();
+        //}
+
+        #endregion
 
     }
 }

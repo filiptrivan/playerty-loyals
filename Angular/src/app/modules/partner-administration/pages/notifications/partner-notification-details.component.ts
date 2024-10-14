@@ -67,7 +67,7 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
     }
 
     sendEmailNotification(){
-        this.apiService.sendNotificationEmail(this.modelId, this.model.version).subscribe(() => {
+        this.apiService.sendPartnerNotificationEmail(this.modelId, this.model.version).subscribe(() => {
             this.messageService.successMessage($localize`:@@SuccessfulEmailAttempt:Your email attempt has been processed.`);
         });
     }

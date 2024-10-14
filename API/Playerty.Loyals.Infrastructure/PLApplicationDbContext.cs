@@ -30,6 +30,8 @@ namespace Playerty.Loyals.Infrastructure
         public DbSet<PartnerNotification> PartnerNotifications { get; set; }
         public DbSet<PartnerRole> PartnerRoles { get; set; }
         public DbSet<Gender> Genders { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<NotificationUser> NotificationUser { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,6 +40,21 @@ namespace Playerty.Loyals.Infrastructure
             modelBuilder.Entity<Partner>()
                 .HasIndex(u => u.Slug)
                 .IsUnique();
+
+            modelBuilder.Entity<NotificationUser>()
+                .HasKey(ru => new { ru.NotificationsId, ru.UsersId });
+
+            modelBuilder.Entity<UserExtended>()
+                .HasMany(e => e.Notifications)
+                .WithMany(e => e.Users)
+                .UsingEntity<NotificationUser>(
+                    j => j.HasOne<Notification>()
+                          .WithMany()
+                          .HasForeignKey(ru => ru.NotificationsId),
+                    j => j.HasOne<UserExtended>()
+                          .WithMany()
+                          .HasForeignKey(ru => ru.UsersId)
+                );
 
             modelBuilder.Entity<PartnerNotificationPartnerUser>()
                 .HasKey(ru => new { ru.PartnerNotificationsId, ru.PartnerUsersId });

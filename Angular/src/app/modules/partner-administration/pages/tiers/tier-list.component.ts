@@ -35,7 +35,7 @@ export class TierListComponent extends BaseForm<Tier> implements OnInit {
         this.init(new Tier());
 
         forkJoin({
-            tiers: this.apiService.getTiersForThePartner(),
+            tiers: this.apiService.loadTierList(),
         }).subscribe(({ tiers }) => {
             this.initFormArray(tiers, new Tier({id: 0}));
             

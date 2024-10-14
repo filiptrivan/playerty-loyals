@@ -37,11 +37,8 @@ export class DashboardComponent implements OnInit {
         this.apiService.getTier(res.tierId).subscribe(res => {
           this.tierForTheCurrentUser = res;
           const levelPercentForTheCurrentUserHelper = Number((this.currentUser.points / res.validTo * 100).toFixed(2));
-          if(levelPercentForTheCurrentUserHelper > 100){
-            this.levelPercentForTheCurrentUser = 100;
-          }else{
-            this.levelPercentForTheCurrentUser = levelPercentForTheCurrentUserHelper;
-          }
+
+          this.levelPercentForTheCurrentUser = Math.min(levelPercentForTheCurrentUserHelper, 100);
         })
       }
 

@@ -16,6 +16,7 @@ import { IndexCardComponent } from 'src/app/core/components/index-card/index-car
 import { SegmentationListComponent } from './pages/segmentations/segmentation-list.component';
 import { SegmentationDetailsComponent } from './pages/segmentations/segmentation-details.component';
 import { SegmentationSelectComponent } from '../administration/partials/segmentation-select.component';
+import { BaseNotificationComponent } from 'src/app/core/components/base-notification/base-notification.component';
 
 const routes: Routes = [
     {
@@ -65,6 +66,7 @@ const routes: Routes = [
         CardSkeletonComponent,
         IndexCardComponent,
         SegmentationSelectComponent,
+        BaseNotificationComponent,
     ],
     declarations: [
         PartnerUserListComponent,

@@ -22,9 +22,9 @@
                         <soft-textarea [control]="control('descriptionLatin')"></soft-textarea>
                     </div>
                     <div class="col-12">
-                        <soft-data-table [tableTitle]="tableTitle" [cols]="cols" [controllerName]="controllerName" [objectName]="objectName" [showAddButton]="false" selectionMode="multiple"
-                        [newlySelectedItems]="newlySelectedPartnerUserList" [unselectedItems]="unselectedPartnerUserList" [rows]="5" (onLazyLoad)="onLazyLoad($event)"
-                        [selectedLazyLoadObservableMethod]="selectedPartnerUserLazyLoad" (onIsAllSelectedChange)="isAllSelectedChange($event)"></soft-data-table>
+                        <soft-data-table [tableTitle]="tableTitle" [cols]="cols" [controllerName]="tableControllerName" [objectName]="tableObjectName" [showAddButton]="false" selectionMode="multiple"
+                        [newlySelectedItems]="newlySelectedObjectList" [unselectedItems]="unselectedObjectList" [rows]="5" (onLazyLoad)="onLazyLoad($event)"
+                        [selectedLazyLoadObservableMethod]="selectedObjectLazyLoad" (onIsAllSelectedChange)="isAllSelectedChange($event)"></soft-data-table>
                     </div>
                     <div class="col-12">
                         <soft-editor [control]="control('emailBody')"></soft-editor>
@@ -36,6 +36,9 @@
                 <p-button (onClick)="onSave()" label="Save" icon="pi pi-save"></p-button>
                 <p-button (onClick)="sendEmailNotification()" label="Send email notification" icon="pi pi-send"></p-button>
                 <soft-return-button></soft-return-button>
+                <!-- <div footerRight>
+                    Updated {{this.model.modifiedAt | pipeWithLocale}} ago
+                </div> -->
            </panel-footer>
     
         </soft-panel>

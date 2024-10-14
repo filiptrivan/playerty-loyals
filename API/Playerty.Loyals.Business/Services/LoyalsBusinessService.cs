@@ -119,15 +119,62 @@ namespace Playerty.Loyals.Services
 
         #endregion
 
-        #region Tier
+        #region Notification
 
-        public async Task<List<TierDTO>> GetTiersForThePartner()
+        public async Task<NotificationDTO> SaveNotificationAndReturnDTOExtendedAsync(NotificationSaveBodyDTO notificationSaveBodyDTO)
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                return await _context.DbSet<Tier>().AsNoTracking().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom).ProjectToType<TierDTO>(Mapper.TierToDTOConfig()).ToListAsync();
+                return await _context.WithTransactionAsync(async () =>
+                {
+                    NotificationDTO savedNotificationDTO = await SaveNotificationAndReturnDTOAsync(notificationSaveBodyDTO.NotificationDTO, false, false);
+
+                    PaginationResult<UserExtended> paginationResult = await LoadUserExtendedListForPagination(notificationSaveBodyDTO.TableFilter, _context.DbSet<UserExtended>());
+
+                    await UpdateUserExtendedListForNotificationTableSelection(paginationResult.Query, savedNotificationDTO.Id, notificationSaveBodyDTO);
+
+                    return savedNotificationDTO;
+                });
             });
         }
+
+        // FT: Add this to the generator
+        public async Task<TableResponseDTO<UserExtendedDTO>> LoadUserForNotificationListForTable(TableFilterDTO tableFilterPayload)
+        {
+            TableResponseDTO<UserExtendedDTO> tableResponse = new TableResponseDTO<UserExtendedDTO>();
+
+            await _context.WithTransactionAsync(async () =>
+            {
+                IQueryable<UserExtended> query = _context.DbSet<UserExtended>().Skip(tableFilterPayload.First).Take(tableFilterPayload.Rows).Where(x => x.Notifications.Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)); // notificationId
+                PaginationResult<UserExtended> paginationResult = await LoadUserExtendedListForPagination(tableFilterPayload, query);
+
+                tableResponse.Data = await paginationResult.Query
+                    .ProjectToType<UserExtendedDTO>(Mapper.UserExtendedProjectToConfig())
+                    .ToListAsync();
+
+                int count = await _context.DbSet<UserExtended>().Where(x => x.Notifications.Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)).CountAsync();
+
+                tableResponse.TotalRecords = count;
+            });
+
+            return tableResponse;
+        }
+
+        public async Task SendNotificationEmail(long notificationId, int notificationVersion)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                Notification notification = await LoadInstanceAsync<Notification, long>(notificationId, notificationVersion); // FT: Checking version because if the user didn't save and some other user changed the version, he will send emails to wrong users
+
+                List<string> recipients = notification.Users.Select(x => x.Email).ToList();
+
+                await _emailingService.SendEmailAsync(recipients, notification.Title, notification.EmailBody);
+            });
+        }
+
+        #endregion
+
+        #region Tier
 
         public async Task<List<TierDTO>> SaveTierList(List<TierDTO> tierListDTO)
         {
@@ -261,6 +308,16 @@ namespace Playerty.Loyals.Services
             return await _context.WithTransactionAsync(async () =>
             {
                 return await _context.DbSet<Tier>().OrderByDescending(x => x.ValidTo).FirstOrDefaultAsync();
+            });
+        }
+
+        public async Task<TierDTO> GetTierDTOForTheCurrentPartnerUser()
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                PartnerUser partnerUser = await _partnerUserAuthenticationService.GetCurrentPartnerUser();
+                Tier tier = await GetTierForThePoints(partnerUser.Points);
+                return tier.Adapt<TierDTO>(Mapper.TierToDTOConfig());
             });
         }
 
@@ -565,7 +622,6 @@ namespace Playerty.Loyals.Services
 
         public async Task<PartnerNotificationDTO> SavePartnerNotificationAndReturnDTOExtendedAsync(PartnerNotificationSaveBodyDTO partnerNotificationSaveBodyDTO)
         {
-
             return await _context.WithTransactionAsync(async () =>
             {
                 int currentPartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
@@ -578,13 +634,13 @@ namespace Playerty.Loyals.Services
 
                 PaginationResult<PartnerUser> paginationResult = await LoadPartnerUserListForPagination(partnerNotificationSaveBodyDTO.TableFilter, allPartnerUsersQuery);
 
-                await UpdatePartnerUserListForPartnerNotificationTableSelection(paginationResult.Query, partnerNotificationSaveBodyDTO.PartnerNotificationDTO.Id, partnerNotificationSaveBodyDTO);
+                await UpdatePartnerUserListForPartnerNotificationTableSelection(paginationResult.Query, savedPartnerNotificationDTO.Id, partnerNotificationSaveBodyDTO);
 
                 return savedPartnerNotificationDTO;
             });
         }
 
-        public async Task SendNotificationEmail(long partnerNotificationId, int partnerNotificationVersion)
+        public async Task SendPartnerNotificationEmail(long partnerNotificationId, int partnerNotificationVersion)
         {
             await _context.WithTransactionAsync(async () =>
             {
@@ -632,33 +688,33 @@ namespace Playerty.Loyals.Services
                     .Take(tableFilterDTO.Rows)
                     .ToListAsync();
 
-                var notificationTasks = notificationUsers.Select(async x =>
+                List<NotificationDTO> notificationsDTO = new List<NotificationDTO>();
+
+                foreach (var item in notificationUsers)
                 {
                     NotificationDTO notificationDTO = new NotificationDTO();
 
-                    if (x.Discriminator == nameof(NotificationUser))
+                    if (item.Discriminator == nameof(NotificationUser))
                     {
-                        Notification notification = await LoadInstanceAsync<Notification, long>(x.NotificationId, null);
+                        Notification notification = await LoadInstanceAsync<Notification, long>(item.NotificationId, null);
                         notificationDTO.Id = notification.Id;
                         notificationDTO.Title = notification.Title;
                         notificationDTO.Description = notification.Description;
-                        notificationDTO.IsMarkedAsRead = x.IsMarkedAsRead;
+                        notificationDTO.CreatedAt = notification.CreatedAt;
+                        notificationDTO.IsMarkedAsRead = item.IsMarkedAsRead;
                     }
-                    else if (x.Discriminator == nameof(PartnerNotificationPartnerUser))
+                    else if (item.Discriminator == nameof(PartnerNotificationPartnerUser))
                     {
-                        PartnerNotification partnerNotification = await LoadInstanceAsync<PartnerNotification, long>(x.NotificationId, null);
+                        PartnerNotification partnerNotification = await LoadInstanceAsync<PartnerNotification, long>(item.NotificationId, null);
                         notificationDTO.Id = partnerNotification.Id;
                         notificationDTO.Title = partnerNotification.Title;
                         notificationDTO.Description = partnerNotification.Description;
-                        notificationDTO.IsMarkedAsRead = x.IsMarkedAsRead;
+                        notificationDTO.CreatedAt = partnerNotification.CreatedAt;
+                        notificationDTO.IsMarkedAsRead = item.IsMarkedAsRead;
                     }
 
-                    return notificationDTO;
-                });
-
-                NotificationDTO[] notificationsArrayDTO = await Task.WhenAll(notificationTasks);
-
-                List<NotificationDTO> notificationsDTO = notificationsArrayDTO.ToList();
+                    notificationsDTO.Add(notificationDTO);
+                }
 
                 notificationsDTO = notificationsDTO.OrderByDescending(x => x.CreatedAt).ToList();
 

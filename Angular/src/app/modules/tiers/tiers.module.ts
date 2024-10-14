@@ -5,6 +5,7 @@ import { SoftDataTableComponent } from "src/app/core/components/soft-data-table/
 import { SoftControlsModule } from "src/app/core/controls/soft-controls.module";
 import { CardSkeletonComponent } from "src/app/core/components/card-skeleton/card-skeleton.component";
 import { TiersComponent } from "./pages/tiers.component";
+import { TimelineIndexProgressbarComponent } from "src/app/core/components/timeline-index-progressbar/timeline-index-progressbar.component";
 
 const routes: Routes = [
     {
@@ -20,6 +21,7 @@ const routes: Routes = [
         SoftDataTableComponent,
         SoftControlsModule,
         CardSkeletonComponent,
+        TimelineIndexProgressbarComponent
     ],
     declarations: [
         TiersComponent,

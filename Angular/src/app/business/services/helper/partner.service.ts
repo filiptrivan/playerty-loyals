@@ -4,6 +4,7 @@ import { ApiService } from '../api/api.service';
 import { environment } from 'src/environments/environment';
 import { map, Observable } from 'rxjs';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
+import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
 @Injectable({
   providedIn: 'root' // FT: Ensures the service is available application-wide
@@ -14,6 +15,7 @@ export class PartnerService {
     private router: Router,
     private route: ActivatedRoute,
     private apiService: ApiService,
+    private messageService: SoftMessageService,
   ) {}
 
   startListening() {
@@ -40,5 +42,5 @@ export class PartnerService {
         })
     );
   }
-  
+
 }
