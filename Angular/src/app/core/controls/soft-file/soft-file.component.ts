@@ -30,10 +30,14 @@ export class SoftFileComponent extends BaseControl implements OnInit {
     }
 
     onSelectedFiles(event: FileSelectEvent){
-        const file = event.files[0]
-        const formData = new FormData();
-        formData.append('file', file, file.name);
-        this.control.setValue(formData);
+        const file = event.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+            const base64String = reader.result as string;
+            const base64Data = base64String.substring(base64String.indexOf(',') + 1);
+            this.control.setValue(base64Data);
+        };
     }
 
     choose(event, chooseCallback){

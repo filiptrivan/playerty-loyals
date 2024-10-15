@@ -317,6 +317,7 @@ namespace Playerty.Loyals.Services
             {
                 PartnerUser partnerUser = await _partnerUserAuthenticationService.GetCurrentPartnerUser();
                 Tier tier = await GetTierForThePoints(partnerUser.Points);
+
                 return tier.Adapt<TierDTO>(Mapper.TierToDTOConfig());
             });
         }
@@ -565,7 +566,7 @@ namespace Playerty.Loyals.Services
                 partnerRoleSaveBodyDTO.PartnerRoleDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
 
                 PartnerRoleDTO savedPartnerRoleDTO = await SavePartnerRoleAndReturnDTOAsync(partnerRoleSaveBodyDTO.PartnerRoleDTO, false, false);
-
+                
                 await UpdatePartnerUserListForPartnerRole(savedPartnerRoleDTO.Id, partnerRoleSaveBodyDTO.SelectedPartnerUserIds);
                 await UpdatePermissionListForPartnerRole(savedPartnerRoleDTO.Id, partnerRoleSaveBodyDTO.SelectedPermissionIds);
 

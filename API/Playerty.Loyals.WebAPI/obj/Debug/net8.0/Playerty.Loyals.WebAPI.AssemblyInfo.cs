@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Playerty.Loyals.WebAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+890e550d3e539517b540e55d26cd54a282b1cbec")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d8690271792d23f8c505665e47e9185e75244ca6")]
 [assembly: System.Reflection.AssemblyProductAttribute("Playerty.Loyals.WebAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Playerty.Loyals.WebAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

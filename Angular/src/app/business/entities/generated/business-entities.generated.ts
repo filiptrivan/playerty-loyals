@@ -665,7 +665,7 @@ export class Partner extends BaseEntity
 	updateUserGroupEndpoint?: string;
 	productsRecommendationEndpoint?: string;
 	updatePointsInterval?: number;
-	logoImage?: FormData;
+	logoImage?: string;
 	primaryColor?: string;
 	version?: number;
 	id?: number;
@@ -697,7 +697,7 @@ export class Partner extends BaseEntity
 		updateUserGroupEndpoint?: string;
 		productsRecommendationEndpoint?: string;
 		updatePointsInterval?: number;
-		logoImage?: FormData;
+		logoImage?: string;
 		primaryColor?: string;
 		version?: number;
 		id?: number;

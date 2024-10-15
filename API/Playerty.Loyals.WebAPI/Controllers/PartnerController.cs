@@ -12,6 +12,9 @@ using Soft.Generator.Shared.DTO;
 using Playerty.Loyals.Business.Enums;
 using Playerty.Loyals.Business.Services;
 using Soft.Generator.Shared.Helpers;
+using Mapster;
+using Playerty.Loyals.Business.DataMappers;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 
 
 namespace Playerty.Loyals.WebAPI.Controllers
