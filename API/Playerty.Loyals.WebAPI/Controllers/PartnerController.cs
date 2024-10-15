@@ -24,7 +24,6 @@ namespace Playerty.Loyals.WebAPI.Controllers
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
         private readonly LoyalsBusinessService _loyalsBusinessService;
 
-
         public PartnerController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService)
         {
             _context = context;
@@ -67,7 +66,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         {
             return await _loyalsBusinessService.SavePartnerAndReturnDTOAsync(partnerDTO, false, false);
         }
-
+        
         [HttpGet]
         //[AuthGuard] // FT: We should show login page of the partner to the user which is not logged in also.
         public async Task<PartnerDTO> GetCurrentPartner()

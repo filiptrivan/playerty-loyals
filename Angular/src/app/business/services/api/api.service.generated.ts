@@ -7,48 +7,48 @@ import { Namebook } from '../../entities/namebook';
 import { Codebook } from '../../entities/codebook';
 import { TableFilter } from '../../entities/table-filter';
 import { TableResponse } from './../../../core/entities/table-response';
-import { PartnerNotificationSaveBody } from '../../entities/generated/business-entities.generated';
-import { Product } from '../../entities/generated/business-entities.generated';
-import { Notification } from '../../entities/generated/business-entities.generated';
-import { UserExtendedSaveBody } from '../../entities/generated/business-entities.generated';
-import { PartnerUserSaveBody } from '../../entities/generated/business-entities.generated';
-import { NotificationSaveBody } from '../../entities/generated/business-entities.generated';
-import { SegmentationItem } from '../../entities/generated/business-entities.generated';
-import { QrCode } from '../../entities/generated/business-entities.generated';
-import { MergedPartnerUser } from '../../entities/generated/business-entities.generated';
 import { PartnerRoleSaveBody } from '../../entities/generated/business-entities.generated';
-import { Segmentation } from '../../entities/generated/business-entities.generated';
-import { SegmentationSaveBody } from '../../entities/generated/business-entities.generated';
 import { PartnerUser } from '../../entities/generated/business-entities.generated';
-import { Brand } from '../../entities/generated/business-entities.generated';
+import { NotificationSaveBody } from '../../entities/generated/business-entities.generated';
+import { Product } from '../../entities/generated/business-entities.generated';
+import { Segmentation } from '../../entities/generated/business-entities.generated';
+import { MergedPartnerUser } from '../../entities/generated/business-entities.generated';
+import { UserExtendedSaveBody } from '../../entities/generated/business-entities.generated';
+import { Notification } from '../../entities/generated/business-entities.generated';
 import { UserExtended } from '../../entities/generated/business-entities.generated';
+import { PartnerNotificationSaveBody } from '../../entities/generated/business-entities.generated';
 import { OnlineShop } from '../../entities/generated/business-entities.generated';
-import { Partner } from '../../entities/generated/business-entities.generated';
-import { PartnerRole } from '../../entities/generated/business-entities.generated';
+import { PartnerUserSaveBody } from '../../entities/generated/business-entities.generated';
+import { QrCode } from '../../entities/generated/business-entities.generated';
+import { SegmentationSaveBody } from '../../entities/generated/business-entities.generated';
+import { Brand } from '../../entities/generated/business-entities.generated';
+import { SegmentationItem } from '../../entities/generated/business-entities.generated';
 import { NotificationUser } from '../../entities/generated/business-entities.generated';
-import { TransactionStatus } from '../../entities/generated/business-entities.generated';
+import { Partner } from '../../entities/generated/business-entities.generated';
 import { TransactionProduct } from '../../entities/generated/business-entities.generated';
-import { Gender } from '../../entities/generated/business-entities.generated';
+import { PartnerNotification } from '../../entities/generated/business-entities.generated';
+import { PartnerRole } from '../../entities/generated/business-entities.generated';
 import { Tier } from '../../entities/generated/business-entities.generated';
 import { Transaction } from '../../entities/generated/business-entities.generated';
-import { PartnerNotification } from '../../entities/generated/business-entities.generated';
+import { Gender } from '../../entities/generated/business-entities.generated';
 import { PartnerNotificationPartnerUser } from '../../entities/generated/business-entities.generated';
-import { ExternalProvider } from '../../entities/generated/security-entities.generated';
-import { Registration } from '../../entities/generated/security-entities.generated';
-import { RefreshTokenRequest } from '../../entities/generated/security-entities.generated';
-import { ForgotPassword } from '../../entities/generated/security-entities.generated';
-import { VerificationTokenRequest } from '../../entities/generated/security-entities.generated';
-import { ForgotPasswordVerificationToken } from '../../entities/generated/security-entities.generated';
-import { RegistrationVerificationResult } from '../../entities/generated/security-entities.generated';
-import { RefreshToken } from '../../entities/generated/security-entities.generated';
-import { RoleSaveBody } from '../../entities/generated/security-entities.generated';
+import { TransactionStatus } from '../../entities/generated/business-entities.generated';
 import { LoginVerificationToken } from '../../entities/generated/security-entities.generated';
-import { RegistrationVerificationToken } from '../../entities/generated/security-entities.generated';
-import { LoginResult } from '../../entities/generated/security-entities.generated';
-import { Login } from '../../entities/generated/security-entities.generated';
+import { RefreshTokenRequest } from '../../entities/generated/security-entities.generated';
 import { JwtAuthResult } from '../../entities/generated/security-entities.generated';
-import { Permission } from '../../entities/generated/security-entities.generated';
+import { RegistrationVerificationToken } from '../../entities/generated/security-entities.generated';
+import { RegistrationVerificationResult } from '../../entities/generated/security-entities.generated';
+import { RoleSaveBody } from '../../entities/generated/security-entities.generated';
+import { Login } from '../../entities/generated/security-entities.generated';
+import { ForgotPasswordVerificationToken } from '../../entities/generated/security-entities.generated';
+import { RefreshToken } from '../../entities/generated/security-entities.generated';
+import { LoginResult } from '../../entities/generated/security-entities.generated';
+import { ForgotPassword } from '../../entities/generated/security-entities.generated';
+import { Registration } from '../../entities/generated/security-entities.generated';
+import { ExternalProvider } from '../../entities/generated/security-entities.generated';
+import { VerificationTokenRequest } from '../../entities/generated/security-entities.generated';
 import { Role } from '../../entities/generated/security-entities.generated';
+import { Permission } from '../../entities/generated/security-entities.generated';
 
 @Injectable()
 export class ApiGeneratedService extends ApiSecurityService {
@@ -58,82 +58,6 @@ export class ApiGeneratedService extends ApiSecurityService {
     }
 
     
-    loadPartnerNotificationListForTable(dto: TableFilter): Observable<TableResponse> { 
-        return this.http.post<TableResponse>(`${environment.apiUrl}/PartnerNotification/LoadPartnerNotificationListForTable`, dto, environment.httpSkipSpinnerOptions);
-    }
-
-    exportPartnerNotificationListToExcel(dto: TableFilter): Observable<any> { 
-        return this.http.post<any>(`${environment.apiUrl}/PartnerNotification/ExportPartnerNotificationListToExcel`, dto, environment.httpOptions);
-    }
-
-    deletePartnerNotification(id: number): Observable<any> { 
-        return this.http.delete<any>(`${environment.apiUrl}/PartnerNotification/DeletePartnerNotification?id=${id}`);
-    }
-
-    getPartnerNotification(id: number): Observable<PartnerNotification> {
-        return this.http.get<PartnerNotification>(`${environment.apiUrl}/PartnerNotification/GetPartnerNotification?id=${id}`);
-    }
-
-    loadPartnerUserNamebookListForPartnerNotification(partnerNotificationId: number): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerNotification/LoadPartnerUserNamebookListForPartnerNotification?partnerNotificationId=${partnerNotificationId}`, environment.httpSkipSpinnerOptions);
-    }
-
-    loadPartnerUserForPartnerNotificationListForTable(dto: TableFilter): Observable<TableResponse> { 
-        return this.http.post<TableResponse>(`${environment.apiUrl}/PartnerNotification/LoadPartnerUserForPartnerNotificationListForTable`, dto, environment.httpSkipSpinnerOptions);
-    }
-
-    savePartnerNotification(partnerNotificationSaveBodyDTO: PartnerNotificationSaveBody): Observable<PartnerNotification> { 
-        return this.http.put<PartnerNotification>(`${environment.apiUrl}/PartnerNotification/SavePartnerNotification`, partnerNotificationSaveBodyDTO, environment.httpOptions);
-    }
-
-    sendPartnerNotificationEmail(partnerNotificationId: number, partnerNotificationVersion: number): Observable<any> {
-        return this.http.get<any>(`${environment.apiUrl}/PartnerNotification/SendPartnerNotificationEmail?partnerNotificationId=${partnerNotificationId}&partnerNotificationVersion=${partnerNotificationVersion}`);
-    }
-
-    loadNotificationListForTheCurrentPartnerUser(tableFilterDTO: TableFilter): Observable<TableResponse> { 
-        return this.http.post<TableResponse>(`${environment.apiUrl}/PartnerNotification/LoadNotificationListForTheCurrentPartnerUser`, tableFilterDTO, environment.httpOptions);
-    }
-
-    getUnreadNotificationCountForTheCurrentPartnerUser(): Observable<any> {
-        return this.http.get<any>(`${environment.apiUrl}/PartnerNotification/GetUnreadNotificationCountForTheCurrentPartnerUser`);
-    }
-
-    loadTierListForTable(dto: TableFilter): Observable<TableResponse> { 
-        return this.http.post<TableResponse>(`${environment.apiUrl}/Tier/LoadTierListForTable`, dto, environment.httpSkipSpinnerOptions);
-    }
-
-    exportTierListToExcel(dto: TableFilter): Observable<any> { 
-        return this.http.post<any>(`${environment.apiUrl}/Tier/ExportTierListToExcel`, dto, environment.httpOptions);
-    }
-
-    deleteTier(id: number): Observable<any> { 
-        return this.http.delete<any>(`${environment.apiUrl}/Tier/DeleteTier?id=${id}`);
-    }
-
-    getTier(id: number): Observable<Tier> {
-        return this.http.get<Tier>(`${environment.apiUrl}/Tier/GetTier?id=${id}`);
-    }
-
-    saveTierList(tierListDTO: Tier[]): Observable<Tier[]> { 
-        return this.http.put<Tier[]>(`${environment.apiUrl}/Tier/SaveTierList`, tierListDTO, environment.httpOptions);
-    }
-
-    loadTierListForDropdown(): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Tier/LoadTierListForDropdown`, environment.httpSkipSpinnerOptions);
-    }
-
-    loadTierList(): Observable<Tier[]> {
-        return this.http.get<Tier[]>(`${environment.apiUrl}/Tier/LoadTierList`);
-    }
-
-    loadTierListFromLargestToSmallest(): Observable<Tier[]> {
-        return this.http.get<Tier[]>(`${environment.apiUrl}/Tier/LoadTierListFromLargestToSmallest`);
-    }
-
-    getTierForTheCurrentPartnerUser(): Observable<Tier> {
-        return this.http.get<Tier>(`${environment.apiUrl}/Tier/GetTierForTheCurrentPartnerUser`);
-    }
-
     getCurrentPartnerUser(): Observable<PartnerUser> {
         return this.http.get<PartnerUser>(`${environment.apiUrl}/PartnerUser/GetCurrentPartnerUser`);
     }
@@ -180,38 +104,6 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     getPartnerUserForTheUser(id: number): Observable<PartnerUser> {
         return this.http.get<PartnerUser>(`${environment.apiUrl}/PartnerUser/GetPartnerUserForTheUser?id=${id}`);
-    }
-
-    loadSegmentationListForTable(dto: TableFilter): Observable<TableResponse> { 
-        return this.http.post<TableResponse>(`${environment.apiUrl}/Segmentation/LoadSegmentationListForTable`, dto, environment.httpSkipSpinnerOptions);
-    }
-
-    exportSegmentationListToExcel(dto: TableFilter): Observable<any> { 
-        return this.http.post<any>(`${environment.apiUrl}/Segmentation/ExportSegmentationListToExcel`, dto, environment.httpOptions);
-    }
-
-    deleteSegmentation(id: number): Observable<any> { 
-        return this.http.delete<any>(`${environment.apiUrl}/Segmentation/DeleteSegmentation?id=${id}`);
-    }
-
-    getSegmentation(id: number): Observable<Segmentation> {
-        return this.http.get<Segmentation>(`${environment.apiUrl}/Segmentation/GetSegmentation?id=${id}`);
-    }
-
-    getSegmentationItemsForTheSegmentation(segmentationId: number): Observable<SegmentationItem[]> {
-        return this.http.get<SegmentationItem[]>(`${environment.apiUrl}/Segmentation/GetSegmentationItemsForTheSegmentation?segmentationId=${segmentationId}`);
-    }
-
-    saveSegmentation(segmentationSaveBodyDTO: SegmentationSaveBody): Observable<any> { 
-        return this.http.put<any>(`${environment.apiUrl}/Segmentation/SaveSegmentation`, segmentationSaveBodyDTO, environment.httpOptions);
-    }
-
-    getSegmentationListForTheCurrentPartner(): Observable<Segmentation[]> {
-        return this.http.get<Segmentation[]>(`${environment.apiUrl}/Segmentation/GetSegmentationListForTheCurrentPartner`);
-    }
-
-    loadSegmentationItemListForDropdown(): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Segmentation/LoadSegmentationItemListForDropdown`, environment.httpSkipSpinnerOptions);
     }
 
     loadPartnerListForTable(dto: TableFilter): Observable<TableResponse> { 
@@ -272,6 +164,74 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     loadPartnerRoleListForDropdown(): Observable<Namebook[]> {
         return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/LoadPartnerRoleListForDropdown`, environment.httpSkipSpinnerOptions);
+    }
+
+    loadTierListForTable(dto: TableFilter): Observable<TableResponse> { 
+        return this.http.post<TableResponse>(`${environment.apiUrl}/Tier/LoadTierListForTable`, dto, environment.httpSkipSpinnerOptions);
+    }
+
+    exportTierListToExcel(dto: TableFilter): Observable<any> { 
+        return this.http.post<any>(`${environment.apiUrl}/Tier/ExportTierListToExcel`, dto, environment.httpOptions);
+    }
+
+    deleteTier(id: number): Observable<any> { 
+        return this.http.delete<any>(`${environment.apiUrl}/Tier/DeleteTier?id=${id}`);
+    }
+
+    getTier(id: number): Observable<Tier> {
+        return this.http.get<Tier>(`${environment.apiUrl}/Tier/GetTier?id=${id}`);
+    }
+
+    saveTierList(tierListDTO: Tier[]): Observable<Tier[]> { 
+        return this.http.put<Tier[]>(`${environment.apiUrl}/Tier/SaveTierList`, tierListDTO, environment.httpOptions);
+    }
+
+    loadTierListForDropdown(): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Tier/LoadTierListForDropdown`, environment.httpSkipSpinnerOptions);
+    }
+
+    loadTierList(): Observable<Tier[]> {
+        return this.http.get<Tier[]>(`${environment.apiUrl}/Tier/LoadTierList`);
+    }
+
+    loadTierListFromLargestToSmallest(): Observable<Tier[]> {
+        return this.http.get<Tier[]>(`${environment.apiUrl}/Tier/LoadTierListFromLargestToSmallest`);
+    }
+
+    getTierForTheCurrentPartnerUser(): Observable<Tier> {
+        return this.http.get<Tier>(`${environment.apiUrl}/Tier/GetTierForTheCurrentPartnerUser`);
+    }
+
+    loadSegmentationListForTable(dto: TableFilter): Observable<TableResponse> { 
+        return this.http.post<TableResponse>(`${environment.apiUrl}/Segmentation/LoadSegmentationListForTable`, dto, environment.httpSkipSpinnerOptions);
+    }
+
+    exportSegmentationListToExcel(dto: TableFilter): Observable<any> { 
+        return this.http.post<any>(`${environment.apiUrl}/Segmentation/ExportSegmentationListToExcel`, dto, environment.httpOptions);
+    }
+
+    deleteSegmentation(id: number): Observable<any> { 
+        return this.http.delete<any>(`${environment.apiUrl}/Segmentation/DeleteSegmentation?id=${id}`);
+    }
+
+    getSegmentation(id: number): Observable<Segmentation> {
+        return this.http.get<Segmentation>(`${environment.apiUrl}/Segmentation/GetSegmentation?id=${id}`);
+    }
+
+    getSegmentationItemsForTheSegmentation(segmentationId: number): Observable<SegmentationItem[]> {
+        return this.http.get<SegmentationItem[]>(`${environment.apiUrl}/Segmentation/GetSegmentationItemsForTheSegmentation?segmentationId=${segmentationId}`);
+    }
+
+    saveSegmentation(segmentationSaveBodyDTO: SegmentationSaveBody): Observable<any> { 
+        return this.http.put<any>(`${environment.apiUrl}/Segmentation/SaveSegmentation`, segmentationSaveBodyDTO, environment.httpOptions);
+    }
+
+    getSegmentationListForTheCurrentPartner(): Observable<Segmentation[]> {
+        return this.http.get<Segmentation[]>(`${environment.apiUrl}/Segmentation/GetSegmentationListForTheCurrentPartner`);
+    }
+
+    loadSegmentationItemListForDropdown(): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Segmentation/LoadSegmentationItemListForDropdown`, environment.httpSkipSpinnerOptions);
     }
 
     getCurrentUser(): Observable<UserExtended> {
@@ -344,6 +304,46 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     loadUserExtendedNamebookListForNotification(notificationId: number): Observable<Namebook[]> {
         return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadUserExtendedNamebookListForNotification?notificationId=${notificationId}`, environment.httpSkipSpinnerOptions);
+    }
+
+    loadPartnerNotificationListForTable(dto: TableFilter): Observable<TableResponse> { 
+        return this.http.post<TableResponse>(`${environment.apiUrl}/PartnerNotification/LoadPartnerNotificationListForTable`, dto, environment.httpSkipSpinnerOptions);
+    }
+
+    exportPartnerNotificationListToExcel(dto: TableFilter): Observable<any> { 
+        return this.http.post<any>(`${environment.apiUrl}/PartnerNotification/ExportPartnerNotificationListToExcel`, dto, environment.httpOptions);
+    }
+
+    deletePartnerNotification(id: number): Observable<any> { 
+        return this.http.delete<any>(`${environment.apiUrl}/PartnerNotification/DeletePartnerNotification?id=${id}`);
+    }
+
+    getPartnerNotification(id: number): Observable<PartnerNotification> {
+        return this.http.get<PartnerNotification>(`${environment.apiUrl}/PartnerNotification/GetPartnerNotification?id=${id}`);
+    }
+
+    loadPartnerUserNamebookListForPartnerNotification(partnerNotificationId: number): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerNotification/LoadPartnerUserNamebookListForPartnerNotification?partnerNotificationId=${partnerNotificationId}`, environment.httpSkipSpinnerOptions);
+    }
+
+    loadPartnerUserForPartnerNotificationListForTable(dto: TableFilter): Observable<TableResponse> { 
+        return this.http.post<TableResponse>(`${environment.apiUrl}/PartnerNotification/LoadPartnerUserForPartnerNotificationListForTable`, dto, environment.httpSkipSpinnerOptions);
+    }
+
+    savePartnerNotification(partnerNotificationSaveBodyDTO: PartnerNotificationSaveBody): Observable<PartnerNotification> { 
+        return this.http.put<PartnerNotification>(`${environment.apiUrl}/PartnerNotification/SavePartnerNotification`, partnerNotificationSaveBodyDTO, environment.httpOptions);
+    }
+
+    sendPartnerNotificationEmail(partnerNotificationId: number, partnerNotificationVersion: number): Observable<any> {
+        return this.http.get<any>(`${environment.apiUrl}/PartnerNotification/SendPartnerNotificationEmail?partnerNotificationId=${partnerNotificationId}&partnerNotificationVersion=${partnerNotificationVersion}`);
+    }
+
+    loadNotificationListForTheCurrentPartnerUser(tableFilterDTO: TableFilter): Observable<TableResponse> { 
+        return this.http.post<TableResponse>(`${environment.apiUrl}/PartnerNotification/LoadNotificationListForTheCurrentPartnerUser`, tableFilterDTO, environment.httpOptions);
+    }
+
+    getUnreadNotificationCountForTheCurrentPartnerUser(): Observable<any> {
+        return this.http.get<any>(`${environment.apiUrl}/PartnerNotification/GetUnreadNotificationCountForTheCurrentPartnerUser`);
     }
 
 }

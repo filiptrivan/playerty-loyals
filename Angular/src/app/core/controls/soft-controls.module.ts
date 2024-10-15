@@ -14,6 +14,7 @@ import { SoftNumberComponent } from './soft-number/soft-number.component';
 import { SoftDropdownComponent } from './soft-dropdown/soft-dropdown.component';
 import { SoftEditorComponent } from './soft-editor/soft-editor.component';
 import { SoftColorpickComponent } from './soft-colorpick/soft-colorpick.component';
+import { SoftFileComponent } from './soft-file/soft-file.component';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { SoftColorpickComponent } from './soft-colorpick/soft-colorpick.componen
     SoftDropdownComponent,
     SoftEditorComponent,
     SoftColorpickComponent,
+    SoftFileComponent,
   ],
   exports: [
     CommonModule,
@@ -51,6 +53,7 @@ import { SoftColorpickComponent } from './soft-colorpick/soft-colorpick.componen
     SoftDropdownComponent,
     SoftEditorComponent,
     SoftColorpickComponent,
+    SoftFileComponent
   ],
   declarations: [
   ],

@@ -14,4 +14,8 @@
     <Folder Include="ValidationRules\" />
   </ItemGroup>
 
+    <ItemGroup>
+	    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
 </Project>

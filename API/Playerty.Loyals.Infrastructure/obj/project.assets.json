@@ -2968,7 +2968,10 @@
         },
         "runtime": {
           "bin/placeholder/Playerty.Loyals.Business.dll": {}
-        }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "Soft.Generator.Infrastructure/1.0.0": {
         "type": "project",

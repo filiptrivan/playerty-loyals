@@ -1,4 +1,5 @@
-﻿using Soft.Generator.Shared.Interfaces;
+﻿using Microsoft.AspNetCore.Http;
+using Soft.Generator.Shared.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

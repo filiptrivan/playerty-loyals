@@ -324,7 +324,6 @@ namespace Playerty.Loyals.Services
         #endregion
 
         #region Partner
-
         public async Task<List<CodebookDTO>> LoadPartnerWithSlugListForAutocomplete(int limit, string query, IQueryable<Partner> partnerQuery, bool authorize = true)
         {
             return await _context.WithTransactionAsync(async () =>
