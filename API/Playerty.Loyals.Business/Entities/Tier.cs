@@ -21,6 +21,10 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public string NameLatin { get; set; }
 
+        [StringLength(400, MinimumLength = 1)]
+        [Required]
+        public string Description { get; set; }
+
         //[Range(0, 100)]
         //[Required]
         //public int Discount { get; set; } // FT: It can't be byte because of fluent validation

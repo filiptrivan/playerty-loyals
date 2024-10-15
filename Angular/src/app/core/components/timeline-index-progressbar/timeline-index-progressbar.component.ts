@@ -46,30 +46,26 @@ export class TimelineIndexProgressbarComponent {
     }
 
     isPassed(item: any){
-        if (this.currentUserPoints > item.validTo) {
+        if (this.currentUserPoints >= item.validTo) {
             return true;
         }
 
         return false;
     }
 
-    ngAfterViewInit() {
-        const observer = new MutationObserver((mutations) => {
-          clearTimeout(this.resizeTimeout);
-          this.resizeTimeout = setTimeout(() => {
-            const connectors = document.querySelectorAll('.p-timeline-event-connector');
-      
-            if (connectors.length) {
-              connectors.forEach((connector, index) => {
-                if (this.connectorMethod != null){
-                    this.connectorMethod(connector, index);
-                }
-              });
+    changeConnector() {
+        clearTimeout(this.resizeTimeout);
+        this.resizeTimeout = setTimeout(() => {
+          const connectors = document.querySelectorAll('.p-timeline-event-connector');
+    
+          if (connectors.length) {
+            for (let i = connectors.length - 1; i >= 0; i--) {
+              if (this.connectorMethod != null){
+                  this.connectorMethod(connectors[i], i);
+              }
             }
-          }, 100);
-        });
-      
-        observer.observe(document.body, { childList: true, subtree: true });
+          }
+        }, 100);
     }
 
 }

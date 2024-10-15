@@ -1,7 +1,10 @@
 .p-colorpicker-preview,
 .p-fluid .p-colorpicker-preview.p-inputtext  {
-    width: $colorPickerPreviewWidth;
-    height: $colorPickerPreviewHeight;
+    // width: $colorPickerPreviewWidth;
+    // height: $colorPickerPreviewHeight;
+    width: 3rem;
+    height: 100%;
+    // position: absolute;
 }
 
 .p-colorpicker-panel {
@@ -17,3 +20,7 @@
 .p-colorpicker-overlay-panel {
     box-shadow: $inputOverlayShadow;
 }
+
+// .p-colorpicker{
+//     width: 100%;
+// }

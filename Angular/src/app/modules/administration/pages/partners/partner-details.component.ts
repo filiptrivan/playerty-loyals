@@ -1,18 +1,18 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin, Subscription } from 'rxjs';
-import { Tier } from 'src/app/business/entities/generated/business-entities.generated';
+import { forkJoin } from 'rxjs';
+import { Partner } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
 @Component({
-    selector: 'tier-details',
-    templateUrl: './tier-details.component.html',
+    selector: 'partner-details',
+    templateUrl: './partner-details.component.html',
     styles: [],
 })
-export class TierDetailsComponent extends BaseForm<Tier> implements OnInit {
+export class PartnerDetailsComponent extends BaseForm<Partner> implements OnInit {
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -29,23 +29,27 @@ export class TierDetailsComponent extends BaseForm<Tier> implements OnInit {
     override ngOnInit() {
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
-            if(this.modelId > 0){
-                forkJoin({
-                    tier: this.apiService.getTier(this.modelId),
-                  }).subscribe(({ tier }) => {
-                    this.init(new Tier(tier));
-                  });
-            }
-            else{
-                this.init(new Tier({id:0}));
-            }
+
+            forkJoin({
+                partner: this.apiService.getPartner(this.modelId),
+            })
+            .subscribe(({ partner }) => {
+                this.init(new Partner(partner));
+            });
         });
     }
 
-    init(model: Tier){
+    init(model: Partner){
         this.initFormGroup(model);
     }
 
     override onBeforeSave(): void {
+        // let saveBody: UserExtendedSaveBody = new UserExtendedSaveBody();
+
+        // saveBody.partnerExtendedDTO = this.model;
+        // saveBody.selectedRoleIds = this.selectedRoles.value;
+
+        // this.saveBody = saveBody;
+        // return;
     }
 }

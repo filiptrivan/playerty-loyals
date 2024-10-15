@@ -7,7 +7,8 @@ import { environment } from '../../../environments/environment';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { SoftMessageService } from './soft-message.service';
 import { SocialUser, SocialAuthService } from '@abacritt/angularx-social-login';
-import { User, ExternalProvider, Login, VerificationTokenRequest, LoginResult, ForgotPassword, Registration, RegistrationVerificationResult, RefreshTokenRequest } from 'src/app/business/entities/generated/security-entities.generated';
+import { ExternalProvider, Login, VerificationTokenRequest, LoginResult, ForgotPassword, Registration, RegistrationVerificationResult, RefreshTokenRequest } from 'src/app/business/entities/generated/security-entities.generated';
+import { UserExtended } from 'src/app/business/entities/generated/business-entities.generated';
 
 
 @Injectable({
@@ -17,7 +18,7 @@ export class AuthService implements OnDestroy {
   private readonly apiUrl = environment.apiUrl;
   private timer?: Subscription;
 
-  private _user = new BehaviorSubject<User | null>(null);
+  private _user = new BehaviorSubject<UserExtended | null>(null);
   user$ = this._user.asObservable();
 
   public _currentUserPermissions = new BehaviorSubject<string[] | null>(null); // FT: Can change it from other components
@@ -62,7 +63,7 @@ export class AuthService implements OnDestroy {
       if (event.key === 'login-event') {
         this.stopTokenTimer();
 
-        this.apiService.getCurrentUser().subscribe((user: User) => {
+        this.apiService.getCurrentUser().subscribe((user: UserExtended) => {
             this._user.next({
               id: user.id,
               email: user.email

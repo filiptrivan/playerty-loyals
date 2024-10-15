@@ -4,9 +4,9 @@ import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { LayoutService } from "./service/app.layout.service";
 import { environment } from 'src/environments/environment';
 import { filter, Subscription } from 'rxjs';
-import { User } from '../business/entities/generated/security-entities.generated';
 import { ApiService } from '../business/services/api/api.service';
 import { CacheService } from '../core/services/cache.service';
+import { PartnerUser, UserExtended } from '../business/entities/generated/business-entities.generated';
 
 interface SoftMenuItem {
   label?: string;
@@ -24,7 +24,8 @@ interface SoftMenuItem {
 })
 export class AppTopBarComponent implements OnDestroy {
     private subscription: Subscription | null = null;
-    currentUser: User;
+    currentUser: UserExtended;
+    currentPartnerUser: PartnerUser;
     currentUserNotificationsCount: number;
     menuItems: SoftMenuItem[] = [
       {
@@ -32,7 +33,7 @@ export class AppTopBarComponent implements OnDestroy {
         icon: 'pi-user',
         showSeparator: true,
         onClick: () => {
-          this.router.navigateByUrl(`/administration/users/${this.currentUser.id}`);
+          this.router.navigateByUrl(`/partner-administration/users/${this.currentPartnerUser.id}`);
         }
       },
       {
@@ -77,6 +78,10 @@ export class AppTopBarComponent implements OnDestroy {
     this.subscription = this.authService.user$.subscribe(res => {
         this.currentUser = res;
         this.avatarLabel = res?.email.charAt(0).toLocaleUpperCase();
+    });
+
+    this.apiService.getCurrentPartnerUser().subscribe(res => {
+        this.currentPartnerUser = res;
     });
 
     this.apiService.getUnreadNotificationCountForTheCurrentPartnerUser().subscribe((count) => {

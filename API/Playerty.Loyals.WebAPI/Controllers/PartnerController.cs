@@ -32,6 +32,41 @@ namespace Playerty.Loyals.WebAPI.Controllers
             _partnerUserAuthenticationService = partnerUserAuthenticationService;
         }
 
+        [HttpPost]
+        [AuthGuard]
+        public async Task<TableResponseDTO<PartnerDTO>> LoadPartnerListForTable(TableFilterDTO dto)
+        {
+            return await _loyalsBusinessService.LoadPartnerListForTable(dto, _context.DbSet<Partner>(), false);
+        }
+
+        [HttpPost]
+        [AuthGuard]
+        public async Task<IActionResult> ExportPartnerListToExcel(TableFilterDTO dto)
+        {
+            byte[] fileContent = await _loyalsBusinessService.ExportPartnerListToExcel(dto, _context.DbSet<Partner>(), false);
+            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Partners.xlsx"));
+        }
+
+        [HttpDelete]
+        [AuthGuard]
+        public async Task DeletePartner(int id)
+        {
+            await _loyalsBusinessService.DeleteEntityAsync<Partner, int>(id);
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<PartnerDTO> GetPartner(int id)
+        {
+            return await _loyalsBusinessService.GetPartnerDTOAsync(id, false);
+        }
+
+        [HttpPut]
+        [AuthGuard]
+        public async Task<PartnerDTO> SavePartner(PartnerDTO partnerDTO)
+        {
+            return await _loyalsBusinessService.SavePartnerAndReturnDTOAsync(partnerDTO, false, false);
+        }
 
         [HttpGet]
         //[AuthGuard] // FT: We should show login page of the partner to the user which is not logged in also.

@@ -1,4 +1,5 @@
-﻿using Soft.Generator.Security.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Soft.Generator.Security.Entities;
 using Soft.Generator.Security.Interface;
 using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.BaseEntities;
@@ -12,11 +13,11 @@ using System.Threading.Tasks;
 
 namespace Playerty.Loyals.Business.Entities
 {
+    [Index(nameof(Email), IsUnique = true)]
     public class UserExtended : BusinessObject<long>, IUser
     {
         [SoftDisplayName]
         [CustomValidator("EmailAddress()")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [StringLength(70, MinimumLength = 5)]
         [Required]
         public string Email { get; set; }

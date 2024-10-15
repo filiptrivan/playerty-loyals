@@ -33,6 +33,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { TimelineModule } from 'primeng/timeline';
 import { CardModule } from 'primeng/card';
+import { ColorPickerModule } from 'primeng/colorpicker';
 
 @NgModule({
   imports: [
@@ -70,6 +71,7 @@ import { CardModule } from 'primeng/card';
     InputGroupAddonModule,
     TimelineModule,
     CardModule,
+    ColorPickerModule,
   ],
   exports: [
     TableModule,
@@ -106,6 +108,7 @@ import { CardModule } from 'primeng/card';
     InputGroupAddonModule,
     TimelineModule,
     CardModule,
+    ColorPickerModule,
   ],
   declarations: [],
   providers: [

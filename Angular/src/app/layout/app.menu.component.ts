@@ -84,12 +84,6 @@ export class AppMenuComponent implements OnInit {
                             visible: true
                         },
                         {
-                            label: 'Notifications',
-                            icon: 'pi pi-fw pi-bell',
-                            routerLink: [`/notifications`],
-                            visible: true
-                        },
-                        {
                             label: 'Points',
                             icon: 'pi pi-fw pi-heart',
                             routerLink: [`/points`],
@@ -128,6 +122,12 @@ export class AppMenuComponent implements OnInit {
                                     hasPermission: (permissionCodes: string[]): boolean => { 
                                         return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
                                     }
+                                },
+                                {
+                                    label: 'Partners',
+                                    icon: 'pi pi-fw pi-at',
+                                    routerLink: [`/${environment.administrationSlug}/partners`],
+                                    visible: true
                                 },
                             ]
                         },

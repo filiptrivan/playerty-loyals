@@ -88,6 +88,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
+        public async Task<List<TierDTO>> LoadTierListFromLargestToSmallest()
+        {
+            return await _loyalsBusinessService.LoadTierDTOList(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderByDescending(x => x.ValidFrom), false);
+        }
+
+        [HttpGet]
+        [AuthGuard]
         public async Task<TierDTO> GetTierForTheCurrentPartnerUser()
         {
             return await _loyalsBusinessService.GetTierDTOForTheCurrentPartnerUser();

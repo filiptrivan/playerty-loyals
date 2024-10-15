@@ -1,10 +1,10 @@
 <p-timeline [value]="items" align="left" styleClass="customized-timeline">
 	<ng-template pTemplate="marker" let-item>
 	  <span [class]="(isCurrentItem(item) ? 'current-item ' : ' ') + (isPassed(item) ? 'passed-item ' : ' ') + 'circle'">
-		<ng-container *ngIf="isPassed(item) === false">
-			{{item.index}}
+		<ng-container *ngIf="isPassed(item) == false">
+			{{item.displayName}}
 		</ng-container>
-		<ng-container *ngIf="isPassed(item) === true">
+		<ng-container *ngIf="isPassed(item) == true">
 			<i class="pi pi-check"></i>
 		</ng-container>
 	  </span>
@@ -13,7 +13,7 @@
 	  <div>
 		<div>
 		  <div style="margin-bottom: 10px;">
-			  <div class="header">{{item.validFrom}}</div>
+			  <div class="header">{{item.validFrom}} - {{item.validTo}}</div>
 			  
 			  <div class="notification-border" style="padding: 18px; margin-top: 10px;">
 				<div class="header" style="margin-bottom: 10px;">{{item.name}}</div>

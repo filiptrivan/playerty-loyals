@@ -1,4 +1,4 @@
-  <div style="display: flex; flex-direction: column; gap: 14px; padding: 30px; position: relative; overflow: hidden;" class="card">
+  <div class="card dashboard-card-wrapper">
     <div class="big-header">
       {{currentUser?.points}} points
       <div class="bold-header-separator"></div>
@@ -15,8 +15,7 @@
     </div>
   </div>
 
-
-  <div style="padding: 30px; position: relative; overflow: hidden;" class="card">
+  <!-- <div style="padding: 30px; position: relative; overflow: hidden;" class="card">
     <div class="big-header">
       Your retail QR code 
       <div class="bold-header-separator"></div>
@@ -35,7 +34,6 @@
       <div class="vertical-gray-separator responsive-hidden" style="height: 210px;">
       </div>
 
-      <!-- <div class="blockHead"><span class="blocktext">Your QR code</span></div> -->
       <div style="text-align: center; margin: auto;">
         <div class="qr-code">
           <qrcode [qrdata]="'Your data string'" [width]="230" [errorCorrectionLevel]="'M'"></qrcode>
@@ -45,4 +43,4 @@
     <div class="card-overflow-icon" style="position: absolute; overflow: hidden; right: 8px; top: -25px; z-index: 1;">
       <i class="pi pi-qrcode" style="font-size: 270px;"></i>
     </div>
-  </div>
+  </div> -->

@@ -395,12 +395,22 @@ namespace Playerty.Loyals.Services
 
                 await UpdateSegmentationItemListForPartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO.Id, partnerUserSaveBodyDTO.SelectedSegmentationItemIds);
 
-                PartnerUser partnerUser = await SavePartnerUserAndReturnDomainAsync(partnerUserSaveBodyDTO.PartnerUserDTO, false, false); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
+                int pointsBeforeSave = await GetPointsForThePartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO.Id);
 
-                await UpdateFirstTimeFilledSegmentationsForTheUser(partnerUser, partnerUserSaveBodyDTO.SelectedSegmentationItemIds);
+                PartnerUser savedPartnerUser = await SavePartnerUserAndReturnDomainAsync(partnerUserSaveBodyDTO.PartnerUserDTO, false, false); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
 
-                if (partnerUser.Points != partnerUserSaveBodyDTO.PartnerUserDTO.Points)
-                    await UpdatePartnerUserTier(partnerUser);
+                await UpdateFirstTimeFilledSegmentationsForTheUser(savedPartnerUser, partnerUserSaveBodyDTO.SelectedSegmentationItemIds);
+
+                if (pointsBeforeSave != partnerUserSaveBodyDTO.PartnerUserDTO.Points)
+                    await UpdatePartnerUserTier(savedPartnerUser);
+            });
+        }
+
+        public async Task<int> GetPointsForThePartnerUser(long partnerUserId)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                return _context.DbSet<PartnerUser>().Where(x => x.Id == partnerUserId).Select(x => x.Points).Single();
             });
         }
 

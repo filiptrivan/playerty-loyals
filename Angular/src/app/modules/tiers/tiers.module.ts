@@ -24,7 +24,7 @@ const routes: Routes = [
         TimelineIndexProgressbarComponent
     ],
     declarations: [
-        TiersComponent,
+        // TiersComponent,
     ],
     providers:[]
 })

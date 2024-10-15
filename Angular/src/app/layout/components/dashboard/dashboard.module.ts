@@ -14,23 +14,27 @@ import { SoftDataTableComponent } from 'src/app/core/components/soft-data-table/
 import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
 import { CardSkeletonComponent } from 'src/app/core/components/card-skeleton/card-skeleton.component';
 import { QRCodeModule } from 'angularx-qrcode';
+import { TiersComponent } from "../../../modules/tiers/pages/tiers.component";
+import { TimelineIndexProgressbarComponent } from 'src/app/core/components/timeline-index-progressbar/timeline-index-progressbar.component';
 
 @NgModule({
     imports: [
-        CommonModule,
-        FormsModule,
-        MenuModule,
-        TableModule,
-        StyleClassModule,
-        PanelMenuModule,
-        ButtonModule,
-        DashboardsRoutingModule,
-        PrimengModule,
-        QRCodeModule,
-        SoftDataTableComponent,
-        SoftControlsModule,
-        CardSkeletonComponent,
-    ],
+    CommonModule,
+    FormsModule,
+    MenuModule,
+    TableModule,
+    StyleClassModule,
+    PanelMenuModule,
+    ButtonModule,
+    DashboardsRoutingModule,
+    PrimengModule,
+    QRCodeModule,
+    SoftDataTableComponent,
+    SoftControlsModule,
+    CardSkeletonComponent,
+    TiersComponent,
+    TimelineIndexProgressbarComponent,
+],
     declarations: [DashboardComponent],
     providers:[ApiService]
 })

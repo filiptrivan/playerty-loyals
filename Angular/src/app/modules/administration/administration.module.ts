@@ -8,11 +8,12 @@ import { CardSkeletonComponent } from "../../core/components/card-skeleton/card-
 import { SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { RoleListComponent } from './pages/roles/role-list.component';
 import { RoleDetailsComponent } from './pages/roles/role-details.component';
-import { TierListComponent } from './pages/tiers/tier-list.component';
-import { TierDetailsComponent } from './pages/tiers/tier-details.component';
 import { NotificationDetailsComponent } from './pages/notifications/notification-details.component';
 import { NotificationListComponent } from './pages/notifications/notification-list.component';
 import { SegmentationSelectComponent } from './partials/segmentation-select.component';
+import { PartnerListComponent } from './pages/partners/partner-list.component';
+import { PartnerDetailsComponent } from './pages/partners/partner-details.component';
+import { SoftColorpickComponent } from "../../core/controls/soft-colorpick/soft-colorpick.component";
 
 const routes: Routes = [
     {
@@ -39,26 +40,34 @@ const routes: Routes = [
         path: 'notifications/:id',
         component: NotificationDetailsComponent,
     },
+    {
+        path: 'partners',
+        component: PartnerListComponent,
+    },
+    {
+        path: 'partners/:id',
+        component: PartnerDetailsComponent,
+    },
 ];
 
 @NgModule({
     imports: [
-        RouterModule.forChild(routes),
-        PrimengModule,
-        SoftDataTableComponent,
-        SoftControlsModule,
-        CardSkeletonComponent,
-        SegmentationSelectComponent,
-    ],
+    RouterModule.forChild(routes),
+    PrimengModule,
+    SoftDataTableComponent,
+    SoftControlsModule,
+    CardSkeletonComponent,
+    SegmentationSelectComponent,
+],
     declarations: [
         UserListComponent,
         UserDetailsComponent, 
         RoleListComponent,
         RoleDetailsComponent,
-        TierListComponent,
-        TierDetailsComponent,
         NotificationListComponent,
         NotificationDetailsComponent,
+        PartnerListComponent,
+        PartnerDetailsComponent,
     ],
     providers:[]
 })

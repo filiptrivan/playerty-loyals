@@ -43,6 +43,9 @@
         // padding-right: 20px !important;
         // text-align: left !important;
     }
+    .p-timeline-event-connector{
+        position: relative;
+    }
 	.circle {
 		display: flex;
 		z-index: 1;
@@ -71,6 +74,8 @@
         height: $i * 1%;
         width: 2px;
         background-color: #4caf50;
+        position: absolute;
+        bottom: 0; 
     }
 }
 

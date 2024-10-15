@@ -1,0 +1,57 @@
+@defer (when model != null) {
+    <soft-card [title]="detailsTitle" icon="pi pi-at">
+        <soft-panel>
+            <panel-header></panel-header>
+    
+            <panel-body>
+                <form [formGroup]="formGroup" class="grid">
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('name')"></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('slug')"></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('loadPurchasesEndpoint')"></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('loadReversalsEndpoint')"></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('createUserEndpoint')"></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('updateUserGroupEndpoint')"></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('productsRecommendationEndpoint')"></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-number [control]="control('updatePointsInterval')"></soft-number>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-colorpick [control]="control('primaryColor', true)"></soft-colorpick>
+                    </div>
+                    <!-- <div class="col-12 md:col-4">
+                        <soft-colorpick [control]="control('ProductsRecommendationEndpoint')"></soft-colorpick>
+                    </div> -->
+                    <!-- 
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('ProductsRecommendationEndpoint')"></soft-textbox>
+                    </div> -->
+<!-- LogoImage
+PrimaryColor -->
+
+                </form>
+            </panel-body>
+    
+            <panel-footer>
+                <p-button (onClick)="onSave()" label="Save" icon="pi pi-save"></p-button>
+                <soft-return-button></soft-return-button>
+            </panel-footer>
+        </soft-panel>
+
+    </soft-card>
+} @placeholder {
+    <card-skeleton [height]="502"></card-skeleton>
+}
