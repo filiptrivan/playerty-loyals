@@ -191,3 +191,8 @@ E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.genruntimeconfig.cache
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\ref\Playerty.Loyals.WebAPI.dll
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.MvcApplicationPartsAssemblyInfo.cs
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Azure.Storage.Blobs.dll
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Azure.Storage.Common.dll
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Microsoft.Extensions.Azure.dll
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\System.ClientModel.dll
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\System.IO.Hashing.dll

@@ -80,6 +80,8 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
             return productsRecommendationEndpointPartnerValidator(formControl);
         case 'updatePointsIntervalPartner':
             return updatePointsIntervalPartnerValidator(formControl);
+        case 'logoImageBlobNamePartner':
+            return logoImageBlobNamePartnerValidator(formControl);
         case 'primaryColorPartner':
             return primaryColorPartnerValidator(formControl);
 
@@ -618,6 +620,22 @@ export function updatePointsIntervalPartnerValidator(control: SoftFormControl): 
         const updatePointsIntervalValid = numberMinRangeRule;
 
         return updatePointsIntervalValid ? null : { _ : $localize`:@@NumberRangeMin:The field must be greater or equal to ${min}.` };
+    };
+    
+    return validator;
+}
+
+export function logoImageBlobNamePartnerValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const min = 1;
+        const max = 1024;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+        const logoImageBlobNameValid = stringLengthRule;
+
+        return logoImageBlobNameValid ? null : { _ : $localize`:@@Length:The field must have a minimum of ${min} and a maximum of ${max} characters.` };
     };
     
     return validator;

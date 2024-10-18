@@ -33,7 +33,7 @@
                         <soft-colorpick [control]="control('primaryColor', true)"></soft-colorpick>
                     </div>
                     <div class="col-12">
-                        <soft-file [control]="control('logoImage')"></soft-file>
+                        <soft-file [control]="control('logoImageBlobName')" [objectId]="model.id" [objectTypeName]="model.typeName" [objectPropertyName]="'LogoImageBlobName'"></soft-file>
                     </div>
                     <!-- 
                     <div class="col-12 md:col-6">

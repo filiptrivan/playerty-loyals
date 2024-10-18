@@ -18,5 +18,9 @@
         public string GoogleClientId { get; set; }
 
         public string ExcelContentType { get; set; }
+
+        public string BlobStorageConnectionString { get; set; }
+        public string BlobStorageContainerName { get; set; }
+
     }
 }

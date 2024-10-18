@@ -9,7 +9,7 @@ export const environment = {
     companyName: 'Playerty Loyals',
     usersCanRegister: true,
     httpOptions: {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      // headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     },
     httpSkipSpinnerOptions: {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

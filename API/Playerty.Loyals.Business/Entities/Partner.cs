@@ -44,7 +44,13 @@ namespace Playerty.Loyals.Business.Entities
         [GreaterThanOrEqualTo(1)]
         public int? UpdatePointsInterval { get; set; }
 
-        public byte[] LogoImage { get; set; } // https://stackoverflow.com/questions/5613898/storing-images-in-sql-server
+        /// <summary>
+        /// FT: Didn't do like this at the end https://stackoverflow.com/questions/5613898/storing-images-in-sql-server
+        /// "A blob name must be at least one character long and cannot be more than 1,024 characters long, for blobs in Azure Storage."
+        /// </summary>
+        [StringLength(1024, MinimumLength = 1)]
+        [BlobName]
+        public string LogoImageBlobName { get; set; } 
 
         [StringLength(7)]
         public string PrimaryColor { get; set; }

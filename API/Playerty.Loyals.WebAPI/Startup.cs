@@ -21,7 +21,9 @@ using Playerty.Loyals.Business.Entities;
 using Soft.Generator.Security.Interface;
 using Playerty.Loyals.Business.DataMappers;
 using System.ComponentModel;
-
+using Microsoft.Extensions.Azure;
+using Azure.Identity;
+using Azure.Storage.Blobs;
 
 public class Startup
 
@@ -81,6 +83,24 @@ public class Startup
                     //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution)
                     .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
             });
+
+        services.AddAzureClients(clientBuilder =>
+        {
+            clientBuilder.AddBlobServiceClient(new Uri(Playerty.Loyals.WebAPI.SettingsProvider.Current.BlobStorageConnectionString));
+
+            clientBuilder.AddClient<BlobContainerClient, BlobClientOptions>((options, provider) => // https://stackoverflow.com/questions/78430531/registering-blobcontainerclient-and-injecting-into-isolated-function
+            {
+                string storageContainerName = Playerty.Loyals.WebAPI.SettingsProvider.Current.BlobStorageContainerName;
+
+                BlobServiceClient blobServiceClient = provider.GetRequiredService<BlobServiceClient>();
+                
+                BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(storageContainerName);
+
+                return blobContainerClient;
+            });
+
+            clientBuilder.UseCredential(new DefaultAzureCredential());
+        });
 
         services.AddSwaggerGen(c =>
         {

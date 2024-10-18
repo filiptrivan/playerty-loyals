@@ -141,12 +141,13 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
     this.saveBody = this.saveBody ?? this.model;
     
+    console.log(this.saveBody)
     let isValid: boolean = this.isFormGroupValid();
     let isFormArrayValid: boolean = this.isFormArrayValid();
-
+    
     if(isValid && isFormArrayValid){
       let controllerName: string = this.controllerName ?? this.model.typeName;
-console.log(this.saveBody)
+
       this.http.put<T>(environment.apiUrl + `/${controllerName}/Save${this.model.typeName}`, this.saveBody, environment.httpOptions).subscribe(res => {
         Object.assign(this.model, res) // this.model = res; // FT: we lose typeName like this and everything that res doesn't have but this.model has
 

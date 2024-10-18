@@ -665,7 +665,7 @@ export class Partner extends BaseEntity
 	updateUserGroupEndpoint?: string;
 	productsRecommendationEndpoint?: string;
 	updatePointsInterval?: number;
-	logoImage?: string;
+	logoImageBlobName?: string;
 	primaryColor?: string;
 	version?: number;
 	id?: number;
@@ -682,7 +682,7 @@ export class Partner extends BaseEntity
 		updateUserGroupEndpoint,
 		productsRecommendationEndpoint,
 		updatePointsInterval,
-		logoImage,
+		logoImageBlobName,
 		primaryColor,
 		version,
 		id,
@@ -697,7 +697,7 @@ export class Partner extends BaseEntity
 		updateUserGroupEndpoint?: string;
 		productsRecommendationEndpoint?: string;
 		updatePointsInterval?: number;
-		logoImage?: string;
+		logoImageBlobName?: string;
 		primaryColor?: string;
 		version?: number;
 		id?: number;
@@ -715,7 +715,7 @@ export class Partner extends BaseEntity
 		this.updateUserGroupEndpoint = updateUserGroupEndpoint;
 		this.productsRecommendationEndpoint = productsRecommendationEndpoint;
 		this.updatePointsInterval = updatePointsInterval;
-		this.logoImage = logoImage;
+		this.logoImageBlobName = logoImageBlobName;
 		this.primaryColor = primaryColor;
 		this.version = version;
 		this.id = id;
