@@ -20,6 +20,7 @@ using Soft.Generator.Shared.SoftExceptions;
 using System.ComponentModel;
 using Azure.Storage.Blobs.Models;
 using Azure;
+using System.Management;
 
 
 namespace Playerty.Loyals.WebAPI.Controllers
@@ -67,14 +68,28 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<PartnerDTO> GetPartner(int id)
         {
-            return await _loyalsBusinessService.GetPartnerDTOAsync(id, false);
+            var dto = await _loyalsBusinessService.GetPartnerDTOAsync(id, false);
+            if (!string.IsNullOrEmpty(dto.LogoImage))
+            {
+                var blobClient = _blobContainerClient.GetBlobClient(dto.LogoImage);
+
+                if (await blobClient.ExistsAsync())
+                {
+                    var blobDownloadInfo = await blobClient.DownloadContentAsync();
+
+                    var imageData = blobDownloadInfo.Value.Content.ToArray();
+                    string base64 = Convert.ToBase64String(imageData);
+                    dto.LogoImageData = $"filename={dto.LogoImage};base64,{base64}";
+                }
+            }
+            return dto;
         }
 
         [HttpPut]
         [AuthGuard]
         public async Task<PartnerDTO> SavePartner(PartnerDTO partnerDTO)
         {
-            await DeleteNonActiveBlobs(partnerDTO.LogoImageBlobName, nameof(Partner), nameof(Partner.LogoImageBlobName), partnerDTO.Id.ToString());
+            await DeleteNonActiveBlobs(partnerDTO.LogoImage, nameof(Partner), nameof(Partner.LogoImage), partnerDTO.Id.ToString());
             return await _loyalsBusinessService.SavePartnerAndReturnDTOAsync(partnerDTO, false, false);
         }
         
@@ -98,21 +113,26 @@ namespace Playerty.Loyals.WebAPI.Controllers
         public async Task<string> UploadLogoImage([FromForm] IFormFile file) // FT: It doesn't work without interface
         {
             using Stream stream = file.OpenReadStream();
-
-            ObjectTypeForFileNameValidateAndThrow(file.FileName, nameof(Partner), nameof(Partner.LogoImageBlobName));
             
             int id = GetObjectIdFromFileName<int>(file.FileName);
             // TODO FT: Authorize access for this id...
 
-            string fileName = $"{nameof(Partner)}-{nameof(Partner.LogoImageBlobName)}-{id}-{Guid.NewGuid()}"; // TODO FT: Delete class name and prop name if you don't need it
-
-            await UploadFileAsync(fileName, nameof(Partner), nameof(Partner.LogoImageBlobName), id.ToString(), stream);
+            string fileName = await UploadFileAsync(file.FileName, nameof(Partner), nameof(Partner.LogoImage), id.ToString(), stream);
 
             return fileName;
         }
 
-        private async Task UploadFileAsync(string blobName, string objectType, string objectProperty, string objectId, Stream content)
+        /// <summary>
+        /// </summary>
+        /// <returns>Newly generated file name</returns>
+        private async Task<string> UploadFileAsync(string fileName, string objectType, string objectProperty, string objectId, Stream content)
         {
+            string fileExtension = GetFileExtensionFromFileName(fileName);
+
+            // TODO FT: Delete class name and prop name if you don't need it
+            // TODO FT: Validate if user has changed ContentType to something we don't handle
+            string blobName = $"{objectId}-{Guid.NewGuid()}.{fileExtension}";
+
             BlobClient blobClient = _blobContainerClient.GetBlobClient(blobName);
 
             await blobClient.UploadAsync(content);
@@ -125,20 +145,8 @@ namespace Playerty.Loyals.WebAPI.Controllers
             };
 
             await blobClient.SetTagsAsync(tags); // https://stackoverflow.com/questions/52769758/azure-blob-storage-authorization-permission-mismatch-error-for-get-request-wit 
-        }
 
-        private static void ObjectTypeForFileNameValidateAndThrow(string fileName, string typeName, string propertyName)
-        {
-            List<string> parts = fileName.Split('-').ToList();
-
-            if (parts.Count != 3) // FT: It could be only 3 because when firstly uploading the file, there is no guid part
-                throw new HackerException($"Invalid file name format ({fileName}).");
-
-            string typePart = parts[0];
-            string propertyPart = parts[1];
-
-            if(typePart != typeName || propertyPart != propertyName)
-                throw new HackerException($"Invalid file name ({fileName}).");
+            return blobName;
         }
 
         // uzimam id iz imena kog je poslao jer ne mogu drugacije da ga posaljem
@@ -146,16 +154,26 @@ namespace Playerty.Loyals.WebAPI.Controllers
         {
             List<string> parts = fileName.Split('-').ToList();
 
-            if (parts.Count != 3) // FT: It could be only 3 because when firstly uploading the file, there is no guid part
+            if (parts.Count != 2) // FT: It could be only 2 because when firstly uploading the file, there is no guid part
                 throw new HackerException($"Invalid file name format ({fileName}).");
 
-            string idPart = parts[2];
+            string idPart = parts[0];
 
             // Try to convert the string part to the specified struct type
             if (TypeDescriptor.GetConverter(typeof(ID)).IsValid(idPart))
                 return (ID)TypeDescriptor.GetConverter(typeof(ID)).ConvertFromString(idPart);
 
             throw new InvalidCastException($"Cannot convert '{idPart}' to {typeof(ID)}.");
+        }
+
+        private static string GetFileExtensionFromFileName(string fileName)
+        {
+            List<string> parts = fileName.Split('.').ToList();
+
+            if (parts.Count < 2) // FT: It could be only 2, it's not the same validation as spliting with '-'
+                throw new HackerException($"Invalid file name format ({fileName}).");
+
+            return parts.Last(); // FT: The file could be .abc.png
         }
 
         // FT: Before this in save method the authorization is being done, so we don't need to do it here also

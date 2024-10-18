@@ -1,6 +1,7 @@
 import { BaseEntity } from "../../../core/entities/base-entity";
 import { TableFilterContext } from "src/app/core/entities/table-filter-context";
 import { TableFilterSortMeta } from "src/app/core/entities/table-filter-sort-meta";
+import { MimeTypes } from "src/app/core/entities/mime-type";
 
 
 export class Notification extends BaseEntity
@@ -665,7 +666,9 @@ export class Partner extends BaseEntity
 	updateUserGroupEndpoint?: string;
 	productsRecommendationEndpoint?: string;
 	updatePointsInterval?: number;
-	logoImageBlobName?: string;
+	logoImageData?: string;
+	logoImageMimeType?: MimeTypes;
+	logoImage?: string;
 	primaryColor?: string;
 	version?: number;
 	id?: number;
@@ -682,7 +685,9 @@ export class Partner extends BaseEntity
 		updateUserGroupEndpoint,
 		productsRecommendationEndpoint,
 		updatePointsInterval,
-		logoImageBlobName,
+		logoImageData,
+		logoImageMimeType,
+		logoImage,
 		primaryColor,
 		version,
 		id,
@@ -697,7 +702,9 @@ export class Partner extends BaseEntity
 		updateUserGroupEndpoint?: string;
 		productsRecommendationEndpoint?: string;
 		updatePointsInterval?: number;
-		logoImageBlobName?: string;
+		logoImageData?: string;
+		logoImageMimeType?: MimeTypes;
+		logoImage?: string;
 		primaryColor?: string;
 		version?: number;
 		id?: number;
@@ -715,7 +722,9 @@ export class Partner extends BaseEntity
 		this.updateUserGroupEndpoint = updateUserGroupEndpoint;
 		this.productsRecommendationEndpoint = productsRecommendationEndpoint;
 		this.updatePointsInterval = updatePointsInterval;
-		this.logoImageBlobName = logoImageBlobName;
+		this.logoImageData = logoImageData;
+		this.logoImageMimeType = logoImageMimeType;
+		this.logoImage = logoImage;
 		this.primaryColor = primaryColor;
 		this.version = version;
 		this.id = id;

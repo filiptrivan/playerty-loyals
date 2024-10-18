@@ -94,8 +94,12 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@ProductsRecommendationEndpoint:ProductsRecommendationEndpoint`;
         case 'updatePointsInterval':
             return $localize`:@@UpdatePointsInterval:UpdatePointsInterval`;
-        case 'logoImageBlobName':
-            return $localize`:@@LogoImageBlobName:LogoImageBlobName`;
+        case 'logoImageData':
+            return $localize`:@@LogoImageData:LogoImageData`;
+        case 'logoImageMimeType':
+            return $localize`:@@LogoImageMimeType:LogoImageMimeType`;
+        case 'logoImage':
+            return $localize`:@@LogoImage:LogoImage`;
         case 'primaryColor':
             return $localize`:@@PrimaryColor:PrimaryColor`;
         case 'partner':

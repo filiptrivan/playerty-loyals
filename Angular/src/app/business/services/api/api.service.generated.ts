@@ -7,48 +7,48 @@ import { Namebook } from '../../entities/namebook';
 import { Codebook } from '../../entities/codebook';
 import { TableFilter } from '../../entities/table-filter';
 import { TableResponse } from './../../../core/entities/table-response';
-import { Notification } from '../../entities/generated/business-entities.generated';
-import { PartnerUser } from '../../entities/generated/business-entities.generated';
-import { Segmentation } from '../../entities/generated/business-entities.generated';
-import { SegmentationItem } from '../../entities/generated/business-entities.generated';
 import { UserExtended } from '../../entities/generated/business-entities.generated';
 import { Brand } from '../../entities/generated/business-entities.generated';
 import { MergedPartnerUser } from '../../entities/generated/business-entities.generated';
+import { SegmentationItem } from '../../entities/generated/business-entities.generated';
+import { Notification } from '../../entities/generated/business-entities.generated';
+import { UserExtendedSaveBody } from '../../entities/generated/business-entities.generated';
+import { PartnerUserSaveBody } from '../../entities/generated/business-entities.generated';
+import { QrCode } from '../../entities/generated/business-entities.generated';
 import { NotificationSaveBody } from '../../entities/generated/business-entities.generated';
+import { Segmentation } from '../../entities/generated/business-entities.generated';
+import { Product } from '../../entities/generated/business-entities.generated';
+import { PartnerUser } from '../../entities/generated/business-entities.generated';
+import { PartnerRoleSaveBody } from '../../entities/generated/business-entities.generated';
 import { OnlineShop } from '../../entities/generated/business-entities.generated';
 import { PartnerNotificationSaveBody } from '../../entities/generated/business-entities.generated';
-import { PartnerRoleSaveBody } from '../../entities/generated/business-entities.generated';
-import { PartnerUserSaveBody } from '../../entities/generated/business-entities.generated';
-import { Product } from '../../entities/generated/business-entities.generated';
-import { QrCode } from '../../entities/generated/business-entities.generated';
 import { SegmentationSaveBody } from '../../entities/generated/business-entities.generated';
-import { UserExtendedSaveBody } from '../../entities/generated/business-entities.generated';
-import { Gender } from '../../entities/generated/business-entities.generated';
-import { NotificationUser } from '../../entities/generated/business-entities.generated';
-import { Partner } from '../../entities/generated/business-entities.generated';
+import { Tier } from '../../entities/generated/business-entities.generated';
 import { PartnerNotification } from '../../entities/generated/business-entities.generated';
+import { Transaction } from '../../entities/generated/business-entities.generated';
+import { TransactionStatus } from '../../entities/generated/business-entities.generated';
+import { Gender } from '../../entities/generated/business-entities.generated';
+import { TransactionProduct } from '../../entities/generated/business-entities.generated';
+import { Partner } from '../../entities/generated/business-entities.generated';
+import { NotificationUser } from '../../entities/generated/business-entities.generated';
 import { PartnerNotificationPartnerUser } from '../../entities/generated/business-entities.generated';
 import { PartnerRole } from '../../entities/generated/business-entities.generated';
-import { Tier } from '../../entities/generated/business-entities.generated';
-import { Transaction } from '../../entities/generated/business-entities.generated';
-import { TransactionProduct } from '../../entities/generated/business-entities.generated';
-import { TransactionStatus } from '../../entities/generated/business-entities.generated';
-import { ExternalProvider } from '../../entities/generated/security-entities.generated';
-import { ForgotPassword } from '../../entities/generated/security-entities.generated';
-import { ForgotPasswordVerificationToken } from '../../entities/generated/security-entities.generated';
-import { JwtAuthResult } from '../../entities/generated/security-entities.generated';
-import { Login } from '../../entities/generated/security-entities.generated';
 import { LoginResult } from '../../entities/generated/security-entities.generated';
-import { LoginVerificationToken } from '../../entities/generated/security-entities.generated';
-import { RefreshToken } from '../../entities/generated/security-entities.generated';
-import { RefreshTokenRequest } from '../../entities/generated/security-entities.generated';
-import { Registration } from '../../entities/generated/security-entities.generated';
-import { RegistrationVerificationResult } from '../../entities/generated/security-entities.generated';
 import { RegistrationVerificationToken } from '../../entities/generated/security-entities.generated';
-import { RoleSaveBody } from '../../entities/generated/security-entities.generated';
+import { JwtAuthResult } from '../../entities/generated/security-entities.generated';
+import { RefreshToken } from '../../entities/generated/security-entities.generated';
+import { RegistrationVerificationResult } from '../../entities/generated/security-entities.generated';
+import { LoginVerificationToken } from '../../entities/generated/security-entities.generated';
+import { RefreshTokenRequest } from '../../entities/generated/security-entities.generated';
+import { ExternalProvider } from '../../entities/generated/security-entities.generated';
+import { Login } from '../../entities/generated/security-entities.generated';
+import { ForgotPasswordVerificationToken } from '../../entities/generated/security-entities.generated';
 import { VerificationTokenRequest } from '../../entities/generated/security-entities.generated';
-import { Permission } from '../../entities/generated/security-entities.generated';
+import { ForgotPassword } from '../../entities/generated/security-entities.generated';
+import { Registration } from '../../entities/generated/security-entities.generated';
+import { RoleSaveBody } from '../../entities/generated/security-entities.generated';
 import { Role } from '../../entities/generated/security-entities.generated';
+import { Permission } from '../../entities/generated/security-entities.generated';
 
 @Injectable()
 export class ApiGeneratedService extends ApiSecurityService {
@@ -58,6 +58,54 @@ export class ApiGeneratedService extends ApiSecurityService {
     }
 
     
+    getCurrentPartnerUser(): Observable<PartnerUser> {
+        return this.http.get<PartnerUser>(`${environment.apiUrl}/PartnerUser/GetCurrentPartnerUser`);
+    }
+
+    loadPartnerUserListForTable(dto: TableFilter): Observable<TableResponse> { 
+        return this.http.post<TableResponse>(`${environment.apiUrl}/PartnerUser/LoadPartnerUserListForTable`, dto, environment.httpSkipSpinnerOptions);
+    }
+
+    exportPartnerUserListToExcel(dto: TableFilter): Observable<any> { 
+        return this.http.post<any>(`${environment.apiUrl}/PartnerUser/ExportPartnerUserListToExcel`, dto, environment.httpOptions);
+    }
+
+    deletePartnerUser(id: number): Observable<any> { 
+        return this.http.delete<any>(`${environment.apiUrl}/PartnerUser/DeletePartnerUser?id=${id}`);
+    }
+
+    getPartnerUser(id: number): Observable<PartnerUser> {
+        return this.http.get<PartnerUser>(`${environment.apiUrl}/PartnerUser/GetPartnerUser?id=${id}`);
+    }
+
+    savePartnerUser(dto: PartnerUserSaveBody): Observable<any> { 
+        return this.http.put<any>(`${environment.apiUrl}/PartnerUser/SavePartnerUser`, dto, environment.httpOptions);
+    }
+
+    loadPartnerUserListForAutocomplete(limit: number, query: string): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerUser/LoadPartnerUserListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
+    }
+
+    loadPartnerUserListForDropdown(): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerUser/LoadPartnerUserListForDropdown`, environment.httpSkipSpinnerOptions);
+    }
+
+    getCurrentPartnerUserPermissionCodes(): Observable<string[]> {
+        return this.http.get<string[]>(`${environment.apiUrl}/PartnerUser/GetCurrentPartnerUserPermissionCodes`);
+    }
+
+    loadPartnerRoleNamebookListForPartnerUser(partnerUserId: number): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerUser/LoadPartnerRoleNamebookListForPartnerUser?partnerUserId=${partnerUserId}`, environment.httpSkipSpinnerOptions);
+    }
+
+    getCheckedSegmentationItemIdsForThePartnerUser(partnerUserId: number): Observable<number[]> {
+        return this.http.get<number[]>(`${environment.apiUrl}/PartnerUser/GetCheckedSegmentationItemIdsForThePartnerUser?partnerUserId=${partnerUserId}`);
+    }
+
+    getPartnerUserForTheUser(id: number): Observable<PartnerUser> {
+        return this.http.get<PartnerUser>(`${environment.apiUrl}/PartnerUser/GetPartnerUserForTheUser?id=${id}`);
+    }
+
     getCurrentUser(): Observable<UserExtended> {
         return this.http.get<UserExtended>(`${environment.apiUrl}/Auth/GetCurrentUser`, environment.httpSkipSpinnerOptions);
     }
@@ -128,6 +176,38 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     loadUserExtendedNamebookListForNotification(notificationId: number): Observable<Namebook[]> {
         return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadUserExtendedNamebookListForNotification?notificationId=${notificationId}`, environment.httpSkipSpinnerOptions);
+    }
+
+    loadSegmentationListForTable(dto: TableFilter): Observable<TableResponse> { 
+        return this.http.post<TableResponse>(`${environment.apiUrl}/Segmentation/LoadSegmentationListForTable`, dto, environment.httpSkipSpinnerOptions);
+    }
+
+    exportSegmentationListToExcel(dto: TableFilter): Observable<any> { 
+        return this.http.post<any>(`${environment.apiUrl}/Segmentation/ExportSegmentationListToExcel`, dto, environment.httpOptions);
+    }
+
+    deleteSegmentation(id: number): Observable<any> { 
+        return this.http.delete<any>(`${environment.apiUrl}/Segmentation/DeleteSegmentation?id=${id}`);
+    }
+
+    getSegmentation(id: number): Observable<Segmentation> {
+        return this.http.get<Segmentation>(`${environment.apiUrl}/Segmentation/GetSegmentation?id=${id}`);
+    }
+
+    getSegmentationItemsForTheSegmentation(segmentationId: number): Observable<SegmentationItem[]> {
+        return this.http.get<SegmentationItem[]>(`${environment.apiUrl}/Segmentation/GetSegmentationItemsForTheSegmentation?segmentationId=${segmentationId}`);
+    }
+
+    saveSegmentation(segmentationSaveBodyDTO: SegmentationSaveBody): Observable<any> { 
+        return this.http.put<any>(`${environment.apiUrl}/Segmentation/SaveSegmentation`, segmentationSaveBodyDTO, environment.httpOptions);
+    }
+
+    getSegmentationListForTheCurrentPartner(): Observable<Segmentation[]> {
+        return this.http.get<Segmentation[]>(`${environment.apiUrl}/Segmentation/GetSegmentationListForTheCurrentPartner`);
+    }
+
+    loadSegmentationItemListForDropdown(): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Segmentation/LoadSegmentationItemListForDropdown`, environment.httpSkipSpinnerOptions);
     }
 
     loadPartnerListForTable(dto: TableFilter): Observable<TableResponse> { 
@@ -236,86 +316,6 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     loadPartnerRoleListForDropdown(): Observable<Namebook[]> {
         return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/LoadPartnerRoleListForDropdown`, environment.httpSkipSpinnerOptions);
-    }
-
-    getCurrentPartnerUser(): Observable<PartnerUser> {
-        return this.http.get<PartnerUser>(`${environment.apiUrl}/PartnerUser/GetCurrentPartnerUser`);
-    }
-
-    loadPartnerUserListForTable(dto: TableFilter): Observable<TableResponse> { 
-        return this.http.post<TableResponse>(`${environment.apiUrl}/PartnerUser/LoadPartnerUserListForTable`, dto, environment.httpSkipSpinnerOptions);
-    }
-
-    exportPartnerUserListToExcel(dto: TableFilter): Observable<any> { 
-        return this.http.post<any>(`${environment.apiUrl}/PartnerUser/ExportPartnerUserListToExcel`, dto, environment.httpOptions);
-    }
-
-    deletePartnerUser(id: number): Observable<any> { 
-        return this.http.delete<any>(`${environment.apiUrl}/PartnerUser/DeletePartnerUser?id=${id}`);
-    }
-
-    getPartnerUser(id: number): Observable<PartnerUser> {
-        return this.http.get<PartnerUser>(`${environment.apiUrl}/PartnerUser/GetPartnerUser?id=${id}`);
-    }
-
-    savePartnerUser(dto: PartnerUserSaveBody): Observable<any> { 
-        return this.http.put<any>(`${environment.apiUrl}/PartnerUser/SavePartnerUser`, dto, environment.httpOptions);
-    }
-
-    loadPartnerUserListForAutocomplete(limit: number, query: string): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerUser/LoadPartnerUserListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
-    }
-
-    loadPartnerUserListForDropdown(): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerUser/LoadPartnerUserListForDropdown`, environment.httpSkipSpinnerOptions);
-    }
-
-    getCurrentPartnerUserPermissionCodes(): Observable<string[]> {
-        return this.http.get<string[]>(`${environment.apiUrl}/PartnerUser/GetCurrentPartnerUserPermissionCodes`);
-    }
-
-    loadPartnerRoleNamebookListForPartnerUser(partnerUserId: number): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerUser/LoadPartnerRoleNamebookListForPartnerUser?partnerUserId=${partnerUserId}`, environment.httpSkipSpinnerOptions);
-    }
-
-    getCheckedSegmentationItemIdsForThePartnerUser(partnerUserId: number): Observable<number[]> {
-        return this.http.get<number[]>(`${environment.apiUrl}/PartnerUser/GetCheckedSegmentationItemIdsForThePartnerUser?partnerUserId=${partnerUserId}`);
-    }
-
-    getPartnerUserForTheUser(id: number): Observable<PartnerUser> {
-        return this.http.get<PartnerUser>(`${environment.apiUrl}/PartnerUser/GetPartnerUserForTheUser?id=${id}`);
-    }
-
-    loadSegmentationListForTable(dto: TableFilter): Observable<TableResponse> { 
-        return this.http.post<TableResponse>(`${environment.apiUrl}/Segmentation/LoadSegmentationListForTable`, dto, environment.httpSkipSpinnerOptions);
-    }
-
-    exportSegmentationListToExcel(dto: TableFilter): Observable<any> { 
-        return this.http.post<any>(`${environment.apiUrl}/Segmentation/ExportSegmentationListToExcel`, dto, environment.httpOptions);
-    }
-
-    deleteSegmentation(id: number): Observable<any> { 
-        return this.http.delete<any>(`${environment.apiUrl}/Segmentation/DeleteSegmentation?id=${id}`);
-    }
-
-    getSegmentation(id: number): Observable<Segmentation> {
-        return this.http.get<Segmentation>(`${environment.apiUrl}/Segmentation/GetSegmentation?id=${id}`);
-    }
-
-    getSegmentationItemsForTheSegmentation(segmentationId: number): Observable<SegmentationItem[]> {
-        return this.http.get<SegmentationItem[]>(`${environment.apiUrl}/Segmentation/GetSegmentationItemsForTheSegmentation?segmentationId=${segmentationId}`);
-    }
-
-    saveSegmentation(segmentationSaveBodyDTO: SegmentationSaveBody): Observable<any> { 
-        return this.http.put<any>(`${environment.apiUrl}/Segmentation/SaveSegmentation`, segmentationSaveBodyDTO, environment.httpOptions);
-    }
-
-    getSegmentationListForTheCurrentPartner(): Observable<Segmentation[]> {
-        return this.http.get<Segmentation[]>(`${environment.apiUrl}/Segmentation/GetSegmentationListForTheCurrentPartner`);
-    }
-
-    loadSegmentationItemListForDropdown(): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Segmentation/LoadSegmentationItemListForDropdown`, environment.httpSkipSpinnerOptions);
     }
 
     loadTierListForTable(dto: TableFilter): Observable<TableResponse> { 

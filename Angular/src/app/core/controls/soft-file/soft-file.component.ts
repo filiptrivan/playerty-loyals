@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FileSelectEvent } from 'primeng/fileupload';
 import { Observable } from 'rxjs';
 import { ApiService } from 'src/app/business/services/api/api.service';
+import { getMimeTypeForFileName } from '../../services/helper-functions';
 
 @Component({
     selector: 'soft-file',
@@ -24,8 +25,7 @@ import { ApiService } from 'src/app/business/services/api/api.service';
 export class SoftFileComponent extends BaseControl implements OnInit {
     files: File[] = [];
     @Input() objectId: number;
-    @Input() objectTypeName: string;
-    @Input() objectPropertyName: string;
+    @Input() fileData: string;
 
     uploadPhotoEndpoint: () => Observable<any>;
 
@@ -35,9 +35,10 @@ export class SoftFileComponent extends BaseControl implements OnInit {
 
     override ngOnInit(){
         if (this.control.value != null) {
-            const file = this.base64ToFile(this.control.value);
+            const file = this.base64ToFile(this.fileData);
             this.files.push(file);
         }
+
         super.ngOnInit();
     }
 
@@ -45,7 +46,7 @@ export class SoftFileComponent extends BaseControl implements OnInit {
         const file = event.files[0];
 
         const formData: FormData = new FormData();
-        formData.append('file', file, `${this.objectTypeName}-${this.objectPropertyName}-${this.objectId}`);
+        formData.append('file', file, `${this.objectId}-${file.name}`);
         
         this.apiService.uploadLogoImage(formData).subscribe((completeFileName: string) => {
             this.control.setValue(completeFileName);
@@ -56,21 +57,25 @@ export class SoftFileComponent extends BaseControl implements OnInit {
         chooseCallback();
     }
     
-    removeFile(removeUploadedFileCallback, index){
-        removeUploadedFileCallback(index);
+    removeFile(removeFileCallback, index: number){
+        removeFileCallback(index);
         this.control.setValue(null);
     }
 
     base64ToFile(base64String: string){
-        const byteCharacters = atob(base64String);
+        const [header, base64Content] = base64String.split(';base64,');
+        const fileName = header.split('=')[1];
+        const mimeType = getMimeTypeForFileName(fileName);
+
+        const byteCharacters = atob(base64Content);
         const byteNumbers = new Uint8Array(byteCharacters.length);
 
         for (let i = 0; i < byteCharacters.length; i++) {
             byteNumbers[i] = byteCharacters.charCodeAt(i);
         }
 
-        const blob = new Blob([byteNumbers], { type: 'image/png' });
-        const file = new File([blob], 'photo', { type: 'image/png' });
+        const blob = new Blob([byteNumbers], { type: mimeType });
+        const file = new File([blob], fileName, { type: mimeType });
 
         return file;
     }

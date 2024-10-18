@@ -50,7 +50,7 @@ namespace Playerty.Loyals.Business.Entities
         /// </summary>
         [StringLength(1024, MinimumLength = 1)]
         [BlobName]
-        public string LogoImageBlobName { get; set; } 
+        public string LogoImage { get; set; } 
 
         [StringLength(7)]
         public string PrimaryColor { get; set; }
