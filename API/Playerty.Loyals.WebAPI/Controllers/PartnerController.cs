@@ -89,7 +89,6 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<PartnerDTO> SavePartner(PartnerDTO partnerDTO)
         {
-            await DeleteNonActiveBlobs(partnerDTO.LogoImage, nameof(Partner), nameof(Partner.LogoImage), partnerDTO.Id.ToString());
             return await _loyalsBusinessService.SavePartnerAndReturnDTOAsync(partnerDTO, false, false);
         }
         
@@ -114,78 +113,14 @@ namespace Playerty.Loyals.WebAPI.Controllers
         {
             using Stream stream = file.OpenReadStream();
             
-            int id = GetObjectIdFromFileName<int>(file.FileName);
+            //int id = GetObjectIdFromFileName<int>(file.FileName);
             // TODO FT: Authorize access for this id...
 
-            string fileName = await UploadFileAsync(file.FileName, nameof(Partner), nameof(Partner.LogoImage), id.ToString(), stream);
+            //string fileName = await UploadFileAsync(file.FileName, nameof(Partner), nameof(Partner.LogoImage), id.ToString(), stream);
 
-            return fileName;
+            //return fileName;
+            return "";
         }
 
-        /// <summary>
-        /// </summary>
-        /// <returns>Newly generated file name</returns>
-        private async Task<string> UploadFileAsync(string fileName, string objectType, string objectProperty, string objectId, Stream content)
-        {
-            string fileExtension = GetFileExtensionFromFileName(fileName);
-
-            // TODO FT: Delete class name and prop name if you don't need it
-            // TODO FT: Validate if user has changed ContentType to something we don't handle
-            string blobName = $"{objectId}-{Guid.NewGuid()}.{fileExtension}";
-
-            BlobClient blobClient = _blobContainerClient.GetBlobClient(blobName);
-
-            await blobClient.UploadAsync(content);
-
-            Dictionary<string, string> tags = new Dictionary<string, string>
-            {
-                { "objectType", $"{objectType}" },
-                { "objectProperty", $"{objectProperty}" },
-                { "objectId", $"{objectId}" },
-            };
-
-            await blobClient.SetTagsAsync(tags); // https://stackoverflow.com/questions/52769758/azure-blob-storage-authorization-permission-mismatch-error-for-get-request-wit 
-
-            return blobName;
-        }
-
-        // uzimam id iz imena kog je poslao jer ne mogu drugacije da ga posaljem
-        private static ID GetObjectIdFromFileName<ID>(string fileName) where ID : struct
-        {
-            List<string> parts = fileName.Split('-').ToList();
-
-            if (parts.Count != 2) // FT: It could be only 2 because when firstly uploading the file, there is no guid part
-                throw new HackerException($"Invalid file name format ({fileName}).");
-
-            string idPart = parts[0];
-
-            // Try to convert the string part to the specified struct type
-            if (TypeDescriptor.GetConverter(typeof(ID)).IsValid(idPart))
-                return (ID)TypeDescriptor.GetConverter(typeof(ID)).ConvertFromString(idPart);
-
-            throw new InvalidCastException($"Cannot convert '{idPart}' to {typeof(ID)}.");
-        }
-
-        private static string GetFileExtensionFromFileName(string fileName)
-        {
-            List<string> parts = fileName.Split('.').ToList();
-
-            if (parts.Count < 2) // FT: It could be only 2, it's not the same validation as spliting with '-'
-                throw new HackerException($"Invalid file name format ({fileName}).");
-
-            return parts.Last(); // FT: The file could be .abc.png
-        }
-
-        // FT: Before this in save method the authorization is being done, so we don't need to do it here also
-        private async Task DeleteNonActiveBlobs(string activeBlobName, string objectType, string objectProperty, string objectId)
-        {
-            AsyncPageable<TaggedBlobItem> blobs = _blobContainerClient.FindBlobsByTagsAsync($"\"objectType\"='{objectType}' AND \"objectProperty\"='{objectProperty}' AND \"objectId\"='{objectId}'");
-
-            await foreach (TaggedBlobItem blob in blobs)
-            {
-                if (blob.BlobName != activeBlobName)
-                    await _blobContainerClient.DeleteBlobAsync(blob.BlobName, Azure.Storage.Blobs.Models.DeleteSnapshotsOption.IncludeSnapshots);
-            }
-        }
     }
 }

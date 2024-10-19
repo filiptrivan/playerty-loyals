@@ -17,6 +17,7 @@ using Playerty.Loyals.Business.DTO;
 using Mapster;
 using Playerty.Loyals.Business.DataMappers;
 using Microsoft.Extensions.Caching.Memory;
+using Azure.Storage.Blobs;
 
 namespace Playerty.Loyals.Business.Services
 {
@@ -26,14 +27,16 @@ namespace Playerty.Loyals.Business.Services
         private readonly AuthenticationService _authenticationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMemoryCache _cache;
+        private readonly BlobContainerClient _blobContainerClient;
 
-        public PartnerUserAuthenticationService(IApplicationDbContext context, AuthenticationService authenticationService, IHttpContextAccessor httpContextAccessor, IMemoryCache cache)
-            : base(context)
+        public PartnerUserAuthenticationService(IApplicationDbContext context, AuthenticationService authenticationService, IHttpContextAccessor httpContextAccessor, IMemoryCache cache, BlobContainerClient blobContainerClient)
+            : base(context, blobContainerClient)
         {
             _context = context;
             _authenticationService = authenticationService;
             _httpContextAccessor = httpContextAccessor;
             _cache = cache;
+            _blobContainerClient = blobContainerClient;
         }
 
         public string GetCurrentPartnerCode()

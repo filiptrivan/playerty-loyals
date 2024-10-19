@@ -23,6 +23,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Soft.Generator.Shared.Emailing;
+using Azure.Storage.Blobs;
 
 namespace Playerty.Loyals.Services
 {
@@ -34,10 +35,11 @@ namespace Playerty.Loyals.Services
         private readonly SecurityBusinessService _securityBusinessService;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
         private readonly EmailingService _emailingService;
+        private readonly BlobContainerClient _blobContainerClient;
 
         public LoyalsBusinessService(IApplicationDbContext context, ExcelService excelService, AuthorizationService authorizationService, SecurityBusinessService securityBusinessService, AuthenticationService authenticationService,
-            PartnerUserAuthenticationService partnerUserAuthenticationService, EmailingService emailingService)
-            : base(context, excelService, authorizationService)
+            PartnerUserAuthenticationService partnerUserAuthenticationService, EmailingService emailingService, BlobContainerClient blobContainerClient)
+            : base(context, excelService, authorizationService, blobContainerClient)
         {
             _context = context;
             _authorizationService = authorizationService;
@@ -45,6 +47,7 @@ namespace Playerty.Loyals.Services
             _authenticationService = authenticationService;
             _partnerUserAuthenticationService = partnerUserAuthenticationService;
             _emailingService = emailingService;
+            _blobContainerClient = blobContainerClient;
         }
 
         #region User

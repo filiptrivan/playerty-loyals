@@ -667,7 +667,6 @@ export class Partner extends BaseEntity
 	productsRecommendationEndpoint?: string;
 	updatePointsInterval?: number;
 	logoImageData?: string;
-	logoImageMimeType?: MimeTypes;
 	logoImage?: string;
 	primaryColor?: string;
 	version?: number;
@@ -686,7 +685,6 @@ export class Partner extends BaseEntity
 		productsRecommendationEndpoint,
 		updatePointsInterval,
 		logoImageData,
-		logoImageMimeType,
 		logoImage,
 		primaryColor,
 		version,
@@ -703,7 +701,6 @@ export class Partner extends BaseEntity
 		productsRecommendationEndpoint?: string;
 		updatePointsInterval?: number;
 		logoImageData?: string;
-		logoImageMimeType?: MimeTypes;
 		logoImage?: string;
 		primaryColor?: string;
 		version?: number;
@@ -723,7 +720,6 @@ export class Partner extends BaseEntity
 		this.productsRecommendationEndpoint = productsRecommendationEndpoint;
 		this.updatePointsInterval = updatePointsInterval;
 		this.logoImageData = logoImageData;
-		this.logoImageMimeType = logoImageMimeType;
 		this.logoImage = logoImage;
 		this.primaryColor = primaryColor;
 		this.version = version;
