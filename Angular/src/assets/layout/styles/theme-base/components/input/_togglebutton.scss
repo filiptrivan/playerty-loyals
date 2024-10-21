@@ -21,8 +21,8 @@
     }
 
     &.p-highlight {
-        background: $toggleButtonActiveBg;
-        border-color: $toggleButtonActiveBorderColor;
+        background: var(--primary-color);
+        border-color: var(--primary-color);
         color: $toggleButtonTextActiveColor;
 
         .p-button-icon-left,
@@ -31,8 +31,8 @@
         }
 
         &:hover {
-            background: $toggleButtonActiveHoverBg;
-            border-color: $toggleButtonActiveHoverBorderColor;
+            background: var(--primary-dark-color);
+            border-color: var(--primary-dark-color);
             color: $toggleButtonTextActiveHoverColor;
 
             .p-button-icon-left,

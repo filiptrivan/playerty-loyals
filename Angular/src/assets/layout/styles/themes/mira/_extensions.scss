@@ -281,7 +281,7 @@
     .p-overlaypanel {
         .p-overlaypanel-close {
             &:enabled:hover {
-                background: $buttonHoverBg;
+                background: var(--primary-dark-color);
                 color: $buttonTextHoverColor;
                 border: 2px solid $buttonHoverBorderColor;
             }
@@ -329,7 +329,7 @@
             }
     
             &:focus {
-                box-shadow: inset $focusShadow;
+                box-shadow: inset 0 0 0 0.2rem var(--primary-light-color);
                 outline: 0 none;
             }
         }

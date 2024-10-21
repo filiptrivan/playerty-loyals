@@ -1,7 +1,7 @@
 @use 'sass:math';
 
 .p-tag {
-    background: $badgeBg;
+    background: var(--primary-color);
     color: $badgeTextColor;
     font-size: $badgeFontSize;
     font-weight: $badgeFontWeight;

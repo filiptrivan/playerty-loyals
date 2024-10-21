@@ -32,7 +32,7 @@
 
         &.p-highlight {
             .p-steps-number {
-                background: $highlightBg;
+                background: var(--highlight-bg);
                 color: $highlightTextColor;
             }
 

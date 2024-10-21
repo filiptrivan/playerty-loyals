@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { SoftCalendarModule } from './soft-calendar/soft-calendar.module';
 import { SoftPanelsModule } from '../components/soft-panels/soft-panels.module';
 import { SoftReturnButtonComponent } from '../components/soft-buttons/soft-return-button.component';
 import { SoftMultiAutocompleteComponent } from './soft-multiautocomplete/soft-multiautocomplete.component';
@@ -15,6 +14,7 @@ import { SoftDropdownComponent } from './soft-dropdown/soft-dropdown.component';
 import { SoftEditorComponent } from './soft-editor/soft-editor.component';
 import { SoftColorpickComponent } from './soft-colorpick/soft-colorpick.component';
 import { SoftFileComponent } from './soft-file/soft-file.component';
+import { SoftCalendarComponent } from './soft-calendar/soft-calendar.component';
 
 @NgModule({
   imports: [
@@ -24,7 +24,7 @@ import { SoftFileComponent } from './soft-file/soft-file.component';
     SoftTextboxComponent,
     SoftTextareaComponent,
     SoftCheckboxComponent,
-    SoftCalendarModule,
+    SoftCalendarComponent,
     SoftReturnButtonComponent,
     SoftPanelsModule,
     SoftPasswordComponent,
@@ -43,7 +43,7 @@ import { SoftFileComponent } from './soft-file/soft-file.component';
     SoftTextboxComponent,
     SoftTextareaComponent,
     SoftCheckboxComponent,
-    SoftCalendarModule,
+    SoftCalendarComponent,
     SoftReturnButtonComponent,
     SoftPanelsModule,
     SoftPasswordComponent,

@@ -39,7 +39,7 @@
                 }
 
                 &.p-highlight {
-                    background: $highlightBg;
+                    background: var(--highlight-bg);
                     color: $highlightTextColor;
 
                     .p-tree-toggler,
@@ -94,7 +94,7 @@
 
     .p-treenode-droppoint {
         &.p-treenode-droppoint-active {
-            background-color: scale-color($highlightBg, $lightness: -20%);
+            background-color: var(--highlight-bg);
         }
     } 
 
@@ -109,7 +109,7 @@
                 transition: $listItemTransition;
 
                 &.p-highlight {
-                    background-color: $highlightBg;
+                    background-color: var(--highlight-bg);
                     color: $highlightTextColor;
 
                     .p-treenode-icon {

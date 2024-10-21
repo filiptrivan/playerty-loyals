@@ -7,7 +7,7 @@ $primaryTextColor: #ffffff !default;
 
 $highlightBg: #ced6f1 !default;
 $highlightTextColor: #585858 !default;
-$highlightFocusBg: darken($highlightBg, 8%) !default;
+$highlightFocusBg: darken(var(--highlight-bg), 8%) !default;
 
 $colors: (
     "blue": #54A6D4,
@@ -268,8 +268,8 @@ $toggleButtonActiveBg:$highlightBg !default;
 $toggleButtonActiveBorderColor:$highlightBg !default;
 $toggleButtonTextActiveColor:$highlightTextColor !default;
 $toggleButtonIconActiveColor:$highlightTextColor !default;
-$toggleButtonActiveHoverBg:scale-color($highlightBg, $lightness: -5%) !default;
-$toggleButtonActiveHoverBorderColor:scale-color($highlightBg, $lightness: -5%) !default;
+$toggleButtonActiveHoverBg:scale-color(var(--highlight-bg), $lightness: -5%) !default;
+$toggleButtonActiveHoverBorderColor:scale-color(var(--highlight-bg), $lightness: -5%) !default;
 $toggleButtonTextActiveHoverColor:$highlightTextColor !default;
 $toggleButtonIconActiveHoverColor:$highlightTextColor !default;
 

@@ -49,7 +49,7 @@
     }
 
     .p-sortable-column {
-        outline-color: $focusOutlineColor;
+        outline-color: var(--primary-light-color);
 
         .p-sortable-column-icon {
             color: $tableHeaderCellIconColor;
@@ -62,7 +62,7 @@
             min-width: $tableSortableColumnBadgeSize;
             line-height: $tableSortableColumnBadgeSize;
             color: $highlightTextColor;
-            background: $highlightBg;
+            background: var(--highlight-bg);
             margin-left: $inlineSpacing;
         }
 
@@ -77,10 +77,10 @@
 
         &.p-highlight {
             background: $tableHeaderCellHighlightBg;
-            color: $tableHeaderCellHighlightTextColor;
+            color: var(--primary-color);
 
             .p-sortable-column-icon {
-                color: $tableHeaderCellHighlightTextColor;
+                color: var(--primary-color);
             }
         }
     }
@@ -119,12 +119,12 @@
             }
 
             &:focus-visible {
-                outline: 0.15rem solid $focusOutlineColor;
+                outline: 0.15rem solid var(--primary-light-color);
                 outline-offset: -0.15rem;
             }
 
             &.p-highlight {
-                background: $highlightBg;
+                background: var(--highlight-bg);
                 color: $highlightTextColor;
 
                 .p-treetable-toggler {
@@ -151,7 +151,7 @@
     }
 
     .p-column-resizer-helper {
-        background: $tableResizerHelperBg;
+        background: var(--primary-color);
     }
 
     .p-treetable-scrollable-header,

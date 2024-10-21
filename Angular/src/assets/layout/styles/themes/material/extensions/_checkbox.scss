@@ -17,7 +17,7 @@
 
         &.p-highlight {
             &:not(.p-disabled).p-focus {
-                border-color: $checkboxActiveBorderColor;
+                border-color: var(--primary-color);
             }
 
             .p-checkbox-icon.pi-check:before {

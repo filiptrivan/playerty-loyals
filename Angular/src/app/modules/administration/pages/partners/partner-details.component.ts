@@ -29,13 +29,17 @@ export class PartnerDetailsComponent extends BaseForm<Partner> implements OnInit
     override ngOnInit() {
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
-
-            forkJoin({
-                partner: this.apiService.getPartner(this.modelId),
-            })
-            .subscribe(({ partner }) => {
-                this.init(new Partner(partner));
-            });
+            if(this.modelId > 0){
+                forkJoin({
+                    partner: this.apiService.getPartner(this.modelId),
+                })
+                .subscribe(({ partner }) => {
+                    this.init(new Partner(partner));
+                });
+            }
+            else{
+                this.init(new Partner({id:0}));
+            }
         });
     }
 

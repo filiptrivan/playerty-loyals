@@ -23,7 +23,7 @@ $colors: (
 $highlightBg: #AFD3C8 !default;
 $highlightBgDark: #8DC8B5 !default;
 $highlightTextColor: #385048 !default;
-$highlightFocusBg: darken($highlightBg, .24) !default;
+$highlightFocusBg: darken(var(--highlight-bg), .24) !default;
 
 //global
 $fontFamily: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
@@ -253,12 +253,12 @@ $toggleButtonHoverBg: #c8c8c8 !default;
 $toggleButtonHoverBorderColor: #c8c8c8 !default;
 $toggleButtonTextHoverColor: #333333 !default;
 $toggleButtonIconHoverColor: #666666 !default;
-$toggleButtonActiveBg: $highlightBg !default;
-$toggleButtonActiveBorderColor: $highlightBg !default;
+$toggleButtonActiveBg: var(--highlight-bg) !default;
+$toggleButtonActiveBorderColor: var(--highlight-bg) !default;
 $toggleButtonTextActiveColor: $highlightTextColor !default;
 $toggleButtonIconActiveColor: $highlightTextColor !default;
-$toggleButtonActiveHoverBg: $highlightBgDark !default;
-$toggleButtonActiveHoverBorderColor: $highlightBgDark !default;
+$toggleButtonActiveHoverBg: var(--highlight-bg)Dark !default;
+$toggleButtonActiveHoverBorderColor: var(--highlight-bg)Dark !default;
 $toggleButtonTextActiveHoverColor: $highlightTextColor !default;
 $toggleButtonIconActiveHoverColor: $highlightTextColor !default;
 
@@ -336,8 +336,8 @@ $inputSwitchSliderPadding: .25rem !default;
 $inputSwitchSliderOffBg: $inputBg !default;
 $inputSwitchHandleOffBg: $primaryColor !default;
 $inputSwitchSliderOffHoverBg: #d8dae2 !default;
-$inputSwitchSliderOnBg: $highlightBg !default;
-$inputSwitchSliderOnHoverBg: $highlightBg !default;
+$inputSwitchSliderOnBg: var(--highlight-bg) !default;
+$inputSwitchSliderOnHoverBg: var(--highlight-bg) !default;
 $inputSwitchHandleOnBg: $highlightTextColor !default;
 
 //panel
@@ -377,12 +377,12 @@ $accordionHeaderHoverBg: $primaryDarkerColor !default;
 $accordionHeaderHoverBorderColor: $primaryDarkerColor !default;
 $accordionHeaderTextHoverColor: $primaryTextColor !default;
 
-$accordionHeaderActiveBg: $highlightBg !default;
+$accordionHeaderActiveBg: var(--highlight-bg) !default;
 $accordionHeaderActiveBorderColor: #dadada !default;
 $accordionHeaderTextActiveColor: $highlightTextColor !default;
 
-$accordionHeaderActiveHoverBg: $highlightBgDark !default;
-$accordionHeaderActiveHoverBorderColor: $highlightBgDark !default;
+$accordionHeaderActiveHoverBg: var(--highlight-bg)Dark !default;
+$accordionHeaderActiveHoverBorderColor: var(--highlight-bg)Dark !default;
 $accordionHeaderTextActiveHoverColor: $highlightTextColor !default;
 
 $accordionContentBorder: $panelContentBorder !default;
@@ -409,7 +409,7 @@ $tabviewHeaderHoverBg: $primaryDarkerColor !default;
 $tabviewHeaderHoverBorderColor: $primaryDarkerColor !default;
 $tabviewHeaderTextHoverColor: $primaryTextColor !default;
 
-$tabviewHeaderActiveBg: $highlightBg !default;
+$tabviewHeaderActiveBg: var(--highlight-bg) !default;
 $tabviewHeaderActiveBorderColor: #dadada !default;
 $tabviewHeaderTextActiveColor: $highlightTextColor !default;
 
@@ -612,7 +612,7 @@ $confirmPopupContentPadding:$panelContentPadding !default;
 $confirmPopupFooterPadding:0 1rem .571rem 1rem !default;
 
 //tooltip
-$tooltipBg: $highlightBg !default;
+$tooltipBg: var(--highlight-bg) !default;
 $tooltipTextColor: $highlightTextColor !default;
 $tooltipPadding: $inputPadding !default;
 

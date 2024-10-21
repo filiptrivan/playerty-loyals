@@ -84,25 +84,6 @@ namespace Playerty.Loyals.Services
             });
         }
 
-        public List<ProductDTO> LoadProductsAsync()
-        {
-            List<ProductDTO> products = new List<ProductDTO>
-            {
-                new ProductDTO { Id = 1, Name = "Bosch Hilti", Brand = new BrandDTO { PointsMultiplier = 1.5M, Name = "Bosch" }, Price = 30000, Code = "B-H-2024" },
-                new ProductDTO { Id = 2, Name = "Makita Drill", Brand = new BrandDTO { PointsMultiplier = 1.2M, Name = "Makita" }, Price = 25000, Code = "M-D-2024" },
-                new ProductDTO { Id = 3, Name = "DeWalt Saw", Brand = new BrandDTO { PointsMultiplier = 1.8M, Name = "DeWalt" }, Price = 35000, Code = "D-S-2024" },
-                new ProductDTO { Id = 4, Name = "Stanley Hammer", Brand = new BrandDTO { PointsMultiplier = 1.1M, Name = "Stanley" }, Price = 5000, Code = "S-H-2024" },
-                new ProductDTO { Id = 5, Name = "Bosch Grinder", Brand = new BrandDTO { PointsMultiplier = 1.5M, Name = "Bosch" }, Price = 15000, Code = "B-G-2024" },
-                new ProductDTO { Id = 6, Name = "Milwaukee Impact Driver", Brand = new BrandDTO { PointsMultiplier = 1.6M, Name = "Milwaukee" }, Price = 32000, Code = "M-I-2024" },
-                new ProductDTO { Id = 7, Name = "Black+Decker Jigsaw", Brand = new BrandDTO { PointsMultiplier = 1.3M, Name = "Black+Decker" }, Price = 12000, Code = "B-J-2024" },
-                new ProductDTO { Id = 8, Name = "Hilti Laser Level", Brand = new BrandDTO { PointsMultiplier = 1.7M, Name = "Hilti" }, Price = 40000, Code = "H-L-2024" },
-                new ProductDTO { Id = 9, Name = "Ryobi Circular Saw", Brand = new BrandDTO { PointsMultiplier = 1.4M, Name = "Ryobi" }, Price = 18000, Code = "R-C-2024" },
-                new ProductDTO { Id = 10, Name = "Festool Sander", Brand = new BrandDTO { PointsMultiplier = 2.0M, Name = "Festool" }, Price = 28000, Code = "F-S-2024" }
-            };
-
-            return products;
-        }
-
         public async Task<List<string>> GetCurrentUserPermissionCodes()
         {
             return await _context.WithTransactionAsync(async () =>
@@ -128,16 +109,13 @@ namespace Playerty.Loyals.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                return await _context.WithTransactionAsync(async () =>
-                {
-                    NotificationDTO savedNotificationDTO = await SaveNotificationAndReturnDTOAsync(notificationSaveBodyDTO.NotificationDTO, false, false);
+                NotificationDTO savedNotificationDTO = await SaveNotificationAndReturnDTOAsync(notificationSaveBodyDTO.NotificationDTO, false, false);
 
-                    PaginationResult<UserExtended> paginationResult = await LoadUserExtendedListForPagination(notificationSaveBodyDTO.TableFilter, _context.DbSet<UserExtended>());
+                PaginationResult<UserExtended> paginationResult = await LoadUserExtendedListForPagination(notificationSaveBodyDTO.TableFilter, _context.DbSet<UserExtended>());
 
-                    await UpdateUserExtendedListForNotificationTableSelection(paginationResult.Query, savedNotificationDTO.Id, notificationSaveBodyDTO);
+                await UpdateUserExtendedListForNotificationTableSelection(paginationResult.Query, savedNotificationDTO.Id, notificationSaveBodyDTO);
 
-                    return savedNotificationDTO;
-                });
+                return savedNotificationDTO;
             });
         }
 

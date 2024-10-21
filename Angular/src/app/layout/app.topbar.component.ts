@@ -7,6 +7,8 @@ import { filter, Subscription } from 'rxjs';
 import { ApiService } from '../business/services/api/api.service';
 import { CacheService } from '../core/services/cache.service';
 import { PartnerUser, UserExtended } from '../business/entities/generated/business-entities.generated';
+import { adjustColor } from '../core/services/helper-functions';
+import { PartnerService } from '../business/services/helper/partner.service';
 
 interface SoftMenuItem {
   label?: string;
@@ -23,7 +25,8 @@ interface SoftMenuItem {
     ]
 })
 export class AppTopBarComponent implements OnDestroy {
-    private subscription: Subscription | null = null;
+    private userSubscription: Subscription | null = null;
+    private partnerSubscription: Subscription | null = null;
     currentUser: UserExtended;
     currentPartnerUser: PartnerUser;
     currentUserNotificationsCount: number;
@@ -58,7 +61,7 @@ export class AppTopBarComponent implements OnDestroy {
       },
     ];
     avatarLabel: string;
-    companyName: string = environment.companyName;
+    companyName: string;
 
     @ViewChild('menubutton') menuButton!: ElementRef;
 
@@ -70,23 +73,32 @@ export class AppTopBarComponent implements OnDestroy {
       public layoutService: LayoutService, 
       private authService: AuthService, 
       private apiService: ApiService,
-      protected router: Router, 
+      protected router: Router,
+      private partnerService: PartnerService,
     ) { 
     }
 
   ngOnInit(){
-    this.subscription = this.authService.user$.subscribe(res => {
+    this.userSubscription = this.authService.user$.subscribe(res => {
         this.currentUser = res;
         this.avatarLabel = res?.email.charAt(0).toLocaleUpperCase();
+    });
+    
+    this.partnerSubscription = this.partnerService.partner$.subscribe(partner => {
+      this.companyName = partner?.name ?? environment.companyName;
+
+      this.partnerService.adjustPartnerColor(partner);
     });
 
     this.apiService.getCurrentPartnerUser().subscribe(res => {
         this.currentPartnerUser = res;
     });
 
+
     this.apiService.getUnreadNotificationCountForTheCurrentPartnerUser().subscribe((count) => {
       this.currentUserNotificationsCount = count;
     });
+
 
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
@@ -106,8 +118,11 @@ export class AppTopBarComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+    if (this.partnerSubscription) {
+      this.partnerSubscription.unsubscribe();
     }
   }
 }

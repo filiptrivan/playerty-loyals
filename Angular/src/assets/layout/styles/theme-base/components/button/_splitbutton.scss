@@ -4,18 +4,18 @@
     &.p-button-outlined {
         > .p-button {
             background-color: transparent;
-            color: $buttonBg;
+            color: var(--primary-color);
             border: $outlinedButtonBorder;
 
             @include button-states {
                 &:hover {
-                    background: rgba($buttonBg, $textButtonHoverBgOpacity);
-                    color: $buttonBg;
+                    background: rgba(var(--primary-color), $textButtonHoverBgOpacity);
+                    color: var(--primary-color);
                 }
 
                 &:active {
-                    background: rgba($buttonBg, $textButtonActiveBgOpacity);
-                    color: $buttonBg;
+                    background: rgba(var(--primary-color), $textButtonActiveBgOpacity);
+                    color: var(--primary-color);
                 }
             }
         }
@@ -43,19 +43,19 @@
     &.p-button-text {
         > .p-button {
             background-color: transparent;
-            color: $buttonBg;
+            color: var(--primary-color);
             border-color: transparent;
 
             @include button-states {
                 &:hover {
-                    background: rgba($buttonBg, $textButtonHoverBgOpacity);
-                    color: $buttonBg;
+                    background: rgba(var(--primary-color), $textButtonHoverBgOpacity);
+                    color: var(--primary-color);
                     border-color: transparent;
                 }
 
                 &:active {
-                    background: rgba($buttonBg, $textButtonActiveBgOpacity);
-                    color: $buttonBg;
+                    background: rgba(var(--primary-color), $textButtonActiveBgOpacity);
+                    color: var(--primary-color);
                     border-color: transparent;
                 }
             }

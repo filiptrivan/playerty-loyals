@@ -40,7 +40,7 @@
 
     &.p-inputswitch-checked {
         .p-inputswitch-slider {
-            background: $inputSwitchSliderOnBg;
+            background: var(--primary-color);
 
             &:before {
                 background: $inputSwitchHandleOnBg;
@@ -49,7 +49,7 @@
 
         &:not(.p-disabled):hover {
             .p-inputswitch-slider {
-                background: $inputSwitchSliderOnHoverBg;
+                background: var(--primary-dark-color);
             }
         }
     }

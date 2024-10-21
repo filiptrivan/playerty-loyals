@@ -28,7 +28,7 @@
 
             &.p-highlight {
                 button {
-                    background: $highlightBg;
+                    background: var(--highlight-bg);
                     color: $highlightTextColor;
                 }
             }

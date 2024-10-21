@@ -18,6 +18,7 @@ using Mapster;
 using Playerty.Loyals.Business.DataMappers;
 using Microsoft.Extensions.Caching.Memory;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace Playerty.Loyals.Business.Services
 {
@@ -73,25 +74,44 @@ namespace Playerty.Loyals.Business.Services
         public async Task<PartnerDTO> GetCurrentPartnerDTO()
         {
             // TODO FT: Test how will sql break if i get partner code (slug) from the headers which doesn't exist in the database
-            string cacheKey = $"Partner_{GetCurrentPartnerCode()}";
+            //string cacheKey = $"Partner_{GetCurrentPartnerCode()}";
 
-            if (!_cache.TryGetValue(cacheKey, out PartnerDTO partnerDTO))
+            // FT: Don't cache anymore because the color could change more frequent, TODO FT: Make better aproach, maybe to cache, but on every save delete from cache
+
+            //if (!_cache.TryGetValue(cacheKey, out PartnerDTO partnerDTO))
+            //{
+
+            PartnerDTO partnerDTO = null;
+
+            await _context.WithTransactionAsync(async () =>
             {
-                partnerDTO = await _context.WithTransactionAsync(async () =>
-                {
-                    string partnerCode = GetCurrentPartnerCode();
-                    return await _context.DbSet<Partner>()
-                        .AsNoTracking()
-                        .Where(x => x.Slug == partnerCode)
-                        .ProjectToType<PartnerDTO>(Mapper.PartnerProjectToConfig())
-                        .SingleOrDefaultAsync();
-                });
+                string partnerCode = GetCurrentPartnerCode();
 
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(60));
+                partnerDTO = await _context.DbSet<Partner>()
+                    .AsNoTracking()
+                    .Where(x => x.Slug == partnerCode)
+                    .ProjectToType<PartnerDTO>(Mapper.PartnerProjectToConfig())
+                    .SingleOrDefaultAsync();
+            });
 
-                _cache.Set(cacheKey, partnerDTO, cacheEntryOptions);
+            if (partnerDTO != null && !string.IsNullOrEmpty(partnerDTO.LogoImage))
+            {
+                BlobClient blobClient = _blobContainerClient.GetBlobClient(partnerDTO.LogoImage);
+
+                Azure.Response<BlobDownloadResult> blobDownloadInfo = await blobClient.DownloadContentAsync();
+
+                byte[] byteArray = blobDownloadInfo.Value.Content.ToArray();
+
+                string base64 = Convert.ToBase64String(byteArray);
+
+                partnerDTO.LogoImageData = $"filename={partnerDTO.LogoImage};base64,{base64}";
             }
+
+            //var cacheEntryOptions = new MemoryCacheEntryOptions()
+            //.SetAbsoluteExpiration(TimeSpan.FromMinutes(60));
+
+            //_cache.Set(cacheKey, partnerDTO, cacheEntryOptions);
+            //}
 
             return partnerDTO;
         }

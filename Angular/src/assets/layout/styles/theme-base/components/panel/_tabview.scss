@@ -40,8 +40,8 @@
             &.p-highlight {
                 .p-tabview-nav-link {
                     background: $tabviewHeaderActiveBg;
-                    border-color: $tabviewHeaderActiveBorderColor;
-                    color: $tabviewHeaderTextActiveColor;
+                    border-color: var(--primary-color);
+                    color: var(--primary-color);
                 }
             }
         }
@@ -61,7 +61,7 @@
 
     .p-tabview-nav-btn.p-link {
         background: $tabviewHeaderActiveBg;
-        color: $tabviewHeaderTextActiveColor;
+        color: var(--primary-color);
         width: $buttonIconOnlyWidth;
         box-shadow: $raisedButtonShadow;
         border-radius: 0;

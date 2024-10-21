@@ -52,7 +52,6 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   //#region Model
 
   initFormGroup(model: T) {
-    console.log(model)
     this.model = Object.assign(this.model ? this.model : {}, model);
     
     this.detailsTitle = getTranslatedClassName(this.model.typeName);

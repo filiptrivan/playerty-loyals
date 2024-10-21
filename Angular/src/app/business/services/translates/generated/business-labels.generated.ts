@@ -50,10 +50,14 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@SelectedSegmentationItemIds:SelectedSegmentationItemIds`;
         case 'id':
             return $localize`:@@Id:Id`;
+        case 'description':
+            return $localize`:@@Description:Description`;
         case 'price':
             return $localize`:@@Price:Price`;
         case 'brand':
             return $localize`:@@Brand:Brand`;
+        case 'linkToWebsite':
+            return $localize`:@@LinkToWebsite:LinkToWebsite`;
         case 'email':
             return $localize`:@@Email:Email`;
         case 'segmentationDTO':
@@ -64,8 +68,6 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@Title:Title`;
         case 'titleLatin':
             return $localize`:@@TitleLatin:TitleLatin`;
-        case 'description':
-            return $localize`:@@Description:Description`;
         case 'descriptionLatin':
             return $localize`:@@DescriptionLatin:DescriptionLatin`;
         case 'emailBody':

@@ -24,6 +24,9 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     partnerUser: PartnerUser;
     segmentations: Segmentation[] = [];
     selectedSegmentationItemIds: number[];
+    
+    firstTimeFillText: string = $localize`:@@FirstTimeFieldFillTooltipText:Complete the field for the first time and earn extra points!`; // Popunite polje prvi put i zaradite dodatne poene
+    firstTimeFillIcon: string = 'pi pi-gift';
 
     constructor(
         protected override differs: KeyValueDiffers,

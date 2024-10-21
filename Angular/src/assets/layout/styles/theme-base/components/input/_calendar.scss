@@ -45,7 +45,7 @@ p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
                 padding: $calendarHeaderCellPadding;
 
                 &:enabled:hover {
-                    color: $calendarMonthYearHeaderHoverTextColor;
+                    color: var(--primary-color);
                 }
             }
 
@@ -80,7 +80,7 @@ p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
 
                 &.p-highlight {
                     color: $highlightTextColor;
-                    background: $highlightBg;
+                    background: var(--highlight-bg);
                 }
 
                 &:focus {
@@ -96,7 +96,7 @@ p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
 
                     &.p-highlight {
                         color: $highlightTextColor;
-                        background: $highlightBg;
+                        background: var(--highlight-bg);
                     }
                 }
             }
@@ -149,7 +149,7 @@ p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
 
             &.p-highlight {
                 color: $highlightTextColor;
-                background: $highlightBg;
+                background: var(--highlight-bg);
             }
         }
     }
@@ -164,7 +164,7 @@ p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext {
 
             &.p-highlight {
                 color: $highlightTextColor;
-                background: $highlightBg;
+                background: var(--highlight-bg);
             }
         }
     }

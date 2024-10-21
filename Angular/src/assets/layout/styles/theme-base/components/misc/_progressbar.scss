@@ -7,7 +7,7 @@
     .p-progressbar-value {
         border: 0 none;
         margin: 0;
-        background: $progressBarValueBg;
+        background: var(--primary-color);
     }
 
     .p-progressbar-label {

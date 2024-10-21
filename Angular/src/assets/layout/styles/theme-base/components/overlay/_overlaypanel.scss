@@ -12,7 +12,7 @@
     }
 
     .p-overlaypanel-close {
-        background: $buttonBg;
+        background: var(--primary-color);
         color: $buttonTextColor;
         width: $actionIconWidth;
         height: $actionIconHeight;
@@ -23,7 +23,7 @@
         right: math.div(-1 * $actionIconWidth, 2);
 
         &:enabled:hover {
-            background: $buttonHoverBg;
+            background: var(--primary-dark-color);
             color: $buttonTextHoverColor;
         }
     }

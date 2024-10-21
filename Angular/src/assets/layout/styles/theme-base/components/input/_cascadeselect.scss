@@ -7,7 +7,7 @@
     border-radius: $borderRadius;
 
     &:not(.p-disabled):hover {
-        border-color: $inputHoverBorderColor;
+        border-color: var(--primary-color);
     }
 
     &:not(.p-disabled).p-focus {
@@ -66,7 +66,7 @@
 
             &.p-highlight {
                 color: $highlightTextColor;
-                background: $highlightBg;
+                background: var(--highlight-bg);
             }
 
             &:not(.p-highlight):not(.p-disabled):hover {

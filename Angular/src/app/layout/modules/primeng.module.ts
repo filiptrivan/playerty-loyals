@@ -35,6 +35,7 @@ import { TimelineModule } from 'primeng/timeline';
 import { CardModule } from 'primeng/card';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { FileUploadModule } from 'primeng/fileupload';
+import { DataViewModule } from 'primeng/dataview';
 
 @NgModule({
   imports: [
@@ -74,6 +75,7 @@ import { FileUploadModule } from 'primeng/fileupload';
     CardModule,
     ColorPickerModule,
     FileUploadModule,
+    DataViewModule,
   ],
   exports: [
     TableModule,
@@ -112,6 +114,7 @@ import { FileUploadModule } from 'primeng/fileupload';
     CardModule,
     ColorPickerModule,
     FileUploadModule,
+    DataViewModule
   ],
   declarations: [],
   providers: [

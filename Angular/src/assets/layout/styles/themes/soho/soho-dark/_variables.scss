@@ -782,7 +782,7 @@ $chipBorderRadius: 16px !default;
 
 //scrollTop
 $scrollTopBg:$highlightBg !default;
-$scrollTopHoverBg:scale-color($highlightBg, $alpha: 24%) !default;
+$scrollTopHoverBg:scale-color(var(--highlight-bg), $alpha: 24%) !default;
 $scrollTopWidth:3rem !default;
 $scrollTopHeight:3rem !default;
 $scrollTopBorderRadius:50% !default;

@@ -105,18 +105,18 @@
     .ql-snow.ql-toolbar button.ql-active,
     .ql-snow.ql-toolbar .ql-picker-label.ql-active,
     .ql-snow.ql-toolbar .ql-picker-item.ql-selected {
-        color: $editorIconActiveColor;
+        color: var(--primary-color);
 
         .ql-stroke {
-            stroke: $editorIconActiveColor;
+            stroke: var(--primary-color);
         }
 
         .ql-fill {
-            fill: $editorIconActiveColor;
+            fill: var(--primary-color);
         }
 
         .ql-picker-label {
-            color: $editorIconActiveColor;
+            color: var(--primary-color);
         }
     }
 }

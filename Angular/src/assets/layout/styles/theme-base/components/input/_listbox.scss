@@ -40,7 +40,7 @@
 
             &.p-highlight {
                 color: $highlightTextColor;
-                background: $highlightBg;
+                background: var(--highlight-bg);
             }
 
             &:focus {

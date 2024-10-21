@@ -44,3 +44,44 @@ export function getMimeTypeForFileName(fileName: string): string {
     const extension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
     return mimeTypes[extension] || 'application/octet-stream'; // 'application/octet-stream' is a generic binary type
 }
+
+export function adjustColor(color: string, percent: number): string {
+    if (!/^#([0-9A-F]{3}){1,2}$/i.test(color)) {
+        throw new Error('Invalid hex color format');
+    }
+
+    let r: number, g: number, b: number;
+    if (color.length === 7) {
+        r = parseInt(color.slice(1, 3), 16);
+        g = parseInt(color.slice(3, 5), 16);
+        b = parseInt(color.slice(5, 7), 16);
+    } else {
+        r = parseInt(color[1] + color[1], 16);
+        g = parseInt(color[2] + color[2], 16);
+        b = parseInt(color[3] + color[3], 16);
+    }
+
+    const adjust = (value: number, percent: number): number => {
+        const amount = (percent / 100) * 255;
+        const newValue = Math.min(Math.max(value + amount, 0), 255);
+        return Math.round(newValue);
+    };
+
+    r = adjust(r, percent);
+    g = adjust(g, percent);
+    b = adjust(b, percent);
+
+    const toHex = (value: number): string => {
+        const hex = value.toString(16).padStart(2, '0');
+        return hex;
+    };
+
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+export function getHtmlImgDisplayString64(base64String: string){
+    const [header, base64Content] = base64String.split(';base64,');
+    const fileName = header.split('=')[1];
+    const mimeType = getMimeTypeForFileName(fileName);
+    return `data:${mimeType};base64, ${base64Content}`;
+}

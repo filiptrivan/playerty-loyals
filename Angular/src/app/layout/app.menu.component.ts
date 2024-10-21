@@ -1,3 +1,4 @@
+import { firstValueFrom, Subscription } from 'rxjs';
 import { ApiService } from './../business/services/api/api.service';
 import { AuthService } from './../core/services/auth.service';
 import { OnInit } from '@angular/core';
@@ -18,6 +19,7 @@ export interface SoftMenuItem extends MenuItem{
     templateUrl: './app.menu.component.html'
 })
 export class AppMenuComponent implements OnInit {
+    private partnerSubscription: Subscription | null = null;
     currentUserPermissions: string[];
     model: SoftMenuItem[] = [];
 
@@ -34,9 +36,16 @@ export class AppMenuComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.apiService.getCurrentPartner().subscribe(res => {
-            if (res == null)
+        this.partnerService.partner$.subscribe(async partner => {
+            if (partner == null){
+                partner = await firstValueFrom(this.partnerService.loadCurrentPartner());
+            }
+            
+            if (partner == null) {
                 this.authService.navigateToSelectPartner();
+            }
+
+            this.partnerService.adjustPartnerColor(partner)
 
             this.model = [
                 {
@@ -44,7 +53,7 @@ export class AppMenuComponent implements OnInit {
                     items: [
                         {
                             // pi-shield ; pi-users ; pi-briefcase ; pi-at
-                            label: `${res?.name ?? ''}`,
+                            label: `${partner?.name ?? ''}`,
                             icon: 'pi pi-fw pi-at', 
                             // command: (event) => {
                             //     event.item['showPartnerDialog'] = !event.item['showPartnerDialog'];
@@ -61,34 +70,28 @@ export class AppMenuComponent implements OnInit {
                     visible: true,
                 },
                 {
-                    label: 'Home',
+                    label: 'Pages',
+                    icon: 'pi pi-fw pi-briefcase',
+                    visible: true,
                     items: [
                         { 
                             label: 'Dashboard', 
                             icon: 'pi pi-fw pi-home', 
                             routerLink: [''],
                             visible: true,
-                        }
-                    ],
-                    visible: true,
-                },
-                {
-                    label: 'Pages',
-                    icon: 'pi pi-fw pi-briefcase',
-                    visible: true,
-                    items: [
+                        },
                         {
                             label: 'Tiers',
                             icon: 'pi pi-fw pi-sitemap',
                             routerLink: [`/tiers`],
                             visible: true
                         },
-                        {
-                            label: 'Points',
-                            icon: 'pi pi-fw pi-heart',
-                            routerLink: [`/points`],
-                            visible: true
-                        },
+                        // {
+                        //     label: 'Points',
+                        //     icon: 'pi pi-fw pi-heart',
+                        //     routerLink: [`/points`],
+                        //     visible: true
+                        // },
                         {
                             label: 'Super administration',
                             icon: 'pi pi-fw pi-cog',
@@ -184,15 +187,17 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ]
                         },
-                        {
-                            label: 'Not Found',
-                            icon: 'pi pi-fw pi-exclamation-circle',
-                            routerLink: [`/not-found`],
-                            visible: true
-                        },
                     ]
                 },
             ];
         });
     }
+
+
+    ngOnDestroy(): void {
+        if (this.partnerSubscription) {
+          this.partnerSubscription.unsubscribe();
+        }
+      }
+
 }

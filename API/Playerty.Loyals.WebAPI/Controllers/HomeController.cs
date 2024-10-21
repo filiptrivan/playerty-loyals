@@ -2,6 +2,7 @@
 using Playerty.Loyals.Business.DTO;
 using Playerty.Loyals.Business.Entities;
 using Playerty.Loyals.Business.Enums;
+using Playerty.Loyals.Business.Services;
 using Playerty.Loyals.Services;
 using Soft.Generator.Security.Interface;
 using Soft.Generator.Security.Services;
@@ -21,9 +22,10 @@ namespace Playerty.Loyals.WebAPI.Controllers
         private readonly IApplicationDbContext _context;
         private readonly AuthenticationService _authenticationService;
         private readonly LoyalsBusinessService _loyalsBusinessService;
+        private readonly WingsApiService _wingsApiService;
 
         public HomeController(SecurityBusinessService securityBusinessService, IJwtAuthManager jwtAuthManagerService, IApplicationDbContext context, AuthenticationService authenticationService,
-            LoyalsBusinessService loyalsBusinessService)
+            LoyalsBusinessService loyalsBusinessService, WingsApiService wingsApiService)
             : base()
         {
             _securityBusinessService = securityBusinessService;
@@ -31,6 +33,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
             _context = context;
             _authenticationService = authenticationService;
             _loyalsBusinessService = loyalsBusinessService;
+            _wingsApiService = wingsApiService;
 
             //Menu = new List<MenuDTO>
             //{
@@ -123,6 +126,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
         //    List<MenuDTO> menu = new List<MenuDTO>();
         //    Load
         //}
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<ProductDTO>> GetProductsForTheRecommendation()
+        {
+            return _wingsApiService.GetProductsForTheRecommendationAsync();
+        }
 
     }
 }

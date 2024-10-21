@@ -27,8 +27,8 @@
         height: $sliderHandleHeight;
         width: $sliderHandleWidth;
         background: $sliderHandleBg;
-        border: $sliderHandleBorder;
-        border-radius: $sliderHandleBorderRadius;
+        border: 2px solid var(--primary-color);
+        border-radius: 2px solid var(--primary-color)Radius;
         transition: $formElementTransition;
 
         &:focus {
@@ -37,13 +37,13 @@
     }
 
     .p-slider-range {
-        background: $sliderRangeBg;
+        background: var(--primary-color);
     }
 
     &:not(.p-disabled) {
         .p-slider-handle:hover {
-            background: $sliderHandleHoverBg;
-            border-color: $sliderHandleHoverBorderColor;
+            background: var(--primary-color);
+            border-color: var(--primary-color);
         }
     }
 

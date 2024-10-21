@@ -13,7 +13,7 @@
 
         &.p-highlight {
             &:not(.p-disabled).p-focus {
-                border-color: $radiobuttonActiveBorderColor;
+                border-color: var(--primary-color);
             }
         }
     }

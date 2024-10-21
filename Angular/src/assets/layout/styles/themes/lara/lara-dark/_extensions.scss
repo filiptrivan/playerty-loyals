@@ -48,7 +48,7 @@
     
     .p-button {
         &:focus {
-            @include focused-ring(rgba($buttonBg, .7));
+            @include focused-ring(rgba(var(--primary-color), .7));
         }
     
         &.p-button-secondary:enabled:focus {

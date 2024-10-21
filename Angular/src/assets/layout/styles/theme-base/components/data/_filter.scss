@@ -28,7 +28,7 @@
 
     &.p-column-filter-menu-button-active,
     &.p-column-filter-menu-button-active:hover {
-        background: $highlightBg;
+        background: var(--highlight-bg);
         color: $highlightTextColor;
     }
 
@@ -80,7 +80,7 @@
 
             &.p-highlight {
                 color: $highlightTextColor;
-                background: $highlightBg;
+                background: var(--highlight-bg);
             }
 
             &:not(.p-highlight):not(.p-disabled):hover {

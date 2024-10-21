@@ -2149,11 +2149,20 @@
         "dependencies": {
           "Laraue.EfCoreTriggers.SqlServer": "8.1.0",
           "Playerty.Loyals.Business": "1.0.0",
+          "Playerty.Loyals.Shared": "1.0.0",
           "Soft.Generator.Infrastructure": "1.0.0",
           "Soft.Generator.Shared": "1.0.0"
         },
         "runtime": {
           "Playerty.Loyals.Infrastructure.dll": {}
+        }
+      },
+      "Playerty.Loyals.Shared/1.0.0": {
+        "dependencies": {
+          "Soft.Generator.Shared": "1.0.0"
+        },
+        "runtime": {
+          "Playerty.Loyals.Shared.dll": {}
         }
       },
       "Soft.Generator.Infrastructure/1.0.0": {
@@ -3625,6 +3634,11 @@
       "sha512": ""
     },
     "Playerty.Loyals.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Playerty.Loyals.Shared/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -1,26 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Soft.Generator.Security.Interface;
-using Soft.Generator.Security.Services;
-using Soft.Generator.Infrastructure.Data;
-using Soft.Generator.Security.SecurityControllers;
 using Soft.Generator.Shared.Interfaces;
 using Playerty.Loyals.Business.Entities;
 using Soft.Generator.Shared.Attributes;
 using Playerty.Loyals.Services;
 using Playerty.Loyals.Business.DTO;
 using Soft.Generator.Shared.DTO;
-using Playerty.Loyals.Business.Enums;
 using Playerty.Loyals.Business.Services;
 using Soft.Generator.Shared.Helpers;
-using Mapster;
-using Playerty.Loyals.Business.DataMappers;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using Azure.Storage.Blobs;
-using Soft.Generator.Shared.SoftExceptions;
-using System.ComponentModel;
 using Azure.Storage.Blobs.Models;
-using Azure;
-using System.Management;
 
 
 namespace Playerty.Loyals.WebAPI.Controllers
@@ -68,21 +56,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<PartnerDTO> GetPartner(int id)
         {
-            var dto = await _loyalsBusinessService.GetPartnerDTOAsync(id, false);
-            if (!string.IsNullOrEmpty(dto.LogoImage))
-            {
-                var blobClient = _blobContainerClient.GetBlobClient(dto.LogoImage);
-
-                if (await blobClient.ExistsAsync())
-                {
-                    var blobDownloadInfo = await blobClient.DownloadContentAsync();
-
-                    var imageData = blobDownloadInfo.Value.Content.ToArray();
-                    string base64 = Convert.ToBase64String(imageData);
-                    dto.LogoImageData = $"filename={dto.LogoImage};base64,{base64}";
-                }
-            }
-            return dto;
+            return await _loyalsBusinessService.GetPartnerDTOAsync(id, false);
         }
 
         [HttpPut]
@@ -106,20 +80,12 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.LoadPartnerWithSlugListForAutocomplete(limit, query, _context.DbSet<Partner>(), false);
         }
 
-        // ne mozes da uploadujes i brises na svaki request zato sto mozes korisniku da obrises staru sliku kada rifresuje
+        // FT: You can't upload and delete on every request because you can delete the old image for the user when he refreshes
         [HttpPost]
         [AuthGuard]
         public async Task<string> UploadLogoImage([FromForm] IFormFile file) // FT: It doesn't work without interface
         {
-            using Stream stream = file.OpenReadStream();
-            
-            //int id = GetObjectIdFromFileName<int>(file.FileName);
-            // TODO FT: Authorize access for this id...
-
-            //string fileName = await UploadFileAsync(file.FileName, nameof(Partner), nameof(Partner.LogoImage), id.ToString(), stream);
-
-            //return fileName;
-            return "";
+            return await _loyalsBusinessService.UploadPartnerLogoImageAsync(file); // TODO FT: Make authorization in loyals business servie with override
         }
 
     }

@@ -7,11 +7,11 @@
     }
 
     &:enabled:focus {
-        background: rgba($buttonBg, .76);
+        background: rgba(var(--primary-color), .76);
     }
 
     &:enabled:active {
-        background: rgba($buttonBg, .68);
+        background: rgba(var(--primary-color), .68);
     }
 
     .p-ink {
@@ -21,15 +21,15 @@
     &.p-button-text,
     &.p-button-outlined {
         &:enabled:focus {
-            background: rgba($buttonBg, .12);
+            background: rgba(var(--primary-color), .12);
         }
 
         &:enabled:active {
-            background: rgba($buttonBg, .16);
+            background: rgba(var(--primary-color), .16);
         }
 
         .p-ink {
-            background-color: rgba($buttonBg, .16);
+            background-color: rgba(var(--primary-color), .16);
         }
     }
 

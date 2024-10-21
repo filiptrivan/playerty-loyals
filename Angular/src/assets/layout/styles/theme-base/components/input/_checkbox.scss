@@ -23,15 +23,15 @@
         }
 
         &.p-highlight {
-            border-color: $checkboxActiveBorderColor;
-            background: $checkboxActiveBg;
+            border-color: var(--primary-color);
+            background: var(--primary-color);
         }
     }
 
     &:not(.p-checkbox-disabled) {
         .p-checkbox-box {
             &:hover {
-                border-color: $inputHoverBorderColor;
+                border-color: var(--primary-color);
             }
 
             &.p-focus {
@@ -39,8 +39,8 @@
             }
 
             &.p-highlight:hover {    
-                border-color: $checkboxActiveHoverBorderColor;
-                background: $checkboxActiveHoverBg;
+                border-color: var(--primary-darker-color);
+                background: var(--primary-darker-color);
                 color: $checkboxIconActiveHoverColor;
             }
         }
@@ -57,7 +57,7 @@ p-checkbox.ng-dirty.ng-invalid > .p-checkbox > .p-checkbox-box {
             background-color: $inputFilledBg;
 
             &.p-highlight {
-                background: $checkboxActiveBg;
+                background: var(--primary-color);
             }
         }
 
@@ -68,7 +68,7 @@ p-checkbox.ng-dirty.ng-invalid > .p-checkbox > .p-checkbox-box {
                 }
         
                 &.p-highlight:hover {    
-                    background: $checkboxActiveHoverBg;
+                    background: var(--primary-darker-color);
                 }
             }
         }
@@ -79,7 +79,7 @@ p-checkbox.ng-dirty.ng-invalid > .p-checkbox > .p-checkbox-box {
     margin-left: $inlineSpacing;
 }
 
-@if ($highlightBg == $checkboxActiveBg) {
+@if (var(--highlight-bg) == var(--primary-color)) {
     .p-highlight {
         .p-checkbox {
             .p-checkbox-box {

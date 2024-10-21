@@ -1,5 +1,6 @@
 import {
     Component, Input,
+    ViewChild,
   } from '@angular/core';
 import { getTranslatedLabel } from 'src/app/business/services/translates/translated-labels.generated';
 import { SoftFormControl } from '../components/soft-form-control/soft-form-control';
@@ -14,7 +15,9 @@ import { SoftFormControl } from '../components/soft-form-control/soft-form-contr
     @Input() disabled: boolean = false;
     @Input() label: string = null; // NgModel/Want custom translation
     @Input() controlValid: boolean = true; // NgModel
-    @Input() placeholder: string = "";
+    @Input() placeholder: string = '';
+    @Input() tooltipText: string = null;
+    @Input() tooltipIcon: string = 'pi pi-info-circle';
 
     validationErrorMessage: string;
     
@@ -42,4 +45,5 @@ import { SoftFormControl } from '../components/soft-form-control/soft-form-contr
         
         return this.validationErrorMessage;
     }
+
   }

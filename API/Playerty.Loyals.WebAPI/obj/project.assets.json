@@ -3751,6 +3751,7 @@
         "dependencies": {
           "Laraue.EfCoreTriggers.SqlServer": "8.1.0",
           "Playerty.Loyals.Business": "1.0.0",
+          "Playerty.Loyals.Shared": "1.0.0",
           "Soft.Generator.Infrastructure": "1.0.0",
           "Soft.Generator.Shared": "1.0.0"
         },
@@ -3759,6 +3760,19 @@
         },
         "runtime": {
           "bin/placeholder/Playerty.Loyals.Infrastructure.dll": {}
+        }
+      },
+      "Playerty.Loyals.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Soft.Generator.Shared": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Playerty.Loyals.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Playerty.Loyals.Shared.dll": {}
         }
       },
       "Soft.Generator.Infrastructure/1.0.0": {
@@ -10939,6 +10953,11 @@
       "type": "project",
       "path": "../Playerty.Loyals.Infrastructure/Playerty.Loyals.Infrastructure.csproj",
       "msbuildProject": "../Playerty.Loyals.Infrastructure/Playerty.Loyals.Infrastructure.csproj"
+    },
+    "Playerty.Loyals.Shared/1.0.0": {
+      "type": "project",
+      "path": "../Playerty.Loyals.Shared/Playerty.Loyals.Shared.csproj",
+      "msbuildProject": "../Playerty.Loyals.Shared/Playerty.Loyals.Shared.csproj"
     },
     "Soft.Generator.Infrastructure/1.0.0": {
       "type": "project",

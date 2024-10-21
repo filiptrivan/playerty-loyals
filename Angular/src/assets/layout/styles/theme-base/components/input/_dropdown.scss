@@ -9,7 +9,7 @@ p-dropdown.ng-dirty.ng-invalid > .p-dropdown { //zakomentarisano u donjem delu j
     border-radius: $borderRadius;
 
     &:not(.p-disabled):hover {
-        border-color: $inputHoverBorderColor;
+        border-color: var(--primary-color);
     }
 
     &:not(.p-disabled).p-focus {
@@ -97,7 +97,7 @@ p-dropdown.ng-dirty.ng-invalid > .p-dropdown { //zakomentarisano u donjem delu j
 
             &.p-highlight {
                 color: $highlightTextColor;
-                background: $highlightBg;
+                background: var(--highlight-bg) !important;
 
                 &.p-focus {
                     background: $highlightFocusBg;

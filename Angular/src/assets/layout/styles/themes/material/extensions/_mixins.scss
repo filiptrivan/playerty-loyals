@@ -33,7 +33,7 @@
     &:enabled:hover {
         background-color: $inputFilledHoverBg;
         border-color: transparent;
-        background-image: linear-gradient(to bottom, $inputFocusBorderColor, $inputFocusBorderColor), linear-gradient(to bottom, $inputHoverBorderColor, $inputHoverBorderColor);
+        background-image: linear-gradient(to bottom, $inputFocusBorderColor, $inputFocusBorderColor), linear-gradient(to bottom, var(--primary-color), var(--primary-color));
     }
 
     &:enabled:focus {

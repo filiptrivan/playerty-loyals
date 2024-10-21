@@ -10,6 +10,7 @@
         "dependencies": {
           "Laraue.EfCoreTriggers.SqlServer": "8.1.0",
           "Playerty.Loyals.Business": "1.0.0",
+          "Playerty.Loyals.Shared": "1.0.0",
           "Soft.Generator.Infrastructure": "1.0.0",
           "Soft.Generator.Shared": "1.0.0"
         },
@@ -1703,6 +1704,14 @@
           "Playerty.Loyals.Business.dll": {}
         }
       },
+      "Playerty.Loyals.Shared/1.0.0": {
+        "dependencies": {
+          "Soft.Generator.Shared": "1.0.0"
+        },
+        "runtime": {
+          "Playerty.Loyals.Shared.dll": {}
+        }
+      },
       "Soft.Generator.Infrastructure/1.0.0": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.2",
@@ -2936,6 +2945,11 @@
       "hashPath": "system.xml.xpath.xdocument.4.0.1.nupkg.sha512"
     },
     "Playerty.Loyals.Business/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Playerty.Loyals.Shared/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

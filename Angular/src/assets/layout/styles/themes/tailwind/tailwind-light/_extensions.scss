@@ -31,7 +31,7 @@
     .p-inputswitch {
         &.p-focus {
             .p-inputswitch-slider {
-                box-shadow: 0 0 0 2px $focusOutlineColor;
+                box-shadow: 0 0 0 2px var(--primary-light-color);
             }
         }
     }

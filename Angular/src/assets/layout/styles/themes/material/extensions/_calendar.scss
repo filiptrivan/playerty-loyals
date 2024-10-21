@@ -41,11 +41,11 @@
     }
 
     &:not(.p-calendar-disabled):hover {
-        border-color: $inputHoverBorderColor;
+        border-color: var(--primary-color);
     }
 
     &:not(.p-calendar-disabled).p-focus {
-        border-color: $inputFocusBorderColor;
+        border-color: var(--primary-color);
         box-shadow: inset 0 0 0 1px $inputFocusBorderColor,inset 0 0 0 1px $inputFocusBorderColor,inset 0 0 0 1px $inputFocusBorderColor,inset 0 0 0 1px $inputFocusBorderColor;
     }
 

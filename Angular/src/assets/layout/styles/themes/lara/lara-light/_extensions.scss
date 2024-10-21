@@ -48,7 +48,7 @@
     
     .p-button {
         &:focus {
-            @include focused-ring(scale-color($buttonBg, $lightness: 50%));
+            @include focused-ring(scale-color(var(--primary-color), $lightness: 50%));
         }
     
         &.p-button-secondary:enabled:focus {

@@ -120,7 +120,7 @@ $inputListItemMargin: 0;
 
 /// Box shadow for an individual itrem of an input list in focused state
 /// @group form
-$inputListItemFocusShadow: inset 0 0 0 0.15rem $focusOutlineColor;
+$inputListItemFocusShadow: inset 0 0 0 0.15rem var(--primary-light-color);
 
 /// Padding for a header of an input list
 /// @group form

@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Playerty.Loyals.Business.Entities;
+using Playerty.Loyals.Business.Services;
+using Playerty.Loyals.Shared.Terms;
 using Soft.Generator.Infrastructure.Data;
 using Soft.Generator.Security.Entities;
 using Soft.Generator.Shared.Helpers;
@@ -92,13 +94,15 @@ namespace Playerty.Loyals.Infrastructure
                 {
                     foreach (UserExtended user in users)
                     {
-                        await Set<PartnerUser>().AddAsync(new PartnerUser
+                        PartnerUser partnerUser = new PartnerUser
                         {
                             User = user,
                             Partner = partner,
                             Points = 0,
                             Tier = null // FT: There is no tier if partner is newly made
-                        });
+                        };
+
+                        await Set<PartnerUser>().AddAsync(partnerUser);
                     }
                 }
             }
@@ -119,13 +123,15 @@ namespace Playerty.Loyals.Infrastructure
                 {
                     foreach (Partner partner in partners)
                     {
-                        await Set<PartnerUser>().AddAsync(new PartnerUser
+                        PartnerUser partnerUser = new PartnerUser
                         {
                             User = user,
                             Partner = partner,
                             Points = 0,
                             Tier = partner.Tiers.OrderBy(t => t.ValidTo).FirstOrDefault() // FT: If exists, saving the lowest tier, else null.
-                        });
+                        };
+
+                        await Set<PartnerUser>().AddAsync(partnerUser);
                     }
                 }
             }

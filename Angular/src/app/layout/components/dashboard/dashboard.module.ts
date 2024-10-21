@@ -16,6 +16,7 @@ import { CardSkeletonComponent } from 'src/app/core/components/card-skeleton/car
 import { QRCodeModule } from 'angularx-qrcode';
 import { TiersComponent } from "../../../modules/tiers/pages/tiers.component";
 import { TimelineIndexProgressbarComponent } from 'src/app/core/components/timeline-index-progressbar/timeline-index-progressbar.component';
+import { ProductsRecommendationComponent } from 'src/app/business/components/products-recommendation/products-recommendation.component';
 
 @NgModule({
     imports: [
@@ -34,6 +35,7 @@ import { TimelineIndexProgressbarComponent } from 'src/app/core/components/timel
     CardSkeletonComponent,
     TiersComponent,
     TimelineIndexProgressbarComponent,
+    ProductsRecommendationComponent,
 ],
     declarations: [DashboardComponent],
     providers:[ApiService]

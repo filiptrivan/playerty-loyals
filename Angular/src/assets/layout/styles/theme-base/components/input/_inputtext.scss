@@ -11,7 +11,7 @@
     border-radius: $borderRadius;
 
     &:enabled:hover {
-        border-color: $inputHoverBorderColor;
+        border-color: var(--primary-color);
     }
 
     &:enabled:focus {

@@ -25,14 +25,14 @@
         }
 
         &.p-rating-icon-active {
-            color: $ratingStarIconOnColor;
+            color: var(--primary-color);
         }
     }
 
     &:not(.p-disabled):not(.p-readonly) {
         .p-rating-icon {
             &:hover {
-                color: $ratingStarIconHoverColor;
+                color: var(--primary-color);
             }
 
             &.p-rating-cancel {
@@ -44,7 +44,7 @@
     }
 }
 
-@if ($highlightBg == $ratingStarIconOnColor) {
+@if (var(--highlight-bg) == var(--primary-color)) {
     .p-highlight {
         .p-rating {
             .p-rating-icon {

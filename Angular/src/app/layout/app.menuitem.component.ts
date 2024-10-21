@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, HostBinding, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MenuService } from './app.menu.service';
 import { LayoutService } from './service/app.layout.service';
@@ -11,6 +11,7 @@ import { ApiService } from '../business/services/api/api.service';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { SoftFormControl } from '../core/components/soft-form-control/soft-form-control';
 import { environment } from 'src/environments/environment';
+import { PartnerService } from '../business/services/helper/partner.service';
 
 @Component({
     // eslint-disable-next-line @angular-eslint/component-selector
@@ -44,6 +45,9 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
 
     menuResetSubscription: Subscription;
 
+    private partnerSubscription: Subscription | null = null;
+    private permissionSubscription: Subscription | null = null;
+
     key: string = "";
 
     currentUserPermissionCodes: string[];
@@ -59,6 +63,7 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
         private menuService: MenuService, 
         private authService: AuthService,
         private apiService: ApiService,
+        private partnerService: PartnerService,
     ) {
         this.menuSourceSubscription = this.menuService.menuSource$.subscribe(value => {
             Promise.resolve(null).then(() => {
@@ -86,7 +91,7 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.authService.currentUserPermissions$.subscribe((currentUserPermissionCodes: string[]) => {
+        this.permissionSubscription = this.authService.currentUserPermissions$.subscribe((currentUserPermissionCodes: string[]) => {
             this.currentUserPermissionCodes = currentUserPermissionCodes;
             if (this.item && typeof this.item.hasPermission === 'function') {
                 this.item.visible = this.item.hasPermission(currentUserPermissionCodes);
@@ -150,9 +155,10 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
         });
     }
 
-    moreOptionsClick(){
+    async moreOptionsClick(){
         if (this.selectedPartner.value) {
             localStorage.setItem(environment.partnerSlugKey, this.selectedPartner.value);
+            await firstValueFrom(this.partnerService.loadCurrentPartner());
             this.router.navigate(['/'], { queryParams: { [environment.partnerParamKey]: this.selectedPartner.value } });
         }
     }
@@ -164,6 +170,14 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
 
         if (this.menuResetSubscription) {
             this.menuResetSubscription.unsubscribe();
+        }
+
+        if (this.permissionSubscription) {
+            this.permissionSubscription.unsubscribe();
+        }
+
+        if (this.partnerSubscription) {
+            this.partnerSubscription.unsubscribe();
         }
     }
 }

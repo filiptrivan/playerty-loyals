@@ -12,7 +12,7 @@
         transition: $formElementTransition;
 
         &:not(.p-disabled):not(.p-highlight):hover {
-            border-color: $inputHoverBorderColor;
+            border-color: var(--primary-color);
         }
 
         &:not(.p-disabled).p-focus {
@@ -27,12 +27,12 @@
         }
 
         &.p-highlight {
-            border-color: $radiobuttonActiveBorderColor;
-            background: $radiobuttonActiveBg;
+            border-color: var(--primary-color);
+            background: var(--primary-color);
 
             &:not(.p-disabled):hover {
-                border-color: $radiobuttonActiveHoverBorderColor;
-                background: $radiobuttonActiveHoverBg;
+                border-color: var(--primary-darker-color);
+                background: var(--primary-darker-color);
                 color: $radiobuttonIconActiveHoverColor;
             }
         }
@@ -53,10 +53,10 @@ p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
             }
 
             &.p-highlight {
-                background: $radiobuttonActiveBg;
+                background: var(--primary-color);
     
                 &:not(.p-disabled):hover {
-                    background: $radiobuttonActiveHoverBg;
+                    background: var(--primary-darker-color);
                 }
             }
         }
@@ -67,7 +67,7 @@ p-radiobutton.ng-dirty.ng-invalid > .p-radiobutton > .p-radiobutton-box {
     margin-left: $inlineSpacing;
 }
 
-@if ($highlightBg == $radiobuttonActiveBg) {
+@if (var(--highlight-bg) == var(--primary-color)) {
     .p-highlight {
         .p-radiobutton {
             .p-radiobutton-box {

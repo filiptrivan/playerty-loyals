@@ -1,7 +1,7 @@
 .p-timeline {
     .p-timeline-event-marker {
-        border: $timelineEventMarkerBorder; 
-        border-radius: $timelineEventMarkerBorderRadius;
+        border: 2px solid var(--primary-color); 
+        border-radius: 2px solid var(--primary-color)Radius;
         width: $timelineEventMarkerWidth;
         height: $timelineEventMarkerHeight;
         background-color: $timelineEventMarkerBackground;

@@ -3052,6 +3052,19 @@
           "Microsoft.AspNetCore.App"
         ]
       },
+      "Playerty.Loyals.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Soft.Generator.Shared": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Playerty.Loyals.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Playerty.Loyals.Shared.dll": {}
+        }
+      },
       "Soft.Generator.Infrastructure/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -8976,6 +8989,11 @@
       "path": "../Playerty.Loyals.Business/Playerty.Loyals.Business.csproj",
       "msbuildProject": "../Playerty.Loyals.Business/Playerty.Loyals.Business.csproj"
     },
+    "Playerty.Loyals.Shared/1.0.0": {
+      "type": "project",
+      "path": "../Playerty.Loyals.Shared/Playerty.Loyals.Shared.csproj",
+      "msbuildProject": "../Playerty.Loyals.Shared/Playerty.Loyals.Shared.csproj"
+    },
     "Soft.Generator.Infrastructure/1.0.0": {
       "type": "project",
       "path": "../../../Soft.Generator/Source/Soft.Generator.Infrastructure/Soft.Generator.Infrastructure.csproj",
@@ -9001,6 +9019,7 @@
     "net8.0": [
       "Laraue.EfCoreTriggers.SqlServer >= 8.1.0",
       "Playerty.Loyals.Business >= 1.0.0",
+      "Playerty.Loyals.Shared >= 1.0.0",
       "Soft.Generator.Infrastructure >= 1.0.0",
       "Soft.Generator.Shared >= 1.0.0"
     ]
@@ -9040,6 +9059,9 @@
           "projectReferences": {
             "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Business\\Playerty.Loyals.Business.csproj": {
               "projectPath": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Business\\Playerty.Loyals.Business.csproj"
+            },
+            "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Shared\\Playerty.Loyals.Shared.csproj": {
+              "projectPath": "E:\\Projects\\Playerty.Loyals\\API\\Playerty.Loyals.Shared\\Playerty.Loyals.Shared.csproj"
             },
             "E:\\Projects\\Soft.Generator\\Source\\Soft.Generator.Infrastructure\\Soft.Generator.Infrastructure.csproj": {
               "projectPath": "E:\\Projects\\Soft.Generator\\Source\\Soft.Generator.Infrastructure\\Soft.Generator.Infrastructure.csproj"

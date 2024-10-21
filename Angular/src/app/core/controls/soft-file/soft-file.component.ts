@@ -62,6 +62,7 @@ export class SoftFileComponent extends BaseControl implements OnInit {
         this.control.setValue(null);
     }
 
+    // FT: Put inside global functions if you need it
     base64ToFile(base64String: string){
         const [header, base64Content] = base64String.split(';base64,');
         const fileName = header.split('=')[1];

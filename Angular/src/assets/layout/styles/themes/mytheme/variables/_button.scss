@@ -332,7 +332,7 @@ $linkButtonTextHoverDecoration:underline;
 
 /// Box shadow of a link button in focused state
 /// @group button
-$linkButtonFocusShadow: 0 0 0 0.2rem $focusOutlineColor;
+$linkButtonFocusShadow: 0 0 0 0.2rem var(--primary-light-color);
 
 /// Background of a toggle button
 /// @group button

@@ -6,7 +6,7 @@
         gap: $inlineSpacing;
 
         &:not(.p-disabled):hover {
-            border-color: $inputHoverBorderColor;
+            border-color: var(--primary-color);
         }
 
         &:not(.p-disabled).p-focus {
@@ -15,7 +15,7 @@
 
         .p-chips-token {
             padding: math.div(nth($inputPadding, 1), 2) nth($inputPadding, 2);
-            background: $highlightBg;
+            background: var(--highlight-bg);
             color: $highlightTextColor;
             border-radius: $borderRadius;
 

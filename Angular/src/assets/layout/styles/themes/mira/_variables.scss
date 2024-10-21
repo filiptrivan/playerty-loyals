@@ -65,7 +65,7 @@ $errorColor:#BF616A !default;
 //highlight
 $highlightBg: $white300 !default;
 $highlightTextColor: $black400 !default;
-$highlightFocusBg: darken($highlightBg, 8%) !default;
+$highlightFocusBg: darken(var(--highlight-bg), 8%) !default;
 
 //scale
 $scaleSM:0.875 !default;

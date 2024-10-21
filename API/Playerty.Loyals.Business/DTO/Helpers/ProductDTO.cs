@@ -17,10 +17,14 @@ namespace Playerty.Loyals.Business.DTO
 
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
         public string Code { get; set; }
 
         public decimal Price { get; set; }
 
-        public BrandDTO Brand { get; set; }
+        public string Brand { get; set; } // FT: Maybe add points multiplier on each brand in the future.
+
+        public string LinkToWebsite { get; set; } // FT: Maybe add points multiplier on each brand in the future.
     }
 }

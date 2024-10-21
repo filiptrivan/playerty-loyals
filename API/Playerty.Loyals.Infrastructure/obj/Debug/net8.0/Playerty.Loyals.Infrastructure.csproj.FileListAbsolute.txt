@@ -24,3 +24,5 @@ E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Infrastructure\obj\Debug\net8.0\
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Infrastructure\obj\Debug\net8.0\refint\Playerty.Loyals.Infrastructure.dll
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Infrastructure\obj\Debug\net8.0\Playerty.Loyals.Infrastructure.pdb
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Infrastructure\obj\Debug\net8.0\ref\Playerty.Loyals.Infrastructure.dll
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Infrastructure\bin\Debug\net8.0\Playerty.Loyals.Shared.dll
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Infrastructure\bin\Debug\net8.0\Playerty.Loyals.Shared.pdb

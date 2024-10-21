@@ -26,9 +26,9 @@
         border-bottom-left-radius: $borderRadius;
 
         &.p-fileupload-highlight {
-            border-color: $fileUploadContentHoverBorder;
+            border-color: 1px dashed var(--primary-color);
             border-style: dashed;
-            background-color: $highlightBg;
+            background-color: var(--highlight-bg);
         }
     }
 
@@ -51,14 +51,14 @@
 
 .p-fileupload-choose {
     &:not(.p-disabled):hover {
-        background: $buttonHoverBg;
+        background: var(--primary-dark-color);
         color: $buttonTextHoverColor;
-        border-color: $buttonHoverBorderColor;
+        border-color: var(--primary-dark-color);
     }
 
     &:not(.p-disabled):active {
-        background: $buttonActiveBg;
+        background: var(--primary-darker-color);
         color: $buttonTextActiveColor;
-        border-color: $buttonActiveBorderColor;
+        border-color: var(--primary-darker-color);
     }
 }

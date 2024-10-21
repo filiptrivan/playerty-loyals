@@ -7,24 +7,24 @@
 @mixin focused() {
 	outline: $focusOutline;
     outline-offset: $focusOutlineOffset;
-    box-shadow: $focusShadow;
+    box-shadow: 0 0 0 0.2rem var(--primary-light-color);
 }
 
 @mixin focused-inset() {
 	outline: $focusOutline;
     outline-offset: $focusOutlineOffset;
-    box-shadow: inset $focusShadow;
+    box-shadow: inset 0 0 0 0.2rem var(--primary-light-color);
 }
 
 @mixin focused-input() {
 	@include focused();
-	border-color: $inputFocusBorderColor;
+	border-color: var(--primary-color);
 }
 
 @mixin focused-listitem() {
 	outline: $focusOutline;
     outline-offset: $focusOutlineOffset;
-    box-shadow: $inputListItemFocusShadow;
+    box-shadow: inset 0 0 0 0.15rem var(--primary-light-color);
 }
 
 @mixin invalid-input() {
@@ -325,11 +325,11 @@
 @mixin focused-inset() {
 	outline: $focusOutline;
     outline-offset: $focusOutlineOffset;
-    box-shadow: inset $focusShadow;
+    box-shadow: inset 0 0 0 0.2rem var(--primary-light-color);
 }
 
 @mixin menuitem-badge {
-    background: $badgeBg;
+    background: var(--primary-color);
     color: $badgeTextColor;
     font-size: $badgeFontSize;
     font-weight: $badgeFontWeight;

@@ -4,11 +4,11 @@
         > .p-button {
             @include button-states {
                 &:focus {
-                    background: rgba($buttonBg, .12);
+                    background: rgba(var(--primary-color), .12);
                 }
 
                 &:active {
-                    background: rgba($buttonBg, .16);
+                    background: rgba(var(--primary-color), .16);
                 }
             }
         }

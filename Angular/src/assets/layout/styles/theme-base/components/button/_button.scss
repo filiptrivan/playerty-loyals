@@ -1,38 +1,38 @@
 .p-button {
     color: $buttonTextColor;
-    background: $buttonBg;
-    border: $buttonBorder;
+    background: var(--primary-color);
+    border: 1px solid var(--primary-color);
     padding: $buttonPadding;
     font-size: $fontSize;
     transition: $formElementTransition;
     border-radius: $borderRadius;
 
     &:enabled:hover {
-        background: $buttonHoverBg;
+        background: var(--primary-dark-color);
         color: $buttonTextHoverColor;
-        border-color: $buttonHoverBorderColor;
+        border-color: var(--primary-dark-color);
     }
 
     &:enabled:active {
-        background: $buttonActiveBg;
+        background: var(--primary-darker-color);
         color: $buttonTextActiveColor;
-        border-color: $buttonActiveBorderColor;
+        border-color: var(--primary-darker-color);
     }
 
     &.p-button-outlined {
         background-color: transparent;
-        color: $buttonBg;
+        color: var(--primary-color);
         border: $outlinedButtonBorder;
 
         &:enabled:hover {
-            background: rgba($buttonBg, $textButtonHoverBgOpacity);
-            color: $buttonBg;
+            background: rgba(var(--primary-color), $textButtonHoverBgOpacity);
+            color: var(--primary-color);
             border: $outlinedButtonBorder;
         }
 
         &:enabled:active {
-            background: rgba($buttonBg, $textButtonActiveBgOpacity);
-            color: $buttonBg;
+            background: rgba(var(--primary-color), $textButtonActiveBgOpacity);
+            color: var(--primary-color);
             border: $outlinedButtonBorder;
         }
 
@@ -54,18 +54,18 @@
 
     &.p-button-text {
         background-color: transparent;
-        color: $buttonBg;
+        color: var(--primary-color);
         border-color: transparent;
 
         &:enabled:hover {
-            background: rgba($buttonBg, $textButtonHoverBgOpacity);
-            color: $buttonBg;
+            background: rgba(var(--primary-color), $textButtonHoverBgOpacity);
+            color: var(--primary-color);
             border-color: transparent;
         }
 
         &:enabled:active {
-            background: rgba($buttonBg, $textButtonActiveBgOpacity);
-            color: $buttonBg;
+            background: rgba(var(--primary-color), $textButtonActiveBgOpacity);
+            color: var(--primary-color);
             border-color: transparent;
         }
 
@@ -113,7 +113,7 @@
         min-width: $fontSize;
         height: $fontSize;
         line-height: $fontSize;
-        color: $buttonBg;
+        color: var(--primary-color);
         background-color: $buttonTextColor;
     }
 
@@ -536,13 +536,13 @@
 }
 
 .p-button.p-button-link {
-    color: $linkButtonColor;
+    color: var(--primary-darker-color);
     background: transparent;
     border: transparent;
 
     &:enabled:hover {
         background:  transparent;
-        color: $linkButtonHoverColor;
+        color: var(--primary-darker-color);
         border-color:  transparent;
 
         .p-button-label {
@@ -552,13 +552,13 @@
 
     &:enabled:focus {
         background: transparent;
-        box-shadow: $linkButtonFocusShadow;
+        box-shadow: 0 0 0 0.2rem var(--primary-light-color);
         border-color:  transparent;
     }
 
     &:enabled:active {
         background:  transparent;
-        color: $linkButtonColor;
+        color: var(--primary-darker-color);
         border-color:  transparent;
     }
 }

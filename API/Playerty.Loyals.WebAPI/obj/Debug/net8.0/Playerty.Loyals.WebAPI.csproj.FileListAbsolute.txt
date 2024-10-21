@@ -195,3 +195,6 @@ E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Azure.St
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Microsoft.Extensions.Azure.dll
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\System.ClientModel.dll
 E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\System.IO.Hashing.dll
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Playerty.Loyals.Shared.dll
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\bin\Debug\net8.0\Playerty.Loyals.Shared.pdb
+E:\Projects\Playerty.Loyals\API\Playerty.Loyals.WebAPI\obj\Debug\net8.0\Playerty.Loyals.WebAPI.MvcApplicationPartsAssemblyInfo.cs

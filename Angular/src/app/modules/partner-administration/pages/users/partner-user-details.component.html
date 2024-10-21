@@ -9,10 +9,10 @@
                         <soft-textbox [control]="control('email', this.userExtended, false, false, true)"></soft-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-calendar [control]="control('birthDate', this.userExtended, false, false, false)"></soft-calendar>
+                        <soft-calendar [control]="control('birthDate', this.userExtended, false, false, false)" [tooltipIcon]="firstTimeFillIcon" [tooltipText]="firstTimeFillText"></soft-calendar>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-dropdown [control]="control('genderId', this.userExtended, false, false, false)" [options]="genderOptions"></soft-dropdown>
+                        <soft-dropdown [control]="control('genderId', this.userExtended, false, false, false)" [options]="genderOptions" [tooltipIcon]="firstTimeFillIcon" [tooltipText]="firstTimeFillText"></soft-dropdown>
                     </div>
                     <div class="col-12">
                         <soft-multiselect
@@ -40,7 +40,7 @@
                         <div class="col-12">
                             <div class="flex flex-column gap-2">
                                 <div>
-                                    {{segmentation.name}}
+                                    {{segmentation.name}} <i [class]="firstTimeFillIcon" style="margin-left: 5px; cursor: pointer;" [pTooltip]="firstTimeFillText" tabindex="-1" tooltipEvent="focus"></i>
                                 </div>
                                 <segmentation-select [formGroup]="formGroup" [partnerUserId]="partnerUser.id" (onIdsChange)="selectedSegmentationItemIdsChange($event)" [segmentation]="segmentation"></segmentation-select>
                             </div>
@@ -59,9 +59,6 @@
            <panel-footer>
                 <p-button (onClick)="onSave()" label="Save" icon="pi pi-save"></p-button>
                 <soft-return-button></soft-return-button>
-                <!-- <div footerRight>
-                    Updated {{this.model.modifiedAt | pipeWithLocale}} ago
-                </div> -->
            </panel-footer>
     
         </soft-panel>

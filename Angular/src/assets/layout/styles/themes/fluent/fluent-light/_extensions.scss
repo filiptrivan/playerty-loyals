@@ -13,7 +13,7 @@
 
 @mixin focused-with-outline() {
     box-shadow: none;
-    outline: 1px solid $focusOutlineColor;
+    outline: 1px solid var(--primary-light-color);
     outline-offset: 2px;
 }
 
@@ -50,10 +50,10 @@
     
         &:not(.p-disabled):hover {
             .p-inputswitch-slider {
-                border-color: $inputHoverBorderColor;
+                border-color: var(--primary-color);
     
                 &:before {
-                    background-color: $inputHoverBorderColor;
+                    background-color: var(--primary-color);
                 }
             }
         }
@@ -61,7 +61,7 @@
         &.p-inputswitch-checked {
             &:not(.p-disabled):hover {
                 .p-inputswitch-slider {
-                    border-color: $inputSwitchSliderOnBg;
+                    border-color: var(--primary-color);
     
                     &:before {
                         background-color: $inputSwitchHandleOnBg;
@@ -70,7 +70,7 @@
             }
     
             .p-inputswitch-slider {
-                border-color: $inputSwitchSliderOnBg;
+                border-color: var(--primary-color);
             }
         }
     }
@@ -253,7 +253,7 @@
     .p-inputswitch.p-focus {
         .p-inputswitch-slider {
             box-shadow: none;
-            outline: 1px solid $focusOutlineColor;
+            outline: 1px solid var(--primary-light-color);
             outline-offset: 2px;
         }
     }

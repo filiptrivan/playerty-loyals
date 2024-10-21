@@ -504,32 +504,40 @@ export class Product extends BaseEntity
 {
     id?: number;
 	name?: string;
+	description?: string;
 	code?: string;
 	price?: number;
-	brand?: Brand;
+	brand?: string;
+	linkToWebsite?: string;
 
     constructor(
     {
         id,
 		name,
+		description,
 		code,
 		price,
-		brand
+		brand,
+		linkToWebsite
     }:{
         id?: number;
 		name?: string;
+		description?: string;
 		code?: string;
 		price?: number;
-		brand?: Brand;     
+		brand?: string;
+		linkToWebsite?: string;     
     } = {}
     ) {
         super('Product'); 
 
         this.id = id;
 		this.name = name;
+		this.description = description;
 		this.code = code;
 		this.price = price;
 		this.brand = brand;
+		this.linkToWebsite = linkToWebsite;
     }
 }
 

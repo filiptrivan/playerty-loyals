@@ -12,7 +12,7 @@
     .p-paginator-last {
         background-color: $paginatorElementBg;
         border: $paginatorElementBorder;
-        color: $primaryColor;
+        color: var(--primary-color);
         min-width: $paginatorElementWidth;
         height: $paginatorElementHeight;
         margin: $paginatorElementMargin;
@@ -77,8 +77,8 @@
             border-radius: $paginatorElementBorderRadius;
 
             &.p-highlight {
-                background: $highlightBg;
-                border-color: $highlightBg;
+                background: var(--highlight-bg);
+                border-color: var(--highlight-bg);
                 color: $highlightTextColor;
             }
 
