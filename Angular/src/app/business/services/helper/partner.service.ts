@@ -1,34 +1,56 @@
 import { Injectable } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api/api.service';
 import { environment } from 'src/environments/environment';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, map, Observable, Subscription } from 'rxjs';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
-import { SoftMessageService } from 'src/app/core/services/soft-message.service';
-import { Partner } from '../../entities/generated/business-entities.generated';
+import { Partner, PartnerUser } from '../../entities/generated/business-entities.generated';
 import { adjustColor } from 'src/app/core/services/helper-functions';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Injectable({
   providedIn: 'root' // FT: Ensures the service is available application-wide
 })
 export class PartnerService {
-  private _partner = new BehaviorSubject<Partner | null>(null);
-  partner$ = this._partner.asObservable();
-  
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private apiService: ApiService,
-    private messageService: SoftMessageService,
-  ) {}
+  private userSubscription: Subscription | null = null;
 
-  startListening() {
+  private _partner = new BehaviorSubject<Partner | undefined>(undefined);
+  partner$ = this._partner.asObservable();
+
+  private _currentPartnerUser = new BehaviorSubject<PartnerUser | undefined>(undefined);
+  currentPartnerUser$ = this._currentPartnerUser.asObservable();
+   
+  constructor(
+    private apiService: ApiService,
+    private route: ActivatedRoute,
+    private authService: AuthService,
+  ) {
+  }
+
+  async startListening() {
     this.route.queryParams.subscribe(params => {
       const partnerSlug = params[environment.partnerParamKey] ?? '';
-          if(partnerSlug != null && partnerSlug != ''){
-            localStorage.setItem(environment.partnerSlugKey, partnerSlug);
-          }
-      });
+        if(partnerSlug != null && partnerSlug != ''){
+          localStorage.setItem(environment.partnerSlugKey, partnerSlug);
+        }
+    });
+
+    await firstValueFrom(this.loadCurrentPartner());
+
+    this.userSubscription = this.authService.user$.subscribe(async user => {
+      const currentPartner = await firstValueFrom(this.partner$);
+
+      if (currentPartner == null) {
+        this._currentPartnerUser.next(null);
+      }else{
+        if (user == null) {
+          this._currentPartnerUser.next(null);
+        }
+        else{
+          await firstValueFrom(this.loadCurrentPartnerUser());
+        }
+      }
+    });
   }
 
   loadTierListForDropdown(): Observable<PrimengOption[]>{
@@ -47,11 +69,12 @@ export class PartnerService {
     );
   }
 
-  loadCurrentPartner(): Observable<Partner> {
+  loadCurrentPartner(): Observable<Promise<Partner>> {
     return this.apiService.getCurrentPartner().pipe(
-      map(partner => {
+      map(async partner => {
         this._partner.next(partner);
         this.adjustPartnerColor(partner);
+
         return partner;
       }
     ))
@@ -59,7 +82,6 @@ export class PartnerService {
 
   adjustPartnerColor(partner: Partner){
       if (partner?.primaryColor != null){
-        
         const primaryColor = partner.primaryColor;
         const primaryLightColor = adjustColor(primaryColor, 60);
         const primaryLighterColor = adjustColor(primaryColor, 95);
@@ -76,4 +98,23 @@ export class PartnerService {
       }
   }
 
+  setCurrentPartner(partner: Partner) {
+    this._partner.next(partner);
+    this.adjustPartnerColor(partner);
+  }
+
+  loadCurrentPartnerUser(): Observable<Partner> {  
+    return this.apiService.getCurrentPartnerUser().pipe(
+      map(currentPartnerUser => {
+        this._currentPartnerUser.next(currentPartnerUser);
+        return currentPartnerUser;
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+  }
 }

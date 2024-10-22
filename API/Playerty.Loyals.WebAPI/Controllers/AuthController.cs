@@ -77,7 +77,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<UserExtendedDTO> GetUser(long id)
         {
-            return await _loyalsBusinessService.GetUserExtendedDTOAsync(id);
+            return await _loyalsBusinessService.GetUserExtendedDTOAsync(id, false);
         }
 
         [HttpPut]
@@ -103,6 +103,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
+        [SkipSpinner]
         public async Task<List<string>> GetCurrentUserPermissionCodes()
         {
             return await _loyalsBusinessService.GetCurrentUserPermissionCodes();

@@ -52,10 +52,13 @@ import { environment } from 'src/environments/environment';
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              environment.googleClientId, {
+              environment.googleClientId, 
+              {
                 scopes: 'email',
+                oneTapEnabled: false,
+                prompt: 'none',
                 // plugin_name: 'the name of the Google OAuth project you created'
-              }
+              },
             )
           },
         ],

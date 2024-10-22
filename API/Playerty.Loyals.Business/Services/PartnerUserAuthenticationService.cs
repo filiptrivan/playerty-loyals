@@ -80,7 +80,6 @@ namespace Playerty.Loyals.Business.Services
 
             //if (!_cache.TryGetValue(cacheKey, out PartnerDTO partnerDTO))
             //{
-
             PartnerDTO partnerDTO = null;
 
             await _context.WithTransactionAsync(async () =>
@@ -107,10 +106,9 @@ namespace Playerty.Loyals.Business.Services
                 partnerDTO.LogoImageData = $"filename={partnerDTO.LogoImage};base64,{base64}";
             }
 
-            //var cacheEntryOptions = new MemoryCacheEntryOptions()
-            //.SetAbsoluteExpiration(TimeSpan.FromMinutes(60));
+            //    var cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(60));
 
-            //_cache.Set(cacheKey, partnerDTO, cacheEntryOptions);
+            //    _cache.Set(cacheKey, partnerDTO, cacheEntryOptions);
             //}
 
             return partnerDTO;

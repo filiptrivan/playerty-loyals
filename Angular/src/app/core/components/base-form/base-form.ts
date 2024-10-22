@@ -140,7 +140,6 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
     this.saveBody = this.saveBody ?? this.model;
     
-    console.log(this.saveBody)
     let isValid: boolean = this.isFormGroupValid();
     let isFormArrayValid: boolean = this.isFormArrayValid();
     
@@ -160,7 +159,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
           this.ngOnInit(); // TODO FT: Even if working with other objects, try to assign everything with Object.assign. Like this we are having more requests then we need.
         }
 
-        this.onAfterSave();
+        this.onAfterSave(res);
       });
       
       this.onAfterSaveRequest();
@@ -180,7 +179,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   }
 
   onBeforeSave(){}
-  onAfterSave(){}
+  onAfterSave(res: any){}
   onAfterSaveRequest(){}
 
   isFormGroupValid(): boolean {

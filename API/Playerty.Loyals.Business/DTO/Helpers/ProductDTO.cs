@@ -23,7 +23,7 @@ namespace Playerty.Loyals.Business.DTO
 
         public decimal Price { get; set; }
 
-        public string Brand { get; set; } // FT: Maybe add points multiplier on each brand in the future.
+        public string Category { get; set; } // FT: Maybe add points multiplier on each brand in the future.
 
         public string LinkToWebsite { get; set; } // FT: Maybe add points multiplier on each brand in the future.
     }

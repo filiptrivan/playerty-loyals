@@ -20,7 +20,7 @@ export interface SoftMenuItem extends MenuItem{
 })
 export class AppMenuComponent implements OnInit {
     private partnerSubscription: Subscription | null = null;
-    currentUserPermissions: string[];
+    
     model: SoftMenuItem[] = [];
 
     constructor(
@@ -29,41 +29,23 @@ export class AppMenuComponent implements OnInit {
         private apiService: ApiService,
         private partnerService: PartnerService,
     ) {
-        this.apiService.getCurrentUserPermissionCodes().subscribe((permissionCodes: string[]) => {
-            this.authService._currentUserPermissions.next(permissionCodes);
-            this.currentUserPermissions = permissionCodes;
-        });
+        
     }
 
     ngOnInit() {
-        this.partnerService.partner$.subscribe(async partner => {
-            if (partner == null){
-                partner = await firstValueFrom(this.partnerService.loadCurrentPartner());
-            }
-            
-            if (partner == null) {
-                this.authService.navigateToSelectPartner();
-            }
-
-            this.partnerService.adjustPartnerColor(partner)
-
+        this.partnerSubscription = this.partnerService.partner$.subscribe(partner => {            
             this.model = [
                 {
                     label: 'Partner',
                     items: [
                         {
-                            // pi-shield ; pi-users ; pi-briefcase ; pi-at
-                            label: `${partner?.name ?? ''}`,
+                            label: `${partner?.name ?? environment.companyName}`,
                             icon: 'pi pi-fw pi-at', 
-                            // command: (event) => {
-                            //     event.item['showPartnerDialog'] = !event.item['showPartnerDialog'];
-                            // },
                             visible: true,
                             items: [
                                 {
                                     showPartnerDialog: true,
                                 }
-                                // routerLink: [''],
                             ]
                         }
                     ],
@@ -84,7 +66,7 @@ export class AppMenuComponent implements OnInit {
                             label: 'Tiers',
                             icon: 'pi pi-fw pi-sitemap',
                             routerLink: [`/tiers`],
-                            visible: true
+                            visible: partner != null
                         },
                         // {
                         //     label: 'Points',
@@ -141,7 +123,8 @@ export class AppMenuComponent implements OnInit {
                                 return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]) ||
                                         permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]) ||
                                         permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]) || 
-                                        permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification])) 
+                                        permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification])) &&
+                                        partner != null
                             },
                             items: [
                                 {
@@ -198,6 +181,6 @@ export class AppMenuComponent implements OnInit {
         if (this.partnerSubscription) {
           this.partnerSubscription.unsubscribe();
         }
-      }
+    }
 
 }

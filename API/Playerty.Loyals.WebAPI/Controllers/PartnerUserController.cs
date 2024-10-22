@@ -34,6 +34,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
+        [SkipSpinner]
         public async Task<PartnerUserDTO> GetCurrentPartnerUser()
         {
             return await _partnerUserAuthenticationService.GetCurrentPartnerUserDTO();

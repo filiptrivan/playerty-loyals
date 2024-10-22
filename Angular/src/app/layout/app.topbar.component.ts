@@ -3,11 +3,9 @@ import { AuthService } from './../core/services/auth.service';
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { LayoutService } from "./service/app.layout.service";
 import { environment } from 'src/environments/environment';
-import { filter, Subscription } from 'rxjs';
+import { filter, Subscription, switchMap } from 'rxjs';
 import { ApiService } from '../business/services/api/api.service';
-import { CacheService } from '../core/services/cache.service';
 import { PartnerUser, UserExtended } from '../business/entities/generated/business-entities.generated';
-import { adjustColor } from '../core/services/helper-functions';
 import { PartnerService } from '../business/services/helper/partner.service';
 
 interface SoftMenuItem {
@@ -27,6 +25,8 @@ interface SoftMenuItem {
 export class AppTopBarComponent implements OnDestroy {
     private userSubscription: Subscription | null = null;
     private partnerSubscription: Subscription | null = null;
+    private partnerUserSubscription: Subscription | null = null;
+
     currentUser: UserExtended;
     currentPartnerUser: PartnerUser;
     currentUserNotificationsCount: number;
@@ -36,7 +36,7 @@ export class AppTopBarComponent implements OnDestroy {
         icon: 'pi-user',
         showSeparator: true,
         onClick: () => {
-          this.router.navigateByUrl(`/partner-administration/users/${this.currentPartnerUser.id}`);
+          this.routeToUserPage();
         }
       },
       {
@@ -47,10 +47,10 @@ export class AppTopBarComponent implements OnDestroy {
           this.router.navigateByUrl(`/notifications`);
         },
       },
-      {
-        label: $localize`:@@Settings:Settings`,
-        icon: 'pi-cog'
-      },
+      // {
+      //   label: $localize`:@@Settings:Settings`,
+      //   icon: 'pi-cog'
+      // },
       {
         label: $localize`:@@Logout:Logout`,
         icon: 'pi-sign-out',
@@ -62,6 +62,7 @@ export class AppTopBarComponent implements OnDestroy {
     ];
     avatarLabel: string;
     companyName: string;
+    showProfileIcon: boolean = false;
 
     @ViewChild('menubutton') menuButton!: ElementRef;
 
@@ -78,27 +79,32 @@ export class AppTopBarComponent implements OnDestroy {
     ) { 
     }
 
-  ngOnInit(){
-    this.userSubscription = this.authService.user$.subscribe(res => {
-        this.currentUser = res;
-        this.avatarLabel = res?.email.charAt(0).toLocaleUpperCase();
+  async ngOnInit(){
+    this.userSubscription = this.authService.user$.subscribe(currentUser => {
+        this.currentUser = currentUser;
+        this.avatarLabel = currentUser?.email.charAt(0).toLocaleUpperCase();
     });
     
-    this.partnerSubscription = this.partnerService.partner$.subscribe(partner => {
-      this.companyName = partner?.name ?? environment.companyName;
-
-      this.partnerService.adjustPartnerColor(partner);
+    this.partnerUserSubscription = this.partnerService.currentPartnerUser$.subscribe(currentPartnerUser => {
+      this.currentPartnerUser = currentPartnerUser;
     });
 
-    this.apiService.getCurrentPartnerUser().subscribe(res => {
-        this.currentPartnerUser = res;
+    this.partnerSubscription = this.partnerService.partner$.subscribe(currentPartner => {
+      this.companyName = currentPartner?.name ?? environment.companyName;
+
+      if (currentPartner !== undefined) {
+        this.apiService.getUnreadNotificationCountForTheCurrentPartnerUser().subscribe(count => {
+          this.currentUserNotificationsCount = count;
+        });
+      }
+
+      // FT: Because user loads first we would always have small flick with profile color if don't do this
+      if (currentPartner === null) { 
+        this.showProfileIcon = this.currentUser != null;
+      }else if (currentPartner !== undefined){
+        this.showProfileIcon = true;
+      }
     });
-
-
-    this.apiService.getUnreadNotificationCountForTheCurrentPartnerUser().subscribe((count) => {
-      this.currentUserNotificationsCount = count;
-    });
-
 
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
@@ -117,6 +123,14 @@ export class AppTopBarComponent implements OnDestroy {
     }
   }
 
+  routeToUserPage(){
+    if (this.currentPartnerUser == null) {
+      this.router.navigateByUrl(`/administration/users/${this.currentUser.id}`);
+    }else{
+      this.router.navigateByUrl(`/partner-administration/users/${this.currentPartnerUser.id}`);
+    }
+  }
+
   ngOnDestroy(): void {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
@@ -124,5 +138,9 @@ export class AppTopBarComponent implements OnDestroy {
     if (this.partnerSubscription) {
       this.partnerSubscription.unsubscribe();
     }
+    if (this.partnerUserSubscription) {
+      this.partnerUserSubscription.unsubscribe();
+    }
   }
+
 }

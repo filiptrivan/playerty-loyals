@@ -14,7 +14,7 @@ import { Login } from 'src/app/business/entities/generated/security-entities.gen
     templateUrl: './login.component.html',
 })
 export class LoginComponent extends BaseForm<Login> implements OnInit {
-    companyName: string = environment.companyName;
+    companyName: string;
     usersCanRegister: boolean = environment.usersCanRegister;
     showEmailSentDialog: boolean = false;
     verificationType: VerificationTypeCodes = VerificationTypeCodes.Login;
@@ -28,7 +28,6 @@ export class LoginComponent extends BaseForm<Login> implements OnInit {
       protected override route: ActivatedRoute,
       public layoutService: LayoutService, 
       private authService: AuthService, 
-      private softMessageService: SoftMessageService, 
     ) { 
       super(differs, http, messageService, changeDetectorRef, router, route);
     }
@@ -41,10 +40,13 @@ export class LoginComponent extends BaseForm<Login> implements OnInit {
         this.initFormGroup(model);
     }
 
+    companyNameChange(companyName: string){
+      this.companyName = companyName;
+    }
+
     sendLoginVerificationEmail() {
         let isFormGroupValid: boolean = this.checkFormGroupValidity();
         if (isFormGroupValid == false) return;
-        // const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
         this.authService.sendLoginVerificationEmail(this.model).subscribe(()=>{
             this.showEmailSentDialog = true;
         });

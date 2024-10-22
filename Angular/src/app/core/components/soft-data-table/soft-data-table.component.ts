@@ -130,14 +130,9 @@ export class SoftDataTableComponent implements OnInit {
   }
 
   filter(event: TableFilterEvent){
-    console.log(event)
     this.selectAll(false); // FT: We need to do it like this because: totalRecords: 1 -> selectedRecords from earlyer selection 2 -> unselect current -> all checkbox is set to true
   }
-  clck(a, b, c){
-console.log(a)
-console.log(b)
-console.log(c)
-  }
+  
   getColHeaderWidth(filterType: string) {
     switch (filterType) {
       case 'text':

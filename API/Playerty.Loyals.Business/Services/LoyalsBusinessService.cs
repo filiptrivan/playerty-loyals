@@ -80,7 +80,7 @@ namespace Playerty.Loyals.Services
                     await _securityBusinessService.UpdateRoleListForUser<UserExtended>(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.SelectedRoleIds);
 
                 userExtendedSaveBodyDTO.UserExtendedDTO.Password = user.Password;
-                return await SaveUserExtendedAndReturnDTOAsync(userExtendedSaveBodyDTO.UserExtendedDTO); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
+                return await SaveUserExtendedAndReturnDTOAsync(userExtendedSaveBodyDTO.UserExtendedDTO, false, false); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
             });
         }
 
@@ -297,6 +297,10 @@ namespace Playerty.Loyals.Services
             return await _context.WithTransactionAsync(async () =>
             {
                 PartnerUser partnerUser = await _partnerUserAuthenticationService.GetCurrentPartnerUser();
+
+                if (partnerUser == null)
+                    return null;
+
                 Tier tier = await GetTierForThePoints(partnerUser.Points);
 
                 return tier.Adapt<TierDTO>(Mapper.TierToDTOConfig());

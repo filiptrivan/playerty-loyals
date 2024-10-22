@@ -19,7 +19,8 @@
         #topbarprofiledropdownmenubutton
         (click)="layoutService.showProfileDropdownSidebar()"
       >
-      <p-avatar 
+      <p-avatar
+          *ngIf="showProfileIcon"
           [label]="avatarLabel"
           [style]="{ 'background-color': 'var(--primary-color)', 'color': '#fff', 'cursor': 'pointer', 'width': '34px', 'height': '34px', 'font-size': '21px' }"
           pBadge 
@@ -34,10 +35,11 @@
       >
       <div *ngIf="layoutService.state.profileDropdownSidebarVisible" style="width: 280px; position: absolute; right: 26px; top: 60px; padding: 15px;" class="card">
         <div style="display: flex; flex-direction: column; justify-content: center; text-align: center; gap: 10px;">
-          <p-avatar 
+          <p-avatar
             [label]="avatarLabel"
             size="xlarge"
             [style]="{ 'background-color': 'var(--primary-color)', 'color': '#fff', 'cursor': 'pointer' }"
+            (click)="routeToUserPage()"
             />
           <div>{{currentUser?.email}}</div>
         </div>

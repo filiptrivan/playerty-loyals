@@ -2,7 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
+import { firstValueFrom } from 'rxjs';
 import { ApiService } from 'src/app/business/services/api/api.service';
+import { PartnerService } from 'src/app/business/services/helper/partner.service';
 import { isArrayEmpty } from 'src/app/business/services/validation/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
@@ -28,6 +30,7 @@ export class PartnerSelectComponent extends BaseForm<PartnerIntermediateStep> im
     protected override router: Router,
     protected override route: ActivatedRoute,
     private apiService: ApiService,
+    private partnerService: PartnerService,
 ) { 
     super(differs, http, messageService, changeDetectorRef, router, route);
 }
@@ -45,11 +48,13 @@ export class PartnerSelectComponent extends BaseForm<PartnerIntermediateStep> im
       this.formGroup.controls['partnerSlug'].validator = isArrayEmpty(this.formGroup.controls['partnerSlug'] as SoftFormControl);
   }
 
-  partnerSubmit(){
+  async partnerSubmit(){
     let isValid: boolean = this.checkFormGroupValidity();
 
     if(isValid){
       localStorage.setItem(environment.partnerSlugKey, this.model.partnerSlug);
+      await firstValueFrom(this.partnerService.loadCurrentPartner());
+      await firstValueFrom(this.partnerService.loadCurrentPartnerUser());
       this.router.navigate(['/'], { queryParams: { [environment.partnerParamKey]: this.model.partnerSlug } });
     }
   }

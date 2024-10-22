@@ -15,7 +15,7 @@ import { RegistrationVerificationResultStatusCodes } from 'src/app/business/enum
     templateUrl: './registration.component.html',
 })
 export class RegistrationComponent extends BaseForm<Registration> implements OnInit {
-    companyName: string = environment.companyName;
+    companyName: string;
     showEmailSentDialog: boolean = false;
     verificationType: VerificationTypeCodes = VerificationTypeCodes.Login;
 
@@ -38,6 +38,10 @@ export class RegistrationComponent extends BaseForm<Registration> implements OnI
     
     init(model: Registration){
         this.initFormGroup(model);
+    }
+
+    companyNameChange(companyName: string){
+        this.companyName = companyName;
     }
 
     sendRegistrationVerificationEmail() {

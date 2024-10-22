@@ -1,5 +1,5 @@
 @if (showEmailSentDialog == false) {
-    <auth>
+    <auth (onCompanyNameChange)="companyNameChange($event)">
         <form [formGroup]="formGroup" style="margin-bottom: 16px;"> <!-- FT: We are not loading anything from the server here so we don't need defer block -->
             <div class="col-12" style="padding: 0;">
                 <soft-textbox [control]="control('email')"></soft-textbox>

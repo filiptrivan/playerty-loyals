@@ -1,13 +1,13 @@
-import { ChangeDetectorRef, Component, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { AuthService } from 'src/app/core/services/auth.service';
 import { PartnerUser, Tier } from 'src/app/business/entities/generated/business-entities.generated';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { CardSkeletonComponent } from 'src/app/core/components/card-skeleton/card-skeleton.component';
 import { SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { TimelineIndexProgressbarComponent } from 'src/app/core/components/timeline-index-progressbar/timeline-index-progressbar.component';
 import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
+import { PartnerService } from 'src/app/business/services/helper/partner.service';
 
 @Component({
   selector: 'tiers',
@@ -22,6 +22,8 @@ import { PrimengModule } from 'src/app/layout/modules/primeng.module';
   ]
 })
 export class TiersComponent implements OnInit {
+  private partnerUserSubscription: Subscription | null = null;
+
   tiers: TierWithIndex[] = [];
   tierForTheCurrentPartnerUser: Tier;
   currentPartnerUser: PartnerUser;
@@ -29,22 +31,26 @@ export class TiersComponent implements OnInit {
   
   constructor(
     private apiService: ApiService,
-    private authService: AuthService,
     private renderer: Renderer2,
+    private partnerService: PartnerService
   ) {}
 
   ngOnInit() {
+
+    this.partnerUserSubscription = this.partnerService.currentPartnerUser$.subscribe(currentPartnerUser => {
+      this.currentPartnerUser = currentPartnerUser;
+    });
+
     forkJoin({
       tiers: this.apiService.loadTierListFromLargestToSmallest(),
       tierForTheCurrentPartnerUser: this.apiService.getTierForTheCurrentPartnerUser(),
-      currentPartnerUser: this.apiService.getCurrentPartnerUser(),
-    }).subscribe(({ tiers, tierForTheCurrentPartnerUser, currentPartnerUser }) => {
+    }).subscribe(({ tiers, tierForTheCurrentPartnerUser }) => {
         this.tiers = tiers;
         this.assignIndexesToTiers(tiers);
         this.timelineIndexProgressbarComponent.changeConnector();
         this.tierForTheCurrentPartnerUser = tierForTheCurrentPartnerUser;
-        this.currentPartnerUser = currentPartnerUser;
     });
+
   }
 
   assignIndexesToTiers(tiers: TierWithIndex[]){
@@ -71,6 +77,12 @@ export class TiersComponent implements OnInit {
 
     if (!connector.classList.contains(`custom-connector-${percent}`)) {
       this.renderer.addClass(connector, `custom-connector-${percent}`);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.partnerUserSubscription) {
+      this.partnerUserSubscription.unsubscribe();
     }
   }
 

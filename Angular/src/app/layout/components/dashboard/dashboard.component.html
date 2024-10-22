@@ -1,6 +1,7 @@
+<ng-container *ngIf="currentPartnerUser">
   <div class="card dashboard-card-wrapper">
     <div class="big-header">
-      {{currentUser?.points}} points
+      {{currentPartnerUserPoints()}} points
       <div class="bold-header-separator"></div>
     </div>
     <div style="display: flex; flex-direction: column; gap: 6px; position: relative; z-index: 2;">
@@ -16,6 +17,7 @@
   </div>
 
   <products-recommendation></products-recommendation>
+</ng-container>
 
   <!-- <div style="padding: 30px; position: relative; overflow: hidden;" class="card">
     <div class="big-header">

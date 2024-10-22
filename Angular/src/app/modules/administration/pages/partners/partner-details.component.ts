@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { Partner } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
+import { PartnerService } from 'src/app/business/services/helper/partner.service';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
@@ -21,10 +22,11 @@ export class PartnerDetailsComponent extends BaseForm<Partner> implements OnInit
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 
-        private apiService: ApiService) 
-        {
+        private apiService: ApiService,
+        private partnerService: PartnerService,
+    ) {
         super(differs, http, messageService, changeDetectorRef, router, route);
-        }
+    }
          
     override ngOnInit() {
         this.route.params.subscribe((params) => {
@@ -47,13 +49,7 @@ export class PartnerDetailsComponent extends BaseForm<Partner> implements OnInit
         this.initFormGroup(model);
     }
 
-    override onBeforeSave(): void {
-        // let saveBody: UserExtendedSaveBody = new UserExtendedSaveBody();
-
-        // saveBody.partnerExtendedDTO = this.model;
-        // saveBody.selectedRoleIds = this.selectedRoles.value;
-
-        // this.saveBody = saveBody;
-        // return;
+    override onAfterSave(savedPartner: Partner): void {
+        this.partnerService.setCurrentPartner(savedPartner);
     }
 }

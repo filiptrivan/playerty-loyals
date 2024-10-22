@@ -41,16 +41,13 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
 
     active = false;
 
-    menuSourceSubscription: Subscription;
+    private menuSourceSubscription: Subscription;
 
-    menuResetSubscription: Subscription;
+    private menuResetSubscription: Subscription;
 
-    private partnerSubscription: Subscription | null = null;
     private permissionSubscription: Subscription | null = null;
 
     key: string = "";
-
-    currentUserPermissionCodes: string[];
 
     selectedPartner: SoftFormControl = new SoftFormControl<string>(null, { updateOn: 'change' });
 
@@ -92,7 +89,6 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.permissionSubscription = this.authService.currentUserPermissions$.subscribe((currentUserPermissionCodes: string[]) => {
-            this.currentUserPermissionCodes = currentUserPermissionCodes;
             if (this.item && typeof this.item.hasPermission === 'function') {
                 this.item.visible = this.item.hasPermission(currentUserPermissionCodes);
             }
@@ -134,9 +130,6 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
             this.active = !this.active;
         }
         
-        // const partnerSlug: string = localStorage.getItem('partner-slug');
-        // this.router.navigateByUrl(`${partnerSlug}/${this.item.routerLink}`)
-
         this.menuService.onMenuStateChange({ key: this.key });
     }
 
@@ -159,6 +152,7 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
         if (this.selectedPartner.value) {
             localStorage.setItem(environment.partnerSlugKey, this.selectedPartner.value);
             await firstValueFrom(this.partnerService.loadCurrentPartner());
+            await firstValueFrom(this.partnerService.loadCurrentPartnerUser());
             this.router.navigate(['/'], { queryParams: { [environment.partnerParamKey]: this.selectedPartner.value } });
         }
     }
@@ -174,10 +168,6 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
 
         if (this.permissionSubscription) {
             this.permissionSubscription.unsubscribe();
-        }
-
-        if (this.partnerSubscription) {
-            this.partnerSubscription.unsubscribe();
         }
     }
 }

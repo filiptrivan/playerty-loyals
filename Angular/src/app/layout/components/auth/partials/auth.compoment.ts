@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { LayoutService } from "src/app/layout/service/app.layout.service";
 import { AuthService } from "src/app/core/services/auth.service";
@@ -23,6 +23,7 @@ export class AuthComponent {
     private partnerSubscription: Subscription | null = null;
 
     @Input() showGoogleAuth: boolean = true;
+    @Output() onCompanyNameChange: EventEmitter<string> = new EventEmitter();
 
     hasGoogleAuth: boolean = environment.googleAuth;
     companyName: string;
@@ -31,19 +32,15 @@ export class AuthComponent {
     constructor(public layoutService: LayoutService, private authService: AuthService, private partnerService: PartnerService, private apiService: ApiService) {}
 
     ngOnInit(){
-      this.partnerSubscription = this.partnerService.partner$.subscribe(async partner => {
-        if (partner == null){
-          partner = await firstValueFrom(this.partnerService.loadCurrentPartner());
-        }
-
+      this.partnerSubscription = this.partnerService.partner$.subscribe(partner => {
         if (partner?.logoImageData) {
           this.image = getHtmlImgDisplayString64(partner.logoImageData);
         }else{
           this.image = `assets/layout/images/${this.layoutService.config.colorScheme === 'light' ? 'logo-dark' : 'logo-white'}.svg`
         }
-
+        
         this.companyName = partner?.name ?? environment.companyName;
-        this.partnerService.adjustPartnerColor(partner);
+        this.onCompanyNameChange.next(this.companyName);
       });
     }
 

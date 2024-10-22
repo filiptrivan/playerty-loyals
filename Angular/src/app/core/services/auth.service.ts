@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable, of, Subject, Subscription } from 'rxjs';
 import { map, tap, delay, finalize } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiService } from 'src/app/business/services/api/api.service';
@@ -9,6 +9,7 @@ import { SoftMessageService } from './soft-message.service';
 import { SocialUser, SocialAuthService } from '@abacritt/angularx-social-login';
 import { ExternalProvider, Login, VerificationTokenRequest, LoginResult, ForgotPassword, Registration, RegistrationVerificationResult, RefreshTokenRequest } from 'src/app/business/entities/generated/security-entities.generated';
 import { UserExtended } from 'src/app/business/entities/generated/business-entities.generated';
+import { PartnerService } from 'src/app/business/services/helper/partner.service';
 
 
 @Injectable({
@@ -21,7 +22,7 @@ export class AuthService implements OnDestroy {
   private _user = new BehaviorSubject<UserExtended | null>(null);
   user$ = this._user.asObservable();
 
-  public _currentUserPermissions = new BehaviorSubject<string[] | null>(null); // FT: Can change it from other components
+  private _currentUserPermissions = new BehaviorSubject<string[] | null>(null);
   currentUserPermissions$ = this._currentUserPermissions.asObservable();
 
   // Google auth
@@ -33,10 +34,8 @@ export class AuthService implements OnDestroy {
   constructor(
     private router: Router,
     private http: HttpClient,
-    private route: ActivatedRoute,
     private externalAuthService: SocialAuthService,
     private apiService: ApiService,
-    private messageService: SoftMessageService, 
   ) {
     window.addEventListener('storage', this.storageEventListener.bind(this));
 
@@ -50,7 +49,7 @@ export class AuthService implements OnDestroy {
         this.navigateToDashboard();
       });
       this.extAuthChangeSub.next(user);
-    })
+    });
   }
 
   private storageEventListener(event: StorageEvent) {
@@ -63,11 +62,12 @@ export class AuthService implements OnDestroy {
       if (event.key === 'login-event') {
         this.stopTokenTimer();
 
-        this.apiService.getCurrentUser().subscribe((user: UserExtended) => {
+        this.apiService.getCurrentUser().subscribe(async (user: UserExtended) => {
             this._user.next({
               id: user.id,
               email: user.email
             });
+            await firstValueFrom(this.loadCurrentUserPermissions()); // FT: Needs to be after setting local storage
           });
       }
     }
@@ -79,7 +79,7 @@ export class AuthService implements OnDestroy {
     return this.apiService.sendLoginVerificationEmail(body);
   }
 
-  login(body: VerificationTokenRequest): Observable<LoginResult> {
+  login(body: VerificationTokenRequest): Observable<Promise<LoginResult>> {
     const browserId = this.getBrowserId();
     body.browserId = browserId;
     const loginResultObservable = this.http.post<LoginResult>(`${this.apiUrl}/Auth/Login`, body);
@@ -92,14 +92,14 @@ export class AuthService implements OnDestroy {
     return this.apiService.sendForgotPasswordVerificationEmail(body);
   }
 
-  forgotPassword(body: VerificationTokenRequest): Observable<LoginResult> {
+  forgotPassword(body: VerificationTokenRequest): Observable<Promise<LoginResult>> {
     const browserId = this.getBrowserId();
     body.browserId = browserId;
     const forgotPasswordResultObservable = this.apiService.forgotPassword(body);
     return this.handleLoginResult(forgotPasswordResultObservable);
   }
 
-  loginExternal(body: ExternalProvider): Observable<LoginResult> {
+  loginExternal(body: ExternalProvider): Observable<Promise<LoginResult>> {
     const browserId = this.getBrowserId();
     body.browserId = browserId;
     const loginResultObservable = this.http.post<LoginResult>(`${this.apiUrl}/Auth/LoginExternal`, body);
@@ -112,7 +112,7 @@ export class AuthService implements OnDestroy {
     return this.apiService.sendRegistrationVerificationEmail(body);
   }
   
-  register(body: VerificationTokenRequest): Observable<LoginResult> {
+  register(body: VerificationTokenRequest): Observable<Promise<LoginResult>> {
     const browserId = this.getBrowserId();
     body.browserId = browserId;
     const loginResultObservable = this.apiService.register(body);
@@ -121,13 +121,14 @@ export class AuthService implements OnDestroy {
 
   handleLoginResult(loginResultObservable: Observable<LoginResult>){
     return loginResultObservable.pipe(
-      map((loginResult: LoginResult) => {
+      map(async (loginResult: LoginResult) => {
         this._user.next({
           id: loginResult.userId,
           email: loginResult.email,
         });
         this.setLocalStorage(loginResult);
         this.startTokenTimer();
+        await firstValueFrom(this.loadCurrentUserPermissions()); // FT: Needs to be after setting local storage
         return loginResult;
       })
     );
@@ -149,12 +150,9 @@ export class AuthService implements OnDestroy {
       .subscribe();
   }
 
-  refreshToken(): Observable<LoginResult | null> {
-    let refreshToken = localStorage.getItem(environment.refreshTokenKey); // FT: REFRESH HACK
-    // refreshToken = "1"; // FT: REFRESH HACK
-    // if (!localStorage.getItem(environment.accessTokenKey)) { // FT: REFRESH HACK
-    //   localStorage.setItem(environment.accessTokenKey, 'eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3ByaW1hcnlzaWQiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvZW1haWxhZGRyZXNzIjoiZmlsaXB0cml2YW41QGdtYWlsLmNvbSIsImV4cCI6MTcyNjYyNjI3NywiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzI2MDsiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo3MjYwOyJ9.fjwLE3DyYgnrtFR1zcP6KSoGQkdM4h04dDcpjLZrdLk');  
-    // }
+  refreshToken(): Observable<Promise<LoginResult> | null> {
+    let refreshToken = localStorage.getItem(environment.refreshTokenKey);
+
     if (!refreshToken) {
       this.clearLocalStorage();
       return of(null);
@@ -167,13 +165,14 @@ export class AuthService implements OnDestroy {
     return this.http
     .post<LoginResult>(`${this.apiUrl}/Auth/RefreshToken`, body, environment.httpSkipSpinnerOptions)
     .pipe(
-      map((loginResult) => {
+      map(async (loginResult) => {
         this._user.next({
           id: loginResult.userId,
           email: loginResult.email
         });
         this.setLocalStorage(loginResult);
         this.startTokenTimer();
+        await firstValueFrom(this.loadCurrentUserPermissions()); // FT: Needs to be after setting local storage
         return loginResult;
       })
     );
@@ -256,6 +255,15 @@ export class AuthService implements OnDestroy {
 
   logoutGoogle = () => {
     this.externalAuthService.signOut();
+  }
+
+  loadCurrentUserPermissions(): Observable<string[]> {
+    return this.apiService.getCurrentUserPermissionCodes().pipe(
+      map(permissionCodes => {
+        this._currentUserPermissions.next(permissionCodes);
+        return permissionCodes;
+      }
+    ));
   }
 
   ngOnDestroy(): void {

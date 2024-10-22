@@ -15,9 +15,5 @@ namespace Playerty.Loyals.Business.Entities
         [StringLength(70, MinimumLength = 1)]
         [Required]
         public string Name { get; set; }
-
-        [StringLength(70, MinimumLength = 1)]
-        [Required]
-        public string NameLatin { get; set; }
     }
 }
