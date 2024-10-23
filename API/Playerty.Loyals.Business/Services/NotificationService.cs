@@ -26,9 +26,7 @@ namespace Playerty.Loyals.Business.Services
                 Notification notification = new Notification
                 {
                     Title = notificationTitle,
-                    TitleLatin = notificationTitle,
                     Description = notificationDescription,
-                    DescriptionLatin = notificationDescription,
                 };
 
                 user.Notifications.Add(notification);
@@ -44,9 +42,7 @@ namespace Playerty.Loyals.Business.Services
                 PartnerNotification partnerNotification = new PartnerNotification
                 {
                     Title = notificationTitle,
-                    TitleLatin = notificationTitle,
                     Description = notificationDescription,
-                    DescriptionLatin = notificationDescription,
                     Partner = partnerUser.Partner,
                 };
 

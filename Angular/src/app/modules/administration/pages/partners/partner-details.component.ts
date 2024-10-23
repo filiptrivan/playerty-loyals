@@ -50,6 +50,6 @@ export class PartnerDetailsComponent extends BaseForm<Partner> implements OnInit
     }
 
     override onAfterSave(savedPartner: Partner): void {
-        this.partnerService.setCurrentPartner(savedPartner);
+        // this.partnerService.setCurrentPartner(savedPartner); // FT: Not doing this because maybe the administrator is saving it.
     }
 }

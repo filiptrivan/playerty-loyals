@@ -6,6 +6,7 @@
     <required *ngIf="control?.required"></required>
   </div>
   <p-inputNumber
+    *ngIf="control"
     [pTooltip]="getValidationErrrorMessages()"
     tooltipPosition="bottom"
     [tooltipDisabled]="control?.valid"

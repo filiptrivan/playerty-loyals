@@ -6,6 +6,7 @@
     <required *ngIf="control?.required"></required>
   </div>
   <textarea
+    *ngIf="control"
     [pTooltip]="getValidationErrrorMessages()" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
     pInputTextarea
     [formControl]="control"

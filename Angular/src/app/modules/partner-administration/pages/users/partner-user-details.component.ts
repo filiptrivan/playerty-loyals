@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { PartnerUser, PartnerUserSaveBody, Segmentation, UserExtended } from 'src/app/business/entities/generated/business-entities.generated';
@@ -20,13 +21,17 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     genderOptions: PrimengOption[];
     selectedRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
     selectedPartnerRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
-    userExtended: UserExtended;
-    partnerUser: PartnerUser;
+    userExtendedFormGroup: FormGroup;
+    partnerUserFormGroup: PartnerUser;
     segmentations: Segmentation[] = [];
     selectedSegmentationItemIds: number[];
     
     firstTimeFillText: string = $localize`:@@FirstTimeFieldFillTooltipText:Complete the field for the first time and earn extra points!`; // Popunite polje prvi put i zaradite dodatne poene
     firstTimeFillIcon: string = 'pi pi-gift';
+    genderTooltipText: string;
+    birthDateTooltipText: string;
+
+    alreadyFilledSegmentationIdsForThePartnerUser: number[] = [];
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -42,13 +47,15 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
 
 
     override ngOnInit() {
+        this.formGroup = new FormGroup({});
+
         this.controllerName = 'PartnerUser';
         this.saveMethodName = 'SavePartnerUser';
         this.detailsTitle = $localize`:@@User:User`;
 
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
-
+ 
             forkJoin({
                 rolesForThePartnerUser: this.apiService.loadPartnerRoleNamebookListForPartnerUser(this.modelId),
                 roleOptions: this.apiService.loadRoleListForDropdown(),
@@ -69,16 +76,30 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
             this.apiService.getPartnerUser(this.modelId).subscribe(partnerUser => {
                 this.partnerUser = new PartnerUser(partnerUser);
                 
-                this.apiService.getUser(partnerUser.userId).subscribe(user => {
-                    this.userExtended = new UserExtended(user);
+                if(partnerUser.hasFilledGenderForTheFirstTime == false)
+                    this.genderTooltipText = null;
+                else
+                    this.genderTooltipText = this.firstTimeFillText;
 
-                    this.apiService.loadRoleNamebookListForUserExtended(user.id).subscribe(rolesForTheUser => {
-                        this.selectedRoles.setValue(
-                            rolesForTheUser.map(role => { return role.id })
-                        );
+                if(partnerUser.hasFilledBirthDateForTheFirstTime == false)
+                    this.birthDateTooltipText = null;
+                else
+                    this.birthDateTooltipText = this.firstTimeFillText;
+
+                this.apiService.getAlreadyFilledSegmentationIdsForThePartnerUser(partnerUser.id).subscribe(ids => {
+                    this.alreadyFilledSegmentationIdsForThePartnerUser = ids;
+
+                    this.apiService.getUser(partnerUser.userId).subscribe(user => {
+                        this.userExtended = new UserExtended(user);
+    
+                        this.apiService.loadRoleNamebookListForUserExtended(user.id).subscribe(rolesForTheUser => {
+                            this.selectedRoles.setValue(
+                                rolesForTheUser.map(role => { return role.id })
+                            );
+                        });
                     });
                 });
-            });
+            })
         });
     }
 
@@ -86,12 +107,20 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         this.selectedSegmentationItemIds = event;
     }
 
+    showSegmentationFirstTimeFillIcon(segmentation: Segmentation){
+        if (this.alreadyFilledSegmentationIdsForThePartnerUser.includes(segmentation.id)) {
+            return false;
+        }
+
+        return true;
+    }
+
     override onBeforeSave(): void {
         let saveBody: PartnerUserSaveBody = new PartnerUserSaveBody();
 
         saveBody.userExtendedDTO = this.userExtended;
         saveBody.selectedRoleIds = this.selectedRoles.value;
-
+        
         saveBody.partnerUserDTO = this.partnerUser;
         saveBody.selectedPartnerRoleIds = this.selectedPartnerRoles.value;
 

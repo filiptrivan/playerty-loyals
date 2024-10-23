@@ -11,6 +11,7 @@
         #
       </span> -->
       <input
+      *ngIf="control"
       [pTooltip]="getValidationErrrorMessages()"
       tooltipPosition="bottom"
       [tooltipDisabled]="control?.valid"
@@ -24,6 +25,7 @@
       />
   </div>
     <p-colorPicker
+    *ngIf="control"
     [pTooltip]="getValidationErrrorMessages()"
     tooltipPosition="bottom"
     [tooltipDisabled]="control?.valid"

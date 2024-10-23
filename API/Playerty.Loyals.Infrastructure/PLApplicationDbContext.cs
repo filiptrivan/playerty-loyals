@@ -22,18 +22,20 @@ namespace Playerty.Loyals.Infrastructure
         {
         }
 
-        public DbSet<Tier> Tiers { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<TransactionStatus> TransactionStatuses { get; set; }
-        public DbSet<TransactionProduct> TransactionProduct { get; set; }
-        public DbSet<Partner> Partners { get; set; }
-        public DbSet<PartnerUser> PartnerUser { get; set; }
-        public DbSet<PartnerNotificationPartnerUser> PartnerNotificationPartnerUser { get; set; }
-        public DbSet<PartnerNotification> PartnerNotifications { get; set; }
-        public DbSet<PartnerRole> PartnerRoles { get; set; }
         public DbSet<Gender> Genders { get; set; }
         public DbSet<Notification> Notifications { get; set; }
-        public DbSet<NotificationUser> NotificationUser { get; set; }
+        public DbSet<NotificationUser> NotificationUser { get; set; } // M2M
+        public DbSet<Partner> Partners { get; set; }
+        public DbSet<PartnerNotification> PartnerNotifications { get; set; }
+        public DbSet<PartnerNotificationPartnerUser> PartnerNotificationPartnerUser { get; set; } // M2M
+        public DbSet<PartnerRole> PartnerRoles { get; set; }
+        public DbSet<PartnerUser> PartnerUsers { get; set; }
+        public DbSet<Segmentation> Segmentations { get; set; }
+        public DbSet<SegmentationItem> SegmentationItems { get; set; }
+        public DbSet<Tier> Tiers { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<TransactionProduct> TransactionProducts { get; set; }
+        public DbSet<TransactionStatus> TransactionStatuses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -99,6 +101,8 @@ namespace Playerty.Loyals.Infrastructure
                             User = user,
                             Partner = partner,
                             Points = 0,
+                            HasFilledGenderForTheFirstTime = false,
+                            HasFilledBirthDateForTheFirstTime = false,
                             Tier = null // FT: There is no tier if partner is newly made
                         };
 
@@ -128,6 +132,8 @@ namespace Playerty.Loyals.Infrastructure
                             User = user,
                             Partner = partner,
                             Points = 0,
+                            HasFilledGenderForTheFirstTime = false,
+                            HasFilledBirthDateForTheFirstTime = false,
                             Tier = partner.Tiers.OrderBy(t => t.ValidTo).FirstOrDefault() // FT: If exists, saving the lowest tier, else null.
                         };
 

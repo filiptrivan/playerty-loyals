@@ -4,7 +4,8 @@
     <required *ngIf="control?.required"></required>
   </div>
     <div class="p-inputgroup p-fluid">
-      <p-autoComplete 
+      <p-autoComplete
+      *ngIf="control"
       [pTooltip]="getValidationErrrorMessages()" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
       [id]="label"
       [formControl]="control"

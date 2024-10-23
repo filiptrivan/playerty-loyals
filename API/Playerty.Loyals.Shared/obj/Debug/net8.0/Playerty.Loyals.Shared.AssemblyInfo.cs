@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Playerty.Loyals.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c751af94fea13e1ec0615d8e68fd8d53be0380ef")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d77a6cf507fe1bc023713d9f0e9c167d5a2e79d0")]
 [assembly: System.Reflection.AssemblyProductAttribute("Playerty.Loyals.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Playerty.Loyals.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

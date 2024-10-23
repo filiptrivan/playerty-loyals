@@ -384,9 +384,9 @@ namespace Playerty.Loyals.Services
 
                 PartnerUser savedPartnerUser = await SavePartnerUserAndReturnDomainAsync(partnerUserSaveBodyDTO.PartnerUserDTO, false, false); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
 
-                await UpdateFirstTimeFilledSegmentationsForTheUser(savedPartnerUser, partnerUserSaveBodyDTO.SelectedSegmentationItemIds);
+                await UpdateFirstTimeFilledPointsForThePartnerUser(savedPartnerUser, partnerUserSaveBodyDTO.SelectedSegmentationItemIds);
 
-                if (pointsBeforeSave != partnerUserSaveBodyDTO.PartnerUserDTO.Points)
+                if (pointsBeforeSave != savedPartnerUser.Points)
                     await UpdatePartnerUserTier(savedPartnerUser);
             });
         }
@@ -399,7 +399,7 @@ namespace Playerty.Loyals.Services
             });
         }
 
-        private async Task UpdateFirstTimeFilledSegmentationsForTheUser(PartnerUser partnerUser, List<long> segmentationItemIdsToCheck)
+        private async Task UpdateFirstTimeFilledPointsForThePartnerUser(PartnerUser partnerUser, List<long> segmentationItemIdsToCheck)
         {
             await _context.WithTransactionAsync(async () =>
             {
@@ -410,8 +410,20 @@ namespace Playerty.Loyals.Services
                     if (partnerUser.AlreadyFilledSegmentations.Any(x => x.Id == segmentation.Id) == false)
                     {
                         partnerUser.AlreadyFilledSegmentations.Add(segmentation);
-                        partnerUser.Points += segmentation.PointsForFirstTimeFill;
+                        partnerUser.Points += segmentation.PointsForTheFirstTimeFill;
                     }
+                }
+
+                if(partnerUser.HasFilledGenderForTheFirstTime == false && partnerUser.User.Gender != null)
+                {
+                    partnerUser.Points += partnerUser.Partner.PointsForTheFirstTimeGenderFill;
+                    partnerUser.HasFilledGenderForTheFirstTime = true;
+                }
+
+                if (partnerUser.HasFilledBirthDateForTheFirstTime == false && partnerUser.User.BirthDate != null)
+                {
+                    partnerUser.Points += partnerUser.Partner.PointsForTheFirstTimeBirthDateFill;
+                    partnerUser.HasFilledBirthDateForTheFirstTime = true;
                 }
 
                 await _context.SaveChangesAsync();
@@ -529,6 +541,19 @@ namespace Playerty.Loyals.Services
                     .AsNoTracking()
                     .Where(x => x.Id == partnerUserId)
                     .SelectMany(x => x.CheckedSegmentationItems)
+                    .Select(x => x.Id)
+                    .ToListAsync();
+            });
+        }
+
+        public async Task<List<int>> GetAlreadyFilledSegmentationIdsForThePartnerUser(long partnerUserId)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                return await _context.DbSet<PartnerUser>()
+                    .AsNoTracking()
+                    .Where(x => x.Id == partnerUserId)
+                    .SelectMany(x => x.AlreadyFilledSegmentations)
                     .Select(x => x.Id)
                     .ToListAsync();
             });
@@ -744,9 +769,9 @@ namespace Playerty.Loyals.Services
 
         #region Segmentation
 
-        public async Task SaveSegmentationExtendedAsync(SegmentationSaveBodyDTO segmentationSaveBodyDTO)
+        public async Task<SimpleSaveResultDTO> SaveSegmentationExtendedAsync(SegmentationSaveBodyDTO segmentationSaveBodyDTO)
         {
-            await _context.WithTransactionAsync(async () =>
+            return await _context.WithTransactionAsync(async () =>
             {
                 segmentationSaveBodyDTO.SegmentationDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
                 Segmentation savedSegmentation = await SaveSegmentationAndReturnDomainAsync(segmentationSaveBodyDTO.SegmentationDTO, false, false);
@@ -768,6 +793,8 @@ namespace Playerty.Loyals.Services
                     segmentationSaveBodyDTO.SegmentationItemsDTO[i].OrderNumber = i + 1;
                     await SaveSegmentationItemAndReturnDomainAsync(segmentationSaveBodyDTO.SegmentationItemsDTO[i], false, false);
                 }
+
+                return new SimpleSaveResultDTO { Id = savedSegmentation.Id.ToString() };
             });
         }
 

@@ -4,7 +4,8 @@
     <required *ngIf="control?.required"></required>
   </div>
   <span class="p-fluid">
-    <p-multiSelect 
+    <p-multiSelect
+    *ngIf="control"
     [pTooltip]="getValidationErrrorMessages()" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
     [id]="label"
     [formControl]="control"

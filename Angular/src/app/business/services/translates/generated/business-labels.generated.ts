@@ -90,6 +90,10 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@SelectedPartnerRoleIds:SelectedPartnerRoleIds`;
         case 'selectedSegmentationItemIds':
             return $localize`:@@SelectedSegmentationItemIds:SelectedSegmentationItemIds`;
+        case 'hasFilledGenderForTheFirstTime':
+            return $localize`:@@HasFilledGenderForTheFirstTime:HasFilledGenderForTheFirstTime`;
+        case 'hasFilledBirthDateForTheFirstTime':
+            return $localize`:@@HasFilledBirthDateForTheFirstTime:HasFilledBirthDateForTheFirstTime`;
         case 'tier':
             return $localize`:@@Tier:Tier`;
         case 'checkedSegmentationItems':
@@ -112,6 +116,18 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@SegmentationItemsDTO:SegmentationItemsDTO`;
         case 'slug':
             return $localize`:@@Slug:Slug`;
+        case 'updatePointsInterval':
+            return $localize`:@@UpdatePointsInterval:UpdatePointsInterval`;
+        case 'logoImageData':
+            return $localize`:@@LogoImageData:LogoImageData`;
+        case 'logoImage':
+            return $localize`:@@LogoImage:LogoImage`;
+        case 'primaryColor':
+            return $localize`:@@PrimaryColor:PrimaryColor`;
+        case 'pointsForTheFirstTimeGenderFill':
+            return $localize`:@@PointsForTheFirstTimeGenderFill:PointsForTheFirstTimeGenderFill`;
+        case 'pointsForTheFirstTimeBirthDateFill':
+            return $localize`:@@PointsForTheFirstTimeBirthDateFill:PointsForTheFirstTimeBirthDateFill`;
         case 'loadPurchasesEndpoint':
             return $localize`:@@LoadPurchasesEndpoint:LoadPurchasesEndpoint`;
         case 'loadReversalsEndpoint':
@@ -122,22 +138,14 @@ export function getTranslatedLabelBusiness(name: string): string
             return $localize`:@@UpdateUserGroupEndpoint:UpdateUserGroupEndpoint`;
         case 'productsRecommendationEndpoint':
             return $localize`:@@ProductsRecommendationEndpoint:ProductsRecommendationEndpoint`;
-        case 'updatePointsInterval':
-            return $localize`:@@UpdatePointsInterval:UpdatePointsInterval`;
-        case 'logoImageData':
-            return $localize`:@@LogoImageData:LogoImageData`;
-        case 'logoImage':
-            return $localize`:@@LogoImage:LogoImage`;
-        case 'primaryColor':
-            return $localize`:@@PrimaryColor:PrimaryColor`;
         case 'partnerNotificationDTO':
             return $localize`:@@PartnerNotificationDTO:PartnerNotificationDTO`;
         case 'validFrom':
             return $localize`:@@ValidFrom:ValidFrom`;
         case 'validTo':
             return $localize`:@@ValidTo:ValidTo`;
-        case 'pointsForFirstTimeFill':
-            return $localize`:@@PointsForFirstTimeFill:PointsForFirstTimeFill`;
+        case 'pointsForTheFirstTimeFill':
+            return $localize`:@@PointsForTheFirstTimeFill:PointsForTheFirstTimeFill`;
         default:
             return null;
     }

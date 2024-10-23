@@ -21,7 +21,7 @@ namespace Playerty.Loyals.Business.Entities
 
         [GreaterThanOrEqualTo(0)]
         [Required]
-        public int PointsForFirstTimeFill { get; set; }
+        public int PointsForTheFirstTimeFill { get; set; }
 
         [Required]
         public virtual Partner Partner { get; set; }

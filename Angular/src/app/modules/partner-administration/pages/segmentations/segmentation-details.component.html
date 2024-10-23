@@ -1,4 +1,4 @@
-@defer (when segmentationItems != null && segmentation != null) {
+@defer (when segmentationFormGroup != null && segmentationItemsFormArray != null) {
     <soft-card [title]="detailsTitle" icon="pi pi-hashtag">
         <soft-panel>
             <panel-header></panel-header>
@@ -6,19 +6,13 @@
             <panel-body>
                 <form [formGroup]="formGroup" class="grid">
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('name', this.segmentation)"></soft-textbox>
+                        <soft-textbox [control]="control('name', segmentationFormGroup)"></soft-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('nameLatin', this.segmentation)"></soft-textbox>
-                    </div>
-                    <div class="col-12 md:col-6">
-                        <soft-textarea [control]="control('description', this.segmentation)"></soft-textarea>
-                    </div>
-                    <div class="col-12 md:col-6">
-                        <soft-textarea [control]="control('descriptionLatin', this.segmentation)"></soft-textarea>
+                        <soft-number [control]="control('pointsForTheFirstTimeFill', segmentationFormGroup)"></soft-number>
                     </div>
                     <div class="col-12">
-                        <soft-number [control]="control('pointsForFirstTimeFill', this.segmentation)"></soft-number>
+                        <soft-textarea [control]="control('description', segmentationFormGroup)"></soft-textarea>
                     </div>
                     
                     <div class="col-12">

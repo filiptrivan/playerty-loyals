@@ -65,6 +65,10 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
 
         case 'pointsPartnerUser':
             return pointsPartnerUserValidator(formControl);
+        case 'hasFilledGenderForTheFirstTimePartnerUser':
+            return hasFilledGenderForTheFirstTimePartnerUserValidator(formControl);
+        case 'hasFilledBirthDateForTheFirstTimePartnerUser':
+            return hasFilledBirthDateForTheFirstTimePartnerUserValidator(formControl);
 
 
         case 'partnerIdPartnerNotification':
@@ -83,8 +87,8 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
             return nameSegmentationValidator(formControl);
         case 'descriptionSegmentation':
             return descriptionSegmentationValidator(formControl);
-        case 'pointsForFirstTimeFillSegmentation':
-            return pointsForFirstTimeFillSegmentationValidator(formControl);
+        case 'pointsForTheFirstTimeFillSegmentation':
+            return pointsForTheFirstTimeFillSegmentationValidator(formControl);
         case 'partnerIdSegmentation':
             return partnerIdSegmentationValidator(formControl);
 
@@ -92,6 +96,16 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
             return namePartnerValidator(formControl);
         case 'slugPartner':
             return slugPartnerValidator(formControl);
+        case 'updatePointsIntervalPartner':
+            return updatePointsIntervalPartnerValidator(formControl);
+        case 'logoImagePartner':
+            return logoImagePartnerValidator(formControl);
+        case 'primaryColorPartner':
+            return primaryColorPartnerValidator(formControl);
+        case 'pointsForTheFirstTimeGenderFillPartner':
+            return pointsForTheFirstTimeGenderFillPartnerValidator(formControl);
+        case 'pointsForTheFirstTimeBirthDateFillPartner':
+            return pointsForTheFirstTimeBirthDateFillPartnerValidator(formControl);
         case 'loadPurchasesEndpointPartner':
             return loadPurchasesEndpointPartnerValidator(formControl);
         case 'loadReversalsEndpointPartner':
@@ -102,12 +116,6 @@ export function getValidatorBusiness(formControl: SoftFormControl, className: st
             return updateUserGroupEndpointPartnerValidator(formControl);
         case 'productsRecommendationEndpointPartner':
             return productsRecommendationEndpointPartnerValidator(formControl);
-        case 'updatePointsIntervalPartner':
-            return updatePointsIntervalPartnerValidator(formControl);
-        case 'logoImagePartner':
-            return logoImagePartnerValidator(formControl);
-        case 'primaryColorPartner':
-            return primaryColorPartnerValidator(formControl);
 
 
 
@@ -495,6 +503,34 @@ export function pointsPartnerUserValidator(control: SoftFormControl): SoftValida
     return validator;
 }
 
+export function hasFilledGenderForTheFirstTimePartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+        const hasFilledGenderForTheFirstTimeValid = notEmptyRule;
+
+        return hasFilledGenderForTheFirstTimeValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function hasFilledBirthDateForTheFirstTimePartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+        const hasFilledBirthDateForTheFirstTimeValid = notEmptyRule;
+
+        return hasFilledBirthDateForTheFirstTimeValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
 
 
 export function partnerIdPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
@@ -598,7 +634,7 @@ export function descriptionSegmentationValidator(control: SoftFormControl): Soft
     return validator;
 }
 
-export function pointsForFirstTimeFillSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
+export function pointsForTheFirstTimeFillSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
     const validator: SoftValidatorFn = (): ValidationErrors | null => {
         const value = control.value;
 
@@ -606,9 +642,9 @@ export function pointsForFirstTimeFillSegmentationValidator(control: SoftFormCon
         const min = 0;
         const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
 
-        const pointsForFirstTimeFillValid = notEmptyRule && numberMinRangeRule;
+        const pointsForTheFirstTimeFillValid = notEmptyRule && numberMinRangeRule;
 
-        return pointsForFirstTimeFillValid ? null : { _ : $localize`:@@NotEmptyNumberRangeMin:The field is mandatory and must be greater or equal to ${min}.` };
+        return pointsForTheFirstTimeFillValid ? null : { _ : $localize`:@@NotEmptyNumberRangeMin:The field is mandatory and must be greater or equal to ${min}.` };
     };
     validator.hasNotEmptyRule = true;
     return validator;
@@ -658,6 +694,84 @@ export function slugPartnerValidator(control: SoftFormControl): SoftValidatorFn 
         const slugValid = notEmptyRule && stringLengthRule;
 
         return slugValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function updatePointsIntervalPartnerValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const min = 1;
+        const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
+
+        const updatePointsIntervalValid = numberMinRangeRule;
+
+        return updatePointsIntervalValid ? null : { _ : $localize`:@@NumberRangeMin:The field must be greater or equal to ${min}.` };
+    };
+    
+    return validator;
+}
+
+export function logoImagePartnerValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const min = 1;
+        const max = 1024;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+        const logoImageValid = stringLengthRule;
+
+        return logoImageValid ? null : { _ : $localize`:@@Length:The field must have a minimum of ${min} and a maximum of ${max} characters.` };
+    };
+    
+    return validator;
+}
+
+export function primaryColorPartnerValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const length = 7;
+        const stringSingleLengthRule = (value?.length == length) || (typeof value === 'undefined' || value === null || value === '');
+
+        const primaryColorValid = stringSingleLengthRule;
+
+        return primaryColorValid ? null : { _ : $localize`:@@SingleLength:The field must be ${length} character long.` };
+    };
+    
+    return validator;
+}
+
+export function pointsForTheFirstTimeGenderFillPartnerValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 0;
+        const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
+
+        const pointsForTheFirstTimeGenderFillValid = notEmptyRule && numberMinRangeRule;
+
+        return pointsForTheFirstTimeGenderFillValid ? null : { _ : $localize`:@@NotEmptyNumberRangeMin:The field is mandatory and must be greater or equal to ${min}.` };
+    };
+    validator.hasNotEmptyRule = true;
+    return validator;
+}
+
+export function pointsForTheFirstTimeBirthDateFillPartnerValidator(control: SoftFormControl): SoftValidatorFn {
+    const validator: SoftValidatorFn = (): ValidationErrors | null => {
+        const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 0;
+        const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
+
+        const pointsForTheFirstTimeBirthDateFillValid = notEmptyRule && numberMinRangeRule;
+
+        return pointsForTheFirstTimeBirthDateFillValid ? null : { _ : $localize`:@@NotEmptyNumberRangeMin:The field is mandatory and must be greater or equal to ${min}.` };
     };
     validator.hasNotEmptyRule = true;
     return validator;
@@ -738,52 +852,6 @@ export function productsRecommendationEndpointPartnerValidator(control: SoftForm
         const productsRecommendationEndpointValid = stringLengthRule;
 
         return productsRecommendationEndpointValid ? null : { _ : $localize`:@@Length:The field must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    
-    return validator;
-}
-
-export function updatePointsIntervalPartnerValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const min = 1;
-        const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
-
-        const updatePointsIntervalValid = numberMinRangeRule;
-
-        return updatePointsIntervalValid ? null : { _ : $localize`:@@NumberRangeMin:The field must be greater or equal to ${min}.` };
-    };
-    
-    return validator;
-}
-
-export function logoImagePartnerValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const min = 1;
-        const max = 1024;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-        const logoImageValid = stringLengthRule;
-
-        return logoImageValid ? null : { _ : $localize`:@@Length:The field must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    
-    return validator;
-}
-
-export function primaryColorPartnerValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const length = 7;
-        const stringSingleLengthRule = (value?.length == length) || (typeof value === 'undefined' || value === null || value === '');
-
-        const primaryColorValid = stringSingleLengthRule;
-
-        return primaryColorValid ? null : { _ : $localize`:@@SingleLength:The field must be ${length} character long.` };
     };
     
     return validator;

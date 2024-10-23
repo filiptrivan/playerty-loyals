@@ -556,9 +556,11 @@ export class PartnerUserSaveBody extends BaseEntity
 
 export class PartnerUser extends BaseEntity
 {
-    partnerDisplayName?: string;
+    points?: number;
+	hasFilledGenderForTheFirstTime?: boolean;
+	hasFilledBirthDateForTheFirstTime?: boolean;
+	partnerDisplayName?: string;
 	partnerId?: number;
-	points?: number;
 	tierDisplayName?: string;
 	tierId?: number;
 	userDisplayName?: string;
@@ -571,9 +573,11 @@ export class PartnerUser extends BaseEntity
 
     constructor(
     {
-        partnerDisplayName,
+        points,
+		hasFilledGenderForTheFirstTime,
+		hasFilledBirthDateForTheFirstTime,
+		partnerDisplayName,
 		partnerId,
-		points,
 		tierDisplayName,
 		tierId,
 		userDisplayName,
@@ -584,9 +588,11 @@ export class PartnerUser extends BaseEntity
 		createdAt,
 		modifiedAt
     }:{
-        partnerDisplayName?: string;
+        points?: number;
+		hasFilledGenderForTheFirstTime?: boolean;
+		hasFilledBirthDateForTheFirstTime?: boolean;
+		partnerDisplayName?: string;
 		partnerId?: number;
-		points?: number;
 		tierDisplayName?: string;
 		tierId?: number;
 		userDisplayName?: string;
@@ -600,9 +606,11 @@ export class PartnerUser extends BaseEntity
     ) {
         super('PartnerUser'); 
 
-        this.partnerDisplayName = partnerDisplayName;
+        this.points = points;
+		this.hasFilledGenderForTheFirstTime = hasFilledGenderForTheFirstTime;
+		this.hasFilledBirthDateForTheFirstTime = hasFilledBirthDateForTheFirstTime;
+		this.partnerDisplayName = partnerDisplayName;
 		this.partnerId = partnerId;
-		this.points = points;
 		this.tierDisplayName = tierDisplayName;
 		this.tierId = tierId;
 		this.userDisplayName = userDisplayName;
@@ -762,7 +770,7 @@ export class Segmentation extends BaseEntity
 {
     name?: string;
 	description?: string;
-	pointsForFirstTimeFill?: number;
+	pointsForTheFirstTimeFill?: number;
 	partnerDisplayName?: string;
 	partnerId?: number;
 	version?: number;
@@ -774,7 +782,7 @@ export class Segmentation extends BaseEntity
     {
         name,
 		description,
-		pointsForFirstTimeFill,
+		pointsForTheFirstTimeFill,
 		partnerDisplayName,
 		partnerId,
 		version,
@@ -784,7 +792,7 @@ export class Segmentation extends BaseEntity
     }:{
         name?: string;
 		description?: string;
-		pointsForFirstTimeFill?: number;
+		pointsForTheFirstTimeFill?: number;
 		partnerDisplayName?: string;
 		partnerId?: number;
 		version?: number;
@@ -797,7 +805,7 @@ export class Segmentation extends BaseEntity
 
         this.name = name;
 		this.description = description;
-		this.pointsForFirstTimeFill = pointsForFirstTimeFill;
+		this.pointsForTheFirstTimeFill = pointsForTheFirstTimeFill;
 		this.partnerDisplayName = partnerDisplayName;
 		this.partnerId = partnerId;
 		this.version = version;
@@ -812,15 +820,17 @@ export class Partner extends BaseEntity
 {
     name?: string;
 	slug?: string;
+	updatePointsInterval?: number;
+	logoImageData?: string;
+	logoImage?: string;
+	primaryColor?: string;
+	pointsForTheFirstTimeGenderFill?: number;
+	pointsForTheFirstTimeBirthDateFill?: number;
 	loadPurchasesEndpoint?: string;
 	loadReversalsEndpoint?: string;
 	createUserEndpoint?: string;
 	updateUserGroupEndpoint?: string;
 	productsRecommendationEndpoint?: string;
-	updatePointsInterval?: number;
-	logoImageData?: string;
-	logoImage?: string;
-	primaryColor?: string;
 	version?: number;
 	id?: number;
 	createdAt?: Date;
@@ -830,15 +840,17 @@ export class Partner extends BaseEntity
     {
         name,
 		slug,
+		updatePointsInterval,
+		logoImageData,
+		logoImage,
+		primaryColor,
+		pointsForTheFirstTimeGenderFill,
+		pointsForTheFirstTimeBirthDateFill,
 		loadPurchasesEndpoint,
 		loadReversalsEndpoint,
 		createUserEndpoint,
 		updateUserGroupEndpoint,
 		productsRecommendationEndpoint,
-		updatePointsInterval,
-		logoImageData,
-		logoImage,
-		primaryColor,
 		version,
 		id,
 		createdAt,
@@ -846,15 +858,17 @@ export class Partner extends BaseEntity
     }:{
         name?: string;
 		slug?: string;
+		updatePointsInterval?: number;
+		logoImageData?: string;
+		logoImage?: string;
+		primaryColor?: string;
+		pointsForTheFirstTimeGenderFill?: number;
+		pointsForTheFirstTimeBirthDateFill?: number;
 		loadPurchasesEndpoint?: string;
 		loadReversalsEndpoint?: string;
 		createUserEndpoint?: string;
 		updateUserGroupEndpoint?: string;
 		productsRecommendationEndpoint?: string;
-		updatePointsInterval?: number;
-		logoImageData?: string;
-		logoImage?: string;
-		primaryColor?: string;
 		version?: number;
 		id?: number;
 		createdAt?: Date;
@@ -865,15 +879,17 @@ export class Partner extends BaseEntity
 
         this.name = name;
 		this.slug = slug;
+		this.updatePointsInterval = updatePointsInterval;
+		this.logoImageData = logoImageData;
+		this.logoImage = logoImage;
+		this.primaryColor = primaryColor;
+		this.pointsForTheFirstTimeGenderFill = pointsForTheFirstTimeGenderFill;
+		this.pointsForTheFirstTimeBirthDateFill = pointsForTheFirstTimeBirthDateFill;
 		this.loadPurchasesEndpoint = loadPurchasesEndpoint;
 		this.loadReversalsEndpoint = loadReversalsEndpoint;
 		this.createUserEndpoint = createUserEndpoint;
 		this.updateUserGroupEndpoint = updateUserGroupEndpoint;
 		this.productsRecommendationEndpoint = productsRecommendationEndpoint;
-		this.updatePointsInterval = updatePointsInterval;
-		this.logoImageData = logoImageData;
-		this.logoImage = logoImage;
-		this.primaryColor = primaryColor;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;

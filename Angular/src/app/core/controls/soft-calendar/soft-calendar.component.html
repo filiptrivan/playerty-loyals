@@ -6,6 +6,7 @@
         <i *ngIf="tooltipText != null" class="{{tooltipIcon}}" style="margin-left: 5px; cursor: pointer;" [pTooltip]="tooltipText" tabindex="-1" tooltipEvent="focus"></i>
     </div>
     <p-calendar
+    *ngIf="control"
     [style]="{'width':'100%'}"
     [pTooltip]="getValidationErrrorMessages()"
     tooltipPosition="bottom"
