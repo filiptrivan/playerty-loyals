@@ -1,4 +1,5 @@
 ﻿using Soft.Generator.Security.Entities;
+using Soft.Generator.Shared.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,7 +11,7 @@ namespace Playerty.Loyals.Business.Entities
 {
     public class PartnerNotification : Notification
     {
-        [Required]
+        [ManyToOneRequired]
         public virtual Partner Partner { get; set; }
         public virtual List<PartnerUser> PartnerUsers { get; set; }
     }

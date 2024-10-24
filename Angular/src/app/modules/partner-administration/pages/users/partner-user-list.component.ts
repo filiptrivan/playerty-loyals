@@ -22,7 +22,7 @@ export class PartnerUserListComponent implements OnInit {
         this.cols = [
             {name: 'Actions', actions:[
                 {name:"Details"},
-                {name:"Delete"},
+                // {name:"Delete"}, // TODO FT: Think about this, how to implement.
             ]},
             {name: 'User', filterType: 'text', field: 'userDisplayName'},
             {name: 'Points', filterType: 'numeric', field: 'points', showMatchModes: true},

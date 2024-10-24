@@ -1,10 +1,8 @@
-import { ChangeDetectorRef, Component, EventEmitter, input, Input, KeyValueDiffers, OnInit, Output } from '@angular/core';
-import { forkJoin, filter } from 'rxjs';
+import { ChangeDetectorRef, Component, Input, KeyValueDiffers, OnInit } from '@angular/core';
 import { Segmentation, SegmentationItem } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { CardSkeletonComponent } from "../../../core/components/card-skeleton/card-skeleton.component";
 import { SoftCheckboxComponent } from 'src/app/core/controls/soft-checkbox/soft-checkbox.component';
-import { SoftFormArray, SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { FormGroup } from '@angular/forms';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { HttpClient } from '@angular/common/http';
@@ -24,12 +22,13 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 // FT: Putting any because we are merging UserExtended and PartnerUser
 export class SegmentationSelectComponent extends BaseFormCopy implements OnInit {
     @Input() segmentation: Segmentation;
+    @Input() allSegmentationItems: SegmentationItem[]; // All, we need to filter, it's better then making multiple requests
     @Input() partnerUserId: number;
     @Input() override formGroup: FormGroup;
-    @Output() onIdsChange: EventEmitter<number[]> = new EventEmitter();
-    segmentationItems: SegmentationItem[] = [];
-    segmentationItemsFormArray: SoftFormArray;
-    segmentationItemModel: SegmentationItem = new SegmentationItem();
+    @Input() segmentationItemsFormArrayIdentifier: string; // FT: Because we are not changing it, we are not using nameof
+    @Input() checkedSegmentationItemIdsForThePartnerUser: number[]; // FT: Because we are not changing it, we are not using nameof
+    
+    segmentationItemsForTheCurrentSegmentation: SegmentationItemIndex[] = []; // for the current segmentation
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -45,22 +44,15 @@ export class SegmentationSelectComponent extends BaseFormCopy implements OnInit 
     }
          
     override ngOnInit() {
-        forkJoin({
-            checkedSegmentationItemIdsForThePartnerUser: this.apiService.getCheckedSegmentationItemIdsForThePartnerUser(this.partnerUserId),
-            segmentationItems: this.apiService.getSegmentationItemsForTheSegmentation(this.segmentation.id),
-        }).subscribe(({ checkedSegmentationItemIdsForThePartnerUser, segmentationItems }) => {
-            segmentationItems.forEach(x => {
-                x.checked = checkedSegmentationItemIdsForThePartnerUser.includes(x.id);
-            });
-
-            this.segmentationItemsFormArray = this.initFormArray(segmentationItems, this.segmentationItemModel);
-
-            this.segmentationItemsFormArray.valueChanges.subscribe(value => {
-                this.onIdsChange.next(value.filter(x => x.checked == true).map(x => x.id));
-            });
-
-            this.segmentationItems = segmentationItems;
+        this.allSegmentationItems.forEach((segmentationItem, index) => {
+            if (segmentationItem.segmentationId == this.segmentation.id) {
+                this.segmentationItemsForTheCurrentSegmentation.push({...segmentationItem, index: index})
+            }
         });
     }
 
+}
+
+class SegmentationItemIndex extends SegmentationItem {
+    index: number;
 }

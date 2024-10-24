@@ -45,7 +45,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task DeleteSegmentation(int id)
         {
-            await _loyalsBusinessService.DeleteSegmentation(id);
+            await _loyalsBusinessService.DeleteSegmentationAsync(id, false);
         }
 
         [HttpGet]
@@ -64,7 +64,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPut]
         [AuthGuard]
-        public async Task<SimpleSaveResultDTO> SaveSegmentation(SegmentationSaveBodyDTO segmentationSaveBodyDTO)
+        public async Task<SegmentationSaveBodyDTO> SaveSegmentation(SegmentationSaveBodyDTO segmentationSaveBodyDTO)
         {
             return await _loyalsBusinessService.SaveSegmentationExtendedAsync(segmentationSaveBodyDTO);
         }
@@ -74,6 +74,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
         public async Task<List<SegmentationDTO>> GetSegmentationListForTheCurrentPartner()
         {
             return await _loyalsBusinessService.GetSegmentationListForTheCurrentPartner();
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<SegmentationItemDTO>> GetSegmentationItemListForTheCurrentPartner()
+        {
+            return await _loyalsBusinessService.GetSegmentationItemListForTheCurrentPartner();
         }
 
         [HttpGet]

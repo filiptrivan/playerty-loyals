@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Playerty.Loyals.Infrastructure;
 
@@ -11,9 +12,11 @@ using Playerty.Loyals.Infrastructure;
 namespace Playerty.Loyals.Infrastructure.Migrations
 {
     [DbContext(typeof(PLApplicationDbContext))]
-    partial class PLApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241023210314_1")]
+    partial class _1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -758,8 +761,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasOne("Playerty.Loyals.Business.Entities.Tier", "Tier")
                         .WithMany("PartnerUsers")
-                        .HasForeignKey("TierId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("TierId");
 
                     b.HasOne("Playerty.Loyals.Business.Entities.UserExtended", "User")
                         .WithMany("PartnerUsers")
@@ -839,9 +841,8 @@ namespace Playerty.Loyals.Infrastructure.Migrations
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.UserExtended", b =>
                 {
                     b.HasOne("Playerty.Loyals.Business.Entities.Gender", "Gender")
-                        .WithMany("Users")
-                        .HasForeignKey("GenderId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .WithMany()
+                        .HasForeignKey("GenderId");
 
                     b.Navigation("Gender");
                 });
@@ -881,11 +882,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Partner");
-                });
-
-            modelBuilder.Entity("Playerty.Loyals.Business.Entities.Gender", b =>
-                {
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Partner", b =>

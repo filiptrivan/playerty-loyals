@@ -16,6 +16,7 @@ import { SoftFormControl } from '../components/soft-form-control/soft-form-contr
     @Input() label: string = null; // NgModel/Want custom translation
     @Input() controlValid: boolean = true; // NgModel
     @Input() placeholder: string = '';
+    @Input() showTooltip: boolean = false;
     @Input() tooltipText: string = null;
     @Input() tooltipIcon: string = 'pi pi-info-circle';
 

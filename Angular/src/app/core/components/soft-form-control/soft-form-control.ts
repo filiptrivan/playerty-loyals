@@ -25,12 +25,15 @@ export class SoftFormControl<T = any> extends FormControl<T> {
     }
 }
 
-export class SoftFormGroup extends FormGroup {
-
+export class SoftFormGroup<TValue = any> extends FormGroup {
+    override getRawValue(): TValue { // FT: Doing this because .value gets only not disabled values
+        return super.getRawValue() as TValue;
+    }
+    public name?: string; // FT: Using for nested form groups
 }
 
-export class SoftFormArray extends FormArray {
+export class SoftFormArray<TValue = any> extends FormArray {
+    override value: TValue; // FT: There is no getRawValue in FormArray
     public required: boolean;
-
-    
+    public modelConstructor: any;
 }

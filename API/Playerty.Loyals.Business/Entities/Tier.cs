@@ -18,7 +18,6 @@ namespace Playerty.Loyals.Business.Entities
         public string Name { get; set; }
 
         [StringLength(400, MinimumLength = 1)]
-        [Required]
         public string Description { get; set; }
 
         //[Range(0, 100)]
@@ -39,6 +38,7 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public int ValidTo { get; set; }
 
+        [ManyToOneRequired]
         public virtual Partner Partner { get; set; }
 
         public virtual List<PartnerUser> PartnerUsers { get; set; }

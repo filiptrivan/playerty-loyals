@@ -21,11 +21,16 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public bool HasFilledBirthDateForTheFirstTime { get; set; }
 
+        [ManyToOneRequired] // TODO FT: Add partner and user to the primary key
         public virtual Partner Partner { get; set; }
 
-        public virtual Tier Tier { get; set; } // FT: It's not required because when the user just made the account and the administrator didn't make any tiers, he can't be any
-
+        [ManyToOneRequired] // TODO FT: Add partner and user to the primary key
         public virtual UserExtended User { get; set; }
+
+        /// <summary>
+        /// [SET NULL] https://www.learnentityframeworkcore.com/conventions/one-to-many-relationship
+        /// </summary>
+        public virtual Tier Tier { get; set; } // FT: It's not required because when the user just made the account and the administrator didn't make any tiers, he can't be any
 
         public virtual List<PartnerRole> PartnerRoles { get; set; }
 

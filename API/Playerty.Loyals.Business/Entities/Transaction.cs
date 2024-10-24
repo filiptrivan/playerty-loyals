@@ -27,7 +27,7 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public int Points { get; set; }
 
-        [Required]
+        [ManyToOneRequired]
         public virtual UserExtended User {  get; set; }
 
         /// <summary>

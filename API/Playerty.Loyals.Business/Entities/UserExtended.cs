@@ -32,9 +32,12 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public int NumberOfFailedAttemptsInARow { get; set; }
 
-        public virtual Gender Gender { get; set; }
-
         public DateTime? BirthDate { get; set; }
+
+        /// <summary>
+        /// [SET NULL] https://www.learnentityframeworkcore.com/conventions/one-to-many-relationship
+        /// </summary>
+        public virtual Gender Gender { get; set; }
 
         public virtual List<Role> Roles { get; set; }
 

@@ -7,7 +7,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { SoftFormArray, SoftFormControl } from '../soft-form-control/soft-form-control';
+import { SoftFormArray, SoftFormControl, SoftFormGroup } from '../soft-form-control/soft-form-control';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { SoftMessageService } from '../../services/soft-message.service';
@@ -15,6 +15,8 @@ import { getTranslatedClassName } from 'src/app/business/services/translates/tra
 import { getValidator } from 'src/app/business/services/validation/validation-rules.generated';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { BaseEntity } from '../../entities/base-entity';
+import { getParentUrl } from '../../services/helper-functions';
 
 @Component({
   selector: 'base-form',
@@ -48,13 +50,14 @@ export class BaseFormCopy implements OnInit {
 
   //#region Model
 
-  initFormGroup(model: any) {
-    if (model == null)
+  initFormGroup(modelConstructor: any, propertyNameInSaveBody: string) {
+    if (modelConstructor == null)
       return null;
 
-    const formGroupToInsert: FormGroup = this.createFormGroup(model);
-    this.formGroup.addControl(model.typeName, formGroupToInsert);
+    const formGroupToInsert: FormGroup = this.createFormGroup(modelConstructor);
+    this.formGroup.addControl(propertyNameInSaveBody, formGroupToInsert);
     
+    return formGroupToInsert;
     // this.modelDiffer = this.differs.find(this.model).create();
   }
 
@@ -77,22 +80,22 @@ export class BaseFormCopy implements OnInit {
   //   }
   // }
 
-  setValidator(formControl: SoftFormControl, model: any) {
+  setValidator(formControl: SoftFormControl, modelConstructor: any) {
     if (formControl == null) return null;
 
-    formControl.validator = getValidator(formControl, model.typeName);
+    formControl.validator = getValidator(formControl, modelConstructor.typeName);
   
     if (formControl?.validator?.hasNotEmptyRule)
       formControl.required = true;
   }
 
-  ngAfterViewChecked(): void {
-    this.changeDetectorRef.detectChanges();
-  }
+  // ngAfterViewChecked(): void {
+  //   this.changeDetectorRef.detectChanges();
+  // }
 
   // FT: If we put onChange to true, we are validating control on change not on blur.
   // FT: If we assign model, we are taking validators for the other class
-  control(formControlName: string, formGroup: FormGroup, updateOnChange: boolean = false, customValidation: boolean = false, disable: boolean = false) {
+  control(formControlName: string, formGroup: FormGroup, customValidation: boolean = false, disable: boolean = false) {
     // let formGroup: FormGroup = this.formGroup.controls[model.typeName] as FormGroup;
   
     if (formGroup == null)
@@ -100,26 +103,16 @@ export class BaseFormCopy implements OnInit {
 
     let formControl: SoftFormControl = formGroup.controls[formControlName] as SoftFormControl;
 
-    // if (model[formControlName] != formControl.value) {
-      // if (updateOnChange)
-      //   formControl = new SoftFormControl(model[formControlName], { updateOn: 'change' });
-      // else
-      //   formControl = new SoftFormControl(model[formControlName], { updateOn: 'blur' });
-
     if (formControl == null){
-      console.error(`The property ${formControlName} in the model ${formGroup.value.typeName} doesn't exist`);
+      console.error(`The property ${formControlName} in the model ${formGroup.getRawValue().typeName} doesn't exist`);
       return null;
     }
 
     if(customValidation == false)
-      this.setValidator(formControl, formGroup.value);
+      this.setValidator(formControl, formGroup.getRawValue());
     
     if(disable == true)
       formControl.disable();
-    
-    // formControl.valueChanges.subscribe(value => {
-    //   model[formControlName] = value;
-    // })
     
     this.onAfterControlInitialization(formControlName);
   
@@ -131,7 +124,7 @@ export class BaseFormCopy implements OnInit {
   onSave(){
     this.onBeforeSave();
 
-    this.saveBody = this.saveBody ?? this.formGroup.value;
+    this.saveBody = this.saveBody ?? this.formGroup.getRawValue();
 
     let isValid: boolean = this.isFormGroupValid();
     let isFormArrayValid: boolean = this.areFormArraysValid();
@@ -140,13 +133,35 @@ export class BaseFormCopy implements OnInit {
       this.http.put<any>(environment.apiUrl + `/${this.controllerName}/${this.saveMethodName}`, this.saveBody, environment.httpOptions).subscribe(res => {
         this.messageService.successMessage("You have successfully saved.");
 
-        // if(res && (res as any)?.id != null)
-          this.rerouteOnTheNewEntity((res as any).id); // You always need to have id, because of id == 0 and version change
-        
-        // FT: Only overriden ngOnInit is called if it exists
-        // this.ngOnInit(); // TODO FT: Even if working with other objects, try to assign everything with Object.assign. Like this we are having more requests then we need.
-        // this.formGroup = new FormGroup({});
+        Object.keys(res).forEach((key) => {
+          const formControl = this.formGroup.get(key);
+          
+          if (formControl) {
+            if (formControl instanceof SoftFormArray) {
+              const formArray = formControl as SoftFormArray;
+              formArray.clear();
 
+              res[key].forEach((model: any) => {
+                if (typeof model === 'object' && model !== null) {
+                  Object.assign(formArray.modelConstructor, model);
+                  formArray.push(this.createFormGroup(formArray.modelConstructor));
+                } else {
+                  console.error('Can not add primitive form control inside form array.');
+                }
+              });
+
+            } else {
+              formControl.patchValue(res[key]);
+            }
+          }else{
+            // FT: It's okay to do this.
+            // console.error('You returned something that is not in the save DTO.');
+          }
+        });
+
+        if (this.modelId == 0)
+          this.rerouteOnTheNewEntity((res as any).rerouteId); // You always need to have id, because of id == 0 and version change
+        
         this.onAfterSave();
       });
       
@@ -156,11 +171,17 @@ export class BaseFormCopy implements OnInit {
     }
   }
 
-  rerouteOnTheNewEntity(newId: number | string): void {
-    if(newId == null) return;
-
+  rerouteOnTheNewEntity(rerouteId: number | string): void {
+    if(rerouteId == null){
+      // console.error('You do not have rerouteId in your DTO.')
+      const currentUrl = this.router.url;
+      const parentUrl: string = getParentUrl(currentUrl);
+      this.router.navigateByUrl(parentUrl);
+      return;
+    }
+      
     const segments = this.router.url.split('/');
-    segments[segments.length - 1] = newId.toString();
+    segments[segments.length - 1] = rerouteId.toString();
 
     const newUrl = segments.join('/');
     this.router.navigateByUrl(newUrl);
@@ -227,38 +248,38 @@ export class BaseFormCopy implements OnInit {
 
   //#region Model List
 
-  initFormArray(modelList: any[], modelConstructor: any, required: boolean = false){ // FT HACK: Because generics can't instantiate in TS (because JS)
+  initFormArray(modelList: any[], modelConstructor: any, formArraySaveBodyName: string, required: boolean = false){ // FT HACK: Because generics can't instantiate in TS (because JS)
     if (modelList == null)
       return null;
 
     let formArray: SoftFormArray = new SoftFormArray([]);
     formArray.required = required;
+    formArray.modelConstructor = modelConstructor;
 
     modelList.forEach(model => {
       Object.assign(modelConstructor, model);
-      const formGroupToInsert: FormGroup = this.createFormGroup(modelConstructor);
-      formArray.push(formGroupToInsert);
+      formArray.push(this.createFormGroup(modelConstructor));
     });
 
-    this.formGroup.addControl(`${modelConstructor.typeName}List`, formArray);
+    this.formGroup.addControl(formArraySaveBodyName, formArray);
 
     return formArray;
   }
 
-  createFormGroup(model: any): FormGroup {
-    let formGroup: FormGroup = new FormGroup({});
+  createFormGroup(modelConstructor: any): FormGroup {
+    let formGroup: SoftFormGroup<any> = new SoftFormGroup({});
 
-    Object.keys(model).forEach((formControlName) => {
+    Object.keys(modelConstructor).forEach((formControlName) => {
       let formControl: SoftFormControl;
 
-      const propertyType = typeof (model[formControlName]);
+      const propertyType = typeof (modelConstructor[formControlName]);
 
       if (propertyType == typeof Date || 
         (formControlName.endsWith('Id') && formControlName.length > 2)
       )
-        formControl = new SoftFormControl(model[formControlName], { updateOn: 'change' });
+        formControl = new SoftFormControl(modelConstructor[formControlName], { updateOn: 'change' });
       else
-        formControl = new SoftFormControl(model[formControlName], { updateOn: 'blur' });
+        formControl = new SoftFormControl(modelConstructor[formControlName], { updateOn: 'blur' });
 
       if (formControlName.endsWith('Id') && formControlName.length > 2) {
         formControl.label = formControlName.substring(0, formControlName.length - 2);
@@ -270,13 +291,13 @@ export class BaseFormCopy implements OnInit {
 
       formGroup.addControl(formControlName, formControl);
 
-      this.setValidator(formControl, model);
+      this.setValidator(formControl, modelConstructor);
       
       // if(disable == true)
       //   formControl.disable();
       
       formGroup.controls[formControlName].valueChanges.subscribe(value => {
-        model[formControlName] = value;
+        modelConstructor[formControlName] = value;
       })
     });
     
@@ -286,22 +307,22 @@ export class BaseFormCopy implements OnInit {
   }
   
   // FT: Need to use this from html because can't do "as SoftFormControl" there
-  // FT: We should migrate totaly on this implementation, because when we add new form group its id is 0!
-  getFormArrayControlByIndex(formControlName: string, modelConstructor: any, index: number): SoftFormControl{
+  getFormArrayControlByIndex(formControlName: string, formArraySaveBodyName: string, index: number): SoftFormControl{
     if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
       this.formArrayControlNamesFromHtml.push(formControlName);
 
     // FT: Can be null when we save
-    return ((this.formGroup?.controls[`${modelConstructor.typeName}List`] as SoftFormArray)?.controls[index] as FormGroup)?.controls[formControlName] as SoftFormControl;
+    return ((this.formGroup?.controls[formArraySaveBodyName] as SoftFormArray)?.controls[index] as FormGroup)?.controls[formControlName] as SoftFormControl;
   }
 
   // FT: Need to use this from html because can't do "as SoftFormControl" there
-  getFormArrayControlById(formControlName: string, modelConstructor: any, id: number): SoftFormControl{
-    if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
-      this.formArrayControlNamesFromHtml.push(formControlName);
+  // FT: Don't uncomment this, if you realy don't need.
+  // getFormArrayControlById(formControlName: string, formArraySaveBodyName: string, id: number): SoftFormControl{
+  //   if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
+  //     this.formArrayControlNamesFromHtml.push(formControlName);
 
-    return ((this.formGroup.controls[`${modelConstructor.typeName}List`] as SoftFormArray)?.controls?.filter(x => x.value.id == id)[0] as FormGroup)?.controls[formControlName] as SoftFormControl;
-  }
+  //   return ((this.formGroup.controls[formArraySaveBodyName] as SoftFormArray)?.controls?.filter(x => x.getRawValue().id == id)[0] as FormGroup)?.controls[formControlName] as SoftFormControl;
+  // }
 
   // getFormArrayGroup(index: number): FormGroup{
   //   return this.formArray.controls[index] as FormGroup
@@ -311,11 +332,11 @@ export class BaseFormCopy implements OnInit {
     return formArray.controls as FormGroup[]
   }
 
-  addNewFormControlToTheFormArray(formArray: SoftFormArray, model: any, index: number) {
+  addNewFormControlToTheFormArray(formArray: SoftFormArray, modelConstructor: any, index: number) {
     if (index == null) {
-      formArray.push(this.createFormGroup(model));
+      formArray.push(this.createFormGroup(modelConstructor));
     }else{
-      formArray.insert(index, this.createFormGroup(model));
+      formArray.insert(index, this.createFormGroup(modelConstructor));
     }
   }
 
@@ -390,16 +411,16 @@ export class BaseFormCopy implements OnInit {
 
   lastMenuIconIndexClicked: number;
 
-  getCrudMenuForOrderedData(formArray: SoftFormArray, instantiatedModel: any){
+  getCrudMenuForOrderedData(formArray: SoftFormArray, modelConstructor: any){
     let crudMenuForOrderedData: MenuItem[] = [
         {label: $localize`:@@Remove:Remove`, icon: 'pi pi-minus', command: () => {
             this.removeFormControlFromTheFormArray(formArray, this.lastMenuIconIndexClicked);
         }},
         {label: $localize`:@@AddAbove:Add above`, icon: 'pi pi-arrow-up', command: () => {
-            this.addNewFormControlToTheFormArray(formArray, instantiatedModel, this.lastMenuIconIndexClicked);
+            this.addNewFormControlToTheFormArray(formArray, modelConstructor, this.lastMenuIconIndexClicked);
         }},
         {label: $localize`:@@AddBelow:Add below`, icon: 'pi pi-arrow-down', command: () => {
-            this.addNewFormControlToTheFormArray(formArray, instantiatedModel, this.lastMenuIconIndexClicked + 1);
+            this.addNewFormControlToTheFormArray(formArray, modelConstructor, this.lastMenuIconIndexClicked + 1);
         }},
     ];
 

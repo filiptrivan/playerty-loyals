@@ -38,7 +38,7 @@ export class TimelineIndexProgressbarComponent {
     }
 
     isCurrentItem(item: any){
-        if (item.id == this.currentItem.id) {
+        if (item.id == this.currentItem?.id) { // currentItem could be null, for our example partner user doesn't always have current tier
           return true;
         }
     

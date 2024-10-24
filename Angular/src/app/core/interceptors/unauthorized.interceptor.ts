@@ -57,6 +57,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
       );
       return of(err.message);
     } else if (err.status == 401) {
+      console.error('Auth: ' + err);
       this.messageService.warningMessage(
         err.error.message, // FT: This is the unauthorized error
         null,

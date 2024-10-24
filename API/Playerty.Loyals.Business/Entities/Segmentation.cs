@@ -23,7 +23,7 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public int PointsForTheFirstTimeFill { get; set; }
 
-        [Required]
+        [ManyToOneRequired]
         public virtual Partner Partner { get; set; }
 
         [Required]

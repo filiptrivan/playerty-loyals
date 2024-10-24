@@ -1,4 +1,5 @@
 ﻿using Playerty.Loyals.Business.Entities;
+using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.BaseEntities;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public long ProductId { get; set; }
 
-        [Required]
+        [ManyToOneRequired]
         public virtual Transaction Transaction { get; set; }
     }
 }

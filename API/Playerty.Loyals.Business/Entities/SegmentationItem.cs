@@ -11,6 +11,7 @@ namespace Playerty.Loyals.Business.Entities
 {
     public class SegmentationItem : BusinessObject<long>
     {
+        // FT: Check in the code that for the same segmentation there is no same segmentation item names, or should we do it? Maybe let the user do what he wants.
         [SoftDisplayName]
         [StringLength(100, MinimumLength = 1)]
         [Required]
@@ -19,7 +20,7 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public int OrderNumber { get; set; }
 
-        [Required] // FT: The segmentation item can't exist without segmentation
+        [ManyToOneRequired] // FT: The segmentation item can't exist without segmentation
         public virtual Segmentation Segmentation { get; set; }
 
         public virtual List<PartnerUser> PartnerUsers { get; set; }

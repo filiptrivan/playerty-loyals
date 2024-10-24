@@ -23,7 +23,7 @@
                                     <index-card [index]="index" [last]="false" [crudMenu]="crudMenu" (onMenuIconClick)="lastMenuIconIndexClicked = $event">
                                         <form [formGroup]="formGroup" class="grid">
                                             <div class="col-12">
-                                                <soft-textbox [control]="getFormArrayControlByIndex('name', segmentationItemModel, index)"></soft-textbox>
+                                                <soft-textbox [control]="getFormArrayControlByIndex('name', segmentationItemsSaveBodyName, index)"></soft-textbox>
                                             </div>
                                         </form>
                                     </index-card>

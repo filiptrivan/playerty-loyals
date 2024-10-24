@@ -1,8 +1,8 @@
-@defer (when segmentationItems != null) {
-    @defer (when segmentationItems.length > 0) {
+@defer (when segmentationItemsForTheCurrentSegmentation != null) {
+    @defer (when segmentationItemsForTheCurrentSegmentation.length > 0) {
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-            @for (segmentationItem of segmentationItems; track segmentationItem.id; let index = $index) {
-                <soft-checkbox [control]="getFormArrayControlById('checked', segmentationItemModel, segmentationItem.id)" [label]="segmentationItem.name" [initializeToFalse]="false"></soft-checkbox>
+            @for (segmentationItem of segmentationItemsForTheCurrentSegmentation; track segmentationItem.id) {
+                <soft-checkbox [control]="getFormArrayControlByIndex('checked', segmentationItemsFormArrayIdentifier, segmentationItem.index)" [label]="segmentationItem.name" [initializeToFalse]="false"></soft-checkbox>
             }
         </div>
     }

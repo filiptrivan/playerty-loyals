@@ -4,7 +4,7 @@
     <label>{{getTranslatedLabel()}}</label>
     <required *ngIf="control?.required"></required>
     <!-- tabindex="-1": Makes the element focusable, but removes it from the tab order. -->
-    <i *ngIf="tooltipText != null" class="{{tooltipIcon}}" style="margin-left: 5px; cursor: pointer;" [pTooltip]="tooltipText" tabindex="-1" tooltipEvent="focus"></i>
+    <i *ngIf="showTooltip" class="{{tooltipIcon}}" style="margin-left: 5px; cursor: pointer;" [pTooltip]="tooltipText" tabindex="-1" tooltipEvent="focus"></i>
   </div>
 
   <div class="p-inputgroup p-fluid">

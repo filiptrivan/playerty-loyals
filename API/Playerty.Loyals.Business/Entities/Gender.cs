@@ -15,5 +15,7 @@ namespace Playerty.Loyals.Business.Entities
         [StringLength(70, MinimumLength = 1)]
         [Required]
         public string Name { get; set; }
+
+        public virtual List<UserExtended> Users { get; set; }
     }
 }

@@ -85,3 +85,16 @@ export function getHtmlImgDisplayString64(base64String: string){
     const mimeType = getMimeTypeForFileName(fileName);
     return `data:${mimeType};base64, ${base64Content}`;
 }
+
+export function nameof<TObject>(obj: TObject, key: keyof TObject): string;
+export function nameof<TObject>(key: keyof TObject): string;
+export function nameof(key1: any, key2?: any): any {
+  return key2 ?? key1;
+}
+
+export function getParentUrl(currentUrl: string){
+    const urlSegments = currentUrl.split('/');
+    urlSegments.pop();
+    const parentUrl = urlSegments.join('/');
+    return parentUrl;
+}

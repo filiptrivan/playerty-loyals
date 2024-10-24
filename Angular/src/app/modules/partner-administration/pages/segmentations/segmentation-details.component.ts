@@ -1,7 +1,6 @@
-import { SoftFormArray } from './../../../../core/components/soft-form-control/soft-form-control';
+import { SoftFormArray, SoftFormGroup } from './../../../../core/components/soft-form-control/soft-form-control';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { forkJoin } from 'rxjs';
@@ -9,6 +8,7 @@ import { Segmentation, SegmentationItem, SegmentationSaveBody } from 'src/app/bu
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { isFormArrayEmpty } from 'src/app/business/services/validation/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
+import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
 @Component({
@@ -17,12 +17,12 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit {
-    // segmentationItems: SegmentationItem[];
     segmentationItemModel: SegmentationItem = new SegmentationItem();
-    segmentationItemsFormArray: SoftFormArray;
+    segmentationItemsSaveBodyName: string = nameof<SegmentationSaveBody>('segmentationItemsDTO');
+    segmentationItemsFormArray: SoftFormArray<SegmentationItem[]>;
     
-    // segmentation: Segmentation;
-    segmentationFormGroup: FormGroup;
+    segmentationFormGroup: SoftFormGroup<Segmentation>;
+    segmentationSaveBodyName: string = nameof<SegmentationSaveBody>('segmentationDTO');
     segmentationModel: SegmentationItem = new SegmentationItem();
 
     crudMenu: MenuItem[] = [];
@@ -53,24 +53,20 @@ export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit
                     segmentationItems: this.apiService.getSegmentationItemsForTheSegmentation(this.modelId),
                 })
                 .subscribe(({ segmentation, segmentationItems }) => {
-                    // this.segmentationItems = segmentationItems;
                     this.initSegmentationItemsFormArray(segmentationItems);
 
-                    // this.segmentation = new Segmentation(segmentation);
-                    this.initFormGroup(new Segmentation(segmentation));
+                    this.segmentationFormGroup = this.initFormGroup(new Segmentation(segmentation), this.segmentationSaveBodyName);
                 });
             }else{
-                // this.segmentationItems = [];
                 this.initSegmentationItemsFormArray([]);
                 
-                // this.segmentation = new Segmentation({id: 0});
-                this.initFormGroup(new Segmentation({id: 0}));
+                this.segmentationFormGroup = this.initFormGroup(new Segmentation({id: 0}), this.segmentationSaveBodyName);
             }
         });
     }
 
     initSegmentationItemsFormArray(segmentationItems: SegmentationItem[]){
-        this.segmentationItemsFormArray = this.initFormArray(segmentationItems, this.segmentationItemModel, true);
+        this.segmentationItemsFormArray = this.initFormArray(segmentationItems, this.segmentationItemModel, this.segmentationItemsSaveBodyName, true);
         this.crudMenu = this.getCrudMenuForOrderedData(this.segmentationItemsFormArray, new SegmentationItem({id: 0}));
         this.segmentationItemsFormArray.validator = isFormArrayEmpty(this.segmentationItemsFormArray);
     }
@@ -82,9 +78,9 @@ export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit
     override onBeforeSave(): void {
         let saveBody: SegmentationSaveBody = new SegmentationSaveBody();
 
-        saveBody.segmentationDTO = this.segmentationFormGroup.value;
+        saveBody.segmentationDTO = this.segmentationFormGroup.getRawValue();
 
-        saveBody.segmentationItemsDTO = this.segmentationItemsFormArray.value;
+        saveBody.segmentationItemsDTO = this.segmentationItemsFormArray.getRawValue();
 
         this.saveBody = saveBody;
     }

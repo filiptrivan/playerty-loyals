@@ -48,7 +48,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task DeletePartnerRole(int id)
         {
-            await _loyalsBusinessService.DeleteEntityAsync<PartnerRole, int>(id);
+            await _loyalsBusinessService.DeletePartnerRoleAsync(id, false);
         }
 
         [HttpGet]

@@ -1,4 +1,4 @@
-@defer (when userExtended != null && partnerUser != null) {
+@defer (when userExtendedFormGroup != null && partnerUserFormGroup != null && segmentationItemsFormArray != null) {
     <soft-card [title]="detailsTitle" icon="pi pi-user">
         <soft-panel [isFirstMultiplePanel]="true">
             <panel-header title="Base details"></panel-header>
@@ -6,13 +6,15 @@
             <panel-body>
                 <form [formGroup]="formGroup" class="grid">
                     <div class="col-12">
-                        <soft-textbox [control]="control('email', this.userExtended, false, false, true)"></soft-textbox>
+                        <soft-textbox [control]="control('email', userExtendedFormGroup, false, true)"></soft-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-calendar [control]="control('birthDate', this.userExtended, false, false, false)" [tooltipIcon]="firstTimeFillIcon" [tooltipText]="firstTimeFillText"></soft-calendar>
+                        <soft-calendar [control]="control('birthDate', userExtendedFormGroup, false, false)" [showTooltip]="!partnerUserFormGroup.getRawValue().hasFilledBirthDateForTheFirstTime" 
+                        [tooltipIcon]="firstTimeFillIcon" [tooltipText]="firstTimeFillText"></soft-calendar>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-dropdown [control]="control('genderId', this.userExtended, false, false, false)" [options]="genderOptions" [tooltipIcon]="firstTimeFillIcon" [tooltipText]="firstTimeFillText"></soft-dropdown>
+                        <soft-dropdown [control]="control('genderId', userExtendedFormGroup, false, false)" [options]="genderOptions" 
+                        [showTooltip]="!partnerUserFormGroup.getRawValue().hasFilledGenderForTheFirstTime" [tooltipIcon]="firstTimeFillIcon" [tooltipText]="firstTimeFillText"></soft-dropdown>
                     </div>
                     <div class="col-12">
                         <soft-multiselect
@@ -30,19 +32,21 @@
             <panel-body>
                 <form [formGroup]="formGroup" class="grid">
                     <div class="col-12 md:col-6">
-                        <soft-number [control]="control('points', this.partnerUser)"></soft-number>
+                        <soft-number [control]="control('points', partnerUserFormGroup)"></soft-number>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('tierDisplayName', this.partnerUser, false, false, true)"></soft-textbox>
+                        <soft-textbox [control]="control('tierDisplayName', partnerUserFormGroup, false, true)"></soft-textbox>
                     </div>
 
-                    @for (segmentation of segmentations; track $index) {
+                    @for (segmentation of segmentations; track segmentation.id; let index = $index) {
                         <div class="col-12">
                             <div class="flex flex-column gap-2">
                                 <div>
                                     {{segmentation.name}} <i *ngIf="showSegmentationFirstTimeFillIcon(segmentation)" [class]="firstTimeFillIcon" style="margin-left: 5px; cursor: pointer;" [pTooltip]="firstTimeFillText" tabindex="-1" tooltipEvent="focus"></i>
                                 </div>
-                                <segmentation-select [formGroup]="formGroup" [partnerUserId]="partnerUser.id" (onIdsChange)="selectedSegmentationItemIdsChange($event)" [segmentation]="segmentation"></segmentation-select>
+                                <segmentation-select [formGroup]="formGroup" [partnerUserId]="partnerUserFormGroup.getRawValue().id" [segmentation]="segmentation" 
+                                [allSegmentationItems]="segmentationItemsFormArray.getRawValue()" [segmentationItemsFormArrayIdentifier]="segmentationItemsFormArrayIdentifier"
+                                ></segmentation-select>
                             </div>
                         </div>
                     }

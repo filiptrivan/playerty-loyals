@@ -48,7 +48,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task DeletePartnerNotification(long id)
         {
-            await _loyalsBusinessService.DeleteEntityAsync<PartnerNotification, long>(id);
+            await _loyalsBusinessService.DeletePartnerNotificationAsync(id, false);
         }
 
         [HttpGet]

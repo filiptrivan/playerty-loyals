@@ -72,9 +72,9 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPut]
         [AuthGuard]
-        public async Task SavePartnerUser(PartnerUserSaveBodyDTO dto)
+        public async Task<PartnerUserSaveBodyDTO> SavePartnerUser(PartnerUserSaveBodyDTO dto)
         {
-            await _loyalsBusinessService.SavePartnerUserAndReturnDTOExtendedAsync(dto);
+            return await _loyalsBusinessService.SavePartnerUserAndReturnDTOExtendedAsync(dto);
         }
 
         [HttpGet]

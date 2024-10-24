@@ -71,6 +71,15 @@ namespace Playerty.Loyals.Infrastructure
                           .HasForeignKey(ru => ru.PartnerUsersId)
                 );
 
+            modelBuilder.Entity<Tier>()
+                .HasMany(e => e.PartnerUsers)
+                .WithOne(e => e.Tier)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Gender>()
+                .HasMany(e => e.Users)
+                .WithOne(e => e.Gender)
+                .OnDelete(DeleteBehavior.SetNull);
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

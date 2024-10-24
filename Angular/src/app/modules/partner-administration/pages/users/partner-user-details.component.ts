@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { PartnerUser, PartnerUserSaveBody, Segmentation, UserExtended } from 'src/app/business/entities/generated/business-entities.generated';
+import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, UserExtended } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { SoftFormArray, SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
+import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
 @Component({
@@ -21,11 +22,17 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     genderOptions: PrimengOption[];
     selectedRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
     selectedPartnerRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
-    userExtendedFormGroup: FormGroup;
-    partnerUserFormGroup: PartnerUser;
+
+    userExtendedFormGroup: SoftFormGroup<UserExtended>;
+    partnerUserFormGroup: SoftFormGroup<PartnerUser>;
+
     segmentations: Segmentation[] = [];
-    selectedSegmentationItemIds: number[];
-    
+    segmentationItems: SegmentationItem[] = [];
+
+    segmentationItemsFormArray: SoftFormArray<SegmentationItem[]>;
+    segmentationItemsFormArrayIdentifier: string = crypto.randomUUID(); // FT: Because we are not changing it, we are not using nameof, it's important that it's not the same as property in save body
+    segmentationItemModel: SegmentationItem = new SegmentationItem();
+
     firstTimeFillText: string = $localize`:@@FirstTimeFieldFillTooltipText:Complete the field for the first time and earn extra points!`; // Popunite polje prvi put i zaradite dodatne poene
     firstTimeFillIcon: string = 'pi pi-gift';
     genderTooltipText: string;
@@ -74,7 +81,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
             });
 
             this.apiService.getPartnerUser(this.modelId).subscribe(partnerUser => {
-                this.partnerUser = new PartnerUser(partnerUser);
+                this.partnerUserFormGroup = this.initFormGroup(new PartnerUser(partnerUser), nameof<PartnerUserSaveBody>('partnerUserDTO'));
                 
                 if(partnerUser.hasFilledGenderForTheFirstTime == false)
                     this.genderTooltipText = null;
@@ -86,25 +93,36 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
                 else
                     this.birthDateTooltipText = this.firstTimeFillText;
 
-                this.apiService.getAlreadyFilledSegmentationIdsForThePartnerUser(partnerUser.id).subscribe(ids => {
-                    this.alreadyFilledSegmentationIdsForThePartnerUser = ids;
+                this.apiService.getSegmentationItemListForTheCurrentPartner().subscribe(segmentationItems => {
+                    this.segmentationItemsFormArray = this.initFormArray(segmentationItems, this.segmentationItemModel, this.segmentationItemsFormArrayIdentifier);
 
-                    this.apiService.getUser(partnerUser.userId).subscribe(user => {
-                        this.userExtended = new UserExtended(user);
-    
-                        this.apiService.loadRoleNamebookListForUserExtended(user.id).subscribe(rolesForTheUser => {
-                            this.selectedRoles.setValue(
-                                rolesForTheUser.map(role => { return role.id })
-                            );
+                    this.apiService.getCheckedSegmentationItemIdsForThePartnerUser(partnerUser.id).subscribe(ids => {
+                        this.segmentationItemsFormArray.controls.forEach((formGroup: FormGroup) => {
+                            formGroup.controls['checked'].setValue(ids.includes(formGroup.controls['id'].value));
                         });
+                    });
+                })
+
+                this.getAlreadyFilledSegmentationIdsForThePartnerUser(partnerUser);     
+
+                this.apiService.getUser(partnerUser.userId).subscribe(user => {
+                    this.userExtendedFormGroup = this.initFormGroup(new UserExtended(user), nameof<PartnerUserSaveBody>('userExtendedDTO'));
+
+                    this.apiService.loadRoleNamebookListForUserExtended(user.id).subscribe(rolesForTheUser => {
+                        this.selectedRoles.setValue(
+                            rolesForTheUser.map(role => { return role.id })
+                        );
                     });
                 });
             })
         });
     }
 
-    selectedSegmentationItemIdsChange(event: number[]){
-        this.selectedSegmentationItemIds = event;
+    // TODO FT: Return this inside save result also
+    getAlreadyFilledSegmentationIdsForThePartnerUser(partnerUser: PartnerUser){
+        this.apiService.getAlreadyFilledSegmentationIdsForThePartnerUser(partnerUser.id).subscribe(ids => {
+            this.alreadyFilledSegmentationIdsForThePartnerUser = ids;
+        });
     }
 
     showSegmentationFirstTimeFillIcon(segmentation: Segmentation){
@@ -118,15 +136,19 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     override onBeforeSave(): void {
         let saveBody: PartnerUserSaveBody = new PartnerUserSaveBody();
 
-        saveBody.userExtendedDTO = this.userExtended;
-        saveBody.selectedRoleIds = this.selectedRoles.value;
+        saveBody.userExtendedDTO = this.userExtendedFormGroup.getRawValue();
+        saveBody.selectedRoleIds = this.selectedRoles.getRawValue();
         
-        saveBody.partnerUserDTO = this.partnerUser;
-        saveBody.selectedPartnerRoleIds = this.selectedPartnerRoles.value;
+        saveBody.partnerUserDTO = this.partnerUserFormGroup.getRawValue();
+        saveBody.selectedPartnerRoleIds = this.selectedPartnerRoles.getRawValue();
 
-        saveBody.selectedSegmentationItemIds = this.selectedSegmentationItemIds;
+        saveBody.selectedSegmentationItemIds = this.segmentationItemsFormArray.value.filter(x => x.checked).map(x => x.id);
 
         this.saveBody = saveBody;
         return;
+    }
+
+    override onAfterSave(): void {
+        this.getAlreadyFilledSegmentationIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue());
     }
 }
