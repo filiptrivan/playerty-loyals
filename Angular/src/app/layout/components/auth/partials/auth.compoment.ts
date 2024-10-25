@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { environment } from "src/environments/environment";
+import { environment } from "src/environments/environment.prod";
 import { LayoutService } from "src/app/layout/service/app.layout.service";
 import { AuthService } from "src/app/core/services/auth.service";
 import { GoogleButtonComponent } from "./google-button.component";

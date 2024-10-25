@@ -1,4 +1,4 @@
-import { environment } from "src/environments/environment";
+import { environment } from "src/environments/environment.prod";
 import { getTranslatedClassNameBusiness } from './generated/business-class-names.generated';
 import { getTranslatedClassNameSecurity } from './generated/security-class-names.generated';
 

@@ -1,4 +1,4 @@
-import { environment } from "src/environments/environment";
+import { environment } from "src/environments/environment.prod";
 import { getTranslatedLabelBusiness } from './generated/business-labels.generated';
 import { getTranslatedLabelSecurity } from './generated/security-labels.generated';
 

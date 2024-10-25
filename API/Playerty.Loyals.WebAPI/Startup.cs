@@ -79,9 +79,9 @@ public class Startup
             {
                 options
                     .UseLazyLoadingProxies()
-                    .UseSqlServer(Playerty.Loyals.WebAPI.SettingsProvider.Current.ConnectionString)
+                    .UseSqlServer(Playerty.Loyals.WebAPI.SettingsProvider.Current.ConnectionString);
                     //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution)
-                    .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+                    //.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
             });
 
         services.AddAzureClients(clientBuilder =>

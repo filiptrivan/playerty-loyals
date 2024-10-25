@@ -1,4 +1,4 @@
-import { environment } from "src/environments/environment";
+import { environment } from "src/environments/environment.prod";
 import { getTranslatedClassNameSecurity } from './generated/security-class-names.generated';
 
 export function getTranslatedClassName(name: string): string {

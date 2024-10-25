@@ -1,4 +1,4 @@
-import { environment } from "src/environments/environment";
+import { environment } from "src/environments/environment.prod";
 import { getTranslatedLabelSecurity } from './generated/security-labels.generated';
 
 export function getTranslatedLabel(name: string): string {
