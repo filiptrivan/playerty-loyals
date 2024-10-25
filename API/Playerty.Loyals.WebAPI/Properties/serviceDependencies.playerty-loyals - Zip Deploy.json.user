@@ -1,0 +1,25 @@
+{
+  "dependencies": {},
+  "parameters": {
+    "playerty-loyals.subscriptionId": {
+      "Name": "playerty-loyals.subscriptionId",
+      "Type": "subscription",
+      "Value": "d34f191b-3e1d-4799-931a-6467597a9670"
+    },
+    "playerty-loyals.resourceName": {
+      "Name": "playerty-loyals.resourceName",
+      "Type": null,
+      "Value": "playerty-loyals"
+    },
+    "playerty-loyals.resourceGroupName": {
+      "Name": "playerty-loyals.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "playerty-loyals"
+    },
+    "playerty-loyals.resourceGroupLocation": {
+      "Name": "playerty-loyals.resourceGroupLocation",
+      "Type": null,
+      "Value": "polandcentral"
+    }
+  }
+}

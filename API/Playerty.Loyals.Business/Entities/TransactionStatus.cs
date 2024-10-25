@@ -19,8 +19,5 @@ namespace Playerty.Loyals.Business.Entities
         [StringLength(255, MinimumLength = 1)]
         [Required]
         public string Code { get; set; }
-
-        [ManyToOneRequired]
-        public virtual PartnerUser PartnerUser { get; set; }
     }
 }

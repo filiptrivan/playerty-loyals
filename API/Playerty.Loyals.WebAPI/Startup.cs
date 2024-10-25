@@ -26,15 +26,15 @@ using Azure.Identity;
 using Azure.Storage.Blobs;
 
 public class Startup
-
 {
-    public static string JsonConfigurationFile = "appsettings.json";
+    public static string _jsonConfigurationFile = "appsettings.Staging.json";
 
     private static string _cachedConfigFile = null;
 
     public Startup(IConfiguration configuration)
     {
         Configuration = configuration;
+
         Playerty.Loyals.WebAPI.SettingsProvider.Current = ReadAssemblyConfiguration<Playerty.Loyals.WebAPI.Settings>();
         Playerty.Loyals.Business.SettingsProvider.Current = ReadAssemblyConfiguration<Playerty.Loyals.Business.Settings>();
         Soft.Generator.Infrastructure.SettingsProvider.Current = ReadAssemblyConfiguration<Soft.Generator.Infrastructure.Settings>();
@@ -247,7 +247,7 @@ public class Startup
             return _cachedConfigFile;
         }
 
-        using StreamReader streamReader = new StreamReader(JsonConfigurationFile);
+        using StreamReader streamReader = new StreamReader(_jsonConfigurationFile);
         return _cachedConfigFile = streamReader.ReadToEnd();
     }
 

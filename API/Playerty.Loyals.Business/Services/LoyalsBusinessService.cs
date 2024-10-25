@@ -52,26 +52,6 @@ namespace Playerty.Loyals.Services
 
         #region User
 
-        public async Task DeletePartnerAsync(int partnerId, bool authorize = true)
-        {
-            await _context.WithTransactionAsync(async () =>
-            {
-                if (authorize)
-                {
-                    await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.DeletePartner);
-                }
-
-                await OnBeforePartnerAsyncDelete(partnerId);
-
-                List<long> partnerUsersToDelete = _context.DbSet<PartnerUser>().Where(x => x.Partner.Id == partnerId);
-                IQueryable<TransactionStatus> transactionStatusQuery = _context.DbSet<TransactionStatus>().Where(x => x.PartnerUser.)
-
-                await _context.DbSet<PartnerUser>().Where(x => x.Partner.Id == partnerId).ExecuteDeleteAsync();
-
-                await DeleteEntityAsync<Partner, int>(partnerId);
-            });
-        }
-
         public async Task<UserExtendedDTO> SaveUserExtendedAndReturnDTOExtendedAsync(UserExtendedSaveBodyDTO userExtendedSaveBodyDTO)
         {
             return await _context.WithTransactionAsync(async () =>
@@ -347,16 +327,7 @@ namespace Playerty.Loyals.Services
                     .SingleOrDefaultAsync();
             });
         }
-
-        //public async Task DeletePartnerUserAsync(long userId)
-        //{
-        //    await _context.WithTransactionAsync(async () =>
-        //    {
-        //        await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(Business.Enums.PermissionCodes.DeletePartnerUser);
-        //        await DeleteEntityAsync<PartnerUser, long>(userId);
-        //    });
-        //}
-
+       
         public async Task<PartnerUserSaveBodyDTO> SavePartnerUserAndReturnDTOExtendedAsync(PartnerUserSaveBodyDTO partnerUserSaveBodyDTO)
         {
             UserExtendedSaveBodyDTO userExtendedSaveBodyDTO = new UserExtendedSaveBodyDTO

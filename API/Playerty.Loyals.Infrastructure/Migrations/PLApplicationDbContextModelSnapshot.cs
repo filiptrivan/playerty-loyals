@@ -276,7 +276,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PartnerId")
+                    b.Property<int?>("PartnerId")
                         .HasColumnType("int");
 
                     b.Property<int>("Points")
@@ -285,7 +285,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.Property<int?>("TierId")
                         .HasColumnType("int");
 
-                    b.Property<long>("UserId")
+                    b.Property<long?>("UserId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("Version")
@@ -325,7 +325,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("PartnerId")
+                    b.Property<int?>("PartnerId")
                         .HasColumnType("int");
 
                     b.Property<int>("PointsForTheFirstTimeFill")
@@ -363,7 +363,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.Property<int>("OrderNumber")
                         .HasColumnType("int");
 
-                    b.Property<int>("SegmentationId")
+                    b.Property<int?>("SegmentationId")
                         .HasColumnType("int");
 
                     b.Property<int>("Version")
@@ -399,7 +399,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("PartnerId")
+                    b.Property<int?>("PartnerId")
                         .HasColumnType("int");
 
                     b.Property<int>("ValidFrom")
@@ -442,7 +442,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                         .HasPrecision(16, 2)
                         .HasColumnType("decimal(16,2)");
 
-                    b.Property<long>("UserId")
+                    b.Property<long?>("UserId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("Version")
@@ -466,7 +466,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("TransactionId")
+                    b.Property<long?>("TransactionId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -638,7 +638,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                 {
                     b.HasBaseType("Playerty.Loyals.Business.Entities.Notification");
 
-                    b.Property<int>("PartnerId")
+                    b.Property<int?>("PartnerId")
                         .HasColumnType("int");
 
                     b.HasIndex("PartnerId");
@@ -650,7 +650,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                 {
                     b.HasBaseType("Soft.Generator.Security.Entities.Role");
 
-                    b.Property<int>("PartnerId")
+                    b.Property<int?>("PartnerId")
                         .HasColumnType("int");
 
                     b.HasIndex("PartnerId");
@@ -752,9 +752,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                 {
                     b.HasOne("Playerty.Loyals.Business.Entities.Partner", "Partner")
                         .WithMany("Users")
-                        .HasForeignKey("PartnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PartnerId");
 
                     b.HasOne("Playerty.Loyals.Business.Entities.Tier", "Tier")
                         .WithMany("PartnerUsers")
@@ -763,9 +761,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasOne("Playerty.Loyals.Business.Entities.UserExtended", "User")
                         .WithMany("PartnerUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Partner");
 
@@ -778,9 +774,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                 {
                     b.HasOne("Playerty.Loyals.Business.Entities.Partner", "Partner")
                         .WithMany()
-                        .HasForeignKey("PartnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PartnerId");
 
                     b.Navigation("Partner");
                 });
@@ -789,9 +783,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                 {
                     b.HasOne("Playerty.Loyals.Business.Entities.Segmentation", "Segmentation")
                         .WithMany("SegmentationItems")
-                        .HasForeignKey("SegmentationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SegmentationId");
 
                     b.Navigation("Segmentation");
                 });
@@ -800,9 +792,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                 {
                     b.HasOne("Playerty.Loyals.Business.Entities.Partner", "Partner")
                         .WithMany("Tiers")
-                        .HasForeignKey("PartnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PartnerId");
 
                     b.Navigation("Partner");
                 });
@@ -811,9 +801,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                 {
                     b.HasOne("Playerty.Loyals.Business.Entities.UserExtended", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -822,9 +810,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                 {
                     b.HasOne("Playerty.Loyals.Business.Entities.Transaction", "Transaction")
                         .WithMany()
-                        .HasForeignKey("TransactionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TransactionId");
 
                     b.Navigation("Transaction");
                 });
@@ -865,9 +851,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                 {
                     b.HasOne("Playerty.Loyals.Business.Entities.Partner", "Partner")
                         .WithMany("PartnerNotifications")
-                        .HasForeignKey("PartnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PartnerId");
 
                     b.Navigation("Partner");
                 });
@@ -876,9 +860,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                 {
                     b.HasOne("Playerty.Loyals.Business.Entities.Partner", "Partner")
                         .WithMany("PartnerRoles")
-                        .HasForeignKey("PartnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PartnerId");
 
                     b.Navigation("Partner");
                 });

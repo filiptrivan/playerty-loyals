@@ -34,7 +34,7 @@ export class SoftFileComponent extends BaseControl implements OnInit {
     }
 
     override ngOnInit(){
-        if (this.control.value != null) {
+        if (this.control.value != null && this.fileData != null) {
             const file = this.base64ToFile(this.fileData);
             this.files.push(file);
         }

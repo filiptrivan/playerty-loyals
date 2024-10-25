@@ -95,15 +95,22 @@ namespace Playerty.Loyals.Business.Services
 
             if (partnerDTO != null && !string.IsNullOrEmpty(partnerDTO.LogoImage))
             {
-                BlobClient blobClient = _blobContainerClient.GetBlobClient(partnerDTO.LogoImage);
+                try
+                {
+                    BlobClient blobClient = _blobContainerClient.GetBlobClient(partnerDTO.LogoImage);
 
-                Azure.Response<BlobDownloadResult> blobDownloadInfo = await blobClient.DownloadContentAsync();
+                    Azure.Response<BlobDownloadResult> blobDownloadInfo = await blobClient.DownloadContentAsync();
 
-                byte[] byteArray = blobDownloadInfo.Value.Content.ToArray();
+                    byte[] byteArray = blobDownloadInfo.Value.Content.ToArray();
 
-                string base64 = Convert.ToBase64String(byteArray);
+                    string base64 = Convert.ToBase64String(byteArray);
 
-                partnerDTO.LogoImageData = $"filename={partnerDTO.LogoImage};base64,{base64}";
+                    partnerDTO.LogoImageData = $"filename={partnerDTO.LogoImage};base64,{base64}";
+                }
+                catch
+                {
+                    // TODO FT: Log
+                }
             }
 
             //    var cacheEntryOptions = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(60));
