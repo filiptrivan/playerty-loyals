@@ -27,13 +27,18 @@ using Azure.Storage.Blobs;
 
 public class Startup
 {
-    public static string _jsonConfigurationFile = "appsettings.Staging.json";
+    public static string _jsonConfigurationFile = "appsettings.json";
+    private readonly IHostEnvironment _hostEnvironment;
 
-    private static string _cachedConfigFile = null;
-
-    public Startup(IConfiguration configuration)
+    public Startup(IConfiguration configuration, IHostEnvironment hostEnvironment)
     {
         Configuration = configuration;
+        _hostEnvironment = hostEnvironment;
+
+        if (_hostEnvironment.IsStaging())
+            _jsonConfigurationFile = "appsettings.Staging.json";
+        else if (_hostEnvironment.IsProduction())
+            _jsonConfigurationFile = "appsettings.Production.json";
 
         Playerty.Loyals.WebAPI.SettingsProvider.Current = ReadAssemblyConfiguration<Playerty.Loyals.WebAPI.Settings>();
         Playerty.Loyals.Business.SettingsProvider.Current = ReadAssemblyConfiguration<Playerty.Loyals.Business.Settings>();
@@ -80,7 +85,6 @@ public class Startup
                 options
                     .UseLazyLoadingProxies()
                     .UseSqlServer(Playerty.Loyals.WebAPI.SettingsProvider.Current.ConnectionString);
-                    //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTrackingWithIdentityResolution)
                     //.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
             });
 
@@ -163,6 +167,7 @@ public class Startup
                     Guid guid = Guid.NewGuid();
                     Exception exception = contextFeature.Error;
                     string exceptionString = "";
+
                     if (env.IsDevelopment())
                         exceptionString = exception.ToString();
 
@@ -241,13 +246,8 @@ public class Startup
 
     private static string ReadConfigFile()
     {
-        if (!string.IsNullOrEmpty(_cachedConfigFile))
-        {
-            return _cachedConfigFile;
-        }
-
         using StreamReader streamReader = new StreamReader(_jsonConfigurationFile);
-        return _cachedConfigFile = streamReader.ReadToEnd();
+        return streamReader.ReadToEnd();
     }
 
     #region Angular

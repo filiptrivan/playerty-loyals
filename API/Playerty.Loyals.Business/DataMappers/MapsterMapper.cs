@@ -36,8 +36,6 @@ namespace Playerty.Loyals.Business.DataMappers
             config
                 .NewConfig<UserExtended, UserExtendedDTO>()
                 .Ignore(dest => dest.Password)
-                .Map(dest => dest.TestDisplayName, src => src.Gender.Name)
-                .Map(dest => dest.TestttttDN, src => src.Gender.Id)
                 ;
 
             return config;

@@ -8,7 +8,5 @@ namespace Playerty.Loyals.Business.DTO
 {
     public partial class UserExtendedDTO
     {
-        public string TestDisplayName { get; set; }
-        public string TestttttDN { get; set; }
     }
 }
