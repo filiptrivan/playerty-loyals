@@ -20,6 +20,7 @@
         public string ExcelContentType { get; set; }
 
         public string BlobStorageConnectionString { get; set; }
+        public string BlobStorageUrl { get; set; }
         public string BlobStorageContainerName { get; set; }
 
     }

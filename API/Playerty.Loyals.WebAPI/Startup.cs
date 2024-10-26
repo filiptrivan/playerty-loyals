@@ -86,7 +86,7 @@ public class Startup
 
         services.AddAzureClients(clientBuilder =>
         {
-            clientBuilder.AddBlobServiceClient(new Uri(Playerty.Loyals.WebAPI.SettingsProvider.Current.BlobStorageConnectionString));
+            clientBuilder.AddBlobServiceClient(Playerty.Loyals.WebAPI.SettingsProvider.Current.BlobStorageConnectionString);
 
             clientBuilder.AddClient<BlobContainerClient, BlobClientOptions>((options, provider) => // https://stackoverflow.com/questions/78430531/registering-blobcontainerclient-and-injecting-into-isolated-function
             {
@@ -98,8 +98,6 @@ public class Startup
 
                 return blobContainerClient;
             });
-
-            clientBuilder.UseCredential(new DefaultAzureCredential());
         });
 
         services.AddSwaggerGen(c =>
@@ -171,6 +169,7 @@ public class Startup
                     string message;
                     if (exception is BusinessException bussinessEx)
                     {
+                        context.Response.StatusCode = StatusCodes.Status400BadRequest;
                         message = bussinessEx.Message;
                     }
                     else if (exception is UnauthorizedException unauthorizedEx)

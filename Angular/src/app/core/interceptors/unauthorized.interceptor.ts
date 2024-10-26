@@ -71,19 +71,13 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
         null
       );
       return of(err.message);
-    } else if (err.status == 400) {
-      this.messageService.warningMessage(
-        $localize`:@@BadRequestDetails:Sorry, we couldn't fulfill your request. Please ensure all fields are correctly filled and try again.`,
-        $localize`:@@BadRequestTitle:Bad request.`,
-      );
-      return of(err.message);
     } else if (err.status == 0) {
       this.messageService.warningMessage(
         $localize`:@@ServerLostConnectionDetails:Connection lost. Please check your internet connection. If the issue persists, contact our support team.`,
         $localize`:@@ServerLostConnectionTitle:Connection lost.`,
       );
-      this.logout(err);
-    } else if (err.error?.exception?.startsWith("Soft.Generator.Shared.SoftExceptions.BusinessException:")){
+      return of(err.message);
+    } else if (err.status == 400) {
       this.messageService.warningMessage(
         err.error.message,
         $localize`:@@Warning:Warning.`,

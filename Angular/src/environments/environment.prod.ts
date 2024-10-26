@@ -6,7 +6,7 @@ export const environment = {
     frontendUrl: 'https://playerty-loyals.vercel.app',
     googleAuth: true,
     googleClientId: '24372003240-44eprq8dn4s0b5f30i18tqksep60uk5u.apps.googleusercontent.com',
-    companyName: 'Playerty Loyalse',
+    companyName: 'Playerty Loyals',
     usersCanRegister: true,
     httpOptions: {
       // headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
