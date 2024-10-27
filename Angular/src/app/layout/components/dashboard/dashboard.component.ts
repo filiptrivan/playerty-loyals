@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit {
   private permissionsSubscription: Subscription | null = null;
   
   currentPartnerUser: PartnerUser;
+  currentPartnerTier: Tier;
 
   constructor(
     public layoutService: LayoutService,
@@ -28,6 +29,13 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.partnerUserSubscription = this.partnerService.currentPartnerUser$.subscribe(currentPartnerUser => {
       this.currentPartnerUser = currentPartnerUser;
+      if (currentPartnerUser?.tierId) {
+        this.apiService.getTier(currentPartnerUser.tierId).subscribe(tier => {
+            this.currentPartnerTier = tier;
+        });
+      } else {
+        this.currentPartnerTier = null; // FT: This line is mandatory.
+      }
     });
 
     this.partnerSubscription = this.partnerService.partner$.subscribe(currentPartner => {

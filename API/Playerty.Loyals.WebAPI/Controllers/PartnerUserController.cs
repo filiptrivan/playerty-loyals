@@ -45,7 +45,8 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserListForTable(TableFilterDTO dto)
         {
-            return await _loyalsBusinessService.LoadPartnerUserListForTable(dto, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            // FT: Ordering by because of notifications
+            return await _loyalsBusinessService.LoadPartnerUserListForTable(dto, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.Id), false);
         }
 
         [HttpPost]

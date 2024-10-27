@@ -7,6 +7,7 @@ export const environment = {
     googleAuth: true,
     googleClientId: '24372003240-44eprq8dn4s0b5f30i18tqksep60uk5u.apps.googleusercontent.com',
     companyName: 'Playerty Loyals',
+    primaryColor: '#111b2c',
     usersCanRegister: true,
     httpOptions: {
       // headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

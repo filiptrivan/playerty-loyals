@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { firstValueFrom, forkJoin } from 'rxjs';
 import { Partner } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerService } from 'src/app/business/services/helper/partner.service';
@@ -49,7 +49,9 @@ export class PartnerDetailsComponent extends BaseForm<Partner> implements OnInit
         this.initFormGroup(model);
     }
 
-    override onAfterSave(savedPartner: Partner): void {
-        // this.partnerService.setCurrentPartner(savedPartner); // FT: Not doing this because maybe the administrator is saving it.
+    override async onAfterSave(savedPartner: Partner): Promise<void> {
+        if ((await firstValueFrom(this.partnerService.partner$)).id == savedPartner.id) {
+            this.partnerService.setCurrentPartner(savedPartner); // FT: Not doing this because maybe the administrator is saving it.
+        }
     }
 }

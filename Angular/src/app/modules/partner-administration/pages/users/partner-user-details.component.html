@@ -5,7 +5,7 @@
             <panel-body>
                 <form [formGroup]="formGroup" class="grid">
                     <div class="col-12">
-                         <user-progressbar #userProgressbar [partnerUser]="partnerUserFormGroup.getRawValue()"></user-progressbar>
+                         <user-progressbar [partnerUser]="partnerUserFormGroup.getRawValue()" [tier]="partnerUserTier"></user-progressbar>
                     </div>
                     <!-- TODO FT: Show only if the user has permission to change points -->
                     <div class="col-12">

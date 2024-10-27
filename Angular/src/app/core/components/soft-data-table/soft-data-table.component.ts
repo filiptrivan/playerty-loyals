@@ -91,7 +91,7 @@ export class SoftDataTableComponent implements OnInit {
     this.onLazyLoad.next(tableFilter);
 
     this.apiService.loadListForTable(this.controllerName, this.objectName, tableFilter).subscribe({
-      next: async (res) => {
+      next: async (res) => { 
         this.items = res.data;
         this.totalRecords = res.totalRecords;
         

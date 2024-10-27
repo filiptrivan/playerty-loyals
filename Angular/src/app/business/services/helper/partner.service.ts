@@ -28,14 +28,15 @@ export class PartnerService {
   }
 
   async startListening() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe(async params => {
       const partnerSlug = params[environment.partnerParamKey] ?? '';
         if(partnerSlug != null && partnerSlug != ''){
           localStorage.setItem(environment.partnerSlugKey, partnerSlug);
+          await firstValueFrom(this.loadCurrentPartner()); // TODO FT: When you have the time fix this, but in most basic case it will be called only once
         }
     });
 
-    await firstValueFrom(this.loadCurrentPartner());
+    await firstValueFrom(this.loadCurrentPartner()); // TODO FT: When you have the time fix this, but in most basic case it will be called only once
 
     this.userSubscription = this.authService.user$.subscribe(async user => {
       const currentPartner = await firstValueFrom(this.partner$);
@@ -81,14 +82,27 @@ export class PartnerService {
   }
 
   adjustPartnerColor(partner: Partner){
-      if (partner?.primaryColor != null){
+      if (partner?.primaryColor != null){ // TODO FT: Make this field not null in the database, and initialize it for the partner?
         const primaryColor = partner.primaryColor;
-        const primaryLightColor = adjustColor(primaryColor, 60);
+        const primaryLightColor = adjustColor(primaryColor, 35);
         const primaryLighterColor = adjustColor(primaryColor, 95);
         const primaryDarkColor = adjustColor(primaryColor, -10);
         const primaryDarkerColor = adjustColor(primaryColor, -20);
         
          // FT: I need to validate color on the server
+        document.documentElement.style.setProperty('--primary-color', primaryColor);
+        document.documentElement.style.setProperty('--primary-light-color', primaryLightColor);
+        document.documentElement.style.setProperty('--primary-lighter-color', primaryLighterColor);
+        document.documentElement.style.setProperty('--primary-dark-color', primaryDarkColor);
+        document.documentElement.style.setProperty('--primary-darker-color', primaryDarkerColor);
+        document.documentElement.style.setProperty('--highlight-bg', primaryLighterColor);
+      } else {
+        const primaryColor = environment.primaryColor;
+        const primaryLightColor = adjustColor(primaryColor, 35);
+        const primaryLighterColor = adjustColor(primaryColor, 95);
+        const primaryDarkColor = adjustColor(primaryColor, -10);
+        const primaryDarkerColor = adjustColor(primaryColor, -20);
+        
         document.documentElement.style.setProperty('--primary-color', primaryColor);
         document.documentElement.style.setProperty('--primary-light-color', primaryLightColor);
         document.documentElement.style.setProperty('--primary-lighter-color', primaryLighterColor);

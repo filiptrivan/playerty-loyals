@@ -8,7 +8,7 @@
         <div>{{tier?.name}}</div>
         <div>{{tier?.validTo}} points</div>
       </div>
-      <p-progressBar [value]="levelPercentForTheCurrentUser" color="var(--primary-dark-color)"/>
+      <p-progressBar [value]="getLevelPercentForTheCurrentUser()" color="var(--primary-dark-color)"/>
     </div>
     <div class="card-overflow-icon" style="position: absolute; overflow: hidden; right: 8px; top: -25px; z-index: 1;">
       <i class="pi pi-heart" style="font-size: 270px;"></i>

@@ -4,7 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom, forkJoin } from 'rxjs';
 import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
-import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, UserExtended } from 'src/app/business/entities/generated/business-entities.generated';
+import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, Tier, UserExtended } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerService } from 'src/app/business/services/helper/partner.service';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
@@ -27,6 +27,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
 
     userExtendedFormGroup: SoftFormGroup<UserExtended>;
     partnerUserFormGroup: SoftFormGroup<PartnerUser>;
+    partnerUserTier: Tier;
 
     segmentations: Segmentation[] = [];
     segmentationItems: SegmentationItem[] = [];
@@ -87,6 +88,11 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
 
             this.apiService.getPartnerUser(this.modelId).subscribe(partnerUser => {
                 this.partnerUserFormGroup = this.initFormGroup(new PartnerUser(partnerUser), nameof<PartnerUserSaveBody>('partnerUserDTO'));
+                if (partnerUser?.tierId) {
+                    this.apiService.getTier(partnerUser.tierId).subscribe(partnerUserTier => {
+                        this.partnerUserTier = partnerUserTier;
+                    });
+                }
                 
                 if(partnerUser.hasFilledGenderForTheFirstTime == false)
                     this.genderTooltipText = null;
@@ -155,10 +161,17 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
 
     override async onAfterSave(): Promise<void> {
         this.getAlreadyFilledSegmentationIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue());
-        this.userProgressbar.loadComponent(this.partnerUserFormGroup.getRawValue());
-
-        if (this.modelId == this.partnerUserFormGroup.getRawValue().id) { // FT: It needs to be == because we are comparing string with number
+        
+        if ((await firstValueFrom(this.partnerService.currentPartnerUser$)).id == this.partnerUserFormGroup.getRawValue().id) {
             await firstValueFrom(this.partnerService.loadCurrentPartnerUser());
+        }
+
+        if (this.partnerUserFormGroup.getRawValue()?.tierId) {
+            this.apiService.getTier(this.partnerUserFormGroup.getRawValue().tierId).subscribe(partnerUserTier => {
+                this.partnerUserTier = partnerUserTier;
+            });
+        }else{
+            this.partnerUserTier = null;
         }
     }
 }

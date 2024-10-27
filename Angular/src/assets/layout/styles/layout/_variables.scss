@@ -7,7 +7,7 @@ $errorColor: rgb(255, 59, 59);
 $disabled: #f8f9fa;
 
 /* SAGA */
-$primaryColor: #2196F3 !default;
+$primaryColor: #111b2c !default;
 $primaryLightColor: scale-color($primaryColor, $lightness: 60%) !default;
 $primaryLighterColor: scale-color($primaryColor, $lightness: 95%) !default;
 $primaryDarkColor: scale-color($primaryColor, $lightness: -10%) !default;
@@ -19,7 +19,7 @@ $highlightTextColor: #495057 !default;
 $highlightFocusBg: rgba($primaryColor, .24) !default;
 
 $colors: (
-    "blue": #2196F3,
+    "blue": #111b2c,
     "green": #4caf50,
     "yellow": #FBC02D,
     "cyan": #00BCD4,

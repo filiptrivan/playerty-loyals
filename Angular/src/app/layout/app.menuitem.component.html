@@ -22,7 +22,6 @@
         </ng-template>
     </ul>
 
-    <div #dive></div>
     <soft-autocomplete
     *ngIf="item.showPartnerDialog"
     [control]="selectedPartner"
@@ -33,9 +32,7 @@
     [showMoreOptions]="true"
     (onMoreOptionsClick)="moreOptionsClick()"
     moreOptionsIcon="pi pi-check"
-    [showClear]="false"
     class="mobile-stay-open"
-    [appendTo]="appendTo"
     ></soft-autocomplete>
         
 </ng-container>

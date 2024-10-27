@@ -30,7 +30,8 @@ export class AppLayoutComponent implements OnDestroy {
                         this.appSidebar.el.nativeElement.contains(event.target) ||
                         this.appTopbar.menuButton.nativeElement.isSameNode(event.target) || 
                         this.appTopbar.menuButton.nativeElement.contains(event.target) ||
-                        (event.target.closest('.mobile-stay-open'))// Keeps menu open on mobile for certain elements
+                        (event.target.closest('.p-autocomplete-items')) ||
+                        (event.target.closest('.p-autocomplete-clear-icon'))
                     );
                     
                     if (isOutsideClicked) {

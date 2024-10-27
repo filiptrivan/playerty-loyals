@@ -52,8 +52,6 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
     selectedPartner: SoftFormControl = new SoftFormControl<string>(null, { updateOn: 'change' });
 
     partnerOptions: any[];
-    appendTo: any;
-    @ViewChild('dive') dive: any;
 
     constructor(
         public layoutService: LayoutService, 
@@ -73,15 +71,6 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
                     if (value.key !== this.key && !value.key.startsWith(this.key + '-')) {
                         this.active = false;
                     }
-                }
-
-                if (this.layoutService.state.staticMenuMobileActive == true){
-                    console.log("HERE")
-                    this.appendTo = this.dive;
-                }
-                else{
-                    console.log("HEREe")
-                    this.appendTo = 'body';
                 }
             });
         });

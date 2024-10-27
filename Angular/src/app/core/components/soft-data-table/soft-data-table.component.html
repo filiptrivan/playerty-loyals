@@ -3,7 +3,7 @@
       (onLazyLoad)="lazyLoad($event)" [totalRecords]="totalRecords" class="soft-table" [loading]="loading" [selectionMode]="selectionMode" dataKey="id" (onFilter)="filter($event)"
       > 
       <ng-template pTemplate="caption">
-        <div class="table-header">
+        <div class="table-header overflow-auto">
           <div style="display: flex; align-items: center; gap: 8px;">
             <i class="{{tableIcon}} text-2xl primary-color"></i>
             <h5 style="margin: 0px;">{{tableTitle}}</h5>

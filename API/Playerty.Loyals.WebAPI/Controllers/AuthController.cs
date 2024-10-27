@@ -55,7 +55,8 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<TableResponseDTO<UserExtendedDTO>> LoadUserListForTable(TableFilterDTO dto)
         {
-            return await _loyalsBusinessService.LoadUserExtendedListForTable(dto, _context.DbSet<UserExtended>());
+            // FT: Ordering by because of notifications
+            return await _loyalsBusinessService.LoadUserExtendedListForTable(dto, _context.DbSet<UserExtended>().OrderBy(x => x.Id));
         }
 
         [HttpPost]

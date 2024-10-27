@@ -16,7 +16,6 @@ import { PartnerUser, Tier } from '../../entities/generated/business-entities.ge
 export class UserProgressbarComponent {
     @Input() partnerUser: PartnerUser;
     @Input() tier: Tier;
-    levelPercentForTheCurrentUser: number;
 
     constructor(
         private apiService: ApiService
@@ -24,26 +23,20 @@ export class UserProgressbarComponent {
     }
 
     ngOnInit(){
-        this.loadComponent(this.partnerUser);
-    }
-
-    loadComponent(partnerUser: PartnerUser) {
-        if (partnerUser.tierId === null) {
-            this.tier = null;
-            this.levelPercentForTheCurrentUser = 0;
-        } 
-        else {
-            this.apiService.getTier(partnerUser.tierId).subscribe(tier => {
-                const levelPercentForTheCurrentUserHelper = Number((partnerUser.points / tier.validTo * 100).toFixed(2));
-                this.levelPercentForTheCurrentUser = Math.min(levelPercentForTheCurrentUserHelper, 100);
-                this.tier = tier;
-            });
-        }
     }
 
     // FT HACK: https://stackoverflow.com/questions/51682170/angular-interpolated-value-display-not-updating-when-changed-in-timeout
     partnerUserPoints(){
-        return this.partnerUser.points;
+        return this.partnerUser?.points;
+    }
+    
+    getLevelPercentForTheCurrentUser(){
+        const levelPercentForTheCurrentUserHelper = Number((this.partnerUser?.points / this.tier?.validTo * 100).toFixed(2));
+        if (levelPercentForTheCurrentUserHelper) {
+            return Math.min(levelPercentForTheCurrentUserHelper, 100);
+        }
+        
+        return 0;
     }
 
 }

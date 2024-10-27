@@ -117,7 +117,13 @@ namespace Playerty.Loyals.Services
 
             await _context.WithTransactionAsync(async () =>
             {
-                IQueryable<UserExtended> query = _context.DbSet<UserExtended>().Skip(tableFilterPayload.First).Take(tableFilterPayload.Rows).Where(x => x.Notifications.Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)); // notificationId
+                IQueryable<UserExtended> query = _context.DbSet<UserExtended>()
+                    .Skip(tableFilterPayload.First)
+                    .Take(tableFilterPayload.Rows)
+                    .Where(x => x.Notifications
+                        .Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)) // notificationId
+                    .OrderBy(x => x.Id);
+
                 PaginationResult<UserExtended> paginationResult = await LoadUserExtendedListForPagination(tableFilterPayload, query);
 
                 tableResponse.Data = await paginationResult.Query
@@ -254,7 +260,7 @@ namespace Playerty.Loyals.Services
                 }
                 else
                 {
-                    Tier tier = await _context.DbSet<Tier>().Where(x => points >= x.ValidFrom && points < x.ValidTo).SingleOrDefaultAsync();
+                    Tier tier = await _context.DbSet<Tier>().Where(x => points >= x.ValidFrom && points < x.ValidTo && x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).SingleOrDefaultAsync();
                     return tier;
                 }
             });
@@ -264,7 +270,7 @@ namespace Playerty.Loyals.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                return await _context.DbSet<Tier>().OrderByDescending(x => x.ValidTo).FirstOrDefaultAsync();
+                return await _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderByDescending(x => x.ValidTo).FirstOrDefaultAsync();
             });
         }
 
@@ -468,7 +474,13 @@ namespace Playerty.Loyals.Services
 
             await _context.WithTransactionAsync(async () =>
             {
-                IQueryable<PartnerUser> query = _context.DbSet<PartnerUser>().Skip(tableFilterPayload.First).Take(tableFilterPayload.Rows).Where(x => x.PartnerNotifications.Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)); // partnerNotificationId
+                IQueryable<PartnerUser> query = _context.DbSet<PartnerUser>()
+                    .Skip(tableFilterPayload.First)
+                    .Take(tableFilterPayload.Rows)
+                    .Where(x => x.PartnerNotifications
+                        .Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)) // partnerNotificationId
+                    .OrderBy(x => x.Id);
+
                 PaginationResult<PartnerUser> paginationResult = await LoadPartnerUserListForPagination(tableFilterPayload, query);
 
                 tableResponse.Data = await paginationResult.Query
