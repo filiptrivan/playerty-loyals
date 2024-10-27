@@ -22,16 +22,20 @@
         </ng-template>
     </ul>
 
+    <div #dive></div>
     <soft-autocomplete
-        *ngIf="item.showPartnerDialog"
-        [control]="selectedPartner"
-        [options]="partnerOptions"
-        (onTextInput)="searchPartners($event)"
-        label=""
-        placeholder="Select the partner"
-        [showMoreOptions]="true"
-        (onMoreOptionsClick)="moreOptionsClick()"
-        moreOptionsIcon="pi pi-check"
+    *ngIf="item.showPartnerDialog"
+    [control]="selectedPartner"
+    [options]="partnerOptions"
+    (onTextInput)="searchPartners($event)"
+    label=""
+    placeholder="Select the partner"
+    [showMoreOptions]="true"
+    (onMoreOptionsClick)="moreOptionsClick()"
+    moreOptionsIcon="pi pi-check"
+    [showClear]="false"
+    class="mobile-stay-open"
+    [appendTo]="appendTo"
     ></soft-autocomplete>
-
+        
 </ng-container>

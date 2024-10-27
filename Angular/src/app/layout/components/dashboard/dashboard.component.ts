@@ -15,10 +15,6 @@ export class DashboardComponent implements OnInit {
   private partnerUserSubscription: Subscription | null = null;
   private permissionsSubscription: Subscription | null = null;
   
-  currentPartnertUser: PartnerUser;
-  tierForTheCurrentUser: Tier;
-  levelPercentForTheCurrentUser: number;
-
   currentPartnerUser: PartnerUser;
 
   constructor(
@@ -32,10 +28,6 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.partnerUserSubscription = this.partnerService.currentPartnerUser$.subscribe(currentPartnerUser => {
       this.currentPartnerUser = currentPartnerUser;
-
-      if (currentPartnerUser) {
-        this.handleCurrentPartnerUser(currentPartnerUser);
-      }
     });
 
     this.partnerSubscription = this.partnerService.partner$.subscribe(currentPartner => {
@@ -50,26 +42,6 @@ export class DashboardComponent implements OnInit {
     if (permissionCodes != null && permissionCodes.length === 0) {
       this.authService.navigateToSelectPartner();
     }
-  }
-  
-  private handleCurrentPartnerUser(currentPartnerUser: PartnerUser) {
-    if (currentPartnerUser.tierId === null) {
-      // FT: Commented it out because, on every user change (refresh token) this is getting displayed
-      // this.messageService.warningMessage($localize`:@@ThePartnerHasNotMadeAnyTiersYet:The partner has not made any tiers yet.`);
-      this.tierForTheCurrentUser = null;
-      this.levelPercentForTheCurrentUser = 0;
-    } else {
-      this.apiService.getTier(currentPartnerUser.tierId).subscribe(tier => {
-        this.tierForTheCurrentUser = tier;
-        const levelPercentForTheCurrentUserHelper = Number((currentPartnerUser.points / tier.validTo * 100).toFixed(2));
-        this.levelPercentForTheCurrentUser = Math.min(levelPercentForTheCurrentUserHelper, 100);
-      });
-    }
-  }
-
-  // FT HACK: https://stackoverflow.com/questions/51682170/angular-interpolated-value-display-not-updating-when-changed-in-timeout
-  currentPartnerUserPoints(){
-    return this.currentPartnerUser.points;
   }
 
   ngOnDestroy(): void {

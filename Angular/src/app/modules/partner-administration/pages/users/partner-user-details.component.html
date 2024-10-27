@@ -1,41 +1,29 @@
 @defer (when userExtendedFormGroup != null && partnerUserFormGroup != null && segmentationItemsFormArray != null) {
-    <soft-card [title]="detailsTitle" icon="pi pi-user">
-        <soft-panel [isFirstMultiplePanel]="true">
-            <panel-header title="Base details"></panel-header>
+        <soft-panel>
+            <panel-header [title]="userExtendedFormGroup.get('email').getRawValue()" icon="pi pi-user"></panel-header>
     
             <panel-body>
                 <form [formGroup]="formGroup" class="grid">
                     <div class="col-12">
-                        <soft-textbox [control]="control('email', userExtendedFormGroup, false, true)"></soft-textbox>
+                         <user-progressbar #userProgressbar [partnerUser]="partnerUserFormGroup.getRawValue()"></user-progressbar>
+                    </div>
+                    <!-- TODO FT: Show only if the user has permission to change points -->
+                    <div class="col-12">
+                        <soft-number [control]="control('points', partnerUserFormGroup)"></soft-number>
                     </div>
                     <div class="col-12 md:col-6">
                         <soft-calendar [control]="control('birthDate', userExtendedFormGroup, false, false)" [showTooltip]="!partnerUserFormGroup.getRawValue().hasFilledBirthDateForTheFirstTime" 
-                        [tooltipIcon]="firstTimeFillIcon" [tooltipText]="firstTimeFillText"></soft-calendar>
+                        [tooltipText]="firstTimeFillText"></soft-calendar>
                     </div>
                     <div class="col-12 md:col-6">
                         <soft-dropdown [control]="control('genderId', userExtendedFormGroup, false, false)" [options]="genderOptions" 
-                        [showTooltip]="!partnerUserFormGroup.getRawValue().hasFilledGenderForTheFirstTime" [tooltipIcon]="firstTimeFillIcon" [tooltipText]="firstTimeFillText"></soft-dropdown>
+                        [showTooltip]="!partnerUserFormGroup.getRawValue().hasFilledGenderForTheFirstTime" [tooltipText]="firstTimeFillText"></soft-dropdown>
                     </div>
                     <div class="col-12">
                         <soft-multiselect
                         [control]="selectedRoles"
-                        label="Roles"
+                        label="Super roles"
                         [options]="roleOptions"></soft-multiselect>
-                    </div>
-                </form>
-            </panel-body>
-    
-        </soft-panel>
-        <soft-panel [isLastMultiplePanel]="true">
-            <panel-header title="Partner details"></panel-header>
-    
-            <panel-body>
-                <form [formGroup]="formGroup" class="grid">
-                    <div class="col-12 md:col-6">
-                        <soft-number [control]="control('points', partnerUserFormGroup)"></soft-number>
-                    </div>
-                    <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('tierDisplayName', partnerUserFormGroup, false, true)"></soft-textbox>
                     </div>
 
                     @for (segmentation of segmentations; track segmentation.id; let index = $index) {
@@ -54,7 +42,7 @@
                     <div class="col-12">
                         <soft-multiselect
                         [control]="selectedPartnerRoles"
-                        label="Roles"
+                        label="Partner roles"
                         [options]="partnerRoleOptions"></soft-multiselect>
                     </div>
                 </form>
@@ -66,7 +54,6 @@
            </panel-footer>
     
         </soft-panel>
-    </soft-card>
 } @placeholder {
     <card-skeleton [height]="502"></card-skeleton>
 }

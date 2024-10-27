@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { firstValueFrom, forkJoin } from 'rxjs';
+import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
 import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, UserExtended } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
+import { PartnerService } from 'src/app/business/services/helper/partner.service';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { SoftFormArray, SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
@@ -40,6 +42,8 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
 
     alreadyFilledSegmentationIdsForThePartnerUser: number[] = [];
 
+    @ViewChild('userProgressbar') userProgressbar: UserProgressbarComponent;
+
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
@@ -48,6 +52,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         protected override router: Router, 
         protected override route: ActivatedRoute, 
         private apiService: ApiService,
+        private partnerService: PartnerService,
     ) {
         super(differs, http, messageService, changeDetectorRef, router, route);
     }
@@ -148,7 +153,12 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         return;
     }
 
-    override onAfterSave(): void {
+    override async onAfterSave(): Promise<void> {
         this.getAlreadyFilledSegmentationIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue());
+        this.userProgressbar.loadComponent(this.partnerUserFormGroup.getRawValue());
+
+        if (this.modelId == this.partnerUserFormGroup.getRawValue().id) { // FT: It needs to be == because we are comparing string with number
+            await firstValueFrom(this.partnerService.loadCurrentPartnerUser());
+        }
     }
 }

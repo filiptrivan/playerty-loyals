@@ -23,78 +23,6 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
     private messageService: SoftMessageService,
   ) {}
 
-  // TODO FT: Handle all on the server
-  // TODO FT: Maybe return the logic for the logout after unauthorized exception
-  private handleAuthError(err: HttpErrorResponse): Observable<any> {
-    if (!environment.production) {
-      console.error(err);
-    }
-    // if (err.status == 404) {
-    //   this.messageService.warningMessage(
-    //     $localize`:@@NotFoundTitle:Not found.`,
-    //     $localize`:@@NotFoundDetails:The requested resource was not found please try again.`
-    //   );
-    //   // TODO: vidi kako da resis ovo jer 404 moze da bude i kad ide na pogresnu stranicu i kad ne pronadje korisnika
-    //   // this.router.navigate(['not-found'], {
-    //   //   queryParams: { returnUrl: this.router.routerState.snapshot.url },
-    //   // });
-    //   if (!environment.production) {
-    //     console.error(err);
-    //   }
-    //   return of(err.message);
-    // }
-    if (err.status == 404) {
-      // TODO: vidi kako da resis ovo jer 404 moze da bude i kad ide na pogresnu stranicu i kad ne pronadje korisnika
-      this.messageService.warningMessage(
-        $localize`:@@NotFoundDetails:The requested resource was not found please try again.`,
-        $localize`:@@NotFoundTitle:Not found.`,
-      );
-      return of(err.message);
-    } else if (err.status == 403) {
-      this.messageService.warningMessage(
-        $localize`:@@PermissionErrorDetails:You don't have permission for this operation.`,
-        $localize`:@@PermissionErrorTitle:Permission error.`,
-      );
-      return of(err.message);
-    } else if (err.status == 401) {
-      console.error('Auth: ' + err);
-      this.messageService.warningMessage(
-        err.error.message, // FT: This is the unauthorized error
-        null,
-        // $localize`:@@SessionExpiredDetails:Your session has expired because of inactivity. To continue, please log in again.`,
-        // $localize`:@@SessionExpiredTitle:Session expired. Log in to continue.`,
-      );
-      this.logout(err);
-    } else if (err.status == 419) {
-      this.messageService.warningMessage(
-        err.error.message,
-        null
-      );
-      return of(err.message);
-    } else if (err.status == 0) {
-      this.messageService.warningMessage(
-        $localize`:@@ServerLostConnectionDetails:Connection lost. Please check your internet connection. If the issue persists, contact our support team.`,
-        $localize`:@@ServerLostConnectionTitle:Connection lost.`,
-      );
-      return of(err.message);
-    } else if (err.status == 400) {
-      this.messageService.warningMessage(
-        err.error.message,
-        $localize`:@@Warning:Warning.`,
-      );
-      return of(err.message);
-    }
-    else {
-      this.messageService.errorMessage(
-        $localize`:@@UnexpectedErrorDetails:Our team has been notified, and we're working to fix the issue. Please try again later.`,
-        $localize`:@@UnexpectedErrorTitle:Something went wrong.`,
-      );
-      return of(err.message);
-    }
-
-    return throwError(err);
-  }
-
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
@@ -106,13 +34,54 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
     );
   }
 
-  logout(err: HttpErrorResponse){
-    this.authService.clearLocalStorage();
-    console.log("UNAUTHORIZED LOGOUT")
-    this.router.navigate(['auth/login'], {
-      // queryParams: { returnUrl: this.router.routerState.snapshot.url },
-    });
-    
-    return of(err.message);
+  private handleAuthError(err: HttpErrorResponse): Observable<any> {
+
+    if (!environment.production) {
+      console.error(err);
+    }
+
+    if (err.status == 0) {
+      this.messageService.warningMessage(
+        $localize`:@@ServerLostConnectionDetails:Connection lost. Please check your internet connection. If the issue persists, contact our support team.`,
+        $localize`:@@ServerLostConnectionTitle:Connection lost.`,
+      );
+      return of(err.message);
+    } 
+    else if (err.status == 403) {
+      this.messageService.warningMessage(
+        $localize`:@@PermissionErrorDetails:You don't have permission for this operation.`,
+        $localize`:@@PermissionErrorTitle:Permission error.`,
+      );
+      return of(err.message);
+    } 
+    else if (err.status == 404) {
+      this.messageService.warningMessage(
+        $localize`:@@NotFoundDetails:The requested resource was not found please try again.`,
+        $localize`:@@NotFoundTitle:Not found.`,
+      );
+      return of(err.message);
+    } 
+    else if (err.status == 400 || err.status == 401 || err.status == 419) {
+      this.messageService.warningMessage(
+        err.error.message,
+        $localize`:@@Warning:Warning.`,
+      );
+
+      if(err.status == 401) {
+        this.authService.logout();
+      }
+
+      return of(err.message);
+    } 
+    else {
+      this.messageService.errorMessage(
+        err.error.message,
+        $localize`:@@UnexpectedErrorTitle:Something went wrong.`,
+      );
+      return of(err.message);
+    }
+
+    return throwError(err);
   }
+
 }

@@ -17,6 +17,7 @@ import { SegmentationListComponent } from './pages/segmentations/segmentation-li
 import { SegmentationDetailsComponent } from './pages/segmentations/segmentation-details.component';
 import { SegmentationSelectComponent } from '../administration/partials/segmentation-select.component';
 import { BaseNotificationComponent } from 'src/app/core/components/base-notification/base-notification.component';
+import { UserProgressbarComponent } from "../../business/components/user-progressbar/user-progressbar.component";
 
 const routes: Routes = [
     {
@@ -67,6 +68,7 @@ const routes: Routes = [
         IndexCardComponent,
         SegmentationSelectComponent,
         BaseNotificationComponent,
+        UserProgressbarComponent
     ],
     declarations: [
         PartnerUserListComponent,

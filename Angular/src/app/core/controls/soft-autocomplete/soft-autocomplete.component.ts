@@ -21,6 +21,8 @@ import { RequiredComponent } from '../../components/required/required.component'
 })
 export class SoftAutocompleteComponent extends BaseAutocompleteControl implements OnInit {
     // @Input() required: boolean = true; // TODO FT: delete if you don't need through whole app
+    @Input() appendTo: any = 'body';
+    @Input() showClear: boolean = true;
 
     constructor() { 
         super();

@@ -437,8 +437,26 @@
 	display: inline-block;
 }
 
-.normal-bottom-padding{
+.non-grid-panel-bottom-padding{
 	padding-bottom: 14px;
+}
+
+@media (max-width: 600px) {
+	.non-grid-panel-bottom-padding{
+		padding-bottom: 0px;
+	}
+}
+
+.panel-body-wrapper{
+	padding: 28px; 
+	padding-bottom: 14px;
+}
+
+@media (max-width: 600px) {
+	.panel-body-wrapper{
+		padding: 14px; 
+		padding-bottom: 0px;
+	}
 }
 
 .last-child-zero-margin{

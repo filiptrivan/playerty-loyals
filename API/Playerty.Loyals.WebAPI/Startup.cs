@@ -182,6 +182,11 @@ public class Startup
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         message = unauthorizedEx.Message;
                     }
+                    else if (exception is SecurityTokenException securityTokenEx)
+                    {
+                        context.Response.StatusCode = StatusCodes.Status419AuthenticationTimeout;
+                        message = securityTokenEx.Message;
+                    }
                     else if (exception is ExpiredVerificationException expiredVerificationEx)
                     {
                         context.Response.StatusCode = StatusCodes.Status419AuthenticationTimeout;

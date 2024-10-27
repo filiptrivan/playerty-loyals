@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
     ]
 })
 export class SoftPasswordComponent extends BaseControl implements OnInit {
-    @Input() showPasswordStrength: boolean = true;
+    @Input() showPasswordStrength: boolean = false;
 
     constructor() { 
         super();

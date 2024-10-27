@@ -7,7 +7,7 @@ import { MessageService } from 'primeng/api';
 export class SoftMessageService { // TODO FT: nece da prikaze poruku ako je neki angular error koji se dogodi tek nakon api poziva
   constructor(private messageService: MessageService, private zone: NgZone) {}
 
-  successMessage(detail: string, title: string = 'Successful action') {
+  successMessage(detail: string, title: string = $localize`:@@SuccessfulAction:Successful action`) {
     this.zone.run(()=>{
       this.messageService.add({
         severity: 'success',
@@ -17,7 +17,7 @@ export class SoftMessageService { // TODO FT: nece da prikaze poruku ako je neki
       });
     });
   }
-  warningMessage(detail: string, title: string = 'Warning') {
+  warningMessage(detail: string, title: string = $localize`:@@Warning:Warning`) {
     this.zone.run(()=>{
       this.messageService.add({
         severity: 'warn',
@@ -27,7 +27,7 @@ export class SoftMessageService { // TODO FT: nece da prikaze poruku ako je neki
       });
     });
   }
-  errorMessage(detail: string, title: string = 'Error') {
+  errorMessage(detail: string, title: string = $localize`:@@Error:Error`) {
     this.zone.run(()=>{
       this.messageService.add({
         severity: 'error',
