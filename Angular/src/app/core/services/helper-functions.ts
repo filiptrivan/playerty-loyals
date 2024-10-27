@@ -47,7 +47,7 @@ export function getMimeTypeForFileName(fileName: string): string {
 
 export function adjustColor(color: string, percent: number): string {
     if (!/^#([0-9A-F]{3}){1,2}$/i.test(color)) {
-        throw new Error('Invalid hex color format');
+        console.error('Invalid hex color format');
     }
 
     let r: number, g: number, b: number;

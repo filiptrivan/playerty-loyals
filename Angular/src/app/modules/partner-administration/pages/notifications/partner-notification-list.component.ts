@@ -22,7 +22,6 @@ export class PartnerNotificationListComponent implements OnInit {
                 {name:"Delete"},
             ]},
             {name: 'Title', filterType: 'text', field: 'title'},
-            {name: 'Title latin', filterType: 'text', field: 'titleLatin'},
             {name: 'Created at', filterType: 'date', field: 'createdAt', showMatchModes: true},
         ]
     }

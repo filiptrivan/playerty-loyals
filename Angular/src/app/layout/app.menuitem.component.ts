@@ -88,7 +88,7 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.permissionSubscription = this.authService.currentUserPermissions$.subscribe((currentUserPermissionCodes: string[]) => {
+        this.permissionSubscription = this.authService.currentPartnerUserPermissions$.subscribe((currentUserPermissionCodes: string[]) => {
             if (this.item && typeof this.item.hasPermission === 'function') {
                 this.item.visible = this.item.hasPermission(currentUserPermissionCodes);
             }

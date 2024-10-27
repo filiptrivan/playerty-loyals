@@ -1,15 +1,13 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, firstValueFrom, Observable, of, Subject, Subscription } from 'rxjs';
 import { map, tap, delay, finalize } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { SoftMessageService } from './soft-message.service';
 import { SocialUser, SocialAuthService } from '@abacritt/angularx-social-login';
 import { ExternalProvider, Login, VerificationTokenRequest, LoginResult, ForgotPassword, Registration, RegistrationVerificationResult, RefreshTokenRequest } from 'src/app/business/entities/generated/security-entities.generated';
 import { UserExtended } from 'src/app/business/entities/generated/business-entities.generated';
-import { PartnerService } from 'src/app/business/services/helper/partner.service';
 
 
 @Injectable({
@@ -22,8 +20,8 @@ export class AuthService implements OnDestroy {
   private _user = new BehaviorSubject<UserExtended | null>(null);
   user$ = this._user.asObservable();
 
-  private _currentUserPermissions = new BehaviorSubject<string[] | null>(null);
-  currentUserPermissions$ = this._currentUserPermissions.asObservable();
+  private _currentPartnerUserPermissions = new BehaviorSubject<string[] | null>(null);
+  currentPartnerUserPermissions$ = this._currentPartnerUserPermissions.asObservable();
 
   // Google auth
   private authChangeSub = new Subject<boolean>();
@@ -57,7 +55,7 @@ export class AuthService implements OnDestroy {
       if (event.key === 'logout-event') {
         this.stopTokenTimer();
         this._user.next(null);
-        this._currentUserPermissions.next(null);
+        this._currentPartnerUserPermissions.next(null);
       }
       if (event.key === 'login-event') {
         this.stopTokenTimer();
@@ -67,7 +65,7 @@ export class AuthService implements OnDestroy {
               id: user.id,
               email: user.email
             });
-            await firstValueFrom(this.loadCurrentUserPermissions()); // FT: Needs to be after setting local storage
+            await firstValueFrom(this.loadCurrentPartnerUserPermissions()); // FT: Needs to be after setting local storage
           });
       }
     }
@@ -128,7 +126,7 @@ export class AuthService implements OnDestroy {
         });
         this.setLocalStorage(loginResult);
         this.startTokenTimer();
-        await firstValueFrom(this.loadCurrentUserPermissions()); // FT: Needs to be after setting local storage
+        await firstValueFrom(this.loadCurrentPartnerUserPermissions()); // FT: Needs to be after setting local storage
         return loginResult;
       })
     );
@@ -142,7 +140,7 @@ export class AuthService implements OnDestroy {
         finalize(() => {
           this.clearLocalStorage();
           this._user.next(null);
-          this._currentUserPermissions.next(null);
+          this._currentPartnerUserPermissions.next(null);
           this.stopTokenTimer();
           this.router.navigate([environment.loginSlug]);
         })
@@ -172,7 +170,7 @@ export class AuthService implements OnDestroy {
         });
         this.setLocalStorage(loginResult);
         this.startTokenTimer();
-        await firstValueFrom(this.loadCurrentUserPermissions()); // FT: Needs to be after setting local storage
+        await firstValueFrom(this.loadCurrentPartnerUserPermissions()); // FT: Needs to be after setting local storage
         return loginResult;
       })
     );
@@ -257,10 +255,10 @@ export class AuthService implements OnDestroy {
     this.externalAuthService.signOut();
   }
 
-  loadCurrentUserPermissions(): Observable<string[]> {
-    return this.apiService.getCurrentUserPermissionCodes().pipe(
+  loadCurrentPartnerUserPermissions(): Observable<string[]> {
+    return this.apiService.getCurrentPartnerUserPermissionCodes().pipe(
       map(permissionCodes => {
-        this._currentUserPermissions.next(permissionCodes);
+        this._currentPartnerUserPermissions.next(permissionCodes);
         return permissionCodes;
       }
     ));

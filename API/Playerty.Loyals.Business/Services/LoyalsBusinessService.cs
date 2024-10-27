@@ -118,11 +118,11 @@ namespace Playerty.Loyals.Services
             await _context.WithTransactionAsync(async () =>
             {
                 IQueryable<UserExtended> query = _context.DbSet<UserExtended>()
+                    .OrderBy(x => x.Id) // FT: It's important that OrderBy is before skip and take
                     .Skip(tableFilterPayload.First)
                     .Take(tableFilterPayload.Rows)
                     .Where(x => x.Notifications
-                        .Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)) // notificationId
-                    .OrderBy(x => x.Id);
+                        .Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)); // notificationId
 
                 PaginationResult<UserExtended> paginationResult = await LoadUserExtendedListForPagination(tableFilterPayload, query);
 
@@ -415,14 +415,26 @@ namespace Playerty.Loyals.Services
             {
                 PartnerUser currentPartnerUser = await _partnerUserAuthenticationService.GetCurrentPartnerUser();
 
-                if (currentPartnerUser == null)
-                    return new List<string>();
+                List<string> currentPartnerUserPermissionCodes = new List<string>();
 
-                return currentPartnerUser.PartnerRoles
+                if (currentPartnerUser != null)
+                {
+                    currentPartnerUserPermissionCodes = currentPartnerUser.PartnerRoles
+                        .SelectMany(x => x.Permissions)
+                        .Select(x => x.Code)
+                        .Distinct()
+                        .ToList();
+                }
+
+                UserExtended currentUser = await _authenticationService.GetCurrentUser<UserExtended>();
+
+                List<string> currentUserPermissionCodes = currentUser.Roles
                     .SelectMany(x => x.Permissions)
                     .Select(x => x.Code)
                     .Distinct()
                     .ToList();
+
+                return currentUserPermissionCodes.Concat(currentUserPermissionCodes).ToList();
             });
         }
 
@@ -475,11 +487,12 @@ namespace Playerty.Loyals.Services
             await _context.WithTransactionAsync(async () =>
             {
                 IQueryable<PartnerUser> query = _context.DbSet<PartnerUser>()
+                    .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
+                    .OrderBy(x => x.Id) // FT: It's important that OrderBy is before skip and take
                     .Skip(tableFilterPayload.First)
                     .Take(tableFilterPayload.Rows)
                     .Where(x => x.PartnerNotifications
-                        .Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)) // partnerNotificationId
-                    .OrderBy(x => x.Id);
+                        .Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)); // partnerNotificationId
 
                 PaginationResult<PartnerUser> paginationResult = await LoadPartnerUserListForPagination(tableFilterPayload, query);
 
