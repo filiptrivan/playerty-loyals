@@ -1,29 +1,25 @@
-begin tran
+﻿begin transaction;
    
-INSERT INTO Roles (Version, Name, CreatedAt, ModifiedAt, Discriminator) VALUES (1, N'Admin', getdate(), getdate(), 'Role');
+INSERT INTO Roles (Version, Name, CreatedAt, ModifiedAt) VALUES (1, N'Admin', getdate(), getdate());
 
-insert into Permissions(Name, Description, Code) values(N'Pregled uloga korisnika', null ,  N'ReadRole');
-insert into Permissions(Name, Description, Code) values(N'Promena uloga korisnika', null ,  N'EditRole');
-insert into Permissions(Name, Description, Code) values(N'Dodavanje uloga korisnika', null ,  N'InsertRole');
-insert into Permissions(Name, Description, Code) values(N'Brisanje uloga korisnika', null ,  N'DeleteRole');
-insert into Permissions(Name, Description, Code) values(N'Pregled profila korisnika', null ,  N'ReadUserExtended');
-insert into Permissions(Name, Description, Code) values(N'Promena profila korisnika', null ,  N'EditUserExtended');
-insert into Permissions(Name, Description, Code) values(N'Brisanje profila korisnika', null ,  N'DeleteUserExtended');
-insert into Permissions(Name, Description, Code) values(N'Pregled permisija uloga', null ,  N'ReadPermission');
-insert into Permissions(Name, Description, Code) values(N'Pregled nivoa odanosti', null ,  N'ReadTier');
-insert into Permissions(Name, Description, Code) values(N'Promena nivoa odanosti', null ,  N'EditTier');
-insert into Permissions(Name, Description, Code) values(N'Dodavanje nivoa odanosti', null ,  N'InsertTier');
-insert into Permissions(Name, Description, Code) values(N'Brisanje nivoa odanosti',null ,  N'DeleteTier');
-insert into Permissions(Name, Description, Code) values(N'Pregled transakcija', null ,  N'ReadTransaction');
-insert into Permissions(Name, Description, Code) values(N'Pregled proizvoda iz transakcije', null ,  N'ReadTransactionProduct');
-insert into Permissions(Name, Description, Code) values(N'Pregled statusa transakcije', null ,  N'ReadTransactionStatus');
-insert into Permissions(Name, Description, Code) values(N'Pregled notifikacija', null ,  N'ReadNotification');
-insert into Permissions(Name, Description, Code) values(N'Promena notifikacija', null ,  N'EditNotification');
-insert into Permissions(Name, Description, Code) values(N'Dodavanje notifikacija', null ,  N'InsertNotification');
-insert into Permissions(Name, Description, Code) values(N'Brisanje notifikacija', null ,  N'DeleteNotification');
+insert into Permissions(Name, Description, Code) values(N'Pregled korisnika', null, N'ReadUserExtended');
+insert into Permissions(Name, Description, Code) values(N'Promena postojećih korisnika', null, N'EditUserExtended');
+insert into Permissions(Name, Description, Code) values(N'Brisanje korisnika', null, N'DeleteUserExtended');
+insert into Permissions(Name, Description, Code) values(N'Pregled notifikacija', null, N'ReadNotification');
+insert into Permissions(Name, Description, Code) values(N'Promena postojećih notifikacija', null, N'EditNotification');
+insert into Permissions(Name, Description, Code) values(N'Dodavanje novih notifikacija', null, N'InsertNotification');
+insert into Permissions(Name, Description, Code) values(N'Brisanje notifikacija', null, N'DeleteNotification');
+insert into Permissions(Name, Description, Code) values(N'Pregled partnera', null, N'ReadPartner');
+insert into Permissions(Name, Description, Code) values(N'Promena postojećih partnera', null, N'EditPartner');
+insert into Permissions(Name, Description, Code) values(N'Dodavanje novih partnera', null, N'InsertPartner');
+insert into Permissions(Name, Description, Code) values(N'Brisanje partnera', null, N'DeletePartner');
+insert into Permissions(Name, Description, Code) values(N'Pregled uloga', null, N'ReadRole');
+insert into Permissions(Name, Description, Code) values(N'Promena postojećih uloga', null, N'EditRole');
+insert into Permissions(Name, Description, Code) values(N'Dodavanje novih uloga', null, N'InsertRole');
+insert into Permissions(Name, Description, Code) values(N'Brisanje uloga', null, N'DeleteRole');
 
-insert into Genders(Name) values(N'Mu�ki');
-insert into Genders(Name) values(N'�enski');
+insert into Genders(Name) values(N'Muški');
+insert into Genders(Name) values(N'Ženski');
 
 DECLARE @AdminRoleId INT;
 DECLARE @AdminUserId INT;
@@ -40,5 +36,12 @@ INSERT INTO PermissionRole (RolesId, PermissionsId) VALUES (@AdminRoleId, 5);
 INSERT INTO PermissionRole (RolesId, PermissionsId) VALUES (@AdminRoleId, 6);
 INSERT INTO PermissionRole (RolesId, PermissionsId) VALUES (@AdminRoleId, 7);
 INSERT INTO PermissionRole (RolesId, PermissionsId) VALUES (@AdminRoleId, 8);
+INSERT INTO PermissionRole (RolesId, PermissionsId) VALUES (@AdminRoleId, 9);
+INSERT INTO PermissionRole (RolesId, PermissionsId) VALUES (@AdminRoleId, 10);
+INSERT INTO PermissionRole (RolesId, PermissionsId) VALUES (@AdminRoleId, 11);
+INSERT INTO PermissionRole (RolesId, PermissionsId) VALUES (@AdminRoleId, 12);
+INSERT INTO PermissionRole (RolesId, PermissionsId) VALUES (@AdminRoleId, 13);
+INSERT INTO PermissionRole (RolesId, PermissionsId) VALUES (@AdminRoleId, 14);
+INSERT INTO PermissionRole (RolesId, PermissionsId) VALUES (@AdminRoleId, 15);
 
-commit
+commit;
