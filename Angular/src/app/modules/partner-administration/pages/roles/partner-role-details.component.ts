@@ -2,10 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
-import { forkJoin, Subscription } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { PartnerRole, PartnerRoleSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { isArrayEmpty } from 'src/app/business/services/validation/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
@@ -17,11 +16,11 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class PartnerRoleDetailsComponent extends BaseForm<PartnerRole> implements OnInit {
-    userOptions: PrimengOption[];
+    partnerUserOptions: PrimengOption[];
     selectedPartnerUsers = new SoftFormControl<PrimengOption[]>(null, {updateOn: 'change'})
 
-    permissionOptions: PrimengOption[];
-    selectedPermissions = new SoftFormControl<number[]>(null, {updateOn: 'change'})
+    partnerPermissionOptions: PrimengOption[];
+    selectedPartnerPermissions = new SoftFormControl<number[]>(null, {updateOn: 'change'})
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -38,20 +37,20 @@ export class PartnerRoleDetailsComponent extends BaseForm<PartnerRole> implement
     override ngOnInit() {
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
-            this.apiService.loadPermissionListForDropdown().subscribe(nl => {
-                this.permissionOptions = nl.map(n => { return { label: n.displayName, value: n.id } });
+            this.apiService.loadPartnerPermissionListForDropdown().subscribe(nl => {
+                this.partnerPermissionOptions = nl.map(n => { return { label: n.displayName, value: n.id } });
             });
             if(this.modelId > 0){
                 forkJoin({
                     partnerRole: this.apiService.getPartnerRole(this.modelId),
                     partnerUsers: this.apiService.loadPartnerUserNamebookListForPartnerRole(this.modelId),
-                    partnerPermissions: this.apiService.loadPermissionNamebookListForPartnerRole(this.modelId),
+                    partnerPermissions: this.apiService.loadPartnerPermissionNamebookListForPartnerRole(this.modelId),
                   }).subscribe(({ partnerRole, partnerUsers, partnerPermissions }) => {
                     this.init(new PartnerRole(partnerRole));
                     this.selectedPartnerUsers.setValue(
                         partnerUsers.map(partnerUser => ({ label: partnerUser.displayName, value: partnerUser.id }))
                     );
-                    this.selectedPermissions.setValue(
+                    this.selectedPartnerPermissions.setValue(
                         partnerPermissions.map(permission => { return permission.id })
                     );
                   });
@@ -66,17 +65,19 @@ export class PartnerRoleDetailsComponent extends BaseForm<PartnerRole> implement
         this.initFormGroup(model);
     }
 
-    searchUsers(event: AutoCompleteCompleteEvent){ 
+    searchPartnerUsers(event: AutoCompleteCompleteEvent){ 
         this.apiService.loadPartnerUserListForAutocomplete(50, event?.query).subscribe(nl => {
-            this.userOptions = nl.map(n => { return { label: n.displayName, value: n.id }});
+            this.partnerUserOptions = nl.map(n => { return { label: n.displayName, value: n.id }});
         })
     }
     
     override onBeforeSave(): void {
         let saveBody: PartnerRoleSaveBody = new PartnerRoleSaveBody();
+
         saveBody.selectedPartnerUserIds = this.selectedPartnerUsers.value?.map(x => x.value);
-        saveBody.selectedPermissionIds = this.selectedPermissions.value;
+        saveBody.selectedPermissionIds = this.selectedPartnerPermissions.value;
         saveBody.partnerRoleDTO = this.model;
+
         this.saveBody = saveBody;
     }
 }

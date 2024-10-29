@@ -18,8 +18,8 @@ export class PartnerListComponent implements OnInit {
     ngOnInit(){
         this.cols = [
             {name: 'Actions', actions:[
-                {name:"Details"},
-                {name:"Delete"},
+                {name:$localize`:@@Details:Details`, field: 'Details'},
+                {name:$localize`:@@Delete:Delete`, field: 'Delete'},
             ]},
             {name: 'Name', filterType: 'text', field: 'name'},
             {name: 'Slug', filterType: 'text', field: 'slug'},

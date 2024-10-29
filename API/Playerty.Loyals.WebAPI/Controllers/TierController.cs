@@ -16,7 +16,6 @@ namespace Playerty.Loyals.WebAPI.Controllers
     [Route("/api/[controller]/[action]")]
     public class TierController : SoftControllerBase
     {
-        private readonly SecurityBusinessService _securityBusinessService;
         private readonly IJwtAuthManager _jwtAuthManagerService;
         private readonly IApplicationDbContext _context;
         private readonly AuthenticationService _authenticationService;
@@ -24,11 +23,10 @@ namespace Playerty.Loyals.WebAPI.Controllers
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
 
 
-        public TierController(SecurityBusinessService securityBusinessService, IJwtAuthManager jwtAuthManagerService, IApplicationDbContext context, AuthenticationService authenticationService,
+        public TierController(IJwtAuthManager jwtAuthManagerService, IApplicationDbContext context, AuthenticationService authenticationService,
             LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService)
             : base()
         {
-            _securityBusinessService = securityBusinessService;
             _jwtAuthManagerService = jwtAuthManagerService;
             _context = context;
             _authenticationService = authenticationService;

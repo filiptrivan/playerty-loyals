@@ -82,14 +82,14 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<List<NamebookDTO<long>>> LoadPartnerUserListForAutocomplete(int limit, string query)
         {
-            return await _loyalsBusinessService.LoadPartnerUserListForAutocomplete(limit, query, _context.DbSet<PartnerUser>(), false);
+            return await _loyalsBusinessService.LoadPartnerUserListForAutocomplete(limit, query, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpGet]
         [AuthGuard]
         public async Task<List<NamebookDTO<long>>> LoadPartnerUserListForDropdown()
         {
-            return await _loyalsBusinessService.LoadPartnerUserListForDropdown(_context.DbSet<PartnerUser>(), false);
+            return await _loyalsBusinessService.LoadPartnerUserListForDropdown(_context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpGet]

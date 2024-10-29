@@ -29,6 +29,7 @@ namespace Playerty.Loyals.Infrastructure
         public DbSet<PartnerNotification> PartnerNotifications { get; set; }
         public DbSet<PartnerNotificationPartnerUser> PartnerNotificationPartnerUser { get; set; } // M2M
         public DbSet<PartnerRole> PartnerRoles { get; set; }
+        public DbSet<PartnerPermission> PartnerPermissions { get; set; }
         public DbSet<PartnerUser> PartnerUsers { get; set; }
         public DbSet<Segmentation> Segmentations { get; set; }
         public DbSet<SegmentationItem> SegmentationItems { get; set; }

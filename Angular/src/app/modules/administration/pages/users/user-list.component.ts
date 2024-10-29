@@ -18,8 +18,8 @@ export class UserListComponent implements OnInit {
     ngOnInit(){
         this.cols = [
             {name: 'Actions', actions:[
-                {name:"Details"},
-                {name:"Delete"},
+                {name:$localize`:@@Details:Details`, field: 'Details'},
+                {name:$localize`:@@Delete:Delete`, field: 'Delete'},
             ]},
             // {name: 'Test', filterType: 'numeric', field: 'testColumnForGrid'},
             {name: 'Email', filterType: 'text', field: 'email'},

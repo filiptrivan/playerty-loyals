@@ -14,16 +14,16 @@
                     <div class="col-12">
                         <soft-multiautocomplete 
                             [control]="selectedPartnerUsers"
-                            (onTextInput)="searchUsers($event)" 
+                            (onTextInput)="searchPartnerUsers($event)" 
                             label="Users"
-                            [options]="userOptions"
+                            [options]="partnerUserOptions"
                             ></soft-multiautocomplete>
                     </div>
                     <div class="col-12">
                         <soft-multiselect
-                            [control]="selectedPermissions"
+                            [control]="selectedPartnerPermissions"
                             label="Permissions"
-                            [options]="permissionOptions"></soft-multiselect>
+                            [options]="partnerPermissionOptions"></soft-multiselect>
                     </div>
                 </form>
             </panel-body>

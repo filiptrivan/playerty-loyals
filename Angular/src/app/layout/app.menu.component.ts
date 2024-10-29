@@ -77,36 +77,40 @@ export class AppMenuComponent implements OnInit {
                         {
                             label: 'Super administration',
                             icon: 'pi pi-fw pi-cog',
-                            hasPermission: (permissionCodes: string[]): boolean => { 
-                                return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]) ||
-                                        permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]) ||
-                                        permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]) || 
-                                        permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification])) 
-                            },
+                            visible: true,
+                            // hasPermission: (permissionCodes: string[]): boolean => { 
+                            //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]) ||
+                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]) ||
+                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]) || 
+                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
+                            // },
                             items: [
                                 {
                                     label: 'Users',
                                     icon: 'pi pi-fw pi-user',
                                     routerLink: [`/${environment.administrationSlug}/users`],
-                                    hasPermission: (permissionCodes: string[]): boolean => { 
-                                        return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]))
-                                    } 
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]))
+                                    // } 
+                                    visible: true,
                                 },
                                 {
                                     label: 'Roles',
                                     icon: 'pi pi-fw pi-id-card',
                                     routerLink: [`/${environment.administrationSlug}/roles`],
-                                    hasPermission: (permissionCodes: string[]): boolean => { 
-                                        return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]))
-                                    }
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]))
+                                    // }
+                                    visible: true,
                                 },
                                 {
                                     label: 'Notifications',
                                     icon: 'pi pi-fw pi-bell',
                                     routerLink: [`/${environment.administrationSlug}/notifications`],
-                                    hasPermission: (permissionCodes: string[]): boolean => { 
-                                        return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
-                                    }
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
+                                    // }
+                                    visible: true,
                                 },
                                 {
                                     label: 'Partners',
@@ -119,29 +123,32 @@ export class AppMenuComponent implements OnInit {
                         {
                             label: 'Administration',
                             icon: 'pi pi-fw pi-cog',
-                            hasPermission: (permissionCodes: string[]): boolean => { 
-                                return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]) ||
-                                        permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]) ||
-                                        permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]) || 
-                                        permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification])) &&
-                                        partner != null
-                            },
+                            // hasPermission: (permissionCodes: string[]): boolean => { 
+                            //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]) ||
+                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]) ||
+                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]) || 
+                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification])) &&
+                            //             partner != null
+                            // },
+                            visible: true,
                             items: [
                                 {
                                     label: 'Users',
                                     icon: 'pi pi-fw pi-user',
                                     routerLink: [`/${environment.partnerAdministrationSlug}/users`],
-                                    hasPermission: (permissionCodes: string[]): boolean => { 
-                                        return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]))
-                                    } 
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]))
+                                    // } 
+                                    visible: true,
                                 },
                                 {
                                     label: 'Roles',
                                     icon: 'pi pi-fw pi-id-card',
                                     routerLink: [`/${environment.partnerAdministrationSlug}/roles`],
-                                    hasPermission: (permissionCodes: string[]): boolean => { 
-                                        return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]))
-                                    }
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]))
+                                    // }
+                                    visible: true,
                                 },
                                 {
                                     label: 'Segmentations',
@@ -156,17 +163,19 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Tiers',
                                     icon: 'pi pi-fw pi-sitemap',
                                     routerLink: [`/${environment.partnerAdministrationSlug}/tiers`],
-                                    hasPermission: (permissionCodes: string[]): boolean => { 
-                                        return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]))
-                                    }
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]))
+                                    // }
+                                    visible: true,
                                 },
                                 {
                                     label: 'Notifications',
                                     icon: 'pi pi-fw pi-bell',
                                     routerLink: [`/${environment.partnerAdministrationSlug}/notifications`],
-                                    hasPermission: (permissionCodes: string[]): boolean => { 
-                                        return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
-                                    }
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
+                                    // }
+                                    visible: true,
                                 },
                             ]
                         },

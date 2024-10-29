@@ -44,6 +44,8 @@ export function getTranslatedClassNameBusiness(name: string): string
             return $localize`:@@PartnerNotification:PartnerNotification`;
         case 'PartnerNotificationPartnerUser':
             return $localize`:@@PartnerNotificationPartnerUser:PartnerNotificationPartnerUser`;
+        case 'PartnerPermission':
+            return $localize`:@@PartnerPermission:PartnerPermission`;
         case 'PartnerRole':
             return $localize`:@@PartnerRole:PartnerRole`;
         case 'Tier':

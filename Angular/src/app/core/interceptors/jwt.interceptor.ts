@@ -24,7 +24,7 @@ export class JwtInterceptor implements HttpInterceptor {
         setHeaders: { Authorization: `Bearer ${accessToken}` },
       });
     }
-
+console.log(accessToken)
     return next.handle(request);
   }
 }

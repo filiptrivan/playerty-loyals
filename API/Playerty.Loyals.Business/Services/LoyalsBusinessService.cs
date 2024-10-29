@@ -30,14 +30,14 @@ namespace Playerty.Loyals.Services
     public class LoyalsBusinessService : BusinessBusinessServiceGenerated
     {
         private readonly IApplicationDbContext _context;
-        private readonly AuthorizationService _authorizationService;
+        private readonly Playerty.Loyals.Business.Services.AuthorizationBusinessService _authorizationService;
         private readonly AuthenticationService _authenticationService;
-        private readonly SecurityBusinessService _securityBusinessService;
+        private readonly SecurityBusinessService<UserExtended> _securityBusinessService;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
         private readonly EmailingService _emailingService;
         private readonly BlobContainerClient _blobContainerClient;
 
-        public LoyalsBusinessService(IApplicationDbContext context, ExcelService excelService, AuthorizationService authorizationService, SecurityBusinessService securityBusinessService, AuthenticationService authenticationService,
+        public LoyalsBusinessService(IApplicationDbContext context, ExcelService excelService, Playerty.Loyals.Business.Services.AuthorizationBusinessService authorizationService, SecurityBusinessService<UserExtended> securityBusinessService, AuthenticationService authenticationService,
             PartnerUserAuthenticationService partnerUserAuthenticationService, EmailingService emailingService, BlobContainerClient blobContainerClient)
             : base(context, excelService, authorizationService, blobContainerClient)
         {
@@ -68,7 +68,7 @@ namespace Playerty.Loyals.Services
                     throw new HackerException("You can not change email from here.");
 
                 if (userExtendedSaveBodyDTO.SelectedRoleIds != null)
-                    await _securityBusinessService.UpdateRoleListForUser<UserExtended>(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.SelectedRoleIds);
+                    await _securityBusinessService.UpdateRoleListForUser(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.SelectedRoleIds);
 
                 userExtendedSaveBodyDTO.UserExtendedDTO.Password = user.Password;
                 return await SaveUserExtendedAndReturnDTOAsync(userExtendedSaveBodyDTO.UserExtendedDTO, false, false); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
@@ -420,7 +420,7 @@ namespace Playerty.Loyals.Services
                 if (currentPartnerUser != null)
                 {
                     currentPartnerUserPermissionCodes = currentPartnerUser.PartnerRoles
-                        .SelectMany(x => x.Permissions)
+                        .SelectMany(x => x.PartnerPermissions)
                         .Select(x => x.Code)
                         .Distinct()
                         .ToList();
@@ -576,61 +576,9 @@ namespace Playerty.Loyals.Services
                 PartnerRoleDTO savedPartnerRoleDTO = await SavePartnerRoleAndReturnDTOAsync(partnerRoleSaveBodyDTO.PartnerRoleDTO, false, false);
                 
                 await UpdatePartnerUserListForPartnerRole(savedPartnerRoleDTO.Id, partnerRoleSaveBodyDTO.SelectedPartnerUserIds);
-                await UpdatePermissionListForPartnerRole(savedPartnerRoleDTO.Id, partnerRoleSaveBodyDTO.SelectedPermissionIds);
+                await UpdatePartnerPermissionListForPartnerRole(savedPartnerRoleDTO.Id, partnerRoleSaveBodyDTO.SelectedPermissionIds);
 
                 return savedPartnerRoleDTO;
-            });
-        }
-
-        public async Task UpdatePermissionListForPartnerRole(int partnerRoleId, List<int> selectedPermissionIds)
-        {
-            if (selectedPermissionIds == null)
-                return;
-
-            List<int> selectedIdsHelper = selectedPermissionIds.ToList();
-
-            await _context.WithTransactionAsync(async () =>
-            {
-                // FT: Not doing authorization here, because we can not figure out here if we are updating while inserting object (eg. User), or updating object, we will always get the id which is not 0 here.
-
-                PartnerRole partnerRole = await LoadInstanceAsync<PartnerRole, int>(partnerRoleId, null); // FT: Version will always be checked before or after this method
-
-                if (partnerRole.Permissions != null)
-                {
-                    foreach (Permission permission in partnerRole.Permissions.ToList())
-                    {
-                        if (selectedIdsHelper.Contains(permission.Id))
-                            selectedIdsHelper.Remove(permission.Id);
-                        else
-                            partnerRole.Permissions.Remove(permission);
-                    }
-                }
-                else
-                {
-                    partnerRole.Permissions = new List<Permission>();
-                }
-
-                List<Permission> permissionListToInsert = await _context.DbSet<Permission>().Where(x => selectedIdsHelper.Contains(x.Id)).ToListAsync();
-
-                partnerRole.Permissions.AddRange(permissionListToInsert);
-                await _context.SaveChangesAsync();
-            });
-        }
-
-        public async Task<List<NamebookDTO<int>>> LoadPermissionNamebookListForPartnerRole(int partnerRoleId)
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                return await _context.DbSet<PartnerRole>()
-                    .AsNoTracking()
-                    .Where(x => x.Id == partnerRoleId && x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
-                    .SelectMany(x => x.Permissions)
-                    .Select(x => new NamebookDTO<int>
-                    {
-                        Id = x.Id,
-                        DisplayName = x.Name,
-                    })
-                    .ToListAsync();
             });
         }
 

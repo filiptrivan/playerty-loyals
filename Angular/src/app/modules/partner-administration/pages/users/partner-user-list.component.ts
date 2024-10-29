@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 
 @Component({
-    selector: 'partner-user-list',
+    selector: 'partner-user-list', 
     templateUrl: './partner-user-list.component.html',
     styles: []
 })
@@ -21,8 +21,8 @@ export class PartnerUserListComponent implements OnInit {
     async ngOnInit(){
         this.cols = [
             {name: 'Actions', actions:[
-                {name:"Details"},
-                // {name:"Delete"}, // TODO FT: Think about this, how to implement.
+                {name:$localize`:@@Details:Details`, field: 'Details'},
+                // {name:$localize`:@@Delete:Delete`, field: 'Delete'}, // TODO FT: Think about this, how to implement.
             ]},
             {name: 'User', filterType: 'text', field: 'userDisplayName'},
             {name: 'Points', filterType: 'numeric', field: 'points', showMatchModes: true},

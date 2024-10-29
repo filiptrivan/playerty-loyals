@@ -20,8 +20,8 @@ export class SegmentationListComponent implements OnInit {
     ngOnInit(){
         this.cols = [
             {name: 'Actions', actions:[
-                {name:"Details"},
-                {name:"Delete"},
+                {name:$localize`:@@Details:Details`, field: 'Details'},
+                {name:$localize`:@@Delete:Delete`, field: 'Delete'},
             ]},
             {name: 'Name', filterType: 'text', field: 'name'},
             {name: 'Points for the first time fill', filterType: 'numeric', field: 'pointsForTheFirstTimeFill', showMatchModes: true},

@@ -802,12 +802,42 @@ export class PartnerNotificationPartnerUser extends BaseEntity
 }
 
 
+export class PartnerPermission extends BaseEntity
+{
+    name?: string;
+	description?: string;
+	code?: string;
+	id?: number;
+
+    constructor(
+    {
+        name,
+		description,
+		code,
+		id
+    }:{
+        name?: string;
+		description?: string;
+		code?: string;
+		id?: number;     
+    } = {}
+    ) {
+        super('PartnerPermission'); 
+
+        this.name = name;
+		this.description = description;
+		this.code = code;
+		this.id = id;
+    }
+}
+
+
 export class PartnerRole extends BaseEntity
 {
-    partnerDisplayName?: string;
-	partnerId?: number;
-	name?: string;
+    name?: string;
 	description?: string;
+	partnerDisplayName?: string;
+	partnerId?: number;
 	version?: number;
 	id?: number;
 	createdAt?: Date;
@@ -815,19 +845,19 @@ export class PartnerRole extends BaseEntity
 
     constructor(
     {
-        partnerDisplayName,
-		partnerId,
-		name,
+        name,
 		description,
+		partnerDisplayName,
+		partnerId,
 		version,
 		id,
 		createdAt,
 		modifiedAt
     }:{
-        partnerDisplayName?: string;
-		partnerId?: number;
-		name?: string;
+        name?: string;
 		description?: string;
+		partnerDisplayName?: string;
+		partnerId?: number;
 		version?: number;
 		id?: number;
 		createdAt?: Date;
@@ -836,10 +866,10 @@ export class PartnerRole extends BaseEntity
     ) {
         super('PartnerRole'); 
 
-        this.partnerDisplayName = partnerDisplayName;
-		this.partnerId = partnerId;
-		this.name = name;
+        this.name = name;
 		this.description = description;
+		this.partnerDisplayName = partnerDisplayName;
+		this.partnerId = partnerId;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;

@@ -17,18 +17,16 @@ namespace Playerty.Loyals.WebAPI.Controllers
     [Route("/api/[controller]/[action]")]
     public class HomeController : SoftControllerBase
     {
-        private readonly SecurityBusinessService _securityBusinessService;
         private readonly IJwtAuthManager _jwtAuthManagerService;
         private readonly IApplicationDbContext _context;
         private readonly AuthenticationService _authenticationService;
         private readonly LoyalsBusinessService _loyalsBusinessService;
         private readonly WingsApiService _wingsApiService;
 
-        public HomeController(SecurityBusinessService securityBusinessService, IJwtAuthManager jwtAuthManagerService, IApplicationDbContext context, AuthenticationService authenticationService,
+        public HomeController(IJwtAuthManager jwtAuthManagerService, IApplicationDbContext context, AuthenticationService authenticationService,
             LoyalsBusinessService loyalsBusinessService, WingsApiService wingsApiService)
             : base()
         {
-            _securityBusinessService = securityBusinessService;
             _jwtAuthManagerService = jwtAuthManagerService;
             _context = context;
             _authenticationService = authenticationService;

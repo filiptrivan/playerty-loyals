@@ -13,6 +13,7 @@ using Playerty.Loyals.Business.Enums;
 using Playerty.Loyals.Business.Services;
 using Soft.Generator.Security.Entities;
 using Microsoft.EntityFrameworkCore;
+using Soft.Generator.Shared.Terms;
 
 namespace Playerty.Loyals.WebAPI.Controllers
 {
@@ -21,7 +22,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
     public class AuthController : BaseSecurityController<UserExtended>
     {
         private readonly ILogger<AuthController> _logger;
-        private readonly SecurityBusinessService _securityBusinessService;
+        private readonly SecurityBusinessService<UserExtended> _securityBusinessService;
         private readonly IJwtAuthManager _jwtAuthManagerService;
         private readonly IApplicationDbContext _context;
         private readonly AuthenticationService _authenticationService;
@@ -29,7 +30,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         private readonly LoyalsBusinessService _loyalsBusinessService;
 
 
-        public AuthController(ILogger<AuthController> logger, SecurityBusinessService securityBusinessService, IJwtAuthManager jwtAuthManagerService, IApplicationDbContext context, AuthenticationService authenticationService,
+        public AuthController(ILogger<AuthController> logger, SecurityBusinessService<UserExtended> securityBusinessService, IJwtAuthManager jwtAuthManagerService, IApplicationDbContext context, AuthenticationService authenticationService,
             LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService)
             : base(securityBusinessService, jwtAuthManagerService, context, authenticationService)
         {
@@ -63,29 +64,29 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<IActionResult> ExportUserListToExcel(TableFilterDTO dto)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportUserExtendedListToExcel(dto, _context.DbSet<UserExtended>());
-            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Users.xlsx"));
+            byte[] fileContent = await _loyalsBusinessService.ExportUserExtendedListToExcel(dto, _context.DbSet<UserExtended>().OrderBy(x => x.Id));
+            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"{SharedTerms.UserExcel}.xlsx"));
         }
 
         [HttpDelete]
         [AuthGuard]
         public async Task DeleteUser(long id)
         {
-            await _loyalsBusinessService.DeleteUserExtendedAsync(id);
+            await _loyalsBusinessService.DeleteUserExtendedAsync(id); // FT: Not authorizing more than basic because when the user wants to delete himself we will make separated method for that and will user currentUserId
         }
 
         [HttpGet]
         [AuthGuard]
         public async Task<UserExtendedDTO> GetUser(long id)
         {
-            return await _loyalsBusinessService.GetUserExtendedDTOAsync(id, false);
+            return await _loyalsBusinessService.GetUserExtendedDTOAsync(id); // FT: Not authorizing more than basic because when user wants to see his profile he will go to the PartnerUser details
         }
 
         [HttpPut]
         [AuthGuard]
         public async Task<UserExtendedDTO> SaveUserExtended(UserExtendedSaveBodyDTO dto)
         {
-            return await _loyalsBusinessService.SaveUserExtendedAndReturnDTOExtendedAsync(dto);
+            return await _loyalsBusinessService.SaveUserExtendedAndReturnDTOExtendedAsync(dto); // FT: Not authorizing more than basic because when user wants to save his profile he will go to the PartnerUser details
         }
 
         [HttpGet]
@@ -107,7 +108,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [SkipSpinner]
         public async Task<List<string>> GetCurrentUserPermissionCodes()
         {
-            return await _loyalsBusinessService.GetCurrentUserPermissionCodes();
+            return await _loyalsBusinessService.GetCurrentUserPermissionCodes(); // FT: Not authorizing because we are reading this from the jwt token
         }
 
         [HttpGet]
@@ -130,15 +131,15 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<TableResponseDTO<NotificationDTO>> LoadNotificationListForTable(TableFilterDTO dto)
         {
-            return await _loyalsBusinessService.LoadNotificationListForTable(dto, _context.DbSet<Notification>().Where(a => EF.Property<string>(a, "Discriminator") == nameof(Notification)));
+            return await _loyalsBusinessService.LoadNotificationListForTable(dto, _context.DbSet<Notification>().Where(a => EF.Property<string>(a, "Discriminator") == nameof(Notification))); // TODO FT: Make one more table, don't do this
         }
 
         [HttpPost]
         [AuthGuard]
         public async Task<IActionResult> ExportNotificationListToExcel(TableFilterDTO dto)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportNotificationListToExcel(dto, _context.DbSet<Notification>().Where(a => EF.Property<string>(a, "Discriminator") == nameof(Notification)));
-            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Notifications.xlsx"));
+            byte[] fileContent = await _loyalsBusinessService.ExportNotificationListToExcel(dto, _context.DbSet<Notification>().Where(a => EF.Property<string>(a, "Discriminator") == nameof(Notification))); // TODO FT: Make one more table, don't do this
+            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"{SharedTerms.NotificationExcel}.xlsx"));
         }
 
         [HttpDelete]

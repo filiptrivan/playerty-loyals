@@ -62,13 +62,14 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
       return of(err.message);
     } 
     else if (err.status == 400 || err.status == 401 || err.status == 419) {
+      console.log("HERE")
       this.messageService.warningMessage(
         err.error.message,
         $localize`:@@Warning:Warning.`,
       );
 
       if(err.status == 401) {
-        this.authService.logout();
+        // this.authService.logout();
       }
 
       return of(err.message);

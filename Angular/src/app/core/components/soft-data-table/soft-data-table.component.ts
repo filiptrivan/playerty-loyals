@@ -217,7 +217,7 @@ export class SoftDataTableComponent implements OnInit {
   }
 
   getClassForAction(action: Action): string{
-    switch(action.name){
+    switch(action.field){
       case 'Details':
         return 'pi pi-pencil text-lg cursor-pointer primary-color';
       case 'Delete':
@@ -228,7 +228,7 @@ export class SoftDataTableComponent implements OnInit {
   }
 
   getMethodForAction(action: Action, rowData: any){
-    switch(action.name){
+    switch(action.field){
       case 'Details':
         return this.navigateToDetails(rowData.id);
       case 'Delete':
@@ -343,6 +343,7 @@ export class SoftDataTableComponent implements OnInit {
 
 export class Action {
   name: string;
+  field: string;
   icon?: string;
   onClick?: () => void;
 }

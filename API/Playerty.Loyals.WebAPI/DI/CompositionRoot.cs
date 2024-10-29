@@ -9,6 +9,7 @@ using Soft.Generator.Shared.SoftFluentValidation;
 using Soft.Generator.Shared.Emailing;
 using Playerty.Loyals.Services;
 using Playerty.Loyals.Business.Services;
+using Playerty.Loyals.Business.Entities;
 
 namespace Playerty.Loyals.WebAPI.DI
 {
@@ -19,8 +20,12 @@ namespace Playerty.Loyals.WebAPI.DI
             // Framework
             registry.Register<AuthenticationService>();
             registry.Register<AuthorizationService>();
-            registry.Register<SecurityBusinessService>();
-            registry.Register<SecurityBusinessServiceGenerated>();
+            registry.Register<SecurityBusinessService<UserExtended>>();
+            registry.Register<SecurityBusinessServiceGenerated<UserExtended>>();
+            registry.Register<Playerty.Loyals.Business.Services.AuthorizationBusinessService>();
+            registry.Register<Playerty.Loyals.Business.Services.AuthorizationBusinessServiceGenerated>();
+            registry.Register<Soft.Generator.Security.Services.AuthorizationBusinessService<UserExtended>>();
+            registry.Register<Soft.Generator.Security.Services.AuthorizationBusinessServiceGenerated>();
             registry.Register<ExcelService>();
             registry.Register<EmailingService>();
             registry.RegisterSingleton<IConfigureOptions<MvcOptions>, TranslatePropertiesConfiguration>();

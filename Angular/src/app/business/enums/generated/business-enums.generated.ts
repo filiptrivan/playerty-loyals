@@ -1,3 +1,28 @@
+export enum PartnerPermissionCodes
+{
+    ReadPartnerRole = 1,
+	EditPartnerRole = 2,
+	InsertPartnerRole = 3,
+	DeletePartnerRole = 4,
+	ReadPartnerUser = 5,
+	EditPartnerUser = 6,
+	ReadPartnerNotification = 7,
+	EditPartnerNotification = 8,
+	InsertPartnerNotification = 9,
+	DeletePartnerNotification = 10,
+	ReadPartner = 11,
+	EditPartner = 12,
+	ReadTier = 13,
+	EditTier = 14,
+	InsertTier = 15,
+	DeleteTier = 16,
+	ReadSegmentation = 17,
+	EditSegmentation = 18,
+	InsertSegmentation = 19,
+	DeleteSegmentation = 20,
+    
+}
+
 export enum PermissionCodes
 {
     
@@ -25,6 +50,10 @@ export enum PermissionCodes
 	EditPartnerNotificationPartnerUser,
 	InsertPartnerNotificationPartnerUser,
 	DeletePartnerNotificationPartnerUser,
+	ReadPartnerPermission,
+	EditPartnerPermission,
+	InsertPartnerPermission,
+	DeletePartnerPermission,
 	ReadPartnerRole,
 	EditPartnerRole,
 	InsertPartnerRole,

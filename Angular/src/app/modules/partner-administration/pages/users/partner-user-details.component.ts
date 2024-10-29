@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom, forkJoin } from 'rxjs';
 import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
