@@ -1,16 +1,18 @@
-<intermediate-step-wrapper [title]="partnerIntermediateStepTitle" [description]="partnerIntermediateStepDescription">
-  <div class="col-12">
-    <soft-autocomplete 
-      [control]="control('partnerSlug', true, true)"
-      (onTextInput)="searchPartners($event)" 
-      [options]="partnerOptions"
-      label="Partner"></soft-autocomplete>
-  </div>
-  <div class="col-12">
-    <p-button
-      (onClick)="partnerSubmit()"
-      label="Submit"
-      icon="pi pi-check"
-    ></p-button>
-  </div>
-</intermediate-step-wrapper>
+<ng-container *transloco="let t">
+  <intermediate-step-wrapper [title]="partnerIntermediateStepTitle" [description]="partnerIntermediateStepDescription">
+    <div class="col-12">
+      <soft-autocomplete 
+        [control]="control('partnerSlug', true, true)"
+        (onTextInput)="searchPartners($event)" 
+        [options]="partnerOptions"
+        [label]="t('Partner')"></soft-autocomplete>
+    </div>
+    <div class="col-12">
+      <p-button
+        (onClick)="partnerSubmit()"
+        [label]="t('Submit')"
+        icon="pi pi-check"
+      ></p-button>
+    </div>
+  </intermediate-step-wrapper>
+</ng-container>

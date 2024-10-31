@@ -7,10 +7,7 @@
   </div>
   <p-editor
     *ngIf="control"
-    [pTooltip]="getValidationErrrorMessages()"
-    tooltipPosition="bottom"
-    [tooltipDisabled]="control?.valid"
-    tooltipStyleClass="soft-tooltip-invalid"
+    [pTooltip]="getValidationErrrorMessages()" [tooltipEvent]="errorMessageTooltipEvent" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
     [formControl]="control"
     [id]="control?.label"
     (blur)="control?.markAsDirty()"

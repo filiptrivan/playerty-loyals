@@ -1,3 +1,4 @@
+import { ApiService } from './../../../business/services/api/api.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { BaseControl } from '../base-control';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -6,8 +7,9 @@ import { RequiredComponent } from '../../components/required/required.component'
 import { CommonModule } from '@angular/common';
 import { FileSelectEvent } from 'primeng/fileupload';
 import { Observable } from 'rxjs';
-import { ApiService } from 'src/app/business/services/api/api.service';
 import { getMimeTypeForFileName } from '../../services/helper-functions';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels.generated';
 
 @Component({
     selector: 'soft-file',
@@ -19,7 +21,8 @@ import { getMimeTypeForFileName } from '../../services/helper-functions';
         ReactiveFormsModule,
         FormsModule,
         PrimengModule,
-        RequiredComponent
+        RequiredComponent,
+        TranslocoDirective
     ]
 })
 export class SoftFileComponent extends BaseControl implements OnInit {
@@ -29,8 +32,12 @@ export class SoftFileComponent extends BaseControl implements OnInit {
 
     uploadPhotoEndpoint: () => Observable<any>;
 
-    constructor(private apiService: ApiService) { 
-        super();
+    constructor(
+        protected override translocoService: TranslocoService,
+        protected override translateLabelsService: TranslateLabelsService,
+        private apiService: ApiService,
+    ) { 
+        super(translocoService, translateLabelsService);
     }
 
     override ngOnInit(){

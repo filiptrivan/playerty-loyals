@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { ApiService } from '../../services/api/api.service';
 import { Product } from '../../entities/generated/business-entities.generated';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
     selector: 'products-recommendation',
@@ -11,6 +12,7 @@ import { Product } from '../../entities/generated/business-entities.generated';
     imports: [
     CommonModule,
     PrimengModule,
+    TranslocoDirective,
 ]
 })
 export class ProductsRecommendationComponent {

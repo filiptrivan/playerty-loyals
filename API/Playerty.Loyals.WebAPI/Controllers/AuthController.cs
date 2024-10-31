@@ -72,7 +72,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task DeleteUser(long id)
         {
-            await _loyalsBusinessService.DeleteUserExtendedAsync(id); // FT: Not authorizing more than basic because when the user wants to delete himself we will make separated method for that and will user currentUserId
+            await _loyalsBusinessService.DeleteUserExtendedAsync(id); // FT: Not authorizing more than basic because when the user wants to delete himself we will make separated method for that and will use currentUserId
         }
 
         [HttpGet]

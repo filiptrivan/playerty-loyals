@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,6 +13,7 @@ import { AppLayoutComponent } from "./app.layout.component";
 import { PrimengModule } from './modules/primeng.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { SoftAutocompleteComponent } from "../core/controls/soft-autocomplete/soft-autocomplete.component";
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @NgModule({
     declarations: [
@@ -25,19 +25,20 @@ import { SoftAutocompleteComponent } from "../core/controls/soft-autocomplete/so
         AppLayoutComponent,
     ],
     imports: [
-    FormsModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    BrowserModule,
-    RouterModule,
-    AppConfigModule,
-    PrimengModule,
-    SoftAutocompleteComponent
-],
+        FormsModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        BrowserModule,
+        RouterModule,
+        AppConfigModule,
+        PrimengModule,
+        TranslocoDirective,
+        SoftAutocompleteComponent,
+    ],
     exports: [
         FormsModule,
         AppLayoutComponent,
-        PrimengModule
+        PrimengModule,
     ]
 })
 export class AppLayoutModule { }

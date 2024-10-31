@@ -1,43 +1,57 @@
-export function getTranslatedClassNameSecurity(name: string): string
-{
-    switch(name) 
+import { Injectable } from '@angular/core';
+import { TranslocoService } from '@jsverse/transloco';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TranslateClassNamesSecurityService {
+
+    constructor(
+    private translocoService: TranslocoService
+    ) {
+    }
+
+    translate(name: string): string
     {
-        case 'ExternalProvider':
-            return $localize`:@@ExternalProvider:ExternalProvider`;
-        case 'RefreshTokenRequest':
-            return $localize`:@@RefreshTokenRequest:RefreshTokenRequest`;
-        case 'VerificationTokenRequest':
-            return $localize`:@@VerificationTokenRequest:VerificationTokenRequest`;
-        case 'User':
-            return $localize`:@@User:User`;
-        case 'Permission':
-            return $localize`:@@Permission:Permission`;
-        case 'Role':
-            return $localize`:@@Role:Role`;
-        case 'RefreshToken':
-            return $localize`:@@RefreshToken:RefreshToken`;
-        case 'ForgotPasswordVerificationToken':
-            return $localize`:@@ForgotPasswordVerificationToken:ForgotPasswordVerificationToken`;
-        case 'RegistrationVerificationResult':
-            return $localize`:@@RegistrationVerificationResult:RegistrationVerificationResult`;
-        case 'RegistrationVerificationToken':
-            return $localize`:@@RegistrationVerificationToken:RegistrationVerificationToken`;
-        case 'Registration':
-            return $localize`:@@Registration:Registration`;
-        case 'Login':
-            return $localize`:@@Login:Login`;
-        case 'LoginVerificationToken':
-            return $localize`:@@LoginVerificationToken:LoginVerificationToken`;
-        case 'ForgotPassword':
-            return $localize`:@@ForgotPassword:ForgotPassword`;
-        case 'LoginResult':
-            return $localize`:@@LoginResult:LoginResult`;
-        case 'JwtAuthResult':
-            return $localize`:@@JwtAuthResult:JwtAuthResult`;
-        case 'Notification':
-            return $localize`:@@Notification:Notification`;
-        default:
-            return null;
+        switch(name) 
+        {
+            case 'ExternalProvider':
+                return this.translocoService.translate('ExternalProvider');
+            case 'ForgotPassword':
+                return this.translocoService.translate('ForgotPassword');
+            case 'ForgotPasswordVerificationToken':
+                return this.translocoService.translate('ForgotPasswordVerificationToken');
+            case 'JwtAuthResult':
+                return this.translocoService.translate('JwtAuthResult');
+            case 'Login':
+                return this.translocoService.translate('Login');
+            case 'LoginResult':
+                return this.translocoService.translate('LoginResult');
+            case 'LoginVerificationToken':
+                return this.translocoService.translate('LoginVerificationToken');
+            case 'RefreshToken':
+                return this.translocoService.translate('RefreshToken');
+            case 'RefreshTokenRequest':
+                return this.translocoService.translate('RefreshTokenRequest');
+            case 'Registration':
+                return this.translocoService.translate('Registration');
+            case 'RegistrationVerificationResult':
+                return this.translocoService.translate('RegistrationVerificationResult');
+            case 'RegistrationVerificationToken':
+                return this.translocoService.translate('RegistrationVerificationToken');
+            case 'RoleSaveBody':
+                return this.translocoService.translate('RoleSaveBody');
+            case 'VerificationTokenRequest':
+                return this.translocoService.translate('VerificationTokenRequest');
+            case 'Permission':
+                return this.translocoService.translate('Permission');
+            case 'Role':
+                return this.translocoService.translate('Role');
+            case 'RoleUser':
+                return this.translocoService.translate('RoleUser');
+            default:
+                return null;
+        }
     }
 }
 

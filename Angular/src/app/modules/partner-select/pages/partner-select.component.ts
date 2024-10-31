@@ -1,11 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { TranslocoService } from '@jsverse/transloco';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { firstValueFrom } from 'rxjs';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerService } from 'src/app/business/services/helper/partner.service';
-import { isArrayEmpty } from 'src/app/business/services/validation/validation-rules';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { BaseEntity } from 'src/app/core/entities/base-entity';
@@ -17,8 +19,8 @@ import { environment } from 'src/environments/environment';
   templateUrl: './partner-select.component.html',
 })
 export class PartnerSelectComponent extends BaseForm<PartnerIntermediateStep> implements OnInit {
-  partnerIntermediateStepTitle = $localize`:@@PartnerIntermediateStepTitle: Choose the partner whose loyalty application you want to go to.`
-  partnerIntermediateStepDescription: string = $localize`:@@PartnerIntermediateStepDescription: Ovde treba nesto da se napise da ce u svakom trenutku moci da promeni partnera. Lorem ipsum description, lorem ipsum lorem ipsum lorem do lo re m ispum.`
+  partnerIntermediateStepTitle: string;
+  partnerIntermediateStepDescription: string;
 
   partnerOptions: PrimengOption[];
 
@@ -29,13 +31,19 @@ export class PartnerSelectComponent extends BaseForm<PartnerIntermediateStep> im
     protected override changeDetectorRef: ChangeDetectorRef,
     protected override router: Router,
     protected override route: ActivatedRoute,
+    protected override translocoService: TranslocoService,
+    protected override translateClassNamesService: TranslateClassNamesService,
+    protected override validatorService: ValidatorService,
     private apiService: ApiService,
     private partnerService: PartnerService,
 ) { 
-    super(differs, http, messageService, changeDetectorRef, router, route);
+    super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
 }
 
   override ngOnInit(){
+    this.partnerIntermediateStepTitle = this.translocoService.translate('PartnerIntermediateStepTitle');
+    this.partnerIntermediateStepDescription = this.translocoService.translate('PartnerIntermediateStepDescription');
+
     this.init(new PartnerIntermediateStep());
   }
 
@@ -45,7 +53,7 @@ export class PartnerSelectComponent extends BaseForm<PartnerIntermediateStep> im
   
   override onAfterControlInitialization(formControlName: string){
     if(formControlName == 'partnerSlug')
-      this.formGroup.controls['partnerSlug'].validator = isArrayEmpty(this.formGroup.controls['partnerSlug'] as SoftFormControl);
+      this.formGroup.controls['partnerSlug'].validator = this.validatorService.isArrayEmpty(this.formGroup.controls['partnerSlug'] as SoftFormControl);
   }
 
   async partnerSubmit(){

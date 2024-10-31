@@ -24,6 +24,9 @@ using System.ComponentModel;
 using Microsoft.Extensions.Azure;
 using Azure.Identity;
 using Azure.Storage.Blobs;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 public class Startup
 {
@@ -72,6 +75,18 @@ public class Startup
 
         services.AddHttpContextAccessor();
         services.AddCors();
+
+        services.Configure<RequestLocalizationOptions>(options => // FT: It's mandatory to be before AddControllers
+        {
+            CultureInfo[] supportedCultures = new[]
+            {
+                new CultureInfo("sr-Latn-RS")
+            };
+
+            options.DefaultRequestCulture = new RequestCulture("sr-Latn-RS");
+            options.SupportedCultures = supportedCultures;
+            options.SupportedUICultures = supportedCultures;
+        });
 
         services.AddControllers().AddJsonOptions(options =>
         {
@@ -132,6 +147,11 @@ public class Startup
             GenerateAngularCode();
             app.UseDeveloperExceptionPage();
         }
+
+        RequestLocalizationOptions localizationOptions = app.ApplicationServices
+            .GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;
+
+        app.UseRequestLocalization(localizationOptions);
 
         // Allow CORS to connect with the Angular frontend
         app.UseCors(builder =>
@@ -275,55 +295,88 @@ public class Startup
         if (baseServicePath == null) return;
 
         List<string> dataClassNamesHelper = new List<string>();
+        List<string> servicesClassNamesHelper = new List<string>();
         List<string> importClassNamesHelper = new List<string>();
 
         List<string> dataLabelsHelper = new List<string>();
+        List<string> servicesLabelsHelper = new List<string>();
         List<string> importLabelsHelper = new List<string>();
 
         foreach (string projectName in projectNames)
         {
             importClassNamesHelper.Add($$"""
-import { getTranslatedClassName{{projectName}} } from './generated/{{projectName.FromPascalToKebabCase()}}-class-names.generated';
+import { TranslateClassNames{{projectName}}Service } from './generated/{{projectName.FromPascalToKebabCase()}}-class-names.generated';
+""");
+            servicesClassNamesHelper.Add($$"""
+        private translateClassNames{{projectName}}Service: TranslateClassNames{{projectName}}Service
 """);
             dataClassNamesHelper.Add($$"""
-    result = getTranslatedClassName{{projectName}}(name);
-    if (result != null)
-        return result;
+        result = this.translateClassNames{{projectName}}Service.translate(name);
+        if (result != null)
+            return result;
 """);
 
             importLabelsHelper.Add($$"""
-import { getTranslatedLabel{{projectName}} } from './generated/{{projectName.FromPascalToKebabCase()}}-labels.generated';
+import { TranslateLabels{{projectName}}Service } from './generated/{{projectName.FromPascalToKebabCase()}}-labels.generated';
+""");
+            servicesLabelsHelper.Add($$"""
+        private translateLabels{{projectName}}Service: TranslateLabels{{projectName}}Service
 """);
             dataLabelsHelper.Add($$"""
-    result = getTranslatedLabel{{projectName}}(name);
-    if (result != null)
-        return result;
+        result = this.translateLabels{{projectName}}Service.translate(name);
+        if (result != null)
+            return result;
 """);
+
         }
 
         string classNamesData = $$"""
 import { environment } from "src/environments/environment";
+import { Injectable } from "@angular/core";
 {{string.Join("\n", importClassNamesHelper)}}
 
-export function getTranslatedClassName(name: string): string {
-    let result: string = null;
+@Injectable({
+    providedIn: 'root',
+})
+export class TranslateClassNamesService {
+
+    constructor(
+{{string.Join(",\n", servicesClassNamesHelper)}}
+    ) {
+    }
+
+    translate(name: string){
+        let result = null;
 
 {{string.Join("\n\n", dataClassNamesHelper)}}
 
-    return name;
+        return name;
+    }
 }
 """;
 
         string labelsData = $$"""
 import { environment } from "src/environments/environment";
+import { Injectable } from "@angular/core";
 {{string.Join("\n", importLabelsHelper)}}
 
-export function getTranslatedLabel(name: string): string {
-    let result: string = null;
+@Injectable({
+    providedIn: 'root',
+})
+export class TranslateLabelsService {
+
+    constructor(
+{{string.Join(",\n", servicesLabelsHelper)}}
+    ) {
+    }
+
+    translate(name: string){
+        let result = null;
 
 {{string.Join("\n\n", dataLabelsHelper)}}
 
-    return name;
+        return name;
+    }
 }
 """;
 
@@ -337,29 +390,45 @@ export function getTranslatedLabel(name: string): string {
 
         List<string> dataHelper = new List<string>();
         List<string> importHelper = new List<string>();
+        List<string> servicesValidatorHelper = new List<string>();
 
         foreach (string projectName in projectNames)
         {
-            dataHelper.Add($$"""
-    result = getValidator{{projectName}}(formControl, className);
-    if (result != null)
-        return result;
-""");
             importHelper.Add($$"""
-import { getValidator{{projectName}} } from './generated/{{projectName.FromPascalToKebabCase()}}-validation-rules.generated';
+import { Validator{{projectName}}Service } from './generated/{{projectName.FromPascalToKebabCase()}}-validation-rules.generated';
+""");
+            servicesValidatorHelper.Add($$"""
+        protected validator{{projectName}}Service: Validator{{projectName}}Service
+""");
+            dataHelper.Add($$"""
+        result = this.validator{{projectName}}Service.getValidator(formControl, className);
+        if (result != null)
+            return result;
 """);
         }
 
         string data = $$"""
 import { SoftFormControl, SoftValidatorFn } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { Injectable } from "@angular/core";
 {{string.Join("\n", importHelper)}}
 
-export function getValidator(formControl: SoftFormControl, className: string): SoftValidatorFn {
-    let result: SoftValidatorFn = null;
+@Injectable({
+    providedIn: 'root',
+})
+export class ValidatorServiceGenerated {
+
+    constructor(
+{{string.Join(",\n", servicesValidatorHelper)}}
+    ) {
+    }
+
+    getValidator(formControl: SoftFormControl, className: string): SoftValidatorFn {
+        let result: SoftValidatorFn = null;
 
 {{string.Join("\n\n", dataHelper)}}
 
-    return result;
+        return result;
+    }
 }
 """;
         Helper.WriteToTheFile(data, $"{baseServicePath}\\validation\\validation-rules.generated.ts");

@@ -1,39 +1,41 @@
-@defer (when model != null) {
-    <soft-card [title]="detailsTitle" icon="pi pi-bell">
-
-        <soft-panel>
-            <panel-header></panel-header>
+<ng-container *transloco="let t">
+    @defer (when model != null) {
+        <soft-card [title]="detailsTitle" icon="pi pi-bell">
     
-            <panel-body>
-                <form [formGroup]="formGroup" class="grid">
-                    <div class="col-12">
-                        <soft-checkbox [control]="isMarkedAsRead" label="Notify users" [initializeToFalse]="false"></soft-checkbox>
-                    </div>
-                    <div class="col-12">
-                        <soft-textbox [control]="control('title')"></soft-textbox>
-                    </div>
-                    <div class="col-12">
-                        <soft-textarea [control]="control('description')"></soft-textarea>
-                    </div>
-                    <div class="col-12">
-                        <soft-data-table [tableTitle]="tableTitle" [cols]="cols" [controllerName]="tableControllerName" [objectName]="objectName" [showAddButton]="false" selectionMode="multiple"
-                        [newlySelectedItems]="newlySelectedUserList" [unselectedItems]="unselectedUserList" [rows]="5" (onLazyLoad)="onLazyLoad($event)"
-                        [selectedLazyLoadObservableMethod]="selectedUserLazyLoad" (onIsAllSelectedChange)="isAllSelectedChange($event)"></soft-data-table>
-                    </div>
-                    <div class="col-12">
-                        <soft-editor [control]="control('emailBody')"></soft-editor>
-                    </div>
-                </form>
-            </panel-body>
-    
-           <panel-footer>
-                <p-button (onClick)="onSave()" label="Save" icon="pi pi-save"></p-button>
-                <p-button (onClick)="sendEmailNotification()" label="Send email notification" icon="pi pi-send"></p-button>
-                <soft-return-button></soft-return-button>
-           </panel-footer>
-    
-        </soft-panel>
-    </soft-card>
-} @placeholder {
-    <card-skeleton [height]="502"></card-skeleton>
-}
+            <soft-panel>
+                <panel-header></panel-header>
+        
+                <panel-body>
+                    <form [formGroup]="formGroup" class="grid">
+                        <div class="col-12">
+                            <soft-checkbox [control]="isMarkedAsRead" [label]="t('NotifyUsers')" [initializeToFalse]="false"></soft-checkbox>
+                        </div>
+                        <div class="col-12">
+                            <soft-textbox [control]="control('title')"></soft-textbox>
+                        </div>
+                        <div class="col-12">
+                            <soft-textarea [control]="control('description')"></soft-textarea>
+                        </div>
+                        <div class="col-12">
+                            <soft-data-table [tableTitle]="t('Recipients')" [cols]="cols" [controllerName]="tableControllerName" [objectNameForTheRequest]="objectNameForTheRequest" [showAddButton]="false" selectionMode="multiple"
+                            [newlySelectedItems]="newlySelectedUserList" [unselectedItems]="unselectedUserList" [rows]="5" (onLazyLoad)="onLazyLoad($event)"
+                            [selectedLazyLoadObservableMethod]="selectedUserLazyLoad" (onIsAllSelectedChange)="isAllSelectedChange($event)"></soft-data-table>
+                        </div>
+                        <div class="col-12">
+                            <soft-editor [control]="control('emailBody')"></soft-editor>
+                        </div>
+                    </form>
+                </panel-body>
+        
+               <panel-footer>
+                    <p-button (onClick)="onSave()" [label]="t('Save')" icon="pi pi-save"></p-button>
+                    <p-button (onClick)="sendEmailNotification()" [label]="t('SendEmailNotification')" icon="pi pi-send"></p-button>
+                    <soft-return-button></soft-return-button>
+               </panel-footer>
+        
+            </soft-panel>
+        </soft-card>
+    } @placeholder {
+        <card-skeleton [height]="502"></card-skeleton>
+    }
+</ng-container>

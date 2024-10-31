@@ -1,5 +1,3 @@
-<!-- Can't put (onBlur) in this control -->
-
 <div class="flex flex-column gap-2">
   <div>
     <label>{{getTranslatedLabel()}}</label>
@@ -7,13 +5,10 @@
   </div>
   <p-inputNumber
     *ngIf="control"
-    [pTooltip]="getValidationErrrorMessages()"
-    tooltipPosition="bottom"
-    [tooltipDisabled]="control?.valid"
-    tooltipStyleClass="soft-tooltip-invalid"
+    [pTooltip]="getValidationErrrorMessages()" [tooltipEvent]="errorMessageTooltipEvent" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
     [formControl]="control"
     [id]="control?.label"
-    (blur)="control?.markAsDirty()"
+    (onBlur)="control?.markAsDirty()"
     [prefix]="prefix"
     [style]="{'width':'100%'}"
     [inputStyle]="{'width':'100%'}"

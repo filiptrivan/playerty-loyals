@@ -8,6 +8,7 @@ import { TimelineIndexProgressbarComponent } from 'src/app/core/components/timel
 import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { PartnerService } from 'src/app/business/services/helper/partner.service';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
   selector: 'tiers',
@@ -18,7 +19,8 @@ import { PartnerService } from 'src/app/business/services/helper/partner.service
     SoftDataTableComponent,
     SoftControlsModule,
     CardSkeletonComponent,
-    TimelineIndexProgressbarComponent
+    TimelineIndexProgressbarComponent,
+    TranslocoDirective,
   ]
 })
 export class TiersComponent implements OnInit {
@@ -27,7 +29,7 @@ export class TiersComponent implements OnInit {
   tiers: TierWithIndex[] = [];
   tierForTheCurrentPartnerUser: Tier;
   currentPartnerUser: PartnerUser;
-  @ViewChild(TimelineIndexProgressbarComponent) timelineIndexProgressbarComponent!: TimelineIndexProgressbarComponent;
+  @ViewChild('timeline') timelineIndexProgressbarComponent!: TimelineIndexProgressbarComponent;
   
   constructor(
     private apiService: ApiService,
@@ -45,10 +47,10 @@ export class TiersComponent implements OnInit {
       tiers: this.apiService.loadTierListFromLargestToSmallest(),
       tierForTheCurrentPartnerUser: this.apiService.getTierForTheCurrentPartnerUser(),
     }).subscribe(({ tiers, tierForTheCurrentPartnerUser }) => {
-        this.tiers = tiers;
-        this.assignIndexesToTiers(tiers);
-        this.timelineIndexProgressbarComponent.changeConnector();
-        this.tierForTheCurrentPartnerUser = tierForTheCurrentPartnerUser;
+      this.tiers = tiers;
+      this.assignIndexesToTiers(tiers);
+      this.timelineIndexProgressbarComponent.changeConnector();
+      this.tierForTheCurrentPartnerUser = tierForTheCurrentPartnerUser;
     });
 
   }

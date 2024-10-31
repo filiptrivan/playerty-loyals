@@ -5,6 +5,7 @@ import { PrimengModule } from "src/app/layout/modules/primeng.module";
 import { SoftDataTableComponent } from "src/app/core/components/soft-data-table/soft-data-table.component";
 import { SoftControlsModule } from "src/app/core/controls/soft-controls.module";
 import { CardSkeletonComponent } from "src/app/core/components/card-skeleton/card-skeleton.component";
+import { TranslocoDirective } from "@jsverse/transloco";
 
 const routes: Routes = [
     {
@@ -20,6 +21,7 @@ const routes: Routes = [
         SoftDataTableComponent,
         SoftControlsModule,
         CardSkeletonComponent,
+        TranslocoDirective,
     ],
     declarations: [
         NotificationComponent,

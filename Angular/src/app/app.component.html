@@ -1,3 +1,7 @@
-<router-outlet></router-outlet>
+<!-- FT HACK: I don't know why, but translations on the layout component work only if i do this -->
+<ng-container *transloco="let t">
+    <router-outlet></router-outlet>
+</ng-container>
+
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-clip-rotate-multiple" [fullScreen]="true"></ngx-spinner>
 <p-toast [breakpoints]="{ '600px': { width: '100%', right: '0', left: '0' } }"></p-toast>

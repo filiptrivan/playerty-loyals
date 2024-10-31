@@ -1,4 +1,4 @@
-<ng-container>
+<ng-container *transloco="let t">
     <div *ngIf="root && item.visible === true" class="layout-menuitem-root-text">{{item.label}}</div>
     <a *ngIf="(!item.routerLink || item.items) && item.visible === true" [attr.href]="item.url" (click)="itemClick($event)"
        [ngClass]="item.styleClass" [attr.target]="item.target" tabindex="0" pRipple>
@@ -28,11 +28,11 @@
     [options]="partnerOptions"
     (onTextInput)="searchPartners($event)"
     label=""
-    placeholder="Select the partner"
+    [placeholder]="t('SelectThePartner')"
     [showMoreOptions]="true"
     (onMoreOptionsClick)="moreOptionsClick()"
     moreOptionsIcon="pi pi-check"
     class="mobile-stay-open"
     ></soft-autocomplete>
-        
+     
 </ng-container>

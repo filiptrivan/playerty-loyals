@@ -1,0 +1,12 @@
+{
+    "ContinueWithGoogle": "Nastavite sa Guglom",
+    "Email": "Email",
+    "Password": "Lozinka",
+    "Login": "Prijavi se",
+    "Name": "Missing value for 'Name'",
+    "NameLatin": "Missing value for 'NameLatin'",
+    "Code": "Missing value for 'Code'",
+    "Checked": "Missing value for 'Checked'",
+    "NotificationDTO": "Missing value for 'NotificationDTO'",
+    "SelectedIds": "Missing value for 'SelectedIds'"
+}

@@ -57,15 +57,15 @@ namespace Playerty.Loyals.Services
             return await _context.WithTransactionAsync(async () =>
             {
                 if (userExtendedSaveBodyDTO.UserExtendedDTO.Password != null)
-                    throw new HackerException("You can not change password from here.");
+                    throw new HackerException("You can't change password from here.");
 
                 if (userExtendedSaveBodyDTO.UserExtendedDTO.Id == 0)
-                    throw new HackerException("You can add new user.");
+                    throw new HackerException("You can't add new user.");
 
                 UserExtended user = await LoadInstanceAsync<UserExtended, long>(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.UserExtendedDTO.Version);
 
                 if (userExtendedSaveBodyDTO.UserExtendedDTO.Email != user.Email)
-                    throw new HackerException("You can not change email from here.");
+                    throw new HackerException("You can't change email from here.");
 
                 if (userExtendedSaveBodyDTO.SelectedRoleIds != null)
                     await _securityBusinessService.UpdateRoleListForUser(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.SelectedRoleIds);
@@ -138,7 +138,7 @@ namespace Playerty.Loyals.Services
             return tableResponse;
         }
 
-        public async Task SendNotificationEmail(long notificationId, int notificationVersion)
+        public async Task SendNotificationEmail(long notificationId, int notificationVersion) 
         {
             await _context.WithTransactionAsync(async () =>
             {
@@ -177,8 +177,8 @@ namespace Playerty.Loyals.Services
 
             if (exceptionHelper.Count > 0)
             {
-                string helper = exceptionHelper.Count == 1 ? "tier" : "tiers";
-                throw new BusinessException($"Invalid {helper}: {exceptionHelper.ToCommaSeparatedString()}. Tiers must be saved sequentialy (Eg. Tier 1: 1p - 10p, Tier 2: 10p - 20p, Tier 3: 20p - 30p). You can not add tier which upper bound is greater (or equal) than lower bound. ");
+                string helper = exceptionHelper.Count == 1 ? "unesen nivo odanosti" : "uneseni nivoi odanosti";
+                throw new BusinessException($"Neispravno {helper}: {exceptionHelper.ToCommaSeparatedString()}. Nivoi odanosti moraju biti sačuvani rastućim redosledom (npr. Nivo 1: 1p - 10p, Nivo 2: 10p - 20p, Nivo 3: 20p - 30p). Ne možete dodati nivo odanosti čija je gornja granica veća (ili jednaka) od donje granice.");
             }
 
             List<TierDTO> result = new List<TierDTO>();

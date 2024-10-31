@@ -1,48 +1,50 @@
-@defer (when segmentationFormGroup != null && segmentationItemsFormArray != null) {
-    <soft-card [title]="detailsTitle" icon="pi pi-hashtag">
-        <soft-panel>
-            <panel-header></panel-header>
-
-            <panel-body>
-                <form [formGroup]="formGroup" class="grid">
-                    <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('name', segmentationFormGroup)"></soft-textbox>
-                    </div>
-                    <div class="col-12 md:col-6">
-                        <soft-number [control]="control('pointsForTheFirstTimeFill', segmentationFormGroup)"></soft-number>
-                    </div>
-                    <div class="col-12">
-                        <soft-textarea [control]="control('description', segmentationFormGroup)"></soft-textarea>
-                    </div>
-                    
-                    <div class="col-12">
-                        <soft-panel>
-                            <panel-header title="Segmentation items" icon="pi pi-tags"></panel-header>
-                            <panel-body [normalBottomPadding]="true">
-                                @for (formGroup of getFormArrayGroups(segmentationItemsFormArray); track formGroup; let index = $index; let last = $last) {
-                                    <index-card [index]="index" [last]="false" [crudMenu]="crudMenu" (onMenuIconClick)="lastMenuIconIndexClicked = $event">
-                                        <form [formGroup]="formGroup" class="grid">
-                                            <div class="col-12">
-                                                <soft-textbox [control]="getFormArrayControlByIndex('name', segmentationItemsSaveBodyName, index)"></soft-textbox>
-                                            </div>
-                                        </form>
-                                    </index-card>
-                                }
-                                
-                                <p-button (onClick)="addNewSegmentationItem(null)" label="Add new segmentation item" icon="pi pi-plus"></p-button>
-                            </panel-body>
-                        </soft-panel>
-                    </div>
-                </form>
-            </panel-body>
-
-            <panel-footer>
-                <p-button (onClick)="onSave()" label="Save" icon="pi pi-save"></p-button>
-                <soft-return-button></soft-return-button>
-            </panel-footer>
-
-        </soft-panel>
-    </soft-card>
-} @placeholder {
-    <card-skeleton [height]="502"></card-skeleton>
-}
+<ng-container *transloco="let t">
+    @defer (when segmentationFormGroup != null && segmentationItemsFormArray != null) {
+        <soft-card [title]="detailsTitle" icon="pi pi-hashtag">
+            <soft-panel>
+                <panel-header></panel-header>
+    
+                <panel-body>
+                    <form [formGroup]="formGroup" class="grid">
+                        <div class="col-12 md:col-6">
+                            <soft-textbox [control]="control('name', segmentationFormGroup)"></soft-textbox>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-number [control]="control('pointsForTheFirstTimeFill', segmentationFormGroup)"></soft-number>
+                        </div>
+                        <div class="col-12">
+                            <soft-textarea [control]="control('description', segmentationFormGroup)"></soft-textarea>
+                        </div>
+                        
+                        <div class="col-12">
+                            <soft-panel>
+                                <panel-header [title]="t('SegmentationItemList')" icon="pi pi-tags"></panel-header>
+                                <panel-body [normalBottomPadding]="true">
+                                    @for (formGroup of getFormArrayGroups(segmentationItemsFormArray); track formGroup; let index = $index; let last = $last) {
+                                        <index-card [index]="index" [last]="false" [crudMenu]="crudMenu" (onMenuIconClick)="lastMenuIconIndexClicked = $event">
+                                            <form [formGroup]="formGroup" class="grid">
+                                                <div class="col-12">
+                                                    <soft-textbox [control]="getSegmentationItemFormArrayControlByIndex(index)"></soft-textbox>
+                                                </div>
+                                            </form>
+                                        </index-card>
+                                    }
+                                    
+                                    <p-button (onClick)="addNewSegmentationItem(null)" [label]="t('AddNewSegmentationItem')" icon="pi pi-plus"></p-button>
+                                </panel-body>
+                            </soft-panel>
+                        </div>
+                    </form>
+                </panel-body>
+    
+                <panel-footer>
+                    <p-button (onClick)="onSave()" [label]="t('Save')" icon="pi pi-save"></p-button>
+                    <soft-return-button></soft-return-button>
+                </panel-footer>
+    
+            </soft-panel>
+        </soft-card>
+    } @placeholder {
+        <card-skeleton [height]="502"></card-skeleton>
+    }
+</ng-container>

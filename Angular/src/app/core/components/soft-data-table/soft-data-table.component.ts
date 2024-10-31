@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LazyLoadEvent, SelectItem } from 'primeng/api';
-import { Table, TableFilterEvent, TableLazyLoadEvent, TableRowSelectEvent, TableRowUnSelectEvent, TableSelectAllChangeEvent } from 'primeng/table';
+import { SelectItem } from 'primeng/api';
+import { Table, TableFilterEvent, TableLazyLoadEvent } from 'primeng/table';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SoftDeleteConfirmationComponent } from '../soft-delete-dialog/soft-delete-confirmation.component';
@@ -10,19 +10,32 @@ import { FormsModule } from '@angular/forms';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { SoftMessageService } from '../../services/soft-message.service';
 import { TableFilter } from 'src/app/business/entities/table-filter';
-import { CheckboxChangeEvent } from 'primeng/checkbox';
 import { firstValueFrom, Observable } from 'rxjs';
 import { PrimengOption } from '../../entities/primeng-option';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 
 @Component({
   selector: 'soft-data-table',
   templateUrl: './soft-data-table.component.html',
-  styles: [],
+  styles: [`
+  	:host {
+		  ::ng-deep {
+		    .remove-button-border-focus:focus, 
+        .remove-button-border-focus:enabled:focus {
+        box-shadow: none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        background-color: var(--gray-200);
+		    }
+		  }
+	  }
+  `],
   imports: [
     FormsModule,
     CommonModule,
     PrimengModule,
-    SoftDeleteConfirmationComponent
+    SoftDeleteConfirmationComponent,
+    TranslocoDirective,
   ],
   standalone: true,
 })
@@ -33,7 +46,7 @@ export class SoftDataTableComponent implements OnInit {
   items: any[];
   @Input() rows: number = 10;
   @Input() cols: Column[];
-  @Input() objectName: string;
+  @Input() objectNameForTheRequest: string;
   @Input() controllerName: string;
   showPaginator: boolean = true;
   isLazyLoadTable: boolean = true;
@@ -55,15 +68,8 @@ export class SoftDataTableComponent implements OnInit {
   @Input() selectedLazyLoadObservableMethod: (tableFilter: TableFilter) => Observable<SelectedRowsMethodResult>;
   @Input() additionalFilterIdLong: number;
   
-  matchModeDateOptions: SelectItem[] = [
-    { label: 'Dates before', value: 'dateBefore' },
-    { label: 'Dates after', value: 'dateAfter' },
-  ];
-  matchModeNumberOptions: SelectItem[] = [
-    { label: 'Equals', value: 'equals' },
-    { label: 'More than', value: 'gte' },
-    { label: 'Less than', value: 'lte' },
-  ];
+  matchModeDateOptions: SelectItem[] = [];
+  matchModeNumberOptions: SelectItem[] = [];
   @Input() showAddButton: boolean = true; 
   showExportToExcelButton: boolean = true;
 
@@ -75,12 +81,24 @@ export class SoftDataTableComponent implements OnInit {
     private dialogService: DialogService,
     private route: ActivatedRoute,
     private messageService: SoftMessageService,
+    private translocoService: TranslocoService,
     @Inject(LOCALE_ID) private locale: string
   ) {}
 
   ngOnInit(): void {
     if (this.controllerName == null)
-      this.controllerName = this.objectName;
+      this.controllerName = this.objectNameForTheRequest;
+
+    this.matchModeDateOptions = [
+      { label: this.translocoService.translate('DatesBefore'), value: 'dateBefore' },
+      { label: this.translocoService.translate('DatesAfter'), value: 'dateAfter' },
+    ];
+
+    this.matchModeNumberOptions = [
+      { label: this.translocoService.translate('Equals'), value: 'equals' },
+      { label: this.translocoService.translate('MoreThan'), value: 'gte' },
+      { label: this.translocoService.translate('LessThan'), value: 'lte' },
+    ];
   }
     
   lazyLoad(event: TableLazyLoadEvent) {
@@ -90,7 +108,7 @@ export class SoftDataTableComponent implements OnInit {
 
     this.onLazyLoad.next(tableFilter);
 
-    this.apiService.loadListForTable(this.controllerName, this.objectName, tableFilter).subscribe({
+    this.apiService.loadListForTable(this.controllerName, this.objectNameForTheRequest, tableFilter).subscribe({
       next: async (res) => { 
         this.items = res.data;
         this.totalRecords = res.totalRecords;
@@ -200,14 +218,14 @@ export class SoftDataTableComponent implements OnInit {
   deleteObject(rowId: number){
     this.deleteRef = this.dialogService.open(SoftDeleteConfirmationComponent, 
       { 
-        header: 'Are you sure?',
+        header: this.translocoService.translate('AreYouSureToDelete'),
         width: '400px',
-        data:{controllerName: this.controllerName, methodPartName: this.objectName, id: rowId, } 
+        data:{controllerName: this.controllerName, methodPartName: this.objectNameForTheRequest, id: rowId, } 
       });
 
       this.deleteRef.onClose.subscribe((deletedSuccessfully: boolean)=>{
         if(deletedSuccessfully == true)
-          this.messageService.successMessage($localize`:@@SuccessfullyDeletedMessage:You have successfully deleted.`);
+          this.messageService.successMessage(this.translocoService.translate('SuccessfullyDeletedMessage'));
           this.lazyLoad(this.lastLazyLoadEvent);
       });
   }
@@ -247,7 +265,7 @@ export class SoftDataTableComponent implements OnInit {
         case 'multiselect':
           return rowData[col.field];
         case 'boolean':
-          return rowData[col.field] == true ? $localize`:@@Yes:Yes` : $localize`:@@No:No`;
+          return rowData[col.field] == true ? this.translocoService.translate('Yes') : this.translocoService.translate('No');
         case 'numeric':
           // TODO FT: make decimal pipe
           return rowData[col.field];
@@ -333,7 +351,7 @@ export class SoftDataTableComponent implements OnInit {
   //#endregion
 
   exportListToExcel() {
-    this.apiService.exportListToExcel(this.controllerName, this.objectName, this.lastLazyLoadEvent);
+    this.apiService.exportListToExcel(this.controllerName, this.objectNameForTheRequest, this.lastLazyLoadEvent);
   }
 
   clear(table: Table) {

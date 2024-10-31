@@ -18,7 +18,7 @@ import { SoftPanelsModule } from "../soft-panels/soft-panels.module";
 export class IndexCardComponent {
     @Input() public last: boolean;
     @Input() public index: number;
-    @Input() public header: string;
+    @Input() public header: string = '';
     @Input() public description: string;
 
     @Input() crudMenu: MenuItem[];

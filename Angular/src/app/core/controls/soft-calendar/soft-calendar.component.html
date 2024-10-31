@@ -8,10 +8,7 @@
     <p-calendar
     *ngIf="control"
     [style]="{'width':'100%'}"
-    [pTooltip]="getValidationErrrorMessages()"
-    tooltipPosition="bottom"
-    [tooltipDisabled]="control?.valid"
-    tooltipStyleClass="soft-tooltip-invalid"
+    [pTooltip]="getValidationErrrorMessages()" [tooltipEvent]="errorMessageTooltipEvent" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
     [formControl]="control"
     dateFormat="dd.mm.yy."
     iconDisplay="input" 

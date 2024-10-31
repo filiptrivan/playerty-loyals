@@ -91,6 +91,9 @@ export function nameof<TObject>(key: keyof TObject): string;
 export function nameof(key1: any, key2?: any): any {
   return key2 ?? key1;
 }
+export function nameOf<TObject extends {name:S}, S extends string>(funcOrClass: TObject): S {
+    return funcOrClass.name;
+}
 
 export function getParentUrl(currentUrl: string){
     const urlSegments = currentUrl.split('/');

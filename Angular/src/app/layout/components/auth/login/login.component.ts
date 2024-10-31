@@ -8,6 +8,9 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { VerificationTypeCodes } from 'src/app/business/enums/verification-type-codes';
 import { Login } from 'src/app/business/entities/generated/security-entities.generated';
+import { TranslocoService } from '@jsverse/transloco';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 
 @Component({
     selector: 'app-login',
@@ -23,13 +26,16 @@ export class LoginComponent extends BaseForm<Login> implements OnInit {
       protected override differs: KeyValueDiffers,
       protected override http: HttpClient,
       protected override messageService: SoftMessageService, 
-    protected override changeDetectorRef: ChangeDetectorRef,
+      protected override changeDetectorRef: ChangeDetectorRef,
       protected override router: Router, 
       protected override route: ActivatedRoute,
+      protected override translocoService: TranslocoService,
+      protected override translateClassNamesService: TranslateClassNamesService,
+      protected override validatorService: ValidatorService,
       public layoutService: LayoutService, 
       private authService: AuthService, 
     ) { 
-      super(differs, http, messageService, changeDetectorRef, router, route);
+      super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
     }
 
     override ngOnInit(){

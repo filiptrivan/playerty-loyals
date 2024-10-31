@@ -1,9 +1,10 @@
 import {
-    Component, Input,
+    Component, HostListener, Input,
     ViewChild,
   } from '@angular/core';
-import { getTranslatedLabel } from 'src/app/business/services/translates/translated-labels.generated';
 import { SoftFormControl } from '../components/soft-form-control/soft-form-control';
+import { TranslocoService } from '@jsverse/transloco';
+import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels.generated';
   
   @Component({
     selector: 'base-control',
@@ -19,20 +20,31 @@ import { SoftFormControl } from '../components/soft-form-control/soft-form-contr
     @Input() showTooltip: boolean = false;
     @Input() tooltipText: string = null;
     @Input() tooltipIcon: string = 'pi pi-info-circle';
+    @Input() errorMessageTooltipEvent: string;
 
     validationErrorMessage: string;
     
+    constructor(
+      protected translocoService: TranslocoService,
+      protected translateLabelsService: TranslateLabelsService,
+    ) {
+
+    }
+
     ngOnInit(){
       if(this.control != null && this.disabled == true)
         this.control.disable();
 
       if(this.control?.validator?.hasNotEmptyRule == true) // FT HACK: Be carefull with this name, if you change it in generator you need to change it here also
         this.control.required = true;
+
+      const width = window.innerWidth;
+      this.errorMessageTooltipEvent = width > 1000 ? 'hover' : 'focus';
     }
 
     getTranslatedLabel(): string{
         if(this.label == null)
-          return getTranslatedLabel(this.control?.label);
+          return this.translateLabelsService.translate(this.control?.label);
         else
           return this.label;
     }

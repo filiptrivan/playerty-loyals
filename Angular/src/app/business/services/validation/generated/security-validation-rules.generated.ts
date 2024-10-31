@@ -1,436 +1,345 @@
 import { ValidationErrors } from '@angular/forms';
 import { SoftFormControl, SoftValidatorFn } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { validatePrecisionScale } from '../../../../core/services/helper-functions';
+import { TranslocoService } from '@jsverse/transloco';
+import { Injectable } from '@angular/core';
 
-export function getValidatorSecurity(formControl: SoftFormControl, className: string): SoftValidatorFn {
-    switch(formControl.label + className){
+@Injectable({
+    providedIn: 'root',
+})
+export class ValidatorSecurityService {
+
+    constructor(
+        private translocoService: TranslocoService
+    ) {
+    }
+
+    getValidator(formControl: SoftFormControl, className: string): SoftValidatorFn {
+        switch(formControl.label + className){
+
+        case 'emailForgotPassword':
+            return this.emailForgotPasswordValidator(formControl);
+        case 'newPasswordForgotPassword':
+            return this.newPasswordForgotPasswordValidator(formControl);
 
 
-        case 'verificationCodeVerificationTokenRequest':
-            return verificationCodeVerificationTokenRequestValidator(formControl);
-        case 'emailVerificationTokenRequest':
-            return emailVerificationTokenRequestValidator(formControl);
 
-        case 'passwordUser':
-            return passwordUserValidator(formControl);
-        case 'emailUser':
-            return emailUserValidator(formControl);
-        case 'hasLoggedInWithExternalProviderUser':
-            return hasLoggedInWithExternalProviderUserValidator(formControl);
-        case 'numberOfFailedAttemptsInARowUser':
-            return numberOfFailedAttemptsInARowUserValidator(formControl);
-        case 'isVerifiedUser':
-            return isVerifiedUserValidator(formControl);
-
-        case 'namePermission':
-            return namePermissionValidator(formControl);
-        case 'descriptionPermission':
-            return descriptionPermissionValidator(formControl);
-
-        case 'nameRole':
-            return nameRoleValidator(formControl);
-        case 'descriptionRole':
-            return descriptionRoleValidator(formControl);
+        case 'emailLogin':
+            return this.emailLoginValidator(formControl);
+        case 'passwordLogin':
+            return this.passwordLoginValidator(formControl);
 
 
 
 
 
         case 'emailRegistration':
-            return emailRegistrationValidator(formControl);
+            return this.emailRegistrationValidator(formControl);
         case 'passwordRegistration':
-            return passwordRegistrationValidator(formControl);
-
-        case 'emailLogin':
-            return emailLoginValidator(formControl);
-        case 'passwordLogin':
-            return passwordLoginValidator(formControl);
+            return this.passwordRegistrationValidator(formControl);
 
 
-        case 'emailForgotPassword':
-            return emailForgotPasswordValidator(formControl);
-        case 'newPasswordForgotPassword':
-            return newPasswordForgotPasswordValidator(formControl);
-            
-        case 'titleNotification':
-            return titleNotificationValidator(formControl);
-        case 'titleLatinNotification':
-            return titleLatinNotificationValidator(formControl);
-        case 'descriptionNotification':
-            return descriptionNotificationValidator(formControl);
-        case 'descriptionLatinNotification':
-            return descriptionLatinNotificationValidator(formControl);
 
 
-        default:
-            return null;
+        case 'verificationCodeVerificationTokenRequest':
+            return this.verificationCodeVerificationTokenRequestValidator(formControl);
+        case 'emailVerificationTokenRequest':
+            return this.emailVerificationTokenRequestValidator(formControl);
+
+        case 'namePermission':
+            return this.namePermissionValidator(formControl);
+        case 'nameLatinPermission':
+            return this.nameLatinPermissionValidator(formControl);
+        case 'descriptionPermission':
+            return this.descriptionPermissionValidator(formControl);
+        case 'descriptionLatinPermission':
+            return this.descriptionLatinPermissionValidator(formControl);
+        case 'codePermission':
+            return this.codePermissionValidator(formControl);
+
+        case 'nameRole':
+            return this.nameRoleValidator(formControl);
+        case 'descriptionRole':
+            return this.descriptionRoleValidator(formControl);
+
+
+            default:
+                return null;
+        }
     }
+
+
+
+    emailForgotPasswordValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 5;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+            const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
+
+            return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+}
+
+    newPasswordForgotPasswordValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 6;
+        const max = 20;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const newPasswordValid = notEmptyRule && stringLengthRule;
+
+            return newPasswordValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
 }
 
 
 
-export function verificationCodeVerificationTokenRequestValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+    emailLoginValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 5;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+            const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
+
+            return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+}
+
+    passwordLoginValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 6;
+        const max = 20;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const passwordValid = notEmptyRule && stringLengthRule;
+
+            return passwordValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+}
+
+
+
+
+
+
+    emailRegistrationValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 5;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+            const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
+
+            return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+}
+
+    passwordRegistrationValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 6;
+        const max = 20;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const passwordValid = notEmptyRule && stringLengthRule;
+
+            return passwordValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+}
+
+
+
+
+
+    verificationCodeVerificationTokenRequestValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const length = 6;
-        const stringSingleLengthRule = value?.length == length;
+        const stringSingleLengthRule = (value?.length == length) || (typeof value === 'undefined' || value === null || value === '');
 
-        const verificationCodeValid = notEmptyRule && stringSingleLengthRule;
+            const verificationCodeValid = notEmptyRule && stringSingleLengthRule;
 
-        return verificationCodeValid ? null : { _ : $localize`:@@NotEmptySingleLength:The field is mandatory and must be ${length} character long.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
+            return verificationCodeValid ? null : { _ : this.translocoService.translate('NotEmptySingleLength', {length}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
 }
 
-export function emailVerificationTokenRequestValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
+    emailVerificationTokenRequestValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 5;
         const max = 100;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
         const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
-        const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
+            const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
 
-        return emailValid ? null : { _ : $localize`:@@NotEmptyLengthEmailAddress:The field is mandatory, must have a minimum of ${min} and a maximum of ${max} characters and must be a valid email address.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
+            return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
 }
 
 
-export function passwordUserValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
+    namePermissionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-        const min = 6;
-        const max = 20;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
-
-        const passwordValid = notEmptyRule && stringLengthRule;
-
-        return passwordValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-export function emailUserValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-        const min = 0;
-        const max = 70;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
-        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
-        const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
-
-        return emailValid ? null : { _ : $localize`:@@NotEmptyLengthEmailAddress:The field is mandatory, must have a minimum of ${min} and a maximum of ${max} characters and must be a valid email address.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-export function hasLoggedInWithExternalProviderUserValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-
-        const hasLoggedInWithExternalProviderValid = notEmptyRule;
-
-        return hasLoggedInWithExternalProviderValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-export function numberOfFailedAttemptsInARowUserValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-
-        const numberOfFailedAttemptsInARowValid = notEmptyRule;
-
-        return numberOfFailedAttemptsInARowValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-export function isVerifiedUserValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-
-        const isVerifiedValid = notEmptyRule;
-
-        return isVerifiedValid ? null : { _ : $localize`:@@NotEmpty:The field is mandatory.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-
-export function namePermissionValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-        const min = 0;
-        const max = 255;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
-
-        const nameValid = notEmptyRule && stringLengthRule;
-
-        return nameValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-export function descriptionPermissionValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const min = 0;
-        const max = 1000;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
-
-        const descriptionValid = stringLengthRule;
-
-        return descriptionValid ? null : { _ : $localize`:@@Length:The field must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    
-    return validator;
-}
-
-
-export function nameRoleValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-        const min = 0;
-        const max = 255;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
-
-        const nameValid = notEmptyRule && stringLengthRule;
-
-        return nameValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-export function descriptionRoleValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
-
-        const min = 0;
-        const max = 1000;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
-
-        const descriptionValid = stringLengthRule;
-
-        return descriptionValid ? null : { _ : $localize`:@@Length:The field must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    
-    return validator;
-}
-
-
-
-
-
-
-export function emailRegistrationValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-        const min = 5;
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
         const max = 100;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
-        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
-        const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
+            const nameValid = notEmptyRule && stringLengthRule;
 
-        return emailValid ? null : { _ : $localize`:@@NotEmptyLengthEmailAddress:The field is mandatory, must have a minimum of ${min} and a maximum of ${max} characters and must be a valid email address.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
+            return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
 }
 
-export function passwordRegistrationValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
+    nameLatinPermissionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-        const min = 6;
-        const max = 20;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
-
-        const passwordValid = notEmptyRule && stringLengthRule;
-
-        return passwordValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-
-export function emailLoginValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-        const min = 5;
-        const max = 100;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
-        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
-        const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
-
-        return emailValid ? null : { _ : $localize`:@@NotEmptyLengthEmailAddress:The field is mandatory, must have a minimum of ${min} and a maximum of ${max} characters and must be a valid email address.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-export function passwordLoginValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-        const min = 6;
-        const max = 20;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
-
-        const passwordValid = notEmptyRule && stringLengthRule;
-
-        return passwordValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-
-
-export function emailForgotPasswordValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-        const min = 5;
-        const max = 100;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
-        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
-        const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
-
-        return emailValid ? null : { _ : $localize`:@@NotEmptyLengthEmailAddress:The field is mandatory, must have a minimum of ${min} and a maximum of ${max} characters and must be a valid email address.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-export function newPasswordForgotPasswordValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value;
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-        const min = 6;
-        const max = 20;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
-
-        const newPasswordValid = notEmptyRule && stringLengthRule;
-
-        return newPasswordValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
-}
-
-export function titleNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
-
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
-        const max = 60;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
-        const titleValid = notEmptyRule && stringLengthRule;
+            const nameLatinValid = notEmptyRule && stringLengthRule;
 
-        return titleValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
+            return nameLatinValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
 }
 
-export function titleLatinNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+    descriptionPermissionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+            const min = 1;
+        const max = 400;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const descriptionValid = stringLengthRule;
+
+            return descriptionValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+}
+
+    descriptionLatinPermissionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const max = 400;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const descriptionLatinValid = stringLengthRule;
+
+            return descriptionLatinValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+}
+
+    codePermissionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
-        const max = 60;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
-        const titleLatinValid = notEmptyRule && stringLengthRule;
+            const codeValid = notEmptyRule && stringLengthRule;
 
-        return titleLatinValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
+            return codeValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
 }
 
-export function descriptionNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
+    nameRoleValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 255;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
-        const descriptionValid = notEmptyRule && stringLengthRule;
+            const nameValid = notEmptyRule && stringLengthRule;
 
-        return descriptionValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
+            return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
 }
 
-export function descriptionLatinNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-    const validator: SoftValidatorFn = (): ValidationErrors | null => {
-        const value = control.value ?? "";
+    descriptionRoleValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-        const notEmptyRule = typeof value !== 'undefined' && value !== '';
-        const min = 1;
-        const max = 255;
-        const stringLengthRule = value?.length >= min && value?.length <= max;
+            const min = 1;
+        const max = 400;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
-        const descriptionLatinValid = notEmptyRule && stringLengthRule;
+            const descriptionValid = stringLengthRule;
 
-        return descriptionLatinValid ? null : { _ : $localize`:@@NotEmptyLength:The field is mandatory and must have a minimum of ${min} and a maximum of ${max} characters.` };
-    };
-    validator.hasNotEmptyRule = true;
-    return validator;
+            return descriptionValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
 }
 
 
 
-
+}
 

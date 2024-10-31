@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
+import { TranslocoService } from '@jsverse/transloco';
 import { forkJoin, map, Observable } from 'rxjs';
 import { Notification, NotificationSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
 import { TableFilter } from 'src/app/business/entities/table-filter';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { PartnerService } from 'src/app/business/services/helper/partner.service';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { Column, SelectedRowsMethodResult } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
-import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
 @Component({
@@ -23,11 +23,10 @@ export class NotificationDetailsComponent extends BaseForm<Notification> impleme
 
     text: string;
 
-    tableTitle: string = $localize`:@@Recipients:Recipients`
     cols: Column[];
     tableControllerName: string = 'Auth';
     override controllerName: string = 'Auth';
-    objectName: string = 'User';
+    objectNameForTheRequest: string = 'User';
     
     newlySelectedUserList: number[] = [];
     unselectedUserList: number[] = [];
@@ -40,11 +39,13 @@ export class NotificationDetailsComponent extends BaseForm<Notification> impleme
         protected override messageService: SoftMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
-        protected override route: ActivatedRoute, 
+        protected override route: ActivatedRoute,
+        protected override translocoService: TranslocoService,
+        protected override translateClassNamesService: TranslateClassNamesService,
+        protected override validatorService: ValidatorService,
         private apiService: ApiService,
-        private partnerService: PartnerService,
     ) {
-        super(differs, http, messageService, changeDetectorRef, router, route);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
     }
          
     override ngOnInit() {
@@ -71,14 +72,14 @@ export class NotificationDetailsComponent extends BaseForm<Notification> impleme
 
     sendEmailNotification(){
         this.apiService.sendNotificationEmail(this.modelId, this.model.version).subscribe(() => {
-            this.messageService.successMessage($localize`:@@SuccessfulEmailAttempt:Your email attempt has been processed.`);
+            this.messageService.successMessage(this.translocoService.translate('SuccessfulEmailAttempt'));
         });
     }
 
     async populateUserTableCols(){
         this.cols = [
-            {name: 'User', filterType: 'text', field: 'email'},
-            {name: 'Created at', filterType: 'date', field: 'createdAt', showMatchModes: true},
+            {name: this.translocoService.translate('User'), filterType: 'text', field: 'email'},
+            {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true},
         ]
     }
 

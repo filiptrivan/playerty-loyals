@@ -1,17 +1,30 @@
 import { environment } from "src/environments/environment";
-import { getTranslatedLabelBusiness } from './generated/business-labels.generated';
-import { getTranslatedLabelSecurity } from './generated/security-labels.generated';
+import { Injectable } from "@angular/core";
+import { TranslateLabelsBusinessService } from './generated/business-labels.generated';
+import { TranslateLabelsSecurityService } from './generated/security-labels.generated';
 
-export function getTranslatedLabel(name: string): string {
-    let result: string = null;
+@Injectable({
+    providedIn: 'root',
+})
+export class TranslateLabelsService {
 
-    result = getTranslatedLabelBusiness(name);
-    if (result != null)
-        return result;
+    constructor(
+        private translateLabelsBusinessService: TranslateLabelsBusinessService,
+        private translateLabelsSecurityService: TranslateLabelsSecurityService
+    ) {
+    }
 
-    result = getTranslatedLabelSecurity(name);
-    if (result != null)
-        return result;
+    translate(name: string){
+        let result = null;
 
-    return name;
+        result = this.translateLabelsBusinessService.translate(name);
+        if (result != null)
+            return result;
+
+        result = this.translateLabelsSecurityService.translate(name);
+        if (result != null)
+            return result;
+
+        return name;
+    }
 }

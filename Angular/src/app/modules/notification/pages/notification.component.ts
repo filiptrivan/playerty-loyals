@@ -6,6 +6,7 @@ import { MenuItem } from 'primeng/api';
 import { PaginatorState } from 'primeng/paginator';
 import { TableFilterContext } from 'src/app/core/entities/table-filter-context';
 import { TableResponse } from 'src/app/core/entities/table-response';
+import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
   templateUrl: './notification.component.html',
@@ -13,11 +14,7 @@ import { TableResponse } from 'src/app/core/entities/table-response';
 export class NotificationComponent implements OnInit {
   currentUserNotifications: TableResponse;
 
-  crudMenu: MenuItem[] = [
-    {label: $localize`:@@Delete:Delete`, icon: 'pi pi-trash'},
-    {label: $localize`:@@MarkAsRead:Mark as read`, icon: 'pi pi-eye'},
-    {label: $localize`:@@MarkAsUnread:Mark as unread`, icon: 'pi pi-eye-slash'},
-  ];
+  crudMenu: MenuItem[] = [];
 
   tableFilter: TableFilter = new TableFilter({
     first: 0,
@@ -27,10 +24,17 @@ export class NotificationComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private authService: AuthService
+    private authService: AuthService,
+    private translocoService: TranslocoService
   ) {}
 
   ngOnInit() {
+    this.crudMenu = [
+      {label: this.translocoService.translate('Delete'), icon: 'pi pi-trash'},
+      {label: this.translocoService.translate('MarkAsRead'), icon: 'pi pi-eye'},
+      {label: this.translocoService.translate('MarkAsUnread'), icon: 'pi pi-eye-slash'},
+    ]
+
     this.loadNotifications();
   }
 

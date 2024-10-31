@@ -1,28 +1,28 @@
-@if (showEmailSentDialog == false) {
-    <auth (onCompanyNameChange)="companyNameChange($event)">
-        <form [formGroup]="formGroup" style="margin-bottom: 16px;"> <!-- FT: We are not loading anything from the server here so we don't need defer block -->
-            <div class="col-12" style="padding: 0;">
-                <soft-textbox [control]="control('email')"></soft-textbox>
-            </div>
-            <div class="col-12" style="padding-left: 0; padding-right: 0;">
-                <soft-password [control]="control('password')"></soft-password>
-            </div>
-    
-            <div class="mb-4 gap-5">
-                <div class="text-center" style="font-size: smaller;">
-                    By clicking Agree & join or Continue, you agree to the {{companyName}} 
-                    <b class="primary-color cursor-pointer">User Agreement</b>, <b class="primary-color cursor-pointer">Privacy Policy</b>, and <b class="primary-color cursor-pointer">Cookie Policy</b>.
+<ng-container *transloco="let t">
+    @if (showEmailSentDialog == false) {
+        <auth (onCompanyNameChange)="companyNameChange($event)">
+            <form [formGroup]="formGroup" style="margin-bottom: 16px;"> <!-- FT: We are not loading anything from the server here so we don't need defer block -->
+                <div class="col-12" style="padding: 0;">
+                    <soft-textbox [control]="control('email')"></soft-textbox>
                 </div>
-            </div>
-            
-            <div style="display: flex; flex-direction: column; gap: 16px;">
-                <p-button label="Agree & join" (onClick)="sendRegistrationVerificationEmail()" [outlined]="true" [style]="{width: '100%'}"></p-button>
-                <p-button label="Already on {{companyName}}? Log in" routerLink="/auth/login" [style]="{width: '100%'}"></p-button>
-            </div>
-        </form>
-    </auth>
-}
-@else {
-    <registration-verification [email]="model.email" [password]="model.password"></registration-verification>
-}
-
+                <div class="col-12" style="padding-left: 0; padding-right: 0;">
+                    <soft-password [control]="control('password')"></soft-password>
+                </div>
+                
+                <div class="mb-4 gap-5">
+                    <div class="text-center" style="font-size: smaller;">
+                        {{t('AgreementsOnRegister')}} <b class="primary-color cursor-pointer">{{t('UserAgreement')}}</b>, <b class="primary-color cursor-pointer">{{t('PrivacyPolicy')}}</b>, {{t('and')}} <b class="primary-color cursor-pointer">{{t('CookiePolicy')}}</b>.
+                    </div>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <p-button [label]="t('AgreeAndJoin')" (onClick)="sendRegistrationVerificationEmail()" [outlined]="true" [style]="{width: '100%'}"></p-button>
+                    <p-button [label]="t('AlreadyOnLoyalty', {companyName: companyName})" routerLink="/auth/login" [style]="{width: '100%'}"></p-button>
+                </div>
+            </form>
+        </auth>
+    }
+    @else {
+        <registration-verification [email]="model.email" [password]="model.password"></registration-verification>
+    }
+</ng-container>

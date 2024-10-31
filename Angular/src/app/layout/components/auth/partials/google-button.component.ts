@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from "@angular/core";
+import { TranslocoDirective } from "@jsverse/transloco";
 import { ButtonModule } from "primeng/button";
 
 @Component({
@@ -6,7 +7,8 @@ import { ButtonModule } from "primeng/button";
   templateUrl: './google-button.component.html',
   styles: [],
   imports: [
-    ButtonModule
+    ButtonModule,
+    TranslocoDirective,
   ],
   standalone: true,
 })

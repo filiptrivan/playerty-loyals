@@ -1,0 +1,15 @@
+{
+    "ContinueWithGoogle": "Continue with Google",
+    "Email": "Email",
+    "Password": "Password",
+    "Login": "Login",
+    "ValidFrom": "Valid from",
+    "ValidTo": "Valid to",
+    "Guid": "Guid",
+    "NotificationDTO": "Notification",
+    "TableFilter": "Table filter",
+    "SelectedIds": "Selected ids",
+    "UnselectedIds": "Unselected ids",
+    "IsAllSelected": "Is all selected",
+    "SelectedPermissionIds": "Selected permission ids"
+}

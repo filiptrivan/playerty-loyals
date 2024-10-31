@@ -1,13 +1,12 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { environment } from "src/environments/environment.prod";
 import { LayoutService } from "src/app/layout/service/app.layout.service";
-import { AuthService } from "src/app/core/services/auth.service";
 import { GoogleButtonComponent } from "./google-button.component";
 import { CommonModule } from "@angular/common";
-import { ApiService } from "src/app/business/services/api/api.service";
 import { PartnerService } from "src/app/business/services/helper/partner.service";
 import { getHtmlImgDisplayString64 } from "src/app/core/services/helper-functions";
-import { firstValueFrom, Subscription } from "rxjs";
+import { Subscription } from "rxjs";
+import { TranslocoDirective } from "@jsverse/transloco";
 
 @Component({
   selector: 'auth',
@@ -15,7 +14,8 @@ import { firstValueFrom, Subscription } from "rxjs";
   styles: [],
   imports: [
     CommonModule,
-    GoogleButtonComponent
+    GoogleButtonComponent,
+    TranslocoDirective,
   ],
   standalone: true,
 })
@@ -29,7 +29,7 @@ export class AuthComponent {
     companyName: string;
     image: string;
     
-    constructor(public layoutService: LayoutService, private authService: AuthService, private partnerService: PartnerService, private apiService: ApiService) {}
+    constructor(public layoutService: LayoutService, private partnerService: PartnerService) {}
 
     ngOnInit(){
       this.partnerSubscription = this.partnerService.partner$.subscribe(partner => {

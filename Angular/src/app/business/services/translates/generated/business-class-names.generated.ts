@@ -1,63 +1,77 @@
-export function getTranslatedClassNameBusiness(name: string): string
-{
-    switch(name) 
+import { Injectable } from '@angular/core';
+import { TranslocoService } from '@jsverse/transloco';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TranslateClassNamesBusinessService {
+
+    constructor(
+    private translocoService: TranslocoService
+    ) {
+    }
+
+    translate(name: string): string
     {
-        case 'Notification':
-            return $localize`:@@Notification:Notification`;
-        case 'PartnerUser':
-            return $localize`:@@PartnerUser:PartnerUser`;
-        case 'Segmentation':
-            return $localize`:@@Segmentation:Segmentation`;
-        case 'SegmentationItem':
-            return $localize`:@@SegmentationItem:SegmentationItem`;
-        case 'UserExtended':
-            return $localize`:@@UserExtended:UserExtended`;
-        case 'Brand':
-            return $localize`:@@Brand:Brand`;
-        case 'MergedPartnerUser':
-            return $localize`:@@MergedPartnerUser:MergedPartnerUser`;
-        case 'NotificationSaveBody':
-            return $localize`:@@NotificationSaveBody:NotificationSaveBody`;
-        case 'OnlineShop':
-            return $localize`:@@OnlineShop:OnlineShop`;
-        case 'PartnerNotificationSaveBody':
-            return $localize`:@@PartnerNotificationSaveBody:PartnerNotificationSaveBody`;
-        case 'PartnerRoleSaveBody':
-            return $localize`:@@PartnerRoleSaveBody:PartnerRoleSaveBody`;
-        case 'PartnerUserSaveBody':
-            return $localize`:@@PartnerUserSaveBody:PartnerUserSaveBody`;
-        case 'Product':
-            return $localize`:@@Product:Product`;
-        case 'QrCode':
-            return $localize`:@@QrCode:QrCode`;
-        case 'SegmentationSaveBody':
-            return $localize`:@@SegmentationSaveBody:SegmentationSaveBody`;
-        case 'UserExtendedSaveBody':
-            return $localize`:@@UserExtendedSaveBody:UserExtendedSaveBody`;
-        case 'Gender':
-            return $localize`:@@Gender:Gender`;
-        case 'NotificationUser':
-            return $localize`:@@NotificationUser:NotificationUser`;
-        case 'Partner':
-            return $localize`:@@Partner:Partner`;
-        case 'PartnerNotification':
-            return $localize`:@@PartnerNotification:PartnerNotification`;
-        case 'PartnerNotificationPartnerUser':
-            return $localize`:@@PartnerNotificationPartnerUser:PartnerNotificationPartnerUser`;
-        case 'PartnerPermission':
-            return $localize`:@@PartnerPermission:PartnerPermission`;
-        case 'PartnerRole':
-            return $localize`:@@PartnerRole:PartnerRole`;
-        case 'Tier':
-            return $localize`:@@Tier:Tier`;
-        case 'Transaction':
-            return $localize`:@@Transaction:Transaction`;
-        case 'TransactionProduct':
-            return $localize`:@@TransactionProduct:TransactionProduct`;
-        case 'TransactionStatus':
-            return $localize`:@@TransactionStatus:TransactionStatus`;
-        default:
-            return null;
+        switch(name) 
+        {
+            case 'Notification':
+                return this.translocoService.translate('Notification');
+            case 'PartnerUser':
+                return this.translocoService.translate('PartnerUser');
+            case 'Segmentation':
+                return this.translocoService.translate('Segmentation');
+            case 'SegmentationItem':
+                return this.translocoService.translate('SegmentationItem');
+            case 'UserExtended':
+                return this.translocoService.translate('UserExtended');
+            case 'Brand':
+                return this.translocoService.translate('Brand');
+            case 'MergedPartnerUser':
+                return this.translocoService.translate('MergedPartnerUser');
+            case 'NotificationSaveBody':
+                return this.translocoService.translate('NotificationSaveBody');
+            case 'OnlineShop':
+                return this.translocoService.translate('OnlineShop');
+            case 'PartnerNotificationSaveBody':
+                return this.translocoService.translate('PartnerNotificationSaveBody');
+            case 'PartnerRoleSaveBody':
+                return this.translocoService.translate('PartnerRoleSaveBody');
+            case 'PartnerUserSaveBody':
+                return this.translocoService.translate('PartnerUserSaveBody');
+            case 'Product':
+                return this.translocoService.translate('Product');
+            case 'QrCode':
+                return this.translocoService.translate('QrCode');
+            case 'SegmentationSaveBody':
+                return this.translocoService.translate('SegmentationSaveBody');
+            case 'UserExtendedSaveBody':
+                return this.translocoService.translate('UserExtendedSaveBody');
+            case 'Gender':
+                return this.translocoService.translate('Gender');
+            case 'NotificationUser':
+                return this.translocoService.translate('NotificationUser');
+            case 'Partner':
+                return this.translocoService.translate('Partner');
+            case 'PartnerNotification':
+                return this.translocoService.translate('PartnerNotification');
+            case 'PartnerNotificationPartnerUser':
+                return this.translocoService.translate('PartnerNotificationPartnerUser');
+            case 'PartnerPermission':
+                return this.translocoService.translate('PartnerPermission');
+            case 'PartnerRole':
+                return this.translocoService.translate('PartnerRole');
+            case 'Tier':
+                return this.translocoService.translate('Tier');
+            case 'Transaction':
+                return this.translocoService.translate('Transaction');
+            case 'TransactionProduct':
+                return this.translocoService.translate('TransactionProduct');
+            case 'TransactionStatus':
+                return this.translocoService.translate('TransactionStatus');
+            default:
+                return null;
+        }
     }
 }
 

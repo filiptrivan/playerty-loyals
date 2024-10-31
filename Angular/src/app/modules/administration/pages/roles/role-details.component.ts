@@ -1,11 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslocoService } from '@jsverse/transloco';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
-import { forkJoin, Subscription } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { Role, RoleSaveBody } from 'src/app/business/entities/generated/security-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { isArrayEmpty } from 'src/app/business/services/validation/validation-rules';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
@@ -30,9 +32,12 @@ export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 
+        protected override translocoService: TranslocoService,
+        protected override translateClassNamesService: TranslateClassNamesService,
+        protected override validatorService: ValidatorService,
         private apiService: ApiService) 
         {
-        super(differs, http, messageService, changeDetectorRef, router, route);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
         }
          
     override ngOnInit() {

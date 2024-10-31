@@ -18,6 +18,7 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { environment } from 'src/environments/environment';
+import { TranslocoRootModule } from './transloco-root.module';
 
 @NgModule({
   declarations: [
@@ -34,12 +35,13 @@ import { environment } from 'src/environments/environment';
     MessagesModule,
     ToastModule,
     SocialLoginModule,
+    TranslocoRootModule,
     NgxSpinnerModule.forRoot({ type: 'ball-clip-rotate-multiple' }),
     CoreModule,
   ],
   providers: [
     SoftMessageService,
-    MessageService, 
+    MessageService,
     {
     provide: ErrorHandler,
     useClass: SoftErrorHandler,

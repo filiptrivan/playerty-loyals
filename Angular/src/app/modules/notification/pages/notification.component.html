@@ -1,12 +1,11 @@
+<ng-container *transloco="let t">
   <div class="card dashboard-card-wrapper">
     <div class="big-header" style="margin-bottom: 10px;">
-      Notifications
+      {{t('NotificationList')}}
       <div class="bold-header-separator"></div>
     </div>
     <div style="display: flex; flex-direction: column; position: relative; z-index: 2;">
       <div style="display: flex; justify-content: space-between;">
-        <!-- <div>{{tierForTheCurrentUser?.name}}</div>
-        <div>{{tierForTheCurrentUser?.validTo}} points</div> -->
       </div>
       @for (notification of currentUserNotifications?.data; track $index) {
         <div [class]="(notification.isMarkedAsRead ? 'primary-lighter-color-background' : '') + ' notification-border'" style="padding: 18px; margin: 0px;">
@@ -22,12 +21,11 @@
               </div>
             </div>
             <div>
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos voluptas beatae maxime vero est magnam dolorem minima optio adipisci, dignissimos esse repellat cum reprehenderit aliquam perferendis natus libero at ut.
+              {{notification.description}}
             </div>
           </div>
         </div>
       }
-      <!-- <p-progressBar [value]="levelPercentForTheCurrentUser" color="var(--primary-dark-color)"/> -->
     </div>
     <p-paginator
       (onPageChange)="onLazyLoad($event)"
@@ -39,3 +37,4 @@
       <i class="pi pi-bell"></i>
     </div>
   </div>
+</ng-container>

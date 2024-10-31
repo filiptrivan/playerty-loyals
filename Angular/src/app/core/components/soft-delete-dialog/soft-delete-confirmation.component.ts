@@ -3,6 +3,7 @@ import { ApiService } from 'src/app/business/services/api/api.service';
 import { Component } from "@angular/core";
 import { DynamicDialogConfig, DynamicDialogRef } from "primeng/dynamicdialog";
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
   selector: 'soft-delete-confirmation',
@@ -10,7 +11,8 @@ import { PrimengModule } from 'src/app/layout/modules/primeng.module';
   styles: [],
   standalone: true,
   imports: [
-    PrimengModule
+    PrimengModule,
+    TranslocoDirective,
   ],
   providers: [
     ConfirmationService

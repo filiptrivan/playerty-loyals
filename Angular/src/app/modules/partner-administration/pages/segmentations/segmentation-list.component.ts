@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Segmentation } from 'src/app/business/entities/generated/business-entities.generated';
+import { TranslocoService } from '@jsverse/transloco';
+import { Component, OnInit } from '@angular/core';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 
 @Component({
@@ -8,23 +8,22 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
     styles: []
 })
 export class SegmentationListComponent implements OnInit {
-    tableTitle: string = $localize`:@@Segmentations:Segmentations`
     cols: Column[];
     controllerName: string = 'Segmentation';
-    objectName: string = 'Segmentation';
+    objectNameForTheRequest: string = 'Segmentation';
 
     constructor(
-        private cdr: ChangeDetectorRef
+        private translocoService: TranslocoService
     ) { }
 
     ngOnInit(){
         this.cols = [
-            {name: 'Actions', actions:[
-                {name:$localize`:@@Details:Details`, field: 'Details'},
-                {name:$localize`:@@Delete:Delete`, field: 'Delete'},
+            {name: this.translocoService.translate('Actions'), actions:[
+                {name: this.translocoService.translate('Details'), field: 'Details'},
+                {name: this.translocoService.translate('Delete'), field: 'Delete'},
             ]},
-            {name: 'Name', filterType: 'text', field: 'name'},
-            {name: 'Points for the first time fill', filterType: 'numeric', field: 'pointsForTheFirstTimeFill', showMatchModes: true},
+            {name: this.translocoService.translate('Name'), filterType: 'text', field: 'name'},
+            {name: this.translocoService.translate('PointsForTheFirstTimeFill'), filterType: 'numeric', field: 'pointsForTheFirstTimeFill', showMatchModes: true},
         ]
     }
 }

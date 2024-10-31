@@ -2,10 +2,13 @@ import { PartnerService } from './../../../../business/services/helper/partner.s
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslocoService } from '@jsverse/transloco';
 import { firstValueFrom, forkJoin, map, Observable } from 'rxjs';
 import { PartnerNotification, PartnerNotificationSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
 import { TableFilter } from 'src/app/business/entities/table-filter';
 import { ApiService } from 'src/app/business/services/api/api.service';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { Column, SelectedRowsMethodResult } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
@@ -21,10 +24,9 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
 
     text: string;
 
-    tableTitle: string = $localize`:@@Recipients:Recipients`
     cols: Column[];
     tableControllerName: string = 'PartnerUser';
-    objectName: string = 'PartnerUser';
+    objectNameForTheRequest: string = 'PartnerUser';
     
     newlySelectedPartnerUserList: number[] = [];
     unselectedPartnerUserList: number[] = [];
@@ -38,10 +40,13 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute,
+        protected override translocoService: TranslocoService,
+        protected override translateClassNamesService: TranslateClassNamesService,
+        protected override validatorService: ValidatorService,
         private apiService: ApiService,
         private partnerService: PartnerService
     ) {
-        super(differs, http, messageService, changeDetectorRef, router, route);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
     }
          
     override ngOnInit() {
@@ -68,17 +73,17 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
 
     sendEmailNotification(){
         this.apiService.sendPartnerNotificationEmail(this.modelId, this.model.version).subscribe(() => {
-            this.messageService.successMessage($localize`:@@SuccessfulEmailAttempt:Your email attempt has been processed.`);
+            this.messageService.successMessage(this.translocoService.translate('SuccessfulEmailAttempt'));
         });
     }
 
     async populatePartnerUserTableCols(){
         this.cols = [
-            {name: 'User', filterType: 'text', field: 'userDisplayName'},
-            {name: 'Points', filterType: 'numeric', field: 'points', showMatchModes: true},
-            {name: 'Tier', filterType: 'multiselect', field: 'tierDisplayName', filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(this.partnerService.loadTierListForDropdown()) },
-            {name: 'Segmentation', filterType: 'multiselect', field: 'checkedSegmentationItemsCommaSeparated', dropdownOrMultiselectValues: await firstValueFrom(this.partnerService.loadSegmentationItemListForPartnerForDropdown()) },
-            {name: 'Created at', filterType: 'date', field: 'createdAt', showMatchModes: true},
+            {name: this.translocoService.translate('User'), filterType: 'text', field: 'userDisplayName'},
+            {name: this.translocoService.translate('Points'), filterType: 'numeric', field: 'points', showMatchModes: true},
+            {name: this.translocoService.translate('Tier'), filterType: 'multiselect', field: 'tierDisplayName', filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(this.partnerService.loadTierListForDropdown()) },
+            {name: this.translocoService.translate('Segmentation'), filterType: 'multiselect', field: 'checkedSegmentationItemsCommaSeparated', dropdownOrMultiselectValues: await firstValueFrom(this.partnerService.loadSegmentationItemListForPartnerForDropdown()) },
+            {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true},
         ]
     }
 

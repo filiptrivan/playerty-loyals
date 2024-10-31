@@ -1,16 +1,16 @@
 <div class="card dashboard-card-wrapper">
     <div class="big-header">
-      {{partnerUserPoints()}} points
+      {{partnerUserPoints()}} <i class="pi pi-star"></i> 
       <div class="bold-header-separator"></div>
     </div>
     <div style="display: flex; flex-direction: column; gap: 6px; position: relative; z-index: 2;">
       <div style="display: flex; justify-content: space-between;">
         <div>{{tier?.name}}</div>
-        <div>{{tier?.validTo}} points</div>
+        <div>{{tier?.validTo}} <i class="pi pi-star"></i></div>
       </div>
       <p-progressBar [value]="getLevelPercentForTheCurrentUser()" color="var(--primary-dark-color)"/>
     </div>
     <div class="card-overflow-icon" style="position: absolute; overflow: hidden; right: 8px; top: -25px; z-index: 1;">
-      <i class="pi pi-heart" style="font-size: 270px;"></i>
+      <i class="pi pi-star" style="font-size: 270px;"></i> 
     </div>
   </div>

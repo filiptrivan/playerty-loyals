@@ -42,7 +42,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         public async Task<IActionResult> ExportPartnerListToExcel(TableFilterDTO dto)
         {
             byte[] fileContent = await _loyalsBusinessService.ExportPartnerListToExcel(dto, _context.DbSet<Partner>(), false);
-            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Partners.xlsx"));
+            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Partneri.xlsx"));
         }
 
         [HttpDelete]

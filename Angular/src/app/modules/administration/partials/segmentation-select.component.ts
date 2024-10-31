@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, Input, KeyValueDiffers, OnInit } from '@angular/core';
 import { Segmentation, SegmentationItem } from 'src/app/business/entities/generated/business-entities.generated';
-import { ApiService } from 'src/app/business/services/api/api.service';
 import { CardSkeletonComponent } from "../../../core/components/card-skeleton/card-skeleton.component";
 import { SoftCheckboxComponent } from 'src/app/core/controls/soft-checkbox/soft-checkbox.component';
 import { FormGroup } from '@angular/forms';
@@ -8,6 +7,9 @@ import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { TranslocoService } from '@jsverse/transloco';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 
 @Component({
     selector: 'segmentation-select',
@@ -37,10 +39,12 @@ export class SegmentationSelectComponent extends BaseFormCopy implements OnInit 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 
-        private apiService: ApiService,
+        protected override translocoService: TranslocoService,
+        protected override translateClassNamesService: TranslateClassNamesService,
+        protected override validatorService: ValidatorService,
     ) 
     {
-        super(differs, http, messageService, changeDetectorRef, router, route);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
     }
          
     override ngOnInit() {
@@ -49,6 +53,10 @@ export class SegmentationSelectComponent extends BaseFormCopy implements OnInit 
                 this.segmentationItemsForTheCurrentSegmentation.push({...segmentationItem, index: index})
             }
         });
+    }
+
+    getSegmentationItemFormArrayControlByIndex(index: number){
+        return this.getFormArrayControlByIndex<SegmentationItem>('checked', this.segmentationItemsFormArrayIdentifier, index);
     }
 
 }

@@ -10,7 +10,7 @@
   <div class="p-inputgroup p-fluid">
     <p-dropdown
     *ngIf="control"
-    [pTooltip]="getValidationErrrorMessages()" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
+    [pTooltip]="getValidationErrrorMessages()" [tooltipEvent]="errorMessageTooltipEvent" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
     [id]="label"
     [formControl]="control"
     [placeholder]="placeholder"

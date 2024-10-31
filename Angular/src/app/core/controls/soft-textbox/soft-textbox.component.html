@@ -7,10 +7,7 @@
   </div>
   <input
     *ngIf="control"
-    [pTooltip]="getValidationErrrorMessages()"
-    tooltipPosition="bottom"
-    [tooltipDisabled]="control?.valid"
-    tooltipStyleClass="soft-tooltip-invalid"
+    [pTooltip]="getValidationErrrorMessages()" [tooltipEvent]="errorMessageTooltipEvent" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
     pInputText
     [formControl]="control"
     [id]="control?.label"

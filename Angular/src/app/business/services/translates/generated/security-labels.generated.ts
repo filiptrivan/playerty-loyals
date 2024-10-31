@@ -1,69 +1,83 @@
-export function getTranslatedLabelSecurity(name: string): string
-{
-    switch(name) 
+import { Injectable } from '@angular/core';
+import { TranslocoService } from '@jsverse/transloco';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class TranslateLabelsSecurityService {
+
+    constructor(
+    private translocoService: TranslocoService
+    ) {
+    }
+
+    translate(name: string): string
     {
-        case 'idToken':
-            return $localize`:@@IdToken:IdToken`;
-        case 'browser':
-            return $localize`:@@Browser:Browser`;
-        case 'refreshToken':
-            return $localize`:@@RefreshToken:RefreshToken`;
-        case 'verificationCode':
-            return $localize`:@@VerificationCode:VerificationCode`;
-        case 'email':
-            return $localize`:@@Email:Email`;
-        case 'password':
-            return $localize`:@@Password:Password`;
-        case 'hasLoggedInWithExternalProvider':
-            return $localize`:@@HasLoggedInWithExternalProvider:HasLoggedInWithExternalProvider`;
-        case 'numberOfFailedAttemptsInARow':
-            return $localize`:@@NumberOfFailedAttemptsInARow:NumberOfFailedAttemptsInARow`;
-        case 'isVerified':
-            return $localize`:@@IsVerified:IsVerified`;
-        case 'version':
-            return $localize`:@@Version:Version`;
-        case 'id':
-            return $localize`:@@Id:Id`;
-        case 'createdAt':
-            return $localize`:@@CreatedAt:CreatedAt`;
-        case 'modifiedAt':
-            return $localize`:@@ModifiedAt:ModifiedAt`;
-        case 'name':
-            return $localize`:@@Name:Name`;
-        case 'description':
-            return $localize`:@@Description:Description`;
-        case 'ipAddress':
-            return $localize`:@@IpAddress:IpAddress`;
-        case 'tokenString':
-            return $localize`:@@TokenString:TokenString`;
-        case 'expireAt':
-            return $localize`:@@ExpireAt:ExpireAt`;
-        case 'testColumnForGrid':
-            return $localize`:@@TestColumnForGrid:TestColumnForGrid`;
-        case 'roles':
-            return $localize`:@@Roles:Roles`;
-        case 'user':
-            return $localize`:@@User:User`;
-        case 'newPassword':
-            return $localize`:@@NewPassword:NewPassword`;
-        case 'status':
-            return $localize`:@@Status:Status`;
-        case 'message':
-            return $localize`:@@Message:Message`;
-        case 'accessToken':
-            return $localize`:@@AccessToken:AccessToken`;
-        case 'userEmail':
-            return $localize`:@@UserEmail:UserEmail`;
-        case 'token':
-            return $localize`:@@Token:Token`;
-        case 'title':
-            return $localize`:@@Title:Title`;
-        case 'titleLatin':
-            return $localize`:@@TitleLatin:TitleLatin`;
-        case 'descriptionLatin':
-            return $localize`:@@DescriptionLatin:DescriptionLatin`;
-        default:
-            return null;
+        switch(name) 
+        {
+            case 'idToken':
+                return this.translocoService.translate('IdToken');
+            case 'browser':
+                return this.translocoService.translate('Browser');
+            case 'email':
+                return this.translocoService.translate('Email');
+            case 'newPassword':
+                return this.translocoService.translate('NewPassword');
+            case 'user':
+                return this.translocoService.translate('User');
+            case 'expireAt':
+                return this.translocoService.translate('ExpireAt');
+            case 'userEmail':
+                return this.translocoService.translate('UserEmail');
+            case 'accessToken':
+                return this.translocoService.translate('AccessToken');
+            case 'token':
+                return this.translocoService.translate('Token');
+            case 'password':
+                return this.translocoService.translate('Password');
+            case 'refreshToken':
+                return this.translocoService.translate('RefreshToken');
+            case 'ipAddress':
+                return this.translocoService.translate('IpAddress');
+            case 'tokenString':
+                return this.translocoService.translate('TokenString');
+            case 'status':
+                return this.translocoService.translate('Status');
+            case 'message':
+                return this.translocoService.translate('Message');
+            case 'selectedPermissionIds':
+                return this.translocoService.translate('SelectedPermissionIds');
+            case 'selectedUserIds':
+                return this.translocoService.translate('SelectedUserIds');
+            case 'roleDTO':
+                return this.translocoService.translate('RoleDTO');
+            case 'verificationCode':
+                return this.translocoService.translate('VerificationCode');
+            case 'name':
+                return this.translocoService.translate('Name');
+            case 'nameLatin':
+                return this.translocoService.translate('NameLatin');
+            case 'description':
+                return this.translocoService.translate('Description');
+            case 'descriptionLatin':
+                return this.translocoService.translate('DescriptionLatin');
+            case 'code':
+                return this.translocoService.translate('Code');
+            case 'id':
+                return this.translocoService.translate('Id');
+            case 'version':
+                return this.translocoService.translate('Version');
+            case 'createdAt':
+                return this.translocoService.translate('CreatedAt');
+            case 'modifiedAt':
+                return this.translocoService.translate('ModifiedAt');
+            case 'roles':
+                return this.translocoService.translate('Roles');
+            case 'users':
+                return this.translocoService.translate('Users');
+            default:
+                return null;
+        }
     }
 }
 

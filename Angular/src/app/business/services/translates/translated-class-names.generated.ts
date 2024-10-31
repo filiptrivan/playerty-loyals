@@ -1,17 +1,30 @@
 import { environment } from "src/environments/environment";
-import { getTranslatedClassNameBusiness } from './generated/business-class-names.generated';
-import { getTranslatedClassNameSecurity } from './generated/security-class-names.generated';
+import { Injectable } from "@angular/core";
+import { TranslateClassNamesBusinessService } from './generated/business-class-names.generated';
+import { TranslateClassNamesSecurityService } from './generated/security-class-names.generated';
 
-export function getTranslatedClassName(name: string): string {
-    let result: string = null;
+@Injectable({
+    providedIn: 'root',
+})
+export class TranslateClassNamesService {
 
-    result = getTranslatedClassNameBusiness(name);
-    if (result != null)
-        return result;
+    constructor(
+        private translateClassNamesBusinessService: TranslateClassNamesBusinessService,
+        private translateClassNamesSecurityService: TranslateClassNamesSecurityService
+    ) {
+    }
 
-    result = getTranslatedClassNameSecurity(name);
-    if (result != null)
-        return result;
+    translate(name: string){
+        let result = null;
 
-    return name;
+        result = this.translateClassNamesBusinessService.translate(name);
+        if (result != null)
+            return result;
+
+        result = this.translateClassNamesSecurityService.translate(name);
+        if (result != null)
+            return result;
+
+        return name;
+    }
 }

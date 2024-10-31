@@ -11,12 +11,12 @@ import { SoftFormArray, SoftFormControl, SoftFormGroup } from '../soft-form-cont
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { SoftMessageService } from '../../services/soft-message.service';
-import { getTranslatedClassName } from 'src/app/business/services/translates/translated-class-names.generated';
-import { getValidator } from 'src/app/business/services/validation/validation-rules.generated';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-import { BaseEntity } from '../../entities/base-entity';
 import { getParentUrl } from '../../services/helper-functions';
+import { TranslocoService } from '@jsverse/transloco';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 
 @Component({
   selector: 'base-form',
@@ -41,7 +41,10 @@ export class BaseFormCopy implements OnInit {
     protected messageService: SoftMessageService, 
     protected changeDetectorRef: ChangeDetectorRef,
     protected router: Router, 
-    protected route: ActivatedRoute
+    protected route: ActivatedRoute,
+    protected translocoService: TranslocoService,
+    protected translateClassNamesService: TranslateClassNamesService,
+    protected validatorService: ValidatorService,
   ) {
   }
 
@@ -83,7 +86,7 @@ export class BaseFormCopy implements OnInit {
   setValidator(formControl: SoftFormControl, modelConstructor: any) {
     if (formControl == null) return null;
 
-    formControl.validator = getValidator(formControl, modelConstructor.typeName);
+    formControl.validator = this.validatorService.getValidator(formControl, modelConstructor.typeName);
   
     if (formControl?.validator?.hasNotEmptyRule)
       formControl.required = true;
@@ -131,7 +134,7 @@ export class BaseFormCopy implements OnInit {
 
     if(isValid && isFormArrayValid){
       this.http.put<any>(environment.apiUrl + `/${this.controllerName}/${this.saveMethodName}`, this.saveBody, environment.httpOptions).subscribe(res => {
-        this.messageService.successMessage("You have successfully saved.");
+        this.messageService.successMessage(this.translocoService.translate('SuccessfulSaveToastDescription'));
 
         Object.keys(res).forEach((key) => {
           const formControl = this.formGroup.get(key);
@@ -221,8 +224,8 @@ export class BaseFormCopy implements OnInit {
 
   showInvalidFieldsMessage(){
     this.messageService.warningMessage(
-      $localize`:@@YouHaveSomeInvalidFieldsDescription:Some of the fields on the form are not valid, please check which ones and try again.`,
-      $localize`:@@YouHaveSomeInvalidFieldsTitle:You have some invalid fields`, 
+      this.translocoService.translate('YouHaveSomeInvalidFieldsDescription'),
+      this.translocoService.translate('YouHaveSomeInvalidFieldsTitle'), 
     );
   }
 
@@ -233,10 +236,7 @@ export class BaseFormCopy implements OnInit {
         this.formGroup.controls[key].markAsDirty(); // this.formGroup.markAsDirty(); // FT: For some reason this doesnt work
       });
 
-      this.messageService.warningMessage(
-        $localize`:@@YouHaveSomeInvalidFieldsDescription:Some of the fields on the form are not valid, please check which ones and try again.`,
-        $localize`:@@YouHaveSomeInvalidFieldsTitle:You have some invalid fields`, 
-      );
+      this.showInvalidFieldsMessage();
 
       return false;
     }
@@ -248,13 +248,14 @@ export class BaseFormCopy implements OnInit {
 
   //#region Model List
 
-  initFormArray(modelList: any[], modelConstructor: any, formArraySaveBodyName: string, required: boolean = false){ // FT HACK: Because generics can't instantiate in TS (because JS)
+  initFormArray(modelList: any[], modelConstructor: any, formArraySaveBodyName: string, formArrayTranslationKey: string, required: boolean = false){ // FT HACK: Because generics can't instantiate in TS (because JS)
     if (modelList == null)
       return null;
 
     let formArray: SoftFormArray = new SoftFormArray([]);
     formArray.required = required;
     formArray.modelConstructor = modelConstructor;
+    formArray.translationKey = formArrayTranslationKey;
 
     modelList.forEach(model => {
       Object.assign(modelConstructor, model);
@@ -307,7 +308,7 @@ export class BaseFormCopy implements OnInit {
   }
   
   // FT: Need to use this from html because can't do "as SoftFormControl" there
-  getFormArrayControlByIndex(formControlName: string, formArraySaveBodyName: string, index: number): SoftFormControl{
+  getFormArrayControlByIndex<T>(formControlName: keyof T & string, formArraySaveBodyName: string, index: number): SoftFormControl{
     if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
       this.formArrayControlNamesFromHtml.push(formControlName);
 
@@ -365,7 +366,7 @@ export class BaseFormCopy implements OnInit {
 
         if (formArray.required == true && formArray.length == 0) {
           invalid = true;
-          this.messageService.warningMessage($localize`:@@ListCanNotBeEmpty:Can not be empty list ` + getTranslatedClassName(key.replace('List', '')))
+          this.messageService.warningMessage(this.translocoService.translate('ListCanNotBeEmpty', {value: this.translateClassNamesService.translate(formArray.translationKey)}))
         }
       }
     });
@@ -413,13 +414,13 @@ export class BaseFormCopy implements OnInit {
 
   getCrudMenuForOrderedData(formArray: SoftFormArray, modelConstructor: any){
     let crudMenuForOrderedData: MenuItem[] = [
-        {label: $localize`:@@Remove:Remove`, icon: 'pi pi-minus', command: () => {
+        {label: this.translocoService.translate('Remove'), icon: 'pi pi-minus', command: () => {
             this.removeFormControlFromTheFormArray(formArray, this.lastMenuIconIndexClicked);
         }},
-        {label: $localize`:@@AddAbove:Add above`, icon: 'pi pi-arrow-up', command: () => {
+        {label: this.translocoService.translate('AddAbove'), icon: 'pi pi-arrow-up', command: () => {
             this.addNewFormControlToTheFormArray(formArray, modelConstructor, this.lastMenuIconIndexClicked);
         }},
-        {label: $localize`:@@AddBelow:Add below`, icon: 'pi pi-arrow-down', command: () => {
+        {label: this.translocoService.translate('AddBelow'), icon: 'pi pi-arrow-down', command: () => {
             this.addNewFormControlToTheFormArray(formArray, modelConstructor, this.lastMenuIconIndexClicked + 1);
         }},
     ];

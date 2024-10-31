@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { RequiredComponent } from '../../components/required/required.component';
+import { TranslocoService } from '@jsverse/transloco';
+import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels.generated';
 
 @Component({
     selector: 'soft-autocomplete',
@@ -24,8 +26,11 @@ export class SoftAutocompleteComponent extends BaseAutocompleteControl implement
     @Input() appendTo: any = 'body';
     @Input() showClear: boolean = true;
 
-    constructor() { 
-        super();
+    constructor(
+        protected override translocoService: TranslocoService,
+        protected override translateLabelsService: TranslateLabelsService,
+    ) { 
+        super(translocoService, translateLabelsService);
     }
 
     override ngOnInit(){

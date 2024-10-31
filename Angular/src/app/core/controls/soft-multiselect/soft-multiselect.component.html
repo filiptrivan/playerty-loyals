@@ -6,7 +6,7 @@
   <span class="p-fluid">
     <p-multiSelect
     *ngIf="control"
-    [pTooltip]="getValidationErrrorMessages()" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
+    [pTooltip]="getValidationErrrorMessages()" [tooltipEvent]="errorMessageTooltipEvent" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
     [id]="label"
     [formControl]="control"
     [options]="options"

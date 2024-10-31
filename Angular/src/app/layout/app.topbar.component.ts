@@ -1,3 +1,4 @@
+import { TranslocoService } from '@jsverse/transloco';
 import { NavigationEnd, Router } from '@angular/router';
 import { AuthService } from './../core/services/auth.service';
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
@@ -30,36 +31,7 @@ export class AppTopBarComponent implements OnDestroy {
     currentUser: UserExtended;
     currentPartnerUser: PartnerUser;
     currentUserNotificationsCount: number;
-    menuItems: SoftMenuItem[] = [
-      {
-        label: $localize`:@@Profile:Profile`,
-        icon: 'pi-user',
-        showSeparator: true,
-        onClick: () => {
-          this.routeToUserPage();
-        }
-      },
-      {
-        label: $localize`:@@Notifications:Notifications`,
-        icon: 'pi-bell',
-        showNotificationBadge: true,
-        onClick: () => {
-          this.router.navigateByUrl(`/notifications`);
-        },
-      },
-      // {
-      //   label: $localize`:@@Settings:Settings`,
-      //   icon: 'pi-cog'
-      // },
-      {
-        label: $localize`:@@Logout:Logout`,
-        icon: 'pi-sign-out',
-        showSeparator: true,
-        onClick: () => {
-          this.authService.logout();
-        }
-      },
-    ];
+    menuItems: SoftMenuItem[] = [];
     avatarLabel: string;
     companyName: string;
     showProfileIcon: boolean = false;
@@ -76,10 +48,42 @@ export class AppTopBarComponent implements OnDestroy {
       private apiService: ApiService,
       protected router: Router,
       private partnerService: PartnerService,
+      private translocoService: TranslocoService,
     ) { 
     }
 
   async ngOnInit(){
+    this.menuItems = [
+      {
+        label: this.translocoService.translate('YourProfile'),
+        icon: 'pi-user',
+        showSeparator: true,
+        onClick: () => {
+          this.routeToUserPage();
+        }
+      },
+      {
+        label: this.translocoService.translate('NotificationList'),
+        icon: 'pi-bell',
+        showNotificationBadge: true,
+        onClick: () => {
+          this.router.navigateByUrl(`/notifications`);
+        },
+      },
+      // {
+      //   label: this.translocoService.translate('Settings'),
+      //   icon: 'pi-cog'
+      // },
+      {
+        label: this.translocoService.translate('Logout'),
+        icon: 'pi-sign-out',
+        showSeparator: true,
+        onClick: () => {
+          this.authService.logout();
+        }
+      }
+    ]
+
     this.userSubscription = this.authService.user$.subscribe(currentUser => {
         this.currentUser = currentUser;
         this.avatarLabel = currentUser?.email.charAt(0).toLocaleUpperCase();

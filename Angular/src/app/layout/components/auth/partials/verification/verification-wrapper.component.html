@@ -1,32 +1,34 @@
-<div class="min-h-screen" style="display: flex; justify-content: center; align-items: center;">
-    <div class="dialog" style="padding: 0px;">
-        <soft-panel>
-            <panel-header title="Account verification" [bigTitle]="true" icon="pi pi-envelope"></panel-header>
-
-            <panel-body>
-                <form class="grid">
-                    <div class="col-12">
-                        <div class="header">Verify your email address</div>
-                    </div>
-                    <div class="col-12">
-                        We’ve sent a verification code to {{email}}. Please check your email inbox or spam folder and enter the code that we’ve sent to complete the process. Thank you!
-                    </div>
-                    <div class="col-12">
-                        <soft-textbox [control]="control('verificationCode')"></soft-textbox>
-                    </div>
-                    <div class="col-12">
-                        <p-button (onClick)="codeSubmit()" label="Submit" icon="pi pi-verified"></p-button>
-                    </div>
-                </form>
-            </panel-body>
-    
-            <panel-footer>
-                <a pButton class="p-button-link" label="Go to Gmail" icon="pi pi-external-link" href="https://mail.google.com/mail/u/" target="_blank" rel="noopener noreferrer"></a>
-                <a pButton class="p-button-link" label="Go to Yahoo" icon="pi pi-external-link" href="https://mail.yahoo.com/d/folders/1/" target="_blank" rel="noopener noreferrer"></a>
-            </panel-footer>
-            <panel-footer>
-                <div>If you don’t see it, you can <a class="link" (click)="resendVerificationToken()">resend the verification code.</a></div>
-            </panel-footer>
-        </soft-panel>
+<ng-container *transloco="let t">
+    <div class="min-h-screen" style="display: flex; justify-content: center; align-items: center;">
+        <div class="dialog" style="padding: 0px;">
+            <soft-panel>
+                <panel-header [title]="t('AccountVerificationHeader')" [bigTitle]="true" icon="pi pi-envelope"></panel-header>
+                
+                <panel-body>
+                    <form class="grid">
+                        <div class="col-12">
+                            <div class="header">{{t('AccountVerificationTitle')}}</div>
+                        </div>
+                        <div class="col-12">
+                            {{t('AccountVerificationDescription', {email: email})}}
+                        </div>
+                        <div class="col-12">
+                            <soft-textbox [control]="control('verificationCode')"></soft-textbox>
+                        </div>
+                        <div class="col-12">
+                            <p-button (onClick)="codeSubmit()" [label]="t('Submit')" icon="pi pi-verified"></p-button>
+                        </div>
+                    </form>
+                </panel-body>
+                
+                <panel-footer>
+                    <a pButton class="p-button-link" [label]="t('GoToGmail')" icon="pi pi-external-link" href="https://mail.google.com/mail/u/" target="_blank" rel="noopener noreferrer"></a>
+                    <a pButton class="p-button-link" [label]="t('GoToYahoo')" icon="pi pi-external-link" href="https://mail.yahoo.com/d/folders/1/" target="_blank" rel="noopener noreferrer"></a>
+                </panel-footer>
+                <panel-footer>
+                    <div>{{t('ResendVerificationCodeFirstPart')}} <a class="link" (click)="resendVerificationToken()">{{t('ResendVerificationCodeLinkSecondPart')}}</a></div>
+                </panel-footer>
+            </soft-panel>
+        </div>
     </div>
-</div>
+</ng-container>

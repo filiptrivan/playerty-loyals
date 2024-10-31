@@ -1,9 +1,8 @@
-import { ActivatedRoute, Router } from '@angular/router';
+import { TranslocoService } from '@jsverse/transloco';
 import { SoftMessageService } from '../../../../../core/services/soft-message.service';
 import { AuthService } from '../../../../../core/services/auth.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { LayoutService } from '../../../../service/app.layout.service';
-import { ApiService } from 'src/app/business/services/api/api.service';
 import { VerificationWrapperComponent } from './verification-wrapper.component';
 
 @Component({
@@ -22,10 +21,8 @@ export class ForgotPasswordVerificationComponent implements OnInit {
     constructor(
       public layoutService: LayoutService, 
       private authService: AuthService, 
-      private router: Router,
-      private route: ActivatedRoute,
-      private apiService: ApiService,
-      private messageService: SoftMessageService, 
+      private messageService: SoftMessageService,
+      private translocoService: TranslocoService
     ) { 
     }
 
@@ -34,13 +31,13 @@ export class ForgotPasswordVerificationComponent implements OnInit {
     
     resendVerificationToken(){
         this.authService.sendForgotPasswordVerificationEmail({email: this.email, newPassword: this.newPassword}).subscribe((res) => {
-            this.messageService.successMessage("Successfully sent verification code.")
+            this.messageService.successMessage(this.translocoService.translate('SuccessfullySentVerificationCode'));
         });
     }
 
     onCodeSubmit(event: string){
         this.authService.forgotPassword({email: this.email, verificationCode: event}).subscribe(() => {
-            this.messageService.successMessage("You have successfully changed your password.");
+            this.messageService.successMessage(this.translocoService.translate('YouHaveSuccessfullyChangedYourPassword'));
             this.authService.navigateToDashboard();
         });
     }

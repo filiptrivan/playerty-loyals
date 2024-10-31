@@ -11,6 +11,7 @@ import { AuthComponent } from './partials/auth.compoment';
 import { RegistrationVerificationComponent } from './partials/verification/registration-verification.component';
 import { LoginVerificationComponent } from './partials/verification/login-verification.component';
 import { ForgotPasswordVerificationComponent } from './partials/verification/forgot-password-verification.component';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 const routes: Routes = [
     { 
@@ -44,6 +45,7 @@ const routes: Routes = [
         LoginVerificationComponent,
         ForgotPasswordVerificationComponent,
         RegistrationVerificationComponent,
+        TranslocoDirective,
     ],
     declarations: [
         ErrorComponent,

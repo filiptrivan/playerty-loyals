@@ -21,6 +21,8 @@ namespace Playerty.Loyals.Business.Services
             _authenticationService = authenticationService;
         }
 
+
+
         //public override async Task UserExtendedSingleReadAuthorize(long userExtendedId)
         //{
         //    await _context.WithTransactionAsync(async () =>

@@ -1,3 +1,4 @@
+import { TranslocoService } from '@jsverse/transloco';
 import { Component, OnInit } from '@angular/core';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 
@@ -7,26 +8,22 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
     styles: []
 })
 export class UserListComponent implements OnInit {
-    tableTitle: string = $localize`:@@Users:Users`
     cols: Column[];
     controllerName: string = 'Auth';
-    objectName: string = 'User';
+    objectNameForTheRequest: string = 'User';
 
     constructor(
+        private translocoService: TranslocoService,
     ) { }
 
     ngOnInit(){
         this.cols = [
-            {name: 'Actions', actions:[
-                {name:$localize`:@@Details:Details`, field: 'Details'},
-                {name:$localize`:@@Delete:Delete`, field: 'Delete'},
+            {name: this.translocoService.translate('Actions'), actions:[
+                {name: this.translocoService.translate('Details'), field: 'Details'},
+                {name:  this.translocoService.translate('Delete'), field: 'Delete'},
             ]},
-            // {name: 'Test', filterType: 'numeric', field: 'testColumnForGrid'},
-            {name: 'Email', filterType: 'text', field: 'email'},
-            {name: 'Created at', filterType: 'date', field: 'createdAt', showMatchModes: true},
-            // {name: 'Modified at', filterType: 'date', field: 'modifiedAt', showMatchModes: true},
-            // {name: 'Disabled', filterType: 'boolean', field: 'isDisabled'},
-            // {name: 'Version', filterType: 'text', field: 'version'},
+            {name: this.translocoService.translate('Email'), filterType: 'text', field: 'email'},
+            {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true},
         ]
     }
 }

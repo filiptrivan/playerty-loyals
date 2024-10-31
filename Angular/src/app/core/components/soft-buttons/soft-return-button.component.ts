@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule, Location } from "@angular/common";
 import { PrimengModule } from "src/app/layout/modules/primeng.module";
 import { getParentUrl } from "../../services/helper-functions";
+import { TranslocoDirective } from "@jsverse/transloco";
 
 @Component({
   selector: 'soft-return-button',
@@ -11,6 +12,7 @@ import { getParentUrl } from "../../services/helper-functions";
   imports: [
     CommonModule,
     PrimengModule,
+    TranslocoDirective,
   ],
   standalone: true,
 })

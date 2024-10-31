@@ -1,4 +1,3 @@
-import { AuthService } from '../../../../../core/services/auth.service';
 import { ChangeDetectorRef, Component, EventEmitter, Input, KeyValueDiffers, OnInit, Output } from '@angular/core';
 import { LayoutService } from '../../../../service/app.layout.service';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
@@ -10,6 +9,9 @@ import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { VerificationTokenRequest } from 'src/app/business/entities/generated/security-entities.generated';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 
 @Component({
     selector: 'verification-wrapper',
@@ -21,6 +23,7 @@ import { ActivatedRoute, Router } from '@angular/router';
         FormsModule,
         ReactiveFormsModule,
         SoftControlsModule,
+        TranslocoDirective,
     ]
 })
 export class VerificationWrapperComponent extends BaseForm<VerificationTokenRequest> implements OnInit {
@@ -35,10 +38,12 @@ export class VerificationWrapperComponent extends BaseForm<VerificationTokenRequ
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router,
         protected override route: ActivatedRoute,
+        protected override translocoService: TranslocoService,
+        protected override translateClassNamesService: TranslateClassNamesService,
+        protected override validatorService: ValidatorService,
         public layoutService: LayoutService, 
-        private authService: AuthService, 
     ) { 
-        super(differs, http, messageService, changeDetectorRef, router, route);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
     }
 
     override ngOnInit(){

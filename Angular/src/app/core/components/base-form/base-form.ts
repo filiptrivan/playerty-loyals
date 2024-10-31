@@ -12,10 +12,11 @@ import { SoftFormControl } from '../soft-form-control/soft-form-control';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { SoftMessageService } from '../../services/soft-message.service';
-import { getTranslatedClassName } from 'src/app/business/services/translates/translated-class-names.generated';
-import { getValidator } from 'src/app/business/services/validation/validation-rules.generated';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { TranslocoService } from '@jsverse/transloco';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 
 @Component({
   selector: 'base-form',
@@ -42,7 +43,10 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     protected messageService: SoftMessageService, 
     protected changeDetectorRef: ChangeDetectorRef,
     protected router: Router, 
-    protected route: ActivatedRoute
+    protected route: ActivatedRoute,
+    protected translocoService: TranslocoService,
+    protected translateClassNamesService: TranslateClassNamesService,
+    protected validatorService: ValidatorService,
     ) {
   }
 
@@ -54,7 +58,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   initFormGroup(model: T) {
     this.model = Object.assign(this.model ? this.model : {}, model);
     
-    this.detailsTitle = getTranslatedClassName(this.model.typeName);
+    this.detailsTitle = this.translateClassNamesService.translate(this.model.typeName);
 
     this.formGroup = new FormGroup({});
     
@@ -83,7 +87,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   setValidator(formControl: SoftFormControl, model: T = null) {
     if (formControl == null) return null;
 
-    formControl.validator = getValidator(formControl, model ? model.typeName : this.model.typeName);
+    formControl.validator = this.validatorService.getValidator(formControl, model ? model.typeName : this.model.typeName);
   
     if (formControl?.validator?.hasNotEmptyRule)
       formControl.required = true;
@@ -95,7 +99,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
   // FT: If we put onChange to true, we are validating control on change not on blur.
   // FT: If we assign model, we are taking validators for the other class
-  control(formControlName: string, updateOnChange: boolean = false, customValidation: boolean = false, disable: boolean = false, model: T = null) {
+  control(formControlName: keyof T & string, updateOnChange: boolean = false, customValidation: boolean = false, disable: boolean = false, model: T = null) {
     let formControl: SoftFormControl = this.formGroup.controls[formControlName] as SoftFormControl;
 
     if (formControl == null) {
@@ -149,7 +153,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
       this.http.put<T>(environment.apiUrl + `/${controllerName}/Save${this.model.typeName}`, this.saveBody, environment.httpOptions).subscribe(res => {
         Object.assign(this.model, res) // this.model = res; // FT: we lose typeName like this and everything that res doesn't have but this.model has
 
-        this.messageService.successMessage("You have successfully saved.");
+        this.messageService.successMessage(this.translocoService.translate('SuccessfulSaveToastDescription'));
 
         if((res as any).id)
           this.rerouteOnTheNewEntity((res as any).id);
@@ -196,8 +200,8 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
   showInvalidFieldsMessage(){
     this.messageService.warningMessage(
-      $localize`:@@YouHaveSomeInvalidFieldsDescription:Some of the fields on the form are not valid, please check which ones and try again.`,
-      $localize`:@@YouHaveSomeInvalidFieldsTitle:You have some invalid fields`, 
+      this.translocoService.translate('YouHaveSomeInvalidFieldsDescription'),
+      this.translocoService.translate('YouHaveSomeInvalidFieldsTitle'), 
     );
   }
 
@@ -208,10 +212,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
         this.formGroup.controls[key].markAsDirty(); // this.formGroup.markAsDirty(); // FT: For some reason this doesnt work
       });
 
-      this.messageService.warningMessage(
-        $localize`:@@YouHaveSomeInvalidFieldsDescription:Some of the fields on the form are not valid, please check which ones and try again.`,
-        $localize`:@@YouHaveSomeInvalidFieldsTitle:You have some invalid fields`, 
-      );
+      this.showInvalidFieldsMessage();
 
       return false;
     }
@@ -284,7 +285,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   }
 
   // FT: Need to use this from html because can't do "as SoftFormControl" there
-  getFormArrayControl(formControlName: string, index: number): SoftFormControl{
+  getFormArrayControl(formControlName: keyof T & string, index: number): SoftFormControl{
     if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
       this.formArrayControlNamesFromHtml.push(formControlName);
     return (this.formArray.controls[index] as FormGroup).controls[formControlName] as SoftFormControl;
@@ -322,7 +323,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
         this.formArray = null;
         this.initFormArray(res, modelConstructor);
 
-        this.messageService.successMessage("You have successfully saved.");
+        this.messageService.successMessage(this.translocoService.translate('SuccessfulSaveToastDescription'));
 
         // FT: Only overriden ngOnInit is called if it exists
         // this.ngOnInit(); // Maybe add it, i didn't need for now...
@@ -374,10 +375,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     });
 
     if (invalid || this.invalidForm) {
-      this.messageService.warningMessage(
-        $localize`:@@YouHaveSomeInvalidFieldsDescription:Some of the fields on the form are not valid, please check which ones and try again.`,
-        $localize`:@@YouHaveSomeInvalidFieldsTitle:You have some invalid fields`, 
-      );
+      this.showInvalidFieldsMessage();
 
       return false;
     }
@@ -393,20 +391,20 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
   getCrudMenuForOrderedData(instantiatedModel: T){
     let crudMenuForOrderedData: MenuItem[] = [
-        {label: $localize`:@@Remove:Remove`, icon: 'pi pi-minus', command: () => {
+        {label: this.translocoService.translate('Remove'), icon: 'pi pi-minus', command: () => {
             this.removeFormControlFromTheFormArray(this.lastMenuIconIndexClicked);
         }},
-        {label: $localize`:@@AddAbove:Add above`, icon: 'pi pi-arrow-up', command: () => {
+        {label: this.translocoService.translate('AddAbove'), icon: 'pi pi-arrow-up', command: () => {
             this.addNewFormControlToTheFormArray(instantiatedModel, this.lastMenuIconIndexClicked);
         }},
-        {label: $localize`:@@AddBelow:Add below`, icon: 'pi pi-arrow-down', command: () => {
+        {label: this.translocoService.translate('AddBelow'), icon: 'pi pi-arrow-down', command: () => {
             this.addNewFormControlToTheFormArray(instantiatedModel, this.lastMenuIconIndexClicked + 1);
         }},
     ];
 
     return crudMenuForOrderedData;
   }
-
+  
   //#endregion
 
 }

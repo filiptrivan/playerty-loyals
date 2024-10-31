@@ -36,4 +36,5 @@ export class SoftFormArray<TValue = any> extends FormArray {
     override value: TValue; // FT: There is no getRawValue in FormArray
     public required: boolean;
     public modelConstructor: any;
+    public translationKey: string;
 }

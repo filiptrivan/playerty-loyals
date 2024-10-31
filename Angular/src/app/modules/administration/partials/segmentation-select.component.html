@@ -2,7 +2,7 @@
     @defer (when segmentationItemsForTheCurrentSegmentation.length > 0) {
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
             @for (segmentationItem of segmentationItemsForTheCurrentSegmentation; track segmentationItem.id) {
-                <soft-checkbox [control]="getFormArrayControlByIndex('checked', segmentationItemsFormArrayIdentifier, segmentationItem.index)" [label]="segmentationItem.name" [initializeToFalse]="false"></soft-checkbox>
+                <soft-checkbox [control]="getSegmentationItemFormArrayControlByIndex(segmentationItem.index)" [label]="segmentationItem.name" [initializeToFalse]="false"></soft-checkbox>
             }
         </div>
     }

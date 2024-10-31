@@ -1,5 +1,6 @@
 import { PartnerService } from './../../../../business/services/helper/partner.service';
 import { Component, OnInit } from '@angular/core';
+import { TranslocoService } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 
@@ -9,26 +10,26 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
     styles: []
 })
 export class PartnerUserListComponent implements OnInit {
-    tableTitle: string = $localize`:@@Users:Users`
     cols: Column[];
     controllerName: string = 'PartnerUser';
-    objectName: string = 'PartnerUser';
+    objectNameForTheRequest: string = 'PartnerUser';
 
     constructor(
         private partnerService: PartnerService,
+        private translocoService: TranslocoService
     ) { }
 
     async ngOnInit(){
         this.cols = [
-            {name: 'Actions', actions:[
-                {name:$localize`:@@Details:Details`, field: 'Details'},
-                // {name:$localize`:@@Delete:Delete`, field: 'Delete'}, // TODO FT: Think about this, how to implement.
+            {name: this.translocoService.translate('Actions'), actions:[
+                {name: this.translocoService.translate('Details'), field: 'Details'},
+                // {name: this.translocoService.translate('Delete'), field: 'Delete'}, // TODO FT: Think about this, how to implement.
             ]},
-            {name: 'User', filterType: 'text', field: 'userDisplayName'},
-            {name: 'Points', filterType: 'numeric', field: 'points', showMatchModes: true},
-            {name: 'Tier', filterType: 'multiselect', field: 'tierDisplayName', filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(this.partnerService.loadTierListForDropdown()) },
-            {name: 'Segmentation', filterType: 'multiselect', field: 'checkedSegmentationItemsCommaSeparated', dropdownOrMultiselectValues: await firstValueFrom(this.partnerService.loadSegmentationItemListForPartnerForDropdown()) },
-            {name: 'Created at', filterType: 'date', field: 'createdAt', showMatchModes: true},
+            {name: this.translocoService.translate('User'), filterType: 'text', field: 'userDisplayName'},
+            {name: this.translocoService.translate('Points'), filterType: 'numeric', field: 'points', showMatchModes: true},
+            {name: this.translocoService.translate('Tier'), filterType: 'multiselect', field: 'tierDisplayName', filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(this.partnerService.loadTierListForDropdown()) },
+            {name: this.translocoService.translate('Segmentation'), filterType: 'multiselect', field: 'checkedSegmentationItemsCommaSeparated', dropdownOrMultiselectValues: await firstValueFrom(this.partnerService.loadSegmentationItemListForPartnerForDropdown()) },
+            {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true},
         ]
     }
     

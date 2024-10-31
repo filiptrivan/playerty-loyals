@@ -1,37 +1,39 @@
-@defer (when tiers != null) {
-    <soft-panel>
-        <panel-header [title]="detailsTitle" [bigTitle]="true" icon="pi pi-sitemap"></panel-header>
-
-        <panel-body [normalBottomPadding]="true">
-
-            @for (formGroup of getFormArrayGroups(); track formGroup; let index = $index; let last = $last) {
-                <index-card [index]="index" [last]="false" [crudMenu]="crudMenu" (onMenuIconClick)="lastMenuIconIndexClicked = $event">
-                    <form [formGroup]="formGroup" class="grid">
-                        <div class="col-12 md:col-4">
-                            <soft-textbox [control]="getFormArrayControl('name', index)"></soft-textbox>
-                        </div>
-                        <div class="col-12 md:col-4">
-                            <soft-number [control]="getFormArrayControl('validFrom', index)"></soft-number>
-                        </div>
-                        <div class="col-12 md:col-4">
-                            <soft-number [control]="getFormArrayControl('validTo', index)"></soft-number>
-                        </div>
-                        <div class="col-12">
-                            <soft-textarea [control]="getFormArrayControl('description', index)"></soft-textarea>
-                        </div>
-                    </form>
-                </index-card>
-            }
-
-            <p-button (onClick)="addNewTier(null)" label="Add new tier" icon="pi pi-plus"></p-button>
-
-        </panel-body>
-
-        <panel-footer>
-            <p-button (onClick)="onSaveTiers()" label="Save" icon="pi pi-save"></p-button>
-        </panel-footer>
-
-    </soft-panel>
-} @placeholder {
-    <card-skeleton [height]="502"></card-skeleton>
-}
+<ng-container *transloco="let t">
+    @defer (when tiers != null) {
+        <soft-panel>
+            <panel-header [title]="detailsTitle" [bigTitle]="true" icon="pi pi-sitemap"></panel-header>
+    
+            <panel-body [normalBottomPadding]="true">
+    
+                @for (formGroup of getFormArrayGroups(); track formGroup; let index = $index; let last = $last) {
+                    <index-card [index]="index" [last]="false" [crudMenu]="crudMenu" (onMenuIconClick)="lastMenuIconIndexClicked = $event">
+                        <form [formGroup]="formGroup" class="grid">
+                            <div class="col-12 md:col-4">
+                                <soft-textbox [control]="getFormArrayControl('name', index)"></soft-textbox>
+                            </div>
+                            <div class="col-12 md:col-4">
+                                <soft-number [control]="getFormArrayControl('validFrom', index)"></soft-number>
+                            </div>
+                            <div class="col-12 md:col-4">
+                                <soft-number [control]="getFormArrayControl('validTo', index)"></soft-number>
+                            </div>
+                            <div class="col-12">
+                                <soft-textarea [control]="getFormArrayControl('description', index)"></soft-textarea>
+                            </div>
+                        </form>
+                    </index-card>
+                }
+    
+                <p-button (onClick)="addNewTier(null)" [label]="t('AddNewTier')" icon="pi pi-plus"></p-button>
+    
+            </panel-body>
+    
+            <panel-footer>
+                <p-button (onClick)="onSaveTiers()" [label]="t('Save')" icon="pi pi-save"></p-button>
+            </panel-footer>
+    
+        </soft-panel>
+    } @placeholder {
+        <card-skeleton [height]="502"></card-skeleton>
+    }
+</ng-container>

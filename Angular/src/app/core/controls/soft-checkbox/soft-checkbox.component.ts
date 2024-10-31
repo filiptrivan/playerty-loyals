@@ -4,6 +4,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { CommonModule } from '@angular/common';
 import { RequiredComponent } from '../../components/required/required.component';
+import { TranslocoService } from '@jsverse/transloco';
+import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels.generated';
 
 @Component({
     selector: 'soft-checkbox',
@@ -21,9 +23,12 @@ import { RequiredComponent } from '../../components/required/required.component'
 export class SoftCheckboxComponent extends BaseControl implements OnInit {
     @Input() initializeToFalse = true;
 
-    constructor() {
-        super();
-     }
+    constructor(
+        protected override translocoService: TranslocoService,
+        protected override translateLabelsService: TranslateLabelsService,
+    ) { 
+        super(translocoService, translateLabelsService);
+    }
 
      override ngOnInit(){
         if (this.initializeToFalse == true)

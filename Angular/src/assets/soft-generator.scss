@@ -1,7 +1,7 @@
 @import './layout/styles/layout/variables';
 
 .table-header {
-	display: flex; 
+	display: flex;
 	justify-content: space-between; 
 	align-items: center;
 }
@@ -214,6 +214,10 @@
 .big-header{
 	font-size: 34px; 
 	font-weight: 400;
+	i{
+		font-size: 32px; 
+		font-weight: 400;
+	}
 }
 
 .bold-header-separator{
@@ -225,6 +229,10 @@
 @media (max-width: 600px) {
 	.big-header{
 		font-size: 28px;
+		i{
+			font-size: 26px; 
+			font-weight: 400;
+		}
 	}
 }
 
@@ -478,7 +486,7 @@
 }
 
 .responsive-card-padding{
-	padding: 30px;
+	padding: 28px;
 }
 
 @media (max-width: 600px) {

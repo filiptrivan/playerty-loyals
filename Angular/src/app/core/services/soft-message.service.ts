@@ -1,3 +1,4 @@
+import { TranslocoService } from '@jsverse/transloco';
 import { Injectable, NgZone } from '@angular/core';
 import { MessageService } from 'primeng/api';
 
@@ -5,9 +6,9 @@ import { MessageService } from 'primeng/api';
   providedIn: 'root',
 })
 export class SoftMessageService { // TODO FT: nece da prikaze poruku ako je neki angular error koji se dogodi tek nakon api poziva
-  constructor(private messageService: MessageService, private zone: NgZone) {}
+  constructor(private messageService: MessageService, private translocoService: TranslocoService, private zone: NgZone) {}
 
-  successMessage(detail: string, title: string = $localize`:@@SuccessfulAction:Successful action`) {
+  successMessage(detail: string, title: string = this.translocoService.translate('SuccessfulAction')) {
     this.zone.run(()=>{
       this.messageService.add({
         severity: 'success',
@@ -17,7 +18,7 @@ export class SoftMessageService { // TODO FT: nece da prikaze poruku ako je neki
       });
     });
   }
-  warningMessage(detail: string, title: string = $localize`:@@Warning:Warning`) {
+  warningMessage(detail: string, title: string = this.translocoService.translate('Warning')){
     this.zone.run(()=>{
       this.messageService.add({
         severity: 'warn',
@@ -27,7 +28,7 @@ export class SoftMessageService { // TODO FT: nece da prikaze poruku ako je neki
       });
     });
   }
-  errorMessage(detail: string, title: string = $localize`:@@Error:Error`) {
+  errorMessage(detail: string, title: string = this.translocoService.translate('Error')){
     this.zone.run(()=>{
       this.messageService.add({
         severity: 'error',

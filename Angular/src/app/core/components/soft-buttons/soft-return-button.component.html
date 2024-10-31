@@ -1,1 +1,3 @@
-<p-button (onClick)="onReturn()" label="Return" i18n-label="@@Return" icon="pi pi-undo" [outlined]="true"></p-button>
+<ng-container *transloco="let t">
+    <p-button (onClick)="onReturn()" [label]="t('Return')" icon="pi pi-undo" [outlined]="true"></p-button>
+</ng-container>

@@ -1,59 +1,61 @@
-@defer (when userExtendedFormGroup != null && partnerUserFormGroup != null && segmentationItemsFormArray != null) {
-        <soft-panel>
-            <panel-header [title]="userExtendedFormGroup.get('email').getRawValue()" icon="pi pi-user"></panel-header>
-    
-            <panel-body>
-                <form [formGroup]="formGroup" class="grid">
-                    <div class="col-12">
-                         <user-progressbar [partnerUser]="partnerUserFormGroup.getRawValue()" [tier]="partnerUserTier"></user-progressbar>
-                    </div>
-                    <!-- TODO FT: Show only if the user has permission to change points -->
-                    <div class="col-12">
-                        <soft-number [control]="control('points', partnerUserFormGroup)"></soft-number>
-                    </div>
-                    <div class="col-12 md:col-6">
-                        <soft-calendar [control]="control('birthDate', userExtendedFormGroup, false, false)" [showTooltip]="!partnerUserFormGroup.getRawValue().hasFilledBirthDateForTheFirstTime" 
-                        [tooltipText]="firstTimeFillText"></soft-calendar>
-                    </div>
-                    <div class="col-12 md:col-6">
-                        <soft-dropdown [control]="control('genderId', userExtendedFormGroup, false, false)" [options]="genderOptions" 
-                        [showTooltip]="!partnerUserFormGroup.getRawValue().hasFilledGenderForTheFirstTime" [tooltipText]="firstTimeFillText"></soft-dropdown>
-                    </div>
-                    <div class="col-12">
-                        <soft-multiselect
-                        [control]="selectedRoles"
-                        label="Super roles"
-                        [options]="roleOptions"></soft-multiselect>
-                    </div>
-
-                    @for (segmentation of segmentations; track segmentation.id; let index = $index) {
+<ng-container *transloco="let t">    
+    @defer (when userExtendedFormGroup != null && partnerUserFormGroup != null && segmentationItemsFormArray != null) {
+            <soft-panel>
+                <panel-header [title]="userExtendedFormGroup.get('email').getRawValue()" icon="pi pi-user"></panel-header>
+        
+                <panel-body>
+                    <form [formGroup]="formGroup" class="grid">
                         <div class="col-12">
-                            <div class="flex flex-column gap-2">
-                                <div>
-                                    {{segmentation.name}} <i *ngIf="showSegmentationFirstTimeFillIcon(segmentation)" [class]="firstTimeFillIcon" style="margin-left: 5px; cursor: pointer;" [pTooltip]="firstTimeFillText" tabindex="-1" tooltipEvent="focus"></i>
-                                </div>
-                                <segmentation-select [formGroup]="formGroup" [partnerUserId]="partnerUserFormGroup.getRawValue().id" [segmentation]="segmentation" 
-                                [allSegmentationItems]="segmentationItemsFormArray.getRawValue()" [segmentationItemsFormArrayIdentifier]="segmentationItemsFormArrayIdentifier"
-                                ></segmentation-select>
-                            </div>
+                             <user-progressbar [partnerUser]="partnerUserFormGroup.getRawValue()" [tier]="partnerUserTier"></user-progressbar>
                         </div>
-                    }
-                            
-                    <div class="col-12">
-                        <soft-multiselect
-                        [control]="selectedPartnerRoles"
-                        label="Partner roles"
-                        [options]="partnerRoleOptions"></soft-multiselect>
-                    </div>
-                </form>
-            </panel-body>
+                        <!-- TODO FT: Show only if the user has permission to change points -->
+                        <div class="col-12">
+                            <soft-number [control]="control('points', partnerUserFormGroup)"></soft-number>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-calendar [control]="control('birthDate', userExtendedFormGroup, false, false)" [showTooltip]="!partnerUserFormGroup.getRawValue().hasFilledBirthDateForTheFirstTime" 
+                            [tooltipText]="firstTimeFillText"></soft-calendar>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-dropdown [control]="control('genderId', userExtendedFormGroup, false, false)" [options]="genderOptions" 
+                            [showTooltip]="!partnerUserFormGroup.getRawValue().hasFilledGenderForTheFirstTime" [tooltipText]="firstTimeFillText"></soft-dropdown>
+                        </div>
+                        <div class="col-12">
+                            <soft-multiselect
+                            [control]="selectedRoles"
+                            [label]="t('SuperRoles')"
+                            [options]="roleOptions"></soft-multiselect>
+                        </div>
     
-           <panel-footer>
-                <p-button (onClick)="onSave()" label="Save" icon="pi pi-save"></p-button>
-                <soft-return-button></soft-return-button>
-           </panel-footer>
-    
-        </soft-panel>
-} @placeholder {
-    <card-skeleton [height]="502"></card-skeleton>
-}
+                        @for (segmentation of segmentations; track segmentation.id; let index = $index) {
+                            <div class="col-12">
+                                <div class="flex flex-column gap-2">
+                                    <div>
+                                        {{segmentation.name}} <i *ngIf="showSegmentationFirstTimeFillIcon(segmentation)" class="pi pi-info-circle" style="margin-left: 5px; cursor: pointer;" [pTooltip]="firstTimeFillText" tabindex="-1" tooltipEvent="focus"></i>
+                                    </div>
+                                    <segmentation-select [formGroup]="formGroup" [partnerUserId]="partnerUserFormGroup.getRawValue().id" [segmentation]="segmentation" 
+                                    [allSegmentationItems]="segmentationItemsFormArray.getRawValue()" [segmentationItemsFormArrayIdentifier]="segmentationItemsFormArrayIdentifier"
+                                    ></segmentation-select>
+                                </div>
+                            </div>
+                        }
+                                
+                        <div class="col-12">
+                            <soft-multiselect
+                            [control]="selectedPartnerRoles"
+                            [label]="t('PartnerRoleList')"
+                            [options]="partnerRoleOptions"></soft-multiselect>
+                        </div>
+                    </form>
+                </panel-body>
+        
+               <panel-footer>
+                    <p-button (onClick)="onSave()" [label]="t('Save')" icon="pi pi-save"></p-button>
+                    <soft-return-button></soft-return-button>
+               </panel-footer>
+        
+            </soft-panel>
+    } @placeholder {
+        <card-skeleton [height]="502"></card-skeleton>
+    }
+</ng-container>

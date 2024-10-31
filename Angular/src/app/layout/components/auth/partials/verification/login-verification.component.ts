@@ -1,10 +1,9 @@
-import { ActivatedRoute, Router } from '@angular/router';
 import { SoftMessageService } from '../../../../../core/services/soft-message.service';
 import { AuthService } from '../../../../../core/services/auth.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { LayoutService } from '../../../../service/app.layout.service';
-import { ApiService } from 'src/app/business/services/api/api.service';
 import { VerificationWrapperComponent } from './verification-wrapper.component';
+import { TranslocoService } from '@jsverse/transloco';
 
 @Component({
     selector: 'login-verification',
@@ -22,10 +21,8 @@ export class LoginVerificationComponent implements OnInit {
     constructor(
       public layoutService: LayoutService, 
       private authService: AuthService, 
-      private router: Router,
-      private route: ActivatedRoute,
-      private apiService: ApiService,
-      private messageService: SoftMessageService, 
+      private messageService: SoftMessageService,
+      private translocoService: TranslocoService,
     ) { 
     }
 
@@ -34,13 +31,13 @@ export class LoginVerificationComponent implements OnInit {
     
     resendVerificationToken(){
         this.authService.sendLoginVerificationEmail({email: this.email, password: this.password}).subscribe((res) => {
-            this.messageService.successMessage("Successfully sent verification code.")
+            this.messageService.successMessage(this.translocoService.translate('SuccessfullySentVerificationCode'));
         });
     }
 
     onCodeSubmit(event: string){
         this.authService.login({email: this.email, verificationCode: event}).subscribe(() => {
-            this.messageService.successMessage("You have successfully verified your account.")
+            this.messageService.successMessage(this.translocoService.translate('YouHaveSuccessfullyVerifiedYourAccount'));
             this.authService.navigateToDashboard();
         });
     }

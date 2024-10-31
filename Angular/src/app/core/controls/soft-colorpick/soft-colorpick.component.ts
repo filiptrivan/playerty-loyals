@@ -4,6 +4,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { RequiredComponent } from '../../components/required/required.component';
 import { CommonModule } from '@angular/common';
+import { TranslocoService } from '@jsverse/transloco';
+import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels.generated';
 
 @Component({
     selector: 'soft-colorpick',
@@ -20,14 +22,16 @@ import { CommonModule } from '@angular/common';
 })
 export class SoftColorpickComponent extends BaseControl implements OnInit {
 
-    constructor() { 
-        super();
+    constructor(
+        protected override translocoService: TranslocoService,
+        protected override translateLabelsService: TranslateLabelsService,
+    ) { 
+        super(translocoService, translateLabelsService);
     }
 
     override ngOnInit(){
-        if (this.control.value == null) {
-            this.placeholder = $localize`:@@SelectAColor:Select a color`;
-        }
+        if (this.control.value == null)
+            this.placeholder = this.translocoService.translate('SelectAColor');
 
         super.ngOnInit();
     }

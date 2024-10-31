@@ -1,37 +1,39 @@
-<div class="card dashboard-card-wrapper-with-grid">
-    <div class="big-header" style="margin-bottom: 10px;">
-      Products for you
-      <div class="bold-header-separator"></div>
-    </div>
+<ng-container *transloco="let t">
+    <div class="card dashboard-card-wrapper-with-grid">
+        <div class="big-header" style="margin-bottom: 10px;">
+        {{t('ProductsForYouTitle')}}
+        <div class="bold-header-separator"></div>
+        </div>
 
-    <p-dataView #dv [value]="products" [rows]="9" filterBy="name" layout="grid">
-        <ng-template let-products pTemplate="gridItem">
-            <div class="grid" style="position: relative; z-index: 2;">
-                <div class="col-12 md:col-4" *ngFor="let product of products">
-                    <div class="card responsive-card-padding border-1 surface-border">
-                        <div class="flex flex-wrap gap-2 align-items-center justify-content-between mb-2">
-                            <div class="flex align-items-center">
-                                <i class="pi pi-tag mr-2"></i>
-                                <span class="font-semibold">{{product.category}}</span>
+        <p-dataView #dv [value]="products" [rows]="9" filterBy="name" layout="grid">
+            <ng-template let-products pTemplate="gridItem">
+                <div class="grid" style="position: relative; z-index: 2;">
+                    <div class="col-12 md:col-4" *ngFor="let product of products">
+                        <div class="card responsive-card-padding border-1 surface-border">
+                            <div class="flex flex-wrap gap-2 align-items-center justify-content-between mb-2">
+                                <div class="flex align-items-center">
+                                    <i class="pi pi-tag mr-2"></i>
+                                    <span class="font-semibold">{{product.category}}</span>
+                                </div>
+                                <!-- <span [class]="'product-badge status-' + product.inventoryStatus.toLowerCase()">{{product.inventoryStatus}}</span> -->
                             </div>
-                            <!-- <span [class]="'product-badge status-' + product.inventoryStatus.toLowerCase()">{{product.inventoryStatus}}</span> -->
-                        </div>
-                        <div class="flex flex-column align-items-center text-center mb-3">
-                            <img [src]="'../../../../assets/demo/images/product/' + product.category + '.jpg'" [alt]="product.name" class="w-9 shadow-2 my-3 mx-0"/>
-                            <div class="text-2xl font-bold">{{product.name}}</div>
-                            <div class="mb-3">{{product.description}}</div>
-                        </div>
-                        <div class="flex align-items-center justify-content-between">
-                            <span class="text-2xl font-semibold">{{product.price}} RSD</span>
-                            <p-button icon="pi pi-external-link"></p-button>
+                            <div class="flex flex-column align-items-center text-center mb-3">
+                                <img [src]="'../../../../assets/demo/images/product/' + product.category + '.jpg'" [alt]="product.name" class="w-9 shadow-2 my-3 mx-0"/>
+                                <div class="text-2xl font-bold">{{product.name}}</div>
+                                <div class="mb-3">{{product.description}}</div>
+                            </div>
+                            <div class="flex align-items-center justify-content-between">
+                                <span class="text-2xl font-semibold">{{product.price}} {{t('Currency')}}</span>
+                                <a pButton [outlined]="true" icon="pi pi-external-link" [href]="product.linkToWebsite" target="_blank" rel="noopener noreferrer"></a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </ng-template>
-    </p-dataView>
+            </ng-template>
+        </p-dataView>
 
-    <div class="card-overflow-icon" style="position: absolute; overflow: hidden; right: 8px; top: -25px; z-index: 1;">
-        <i class="pi pi-star" style="font-size: 270px;"></i>
+        <div class="card-overflow-icon" style="position: absolute; overflow: hidden; right: 8px; top: -25px; z-index: 1;">
+            <i class="pi pi-heart" style="font-size: 270px;"></i>
+        </div>
     </div>
-</div>
+</ng-container>

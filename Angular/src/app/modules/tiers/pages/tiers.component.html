@@ -1,13 +1,15 @@
-  <div class="card dashboard-card-wrapper">
-    <div class="big-header" style="margin-bottom: 10px;">
-      <span i18n="@@Tiers">Tiers</span>
-      <div class="bold-header-separator"></div>
+  <ng-container *transloco="let t">
+    <div class="card dashboard-card-wrapper">
+      <div class="big-header" style="margin-bottom: 10px;">
+        <span>{{t('TierList')}}</span>
+        <div class="bold-header-separator"></div>
+      </div>
+      <div style="display: flex; flex-direction: column; position: relative; z-index: 2;">
+        <timeline-index-progressbar #timeline [items]="tiers" [currentItem]="tierForTheCurrentPartnerUser" [currentUserPoints]="currentPartnerUser?.points" 
+        [connectorMethod]="connectorMethod"></timeline-index-progressbar>
+      </div>
+      <div class="card-overflow-icon">
+        <i class="pi pi-sitemap"></i>
+      </div>
     </div>
-    <div style="display: flex; flex-direction: column; position: relative; z-index: 2;">
-      <timeline-index-progressbar #timeline [items]="tiers" [currentItem]="tierForTheCurrentPartnerUser" [currentUserPoints]="currentPartnerUser?.points" 
-      [connectorMethod]="connectorMethod"></timeline-index-progressbar>
-    </div>
-    <div class="card-overflow-icon">
-      <i class="pi pi-sitemap"></i>
-    </div>
-  </div>
+  </ng-container>

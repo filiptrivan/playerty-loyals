@@ -52,18 +52,18 @@ namespace Playerty.Loyals.Business.Services
 
             if (!_cache.TryGetValue(cacheKey, out int partnerId))
             {
-                partnerId = await _context.WithTransactionAsync(async () =>
+                await _context.WithTransactionAsync(async () =>
                 {
                     string partnerCode = GetCurrentPartnerCode();
-                    return await _context.DbSet<Partner>()
+                    partnerId = await _context.DbSet<Partner>()
                         .AsNoTracking()
                         .Where(x => x.Slug == partnerCode)
                         .Select(x => x.Id)
-                        .SingleOrDefaultAsync();
+                        .SingleAsync();
                 });
 
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(60)); // TODO FT: Maybe put bigger value?
+                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(43200)); // FT: One month, i think it's okay to do this because even if someone hack us and provide the deleted slug of the partner which is in the memory the code will break at some point because there is nothing in the database
 
                 _cache.Set(cacheKey, partnerId, cacheEntryOptions);
             }

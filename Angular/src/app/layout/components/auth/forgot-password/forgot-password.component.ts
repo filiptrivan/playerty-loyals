@@ -6,6 +6,9 @@ import { LayoutService } from '../../../service/app.layout.service';
 import { BaseForm } from '../../../../core/components/base-form/base-form';
 import { HttpClient } from '@angular/common/http';
 import { ForgotPassword } from 'src/app/business/entities/generated/security-entities.generated';
+import { TranslocoService } from '@jsverse/transloco';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 
 @Component({
     selector: 'forgot-password',
@@ -18,13 +21,16 @@ export class ForgotPasswordComponent extends BaseForm<ForgotPassword> implements
       protected override differs: KeyValueDiffers,
       protected override http: HttpClient,
       protected override messageService: SoftMessageService, 
-    protected override changeDetectorRef: ChangeDetectorRef,
+      protected override changeDetectorRef: ChangeDetectorRef,
       protected override router: Router,
       protected override route: ActivatedRoute,
+      protected override translocoService: TranslocoService,
+      protected override translateClassNamesService: TranslateClassNamesService,
+      protected override validatorService: ValidatorService,
       public layoutService: LayoutService, 
       private authService: AuthService, 
     ) { 
-      super(differs, http, messageService, changeDetectorRef, router, route);
+      super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
     }
 
     override ngOnInit(){

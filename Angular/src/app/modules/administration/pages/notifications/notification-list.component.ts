@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslocoService } from '@jsverse/transloco';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 
 @Component({
@@ -7,22 +8,22 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
     styles: []
 })
 export class NotificationListComponent implements OnInit {
-    tableTitle: string = $localize`:@@Notifications:Notifications`
     cols: Column[];
     controllerName: string = 'Auth';
-    objectName: string = 'Notification';
+    objectNameForTheRequest: string = 'Notification';
 
     constructor(
+        private translocoService: TranslocoService,
     ) { }
 
     ngOnInit(){
         this.cols = [
-            {name: 'Actions', actions:[
-                {name:$localize`:@@Details:Details`, field: 'Details'},
-                {name:$localize`:@@Delete:Delete`, field: 'Delete'},
+            {name: this.translocoService.translate('Actions'), actions:[
+                {name: this.translocoService.translate('Details'), field: 'Details'},
+                {name: this.translocoService.translate('Delete'), field: 'Delete'},
             ]},
-            {name: 'Title', filterType: 'text', field: 'title'},
-            {name: 'Created at', filterType: 'date', field: 'createdAt', showMatchModes: true},
+            {name: this.translocoService.translate('Title'), filterType: 'text', field: 'title'},
+            {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true},
         ]
     }
 }

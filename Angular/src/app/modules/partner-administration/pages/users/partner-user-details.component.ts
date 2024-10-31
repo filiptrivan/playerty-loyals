@@ -2,11 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslocoService } from '@jsverse/transloco';
 import { firstValueFrom, forkJoin } from 'rxjs';
 import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
 import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, Tier, UserExtended } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerService } from 'src/app/business/services/helper/partner.service';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { SoftFormArray, SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
@@ -34,10 +37,10 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
 
     segmentationItemsFormArray: SoftFormArray<SegmentationItem[]>;
     segmentationItemsFormArrayIdentifier: string = crypto.randomUUID(); // FT: Because we are not changing it, we are not using nameof, it's important that it's not the same as property in save body
+    segmentationItemsTranslationKey: string = new SegmentationItem().typeName;
     segmentationItemModel: SegmentationItem = new SegmentationItem();
 
-    firstTimeFillText: string = $localize`:@@FirstTimeFieldFillTooltipText:Complete the field for the first time and earn extra points!`; // Popunite polje prvi put i zaradite dodatne poene
-    firstTimeFillIcon: string = 'pi pi-gift';
+    firstTimeFillText: string = this.translocoService.translate('FirstTimeFieldFillTooltipText');
     genderTooltipText: string;
     birthDateTooltipText: string;
 
@@ -52,10 +55,13 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 
+        protected override translocoService: TranslocoService,
+        protected override translateClassNamesService: TranslateClassNamesService,
+        protected override validatorService: ValidatorService,
         private apiService: ApiService,
         private partnerService: PartnerService,
     ) {
-        super(differs, http, messageService, changeDetectorRef, router, route);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
     }
 
 
@@ -64,7 +70,6 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
 
         this.controllerName = 'PartnerUser';
         this.saveMethodName = 'SavePartnerUser';
-        this.detailsTitle = $localize`:@@User:User`;
 
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
@@ -88,6 +93,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
 
             this.apiService.getPartnerUser(this.modelId).subscribe(partnerUser => {
                 this.partnerUserFormGroup = this.initFormGroup(new PartnerUser(partnerUser), nameof<PartnerUserSaveBody>('partnerUserDTO'));
+                console.log(partnerUser)
                 if (partnerUser?.tierId) {
                     this.apiService.getTier(partnerUser.tierId).subscribe(partnerUserTier => {
                         this.partnerUserTier = partnerUserTier;
@@ -105,7 +111,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
                     this.birthDateTooltipText = this.firstTimeFillText;
 
                 this.apiService.getSegmentationItemListForTheCurrentPartner().subscribe(segmentationItems => {
-                    this.segmentationItemsFormArray = this.initFormArray(segmentationItems, this.segmentationItemModel, this.segmentationItemsFormArrayIdentifier);
+                    this.segmentationItemsFormArray = this.initFormArray(segmentationItems, this.segmentationItemModel, this.segmentationItemsFormArrayIdentifier, this.segmentationItemsTranslationKey);
 
                     this.apiService.getCheckedSegmentationItemIdsForThePartnerUser(partnerUser.id).subscribe(ids => {
                         this.segmentationItemsFormArray.controls.forEach((formGroup: FormGroup) => {
