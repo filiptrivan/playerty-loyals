@@ -8,7 +8,7 @@
                 <panel-body>
                     <form [formGroup]="formGroup" class="grid">
                         <div class="col-12">
-                            <soft-checkbox [control]="isMarkedAsRead" [label]="t('NotifyUsers')" [initializeToFalse]="false"></soft-checkbox>
+                            <soft-checkbox [control]="isMarkedAsRead" [label]="t('NotifyUsers')" [initializeToFalse]="false" [fakeLabel]="false"></soft-checkbox>
                         </div>
                         <div class="col-12">
                             <soft-textbox [control]="control('title')"></soft-textbox>

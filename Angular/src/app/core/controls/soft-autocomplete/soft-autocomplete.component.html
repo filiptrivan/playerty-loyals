@@ -1,8 +1,9 @@
-<div class="flex flex-column gap-2">
-  <div *ngIf="getTranslatedLabel() != '' && getTranslatedLabel() != null">
-    <label>{{getTranslatedLabel()}}</label>
-    <required *ngIf="control?.required"></required>
-  </div>
+<ng-container *transloco="let t">
+  <div class="flex flex-column gap-2">
+    <div *ngIf="getTranslatedLabel() != '' && getTranslatedLabel() != null">
+      <label>{{getTranslatedLabel()}}</label>
+      <required *ngIf="control?.required"></required>
+    </div>
     <div class="p-inputgroup p-fluid">
       <p-autoComplete
       *ngIf="control"
@@ -24,9 +25,11 @@
       [style]="{'width':'100%', 'position' : 'relative'}"
       [inputStyle]="{'width':'100%'}"
       [appendTo]="appendTo"
+      [emptyMessage]="t('EmptyMessage')"
       />
-    <span *ngIf="showMoreOptions" (click)="moreOptionsClick()" class="p-inputgroup-addon" style="cursor: pointer; background-color: var(--primary-color); border-color: var(--primary-color);">
-      <i class="pi {{moreOptionsIcon}}" style="color: #fff;"></i>
-    </span>
+      <span *ngIf="showMoreOptions" (click)="moreOptionsClick()" class="p-inputgroup-addon" style="cursor: pointer; background-color: var(--primary-color); border-color: var(--primary-color);">
+        <i class="pi {{moreOptionsIcon}}" style="color: #fff;"></i>
+      </span>
+    </div>
   </div>
-</div>
+</ng-container>

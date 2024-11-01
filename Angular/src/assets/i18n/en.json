@@ -309,6 +309,7 @@
     "ClearFilters": "Clear all filters",
     "YouDoNotHaveAnyNotifications": "You don't have any notifications."
   },
+  "EmptyMessage": "No results found",
   "More than": "More than",
   "BadRequestDetails": "The system can’t process the request. Please check your request and try again."
 }

@@ -7,6 +7,7 @@ import { SoftControlsModule } from "src/app/core/controls/soft-controls.module";
 import { CardSkeletonComponent } from "src/app/core/components/card-skeleton/card-skeleton.component";
 import { IntermediateStepWrapperComponent } from "./partials/intermediate-step-wrapper.component";
 import { SoftAutocompleteComponent } from "../../core/controls/soft-autocomplete/soft-autocomplete.component";
+import { TranslocoDirective } from "@jsverse/transloco";
 
 const routes: Routes = [
     {
@@ -23,7 +24,8 @@ const routes: Routes = [
     SoftControlsModule,
     CardSkeletonComponent,
     IntermediateStepWrapperComponent,
-    SoftAutocompleteComponent
+    SoftAutocompleteComponent,
+    TranslocoDirective,
 ],
     declarations: [
         PartnerSelectComponent,

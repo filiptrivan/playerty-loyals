@@ -8,22 +8,6 @@ import { Codebook } from '../../entities/codebook';
 import { SimpleSaveResult } from '../../entities/simple-save-result';
 import { TableFilter } from '../../entities/table-filter';
 import { TableResponse } from './../../../core/entities/table-response';
-import { RegistrationVerificationToken } from '../../entities/generated/security-entities.generated';
-import { Login } from '../../entities/generated/security-entities.generated';
-import { LoginVerificationToken } from '../../entities/generated/security-entities.generated';
-import { ExternalProvider } from '../../entities/generated/security-entities.generated';
-import { JwtAuthResult } from '../../entities/generated/security-entities.generated';
-import { RoleSaveBody } from '../../entities/generated/security-entities.generated';
-import { VerificationTokenRequest } from '../../entities/generated/security-entities.generated';
-import { RefreshTokenRequest } from '../../entities/generated/security-entities.generated';
-import { ForgotPassword } from '../../entities/generated/security-entities.generated';
-import { Registration } from '../../entities/generated/security-entities.generated';
-import { RegistrationVerificationResult } from '../../entities/generated/security-entities.generated';
-import { ForgotPasswordVerificationToken } from '../../entities/generated/security-entities.generated';
-import { RefreshToken } from '../../entities/generated/security-entities.generated';
-import { LoginResult } from '../../entities/generated/security-entities.generated';
-import { Role } from '../../entities/generated/security-entities.generated';
-import { Permission } from '../../entities/generated/security-entities.generated';
 import { Brand } from '../../entities/generated/business-entities.generated';
 import { QrCode } from '../../entities/generated/business-entities.generated';
 import { PartnerUser } from '../../entities/generated/business-entities.generated';
@@ -51,6 +35,22 @@ import { PartnerPermission } from '../../entities/generated/business-entities.ge
 import { Transaction } from '../../entities/generated/business-entities.generated';
 import { PartnerNotificationPartnerUser } from '../../entities/generated/business-entities.generated';
 import { TransactionStatus } from '../../entities/generated/business-entities.generated';
+import { RegistrationVerificationToken } from '../../entities/generated/security-entities.generated';
+import { Login } from '../../entities/generated/security-entities.generated';
+import { LoginVerificationToken } from '../../entities/generated/security-entities.generated';
+import { ExternalProvider } from '../../entities/generated/security-entities.generated';
+import { JwtAuthResult } from '../../entities/generated/security-entities.generated';
+import { RoleSaveBody } from '../../entities/generated/security-entities.generated';
+import { VerificationTokenRequest } from '../../entities/generated/security-entities.generated';
+import { RefreshTokenRequest } from '../../entities/generated/security-entities.generated';
+import { ForgotPassword } from '../../entities/generated/security-entities.generated';
+import { Registration } from '../../entities/generated/security-entities.generated';
+import { RegistrationVerificationResult } from '../../entities/generated/security-entities.generated';
+import { ForgotPasswordVerificationToken } from '../../entities/generated/security-entities.generated';
+import { RefreshToken } from '../../entities/generated/security-entities.generated';
+import { LoginResult } from '../../entities/generated/security-entities.generated';
+import { Role } from '../../entities/generated/security-entities.generated';
+import { Permission } from '../../entities/generated/security-entities.generated';
 
 @Injectable()
 export class ApiGeneratedService extends ApiSecurityService {
