@@ -1,12 +1,12 @@
 {
-  "TierList": "Nivoi odanosti",
+  "TierList": "Nivoi lojalnosti",
   "Partner": "Partner",
   "Submit": "Potvrdite",
   "UserList": "Korisnici",
   "SuperRoles": "Super uloge",
   "PartnerRoleList": "Uloge",
   "Save": "Sačuvajte",
-  "AddNewTier": "Dodajte novi nivo odanosti",
+  "AddNewTier": "Dodajte novi nivo lojalnosti",
   "SegmentationList": "Segmentacije",
   "SegmentationItemList": "Stavke segmentacije",
   "AddNewSegmentationItem": "Dodaj novu stavku segmentacije",
@@ -60,7 +60,7 @@
   "Details": "Detalji",
   "User": "Korisnik",
   "Points": "Poeni",
-  "Tier": "Nivo odanosti",
+  "Tier": "Nivo lojalnosti",
   "Segmentation": "Segmentacija",
   "CreatedAt": "Kreirano",
   "FirstTimeFieldFillTooltipText": "Popunite polje prvi put i zaradite dodatne poene!",
@@ -293,7 +293,10 @@
     "emptyMessage": "Nema rezultata",
     "emptyFilterMessage": "Nema rezultata"
   },
+  "ClearFilters": "Uklonite sve filtere",
   "PartnerNotificationList": "Notifikacije",
   "PartnerUserList": "Korisnici",
-  "More than": "Više od"
+  "YouDoNotHaveAnyNotifications": "Nemate nijednu notifikaciju.",
+  "More than": "Više od",
+  "BadRequestDetails": "Sistem ne može da obradi zahtev. Molimo vas da proverite zahtev i pokušate ponovo."
 }

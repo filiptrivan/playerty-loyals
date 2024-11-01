@@ -1,7 +1,6 @@
 import {
     Component,
     EventEmitter,
-    Input,
     Output,
   } from '@angular/core';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';

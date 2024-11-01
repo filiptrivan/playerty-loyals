@@ -9,8 +9,8 @@
     *ngIf="control"
     [pTooltip]="getValidationErrrorMessages()" [tooltipEvent]="errorMessageTooltipEvent" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
     [formControl]="control"
-    [id]="control?.label"
-    (blur)="control?.markAsDirty()"
+    [id]="control.label"
+    (blur)="control.markAsDirty()"
     [placeholder]="placeholder"
     [style]="{ height: '320px' }"
     />

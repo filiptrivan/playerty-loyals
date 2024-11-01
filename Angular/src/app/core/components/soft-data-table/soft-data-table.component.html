@@ -10,8 +10,8 @@
           <h5 style="margin: 0px;">{{tableTitle}}</h5>
         </div>
         <div style="display: flex; gap: 8px;">
-          <button pButton [label]="t('Clear')" class="p-button-outlined remove-button-border-focus" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
-          <button pButton *ngIf="showExportToExcelButton" [label]="t('ExportToExcel')" class="p-button-outlined remove-button-border-focus" icon="pi pi-download" (click)="exportListToExcel()"></button>
+          <button pButton [label]="t('ClearFilters')" class="p-button-outlined remove-button-border-focus" style="flex: none;" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
+          <button pButton *ngIf="showExportToExcelButton" [label]="t('ExportToExcel')" class="p-button-outlined remove-button-border-focus" style="flex: none;" icon="pi pi-download" (click)="exportListToExcel()"></button>
         </div>
       </div>
       </ng-template>

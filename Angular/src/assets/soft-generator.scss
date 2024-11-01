@@ -467,12 +467,24 @@
 	}
 }
 
+@media (max-width: 600px) {
+	.panel-add-button{
+		margin-bottom: 14px;
+	}
+}
+
 .last-child-zero-margin{
 	margin-bottom: 0px !important;
 }
 
 .card-margin-bottom{
 	margin-bottom: 28px;
+}
+
+@media (max-width: 600px) {
+	.card-margin-bottom{
+		margin-bottom: 14px;
+	}
 }
 
 .card-with-grid-padding-bottom{

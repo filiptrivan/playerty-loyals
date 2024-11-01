@@ -26,6 +26,9 @@
           </div>
         </div>
       }
+      @if (currentUserNotifications?.totalRecords == 0) {
+        {{t('YouDoNotHaveAnyNotifications')}}
+      }
     </div>
     <p-paginator
       (onPageChange)="onLazyLoad($event)"

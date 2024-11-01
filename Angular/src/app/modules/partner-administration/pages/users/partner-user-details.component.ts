@@ -93,7 +93,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
 
             this.apiService.getPartnerUser(this.modelId).subscribe(partnerUser => {
                 this.partnerUserFormGroup = this.initFormGroup(new PartnerUser(partnerUser), nameof<PartnerUserSaveBody>('partnerUserDTO'));
-                console.log(partnerUser)
+                
                 if (partnerUser?.tierId) {
                     this.apiService.getTier(partnerUser.tierId).subscribe(partnerUserTier => {
                         this.partnerUserTier = partnerUserTier;

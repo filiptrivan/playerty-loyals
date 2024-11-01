@@ -7,10 +7,11 @@
     <i *ngIf="showTooltip" class="{{tooltipIcon}}" style="margin-left: 5px; cursor: pointer;" [pTooltip]="tooltipText" tabindex="-1" tooltipEvent="focus"></i>
   </div>
 
+  <!-- FT: Dropdown doesn't support tooltip event, but it can only has not empty validation, so for now it's okay to not show validation message on dropdown ever -->
   <div class="p-inputgroup p-fluid">
     <p-dropdown
     *ngIf="control"
-    [pTooltip]="getValidationErrrorMessages()" [tooltipEvent]="errorMessageTooltipEvent" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
+    [pTooltip]="getValidationErrrorMessages()" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid" 
     [id]="label"
     [formControl]="control"
     [placeholder]="placeholder"

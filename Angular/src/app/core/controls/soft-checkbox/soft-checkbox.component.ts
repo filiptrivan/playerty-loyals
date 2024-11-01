@@ -21,6 +21,7 @@ import { TranslateLabelsService } from 'src/app/business/services/translates/tra
     ]
 })
 export class SoftCheckboxComponent extends BaseControl implements OnInit {
+    @Input() fakeLabel = true;
     @Input() initializeToFalse = true;
 
     constructor(

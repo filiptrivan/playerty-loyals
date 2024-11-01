@@ -5,6 +5,7 @@ import {
 import { SoftFormControl } from '../components/soft-form-control/soft-form-control';
 import { TranslocoService } from '@jsverse/transloco';
 import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels.generated';
+import { TooltipOptions } from 'primeng/api';
   
   @Component({
     selector: 'base-control',
@@ -20,8 +21,7 @@ import { TranslateLabelsService } from 'src/app/business/services/translates/tra
     @Input() showTooltip: boolean = false;
     @Input() tooltipText: string = null;
     @Input() tooltipIcon: string = 'pi pi-info-circle';
-    @Input() errorMessageTooltipEvent: string;
-
+    errorMessageTooltipEvent: string;
     validationErrorMessage: string;
     
     constructor(
@@ -38,8 +38,11 @@ import { TranslateLabelsService } from 'src/app/business/services/translates/tra
       if(this.control?.validator?.hasNotEmptyRule == true) // FT HACK: Be carefull with this name, if you change it in generator you need to change it here also
         this.control.required = true;
 
-      const width = window.innerWidth;
-      this.errorMessageTooltipEvent = width > 1000 ? 'hover' : 'focus';
+       this.errorMessageTooltipEvent = window.innerWidth > 1000 ? 'hover' : 'focus'
+    }
+
+    ngAfterViewInit(){
+
     }
 
     getTranslatedLabel(): string{

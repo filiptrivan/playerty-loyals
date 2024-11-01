@@ -61,7 +61,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
     } 
     else if (err.status == 400 || err.status == 401 || err.status == 419) {
       this.messageService.warningMessage(
-        err.error.message,
+        err.error.message ?? this.translocoService.translate('BadRequestDetails'),
         this.translocoService.translate('Warning'),
       );
 

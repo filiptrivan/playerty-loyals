@@ -305,7 +305,10 @@
     "clear": "Clear",
     "apply": "Apply",
     "emptyMessage": "No results found",
-    "emptyFilterMessage": "No results found"
+    "emptyFilterMessage": "No results found",
+    "ClearFilters": "Clear all filters",
+    "YouDoNotHaveAnyNotifications": "You don't have any notifications."
   },
-  "More than": "More than"
+  "More than": "More than",
+  "BadRequestDetails": "The system can’t process the request. Please check your request and try again."
 }

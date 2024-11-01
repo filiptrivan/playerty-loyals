@@ -177,8 +177,8 @@ namespace Playerty.Loyals.Services
 
             if (exceptionHelper.Count > 0)
             {
-                string helper = exceptionHelper.Count == 1 ? "unesen nivo odanosti" : "uneseni nivoi odanosti";
-                throw new BusinessException($"Neispravno {helper}: {exceptionHelper.ToCommaSeparatedString()}. Nivoi odanosti moraju biti sačuvani rastućim redosledom (npr. Nivo 1: 1p - 10p, Nivo 2: 10p - 20p, Nivo 3: 20p - 30p). Ne možete dodati nivo odanosti čija je gornja granica veća (ili jednaka) od donje granice.");
+                string helper = exceptionHelper.Count == 1 ? "unesen nivo lojalnosti" : "uneseni nivoi lojalnosti";
+                throw new BusinessException($"Neispravno {helper}: {exceptionHelper.ToCommaSeparatedString()}. Nivoi lojalnosti moraju biti sačuvani rastućim redosledom (npr. Nivo 1: 1p - 10p, Nivo 2: 10p - 20p, Nivo 3: 20p - 30p). Ne možete dodati nivo lojalnosti čija je gornja granica veća (ili jednaka) od donje granice.");
             }
 
             List<TierDTO> result = new List<TierDTO>();
@@ -220,7 +220,7 @@ namespace Playerty.Loyals.Services
         {
             await _context.WithTransactionAsync(async () =>
             {
-                List<PartnerUser> partnerUsers = await _context.DbSet<PartnerUser>().ToListAsync();
+                List<PartnerUser> partnerUsers = await _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).ToListAsync();
 
                 foreach (PartnerUser partnerUser in partnerUsers)
                 {
@@ -305,6 +305,7 @@ namespace Playerty.Loyals.Services
                     partnerQuery = partnerQuery.Where(x => x.Name.Contains(query));
 
                 return await partnerQuery
+                    .AsNoTracking()
                     .Take(limit)
                     .Select(x => new CodebookDTO
                     {
