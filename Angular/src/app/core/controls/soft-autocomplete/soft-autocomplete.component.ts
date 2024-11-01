@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { RequiredComponent } from '../../components/required/required.component';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels.generated';
 
 @Component({
@@ -18,7 +18,8 @@ import { TranslateLabelsService } from 'src/app/business/services/translates/tra
         FormsModule,
         PrimengModule,
         CommonModule,
-        RequiredComponent
+        RequiredComponent,
+        TranslocoDirective,
     ]
 })
 export class SoftAutocompleteComponent extends BaseAutocompleteControl implements OnInit {

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
     selector: 'intermediate-step-wrapper',
@@ -14,6 +15,7 @@ import { PrimengModule } from 'src/app/layout/modules/primeng.module';
         FormsModule,
         ReactiveFormsModule,
         SoftControlsModule,
+        TranslocoDirective
     ]
 })
 export class IntermediateStepWrapperComponent implements OnInit {
