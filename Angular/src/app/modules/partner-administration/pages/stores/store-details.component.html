@@ -1,0 +1,46 @@
+<ng-container *transloco="let t">
+    @defer (when storeFormGroup != null) {
+        <soft-card [title]="detailsTitle" icon="pi pi-hashtag">
+            <soft-panel>
+                <panel-header></panel-header>
+    
+                <panel-body>
+                    <form [formGroup]="formGroup" class="grid">
+                        <div class="col-12 md:col-6">
+                            <soft-textbox [control]="control('name', storeFormGroup)"></soft-textbox>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-number [control]="control('updatePointsInterval', storeFormGroup)"></soft-number>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-textbox [control]="control('loadPurchasesEndpoint', storeFormGroup)"></soft-textbox>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-textbox [control]="control('loadReversalsEndpoint', storeFormGroup)"></soft-textbox>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-textbox [control]="control('createUserEndpoint', storeFormGroup)"></soft-textbox>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-textbox [control]="control('updateUserGroupEndpoint', storeFormGroup)"></soft-textbox>
+                        </div>
+                        
+                        <!-- <div class="col-12">
+                            <soft-data-table [tableTitle]="t('DiscountCategoryList')" [cols]="cols" [hasLazyLoad]="false" [formArray]="discountCategoryFormArray" [totalRecords]="discountCategoryFormArray?.length" 
+                            [showAddButton]="false" selectionMode="multiple" [selectedItemIds]="selectedDiscountCategoryIdsForStore" [selectedItems]="selectedDiscountCategoryListForStore" [showPaginator]="false" [formArrayControlNamesFromHtml]="formArrayControlNamesFromHtml"
+                            [showExportToExcelButton]="false" (onRowSelect)="rowSelect($event)" (onRowUnselect)="rowUnselect($event)"></soft-data-table>
+                        </div> -->
+                    </form>
+                </panel-body>
+    
+                <panel-footer>
+                    <p-button (onClick)="onSave()" [label]="t('Save')" icon="pi pi-save"></p-button>
+                    <soft-return-button></soft-return-button>
+                </panel-footer>
+    
+            </soft-panel>
+        </soft-card>
+    } @placeholder {
+        <card-skeleton [height]="502"></card-skeleton>
+    }
+</ng-container>

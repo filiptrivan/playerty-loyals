@@ -1,0 +1,21 @@
+﻿using Soft.Generator.Shared.Attributes;
+using Soft.Generator.Shared.BaseEntities;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Playerty.Loyals.Business.Entities
+{
+    public class StoreTier : BusinessObject<long>
+    {
+        public virtual Store Store { get; set; }
+
+        [ManyToOneRequired]
+        public virtual Tier Tier { get; set; }
+
+        public virtual List<DiscountCategory> DiscountCategories { get; set; }
+    }
+}

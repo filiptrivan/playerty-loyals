@@ -1,11 +1,9 @@
 import {
-    Component, HostListener, Input,
-    ViewChild,
+    Component, Input,
   } from '@angular/core';
 import { SoftFormControl } from '../components/soft-form-control/soft-form-control';
 import { TranslocoService } from '@jsverse/transloco';
 import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels.generated';
-import { TooltipOptions } from 'primeng/api';
   
   @Component({
     selector: 'base-control',
@@ -15,6 +13,7 @@ import { TooltipOptions } from 'primeng/api';
   export class BaseControl {
     @Input() control: SoftFormControl; // FT: if you name it formControl: https://stackoverflow.com/a/54755671/21209982
     @Input() disabled: boolean = false;
+    @Input() showLabel: boolean = true;
     @Input() label: string = null; // NgModel/Want custom translation
     @Input() controlValid: boolean = true; // NgModel
     @Input() placeholder: string = '';
@@ -53,13 +52,13 @@ import { TooltipOptions } from 'primeng/api';
     }
 
     getValidationErrrorMessages(){
-        if(this.control?.errors && this.control?.dirty){
-            // FT: it should always be one error message for single form control, 
-            // also i don't need to reassign it to null because it will be shown only when control.valid == false
-            this.validationErrorMessage = this.control.errors['_'];
-        }
-        
-        return this.validationErrorMessage;
+      if(this.control?.errors && this.control?.dirty){
+          // FT: it should always be one error message for single form control, 
+          // also i don't need to reassign it to null because it will be shown only when control.valid == false
+          this.validationErrorMessage = this.control.errors['_'];
+      }
+      
+      return this.validationErrorMessage;
     }
 
   }

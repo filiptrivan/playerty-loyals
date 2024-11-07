@@ -1,24 +1,29 @@
-<p-timeline [value]="items" align="left" styleClass="customized-timeline">
-	<ng-template pTemplate="marker" let-item>
-	  <span [class]="(isCurrentItem(item) ? 'current-item ' : ' ') + (isPassed(item) ? 'passed-item ' : ' ') + 'circle'">
-		<ng-container *ngIf="isPassed(item) == false">
-			{{item.displayName}}
+<p-timeline [value]="tiers" align="left" styleClass="customized-timeline">
+	<ng-template pTemplate="marker" let-tier>
+	  <span [class]="(isCurrentTier(tier) ? 'current-item ' : ' ') + (isPassed(tier) ? 'passed-item ' : ' ') + 'circle'">
+		<ng-container *ngIf="isPassed(tier) == false">
+			{{tier.displayName}}
 		</ng-container>
-		<ng-container *ngIf="isPassed(item) == true">
+		<ng-container *ngIf="isPassed(tier) == true">
 			<i class="pi pi-check"></i>
 		</ng-container>
 	  </span>
 	</ng-template>
-	<ng-template pTemplate="content" let-item>
+	<ng-template pTemplate="content" let-tier>
 	  <div>
 		<div>
 		  <div style="margin-bottom: 10px;">
-			  <div class="header">{{item.validFrom}} - {{item.validTo}}</div>
+			  <div class="header">{{tier.validFrom}} - {{tier.validTo}}</div>
 			  
 			  <div class="notification-border" style="padding: 18px; margin-top: 10px;">
-				<div class="header" style="margin-bottom: 10px;">{{item.name}}</div>
+				<div class="header" style="margin-bottom: 10px;">{{tier.name}}</div>
 				<div class="text-wrapper">
-					{{item.description}}
+					{{tier.description}}
+					<div *ngFor="let store of tier.stores">
+						<div *ngFor="let discountCategory of store.discountCategoryList">
+							eee
+						</div>
+					</div>
 				</div>
 			  </div>
 		  </div>

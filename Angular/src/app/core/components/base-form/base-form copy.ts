@@ -87,7 +87,7 @@ export class BaseFormCopy implements OnInit {
     if (formControl == null) return null;
 
     formControl.validator = this.validatorService.getValidator(formControl, modelConstructor.typeName);
-  
+
     if (formControl?.validator?.hasNotEmptyRule)
       formControl.required = true;
   }
@@ -162,8 +162,7 @@ export class BaseFormCopy implements OnInit {
           }
         });
 
-        if (this.modelId == 0)
-          this.rerouteOnTheNewEntity((res as any).rerouteId); // You always need to have id, because of id == 0 and version change
+        this.rerouteOnTheNewEntity((res as any).rerouteId); // You always need to have id, because of id == 0 and version change
         
         this.onAfterSave();
       });
@@ -248,7 +247,8 @@ export class BaseFormCopy implements OnInit {
 
   //#region Model List
 
-  initFormArray(modelList: any[], modelConstructor: any, formArraySaveBodyName: string, formArrayTranslationKey: string, required: boolean = false){ // FT HACK: Because generics can't instantiate in TS (because JS)
+  // FT HACK: Using modelConstructor because generics can't instantiate in TS (because JS)
+  initFormArray(modelList: any[], modelConstructor: any, formArraySaveBodyName: string, formArrayTranslationKey: string, required: boolean = false, disableLambda?: (formControlName: string, model: any) => boolean){
     if (modelList == null)
       return null;
 
@@ -259,7 +259,7 @@ export class BaseFormCopy implements OnInit {
 
     modelList.forEach(model => {
       Object.assign(modelConstructor, model);
-      formArray.push(this.createFormGroup(modelConstructor));
+      formArray.push(this.createFormGroup(modelConstructor, disableLambda));
     });
 
     this.formGroup.addControl(formArraySaveBodyName, formArray);
@@ -267,20 +267,22 @@ export class BaseFormCopy implements OnInit {
     return formArray;
   }
 
-  createFormGroup(modelConstructor: any): FormGroup {
+  createFormGroup(modelConstructor: any, disableLambda?: (formControlName: string, model: any) => boolean): FormGroup {
     let formGroup: SoftFormGroup<any> = new SoftFormGroup({});
 
     Object.keys(modelConstructor).forEach((formControlName) => {
       let formControl: SoftFormControl;
 
-      const propertyType = typeof (modelConstructor[formControlName]);
+      const formControlValue = modelConstructor[formControlName];
+
+      const propertyType = typeof formControlValue;
 
       if (propertyType == typeof Date || 
         (formControlName.endsWith('Id') && formControlName.length > 2)
       )
-        formControl = new SoftFormControl(modelConstructor[formControlName], { updateOn: 'change' });
+        formControl = new SoftFormControl(formControlValue, { updateOn: 'change' });
       else
-        formControl = new SoftFormControl(modelConstructor[formControlName], { updateOn: 'blur' });
+        formControl = new SoftFormControl(formControlValue, { updateOn: 'blur' });
 
       if (formControlName.endsWith('Id') && formControlName.length > 2) {
         formControl.label = formControlName.substring(0, formControlName.length - 2);
@@ -294,12 +296,13 @@ export class BaseFormCopy implements OnInit {
 
       this.setValidator(formControl, modelConstructor);
       
-      // if(disable == true)
-      //   formControl.disable();
+      if(disableLambda && disableLambda(formControlName, modelConstructor)){
+        formControl.disable();
+      }
       
-      formGroup.controls[formControlName].valueChanges.subscribe(value => {
-        modelConstructor[formControlName] = value;
-      })
+      // formGroup.controls[formControlName].valueChanges.subscribe(value => {
+      //   modelConstructor[formControlName] = value;
+      // })
     });
     
     // this.onAfterArrayControlInitialization(formControlName);
@@ -356,7 +359,7 @@ export class BaseFormCopy implements OnInit {
       if (formArray instanceof SoftFormArray){
         (formArray.controls as FormGroup[]).forEach(formGroup => {
           Object.keys(formGroup.controls).forEach(key => {
-            const formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
+            const formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesn't work
             formControl.markAsDirty();
             if (this.formArrayControlNamesFromHtml.includes(formControl.label) && formControl.invalid) {
               invalid = true;
@@ -368,6 +371,8 @@ export class BaseFormCopy implements OnInit {
           invalid = true;
           this.messageService.warningMessage(this.translocoService.translate('ListCanNotBeEmpty', {value: this.translateClassNamesService.translate(formArray.translationKey)}))
         }
+
+        console.log(invalid)
       }
     });
 

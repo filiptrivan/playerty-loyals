@@ -18,6 +18,8 @@ import { TiersComponent } from "../../../modules/tiers/pages/tiers.component";
 import { TimelineIndexProgressbarComponent } from 'src/app/core/components/timeline-index-progressbar/timeline-index-progressbar.component';
 import { ProductsRecommendationComponent } from 'src/app/business/components/products-recommendation/products-recommendation.component';
 import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
+import { TranslocoDirective } from '@jsverse/transloco';
+import { InfoCardComponent } from "../../../core/components/info-card/info-card.component";
 
 @NgModule({
     imports: [
@@ -38,6 +40,8 @@ import { UserProgressbarComponent } from 'src/app/business/components/user-progr
     TimelineIndexProgressbarComponent,
     ProductsRecommendationComponent,
     UserProgressbarComponent,
+    TranslocoDirective,
+    InfoCardComponent,
 ],
     declarations: [DashboardComponent],
     providers:[ApiService]

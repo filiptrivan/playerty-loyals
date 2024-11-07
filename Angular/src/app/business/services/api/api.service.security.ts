@@ -1,11 +1,10 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Namebook } from '../../entities/namebook';
-import { Login, VerificationTokenRequest, LoginResult, ForgotPassword, ExternalProvider, Registration, RegistrationVerificationResult, RefreshTokenRequest, Role } from '../../entities/generated/security-entities.generated';
+import { Login, AuthResult, ForgotPassword, Registration, RegistrationVerificationResult, RefreshTokenRequest, Role } from '../../entities/generated/security-entities.generated';
 import { TableFilter } from '../../entities/table-filter';
-import { TableResponse } from 'src/app/core/entities/table-response';
 
 @Injectable()
 export class ApiSecurityService {
@@ -19,36 +18,36 @@ export class ApiSecurityService {
         return this.http.post<any>(`${environment.apiUrl}/Auth/SendLoginVerificationEmail`, loginDTO, environment.httpOptions);
     }
 
-    login(request: VerificationTokenRequest): Observable<LoginResult> { 
-        return this.http.post<LoginResult>(`${environment.apiUrl}/Auth/Login`, request, environment.httpOptions);
-    }
+    // login(request: VerificationTokenRequest): Observable<AuthResult> { 
+    //     return this.http.post<AuthResult>(`${environment.apiUrl}/Auth/Login`, request, environment.httpOptions);
+    // }
 
     sendForgotPasswordVerificationEmail(forgotPasswordDTO: ForgotPassword): Observable<any> { 
         return this.http.post<any>(`${environment.apiUrl}/Auth/SendForgotPasswordVerificationEmail`, forgotPasswordDTO, environment.httpOptions);
     }
 
-    forgotPassword(request: VerificationTokenRequest): Observable<LoginResult> { 
-        return this.http.post<LoginResult>(`${environment.apiUrl}/Auth/ForgotPassword`, request, environment.httpOptions);
-    }
+    // forgotPassword(request: VerificationTokenRequest): Observable<AuthResult> { 
+    //     return this.http.post<AuthResult>(`${environment.apiUrl}/Auth/ForgotPassword`, request, environment.httpOptions);
+    // }
 
-    loginExternal(externalProviderDTO: ExternalProvider): Observable<LoginResult> { 
-        return this.http.post<LoginResult>(`${environment.apiUrl}/Auth/LoginExternal`, externalProviderDTO, environment.httpOptions);
-    }
+    // loginExternal(externalProviderDTO: ExternalProvider): Observable<AuthResult> { 
+    //     return this.http.post<AuthResult>(`${environment.apiUrl}/Auth/LoginExternal`, externalProviderDTO, environment.httpOptions);
+    // }
 
     sendRegistrationVerificationEmail(registrationDTO: Registration): Observable<RegistrationVerificationResult> { 
         return this.http.post<RegistrationVerificationResult>(`${environment.apiUrl}/Auth/SendRegistrationVerificationEmail`, registrationDTO, environment.httpOptions);
     }
 
-    register(request: VerificationTokenRequest): Observable<LoginResult> { 
-        return this.http.post<LoginResult>(`${environment.apiUrl}/Auth/Register`, request, environment.httpOptions);
-    }
+    // register(request: VerificationTokenRequest): Observable<AuthResult> { 
+    //     return this.http.post<AuthResult>(`${environment.apiUrl}/Auth/Register`, request, environment.httpOptions);
+    // }
 
     logout(browserId: string): Observable<any> { 
         return this.http.get<any>(`${environment.apiUrl}/Auth/Logout?browserId=${browserId}`);
     }
 
-    refreshToken(request: RefreshTokenRequest): Observable<LoginResult> { 
-        return this.http.post<LoginResult>(`${environment.apiUrl}/Auth/RefreshToken`, request, environment.httpOptions);
+    refreshToken(request: RefreshTokenRequest): Observable<AuthResult> { 
+        return this.http.post<AuthResult>(`${environment.apiUrl}/Auth/RefreshToken`, request, environment.httpOptions);
     }
 
     loadRoleListForAutocomplete(limit: number, query: string): Observable<Namebook[]> {

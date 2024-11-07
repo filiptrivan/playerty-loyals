@@ -26,6 +26,7 @@ export class SoftAutocompleteComponent extends BaseAutocompleteControl implement
     // @Input() required: boolean = true; // TODO FT: delete if you don't need through whole app
     @Input() appendTo: any = 'body';
     @Input() showClear: boolean = true;
+    @Input() emptyMessage: string;
 
     constructor(
         protected override translocoService: TranslocoService,
@@ -36,6 +37,10 @@ export class SoftAutocompleteComponent extends BaseAutocompleteControl implement
 
     override ngOnInit(){
         super.ngOnInit();
+
+        if (this.emptyMessage == null) {
+            this.emptyMessage = this.translocoService.translate('EmptyMessage');
+        }
     }
 
     search(event: AutoCompleteCompleteEvent){

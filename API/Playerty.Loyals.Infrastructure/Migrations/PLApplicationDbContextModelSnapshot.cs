@@ -100,6 +100,43 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.ToTable("PermissionRole");
                 });
 
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.DiscountCategory", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int?>("PartnerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartnerId");
+
+                    b.ToTable("DiscountCategories");
+                });
+
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Gender", b =>
                 {
                     b.Property<int>("Id")
@@ -189,20 +226,8 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CreateUserEndpoint")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("LoadPurchasesEndpoint")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<string>("LoadReversalsEndpoint")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("LogoImage")
                         .HasMaxLength(1024)
@@ -216,12 +241,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("PointsForTheFirstTimeBirthDateFill")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PointsForTheFirstTimeGenderFill")
-                        .HasColumnType("int");
-
                     b.Property<string>("PrimaryColor")
                         .HasMaxLength(7)
                         .HasColumnType("nvarchar(7)");
@@ -234,13 +253,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<int?>("UpdatePointsInterval")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UpdateUserGroupEndpoint")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<int>("Version")
                         .HasColumnType("int");
@@ -348,12 +360,6 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("HasFilledBirthDateForTheFirstTime")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("HasFilledGenderForTheFirstTime")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2");
 
@@ -455,6 +461,107 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.HasIndex("SegmentationId");
 
                     b.ToTable("SegmentationItems");
+                });
+
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.Store", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CreateUserEndpoint")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LoadPurchasesEndpoint")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("LoadReversalsEndpoint")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int?>("PartnerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UpdatePointsInterval")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdateUserGroupEndpoint")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartnerId");
+
+                    b.ToTable("Stores");
+                });
+
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.StoreTier", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("StoreId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("TierId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StoreId");
+
+                    b.HasIndex("TierId");
+
+                    b.ToTable("StoreTiers");
+                });
+
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.StoreTierDiscountCategory", b =>
+                {
+                    b.Property<long>("StoreTiersId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("DiscountCategoriesId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Discount")
+                        .HasColumnType("int");
+
+                    b.HasKey("StoreTiersId", "DiscountCategoriesId");
+
+                    b.HasIndex("DiscountCategoriesId");
+
+                    b.ToTable("StoreTierDiscountCategory");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Tier", b =>
@@ -793,6 +900,15 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.DiscountCategory", b =>
+                {
+                    b.HasOne("Playerty.Loyals.Business.Entities.Partner", "Partner")
+                        .WithMany()
+                        .HasForeignKey("PartnerId");
+
+                    b.Navigation("Partner");
+                });
+
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.NotificationUser", b =>
                 {
                     b.HasOne("Playerty.Loyals.Business.Entities.Notification", null)
@@ -870,6 +986,45 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                         .HasForeignKey("SegmentationId");
 
                     b.Navigation("Segmentation");
+                });
+
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.Store", b =>
+                {
+                    b.HasOne("Playerty.Loyals.Business.Entities.Partner", "Partner")
+                        .WithMany()
+                        .HasForeignKey("PartnerId");
+
+                    b.Navigation("Partner");
+                });
+
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.StoreTier", b =>
+                {
+                    b.HasOne("Playerty.Loyals.Business.Entities.Store", "Store")
+                        .WithMany("StoreTiers")
+                        .HasForeignKey("StoreId");
+
+                    b.HasOne("Playerty.Loyals.Business.Entities.Tier", "Tier")
+                        .WithMany("StoreTiers")
+                        .HasForeignKey("TierId");
+
+                    b.Navigation("Store");
+
+                    b.Navigation("Tier");
+                });
+
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.StoreTierDiscountCategory", b =>
+                {
+                    b.HasOne("Playerty.Loyals.Business.Entities.DiscountCategory", null)
+                        .WithMany()
+                        .HasForeignKey("DiscountCategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Playerty.Loyals.Business.Entities.StoreTier", null)
+                        .WithMany()
+                        .HasForeignKey("StoreTiersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Tier", b =>
@@ -961,9 +1116,16 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.Navigation("SegmentationItems");
                 });
 
+            modelBuilder.Entity("Playerty.Loyals.Business.Entities.Store", b =>
+                {
+                    b.Navigation("StoreTiers");
+                });
+
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Tier", b =>
                 {
                     b.Navigation("PartnerUsers");
+
+                    b.Navigation("StoreTiers");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Transaction", b =>

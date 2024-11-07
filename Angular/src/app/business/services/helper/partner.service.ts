@@ -85,7 +85,7 @@ export class PartnerService {
       if (partner?.primaryColor != null){ // TODO FT: Make this field not null in the database, and initialize it for the partner?
         const primaryColor = partner.primaryColor;
         const primaryLightColor = adjustColor(primaryColor, 35);
-        const primaryLighterColor = adjustColor(primaryColor, 95);
+        const primaryLighterColor = adjustColor(primaryColor, 80);
         const primaryDarkColor = adjustColor(primaryColor, -10);
         const primaryDarkerColor = adjustColor(primaryColor, -20);
         
@@ -99,7 +99,7 @@ export class PartnerService {
       } else {
         const primaryColor = environment.primaryColor;
         const primaryLightColor = adjustColor(primaryColor, 35);
-        const primaryLighterColor = adjustColor(primaryColor, 95);
+        const primaryLighterColor = adjustColor(primaryColor, 80);
         const primaryDarkColor = adjustColor(primaryColor, -10);
         const primaryDarkerColor = adjustColor(primaryColor, -20);
         
@@ -114,10 +114,11 @@ export class PartnerService {
 
   setCurrentPartner(partner: Partner) {
     this._partner.next(partner);
+    localStorage.setItem(environment.partnerSlugKey, partner.slug);
     this.adjustPartnerColor(partner);
   }
 
-  loadCurrentPartnerUser(): Observable<Partner> {  
+  loadCurrentPartnerUser(): Observable<PartnerUser> {  
     return this.apiService.getCurrentPartnerUser().pipe(
       map(currentPartnerUser => {
         this._currentPartnerUser.next(currentPartnerUser);

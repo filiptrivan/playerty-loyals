@@ -27,16 +27,21 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((err) => {
-        return this.handleAuthError(err);
+        return this.handleAuthError(err, request);
       })
     );
   }
 
-  private handleAuthError(err: HttpErrorResponse): Observable<any> {
+  private handleAuthError(err: HttpErrorResponse, request: HttpRequest<any>): Observable<any> {
 
     if (!environment.production) {
       console.error(err);
     }
+
+    let errorResponse = err.error;
+
+    if (request.responseType != 'json')
+      errorResponse= JSON.parse(err.error);
 
     if (err.status == 0) {
       this.messageService.warningMessage(
@@ -61,7 +66,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
     } 
     else if (err.status == 400 || err.status == 401 || err.status == 419) {
       this.messageService.warningMessage(
-        err.error.message ?? this.translocoService.translate('BadRequestDetails'),
+        errorResponse.message ?? this.translocoService.translate('BadRequestDetails'),
         this.translocoService.translate('Warning'),
       );
 
@@ -73,7 +78,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
     } 
     else {
       this.messageService.errorMessage(
-        err.error.message,
+        errorResponse.message,
         this.translocoService.translate('UnexpectedErrorTitle'),
       );
       return of(err.message);

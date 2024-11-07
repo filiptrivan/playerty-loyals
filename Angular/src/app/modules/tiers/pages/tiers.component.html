@@ -5,11 +5,11 @@
         <div class="bold-header-separator"></div>
       </div>
       <div style="display: flex; flex-direction: column; position: relative; z-index: 2;">
-        <timeline-index-progressbar #timeline [items]="tiers" [currentItem]="tierForTheCurrentPartnerUser" [currentUserPoints]="currentPartnerUser?.points" 
+        <timeline-index-progressbar #timeline [tiers]="tiers" [currentTier]="tierForTheCurrentPartnerUser" [currentUserPoints]="currentPartnerUser?.points" 
         [connectorMethod]="connectorMethod"></timeline-index-progressbar>
       </div>
       <div class="card-overflow-icon">
-        <i class="pi pi-sitemap"></i>
+        <i class="pi pi-crown"></i>
       </div>
     </div>
   </ng-container>

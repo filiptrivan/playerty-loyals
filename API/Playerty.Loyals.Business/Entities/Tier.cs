@@ -20,10 +20,6 @@ namespace Playerty.Loyals.Business.Entities
         [StringLength(400, MinimumLength = 1)]
         public string Description { get; set; }
 
-        //[Range(0, 100)]
-        //[Required]
-        //public int Discount { get; set; } // FT: It can't be byte because of fluent validation
-
         /// <summary>
         /// Points
         /// </summary>
@@ -42,5 +38,8 @@ namespace Playerty.Loyals.Business.Entities
         public virtual Partner Partner { get; set; }
 
         public virtual List<PartnerUser> PartnerUsers { get; set; }
+
+        [Map]
+        public virtual List<StoreTier> StoreTiers { get; set; }
     }
 }

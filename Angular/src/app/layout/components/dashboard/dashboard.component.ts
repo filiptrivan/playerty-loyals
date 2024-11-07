@@ -37,7 +37,7 @@ export class DashboardComponent implements OnInit {
         this.currentPartnerTier = null; // FT: This line is mandatory.
       }
     });
-
+    
     this.partnerSubscription = this.partnerService.partner$.subscribe(currentPartner => {
       if (currentPartner === null) {
         this.handleMissingPartner();
@@ -48,7 +48,7 @@ export class DashboardComponent implements OnInit {
   private async handleMissingPartner() {
     const permissionCodes: string[] = await firstValueFrom(this.authService.currentPartnerUserPermissions$);
     if (permissionCodes != null && permissionCodes.length === 0) {
-      this.authService.navigateToSelectPartner();
+      // this.authService.navigateToSelectPartner();
     }
   }
 

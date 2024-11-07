@@ -1,7 +1,7 @@
 <ng-container *transloco="let t">
   <div class="card responsive-card-padding overflow-auto">
-    <p-table #dt [value]="items" [rows]="rows" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="showPaginator" responsiveLayout="scroll" [lazy]="isLazyLoadTable"
-    (onLazyLoad)="lazyLoad($event)" [totalRecords]="totalRecords" class="soft-table" [loading]="loading" [selectionMode]="selectionMode" dataKey="id" (onFilter)="filter($event)"
+    <p-table #dt [value]="items" [rows]="rows" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="showPaginator" responsiveLayout="scroll" [lazy]="hasLazyLoad"
+    (onLazyLoad)="lazyLoad($event)" [totalRecords]="totalRecords" class="soft-table" [loading]="(items === undefined || loading === true)" [selectionMode]="selectionMode" dataKey="id" (onFilter)="filter($event)"
     > 
     <ng-template pTemplate="caption">
       <div class="table-header overflow-auto">
@@ -49,14 +49,13 @@
           </ng-container>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-rowData let-index="rowIndex">
+      <ng-template pTemplate="body" let-rowData let-index="rowIndex" let-editing="editing">
         <tr>
           <td *ngIf="selectionMode == 'multiple'">
-            <!-- <p-tableCheckbox [value]="rowData.id"></p-tableCheckbox> -->
-              <p-checkbox (onChange)="selectRow(rowData.id)" [ngModel]="isRowSelected(rowData.id)" [binary]="true"></p-checkbox>
+              <p-checkbox (onChange)="selectRow(rowData.id, rowData.index)" [ngModel]="isRowSelected(rowData.id)" [binary]="true"></p-checkbox>
           </td>
-          <ng-container *ngFor="let col of cols">
-            <td [pTooltip]="getRowData(rowData, col)">
+          <ng-container *ngFor="let col of cols; trackBy: trackByFn">
+            <td [pTooltip]="getRowData(rowData, col)" *ngIf="!col.editable">
               <div style="display: flex; align-items: center; justify-content: center; gap: 18px;">
                 <ng-container *ngFor="let action of col.actions" >
                   <span [pTooltip]="action.name" [class]="getClassForAction(action)" (click)="getMethodForAction(action, rowData)"></span>
@@ -64,17 +63,20 @@
               </div>
               {{getRowData(rowData, col)}}
             </td>
+            <td *ngIf="col.editable">
+              <soft-number [control]="getFormArrayControlByIndex(col.field, rowData.index)" [showLabel]="false"></soft-number>
+            </td>
           </ng-container>
         </tr>
       </ng-template>
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td [attr.colspan]="cols?.length + (selectedLazyLoadObservableMethod ? 1 : 0)">{{t('NoRecordsFound')}}</td>
+          <td [attr.colspan]="cols?.length + (selectionMode === 'multiple' ? 1 : 0)">{{t('NoRecordsFound')}}</td>
         </tr>
       </ng-template>
       <ng-template pTemplate="loadingbody">
         <tr>
-          <td [attr.colspan]="cols?.length + (selectedLazyLoadObservableMethod ? 1 : 0)">{{t('Loading')}}...</td>
+          <td [attr.colspan]="cols?.length + (selectionMode === 'multiple' ? 1 : 0)">{{t('Loading')}}...</td>
         </tr>
       </ng-template>
       <ng-template pTemplate="paginatorleft">

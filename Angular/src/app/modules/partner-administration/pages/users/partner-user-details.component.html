@@ -13,12 +13,10 @@
                             <soft-number [control]="control('points', partnerUserFormGroup)"></soft-number>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-calendar [control]="control('birthDate', userExtendedFormGroup, false, false)" [showTooltip]="!partnerUserFormGroup.getRawValue().hasFilledBirthDateForTheFirstTime" 
-                            [tooltipText]="firstTimeFillText"></soft-calendar>
+                            <soft-calendar [control]="control('birthDate', userExtendedFormGroup, false, false)"></soft-calendar>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-dropdown [control]="control('genderId', userExtendedFormGroup, false, false)" [options]="genderOptions" 
-                            [showTooltip]="!partnerUserFormGroup.getRawValue().hasFilledGenderForTheFirstTime" [tooltipText]="firstTimeFillText"></soft-dropdown>
+                            <soft-dropdown [control]="control('genderId', userExtendedFormGroup, false, false)" [options]="genderOptions"></soft-dropdown>
                         </div>
                         <div class="col-12">
                             <soft-multiselect

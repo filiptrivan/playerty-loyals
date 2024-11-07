@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using LightInject;
-using Soft.Generator.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Soft.Generator.Shared.Interfaces;
 using Microsoft.AspNetCore.Diagnostics;
@@ -17,12 +16,7 @@ using Soft.Generator.Shared.Extensions;
 using Playerty.Loyals.WebAPI.DI;
 using Playerty.Loyals.Infrastructure;
 using System.Reflection;
-using Playerty.Loyals.Business.Entities;
-using Soft.Generator.Security.Interface;
-using Playerty.Loyals.Business.DataMappers;
-using System.ComponentModel;
 using Microsoft.Extensions.Azure;
-using Azure.Identity;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Localization;
@@ -94,15 +88,6 @@ public class Startup
             options.JsonSerializerOptions.Converters.Add(new JsonDateTimeConverter());
         });
 
-        services.AddDbContext<IApplicationDbContext, PLApplicationDbContext>( // https://youtu.be/bN57EDYD6M0?si=CVztRqlj0hBSrFXb
-            options =>
-            {
-                options
-                    .UseLazyLoadingProxies()
-                    .UseSqlServer(Playerty.Loyals.WebAPI.SettingsProvider.Current.ConnectionString);
-                    //.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
-            });
-
         services.AddAzureClients(clientBuilder =>
         {
             clientBuilder.AddBlobServiceClient(Playerty.Loyals.WebAPI.SettingsProvider.Current.BlobStorageConnectionString);
@@ -112,12 +97,21 @@ public class Startup
                 string storageContainerName = Playerty.Loyals.WebAPI.SettingsProvider.Current.BlobStorageContainerName;
 
                 BlobServiceClient blobServiceClient = provider.GetRequiredService<BlobServiceClient>();
-                
+
                 BlobContainerClient blobContainerClient = blobServiceClient.GetBlobContainerClient(storageContainerName);
 
                 return blobContainerClient;
             });
         });
+
+        services.AddDbContext<IApplicationDbContext, PLApplicationDbContext>( // https://youtu.be/bN57EDYD6M0?si=CVztRqlj0hBSrFXb
+            options =>
+            {
+                options
+                    .UseLazyLoadingProxies()
+                    .UseSqlServer(Playerty.Loyals.WebAPI.SettingsProvider.Current.ConnectionString);
+                    //.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+            });
 
         services.AddSwaggerGen(c =>
         {
@@ -215,10 +209,6 @@ public class Startup
                     else if (exception is SqlException sqlEx && sqlEx.Number == 2627)
                     {
                         message = sqlEx.Message;
-                    }
-                    else if (exception is ValidationException fluentEx)
-                    {
-                        message = fluentEx.Message;
                     }
                     else
                     {

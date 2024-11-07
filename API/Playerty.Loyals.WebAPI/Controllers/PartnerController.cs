@@ -59,6 +59,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.GetPartnerDTOAsync(id, false);
         }
 
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<PartnerDTO>> GetPartners()
+        {
+            return await _loyalsBusinessService.LoadPartnerDTOList(_context.DbSet<Partner>(), false);
+        }
+
         [HttpPut]
         [AuthGuard]
         public async Task<PartnerDTO> SavePartner(PartnerDTO partnerDTO)
@@ -86,6 +93,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
         public async Task<string> UploadLogoImage([FromForm] IFormFile file) // FT: It doesn't work without interface
         {
             return await _loyalsBusinessService.UploadPartnerLogoImageAsync(file); // TODO FT: Make authorization in loyals business servie with override
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<int>> GetPartnerIdsForTheCurrentUser()
+        {
+            return await _loyalsBusinessService.GetPartnerIdsForTheCurrentUser();
         }
 
     }

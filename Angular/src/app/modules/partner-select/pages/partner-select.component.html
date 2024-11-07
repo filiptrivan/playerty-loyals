@@ -1,18 +1,36 @@
 <ng-container *transloco="let t">
-  <intermediate-step-wrapper [title]="partnerIntermediateStepTitle" [description]="partnerIntermediateStepDescription">
-    <div class="col-12">
-      <soft-autocomplete 
-        [control]="control('partnerSlug', true, true)"
-        (onTextInput)="searchPartners($event)" 
-        [options]="partnerOptions"
-        [label]="t('Partner')"></soft-autocomplete>
-    </div>
-    <div class="col-12">
-      <p-button
-        (onClick)="partnerSubmit()"
-        [label]="t('Submit')"
-        icon="pi pi-check"
-      ></p-button>
-    </div>
-  </intermediate-step-wrapper>
+  <div class="card dashboard-card-wrapper-with-grid">
+      <div class="big-header" style="margin-bottom: 10px;">
+      {{t('PartnerList')}}
+      <div class="bold-header-separator"></div>
+      </div>
+
+      <p-dataView #dv [value]="partners" [rows]="9" filterBy="name" layout="grid">
+          <ng-template let-partners pTemplate="gridItem">
+              <div class="grid" style="position: relative; z-index: 2;">
+                  <div class="col-12 md:col-4" *ngFor="let partner of partners">
+                      <div class="card responsive-card-padding border-1 surface-border">
+                          <div class="flex flex-column align-items-center text-center mb-5">
+                              <img [src]="getPartnerLogoImage(partner)" [alt]="partner.name" class="w-9 my-3 mx-0"/>
+                              <div class="text-2xl font-bold">{{partner.name}}</div>
+                          </div>
+                          <div>
+                                @if (partnerIdsForTheCurrentUser.includes(partner.id)) {
+                                    <p-button [label]="'Već ste član'" [disabled]="true" icon="pi pi-check" [outlined]="false" severity="success" [style]="{width: '100%'}"></p-button>
+                                }
+                                @else {
+                                    <!-- TODO FT: Translate -->
+                                    <p-button (onClick)="addNewPartnerUser(partner.id)" [label]="'Postani član'" icon="pi pi-user-plus" [outlined]="true" [style]="{width: '100%'}"></p-button>
+                                }
+                        </div>
+                      </div>
+                  </div>
+              </div>
+          </ng-template>
+      </p-dataView>
+
+      <div class="card-overflow-icon" style="position: absolute; overflow: hidden; right: 8px; top: -25px; z-index: 1;">
+          <i class="pi pi-at" style="font-size: 270px;"></i>
+      </div>
+  </div>
 </ng-container>

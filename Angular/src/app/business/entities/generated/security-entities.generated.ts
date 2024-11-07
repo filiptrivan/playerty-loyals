@@ -355,7 +355,7 @@ export class ForgotPassword extends BaseEntity
     }
 }
 
-export class LoginResult extends BaseEntity
+export class AuthResult extends BaseEntity
 {
     userId?: number;
 	email?: string;
@@ -367,15 +367,15 @@ export class LoginResult extends BaseEntity
         userId,
 		email,
 		accessToken,
-		refreshToken
+		refreshToken,
     }:{
         userId?: number;
 		email?: string;
 		accessToken?: string;
-		refreshToken?: string;     
+		refreshToken?: string;
     } = {}
     ) {
-        super('LoginResult'); 
+        super('AuthResult'); 
 
         this.userId = userId;
 		this.email = email;

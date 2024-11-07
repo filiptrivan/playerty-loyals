@@ -61,7 +61,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task DeletePartnerUser(long id)
         {
-            await _loyalsBusinessService.DeletePartnerUserAsync(id);
+            await _loyalsBusinessService.DeletePartnerUserAsync(id, false); // TODO FT: Override
         }
 
         [HttpGet]
@@ -125,6 +125,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
         public async Task<PartnerUserDTO> GetPartnerUserForTheUser(long id)
         {
             return await _loyalsBusinessService.GetPartnerUserForTheUser(id);
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task AddPartnerUserForTheCurrentUser(int partnerId)
+        {
+            await _loyalsBusinessService.AddPartnerUserForTheCurrentUser(partnerId);
         }
 
     }

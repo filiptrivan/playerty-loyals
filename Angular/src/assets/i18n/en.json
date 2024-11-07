@@ -146,7 +146,7 @@
   "ExternalProvider": "Missing value for 'ExternalProvider'",
   "ForgotPasswordVerificationToken": "Missing value for 'ForgotPasswordVerificationToken'",
   "JwtAuthResult": "Missing value for 'JwtAuthResult'",
-  "LoginResult": "Missing value for 'LoginResult'",
+  "AuthResult": "Missing value for 'LoginResult'",
   "LoginVerificationToken": "Missing value for 'LoginVerificationToken'",
   "RefreshTokenRequest": "Missing value for 'RefreshTokenRequest'",
   "Registration": "Missing value for 'Registration'",

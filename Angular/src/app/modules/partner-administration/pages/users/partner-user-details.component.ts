@@ -41,8 +41,6 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     segmentationItemModel: SegmentationItem = new SegmentationItem();
 
     firstTimeFillText: string = this.translocoService.translate('FirstTimeFieldFillTooltipText');
-    genderTooltipText: string;
-    birthDateTooltipText: string;
 
     alreadyFilledSegmentationIdsForThePartnerUser: number[] = [];
 
@@ -100,16 +98,6 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
                     });
                 }
                 
-                if(partnerUser.hasFilledGenderForTheFirstTime == false)
-                    this.genderTooltipText = null;
-                else
-                    this.genderTooltipText = this.firstTimeFillText;
-
-                if(partnerUser.hasFilledBirthDateForTheFirstTime == false)
-                    this.birthDateTooltipText = null;
-                else
-                    this.birthDateTooltipText = this.firstTimeFillText;
-
                 this.apiService.getSegmentationItemListForTheCurrentPartner().subscribe(segmentationItems => {
                     this.segmentationItemsFormArray = this.initFormArray(segmentationItems, this.segmentationItemModel, this.segmentationItemsFormArrayIdentifier, this.segmentationItemsTranslationKey);
 

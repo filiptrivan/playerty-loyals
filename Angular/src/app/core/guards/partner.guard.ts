@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { Observable, map, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -17,7 +16,7 @@ export class PartnerGuard implements CanActivate {
     if (localStorage.getItem(environment.partnerSlugKey) != null && localStorage.getItem(environment.partnerSlugKey) != '') {
       return true;
     }else{
-      this.authService.navigateToSelectPartner();
+      // this.authService.navigateToSelectPartner();
       return false;
     }
   }

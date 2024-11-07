@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Soft.Generator.Security.Interface;
 using Soft.Generator.Security.Services;
-using Soft.Generator.Infrastructure.Data;
 using Soft.Generator.Security.SecurityControllers;
 using Soft.Generator.Shared.Interfaces;
 using Playerty.Loyals.Business.Entities;
@@ -9,11 +8,12 @@ using Soft.Generator.Shared.Attributes;
 using Playerty.Loyals.Services;
 using Playerty.Loyals.Business.DTO;
 using Soft.Generator.Shared.DTO;
-using Playerty.Loyals.Business.Enums;
 using Playerty.Loyals.Business.Services;
-using Soft.Generator.Security.Entities;
 using Microsoft.EntityFrameworkCore;
 using Soft.Generator.Shared.Terms;
+using Soft.Generator.Security.DTO;
+using Soft.Generator.Shared.Extensions;
+using Azure.Core;
 
 namespace Playerty.Loyals.WebAPI.Controllers
 {
@@ -42,6 +42,60 @@ namespace Playerty.Loyals.WebAPI.Controllers
             _loyalsBusinessService = loyalsBusinessService;
             _partnerUserAuthenticationService = partnerUserAuthenticationService;
         }
+
+        /// <summary>
+        /// FT: Putting the method here because we need to make new partner user if he doesn't exist
+        /// </summary>
+        [HttpPost]
+        public async Task<AuthResultDTO> Register(VerificationTokenRequestDTO request)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                AuthResultDTO authResultDTO = await _securityBusinessService.Register(request);
+                await _loyalsBusinessService.AddPartnerUserAfterAuthResult(authResultDTO);
+                return authResultDTO;
+            });
+        }
+
+        /// <summary>
+        /// FT: Putting the method here because we need to make new partner user if he doesn't exist
+        /// </summary
+        [HttpPost]
+        public async Task<AuthResultDTO> Login(VerificationTokenRequestDTO request)
+        {
+            AuthResultDTO authResultDTO = _securityBusinessService.Login(request);
+            await _loyalsBusinessService.AddPartnerUserAfterAuthResult(authResultDTO);
+            return authResultDTO;
+        }
+
+        /// <summary>
+        /// FT: Putting the method here because we need to make new partner user if he doesn't exist
+        /// </summary>
+        [HttpPost]
+        public async Task<AuthResultDTO> LoginExternal(ExternalProviderDTO externalProviderDTO) // TODO FT: Add enum for which external provider you should login user
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                AuthResultDTO authResultDTO = await _securityBusinessService.LoginExternal(externalProviderDTO, SettingsProvider.Current.GoogleClientId);
+                await _loyalsBusinessService.AddPartnerUserAfterAuthResult(authResultDTO);
+                return authResultDTO;
+            });
+        }
+
+        /// <summary>
+        /// FT: Putting the method here because we need to make new partner user if he doesn't exist
+        /// </summary
+        [HttpPost]
+        public async Task<AuthResultDTO> ForgotPassword(VerificationTokenRequestDTO request)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                AuthResultDTO authResultDTO = await _securityBusinessService.ForgotPassword(request);
+                await _loyalsBusinessService.AddPartnerUserAfterAuthResult(authResultDTO);
+                return authResultDTO;
+            });
+        }
+
 
         [HttpGet]
         [AuthGuard]

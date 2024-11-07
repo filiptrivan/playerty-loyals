@@ -15,12 +15,6 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public int Points { get; set; }
 
-        [Required]
-        public bool HasFilledGenderForTheFirstTime { get; set; }
-
-        [Required]
-        public bool HasFilledBirthDateForTheFirstTime { get; set; }
-
         [ManyToOneRequired] // TODO FT: Add partner and user to the primary key
         public virtual Partner Partner { get; set; }
 

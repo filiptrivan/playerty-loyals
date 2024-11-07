@@ -4,7 +4,6 @@ import { NotfoundComponent } from './layout/components/notfound/notfound.compone
 import { AppLayoutComponent } from "./layout/app.layout.component";
 import { AuthGuard } from './core/guards/auth.guard';
 import { NotAuthGuard } from './core/guards/not-auth.guard';
-import { PartnerGuard } from './core/guards/partner.guard';
 
 @NgModule({
     imports: [
@@ -16,12 +15,12 @@ import { PartnerGuard } from './core/guards/partner.guard';
                     {
                         path: '',
                         loadChildren: () => import('./layout/components/dashboard/dashboard.module').then(m => m.DashboardModule),
-                        canActivate: [AuthGuard, PartnerGuard]
+                        canActivate: [AuthGuard]
                     },
                     { 
                         path: 'documentation',
                         loadChildren: () => import('./layout/components/documentation/documentation.module').then(m => m.DocumentationModule),
-                        canActivate: [AuthGuard, PartnerGuard]
+                        canActivate: [AuthGuard]
                     },
                     { 
                         path: 'administration',
@@ -31,17 +30,22 @@ import { PartnerGuard } from './core/guards/partner.guard';
                     { 
                         path: 'partner-administration',
                         loadChildren: () => import('./modules/partner-administration/partner-administration.module').then(m => m.PartnerAdministrationModule),
-                        canActivate: [AuthGuard, PartnerGuard]
+                        canActivate: [AuthGuard]
+                    },
+                    { 
+                        path: '',
+                        loadChildren: () => import('./modules/partner-select/partner-select.module').then(m => m.PartnerSelectModule),
+                        canActivate: [AuthGuard]
                     },
                     { 
                         path: '',
                         loadChildren: () => import('./modules/notification/notification.module').then(m => m.NotificationModule),
-                        canActivate: [AuthGuard, PartnerGuard]
+                        canActivate: [AuthGuard]
                     },
                     { 
                         path: '',
                         loadChildren: () => import('./modules/tiers/tiers.module').then(m => m.TiersModule),
-                        canActivate: [AuthGuard, PartnerGuard]
+                        canActivate: [AuthGuard]
                     },
                 ],
             },
@@ -55,11 +59,11 @@ import { PartnerGuard } from './core/guards/partner.guard';
                     },
                 ],
             },
-            {
-                path: '',
-                loadChildren: () => import('./modules/partner-select/partner-select.module').then(m => m.PartnerSelectModule),
-                canActivate: [AuthGuard]
-            },
+            // {
+            //     path: '',
+            //     loadChildren: () => import('./modules/partner-select/partner-select.module').then(m => m.PartnerSelectModule),
+            //     canActivate: [AuthGuard]
+            // },
             // { path: 'landing', loadChildren: () => import('./layout/components/landing/landing.module').then(m => m.LandingModule) },
             { path: 'not-found', component: NotfoundComponent },
             { path: '**', redirectTo: 'not-found' },

@@ -79,7 +79,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<TierDTO>> LoadTierList()
+        public async Task<List<TierDTO>> LoadTierDTOList()
         {
             return await _loyalsBusinessService.LoadTierDTOList(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
         }
@@ -96,6 +96,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
         public async Task<TierDTO> GetTierForTheCurrentPartnerUser()
         {
             return await _loyalsBusinessService.GetTierDTOForTheCurrentPartnerUser();
+        }
+
+        [HttpPost]
+        [AuthGuard]
+        public async Task<List<StoreTierDTO>> LoadStoreTierDTOListForTierList(List<long> tierIds)
+        {
+            return await _loyalsBusinessService.LoadStoreTierDTOList(_context.DbSet<StoreTier>().Where(x => tierIds.Contains(x.Tier.Id)), false);
         }
 
         //[HttpGet]

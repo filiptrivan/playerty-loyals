@@ -1,0 +1,42 @@
+﻿using Soft.Generator.Shared.Attributes;
+using Soft.Generator.Shared.BaseEntities;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Playerty.Loyals.Business.Entities
+{
+    public class Store : BusinessObject<long>
+    {
+        [SoftDisplayName]
+        [StringLength(255, MinimumLength = 1)]
+        [Required]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// In hours, look if user can pass start time in DTO, so we can initialize scheduler in Azure, it would be nice if we don't have that field in the database.
+        /// </summary>
+        [GreaterThanOrEqualTo(1)]
+        public int? UpdatePointsInterval { get; set; }
+
+        [StringLength(1000, MinimumLength = 1)]
+        public string LoadPurchasesEndpoint { get; set; }
+
+        [StringLength(1000, MinimumLength = 1)]
+        public string LoadReversalsEndpoint { get; set; }
+
+        [StringLength(1000, MinimumLength = 1)]
+        public string CreateUserEndpoint { get; set; }
+
+        [StringLength(1000, MinimumLength = 1)]
+        public string UpdateUserGroupEndpoint { get; set; }
+
+        [ManyToOneRequired]
+        public virtual Partner Partner { get; set; }
+
+        public virtual List<StoreTier> StoreTiers { get; set; }
+    }
+}

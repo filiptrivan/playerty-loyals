@@ -6,7 +6,7 @@ import { map, tap, delay, finalize } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { SocialUser, SocialAuthService } from '@abacritt/angularx-social-login';
-import { ExternalProvider, Login, VerificationTokenRequest, LoginResult, ForgotPassword, Registration, RegistrationVerificationResult, RefreshTokenRequest } from 'src/app/business/entities/generated/security-entities.generated';
+import { ExternalProvider, Login, VerificationTokenRequest, AuthResult, ForgotPassword, Registration, RegistrationVerificationResult, RefreshTokenRequest } from 'src/app/business/entities/generated/security-entities.generated';
 import { UserExtended } from 'src/app/business/entities/generated/business-entities.generated';
 
 
@@ -77,10 +77,10 @@ export class AuthService implements OnDestroy {
     return this.apiService.sendLoginVerificationEmail(body);
   }
 
-  login(body: VerificationTokenRequest): Observable<Promise<LoginResult>> {
+  login(body: VerificationTokenRequest): Observable<Promise<AuthResult>> {
     const browserId = this.getBrowserId();
     body.browserId = browserId;
-    const loginResultObservable = this.http.post<LoginResult>(`${this.apiUrl}/Auth/Login`, body);
+    const loginResultObservable = this.http.post<AuthResult>(`${this.apiUrl}/Auth/Login`, body);
     return this.handleLoginResult(loginResultObservable);
   }
 
@@ -90,17 +90,17 @@ export class AuthService implements OnDestroy {
     return this.apiService.sendForgotPasswordVerificationEmail(body);
   }
 
-  forgotPassword(body: VerificationTokenRequest): Observable<Promise<LoginResult>> {
+  forgotPassword(body: VerificationTokenRequest): Observable<Promise<AuthResult>> {
     const browserId = this.getBrowserId();
     body.browserId = browserId;
     const forgotPasswordResultObservable = this.apiService.forgotPassword(body);
     return this.handleLoginResult(forgotPasswordResultObservable);
   }
 
-  loginExternal(body: ExternalProvider): Observable<Promise<LoginResult>> {
+  loginExternal(body: ExternalProvider): Observable<Promise<AuthResult>> {
     const browserId = this.getBrowserId();
     body.browserId = browserId;
-    const loginResultObservable = this.http.post<LoginResult>(`${this.apiUrl}/Auth/LoginExternal`, body);
+    const loginResultObservable = this.http.post<AuthResult>(`${this.apiUrl}/Auth/LoginExternal`, body);
     return this.handleLoginResult(loginResultObservable);
   }
 
@@ -110,16 +110,16 @@ export class AuthService implements OnDestroy {
     return this.apiService.sendRegistrationVerificationEmail(body);
   }
   
-  register(body: VerificationTokenRequest): Observable<Promise<LoginResult>> {
+  register(body: VerificationTokenRequest): Observable<Promise<AuthResult>> {
     const browserId = this.getBrowserId();
     body.browserId = browserId;
     const loginResultObservable = this.apiService.register(body);
     return this.handleLoginResult(loginResultObservable);
   }
 
-  handleLoginResult(loginResultObservable: Observable<LoginResult>){
+  handleLoginResult(loginResultObservable: Observable<AuthResult>){
     return loginResultObservable.pipe(
-      map(async (loginResult: LoginResult) => {
+      map(async (loginResult: AuthResult) => {
         this._user.next({
           id: loginResult.userId,
           email: loginResult.email,
@@ -148,7 +148,7 @@ export class AuthService implements OnDestroy {
       .subscribe();
   }
 
-  refreshToken(): Observable<Promise<LoginResult> | null> {
+  refreshToken(): Observable<Promise<AuthResult> | null> {
     let refreshToken = localStorage.getItem(environment.refreshTokenKey);
 
     if (!refreshToken) {
@@ -161,7 +161,7 @@ export class AuthService implements OnDestroy {
     body.browserId = browserId;
     body.refreshToken = refreshToken;
     return this.http
-    .post<LoginResult>(`${this.apiUrl}/Auth/RefreshToken`, body, environment.httpSkipSpinnerOptions)
+    .post<AuthResult>(`${this.apiUrl}/Auth/RefreshToken`, body, environment.httpSkipSpinnerOptions)
     .pipe(
       map(async (loginResult) => {
         this._user.next({
@@ -176,7 +176,7 @@ export class AuthService implements OnDestroy {
     );
   }
 
-  setLocalStorage(loginResult: LoginResult) {
+  setLocalStorage(loginResult: AuthResult) {
     localStorage.setItem(environment.accessTokenKey, loginResult.accessToken);
     localStorage.setItem(environment.refreshTokenKey, loginResult.refreshToken);
     localStorage.setItem('login-event', 'login' + Math.random());
@@ -246,10 +246,10 @@ export class AuthService implements OnDestroy {
     this.router.navigate(['/']);
   }
 
-  navigateToSelectPartner(){
-    localStorage.removeItem(environment.partnerSlugKey);
-    this.router.navigate([environment.partnerSelectSlug]);
-  }
+  // navigateToSelectPartner(){
+  //   localStorage.removeItem(environment.partnerSlugKey);
+  //   // this.router.navigate([environment.partnerSelectSlug]);
+  // }
 
   logoutGoogle = () => {
     this.externalAuthService.signOut();

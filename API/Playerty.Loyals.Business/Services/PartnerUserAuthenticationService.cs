@@ -121,6 +121,14 @@ namespace Playerty.Loyals.Business.Services
             return partnerDTO;
         }
 
+        public async Task<Partner> GetCurrentPartner()
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                return await _context.DbSet<Partner>().Where(x => x.Slug == GetCurrentPartnerCode()).SingleOrDefaultAsync();
+            });
+        }
+
         public async Task<PartnerUser> GetCurrentPartnerUser()
         {
             return await _context.WithTransactionAsync(async () =>

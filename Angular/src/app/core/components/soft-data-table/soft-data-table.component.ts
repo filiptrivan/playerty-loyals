@@ -6,13 +6,15 @@ import { ApiService } from 'src/app/business/services/api/api.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SoftDeleteConfirmationComponent } from '../soft-delete-dialog/soft-delete-confirmation.component';
 import { CommonModule, formatDate } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, FormsModule } from '@angular/forms';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { SoftMessageService } from '../../services/soft-message.service';
 import { TableFilter } from 'src/app/business/entities/table-filter';
 import { firstValueFrom, Observable } from 'rxjs';
 import { PrimengOption } from '../../entities/primeng-option';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
+import { SoftControlsModule } from '../../controls/soft-controls.module';
+import { SoftFormArray, SoftFormControl } from '../soft-form-control/soft-form-control';
 
 @Component({
   selector: 'soft-data-table',
@@ -36,6 +38,7 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
     PrimengModule,
     SoftDeleteConfirmationComponent,
     TranslocoDirective,
+    SoftControlsModule,
   ],
   standalone: true,
 })
@@ -43,14 +46,13 @@ export class SoftDataTableComponent implements OnInit {
   @ViewChild('dt') table: Table;
   @Input() tableTitle: string;
   @Input() tableIcon: string = 'pi pi-list';
-  items: any[];
+  @Input() items: any[]; // FT: Pass only when hasLazyLoad === false
   @Input() rows: number = 10;
   @Input() cols: Column[];
   @Input() objectNameForTheRequest: string;
   @Input() controllerName: string;
-  showPaginator: boolean = true;
-  isLazyLoadTable: boolean = true;
-  totalRecords: number;
+  @Input() showPaginator: boolean = true; // FT: Pass only when hasLazyLoad === false
+  @Input() totalRecords: number; // FT: Pass only when hasLazyLoad === false
   lastLazyLoadEvent: TableLazyLoadEvent;
   loading: boolean = true;
   
@@ -71,9 +73,18 @@ export class SoftDataTableComponent implements OnInit {
   matchModeDateOptions: SelectItem[] = [];
   matchModeNumberOptions: SelectItem[] = [];
   @Input() showAddButton: boolean = true; 
-  showExportToExcelButton: boolean = true;
+  @Input() showExportToExcelButton: boolean = true;
 
   deleteRef: DynamicDialogRef;
+
+  // Client side table
+  @Input() formArray: SoftFormArray;
+  @Input() formArrayControlNamesFromHtml: string[];
+  @Input() hasLazyLoad: boolean = true; 
+  @Input() selectedItemIds: number[] = []; // FT: Pass only when hasLazyLoad === false, it's enough if the M2M association hasn't additional fields
+  @Input() selectedItems: any[] = []; // FT: Pass only when hasLazyLoad === false
+  @Output() onRowSelect: EventEmitter<number> = new EventEmitter();
+  @Output() onRowUnselect: EventEmitter<number> = new EventEmitter();
 
   constructor(
     private apiService: ApiService,
@@ -99,8 +110,18 @@ export class SoftDataTableComponent implements OnInit {
       { label: this.translocoService.translate('MoreThan'), value: 'gte' },
       { label: this.translocoService.translate('LessThan'), value: 'lte' },
     ];
+
+    if (this.hasLazyLoad === false) {
+      this.loading = false;
+      this.items = this.formArray.value;
+      this.items.forEach((item, index) => {
+        item.index = index;
+      });
+      this.rowsSelectedNumber = this.selectedItemIds.length;
+      this.setFakeIsAllSelected();
+    }
   }
-    
+  
   lazyLoad(event: TableLazyLoadEvent) {
     this.lastLazyLoadEvent = event;
 
@@ -148,7 +169,15 @@ export class SoftDataTableComponent implements OnInit {
   }
 
   filter(event: TableFilterEvent){
-    this.selectAll(false); // FT: We need to do it like this because: totalRecords: 1 -> selectedRecords from earlyer selection 2 -> unselect current -> all checkbox is set to true
+    if (this.hasLazyLoad)
+      this.selectAll(false); // FT: We need to do it like this because: totalRecords: 1 -> selectedRecords from earlyer selection 2 -> unselect current -> all checkbox is set to true
+
+    if (this.hasLazyLoad === false && this.formArray) {
+      this.items = this.formArray.value;
+      this.items.forEach((item, index) => {
+        item.index = index;
+      });
+    }
   }
   
   getColHeaderWidth(filterType: string) {
@@ -274,7 +303,12 @@ export class SoftDataTableComponent implements OnInit {
       }
   }
 
+  trackByFn(index, item){
+    return item.id;
+  }
+
   //#region Selection
+
   setFakeIsAllSelected(){
     if(this.rowsSelectedNumber == this.totalRecords)
       this.fakeIsAllSelected = true;
@@ -292,33 +326,48 @@ export class SoftDataTableComponent implements OnInit {
       this.onIsAllSelectedChange.next(true);
       this.rowsSelectedNumber = this.totalRecords;
       this.fakeSelectedItems = [...this.items.map(x => x.id)];
+      this.selectedItemIds = [...this.items.map(x => x.id)]
     }else{
       this.isAllSelected = false;
       this.fakeIsAllSelected = false;
       this.onIsAllSelectedChange.next(false);
       this.rowsSelectedNumber = 0;
       this.fakeSelectedItems = [];
+      this.selectedItemIds = [];
     }
   }
 
-  selectRow(id: number) {
+  selectRow(id: number, index: number) {
     if (this.isRowSelected(id)) {
-      this.onRowUnselect(id);
+      this.rowUnselect(id);
+      this.onRowUnselect.next(index);
     } else {
-      this.onRowSelect(id);
+      this.rowSelect(id);
+      this.onRowSelect.next(index);
     }
   }
 
   isRowSelected(id: number){
-    return this.fakeSelectedItems.find(x => x == id) != undefined;
+    if (this.hasLazyLoad){
+      return this.fakeSelectedItems.find(x => x == id) != undefined;
+    }
+    else {
+      return this.selectedItemIds.find(x => x == id) != undefined;
+    }
   }
 
-  onRowSelect(id: number){
+  rowSelect(id: number){
     if (this.isAllSelected == false || this.currentPageSelectedItemsFromDb.includes(id) == false) {
       this.newlySelectedItems.push(id);
     }
 
-    this.fakeSelectedItems.push(id);
+    if (this.hasLazyLoad){
+      this.fakeSelectedItems.push(id);
+    }
+    else {
+      this.selectedItemIds.push(id);
+    }
+    
     this.rowsSelectedNumber++;
 
     const index = this.unselectedItems.indexOf(id);
@@ -329,7 +378,7 @@ export class SoftDataTableComponent implements OnInit {
     this.setFakeIsAllSelected();
   }
   
-  onRowUnselect(id: number) {
+  rowUnselect(id: number) {
     if (this.isAllSelected == true || this.currentPageSelectedItemsFromDb.includes(id) == true) {
       this.unselectedItems.push(id);
     }
@@ -338,12 +387,16 @@ export class SoftDataTableComponent implements OnInit {
 
     const index = this.newlySelectedItems.indexOf(id);
     const fakeIndex = this.fakeSelectedItems.indexOf(id);
+    const nonLazyLoadIndex = this.selectedItemIds.indexOf(id);
 
     if (index !== -1) {
       this.newlySelectedItems.splice(index, 1); // FT: Splice is mutating the array
     }
     if (fakeIndex !== -1) {
       this.fakeSelectedItems.splice(fakeIndex, 1); // FT: Splice is mutating the array
+    }
+    if (nonLazyLoadIndex !== -1) {
+      this.selectedItemIds.splice(nonLazyLoadIndex, 1); // FT: Splice is mutating the array
     }
 
     this.setFakeIsAllSelected();
@@ -357,6 +410,18 @@ export class SoftDataTableComponent implements OnInit {
   clear(table: Table) {
     table.clear();
   }
+
+  //#region Client side table
+
+  getFormArrayControlByIndex(formControlName: string, index: number): SoftFormControl{
+    if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
+      this.formArrayControlNamesFromHtml.push(formControlName);
+
+    // FT: Can be null when we save
+    return (this.formArray.controls[index] as FormGroup).controls[formControlName] as SoftFormControl;
+  }
+
+  //#endregion
 }
 
 export class Action {
@@ -376,6 +441,7 @@ export class Column {
   showAddButton?: boolean;
   dropdownOrMultiselectValues?: PrimengOption[];
   actions?: Action[];
+  editable?: boolean;
 }
 
 export class SelectedRowsMethodResult {

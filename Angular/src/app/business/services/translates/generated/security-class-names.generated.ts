@@ -25,8 +25,8 @@ export class TranslateClassNamesSecurityService {
                 return this.translocoService.translate('JwtAuthResult');
             case 'Login':
                 return this.translocoService.translate('Login');
-            case 'LoginResult':
-                return this.translocoService.translate('LoginResult');
+            case 'AuthResult':
+                return this.translocoService.translate('AuthResult');
             case 'LoginVerificationToken':
                 return this.translocoService.translate('LoginVerificationToken');
             case 'RefreshToken':

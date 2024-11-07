@@ -56,7 +56,7 @@ export class PartnerDetailsComponent extends BaseForm<Partner> implements OnInit
     }
 
     override async onAfterSave(savedPartner: Partner): Promise<void> {
-        if ((await firstValueFrom(this.partnerService.partner$)).id == savedPartner.id) {
+        if ((await firstValueFrom(this.partnerService.partner$))?.id == savedPartner.id) {
             this.partnerService.setCurrentPartner(savedPartner); // FT: Not doing this because maybe the administrator is saving it.
         }
     }

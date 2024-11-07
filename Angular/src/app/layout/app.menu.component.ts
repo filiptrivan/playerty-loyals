@@ -62,7 +62,7 @@ export class AppMenuComponent implements OnInit {
                         },
                         {
                             label: this.translocoService.translate('TierList'),
-                            icon: 'pi pi-fw pi-sitemap',
+                            icon: 'pi pi-fw pi-crown',
                             routerLink: [`/tiers`],
                             visible: partner != null
                         },
@@ -72,6 +72,12 @@ export class AppMenuComponent implements OnInit {
                         //     routerLink: [`/points`],
                         //     visible: true
                         // },
+                        {
+                            label: this.translocoService.translate('PartnerList'),
+                            icon: 'pi pi-fw pi-at',
+                            routerLink: [`/partner-select`],
+                            visible: true
+                        },
                         {
                             label: this.translocoService.translate('SuperAdministration'),
                             icon: 'pi pi-fw pi-cog',
@@ -149,6 +155,15 @@ export class AppMenuComponent implements OnInit {
                                     visible: true,
                                 },
                                 {
+                                    label: this.translocoService.translate('NotificationList'),
+                                    icon: 'pi pi-fw pi-bell',
+                                    routerLink: [`/${environment.partnerAdministrationSlug}/notifications`],
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
+                                    // }
+                                    visible: true,
+                                },
+                                {
                                     label: this.translocoService.translate('SegmentationList'),
                                     icon: 'pi pi-fw pi-hashtag',
                                     routerLink: [`/${environment.partnerAdministrationSlug}/segmentations`],
@@ -158,20 +173,20 @@ export class AppMenuComponent implements OnInit {
                                     // }
                                 },
                                 {
+                                    label: this.translocoService.translate('StoreList'),
+                                    icon: 'pi pi-fw pi-shop',
+                                    routerLink: [`/${environment.partnerAdministrationSlug}/stores`],
+                                    visible: true,
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadSegmentation]))
+                                    // }
+                                },
+                                {
                                     label: this.translocoService.translate('TierList'),
-                                    icon: 'pi pi-fw pi-sitemap',
+                                    icon: 'pi pi-fw pi-crown',
                                     routerLink: [`/${environment.partnerAdministrationSlug}/tiers`],
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
                                     //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]))
-                                    // }
-                                    visible: true,
-                                },
-                                {
-                                    label: this.translocoService.translate('NotificationList'),
-                                    icon: 'pi pi-fw pi-bell',
-                                    routerLink: [`/${environment.partnerAdministrationSlug}/notifications`],
-                                    // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
                                     // }
                                     visible: true,
                                 },

@@ -26,8 +26,6 @@ export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit
     
     segmentationFormGroup: SoftFormGroup<Segmentation>;
     segmentationSaveBodyName: string = nameof<SegmentationSaveBody>('segmentationDTO');
-    segmentationTranslationKey: string = new Segmentation().typeName;
-    segmentationModel: SegmentationItem = new SegmentationItem();
 
     crudMenu: MenuItem[] = [];
 

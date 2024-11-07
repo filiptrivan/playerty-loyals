@@ -23,7 +23,7 @@ export class PartnerUserListComponent implements OnInit {
         this.cols = [
             {name: this.translocoService.translate('Actions'), actions:[
                 {name: this.translocoService.translate('Details'), field: 'Details'},
-                // {name: this.translocoService.translate('Delete'), field: 'Delete'}, // TODO FT: Think about this, how to implement.
+                {name: this.translocoService.translate('Delete'), field: 'Delete'},
             ]},
             {name: this.translocoService.translate('User'), filterType: 'text', field: 'userDisplayName'},
             {name: this.translocoService.translate('Points'), filterType: 'numeric', field: 'points', showMatchModes: true},

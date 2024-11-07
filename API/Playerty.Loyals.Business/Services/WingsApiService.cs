@@ -86,5 +86,24 @@ namespace Playerty.Loyals.Business.Services
 
             return products;
         }
+
+        public List<DiscountCategoryDTO> GetDiscountCategoriesDTO()
+        {
+            List<DiscountCategoryDTO> discountCategoryDTOList = new List<DiscountCategoryDTO>
+            {
+                new DiscountCategoryDTO { Name = "Bosch", Code = "B-H-2024" },
+                new DiscountCategoryDTO { Name = "Makita", Code = "M-D-2024" },
+                new DiscountCategoryDTO { Name = "DeWalt", Code = "D-S-2024" },
+                new DiscountCategoryDTO { Name = "Stanley", Code = "S-H-2024" },
+                new DiscountCategoryDTO { Name = "Bosch", Code = "B-G-2024" },
+                new DiscountCategoryDTO { Name = "Milwaukee", Code = "M-I-2024" },
+                new DiscountCategoryDTO { Name = "Black+Decker", Code = "B-J-2024" },
+                new DiscountCategoryDTO { Name = "Hilti", Code = "H-L-2024" },
+                new DiscountCategoryDTO { Name = "Ryobi", Code = "R-C-2024" },
+                //new ProductDTO { Id = 10, Name = "Festool Sander", Brand = "Festool", Price = 28000, Code = "F-S-2024", LinkToWebsite = "abc", Description = "A premium sander, designed for smooth finishes on woodworking projects." },
+            };
+
+            return discountCategoryDTOList;
+        }
     }
 }

@@ -18,15 +18,15 @@ const routes: Routes = [
 
 @NgModule({
     imports: [
-    RouterModule.forChild(routes),
-    PrimengModule,
-    SoftDataTableComponent,
-    SoftControlsModule,
-    CardSkeletonComponent,
-    IntermediateStepWrapperComponent,
-    SoftAutocompleteComponent,
-    TranslocoDirective,
-],
+        RouterModule.forChild(routes),
+        PrimengModule,
+        SoftDataTableComponent,
+        SoftControlsModule,
+        CardSkeletonComponent,
+        IntermediateStepWrapperComponent,
+        SoftAutocompleteComponent,
+        TranslocoDirective,
+    ],
     declarations: [
         PartnerSelectComponent,
     ],

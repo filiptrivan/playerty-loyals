@@ -1,9 +1,19 @@
-<ng-container *ngIf="currentPartnerUser">
-
-  <user-progressbar [partnerUser]="currentPartnerUser" [tier]="currentPartnerTier"></user-progressbar>
-
-  <div style="margin-bottom: 28px;"></div>
-
-  <products-recommendation></products-recommendation>
-
+<ng-container *transloco="let t">
+  @if (currentPartnerUser) {
+    <ng-container>
+    
+      <user-progressbar [partnerUser]="currentPartnerUser" [tier]="currentPartnerTier"></user-progressbar>
+    
+      <div style="margin-bottom: 28px;"></div>
+    
+      <products-recommendation></products-recommendation>
+    
+    </ng-container>
+  }
+  @else if (currentPartnerUser === null) {
+    <info-card header="Nemate profil za trenutnog partnera">
+      <!-- TODO FT: Translate -->
+      Molimo vas odaberite partnera čijem programu lojalnosti želite da pristupite, to možete da uradite izborom iz padajuće liste u levom gornjem uglu, unutar menija. Ako niste član nijednog, postanite <b routerLink="/partner-select" class="link">ovde</b>.
+    </info-card>
+  }
 </ng-container>

@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Playerty.Loyals.Business.Services;
+﻿using Playerty.Loyals.Business.Services;
 using Soft.Generator.Shared.DTO;
 using Soft.Generator.Shared.Excel;
 using Soft.Generator.Shared.Interfaces;
 using Soft.Generator.Shared.Extensions;
-using Soft.Generator.Security.Entities;
 using Microsoft.EntityFrameworkCore;
 using Playerty.Loyals.Business.Entities;
 using Soft.Generator.Security.Services;
-using Playerty.Loyals.Enums;
 using Playerty.Loyals.Business.DTO;
 using Playerty.Loyals.Business.Enums;
 using Soft.Generator.Shared.SoftExceptions;
@@ -20,10 +13,11 @@ using Mapster;
 using Soft.Generator.Security.DTO;
 using Playerty.Loyals.Business.DataMappers;
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Soft.Generator.Shared.Emailing;
 using Azure.Storage.Blobs;
+using Playerty.Loyals.Business.ValidationRules;
+using System.Collections.Generic;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Database;
 
 namespace Playerty.Loyals.Services
 {
@@ -36,9 +30,10 @@ namespace Playerty.Loyals.Services
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
         private readonly EmailingService _emailingService;
         private readonly BlobContainerClient _blobContainerClient;
+        private readonly WingsApiService _wingsApiService;
 
         public LoyalsBusinessService(IApplicationDbContext context, ExcelService excelService, Playerty.Loyals.Business.Services.AuthorizationBusinessService authorizationService, SecurityBusinessService<UserExtended> securityBusinessService, AuthenticationService authenticationService,
-            PartnerUserAuthenticationService partnerUserAuthenticationService, EmailingService emailingService, BlobContainerClient blobContainerClient)
+            PartnerUserAuthenticationService partnerUserAuthenticationService, EmailingService emailingService, BlobContainerClient blobContainerClient, WingsApiService wingsApiService)
             : base(context, excelService, authorizationService, blobContainerClient)
         {
             _context = context;
@@ -48,6 +43,7 @@ namespace Playerty.Loyals.Services
             _partnerUserAuthenticationService = partnerUserAuthenticationService;
             _emailingService = emailingService;
             _blobContainerClient = blobContainerClient;
+            _wingsApiService = wingsApiService;
         }
 
         #region User
@@ -100,7 +96,7 @@ namespace Playerty.Loyals.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                NotificationDTO savedNotificationDTO = await SaveNotificationAndReturnDTOAsync(notificationSaveBodyDTO.NotificationDTO, false, false);
+                NotificationDTO savedNotificationDTO = await SaveNotificationAndReturnDTOAsync(notificationSaveBodyDTO.NotificationDTO, true, true);
 
                 PaginationResult<UserExtended> paginationResult = await LoadUserExtendedListForPagination(notificationSaveBodyDTO.TableFilter, _context.DbSet<UserExtended>());
 
@@ -138,10 +134,12 @@ namespace Playerty.Loyals.Services
             return tableResponse;
         }
 
-        public async Task SendNotificationEmail(long notificationId, int notificationVersion) 
+        public async Task SendNotificationEmail(long notificationId, int notificationVersion)
         {
             await _context.WithTransactionAsync(async () =>
             {
+                await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.EditNotification);
+
                 Notification notification = await LoadInstanceAsync<Notification, long>(notificationId, notificationVersion); // FT: Checking version because if the user didn't save and some other user changed the version, he will send emails to wrong users
 
                 List<string> recipients = notification.Users.Select(x => x.Email).ToList();
@@ -292,14 +290,22 @@ namespace Playerty.Loyals.Services
         #endregion
 
         #region Partner
+
+        /// <summary>
+        /// TODO FT: Add this to generator (you will need to add one more custom attribute [Code])
+        /// </summary>
         public async Task<List<CodebookDTO>> LoadPartnerWithSlugListForAutocomplete(int limit, string query, IQueryable<Partner> partnerQuery, bool authorize = true)
         {
+            long currentUserId = _authenticationService.GetCurrentUserId();
+
             return await _context.WithTransactionAsync(async () =>
             {
                 if (authorize)
                 {
                     await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.ReadPartner);
                 }
+
+                partnerQuery = partnerQuery.Where(x => x.Users.Any(x => x.User.Id == currentUserId));
 
                 if (!string.IsNullOrEmpty(query))
                     partnerQuery = partnerQuery.Where(x => x.Name.Contains(query));
@@ -313,6 +319,16 @@ namespace Playerty.Loyals.Services
                         DisplayName = x.Name,
                     })
                     .ToListAsync();
+            });
+        }
+
+        public async Task<List<int>> GetPartnerIdsForTheCurrentUser()
+        {
+            long currentUserId = _authenticationService.GetCurrentUserId();
+
+            return await _context.WithTransactionAsync(async () =>
+            {
+                return await _context.DbSet<Partner>().Where(x => x.Users.Any(x => x.User.Id == currentUserId)).Select(x => x.Id).ToListAsync();
             });
         }
 
@@ -334,7 +350,58 @@ namespace Playerty.Loyals.Services
                     .SingleOrDefaultAsync();
             });
         }
-       
+
+        public async Task AddPartnerUserAfterAuthResult(AuthResultDTO authResultDTO)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                Partner currentPartner = await _partnerUserAuthenticationService.GetCurrentPartner();
+
+                if (currentPartner != null)
+                {
+                    UserExtended user = await LoadInstanceAsync<UserExtended, long>(authResultDTO.UserId, null);
+
+                    PartnerUser partnerUser = await _context.DbSet<PartnerUser>().Where(x => x.User.Id == user.Id && x.Partner.Id == currentPartner.Id).SingleOrDefaultAsync();
+
+                    await AddPartnerUser(partnerUser, user, currentPartner);
+                }
+            });
+        }
+
+        public async Task AddPartnerUserForTheCurrentUser(int partnerId)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                Partner partner = await LoadInstanceAsync<Partner, int>(partnerId, null);
+
+                UserExtended user = await _authenticationService.GetCurrentUser<UserExtended>();
+
+                PartnerUser partnerUser = await _context.DbSet<PartnerUser>().Where(x => x.User.Id == user.Id && x.Partner.Id == partner.Id).SingleOrDefaultAsync();
+
+                await AddPartnerUser(partnerUser, user, partner);
+            });
+        }
+
+        private async Task AddPartnerUser(PartnerUser partnerUser, UserExtended user, Partner partner)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                if (partnerUser == null)
+                {
+                    partnerUser = new PartnerUser
+                    {
+                        User = user,
+                        Partner = partner,
+                        Points = 0,
+                        Tier = partner.Tiers.OrderBy(t => t.ValidTo).FirstOrDefault() // FT: If exists, saving the lowest tier, else null.
+                    };
+
+                    await _context.DbSet<PartnerUser>().AddAsync(partnerUser);
+                    await _context.SaveChangesAsync();
+                }
+            });
+        }
+
         public async Task<PartnerUserSaveBodyDTO> SavePartnerUserAndReturnDTOExtendedAsync(PartnerUserSaveBodyDTO partnerUserSaveBodyDTO)
         {
             UserExtendedSaveBodyDTO userExtendedSaveBodyDTO = new UserExtendedSaveBodyDTO
@@ -392,18 +459,6 @@ namespace Playerty.Loyals.Services
                         partnerUser.AlreadyFilledSegmentations.Add(segmentation);
                         partnerUser.Points += segmentation.PointsForTheFirstTimeFill;
                     }
-                }
-
-                if(partnerUser.HasFilledGenderForTheFirstTime == false && partnerUser.User.Gender != null)
-                {
-                    partnerUser.Points += partnerUser.Partner.PointsForTheFirstTimeGenderFill;
-                    partnerUser.HasFilledGenderForTheFirstTime = true;
-                }
-
-                if (partnerUser.HasFilledBirthDateForTheFirstTime == false && partnerUser.User.BirthDate != null)
-                {
-                    partnerUser.Points += partnerUser.Partner.PointsForTheFirstTimeBirthDateFill;
-                    partnerUser.HasFilledBirthDateForTheFirstTime = true;
                 }
 
                 await _context.SaveChangesAsync();
@@ -575,7 +630,7 @@ namespace Playerty.Loyals.Services
                 partnerRoleSaveBodyDTO.PartnerRoleDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
 
                 PartnerRoleDTO savedPartnerRoleDTO = await SavePartnerRoleAndReturnDTOAsync(partnerRoleSaveBodyDTO.PartnerRoleDTO, false, false);
-                
+
                 await UpdatePartnerUserListForPartnerRole(savedPartnerRoleDTO.Id, partnerRoleSaveBodyDTO.SelectedPartnerUserIds);
                 await UpdatePartnerPermissionListForPartnerRole(savedPartnerRoleDTO.Id, partnerRoleSaveBodyDTO.SelectedPermissionIds);
 
@@ -630,7 +685,8 @@ namespace Playerty.Loyals.Services
 
                 var notificationUsersQuery = _context.DbSet<NotificationUser>()
                     .Where(x => x.UsersId == currentUserId)
-                    .Select(x => new {
+                    .Select(x => new
+                    {
                         UserId = x.UsersId,
                         NotificationId = x.NotificationsId,
                         IsMarkedAsRead = x.IsMarkedAsRead,
@@ -639,7 +695,8 @@ namespace Playerty.Loyals.Services
 
                 var partnerNotificationPartnerUsersQuery = _context.DbSet<PartnerNotificationPartnerUser>()
                     .Where(x => x.PartnerUsersId == currentPartnerUserId)
-                    .Select(x => new {
+                    .Select(x => new
+                    {
                         UserId = x.PartnerUsersId,
                         NotificationId = x.PartnerNotificationsId,
                         IsMarkedAsRead = x.IsMarkedAsRead,
@@ -743,8 +800,8 @@ namespace Playerty.Loyals.Services
                     savedSegmentationItemsDTO.Add(await SaveSegmentationItemAndReturnDTOAsync(segmentationSaveBodyDTO.SegmentationItemsDTO[i], false, false));
                 }
 
-                return new SegmentationSaveBodyDTO 
-                { 
+                return new SegmentationSaveBodyDTO
+                {
                     SegmentationDTO = savedSegmentationDTO,
                     SegmentationItemsDTO = savedSegmentationItemsDTO,
                 };
@@ -782,7 +839,7 @@ namespace Playerty.Loyals.Services
                     .ToListAsync();
             });
         }
-        
+
         //public async Task DeleteSegmentation(int segmentationId)
         //{
         //    await _context.WithTransactionAsync(async () =>
@@ -795,6 +852,209 @@ namespace Playerty.Loyals.Services
 
         #endregion
 
+        #region Store
+
+        public async Task<List<DiscountCategoryDTO>> LoadDiscountCategoryDTOListForCurrentPartner(long storeId)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                await SyncDiscountCategories();
+
+                IQueryable<DiscountCategory> discountCategoryQuery = _context.DbSet<DiscountCategory>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode());
+
+                List<DiscountCategoryDTO> discountCategoryDTOList = await LoadDiscountCategoryDTOList(discountCategoryQuery, false);
+
+
+                //List<StoreTierDiscountCategory> storeDiscountCategoryList = await _context.DbSet<StoreTierDiscountCategory>().AsNoTracking().Where(x => x.StoresId == storeId).ToListAsync();
+                //List<long> selectedDiscountCategoryIdsForStore = storeDiscountCategoryList.Select(x => x.DiscountCategoriesId).ToList();
+
+                //foreach (DiscountCategoryDTO discountCategoryDTO in discountCategoryDTOList)
+                //{
+                //    StoreTierDiscountCategory storeDiscountCategory = storeDiscountCategoryList.Where(x => x.DiscountCategoriesId == discountCategoryDTO.Id).SingleOrDefault();
+
+                //    if (storeDiscountCategory != null)
+                //    {
+                //        discountCategoryDTO.SelectedForStore = true;
+                //        discountCategoryDTO.Discount = storeDiscountCategory.Discount;
+                //    }
+                //}
+
+                return discountCategoryDTOList;
+            });
+        }
+
+        public async Task<StoreDTO> SaveStoreExtendedAsync(StoreSaveBodyDTO storeSaveBodyDTO)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                int currentPartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
+                storeSaveBodyDTO.StoreDTO.PartnerId = currentPartnerId;
+
+                StoreDTO savedStoreDTO = await SaveStoreAndReturnDTOAsync(storeSaveBodyDTO.StoreDTO, false, false);
+
+                await SyncDiscountCategories();
+
+                //await UpdateDiscountCategoryListForStoreTableClientSelection(storeSaveBodyDTO.SelectedStoreDiscountCategoryDTOList, savedStoreDTO.Id);
+
+                return savedStoreDTO;
+            });
+        }
+
+        /// <summary>
+        /// TODO FT: Move to Sync service
+        /// </summary>
+        public async Task SyncDiscountCategories()
+        {
+            List<DiscountCategoryDTO> discountCategoryApiDTOList = _wingsApiService.GetDiscountCategoriesDTO();
+
+            if (discountCategoryApiDTOList.Count() != discountCategoryApiDTOList.DistinctBy(x => x.Code).Count())
+                throw new BusinessException("Partner mora da prosledi jedinstvene kodove za kategorije.");
+
+            await _context.WithTransactionAsync(async () =>
+            {
+                DbSet<DiscountCategory> dbSet = _context.DbSet<DiscountCategory>();
+                List<DiscountCategory> discountCategoryList = await _context.DbSet<DiscountCategory>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).ToListAsync();
+
+                foreach (DiscountCategoryDTO discountCategoryApiDTO in discountCategoryApiDTOList)
+                {
+                    discountCategoryApiDTO.Discount = 0; // FT HACK: Only for passing the validation, we will not save this anywhere
+                    DiscountCategoryDTOValidationRules validationRules = new DiscountCategoryDTOValidationRules();
+                    validationRules.ValidateAndThrow(discountCategoryApiDTO);
+
+                    DiscountCategory discountCategory = discountCategoryList.Where(x => x.Code == discountCategoryApiDTO.Code).SingleOrDefault();
+
+                    if (discountCategory == null) // Add new
+                    {
+                        discountCategory = discountCategoryApiDTO.Adapt<DiscountCategory>(Mapper.DiscountCategoryDTOToEntityConfig());
+                        await dbSet.AddAsync(discountCategory);
+                    }
+                    else // Update
+                    {
+                        discountCategoryApiDTO.Adapt(discountCategory, Mapper.DiscountCategoryDTOToEntityConfig());
+                        dbSet.Update(discountCategory);
+
+                        discountCategoryList.Remove(discountCategory);
+                    }
+
+                    int currentPartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
+                    discountCategory.Partner = await LoadInstanceAsync<Partner, int>(currentPartnerId, null);
+                }
+
+                _context.DbSet<DiscountCategory>().RemoveRange(discountCategoryList);
+
+                await _context.SaveChangesAsync();
+            });
+        }
+
+        /// <summary>
+        /// Need to put validation so user can not assign any other partners discount category nor store
+        /// Passing store id because when we are making new object we don't know which id it has
+        /// </summary>
+        //public async Task UpdateDiscountCategoryListForStoreTableClientSelection(List<StoreDiscountCategoryDTO> selectedDTOList, long storeId)
+        //{
+        //    if (selectedDTOList == null)
+        //        return;
+
+        //    List<StoreDiscountCategoryDTO> selectedDTOListHelper = selectedDTOList.ToList();
+
+        //    await _context.WithTransactionAsync((Func<Task>)(async () =>
+        //    {
+        //        // FT: Not doing authorization here, because we can not figure out here if we are updating while inserting object (eg. User), or updating object, we will always get the id which is not 0 here.
+
+        //        DbSet<StoreTierDiscountCategory> dbSet = _context.DbSet<StoreTierDiscountCategory>();
+        //        List<StoreTierDiscountCategory> storeDiscountCategoryList = await _context.DbSet<StoreTierDiscountCategory>().Where(x => x.StoresId == storeId).ToListAsync();
+
+        //        foreach (Business.DTO.StoreDiscountCategoryDTO selectedStoreDiscountCategoryDTO in selectedDTOListHelper)
+        //        {
+        //            Business.ValidationRules.StoreDiscountCategoryDTOValidationRules validationRules = new Business.ValidationRules.StoreDiscountCategoryDTOValidationRules();
+        //            DefaultValidatorExtensions.ValidateAndThrow<Business.DTO.StoreDiscountCategoryDTO>(validationRules, (Business.DTO.StoreDiscountCategoryDTO)selectedStoreDiscountCategoryDTO);
+
+        //            StoreTierDiscountCategory storeDiscountCategory = storeDiscountCategoryList.Where(x => x.DiscountCategoriesId == selectedStoreDiscountCategoryDTO.DiscountCategoriesId).SingleOrDefault();
+
+        //            if (storeDiscountCategory == null)
+        //            {
+        //                storeDiscountCategory = TypeAdapter.Adapt<StoreTierDiscountCategory>(selectedStoreDiscountCategoryDTO, (TypeAdapterConfig)Mapper.StoreDiscountCategoryDTOToEntityConfig());
+        //                storeDiscountCategory.StoresId = storeId;
+        //                _context.DbSet<StoreTierDiscountCategory>().Add(storeDiscountCategory);
+        //            }
+        //            else
+        //            {
+        //                selectedStoreDiscountCategoryDTO.Adapt<Business.DTO.StoreDiscountCategoryDTO, StoreTierDiscountCategory>(storeDiscountCategory, (TypeAdapterConfig)Mapper.StoreDiscountCategoryDTOToEntityConfig());
+        //                dbSet.Update(storeDiscountCategory);
+
+        //                storeDiscountCategoryList.Remove(storeDiscountCategory);
+        //            }
+        //        }
+
+        //        _context.DbSet<StoreTierDiscountCategory>().RemoveRange(storeDiscountCategoryList);
+
+        //        await _context.SaveChangesAsync();
+        //    }));
+        //}
+
+        /// <summary>
+        /// TODO FT: Add to generator, lazy load
+        /// </summary>
+        //public async Task<TableResponseDTO<DiscountCategoryDTO>> LoadDiscountCategoryForStoreForTable(TableFilterDTO tableFilterPayload)
+        //{
+        //    TableResponseDTO<DiscountCategoryDTO> tableResponse = new TableResponseDTO<DiscountCategoryDTO>();
+
+        //    await _context.WithTransactionAsync(async () =>
+        //    {
+        //        IQueryable<DiscountCategory> query = _context.DbSet<DiscountCategory>()
+        //            .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
+        //            .Where(x => x.Stores
+        //                .Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)); // storeId
+
+        //        PaginationResult<DiscountCategory> paginationResult = await LoadDiscountCategoryListForPagination(tableFilterPayload, query);
+
+        //        tableResponse.Data = await paginationResult.Query
+        //            .ProjectToType<DiscountCategoryDTO>(Mapper.DiscountCategoryProjectToConfig())
+        //            .ToListAsync();
+
+        //        tableResponse.TotalRecords = tableResponse.Data.Count;
+        //    });
+
+        //    return tableResponse;
+        //}
+
+        /// <summary>
+        /// TODO FT: Add to generator, client table, without additional fields in M2M
+        /// </summary>
+        //public async Task<List<long>> LoadSelectedDiscountCategoryIdsForStore(IQueryable<DiscountCategory> query, long storeId)
+        //{
+        //    return await _context.WithTransactionAsync(async () =>
+        //    {
+        //        List<long> ids = await query
+        //            .AsNoTracking()
+        //            .Where(x => x.Stores
+        //                .Any(x => x.Id == storeId))
+        //            .Select(x => x.Id)
+        //            .ToListAsync();
+
+        //        return ids;
+        //    });
+        //}
+
+        /// <summary>
+        /// TODO FT: Add to generator, client table, with additional fields in M2M
+        /// </summary>
+        //public async Task<List<DiscountCategoryDTO>> LoadSelectedDiscountCategoryListForStore(IQueryable<DiscountCategory> discountCategoryQuery, long storeId)
+        //{
+        //    return await _context.WithTransactionAsync(async () =>
+        //    {
+        //        List<DiscountCategoryDTO> dtoList = await discountCategoryQuery
+        //            .AsNoTracking()
+        //            .Where(x => x.Stores
+        //                .Any(x => x.Id == storeId))
+        //            .ProjectToType<DiscountCategoryDTO>(Mapper.DiscountCategoryToDTOConfig())
+        //            .ToListAsync();
+
+        //        return dtoList;
+        //    });
+        //}
+
+        #endregion
     }
 
 }

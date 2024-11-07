@@ -16,14 +16,5 @@ namespace Playerty.Loyals.GeneratorSettings
 
         [Output(@"E:\Projects\Playerty.Loyals\Angular\src\app\business\services\validation\generated")]
         public string NgValidatorsGenerator { get; set; }
-
-        [Output(@"E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\DataMappers\LoyalsMapper.generated.cs")]
-        public string MapperlyGenerator { get; set; }
-
-        [Output(@"E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\DTO\Generated\LoyalsDTOList.generated.cs")]
-        public string EntitiesToDTOGenerator { get; set; }
-
-        [Output(@"E:\Projects\Playerty.Loyals\API\Playerty.Loyals.Business\ValidationRules\LoyalsValidationRules.generated.cs")]
-        public string FluentValidationGenerator { get; set; }
     }
 }

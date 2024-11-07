@@ -20,6 +20,7 @@ export function getMimeTypeForFileName(fileName: string): string {
         '.jpg': 'image/jpeg',
         '.jpeg': 'image/jpeg',
         '.png': 'image/png',
+        '.webp': 'image/webp',
         '.gif': 'image/gif',
         '.pdf': 'application/pdf',
         '.txt': 'text/plain',
@@ -80,6 +81,9 @@ export function adjustColor(color: string, percent: number): string {
 }
 
 export function getHtmlImgDisplayString64(base64String: string){
+    if (base64String == null)
+        return null;
+
     const [header, base64Content] = base64String.split(';base64,');
     const fileName = header.split('=')[1];
     const mimeType = getMimeTypeForFileName(fileName);

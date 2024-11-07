@@ -1,26 +1,49 @@
 <ng-container *transloco="let t">
-    @defer (when tiers != null) {
+    @defer (when tierFormArray != null && storeTierFormArray != null) {
         <soft-panel>
-            <panel-header [title]="detailsTitle" [bigTitle]="true" icon="pi pi-sitemap"></panel-header>
+            <panel-header [title]="detailsTitle" [bigTitle]="true" icon="pi pi-crown"></panel-header>
     
             <panel-body [normalBottomPadding]="true">
     
-                @for (formGroup of getFormArrayGroups(); track formGroup; let index = $index; let last = $last) {
-                    <index-card [index]="index" [last]="false" [crudMenu]="crudMenu" (onMenuIconClick)="lastMenuIconIndexClicked = $event">
-                        <form [formGroup]="formGroup" class="grid">
+                @for (tierFormGroup of getFormArrayGroups(this.tierFormArray); track tierFormGroup; let tierIndex = $index; let last = $last) {
+                    <index-card [index]="tierIndex" [last]="false" [crudMenu]="tierCrudMenu" (onMenuIconClick)="lastMenuIconIndexClicked = $event">
+                        <form [formGroup]="tierFormGroup" class="grid">
                             <div class="col-12 md:col-4">
-                                <soft-textbox [control]="getFormArrayControl('name', index)"></soft-textbox>
+                                <soft-textbox [control]="getTierFormArrayControlByIndex('name', tierIndex)"></soft-textbox>
                             </div>
                             <div class="col-12 md:col-4">
-                                <soft-number [control]="getFormArrayControl('validFrom', index)"></soft-number>
+                                <soft-number [control]="getTierFormArrayControlByIndex('validFrom', tierIndex)"></soft-number>
                             </div>
                             <div class="col-12 md:col-4">
-                                <soft-number [control]="getFormArrayControl('validTo', index)"></soft-number>
+                                <soft-number [control]="getTierFormArrayControlByIndex('validTo', tierIndex)"></soft-number>
                             </div>
                             <div class="col-12">
-                                <soft-textarea [control]="getFormArrayControl('description', index)"></soft-textarea>
+                                <soft-textarea [control]="getTierFormArrayControlByIndex('description', tierIndex)"></soft-textarea>
                             </div>
                         </form>
+
+                        @for (storeTierFormGroup of getStoreTierFormArrayGroups(tierIndex); track storeTierFormGroup; let storeTierIndex = $index; let last = $last) {
+                            <index-card [index]="storeTierIndex" [last]="false" [crudMenu]="storeTierCrudMenu" (onMenuIconClick)="lastMenuIconIndexClicked = $event">
+                                <form [formGroup]="storeTierFormGroup" class="grid">
+                                    <!-- <div class="col-12 md:col-4">
+                                        <soft-textbox [control]="getStoreTierFormArrayControlByIndex('tierId', index)"></soft-textbox>
+                                    </div> -->
+                                    <div class="col-12">
+                                        <soft-textbox [control]="getStoreTierFormArrayControlByIndex('storeId', storeTierIndex)"></soft-textbox>
+                                    </div>
+                                    <!-- <div class="col-12 md:col-4">
+                                        <soft-number [control]="getStoreTierFormArrayControlByIndex('validTo', index)"></soft-number>
+                                    </div>
+                                    <div class="col-12">
+                                        <soft-textarea [control]="getStoreTierFormArrayControlByIndex('description', index)"></soft-textarea>
+                                    </div> -->
+                                </form>
+                            </index-card>
+                        }
+    
+                        <div class="panel-add-button">
+                            <p-button (onClick)="addNewStoreTier(null, tierIndex)" [label]="t('AddNewStoreTier')" icon="pi pi-plus"></p-button>
+                        </div>
                     </index-card>
                 }
     
@@ -31,7 +54,7 @@
             </panel-body>
     
             <panel-footer>
-                <p-button (onClick)="onSaveTiers()" [label]="t('Save')" icon="pi pi-save"></p-button>
+                <p-button (onClick)="onSave()" [label]="t('Save')" icon="pi pi-save"></p-button>
             </panel-footer>
     
         </soft-panel>

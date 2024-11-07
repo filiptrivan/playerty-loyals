@@ -17,6 +17,7 @@ namespace Playerty.Loyals.Infrastructure
 {
     public class PLApplicationDbContext : ApplicationDbContext<UserExtended> // https://stackoverflow.com/questions/41829229/how-do-i-implement-dbcontext-inheritance-for-multiple-databases-in-ef7-net-co
     {
+
         public PLApplicationDbContext(DbContextOptions<PLApplicationDbContext> options)
                 : base(options)
         {
@@ -37,6 +38,10 @@ namespace Playerty.Loyals.Infrastructure
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TransactionProduct> TransactionProducts { get; set; }
         public DbSet<TransactionStatus> TransactionStatuses { get; set; }
+        public DbSet<Store> Stores { get; set; }
+        public DbSet<StoreTier> StoreTiers { get; set; }
+        public DbSet<DiscountCategory> DiscountCategories { get; set; }
+        public DbSet<StoreTierDiscountCategory> StoreTierDiscountCategory { get; set; } // M2M
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -72,6 +77,21 @@ namespace Playerty.Loyals.Infrastructure
                           .HasForeignKey(ru => ru.PartnerUsersId)
                 );
 
+            modelBuilder.Entity<StoreTierDiscountCategory>()
+                .HasKey(ru => new { ru.StoreTiersId, ru.DiscountCategoriesId });
+
+            modelBuilder.Entity<StoreTier>()
+                .HasMany(e => e.DiscountCategories)
+                .WithMany(e => e.StoreTiers)
+                .UsingEntity<StoreTierDiscountCategory>(
+                    j => j.HasOne<DiscountCategory>()
+                          .WithMany()
+                          .HasForeignKey(ru => ru.DiscountCategoriesId),
+                    j => j.HasOne<StoreTier>()
+                          .WithMany()
+                          .HasForeignKey(ru => ru.StoreTiersId)
+                );
+
             modelBuilder.Entity<Tier>()
                 .HasMany(e => e.PartnerUsers)
                 .WithOne(e => e.Tier)
@@ -86,8 +106,8 @@ namespace Playerty.Loyals.Infrastructure
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             // FT: Need to call these methods here, because of abstraction with security package
-            await AddPartnerUserForEachNewPartner();
-            await SaveUserForEachPartnerAndSetDefaultTierForEachUser();
+            //await AddPartnerUserForEachNewPartner();
+            //await SaveUserCurrentPartnerAndSetDefaultTierForEachUser();
             return await base.SaveChangesAsync(cancellationToken);
         }
 
@@ -111,8 +131,6 @@ namespace Playerty.Loyals.Infrastructure
                             User = user,
                             Partner = partner,
                             Points = 0,
-                            HasFilledGenderForTheFirstTime = false,
-                            HasFilledBirthDateForTheFirstTime = false,
                             Tier = null // FT: There is no tier if partner is newly made
                         };
 
@@ -122,7 +140,7 @@ namespace Playerty.Loyals.Infrastructure
             }
         }
 
-        private async Task SaveUserForEachPartnerAndSetDefaultTierForEachUser()
+        private async Task SaveUserCurrentPartnerAndSetDefaultTierForEachUser()
         {
             List<UserExtended> newUsers = ChangeTracker.Entries<UserExtended>() // https://stackoverflow.com/questions/4867602/entity-framework-there-is-already-an-open-datareader-associated-with-this-comma
                 .Where(e => e.State == EntityState.Added)
@@ -131,24 +149,19 @@ namespace Playerty.Loyals.Infrastructure
 
             if (newUsers.Count != 0)
             {
-                List<Partner> partners = await Partners.ToListAsync();
+                Partner currentPartner = null; // await _partnerUserAuthenticationService.GetCurrentPartner();
 
                 foreach (UserExtended user in newUsers)
                 {
-                    foreach (Partner partner in partners)
+                    PartnerUser partnerUser = new PartnerUser
                     {
-                        PartnerUser partnerUser = new PartnerUser
-                        {
-                            User = user,
-                            Partner = partner,
-                            Points = 0,
-                            HasFilledGenderForTheFirstTime = false,
-                            HasFilledBirthDateForTheFirstTime = false,
-                            Tier = partner.Tiers.OrderBy(t => t.ValidTo).FirstOrDefault() // FT: If exists, saving the lowest tier, else null.
-                        };
+                        User = user,
+                        Partner = currentPartner,
+                        Points = 0,
+                        Tier = currentPartner.Tiers.OrderBy(t => t.ValidTo).FirstOrDefault() // FT: If exists, saving the lowest tier, else null.
+                    };
 
-                        await Set<PartnerUser>().AddAsync(partnerUser);
-                    }
+                    await Set<PartnerUser>().AddAsync(partnerUser);
                 }
             }
         }

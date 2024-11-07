@@ -4,6 +4,7 @@ import { FormBuilder } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { SoftPanelsModule } from "../soft-panels/soft-panels.module";
+import { Tier } from 'src/app/business/entities/generated/business-entities.generated';
 
 @Component({
     selector: 'timeline-index-progressbar',
@@ -21,9 +22,9 @@ export class TimelineIndexProgressbarComponent {
     // @Input() header: string;
     // @Input() description: string;
     
-    @Input() items: any[];
-    @Input() currentItem: any;
-    @Input() currentUserPoints: any;
+    @Input() tiers: Tier[];
+    @Input() currentTier: Tier;
+    @Input() currentUserPoints: number;
     @Input() connectorMethod: (connector: Element, index: number) => void;
     resizeTimeout;
 
@@ -37,16 +38,16 @@ export class TimelineIndexProgressbarComponent {
         // console.log(this.last);
     }
 
-    isCurrentItem(item: any){
-        if (item.id == this.currentItem?.id) { // currentItem could be null, for our example partner user doesn't always have current tier
+    isCurrentTier(tier: Tier){
+        if (tier.id == this.currentTier?.id) { // currentTier could be null, for our example partner user doesn't always have current tier
           return true;
         }
     
         return false;
     }
 
-    isPassed(item: any){
-        if (this.currentUserPoints >= item.validTo) {
+    isPassed(tier: Tier){
+        if (this.currentUserPoints >= tier.validTo) {
             return true;
         }
 

@@ -1,4 +1,3 @@
-import { Segmentation } from './../../business/entities/generated/loyals-entities.generated';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PartnerUserListComponent } from './pages/users/partner-user-list.component';
@@ -18,6 +17,8 @@ import { SegmentationDetailsComponent } from './pages/segmentations/segmentation
 import { SegmentationSelectComponent } from '../administration/partials/segmentation-select.component';
 import { UserProgressbarComponent } from "../../business/components/user-progressbar/user-progressbar.component";
 import { TranslocoDirective } from '@jsverse/transloco';
+import { StoreListComponent } from './pages/stores/store-list.component';
+import { StoreDetailsComponent } from './pages/stores/store-details.component';
 
 const routes: Routes = [
     {
@@ -37,6 +38,14 @@ const routes: Routes = [
         component: PartnerRoleDetailsComponent,
     },
     {
+        path: 'notifications',
+        component: PartnerNotificationListComponent,
+    },
+    {
+        path: 'notifications/:id',
+        component: PartnerNotificationDetailsComponent,
+    },
+    {
         path: 'segmentations',
         component: SegmentationListComponent,
     },
@@ -45,16 +54,16 @@ const routes: Routes = [
         component: SegmentationDetailsComponent,
     },
     {
+        path: 'stores',
+        component: StoreListComponent,
+    },
+    {
+        path: 'stores/:id',
+        component: StoreDetailsComponent,
+    },
+    {
         path: 'tiers',
         component: TierListComponent,
-    },
-    {
-        path: 'notifications',
-        component: PartnerNotificationListComponent,
-    },
-    {
-        path: 'notifications/:id',
-        component: PartnerNotificationDetailsComponent,
     },
 ];
 
@@ -80,6 +89,8 @@ const routes: Routes = [
         PartnerNotificationDetailsComponent,
         SegmentationListComponent,
         SegmentationDetailsComponent,
+        StoreListComponent,
+        StoreDetailsComponent,
     ],
     providers:[]
 })

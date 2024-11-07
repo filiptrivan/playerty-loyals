@@ -24,12 +24,6 @@ namespace Playerty.Loyals.Business.Entities
         public string Slug { get; set; } // FT: The user will input the slug, and the slug will be the code in the same time
 
         /// <summary>
-        /// In hours
-        /// </summary>
-        [GreaterThanOrEqualTo(1)]
-        public int? UpdatePointsInterval { get; set; }
-
-        /// <summary>
         /// FT: Didn't do like this at the end https://stackoverflow.com/questions/5613898/storing-images-in-sql-server
         /// "A blob name must be at least one character long and cannot be more than 1,024 characters long, for blobs in Azure Storage."
         /// </summary>
@@ -40,27 +34,6 @@ namespace Playerty.Loyals.Business.Entities
         [StringLength(7)]
         public string PrimaryColor { get; set; }
 
-        [GreaterThanOrEqualTo(0)]
-        [Required]
-        public int PointsForTheFirstTimeGenderFill { get; set; }
-
-        [GreaterThanOrEqualTo(0)]
-        [Required]
-        public int PointsForTheFirstTimeBirthDateFill { get; set; }
-
-
-
-        [StringLength(1000, MinimumLength = 1)]
-        public string LoadPurchasesEndpoint { get; set; }
-
-        [StringLength(1000, MinimumLength = 1)]
-        public string LoadReversalsEndpoint { get; set; }
-
-        [StringLength(1000, MinimumLength = 1)]
-        public string CreateUserEndpoint { get; set; }
-
-        [StringLength(1000, MinimumLength = 1)]
-        public string UpdateUserGroupEndpoint { get; set; }
 
         [StringLength(1000, MinimumLength = 1)]
         public string ProductsRecommendationEndpoint { get; set; }
