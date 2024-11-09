@@ -105,6 +105,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.LoadStoreTierDTOList(_context.DbSet<StoreTier>().Where(x => tierIds.Contains(x.Tier.Id)), false);
         }
 
+        [HttpPost]
+        [AuthGuard]
+        public async Task<List<DiscountCategoryDTO>> LoadDiscountCategoryDTOListForCurrentPartner(List<long> storeTierIds)
+        {
+            return await _loyalsBusinessService.LoadDiscountCategoryDTOListForCurrentPartner(storeTierIds);
+        }
+
         //[HttpGet]
         //[AuthGuard]
         //public async Task<List<NamebookDTO<long>>> LoadUserListForTier(int roleId)

@@ -79,6 +79,7 @@ export class SoftDataTableComponent implements OnInit {
 
   // Client side table
   @Input() formArray: SoftFormArray;
+  @Input() formArrayItems: any[]; // FT: Pass this only if you have some additional logic for showing data
   @Input() formArrayControlNamesFromHtml: string[];
   @Input() hasLazyLoad: boolean = true; 
   @Input() selectedItemIds: number[] = []; // FT: Pass only when hasLazyLoad === false, it's enough if the M2M association hasn't additional fields
@@ -113,7 +114,7 @@ export class SoftDataTableComponent implements OnInit {
 
     if (this.hasLazyLoad === false) {
       this.loading = false;
-      this.items = this.formArray.value;
+      this.items = this.formArrayItems ?? this.formArray.value;
       this.items.forEach((item, index) => {
         item.index = index;
       });
@@ -173,7 +174,7 @@ export class SoftDataTableComponent implements OnInit {
       this.selectAll(false); // FT: We need to do it like this because: totalRecords: 1 -> selectedRecords from earlyer selection 2 -> unselect current -> all checkbox is set to true
 
     if (this.hasLazyLoad === false && this.formArray) {
-      this.items = this.formArray.value;
+      this.items = this.formArrayItems ?? this.formArray.value;
       this.items.forEach((item, index) => {
         item.index = index;
       });
@@ -413,12 +414,13 @@ export class SoftDataTableComponent implements OnInit {
 
   //#region Client side table
 
-  getFormArrayControlByIndex(formControlName: string, index: number): SoftFormControl{
+  // FT: Doint with Id, not with index, because we are never adding the new record in the table at the same page, when and if, we add that functionality we should change the logic somehow to index
+  getFormArrayControlById(formControlName: string, id: number): SoftFormControl{
     if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
       this.formArrayControlNamesFromHtml.push(formControlName);
 
     // FT: Can be null when we save
-    return (this.formArray.controls[index] as FormGroup).controls[formControlName] as SoftFormControl;
+    return ((this.formArray.controls) as FormGroup[]).find(x => x.controls['id'].value === id).controls[formControlName] as SoftFormControl;
   }
 
   //#endregion

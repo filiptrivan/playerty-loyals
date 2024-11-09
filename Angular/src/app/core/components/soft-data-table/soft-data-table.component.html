@@ -64,7 +64,7 @@
               {{getRowData(rowData, col)}}
             </td>
             <td *ngIf="col.editable">
-              <soft-number [control]="getFormArrayControlByIndex(col.field, rowData.index)" [showLabel]="false"></soft-number>
+              <soft-number [control]="getFormArrayControlById(col.field, rowData.id)" [showLabel]="false"></soft-number>
             </td>
           </ng-container>
         </tr>

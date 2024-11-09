@@ -206,10 +206,6 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.get<Store>(`${environment.apiUrl}/Store/GetStore?id=${id}`);
     }
 
-    loadDiscountCategoryDTOListForCurrentPartner(storeId: number): Observable<DiscountCategory[]> {
-        return this.http.get<DiscountCategory[]>(`${environment.apiUrl}/Store/LoadDiscountCategoryDTOListForCurrentPartner?storeId=${storeId}`);
-    }
-
     saveStore(storeSaveBodyDTO: StoreSaveBody): Observable<Store> { 
         return this.http.put<Store>(`${environment.apiUrl}/Store/SaveStore`, storeSaveBodyDTO, environment.httpOptions);
     }
@@ -336,6 +332,10 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     loadStoreTierDTOListForTierList(tierIds: number[]): Observable<StoreTier[]> { 
         return this.http.post<StoreTier[]>(`${environment.apiUrl}/Tier/LoadStoreTierDTOListForTierList`, tierIds, environment.httpOptions);
+    }
+
+    loadDiscountCategoryDTOListForCurrentPartner(storeTierIds: number[]): Observable<DiscountCategory[]> { 
+        return this.http.post<DiscountCategory[]>(`${environment.apiUrl}/Tier/LoadDiscountCategoryDTOListForCurrentPartner`, storeTierIds, environment.httpOptions);
     }
 
     loadPartnerRoleListForTable(dto: TableFilter): Observable<TableResponse> { 

@@ -57,13 +57,6 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.GetStoreDTOAsync(id, false);
         }
 
-        [HttpGet]
-        [AuthGuard]
-        public async Task<List<DiscountCategoryDTO>> LoadDiscountCategoryDTOListForCurrentPartner(long storeId)
-        {
-            return await _loyalsBusinessService.LoadDiscountCategoryDTOListForCurrentPartner(storeId);
-        }
-
         //[HttpGet]
         //[AuthGuard]
         //public async Task<List<long>> LoadSelectedDiscountCategoryIdsForStore(long storeId)

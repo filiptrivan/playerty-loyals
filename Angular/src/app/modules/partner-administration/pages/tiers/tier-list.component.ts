@@ -4,14 +4,14 @@ import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { MenuItem } from 'primeng/api';
-import { forkJoin } from 'rxjs';
+import { forkJoin, filter } from 'rxjs';
 import { DiscountCategory, StoreTier, Tier, TierSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
-import { SoftFormArray } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { SoftFormArray, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
@@ -21,23 +21,28 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class TierListComponent extends BaseFormCopy implements OnInit {
+    // Tier
     tierModel: Tier = new Tier();
     tierDTOListSaveBodyName: string = nameof<TierSaveBody>('tierDTOList');
     tierTranslationKey: string = new Tier().typeName;
     tierFormArray: SoftFormArray<Tier[]>;
     tierCrudMenu: MenuItem[];
 
+    // StoreTier
     storeTierModel: StoreTier = new StoreTier();
     storeTierDTOListSaveBodyName: string = nameof<TierSaveBody>('storeTierDTOList');
     storeTierTranslationKey: string = new StoreTier().typeName;
     storeTierFormArray: SoftFormArray<StoreTier[]>;
     storeTierCrudMenu: MenuItem[];
-
-    cols: Column[];
-    tableControllerName: string = 'Store';
-    objectNameForTheRequest: string = 'DiscountCategory';
-    selectedDiscountCategoryListForStore: DiscountCategory[] = [];
-    selectedDiscountCategoryIdsForStore: number[] = [];
+    
+    // DiscountCategories M2M
+    discountCategoryCols: Column[];
+    discountCategoryModel: DiscountCategory = new DiscountCategory();
+    discountCategoriesSaveBodyName: string = nameof<TierSaveBody>('selectedDiscountCategoryDTOList');
+    discountCategoriesTranslationKey: string = new DiscountCategory().typeName;
+    discountCategoryFormArray: SoftFormArray<DiscountCategory[]>;
+    alreadySelectedDiscountCategoryListForStore: DiscountCategory[] = [];
+    alreadySelectedDiscountCategoryIdsForStore: number[] = [];
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -59,7 +64,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         this.saveMethodName = 'SaveTierList';
         this.detailsTitle = this.translocoService.translate('TierList');
 
-        this.cols = [
+        this.discountCategoryCols = [
             {name: this.translocoService.translate('Name'), filterType: 'text', field: 'name'},
             {name: this.translocoService.translate('Discount'), filterType: 'numeric', field: 'discount', showMatchModes: true, editable: true},
         ];
@@ -70,19 +75,20 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
             this.initTierFormArray(tierList);
             this.apiService.loadStoreTierDTOListForTierList(tierList.map(x => x.id)).subscribe(storeTierList => {
                 this.initStoreTierFormArray(storeTierList);
+
+                this.apiService.loadDiscountCategoryDTOListForCurrentPartner(storeTierList.map(x => x.id)).subscribe(discountCategories => {
+                    this.initDiscountCategoriesFormArray(discountCategories);
+                });
             });
         });
     }
+
+    //#region Tier
 
     initTierFormArray(tierList: Tier[]){
         this.tierFormArray = this.initFormArray(tierList, this.tierModel, this.tierDTOListSaveBodyName, this.tierTranslationKey, true);
         this.tierCrudMenu = this.getCrudMenuForOrderedData(this.tierFormArray, new Tier({id: 0}));
         this.tierFormArray.validator = this.validatorService.isFormArrayEmpty(this.tierFormArray);
-    }
-
-    initStoreTierFormArray(storeTierList: StoreTier[]){
-        this.storeTierFormArray = this.initFormArray(storeTierList, this.storeTierModel, this.storeTierDTOListSaveBodyName, this.storeTierTranslationKey);
-        this.storeTierCrudMenu = this.getCrudMenuForOrderedData(this.storeTierFormArray, new StoreTier({id: 0}));
     }
 
     addNewTier(index: number){
@@ -93,65 +99,82 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         return this.getFormArrayControlByIndex<Tier>(formControlName, this.tierDTOListSaveBodyName, index);
     }
 
-    addNewStoreTier(index: number, tierId: number){
-        this.addNewFormControlToTheFormArray(this.storeTierFormArray, new StoreTier({id: 0, tierId: tierId}), index);
+    //#endregion
+
+    //#region StoreTier
+
+    initStoreTierFormArray(storeTierList: StoreTier[]){
+        this.storeTierFormArray = this.initFormArray(storeTierList, this.storeTierModel, this.storeTierDTOListSaveBodyName, this.storeTierTranslationKey);
+        this.storeTierCrudMenu = this.getCrudMenuForOrderedData(this.storeTierFormArray, new StoreTier({id: 0}));
     }
 
-    getStoreTierFormArrayControlByIndex(formControlName: keyof StoreTier & string, index: number){
-        return this.getFormArrayControlByIndex<StoreTier>(formControlName, this.storeTierDTOListSaveBodyName, index);
+    addNewStoreTier(index: number, tierIndex: number){
+        let tierId = this.getTierFormArrayControlByIndex('id', tierIndex).getRawValue();
+        tierId = tierId === 0 ? tierIndex : tierId; // FT: Doing this because if we add new Tier and StoreTier, the tierId will be 0
+
+        // FT: For the Tier we are not assigning index because we are sending the ordered list from the UI and we will get the index in foreach on the backend, but here we need orderNumber so we can filter 
+        this.addNewFormControlToTheFormArray(this.storeTierFormArray, new StoreTier({id: 0, tierId: 0, tierClientIndex: tierIndex}), index);
+
+        this.discountCategoryFormArray.value.filter(x => x.storeTierId === 0).forEach(discountCategory => {
+            let newDiscountCategory: DiscountCategory = new DiscountCategory(discountCategory);
+            newDiscountCategory.storeTierId = 0;
+            newDiscountCategory.storeTierClientIndex = index;
+            newDiscountCategory.tierClientIndex = tierIndex;
+
+            this.addNewFormControlToTheFormArray(this.discountCategoryFormArray, newDiscountCategory, null)
+        });
     }
 
-    getStoreTierFormArrayGroups(tierId: number){
+    getStoreTierFormArrayControl(formControlName: keyof StoreTier & string, index: number, tierIndex: number){
+        return this.getFormArrayControlByIndex<StoreTier>(formControlName, this.storeTierDTOListSaveBodyName, index, 
+            (formGroups: SoftFormGroup<StoreTier>[]): SoftFormGroup[] => {
+                return formGroups.filter(x => x.controls['tierIndex'].value === tierIndex);
+            });
+    }
+
+    getStoreTierFormArrayGroups(tierIndex: number){
+        let tierId = this.getTierFormArrayControlByIndex('id', tierIndex).getRawValue();
+        tierId = tierId === 0 ? tierIndex : tierId;
+
         let formGroups: FormGroup[] = this.getFormArrayGroups(this.storeTierFormArray);
         return formGroups.filter(x => x.controls['tierId'].value === tierId)
     }
 
-    // override ngOnInit() {
-    //     this.route.params.subscribe((params) => {
-    //         this.modelId = params['id'];
+    //#endregion
 
-    //         this.apiService.loadDiscountCategoryDTOListForCurrentPartner(this.modelId).subscribe(discountCategories => {
-    //             this.initDiscountCategoriesFormArray(discountCategories);
-    //         });
+    //#region DiscountCategory M2M
 
-    //         if (this.modelId > 0) {
-    //             forkJoin({
-    //                 store: this.apiService.getStore(this.modelId),
-    //             })
-    //             .subscribe(({ store }) => {
-    //                 this.storeFormGroup = this.initFormGroup(new Store(store), this.storeSaveBodyName);
-    //             });
-    //         }else{
-    //             this.storeFormGroup = this.initFormGroup(new Store({id: 0}), this.storeSaveBodyName);
-    //         }
-    //     });
-    // }
-
-    // initDiscountCategoriesFormArray(discountCategories: DiscountCategory[]){
-    //     this.discountCategoryFormArray = this.initFormArray(discountCategories, this.discountCategoryModel, this.discountCategoriesSaveBodyName, this.discountCategoriesTranslationKey, false, 
-    //         this.discountDisableLambda
-    //     );
+    initDiscountCategoriesFormArray(discountCategories: DiscountCategory[]){
+        this.discountCategoryFormArray = this.initFormArray(discountCategories, this.discountCategoryModel, this.discountCategoriesSaveBodyName, this.discountCategoriesTranslationKey, false, 
+            this.discountDisableLambda
+        );
         
-    //     this.selectedDiscountCategoryIdsForStore = discountCategories.filter(x => x.selectedForStore).map(x => x.id);
-    // }
+        this.alreadySelectedDiscountCategoryIdsForStore = discountCategories.filter(x => x.selectedForStore).map(x => x.id);
+    }
 
-    // discountDisableLambda = (formControlName: string, model: DiscountCategory): boolean => {
-    //     if(formControlName === nameof<DiscountCategory>('discount') && model.selectedForStore !== true){
-    //         return true;
-    //     }
+    discountDisableLambda = (formControlName: string, model: DiscountCategory): boolean => {
+        if(formControlName === nameof<DiscountCategory>('discount') && model.selectedForStore !== true){
+            return true;
+        }
 
-    //     return false;
-    // }
+        return false;
+    }
 
-    // rowSelect(index: number){
-    //     const formControl = this.getFormArrayControlByIndex<DiscountCategory>('discount', this.discountCategoriesSaveBodyName, index);
-    //     formControl.enable();
-    // }
+    getDiscountCategoryFormArrayItems(storeTierIndex: number, tierIndex: number){
+        return this.discountCategoryFormArray.value.filter(x => x.storeTierClientIndex === storeTierIndex && x.tierClientIndex === tierIndex);
+    }
 
-    // rowUnselect(index: number){
-    //     const formControl = this.getFormArrayControlByIndex<DiscountCategory>('discount', this.discountCategoriesSaveBodyName, index);
-    //     formControl.disable();
-    // }
+    rowSelect(index: number){
+        const formControl = this.getFormArrayControlByIndex<DiscountCategory>('discount', this.discountCategoriesSaveBodyName, index);
+        formControl.enable();
+    }
+
+    rowUnselect(index: number){
+        const formControl = this.getFormArrayControlByIndex<DiscountCategory>('discount', this.discountCategoriesSaveBodyName, index);
+        formControl.disable();
+    }
+
+    //#endregion
 
     // override onBeforeSave(): void {
     //     let saveBody: StoreSaveBody = new StoreSaveBody();

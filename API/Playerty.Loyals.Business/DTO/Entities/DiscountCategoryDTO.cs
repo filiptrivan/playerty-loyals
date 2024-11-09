@@ -11,7 +11,7 @@ namespace Playerty.Loyals.Business.DTO
     public partial class DiscountCategoryDTO
     {
         public int Discount { get; set; }
-
         public bool SelectedForStore { get; set; }
+        public long StoreTierId { get; set; }
     }
 }

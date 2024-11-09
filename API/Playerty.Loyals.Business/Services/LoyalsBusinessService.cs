@@ -854,7 +854,11 @@ namespace Playerty.Loyals.Services
 
         #region Store
 
-        public async Task<List<DiscountCategoryDTO>> LoadDiscountCategoryDTOListForCurrentPartner(long storeId)
+        /// <summary>
+        /// When we need order numbers on M2M
+        /// FT: The first elements of the list with StoreTierId == 0 will be used for adding new StoreTier in the list on the UI
+        /// </summary>
+        public async Task<List<DiscountCategoryDTO>> LoadDiscountCategoryDTOListForCurrentPartner(List<long> storeTierIds)
         {
             return await _context.WithTransactionAsync(async () =>
             {
@@ -862,22 +866,31 @@ namespace Playerty.Loyals.Services
 
                 IQueryable<DiscountCategory> discountCategoryQuery = _context.DbSet<DiscountCategory>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode());
 
-                List<DiscountCategoryDTO> discountCategoryDTOList = await LoadDiscountCategoryDTOList(discountCategoryQuery, false);
+                List<DiscountCategoryDTO> discountCategoryDTOList = await LoadDiscountCategoryDTOList(discountCategoryQuery, false); // 10
 
+                List<DiscountCategoryDTO> discountCategoryResultDTOList = discountCategoryDTOList.ToList(); // 10
 
-                //List<StoreTierDiscountCategory> storeDiscountCategoryList = await _context.DbSet<StoreTierDiscountCategory>().AsNoTracking().Where(x => x.StoresId == storeId).ToListAsync();
-                //List<long> selectedDiscountCategoryIdsForStore = storeDiscountCategoryList.Select(x => x.DiscountCategoriesId).ToList();
+                List<StoreTierDiscountCategory> storeTierDiscountCategoryList = await _context.DbSet<StoreTierDiscountCategory>().AsNoTracking().Where(x => storeTierIds.Contains(x.StoreTiersId)).ToListAsync();
+                //List<long> selectedDiscountCategoryIdsForStore = storeTierDiscountCategoryList.Select(x => x.DiscountCategoriesId).ToList();
 
-                //foreach (DiscountCategoryDTO discountCategoryDTO in discountCategoryDTOList)
-                //{
-                //    StoreTierDiscountCategory storeDiscountCategory = storeDiscountCategoryList.Where(x => x.DiscountCategoriesId == discountCategoryDTO.Id).SingleOrDefault();
+                foreach (long storeTierId in storeTierIds)
+                {
+                    List<DiscountCategoryDTO> helper = discountCategoryDTOList.ToList(); // 10
 
-                //    if (storeDiscountCategory != null)
-                //    {
-                //        discountCategoryDTO.SelectedForStore = true;
-                //        discountCategoryDTO.Discount = storeDiscountCategory.Discount;
-                //    }
-                //}
+                    foreach (DiscountCategoryDTO discountCategoryDTO in helper)
+                    {
+                        StoreTierDiscountCategory storeDiscountCategory = storeTierDiscountCategoryList.Where(x => x.DiscountCategoriesId == discountCategoryDTO.Id && x.StoreTiersId == storeTierId).SingleOrDefault();
+
+                        if (storeDiscountCategory != null)
+                        {
+                            discountCategoryDTO.SelectedForStore = true;
+                            discountCategoryDTO.Discount = storeDiscountCategory.Discount;
+                            discountCategoryDTO.StoreTierId = storeTierId;
+                        }
+                    }
+
+                    discountCategoryResultDTOList = discountCategoryResultDTOList.Concat(helper).ToList(); // 20
+                }
 
                 return discountCategoryDTOList;
             });
