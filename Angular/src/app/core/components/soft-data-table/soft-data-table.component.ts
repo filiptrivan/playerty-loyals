@@ -6,7 +6,7 @@ import { ApiService } from 'src/app/business/services/api/api.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SoftDeleteConfirmationComponent } from '../soft-delete-dialog/soft-delete-confirmation.component';
 import { CommonModule, formatDate } from '@angular/common';
-import { FormGroup, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { SoftMessageService } from '../../services/soft-message.service';
 import { TableFilter } from 'src/app/business/entities/table-filter';
@@ -14,7 +14,7 @@ import { firstValueFrom, Observable } from 'rxjs';
 import { PrimengOption } from '../../entities/primeng-option';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { SoftControlsModule } from '../../controls/soft-controls.module';
-import { SoftFormArray, SoftFormControl } from '../soft-form-control/soft-form-control';
+import { SoftFormControl } from '../soft-form-control/soft-form-control';
 
 @Component({
   selector: 'soft-data-table',
@@ -78,14 +78,18 @@ export class SoftDataTableComponent implements OnInit {
   deleteRef: DynamicDialogRef;
 
   // Client side table
-  @Input() formArray: SoftFormArray;
   @Input() formArrayItems: any[]; // FT: Pass this only if you have some additional logic for showing data
+  @Input() getFormArrayItems: (additionalIndexes?: any) => any[];
   @Input() formArrayControlNamesFromHtml: string[];
   @Input() hasLazyLoad: boolean = true; 
   @Input() selectedItemIds: number[] = []; // FT: Pass only when hasLazyLoad === false, it's enough if the M2M association hasn't additional fields
+  @Input() getAlreadySelectedItemIds: (additionalIndexes?: any) => number[]; // FT: Pass only when hasLazyLoad === false, it's enough if the M2M association hasn't additional fields
   @Input() selectedItems: any[] = []; // FT: Pass only when hasLazyLoad === false
-  @Output() onRowSelect: EventEmitter<number> = new EventEmitter();
-  @Output() onRowUnselect: EventEmitter<number> = new EventEmitter();
+  @Input() getAlreadySelectedItems: (additionalIndexes?: any) => any[]; // FT: Pass only when hasLazyLoad === false, it's enough if the M2M association hasn't additional fields
+  @Input() getSoftFormControl: (formControlName: string, index: number, additionalIndexes?: any) => SoftFormControl;
+  @Input() additionalIndexes: any;
+  @Output() onRowSelect: EventEmitter<RowClickEvent> = new EventEmitter();
+  @Output() onRowUnselect: EventEmitter<RowClickEvent> = new EventEmitter();
 
   constructor(
     private apiService: ApiService,
@@ -113,13 +117,7 @@ export class SoftDataTableComponent implements OnInit {
     ];
 
     if (this.hasLazyLoad === false) {
-      this.loading = false;
-      this.items = this.formArrayItems ?? this.formArray.value;
-      this.items.forEach((item, index) => {
-        item.index = index;
-      });
-      this.rowsSelectedNumber = this.selectedItemIds.length;
-      this.setFakeIsAllSelected();
+      this.clientLoad();
     }
   }
   
@@ -169,16 +167,36 @@ export class SoftDataTableComponent implements OnInit {
     });
   }
 
+  clientLoad(){
+    this.loading = false;
+    this.items = this._getFormArrayItems();
+    this.items.forEach((item, index) => {
+      item.index = index;
+    });
+    if (this.getAlreadySelectedItemIds) {
+      this.selectedItemIds = this.getAlreadySelectedItemIds(this.additionalIndexes);
+    }
+    if (this.getAlreadySelectedItems) {
+      this.selectedItemIds = this.getAlreadySelectedItems(this.additionalIndexes);
+    }
+    this.rowsSelectedNumber = this.selectedItemIds.length;
+    this.setFakeIsAllSelected();
+  }
+
   filter(event: TableFilterEvent){
-    if (this.hasLazyLoad)
+    if (this.hasLazyLoad && this.selectionMode === 'multiple')
       this.selectAll(false); // FT: We need to do it like this because: totalRecords: 1 -> selectedRecords from earlyer selection 2 -> unselect current -> all checkbox is set to true
 
-    if (this.hasLazyLoad === false && this.formArray) {
-      this.items = this.formArrayItems ?? this.formArray.value;
+    if (this.hasLazyLoad === false && this.selectionMode === 'multiple') {
+      this.items = this._getFormArrayItems();
       this.items.forEach((item, index) => {
         item.index = index;
       });
     }
+  }
+
+  private _getFormArrayItems(){
+    return this.formArrayItems ?? this.getFormArrayItems(this.additionalIndexes);
   }
   
   getColHeaderWidth(filterType: string) {
@@ -304,8 +322,12 @@ export class SoftDataTableComponent implements OnInit {
       }
   }
 
-  trackByFn(index, item){
-    return item.id;
+  colTrackByFn(index, item){
+    return item.field;
+  }
+
+  actionTrackByFn(index, item: Action){
+    return `${index}${item.field}`
   }
 
   //#region Selection
@@ -328,7 +350,8 @@ export class SoftDataTableComponent implements OnInit {
       this.rowsSelectedNumber = this.totalRecords;
       this.fakeSelectedItems = [...this.items.map(x => x.id)];
       this.selectedItemIds = [...this.items.map(x => x.id)]
-    }else{
+    }
+    else{
       this.isAllSelected = false;
       this.fakeIsAllSelected = false;
       this.onIsAllSelectedChange.next(false);
@@ -341,10 +364,10 @@ export class SoftDataTableComponent implements OnInit {
   selectRow(id: number, index: number) {
     if (this.isRowSelected(id)) {
       this.rowUnselect(id);
-      this.onRowUnselect.next(index);
+      this.onRowUnselect.next(new RowClickEvent({ index: index, additionalIndexes: this.additionalIndexes }));
     } else {
       this.rowSelect(id);
-      this.onRowSelect.next(index);
+      this.onRowSelect.next(new RowClickEvent({ index: index, additionalIndexes: this.additionalIndexes }));
     }
   }
 
@@ -414,13 +437,14 @@ export class SoftDataTableComponent implements OnInit {
 
   //#region Client side table
 
-  // FT: Doint with Id, not with index, because we are never adding the new record in the table at the same page, when and if, we add that functionality we should change the logic somehow to index
-  getFormArrayControlById(formControlName: string, id: number): SoftFormControl{
-    if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
-      this.formArrayControlNamesFromHtml.push(formControlName);
-
-    // FT: Can be null when we save
-    return ((this.formArray.controls) as FormGroup[]).find(x => x.controls['id'].value === id).controls[formControlName] as SoftFormControl;
+  // FT: Can do it with Id also, because we are never adding the new record in the table at the same page.
+  getFormArrayControlByIndex(formControlName: string, index: number): SoftFormControl{
+    if (this.getSoftFormControl) {
+      return this.getSoftFormControl(formControlName, index, this.additionalIndexes);
+    }
+    else{
+      return null;
+    }
   }
 
   //#endregion
@@ -449,4 +473,22 @@ export class Column {
 export class SelectedRowsMethodResult {
   fakeSelectedItems: number[] = [];
   selectedTotalRecords: number = 0;
+}
+
+export class RowClickEvent {
+  index?: number;
+  additionalIndexes?: any;
+
+  constructor(
+    {
+      index, 
+      additionalIndexes
+    }:{
+      index?: number; 
+      additionalIndexes?: any;
+    } = {}
+    ) {
+    this.index = index;
+    this.additionalIndexes = additionalIndexes;
+  }
 }

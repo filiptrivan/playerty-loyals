@@ -85,7 +85,7 @@ export class BaseFormCopy implements OnInit {
 
   setValidator(formControl: SoftFormControl, modelConstructor: any) {
     if (formControl == null) return null;
-
+    
     formControl.validator = this.validatorService.getValidator(formControl, modelConstructor.typeName);
 
     if (formControl?.validator?.hasNotEmptyRule)
@@ -133,7 +133,9 @@ export class BaseFormCopy implements OnInit {
     let isFormArrayValid: boolean = this.areFormArraysValid();
 
     if(isValid && isFormArrayValid){
-      this.http.put<any>(environment.apiUrl + `/${this.controllerName}/${this.saveMethodName}`, this.saveBody, environment.httpOptions).subscribe(res => {
+      const saveMethodName = this.saveMethodName ?? `Save${this.controllerName}`;
+      
+      this.http.put<any>(environment.apiUrl + `/${this.controllerName}/${saveMethodName}`, this.saveBody, environment.httpOptions).subscribe(res => {
         this.messageService.successMessage(this.translocoService.translate('SuccessfulSaveToastDescription'));
 
         Object.keys(res).forEach((key) => {
@@ -311,23 +313,22 @@ export class BaseFormCopy implements OnInit {
   }
   
   // FT: Need to use this from html because can't do "as SoftFormControl" there
-  getFormArrayControlByIndex<T>(formControlName: keyof T & string, formArraySaveBodyName: string, index: number, filter?: (formGroups: SoftFormGroup<T>[]) => SoftFormGroup<T>[]): SoftFormControl{
+  getFormArrayControlByIndex<T>(formControlName: keyof T & string, formArraySaveBodyName: string, index: number, filter?: (formGroups: SoftFormGroup<T>[]) => SoftFormGroup<T>[]): SoftFormControl {
     if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
       this.formArrayControlNamesFromHtml.push(formControlName);
 
-    let formArray: SoftFormArray<T[]> = this.formGroup?.controls[formArraySaveBodyName] as SoftFormArray;
+    let formArray: SoftFormArray<T[]> = this.formGroup.controls[formArraySaveBodyName] as SoftFormArray;
 
     let filteredFormGroups: SoftFormGroup<T>[];
 
     if (filter) {
-      filteredFormGroups = filter(formArray?.controls as SoftFormGroup<T>[]);
+      filteredFormGroups = filter(formArray.controls as SoftFormGroup<T>[]);
     }
     else{
-      return (formArray?.controls[index] as SoftFormGroup<T>)?.controls[formControlName] as SoftFormControl;
+      return (formArray.controls[index] as SoftFormGroup<T>).controls[formControlName] as SoftFormControl;
     }
 
-    // FT: Can be null when we save
-    return filteredFormGroups[index]?.controls[formControlName] as SoftFormControl;
+    return filteredFormGroups[index].controls[formControlName] as SoftFormControl;
   }
 
   // FT: Need to use this from html because can't do "as SoftFormControl" there
@@ -343,20 +344,35 @@ export class BaseFormCopy implements OnInit {
   //   return this.formArray.controls[index] as FormGroup
   // }
 
-  getFormArrayGroups(formArray: SoftFormArray): FormGroup[]{
-    return formArray.controls as FormGroup[]
+  getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+    return formArray.controls as SoftFormGroup<T>[]
   }
 
-  addNewFormControlToTheFormArray(formArray: SoftFormArray, modelConstructor: any, index: number) {
+  addNewFormControlToTheFormArray(formArray: SoftFormArray, modelConstructor: any, index: number, disableLambda?: (formControlName: string, model: any) => boolean) {
     if (index == null) {
-      formArray.push(this.createFormGroup(modelConstructor));
+      formArray.push(this.createFormGroup(modelConstructor, disableLambda));
     }else{
-      formArray.insert(index, this.createFormGroup(modelConstructor));
+      formArray.insert(index, this.createFormGroup(modelConstructor, disableLambda));
     }
   }
 
   removeFormControlFromTheFormArray(formArray: SoftFormArray, index: number) {
     formArray.removeAt(index);
+  }
+
+  removeFormControlsFromTheFormArray(formArray: SoftFormArray, indexes: number[]) {
+    const controlsHelper = [];
+
+    formArray.controls.forEach(control => {
+      controlsHelper.push(control);
+    }); 
+
+    formArray.clear();
+
+    controlsHelper.forEach((control, index) => {
+      if(indexes.includes(index) === false)
+        formArray.push(control);
+    });
   }
 
   areFormArraysValid(): boolean {

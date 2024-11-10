@@ -99,12 +99,12 @@ namespace Playerty.Loyals.WebAPI.Controllers
         //    return await _loyalsBusinessService.GetStoreItemListForTheCurrentPartner();
         //}
 
-        //[HttpGet]
-        //[AuthGuard]
-        //public async Task<List<NamebookDTO<long>>> LoadStoreItemListForDropdown()
-        //{
-        //    return await _loyalsBusinessService.LoadStoreItemListForDropdown(_context.DbSet<StoreItem>().Where(x => x.Store.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
-        //}
+        [HttpGet]
+        [AuthGuard]
+        public async Task<List<NamebookDTO<long>>> LoadStoreListForDropdown()
+        {
+            return await _loyalsBusinessService.LoadStoreListForDropdown(_context.DbSet<Store>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+        }
 
     }
 }

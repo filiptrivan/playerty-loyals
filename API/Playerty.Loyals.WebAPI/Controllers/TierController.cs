@@ -65,9 +65,9 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPut]
         [AuthGuard]
-        public async Task<List<TierDTO>> SaveTierList(List<TierDTO> tierListDTO)
+        public async Task<TierSaveBodyDTO> SaveTier(TierSaveBodyDTO tierSaveBodyDTO)
         {
-            return await _loyalsBusinessService.SaveTierList(tierListDTO);
+            return await _loyalsBusinessService.SaveTier(tierSaveBodyDTO);
         }
 
         [HttpGet]

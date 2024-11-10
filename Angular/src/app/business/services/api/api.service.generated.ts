@@ -13,6 +13,7 @@ import { TierSaveBody } from '../../entities/generated/business-entities.generat
 import { PartnerRoleSaveBody } from '../../entities/generated/business-entities.generated';
 import { UserExtended } from '../../entities/generated/business-entities.generated';
 import { Product } from '../../entities/generated/business-entities.generated';
+import { StoreTier } from '../../entities/generated/business-entities.generated';
 import { MergedPartnerUser } from '../../entities/generated/business-entities.generated';
 import { Brand } from '../../entities/generated/business-entities.generated';
 import { SegmentationItem } from '../../entities/generated/business-entities.generated';
@@ -30,7 +31,6 @@ import { PartnerUser } from '../../entities/generated/business-entities.generate
 import { Gender } from '../../entities/generated/business-entities.generated';
 import { Store } from '../../entities/generated/business-entities.generated';
 import { PartnerNotificationPartnerUser } from '../../entities/generated/business-entities.generated';
-import { StoreTier } from '../../entities/generated/business-entities.generated';
 import { TransactionProduct } from '../../entities/generated/business-entities.generated';
 import { TransactionStatus } from '../../entities/generated/business-entities.generated';
 import { Transaction } from '../../entities/generated/business-entities.generated';
@@ -210,6 +210,10 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.put<Store>(`${environment.apiUrl}/Store/SaveStore`, storeSaveBodyDTO, environment.httpOptions);
     }
 
+    loadStoreListForDropdown(): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Store/LoadStoreListForDropdown`, environment.httpSkipSpinnerOptions);
+    }
+
     loadPartnerListForTable(dto: TableFilter): Observable<TableResponse> { 
         return this.http.post<TableResponse>(`${environment.apiUrl}/Partner/LoadPartnerListForTable`, dto, environment.httpSkipSpinnerOptions);
     }
@@ -310,8 +314,8 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.get<Tier>(`${environment.apiUrl}/Tier/GetTier?id=${id}`);
     }
 
-    saveTierList(tierListDTO: Tier[]): Observable<Tier[]> { 
-        return this.http.put<Tier[]>(`${environment.apiUrl}/Tier/SaveTierList`, tierListDTO, environment.httpOptions);
+    saveTier(tierSaveBodyDTO: TierSaveBody): Observable<TierSaveBody> { 
+        return this.http.put<TierSaveBody>(`${environment.apiUrl}/Tier/SaveTier`, tierSaveBodyDTO, environment.httpOptions);
     }
 
     loadTierListForDropdown(): Observable<Namebook[]> {

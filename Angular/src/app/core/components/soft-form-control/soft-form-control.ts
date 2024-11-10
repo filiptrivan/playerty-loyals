@@ -1,4 +1,4 @@
-import { FormArray, FormControl, FormControlOptions, FormGroup, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormArray, FormControl, FormControlOptions, FormGroup, ValidatorFn } from '@angular/forms';
 
 export interface SoftValidatorFn extends ValidatorFn {
     hasNotEmptyRule?: boolean;
@@ -26,6 +26,12 @@ export class SoftFormControl<T = any> extends FormControl<T> {
 }
 
 export class SoftFormGroup<TValue = any> extends FormGroup {
+    declare controls: { [P in keyof TValue]: AbstractControl };
+
+    constructor(controls: { [P in keyof TValue]: AbstractControl }) {
+        super(controls);
+    }
+
     override getRawValue(): TValue { // FT: Doing this because .value gets only not disabled values
         return super.getRawValue() as TValue;
     }

@@ -301,5 +301,6 @@
   "YouDoNotHaveAnyNotifications": "Nemate nijednu notifikaciju.",
   "More than": "Više od",
   "BadRequestDetails": "Sistem ne može da obradi zahtev. Molimo vas da proverite zahtev i pokušate ponovo.",
-  "StoreList": "Prodavnice"
+  "StoreList": "Prodavnice",
+  "Store": "Prodavnica"
 }

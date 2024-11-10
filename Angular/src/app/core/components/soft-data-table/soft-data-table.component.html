@@ -22,7 +22,7 @@
               <p-checkbox (onChange)="selectAll($event.checked)" [(ngModel)]="fakeIsAllSelected" [binary]="true"></p-checkbox> ({{rowsSelectedNumber}})
             </div>
           </th>
-          <ng-container *ngFor="let col of cols">
+          <ng-container *ngFor="let col of cols; trackBy: colTrackByFn">
             <th [style]="getColHeaderWidth(col.filterType)">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 {{col.name}}
@@ -54,17 +54,17 @@
           <td *ngIf="selectionMode == 'multiple'">
               <p-checkbox (onChange)="selectRow(rowData.id, rowData.index)" [ngModel]="isRowSelected(rowData.id)" [binary]="true"></p-checkbox>
           </td>
-          <ng-container *ngFor="let col of cols; trackBy: trackByFn">
+          <ng-container *ngFor="let col of cols; trackBy: colTrackByFn">
             <td [pTooltip]="getRowData(rowData, col)" *ngIf="!col.editable">
               <div style="display: flex; align-items: center; justify-content: center; gap: 18px;">
-                <ng-container *ngFor="let action of col.actions" >
+                <ng-container *ngFor="let action of col.actions; trackBy: actionTrackByFn" >
                   <span [pTooltip]="action.name" [class]="getClassForAction(action)" (click)="getMethodForAction(action, rowData)"></span>
                 </ng-container>
               </div>
               {{getRowData(rowData, col)}}
             </td>
             <td *ngIf="col.editable">
-              <soft-number [control]="getFormArrayControlById(col.field, rowData.id)" [showLabel]="false"></soft-number>
+              <soft-number [control]="getFormArrayControlByIndex(col.field, rowData.index)" [showLabel]="false"></soft-number>
             </td>
           </ng-container>
         </tr>

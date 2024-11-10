@@ -1,11 +1,11 @@
 <ng-container *transloco="let t">
-    @defer (when tierFormArray != null && storeTierFormArray != null) {
+    @defer (when tierFormArray != null && storeTierFormArray != null && discountCategoryFormArray != null) {
         <soft-panel>
             <panel-header [title]="detailsTitle" [bigTitle]="true" icon="pi pi-crown"></panel-header>
     
             <panel-body [normalBottomPadding]="true">
     
-                @for (tierFormGroup of getFormArrayGroups(this.tierFormArray); track tierFormGroup; let tierIndex = $index; let last = $last) {
+                @for (tierFormGroup of getFormArrayGroups(this.tierFormArray); track tierIndex.toString() + tierFormGroup.controls['id']; let tierIndex = $index; let last = $last) {
                     <index-card [index]="tierIndex" [last]="false" [crudMenu]="tierCrudMenu" (onMenuIconClick)="lastMenuIconIndexClicked = $event">
                         <form [formGroup]="tierFormGroup" class="grid">
                             <div class="col-12 md:col-4">
@@ -22,18 +22,21 @@
                             </div>
 
                             <div class="col-12">
-                                @for (storeTierFormGroup of getStoreTierFormArrayGroups(tierIndex); track storeTierFormGroup; let storeTierIndex = $index; let last = $last) {
+                                @for (storeTierFormGroup of getStoreTierFormArrayGroups(tierIndex); track storeTierIndex.toString() + storeTierFormGroup.controls.tierClientIndex.value.toString(); let storeTierIndex = $index; let last = $last) {
                                     <index-card [index]="storeTierIndex" [last]="false" [crudMenu]="storeTierCrudMenu" (onMenuIconClick)="lastMenuIconIndexClicked = $event">
                                         <form [formGroup]="storeTierFormGroup" class="grid">
                                             <div class="col-12">
-                                                <soft-textbox [control]="getStoreTierFormArrayControl('storeId', storeTierIndex, tierIndex)"></soft-textbox>
+                                                <soft-dropdown [control]="getStoreTierFormArrayControl('storeId', storeTierIndex, tierIndex)" (onChange)="storeChange($event, tierIndex, storeTierIndex)" [options]="storeOptions"></soft-dropdown>
                                             </div>
                                             <div class="col-12">
-                                                <soft-data-table [formArray]="discountCategoryFormArray" [formArrayItems]="getDiscountCategoryFormArrayItems(storeTierIndex, tierIndex)" 
-                                                [selectedItemIds]="alreadySelectedDiscountCategoryIdsForStore" [selectedItems]="alreadySelectedDiscountCategoryListForStore"
-                                                (onRowSelect)="rowSelect($event)" (onRowUnselect)="rowUnselect($event)" [totalRecords]="discountCategoryFormArray?.length" 
+                                                <soft-data-table #discountCategoryTable
+                                                [getSoftFormControl]="getDiscountCategoryFormArrayControl" [getFormArrayItems]="getDiscountCategoryFormArrayItems" 
+                                                [getAlreadySelectedItemIds]="getAlreadySelectedDiscountCategoryIdsForStore" 
+                                                [getAlreadySelectedItems]="getAlreadySelectedDiscountCategoryListForStore"
+                                                (onRowSelect)="rowSelect($event)" (onRowUnselect)="rowUnselect($event)" [totalRecords]="discountCategoryLength" 
                                                 selectionMode="multiple" [showAddButton]="false" [tableTitle]="t('DiscountCategoryList')" [cols]="discountCategoryCols" [hasLazyLoad]="false" [showPaginator]="false"
-                                                [showExportToExcelButton]="false" [formArrayControlNamesFromHtml]="formArrayControlNamesFromHtml"
+                                                [showExportToExcelButton]="false" [formArrayControlNamesFromHtml]="formArrayControlNamesFromHtml" 
+                                                [additionalIndexes]="getDiscountCategoryAdditionalIndexes(tierIndex, storeTierIndex)"
                                                 ></soft-data-table>
                                             </div>
                                         </form>
@@ -41,7 +44,7 @@
                                 }
 
                                 <div>
-                                    <p-button (onClick)="addNewStoreTier(null, tierIndex)" [label]="t('AddNewStoreTier')" icon="pi pi-plus"></p-button>
+                                    <p-button (onClick)="addNewStoreTier(tierIndex)" [label]="t('AddNewStoreTier')" icon="pi pi-plus"></p-button>
                                 </div>
                             </div>
     

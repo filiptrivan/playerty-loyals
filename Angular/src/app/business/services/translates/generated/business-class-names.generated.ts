@@ -25,6 +25,8 @@ export class TranslateClassNamesBusinessService {
                 return this.translocoService.translate('Segmentation');
             case 'SegmentationItem':
                 return this.translocoService.translate('SegmentationItem');
+            case 'StoreTier':
+                return this.translocoService.translate('StoreTier');
             case 'UserExtended':
                 return this.translocoService.translate('UserExtended');
             case 'Brand':
@@ -69,8 +71,6 @@ export class TranslateClassNamesBusinessService {
                 return this.translocoService.translate('PartnerRole');
             case 'Store':
                 return this.translocoService.translate('Store');
-            case 'StoreTier':
-                return this.translocoService.translate('StoreTier');
             case 'StoreTierDiscountCategory':
                 return this.translocoService.translate('StoreTierDiscountCategory');
             case 'Tier':

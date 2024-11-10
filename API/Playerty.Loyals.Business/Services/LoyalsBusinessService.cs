@@ -152,24 +152,32 @@ namespace Playerty.Loyals.Services
 
         #region Tier
 
-        public async Task<List<TierDTO>> SaveTierList(List<TierDTO> tierListDTO)
+        public async Task<TierSaveBodyDTO> SaveTier(TierSaveBodyDTO tierSaveBodyDTO)
         {
             List<int> exceptionHelper = new List<int>();
 
-            for (int i = 0; i < tierListDTO.Count; i++)
+            for (int i = 0; i < tierSaveBodyDTO.TierDTOList.Count; i++)
             {
-                if (tierListDTO[i].ValidTo <= tierListDTO[i].ValidFrom)
+                if (tierSaveBodyDTO.TierDTOList[i].ValidTo <= tierSaveBodyDTO.TierDTOList[i].ValidFrom)
                 {
                     exceptionHelper.Add(i+1);
                 }
 
-                if (i < tierListDTO.Count - 1)
+                if (i < tierSaveBodyDTO.TierDTOList.Count - 1)
                 {
-                    if (tierListDTO[i].ValidTo != tierListDTO[i + 1].ValidFrom)
+                    if (tierSaveBodyDTO.TierDTOList[i].ValidTo != tierSaveBodyDTO.TierDTOList[i + 1].ValidFrom)
                     {
                         exceptionHelper.Add(i+2); // FT: If he provided 0 - 10 and 12 - 20, the second is invalid.
                         i++; // FT: Skip the next one so we don't need to do distinct.
                     }
+                }
+
+                List<StoreTierDTO> storeTierDTOList = tierSaveBodyDTO.StoreTierDTOList.Where(x => x.TierClientIndex == i).ToList();
+
+                for (int j = 0; j < storeTierDTOList.Count; j++)
+                {
+                    List<DiscountCategoryDTO> discountCategoryDTOList = tierSaveBodyDTO.SelectedDiscountCategoryDTOList.Where(x => x.TierClientIndex == i && x.StoreTierClientIndex == j).ToList();
+
                 }
             }
 
@@ -179,26 +187,28 @@ namespace Playerty.Loyals.Services
                 throw new BusinessException($"Neispravno {helper}: {exceptionHelper.ToCommaSeparatedString()}. Nivoi lojalnosti moraju biti sačuvani rastućim redosledom (npr. Nivo 1: 1p - 10p, Nivo 2: 10p - 20p, Nivo 3: 20p - 30p). Ne možete dodati nivo lojalnosti čija je gornja granica veća (ili jednaka) od donje granice.");
             }
 
-            List<TierDTO> result = new List<TierDTO>();
+            List<TierDTO> tierResultDTOList = new List<TierDTO>();
 
             await _context.WithTransactionAsync(async () =>
             {
-                List<int> tierIdsDTO = tierListDTO.Select(x => x.Id).ToList();
+                List<int> tierIdsDTO = tierSaveBodyDTO.TierDTOList.Select(x => x.Id).ToList();
 
                 IQueryable<Tier> tiersForDeleteQuery = _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode() && tierIdsDTO.Contains(x.Id) == false);
 
                 await DeleteTiers(tiersForDeleteQuery);
 
-                foreach (TierDTO tierDTO in tierListDTO)
+                foreach (TierDTO tierDTO in tierSaveBodyDTO.TierDTOList)
                 {
                     tierDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
-                    result.Add(await SaveTierAndReturnDTOAsync(tierDTO, false, false));
+                    tierResultDTOList.Add(await SaveTierAndReturnDTOAsync(tierDTO, false, false));
                 }
 
                 await UpdatePartnerUsersTiers();
             });
 
-            return result;
+            tierSaveBodyDTO.TierDTOList = tierResultDTOList;
+
+            return tierSaveBodyDTO;
         }
 
         private async Task DeleteTiers(IQueryable<Tier> tiersForDeleteQuery)
@@ -864,28 +874,28 @@ namespace Playerty.Loyals.Services
             {
                 await SyncDiscountCategories();
 
-                IQueryable<DiscountCategory> discountCategoryQuery = _context.DbSet<DiscountCategory>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode());
+                IQueryable<DiscountCategory> discountCategoryQuery = _context.DbSet<DiscountCategory>().Where(x => x.Store.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode());
 
-                List<DiscountCategoryDTO> discountCategoryDTOList = await LoadDiscountCategoryDTOList(discountCategoryQuery, false); // 10
+                List<DiscountCategoryDTO> discountCategoryDTOList = await LoadDiscountCategoryDTOList(discountCategoryQuery, false); // 14
 
-                List<DiscountCategoryDTO> discountCategoryResultDTOList = discountCategoryDTOList.ToList(); // 10
+                List<DiscountCategoryDTO> discountCategoryResultDTOList = discountCategoryDTOList.ToList(); // 14
 
                 List<StoreTierDiscountCategory> storeTierDiscountCategoryList = await _context.DbSet<StoreTierDiscountCategory>().AsNoTracking().Where(x => storeTierIds.Contains(x.StoreTiersId)).ToListAsync();
                 //List<long> selectedDiscountCategoryIdsForStore = storeTierDiscountCategoryList.Select(x => x.DiscountCategoriesId).ToList();
 
-                foreach (long storeTierId in storeTierIds)
+                for (int i = 0; i < storeTierIds.Count; i++)
                 {
-                    List<DiscountCategoryDTO> helper = discountCategoryDTOList.ToList(); // 10
+                    List<DiscountCategoryDTO> helper = discountCategoryDTOList.ToList(); // 14
 
                     foreach (DiscountCategoryDTO discountCategoryDTO in helper)
                     {
-                        StoreTierDiscountCategory storeDiscountCategory = storeTierDiscountCategoryList.Where(x => x.DiscountCategoriesId == discountCategoryDTO.Id && x.StoreTiersId == storeTierId).SingleOrDefault();
+                        StoreTierDiscountCategory storeDiscountCategory = storeTierDiscountCategoryList.Where(x => x.DiscountCategoriesId == discountCategoryDTO.Id && x.StoreTiersId == storeTierIds[i]).SingleOrDefault();
 
                         if (storeDiscountCategory != null)
                         {
                             discountCategoryDTO.SelectedForStore = true;
                             discountCategoryDTO.Discount = storeDiscountCategory.Discount;
-                            discountCategoryDTO.StoreTierId = storeTierId;
+                            discountCategoryDTO.StoreTierId = storeTierIds[i];
                         }
                     }
 
@@ -926,11 +936,12 @@ namespace Playerty.Loyals.Services
             await _context.WithTransactionAsync(async () =>
             {
                 DbSet<DiscountCategory> dbSet = _context.DbSet<DiscountCategory>();
-                List<DiscountCategory> discountCategoryList = await _context.DbSet<DiscountCategory>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).ToListAsync();
+                List<DiscountCategory> discountCategoryList = await _context.DbSet<DiscountCategory>().Where(x => x.Store.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).ToListAsync();
 
                 foreach (DiscountCategoryDTO discountCategoryApiDTO in discountCategoryApiDTOList)
                 {
                     discountCategoryApiDTO.Discount = 0; // FT HACK: Only for passing the validation, we will not save this anywhere
+
                     DiscountCategoryDTOValidationRules validationRules = new DiscountCategoryDTOValidationRules();
                     validationRules.ValidateAndThrow(discountCategoryApiDTO);
 
@@ -949,8 +960,7 @@ namespace Playerty.Loyals.Services
                         discountCategoryList.Remove(discountCategory);
                     }
 
-                    int currentPartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
-                    discountCategory.Partner = await LoadInstanceAsync<Partner, int>(currentPartnerId, null);
+                    discountCategory.Store = await LoadInstanceAsync<Store, long>((long)discountCategoryApiDTO.StoreId, null);
                 }
 
                 _context.DbSet<DiscountCategory>().RemoveRange(discountCategoryList);

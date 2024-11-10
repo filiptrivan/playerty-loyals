@@ -11,6 +11,7 @@ namespace Playerty.Loyals.Business.Entities
 {
     public class StoreTier : BusinessObject<long>
     {
+        [ManyToOneRequired]
         public virtual Store Store { get; set; }
 
         [ManyToOneRequired]

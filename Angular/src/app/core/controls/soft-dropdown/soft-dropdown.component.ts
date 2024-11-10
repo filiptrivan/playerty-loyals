@@ -6,6 +6,7 @@ import { RequiredComponent } from '../../components/required/required.component'
 import { BaseDropdownControl } from '../base-dropdown-control';
 import { TranslocoService } from '@jsverse/transloco';
 import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels.generated';
+import { DropdownChangeEvent } from 'primeng/dropdown';
 
 @Component({
     selector: 'soft-dropdown',
@@ -21,7 +22,7 @@ import { TranslateLabelsService } from 'src/app/business/services/translates/tra
     ]
 })
 export class SoftDropdownComponent extends BaseDropdownControl implements OnInit {
-    // @Input() required: boolean = true; // TODO FT: delete if you don't need through whole app
+    @Output() onChange: EventEmitter<DropdownChangeEvent> = new EventEmitter();
 
     constructor(
         protected override translocoService: TranslocoService,
@@ -38,8 +39,8 @@ export class SoftDropdownComponent extends BaseDropdownControl implements OnInit
 
     }
 
-    select(event){
-
+    change(event: DropdownChangeEvent){
+        this.onChange.next(event);
     }
 
 }

@@ -21,6 +21,10 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('SelectedForStore');
             case 'storeTier':
                 return this.translocoService.translate('StoreTier');
+            case 'storeTierClientIndex':
+                return this.translocoService.translate('StoreTierClientIndex');
+            case 'tierClientIndex':
+                return this.translocoService.translate('TierClientIndex');
             case 'isMarkedAsRead':
                 return this.translocoService.translate('IsMarkedAsRead');
             case 'checked':
@@ -87,8 +91,8 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('StoreTierDTOList');
             case 'selectedDiscountCategoryDTOList':
                 return this.translocoService.translate('SelectedDiscountCategoryDTOList');
-            case 'partner':
-                return this.translocoService.translate('Partner');
+            case 'store':
+                return this.translocoService.translate('Store');
             case 'version':
                 return this.translocoService.translate('Version');
             case 'createdAt':
@@ -113,6 +117,8 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('PrimaryColor');
             case 'productsRecommendationEndpoint':
                 return this.translocoService.translate('ProductsRecommendationEndpoint');
+            case 'partner':
+                return this.translocoService.translate('Partner');
             case 'partnerNotifications':
                 return this.translocoService.translate('PartnerNotifications');
             case 'partnerUsers':
@@ -141,8 +147,6 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('CreateUserEndpoint');
             case 'updateUserGroupEndpoint':
                 return this.translocoService.translate('UpdateUserGroupEndpoint');
-            case 'store':
-                return this.translocoService.translate('Store');
             case 'storeTiers':
                 return this.translocoService.translate('StoreTiers');
             case 'discountCategories':

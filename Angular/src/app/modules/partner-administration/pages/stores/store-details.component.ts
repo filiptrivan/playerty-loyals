@@ -65,10 +65,6 @@ export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
 
         saveBody.storeDTO = this.storeFormGroup.getRawValue();
 
-        // saveBody.selectedStoreDiscountCategoryDTOList = this.discountCategoryFormArray.value
-        //     .filter(x => x.selectedForStore)
-        //     .map(x => { return { discountCategoriesId: x.id, discount: x.discount }});
-
         this.saveBody = saveBody;
     }
 }

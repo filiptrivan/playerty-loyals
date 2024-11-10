@@ -9,10 +9,12 @@ export class DiscountCategory extends BaseEntity
     discount?: number;
 	selectedForStore?: boolean;
 	storeTierId?: number;
+	storeTierClientIndex?: number;
+	tierClientIndex?: number;
 	name?: string;
 	code?: string;
-	partnerDisplayName?: string;
-	partnerId?: number;
+	storeDisplayName?: string;
+	storeId?: number;
 	version?: number;
 	id?: number;
 	createdAt?: Date;
@@ -23,10 +25,12 @@ export class DiscountCategory extends BaseEntity
         discount,
 		selectedForStore,
 		storeTierId,
+		storeTierClientIndex,
+		tierClientIndex,
 		name,
 		code,
-		partnerDisplayName,
-		partnerId,
+		storeDisplayName,
+		storeId,
 		version,
 		id,
 		createdAt,
@@ -35,10 +39,12 @@ export class DiscountCategory extends BaseEntity
         discount?: number;
 		selectedForStore?: boolean;
 		storeTierId?: number;
+		storeTierClientIndex?: number;
+		tierClientIndex?: number;
 		name?: string;
 		code?: string;
-		partnerDisplayName?: string;
-		partnerId?: number;
+		storeDisplayName?: string;
+		storeId?: number;
 		version?: number;
 		id?: number;
 		createdAt?: Date;
@@ -50,10 +56,12 @@ export class DiscountCategory extends BaseEntity
         this.discount = discount;
 		this.selectedForStore = selectedForStore;
 		this.storeTierId = storeTierId;
+		this.storeTierClientIndex = storeTierClientIndex;
+		this.tierClientIndex = tierClientIndex;
 		this.name = name;
 		this.code = code;
-		this.partnerDisplayName = partnerDisplayName;
-		this.partnerId = partnerId;
+		this.storeDisplayName = storeDisplayName;
+		this.storeId = storeId;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;
@@ -262,6 +270,56 @@ export class SegmentationItem extends BaseEntity
 		this.orderNumber = orderNumber;
 		this.segmentationDisplayName = segmentationDisplayName;
 		this.segmentationId = segmentationId;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
+export class StoreTier extends BaseEntity
+{
+    tierClientIndex?: number;
+	storeDisplayName?: string;
+	storeId?: number;
+	tierDisplayName?: string;
+	tierId?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        tierClientIndex,
+		storeDisplayName,
+		storeId,
+		tierDisplayName,
+		tierId,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        tierClientIndex?: number;
+		storeDisplayName?: string;
+		storeId?: number;
+		tierDisplayName?: string;
+		tierId?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('StoreTier'); 
+
+        this.tierClientIndex = tierClientIndex;
+		this.storeDisplayName = storeDisplayName;
+		this.storeId = storeId;
+		this.tierDisplayName = tierDisplayName;
+		this.tierId = tierId;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;
@@ -998,52 +1056,6 @@ export class Store extends BaseEntity
 		this.updateUserGroupEndpoint = updateUserGroupEndpoint;
 		this.partnerDisplayName = partnerDisplayName;
 		this.partnerId = partnerId;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class StoreTier extends BaseEntity
-{
-    storeDisplayName?: string;
-	storeId?: number;
-	tierDisplayName?: string;
-	tierId?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        storeDisplayName,
-		storeId,
-		tierDisplayName,
-		tierId,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        storeDisplayName?: string;
-		storeId?: number;
-		tierDisplayName?: string;
-		tierId?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('StoreTier'); 
-
-        this.storeDisplayName = storeDisplayName;
-		this.storeId = storeId;
-		this.tierDisplayName = tierDisplayName;
-		this.tierId = tierId;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;

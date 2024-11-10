@@ -21,7 +21,7 @@ namespace Playerty.Loyals.Business.Entities
         public string Code { get; set; }
 
         [ManyToOneRequired]
-        public virtual Partner Partner { get; set; }
+        public virtual Store Store { get; set; }
 
         public virtual List<StoreTier> StoreTiers { get; set; }
     }
