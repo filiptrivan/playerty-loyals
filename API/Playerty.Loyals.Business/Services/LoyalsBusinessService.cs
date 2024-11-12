@@ -171,14 +171,6 @@ namespace Playerty.Loyals.Services
                         i++; // FT: Skip the next one so we don't need to do distinct.
                     }
                 }
-
-                List<StoreTierDTO> storeTierDTOList = tierSaveBodyDTO.StoreTierDTOList.Where(x => x.TierClientIndex == i).ToList();
-
-                for (int j = 0; j < storeTierDTOList.Count; j++)
-                {
-                    List<DiscountCategoryDTO> discountCategoryDTOList = tierSaveBodyDTO.SelectedDiscountCategoryDTOList.Where(x => x.TierClientIndex == i && x.StoreTierClientIndex == j).ToList();
-
-                }
             }
 
             if (exceptionHelper.Count > 0)
@@ -188,6 +180,7 @@ namespace Playerty.Loyals.Services
             }
 
             List<TierDTO> tierResultDTOList = new List<TierDTO>();
+            List<StoreTierDTO> storeTierResultDTOList = new List<StoreTierDTO>();
 
             await _context.WithTransactionAsync(async () =>
             {
@@ -197,16 +190,32 @@ namespace Playerty.Loyals.Services
 
                 await DeleteTiers(tiersForDeleteQuery);
 
-                foreach (TierDTO tierDTO in tierSaveBodyDTO.TierDTOList)
+                for (int i = 0; i < tierSaveBodyDTO.TierDTOList.Count; i++)
                 {
+                    TierDTO tierDTO = tierSaveBodyDTO.TierDTOList[i];
                     tierDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
-                    tierResultDTOList.Add(await SaveTierAndReturnDTOAsync(tierDTO, false, false));
+                    TierDTO savedTierDTO = await SaveTierAndReturnDTOAsync(tierDTO, false, false);
+                    tierResultDTOList.Add(savedTierDTO);
+
+                    List<StoreTierDTO> storeTierDTOList = tierSaveBodyDTO.StoreTierDTOList.Where(x => x.TierClientIndex == i).ToList();
+                    for (int j = 0; j < storeTierDTOList.Count; j++)
+                    {
+                        StoreTierDTO storeTierDTO = storeTierDTOList[j];
+                        storeTierDTO.TierId = savedTierDTO.Id;
+                        StoreTierDTO savedStoreTierDTO = await SaveStoreTierAndReturnDTOAsync(storeTierDTO, false, false);
+                        savedStoreTierDTO.TierClientIndex = i;
+                        storeTierResultDTOList.Add(savedStoreTierDTO);
+
+                        List<DiscountCategoryDTO> discountCategoryDTOList = tierSaveBodyDTO.SelectedDiscountCategoryDTOList.Where(x => x.TierClientIndex == i && x.StoreTierClientIndex == j).ToList();
+                        await UpdateDiscountCategoryListForStoreTier(savedStoreTierDTO.Id, discountCategoryDTOList);
+                    }
                 }
 
                 await UpdatePartnerUsersTiers();
             });
 
             tierSaveBodyDTO.TierDTOList = tierResultDTOList;
+            tierSaveBodyDTO.StoreTierDTOList = storeTierResultDTOList;
 
             return tierSaveBodyDTO;
         }
@@ -215,7 +224,7 @@ namespace Playerty.Loyals.Services
         {
             await _context.WithTransactionAsync(async () =>
             {
-                //await SetEveryUsersTierToNullForTheProvidedTiers(await tiersForDeleteQuery.Select(x => x.Id).ToListAsync()); // FT: SET NULL is doing this now.
+                //await SetEveryUsersTierToNullForTheProvidedTiers(await tiersForDeleteQuery.Select(x => x.Id).ToListAsync()); // FT: SET NULL is doing this for us.
 
                 // FT: Can't use execute delete because of disabled changes tracker, we need to know which tiers are deleted so we can update partner users.
                 _context.DbSet<Tier>().RemoveRange(await tiersForDeleteQuery.ToListAsync());
@@ -295,6 +304,23 @@ namespace Playerty.Loyals.Services
 
                 return tier.Adapt<TierDTO>(Mapper.TierToDTOConfig());
             });
+        }
+
+        public async Task<List<StoreTierDTO>> LoadStoreTierDTOListForTierList(List<long> tierIds)
+        {
+            List<StoreTierDTO> storeTierDTOList = await LoadStoreTierDTOList(_context.DbSet<StoreTier>().Where(x => tierIds.Contains(x.Tier.Id)), false);
+
+            for (int i = 0; i < tierIds.Count; i++)
+            {
+                List<StoreTierDTO> storeTierDTOForTierList = storeTierDTOList.Where(x => x.TierId == tierIds[i]).ToList();
+
+                foreach (StoreTierDTO storeTierDTO in storeTierDTOForTierList)
+                {
+                    storeTierDTO.TierClientIndex = i;
+                }
+            }
+
+            return storeTierDTOList;
         }
 
         #endregion

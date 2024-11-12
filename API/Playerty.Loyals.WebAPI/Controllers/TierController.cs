@@ -102,7 +102,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<List<StoreTierDTO>> LoadStoreTierDTOListForTierList(List<long> tierIds)
         {
-            return await _loyalsBusinessService.LoadStoreTierDTOList(_context.DbSet<StoreTier>().Where(x => tierIds.Contains(x.Tier.Id)), false);
+            return await _loyalsBusinessService.LoadStoreTierDTOListForTierList(tierIds);
         }
 
         [HttpPost]

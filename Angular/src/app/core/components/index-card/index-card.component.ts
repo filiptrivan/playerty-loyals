@@ -20,10 +20,12 @@ export class IndexCardComponent {
     @Input() public index: number;
     @Input() public header: string = '';
     @Input() public description: string;
+    @Input() public showRemoveIcon: boolean;
 
     @Input() crudMenu: MenuItem[];
 
     @Output() onMenuIconClick: EventEmitter<number> = new EventEmitter();
+    @Output() onRemoveIconClick: EventEmitter<null> = new EventEmitter();
     
     constructor(
         protected formBuilder: FormBuilder,
@@ -37,6 +39,10 @@ export class IndexCardComponent {
 
     menuIconClick(index: number){
         this.onMenuIconClick.next(index);
+    }
+
+    removeIconClick(){
+        this.onRemoveIconClick.next(null);
     }
 
 }

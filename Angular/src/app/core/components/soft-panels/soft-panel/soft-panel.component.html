@@ -12,10 +12,13 @@
         </div>
     </ng-template>
 
-    <ng-template *ngIf="crudMenu" pTemplate="icons">
-        <div class="mr-2">
+    <ng-template pTemplate="icons">
+        <div *ngIf="crudMenu" class="mr-2">
             <i class="pi pi-ellipsis-h icon-hover" (click)="menuItemClick(index, $event)"></i>
             <p-menu #menu [model]="crudMenu" [popup]="true" appendTo="body"></p-menu>
+        </div>
+        <div *ngIf="showRemoveIcon" class="mr-2">
+            <i class="pi pi-minus icon-hover error-color-light" (click)="removeItemClick()"></i>
         </div>
     </ng-template>
 

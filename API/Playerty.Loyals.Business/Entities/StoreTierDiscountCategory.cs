@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Soft.Generator.Shared.Attributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,8 +10,10 @@ namespace Playerty.Loyals.Business.Entities
 {
     public class StoreTierDiscountCategory
     {
+        [MainEntityManyToMany(nameof(StoreTier))]
         public long StoreTiersId { get; set; }
 
+        [ExtendManyToMany(nameof(DiscountCategory))]
         public long DiscountCategoriesId { get; set; }
 
         [Range(0, 100)]

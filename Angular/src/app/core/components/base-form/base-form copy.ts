@@ -124,7 +124,7 @@ export class BaseFormCopy implements OnInit {
 
   onAfterControlInitialization(formControlName: string) { }
 
-  onSave(){
+  onSave(reroute: boolean = true){
     this.onBeforeSave();
 
     this.saveBody = this.saveBody ?? this.formGroup.getRawValue();
@@ -144,7 +144,13 @@ export class BaseFormCopy implements OnInit {
           if (formControl) {
             if (formControl instanceof SoftFormArray) {
               const formArray = formControl as SoftFormArray;
-              formArray.clear();
+              if (res[key].length !== 0) {
+                formArray.clear();
+              }
+              else{
+                // FT: This is okay because when we have M2M association with additional fields, we will not give back the list because we are not checking version on the server.
+                // console.error(`You returned empty array for control: ${formArray.translationKey}.`);
+              }
 
               res[key].forEach((model: any) => {
                 if (typeof model === 'object' && model !== null) {
@@ -164,7 +170,8 @@ export class BaseFormCopy implements OnInit {
           }
         });
 
-        this.rerouteOnTheNewEntity((res as any).rerouteId); // You always need to have id, because of id == 0 and version change
+        if (reroute)
+          this.rerouteOnTheNewEntity((res as any).rerouteId); // You always need to have id, because of id == 0 and version change
         
         this.onAfterSave();
       });
@@ -286,14 +293,8 @@ export class BaseFormCopy implements OnInit {
       else
         formControl = new SoftFormControl(formControlValue, { updateOn: 'blur' });
 
-      if (formControlName.endsWith('Id') && formControlName.length > 2) {
-        formControl.label = formControlName.substring(0, formControlName.length - 2);
-      } else if (formControlName.endsWith('DisplayName')) {
-        formControl.label = formControlName.replace('DisplayName', '');
-      } else {
-        formControl.label = formControlName;
-      }
-
+      formControl.label = formControlName;
+      
       formGroup.addControl(formControlName, formControl);
 
       this.setValidator(formControl, modelConstructor);
@@ -329,6 +330,24 @@ export class BaseFormCopy implements OnInit {
     }
 
     return filteredFormGroups[index].controls[formControlName] as SoftFormControl;
+  }
+
+  getFormArrayControls<T>(formControlName: keyof T & string, formArraySaveBodyName: string, filter?: (formGroups: SoftFormGroup<T>[]) => SoftFormGroup<T>[]): SoftFormControl[] {
+    if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
+      this.formArrayControlNamesFromHtml.push(formControlName);
+
+    let formArray: SoftFormArray<T[]> = this.formGroup.controls[formArraySaveBodyName] as SoftFormArray;
+
+    let filteredFormGroups: SoftFormGroup<T>[];
+
+    if (filter) {
+      filteredFormGroups = filter(formArray.controls as SoftFormGroup<T>[]);
+    }
+    else{
+      return (formArray.controls as SoftFormGroup<T>[]).map(x => x.controls[formControlName] as SoftFormControl);
+    }
+
+    return filteredFormGroups.map(x => x.controls[formControlName] as SoftFormControl);
   }
 
   // FT: Need to use this from html because can't do "as SoftFormControl" there
@@ -398,8 +417,6 @@ export class BaseFormCopy implements OnInit {
           invalid = true;
           this.messageService.warningMessage(this.translocoService.translate('ListCanNotBeEmpty', {value: this.translateClassNamesService.translate(formArray.translationKey)}))
         }
-
-        console.log(invalid)
       }
     });
 
@@ -450,15 +467,21 @@ export class BaseFormCopy implements OnInit {
             this.removeFormControlFromTheFormArray(formArray, this.lastMenuIconIndexClicked);
         }},
         {label: this.translocoService.translate('AddAbove'), icon: 'pi pi-arrow-up', command: () => {
+            this.onBeforeAddAbove(formArray, this.lastMenuIconIndexClicked);
             this.addNewFormControlToTheFormArray(formArray, modelConstructor, this.lastMenuIconIndexClicked);
         }},
         {label: this.translocoService.translate('AddBelow'), icon: 'pi pi-arrow-down', command: () => {
+            this.onBeforeAddBelow(formArray, this.lastMenuIconIndexClicked);
             this.addNewFormControlToTheFormArray(formArray, modelConstructor, this.lastMenuIconIndexClicked + 1);
         }},
     ];
 
     return crudMenuForOrderedData;
   }
+
+  onBeforeAddAbove(formArray: SoftFormArray, lastMenuIconIndexClicked: number) {}
+
+  onBeforeAddBelow(formArray: SoftFormArray, lastMenuIconIndexClicked: number) {}
 
   //#endregion
 

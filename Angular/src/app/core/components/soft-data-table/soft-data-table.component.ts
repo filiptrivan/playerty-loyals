@@ -52,7 +52,7 @@ export class SoftDataTableComponent implements OnInit {
   @Input() objectNameForTheRequest: string;
   @Input() controllerName: string;
   @Input() showPaginator: boolean = true; // FT: Pass only when hasLazyLoad === false
-  @Input() totalRecords: number; // FT: Pass only when hasLazyLoad === false
+  totalRecords: number;
   lastLazyLoadEvent: TableLazyLoadEvent;
   loading: boolean = true;
   
@@ -66,7 +66,7 @@ export class SoftDataTableComponent implements OnInit {
   isAllSelected: boolean = null;
   fakeIsAllSelected: boolean = false; // FT: Only for showing checkboxes, we will not send this to the backend
   isFirstTimeLazyLoad: boolean = true;
-  @Output() onIsAllSelectedChange: EventEmitter<boolean> = new EventEmitter();
+  @Output() onIsAllSelectedChange: EventEmitter<AllClickEvent> = new EventEmitter();
   @Input() selectedLazyLoadObservableMethod: (tableFilter: TableFilter) => Observable<SelectedRowsMethodResult>;
   @Input() additionalFilterIdLong: number;
   
@@ -78,13 +78,13 @@ export class SoftDataTableComponent implements OnInit {
   deleteRef: DynamicDialogRef;
 
   // Client side table
-  @Input() formArrayItems: any[]; // FT: Pass this only if you have some additional logic for showing data
+  // @Input() formArrayItems: any[]; // FT: Pass this only if you have some additional logic for showing data
   @Input() getFormArrayItems: (additionalIndexes?: any) => any[];
   @Input() formArrayControlNamesFromHtml: string[];
   @Input() hasLazyLoad: boolean = true; 
-  @Input() selectedItemIds: number[] = []; // FT: Pass only when hasLazyLoad === false, it's enough if the M2M association hasn't additional fields
+  selectedItemIds: number[] = []; // FT: Pass only when hasLazyLoad === false, it's enough if the M2M association hasn't additional fields
   @Input() getAlreadySelectedItemIds: (additionalIndexes?: any) => number[]; // FT: Pass only when hasLazyLoad === false, it's enough if the M2M association hasn't additional fields
-  @Input() selectedItems: any[] = []; // FT: Pass only when hasLazyLoad === false
+  selectedItems: any[] = []; // FT: Pass only when hasLazyLoad === false
   @Input() getAlreadySelectedItems: (additionalIndexes?: any) => any[]; // FT: Pass only when hasLazyLoad === false, it's enough if the M2M association hasn't additional fields
   @Input() getSoftFormControl: (formControlName: string, index: number, additionalIndexes?: any) => SoftFormControl;
   @Input() additionalIndexes: any;
@@ -169,34 +169,41 @@ export class SoftDataTableComponent implements OnInit {
 
   clientLoad(){
     this.loading = false;
-    this.items = this._getFormArrayItems();
-    this.items.forEach((item, index) => {
-      item.index = index;
-    });
+
+    this.loadFormArrayItems();
+    this.totalRecords = this.items.length;
+
     if (this.getAlreadySelectedItemIds) {
       this.selectedItemIds = this.getAlreadySelectedItemIds(this.additionalIndexes);
     }
     if (this.getAlreadySelectedItems) {
-      this.selectedItemIds = this.getAlreadySelectedItems(this.additionalIndexes);
+      this.selectedItems = this.getAlreadySelectedItems(this.additionalIndexes);
     }
     this.rowsSelectedNumber = this.selectedItemIds.length;
     this.setFakeIsAllSelected();
   }
+
+  private clientFilterCount = 0;
 
   filter(event: TableFilterEvent){
     if (this.hasLazyLoad && this.selectionMode === 'multiple')
       this.selectAll(false); // FT: We need to do it like this because: totalRecords: 1 -> selectedRecords from earlyer selection 2 -> unselect current -> all checkbox is set to true
 
     if (this.hasLazyLoad === false && this.selectionMode === 'multiple') {
-      this.items = this._getFormArrayItems();
-      this.items.forEach((item, index) => {
-        item.index = index;
-      });
+      if (this.clientFilterCount === 0) {
+        this.loadFormArrayItems();
+        this.clientFilterCount++;
+      }else{
+        this.clientFilterCount--;
+      }
     }
   }
 
-  private _getFormArrayItems(){
-    return this.formArrayItems ?? this.getFormArrayItems(this.additionalIndexes);
+  private loadFormArrayItems(){
+    this.items = this.getFormArrayItems(this.additionalIndexes);
+    this.items.forEach((item, index) => {
+      item.index = index;
+    });
   }
   
   getColHeaderWidth(filterType: string) {
@@ -346,7 +353,7 @@ export class SoftDataTableComponent implements OnInit {
     if (checked == true) {
       this.isAllSelected = true;
       this.fakeIsAllSelected = true;
-      this.onIsAllSelectedChange.next(true);
+      this.onIsAllSelectedChange.next(new AllClickEvent({checked: true, additionalIndexes: this.additionalIndexes}));
       this.rowsSelectedNumber = this.totalRecords;
       this.fakeSelectedItems = [...this.items.map(x => x.id)];
       this.selectedItemIds = [...this.items.map(x => x.id)]
@@ -354,7 +361,7 @@ export class SoftDataTableComponent implements OnInit {
     else{
       this.isAllSelected = false;
       this.fakeIsAllSelected = false;
-      this.onIsAllSelectedChange.next(false);
+      this.onIsAllSelectedChange.next(new AllClickEvent({checked: false, additionalIndexes: this.additionalIndexes}));
       this.rowsSelectedNumber = 0;
       this.fakeSelectedItems = [];
       this.selectedItemIds = [];
@@ -364,19 +371,19 @@ export class SoftDataTableComponent implements OnInit {
   selectRow(id: number, index: number) {
     if (this.isRowSelected(id)) {
       this.rowUnselect(id);
-      this.onRowUnselect.next(new RowClickEvent({ index: index, additionalIndexes: this.additionalIndexes }));
+      this.onRowUnselect.next(new RowClickEvent({ index: index, id: id, additionalIndexes: this.additionalIndexes }));
     } else {
       this.rowSelect(id);
-      this.onRowSelect.next(new RowClickEvent({ index: index, additionalIndexes: this.additionalIndexes }));
+      this.onRowSelect.next(new RowClickEvent({ index: index, id: id, additionalIndexes: this.additionalIndexes }));
     }
   }
 
   isRowSelected(id: number){
     if (this.hasLazyLoad){
-      return this.fakeSelectedItems.find(x => x == id) != undefined;
+      return this.fakeSelectedItems.find(x => x === id) != undefined;
     }
     else {
-      return this.selectedItemIds.find(x => x == id) != undefined;
+      return this.selectedItemIds.find(x => x === id) != undefined;
     }
   }
 
@@ -477,18 +484,40 @@ export class SelectedRowsMethodResult {
 
 export class RowClickEvent {
   index?: number;
+  id?: number;
   additionalIndexes?: any;
 
   constructor(
     {
       index, 
+      id, 
       additionalIndexes
     }:{
       index?: number; 
+      id?: number; 
       additionalIndexes?: any;
     } = {}
     ) {
     this.index = index;
+    this.id = id;
+    this.additionalIndexes = additionalIndexes;
+  }
+}
+
+export class AllClickEvent {
+  checked?: boolean;
+  additionalIndexes?: any;
+
+  constructor(
+    {
+      checked, 
+      additionalIndexes
+    }:{
+      checked?: boolean; 
+      additionalIndexes?: any;
+    } = {}
+    ) {
+    this.checked = checked;
     this.additionalIndexes = additionalIndexes;
   }
 }

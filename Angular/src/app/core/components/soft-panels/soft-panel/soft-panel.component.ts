@@ -13,8 +13,11 @@ export class SoftPanelComponent implements OnInit {
   @Input() isMiddleMultiplePanel: boolean = false;
   @Input() isLastMultiplePanel: boolean = false;
   @Input() crudMenu: MenuItem[];
+  @Input() showRemoveIcon: boolean = false;
   @Input() index: number;
+
   @Output() onMenuIconClick: EventEmitter<number> = new EventEmitter();
+  @Output() onRemoveIconClick: EventEmitter<null> = new EventEmitter();
 
   @ViewChild('menu') menu: Menu;
   
@@ -27,4 +30,9 @@ export class SoftPanelComponent implements OnInit {
     this.menu.toggle(event);
     this.onMenuIconClick.next(index);
   }
+
+  removeItemClick(){
+    this.onRemoveIconClick.next(null);
+  }
+
 }

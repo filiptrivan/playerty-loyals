@@ -10,7 +10,7 @@ import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
-import { Column, SelectedRowsMethodResult } from 'src/app/core/components/soft-data-table/soft-data-table.component';
+import { AllClickEvent, Column, SelectedRowsMethodResult } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
@@ -102,8 +102,8 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
         );
     }
 
-    isAllSelectedChange(event: boolean){
-        this.isAllSelected = event;
+    isAllSelectedChange(event: AllClickEvent){
+        this.isAllSelected = event.checked;
     }
 
     onLazyLoad(event: TableFilter){

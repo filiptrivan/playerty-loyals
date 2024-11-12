@@ -45,10 +45,21 @@ import { TranslateLabelsService } from 'src/app/business/services/translates/tra
     }
 
     getTranslatedLabel(): string{
-        if(this.label == null)
-          return this.translateLabelsService.translate(this.control?.label);
-        else
+        if(this.label == null){
+          let formControlName = this.control?.label;
+
+          if (formControlName.endsWith('Id') && formControlName.length > 2) {
+            formControlName = formControlName.substring(0, formControlName.length - 2);
+          } 
+          else if (formControlName.endsWith('DisplayName')) {
+            formControlName = formControlName.replace('DisplayName', '');
+          } 
+
+          return this.translateLabelsService.translate(formControlName);
+        }
+        else{
           return this.label;
+        }
     }
 
     getValidationErrrorMessages(){

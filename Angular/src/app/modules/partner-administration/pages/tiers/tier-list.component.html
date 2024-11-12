@@ -5,7 +5,7 @@
     
             <panel-body [normalBottomPadding]="true">
     
-                @for (tierFormGroup of getFormArrayGroups(this.tierFormArray); track tierIndex.toString() + tierFormGroup.controls['id']; let tierIndex = $index; let last = $last) {
+                @for (tierFormGroup of getFormArrayGroups(this.tierFormArray); track tierIndex; let tierIndex = $index; let last = $last) {
                     <index-card [index]="tierIndex" [last]="false" [crudMenu]="tierCrudMenu" (onMenuIconClick)="lastMenuIconIndexClicked = $event">
                         <form [formGroup]="tierFormGroup" class="grid">
                             <div class="col-12 md:col-4">
@@ -22,18 +22,20 @@
                             </div>
 
                             <div class="col-12">
-                                @for (storeTierFormGroup of getStoreTierFormArrayGroups(tierIndex); track storeTierIndex.toString() + storeTierFormGroup.controls.tierClientIndex.value.toString(); let storeTierIndex = $index; let last = $last) {
-                                    <index-card [index]="storeTierIndex" [last]="false" [crudMenu]="storeTierCrudMenu" (onMenuIconClick)="lastMenuIconIndexClicked = $event">
+                                @for (storeTierFormGroup of getStoreTierFormArrayGroups(tierIndex); track storeTierIndex; let storeTierIndex = $index; let last = $last) {
+                                    <index-card [index]="storeTierIndex" [showRemoveIcon]="true" (onRemoveIconClick)="removeStoreTier(tierIndex, storeTierIndex)" [last]="false">
                                         <form [formGroup]="storeTierFormGroup" class="grid">
                                             <div class="col-12">
                                                 <soft-dropdown [control]="getStoreTierFormArrayControl('storeId', storeTierIndex, tierIndex)" (onChange)="storeChange($event, tierIndex, storeTierIndex)" [options]="storeOptions"></soft-dropdown>
                                             </div>
                                             <div class="col-12">
                                                 <soft-data-table #discountCategoryTable
-                                                [getSoftFormControl]="getDiscountCategoryFormArrayControl" [getFormArrayItems]="getDiscountCategoryFormArrayItems" 
+                                                [getFormArrayItems]="getDiscountCategoryFormArrayItems" 
+                                                [getSoftFormControl]="getDiscountCategoryFormArrayControl" 
                                                 [getAlreadySelectedItemIds]="getAlreadySelectedDiscountCategoryIdsForStore" 
                                                 [getAlreadySelectedItems]="getAlreadySelectedDiscountCategoryListForStore"
-                                                (onRowSelect)="rowSelect($event)" (onRowUnselect)="rowUnselect($event)" [totalRecords]="discountCategoryLength" 
+                                                (onIsAllSelectedChange)="allSelected($event)"
+                                                (onRowSelect)="rowSelect($event)" (onRowUnselect)="rowUnselect($event)" 
                                                 selectionMode="multiple" [showAddButton]="false" [tableTitle]="t('DiscountCategoryList')" [cols]="discountCategoryCols" [hasLazyLoad]="false" [showPaginator]="false"
                                                 [showExportToExcelButton]="false" [formArrayControlNamesFromHtml]="formArrayControlNamesFromHtml" 
                                                 [additionalIndexes]="getDiscountCategoryAdditionalIndexes(tierIndex, storeTierIndex)"
@@ -59,7 +61,7 @@
             </panel-body>
     
             <panel-footer>
-                <p-button (onClick)="onSave()" [label]="t('Save')" icon="pi pi-save"></p-button>
+                <p-button (onClick)="onSave(false)" [label]="t('Save')" icon="pi pi-save"></p-button>
             </panel-footer>
     
         </soft-panel>

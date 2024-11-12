@@ -10,11 +10,12 @@ import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { Column, RowClickEvent, SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';
+import { AllClickEvent, Column, RowClickEvent, SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { SoftFormArray, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import 'zone.js';
 
 @Component({
     selector: 'tier-list',
@@ -46,7 +47,8 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     discountCategoryLength: number;
     alreadySelectedDiscountCategoryListForStore: DiscountCategory[] = [];
     alreadySelectedDiscountCategoryIdsForStore: number[] = [];
-    @ViewChildren('discountCategoryTable') discountCategoryTables!: QueryList<SoftDataTableComponent>; // FT: Made for refreshing table
+    discountCategorySelectedList: {id: number, additionalIndexes: DiscountCategoryAdditionalIndexes}[] = [];
+    @ViewChildren('discountCategoryTable') discountCategoryTables: QueryList<SoftDataTableComponent>; // FT: Made for refreshing table
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -101,6 +103,58 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         this.addNewFormControlToTheFormArray(this.tierFormArray, new Tier({id: 0}), index);
     }
 
+    override onBeforeAddBelow(formArray: SoftFormArray, lastMenuIconIndexClicked: number): void {
+        if (formArray.translationKey === this.tierTranslationKey) {
+            this.storeTierFormArray.value.forEach((storeTier, index) => {
+                if (storeTier.tierClientIndex == null || storeTier.tierClientIndex <= lastMenuIconIndexClicked)
+                    return;
+                
+                (this.storeTierFormArray.controls[index] as SoftFormGroup<StoreTier>).controls.tierClientIndex.setValue(storeTier.tierClientIndex + 1);
+            });
+
+            this.discountCategoryFormArray.value.forEach((discountCategory, index) => {
+                if (discountCategory.tierClientIndex == null || discountCategory.tierClientIndex <= lastMenuIconIndexClicked)
+                    return;
+                
+                (this.discountCategoryFormArray.controls[index] as SoftFormGroup<DiscountCategory>).controls.tierClientIndex.setValue(discountCategory.tierClientIndex + 1);
+            });
+
+            let discountCategoryTablesForTier = this.discountCategoryTables.filter(x => (x.additionalIndexes as DiscountCategoryAdditionalIndexes).tierIndex > lastMenuIconIndexClicked);
+
+            discountCategoryTablesForTier.forEach(table => {
+                const additionalIndexes = table.additionalIndexes as DiscountCategoryAdditionalIndexes;
+                this.setDiscountCategoryAdditionalIndexes(table, additionalIndexes.tierIndex + 1, additionalIndexes.storeTierIndex);
+                // table.clientLoad();
+            });
+        }
+    }
+
+    override onBeforeAddAbove(formArray: SoftFormArray, lastMenuIconIndexClicked: number): void {
+        if (formArray.translationKey === this.tierTranslationKey) {
+            this.storeTierFormArray.value.forEach((storeTier, index) => {
+                if (storeTier.tierClientIndex == null || storeTier.tierClientIndex < lastMenuIconIndexClicked)
+                    return;
+                
+                (this.storeTierFormArray.controls[index] as SoftFormGroup<StoreTier>).controls.tierClientIndex.setValue(storeTier.tierClientIndex + 1);
+            });
+
+            this.discountCategoryFormArray.value.forEach((discountCategory, index) => {
+                if (discountCategory.tierClientIndex == null || discountCategory.tierClientIndex < lastMenuIconIndexClicked)
+                    return;
+                
+                (this.discountCategoryFormArray.controls[index] as SoftFormGroup<DiscountCategory>).controls.tierClientIndex.setValue(discountCategory.tierClientIndex + 1);
+            });
+
+            let discountCategoryTablesForTier = this.discountCategoryTables.filter(x => (x.additionalIndexes as DiscountCategoryAdditionalIndexes).tierIndex >= lastMenuIconIndexClicked);
+
+            discountCategoryTablesForTier.forEach(table => {
+                const additionalIndexes = table.additionalIndexes as DiscountCategoryAdditionalIndexes;
+                this.setDiscountCategoryAdditionalIndexes(table, additionalIndexes.tierIndex + 1, additionalIndexes.storeTierIndex);
+                // table.clientLoad();
+            });
+        }
+    }
+
     getTierFormArrayControlByIndex(formControlName: keyof Tier & string, index: number){
         return this.getFormArrayControlByIndex<Tier>(formControlName, this.tierDTOListSaveBodyName, index);
     }
@@ -110,6 +164,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     //#region StoreTier
 
     initStoreTierFormArray(storeTierList: StoreTier[]){
+        // this.assignStoreTierListIndexes(storeTierList);
         this.storeTierFormArray = this.initFormArray(storeTierList, this.storeTierModel, this.storeTierDTOListSaveBodyName, this.storeTierTranslationKey);
         this.storeTierCrudMenu = this.getCrudMenuForOrderedData(this.storeTierFormArray, new StoreTier({id: 0}));
     }
@@ -117,6 +172,10 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     addNewStoreTier(tierIndex: number){
         // FT: For the Tier we are not assigning index because we are sending the ordered list from the UI and we will get the index in foreach on the backend, but here we need orderNumber so we can filter 
         this.addNewFormControlToTheFormArray(this.storeTierFormArray, new StoreTier({id: 0, tierClientIndex: tierIndex}), null);
+    }
+
+    removeStoreTier(tierIndex: number, storeTierIndex: number){
+
     }
 
     storeChange(event: DropdownChangeEvent, tierIndex: number, storeTierIndex: number){
@@ -149,9 +208,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
             this.addNewFormControlToTheFormArray(this.discountCategoryFormArray, newDiscountCategory, null, this.discountDisableLambda)
         });
 
-        const discountCategoryTable: SoftDataTableComponent = this.discountCategoryTables.find(x => 
-            (x.additionalIndexes as DiscountCategoryAdditionalIndexes).tierIndex === storeTierIndex && 
-            (x.additionalIndexes as DiscountCategoryAdditionalIndexes).storeTierIndex === storeTierIndex);
+        const discountCategoryTable: SoftDataTableComponent = this.findDiscountCategoryTable(tierIndex, storeTierIndex);
 
         discountCategoryTable.clientLoad();
     }
@@ -182,7 +239,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         this.discountCategoryLength = discountCategories.length;
     }
 
-    getAlreadySelectedDiscountCategoryIdsForStore = (additionalIndexes: DiscountCategoryAdditionalIndexes) => {
+    getAlreadySelectedDiscountCategoryIdsForStore = (additionalIndexes: DiscountCategoryAdditionalIndexes): number[] => {
         return this.discountCategoryFormArray.value.filter(x => x.storeTierClientIndex === additionalIndexes.storeTierIndex && x.tierClientIndex === additionalIndexes.tierIndex && x.selectedForStore).map(x => x.id);
     }
 
@@ -202,12 +259,45 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         return this.discountCategoryFormArray.value.filter(x => x.storeTierClientIndex === additionalIndexes.storeTierIndex && x.tierClientIndex === additionalIndexes.tierIndex);
     }
 
+    allSelected(event: AllClickEvent){
+        const additionalIndexes = event.additionalIndexes as DiscountCategoryAdditionalIndexes;
+
+        const formControls = this.getFormArrayControls<DiscountCategory>('discount', this.discountCategoriesSaveBodyName, (formGroups: SoftFormGroup<DiscountCategory>[]): SoftFormGroup[] => {
+            return formGroups.filter(x => x.controls.storeTierClientIndex.value === additionalIndexes.storeTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
+        });
+
+        if (event.checked === true) {
+            formControls.forEach(control => {
+                control.enable();
+
+                if (control.label === 'id') {
+                    this.discountCategorySelectedList.push({id: control.value, additionalIndexes: event.additionalIndexes});
+                }
+            });
+        }
+        else{
+            formControls.forEach(control => {
+                control.disable();
+            });
+
+            const selectedIndexes = this.discountCategorySelectedList
+                .map((item, index) => (item.additionalIndexes === event.additionalIndexes ? index : -1))
+                .filter(index => index !== -1);
+
+            for (let i = selectedIndexes.length - 1; i >= 0; i--) {
+                this.discountCategorySelectedList.splice(selectedIndexes[i], 1);
+            }
+        }
+    }
+
     rowSelect(event: RowClickEvent){
         const additionalIndexes = event.additionalIndexes as DiscountCategoryAdditionalIndexes;
 
         const formControl = this.getFormArrayControlByIndex<DiscountCategory>('discount', this.discountCategoriesSaveBodyName, event.index, (formGroups: SoftFormGroup<DiscountCategory>[]): SoftFormGroup[] => {
             return formGroups.filter(x => x.controls.storeTierClientIndex.value === additionalIndexes.storeTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
+
+        this.discountCategorySelectedList.push({id: event.id, additionalIndexes: event.additionalIndexes});
 
         formControl.enable();
     }
@@ -219,6 +309,12 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
             return formGroups.filter(x => x.controls.storeTierClientIndex.value === additionalIndexes.storeTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
         
+        const index = this.discountCategorySelectedList.findIndex(item => item.id === event.id && item.additionalIndexes === event.additionalIndexes);
+          
+        if (index !== -1) {
+            this.discountCategorySelectedList.splice(index, 1);
+        }
+
         formControl.disable();
     }
 
@@ -233,16 +329,18 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         return new DiscountCategoryAdditionalIndexes({tierIndex: tierIndex, storeTierIndex: storeTierIndex});
     }
 
-    //#endregion
-
-    ngDoCheck(){
-        console.log('CHANGE DETECTED');
-    
-        // Log current values of properties
-        console.log('tierFormArray:', this.tierFormArray);
-        console.log('storeTierFormArray:', this.storeTierFormArray);
-        console.log('discountCategoryFormArray:', this.discountCategoryFormArray);
+    setDiscountCategoryAdditionalIndexes(table: SoftDataTableComponent, tierIndex: number, storeTierIndex: number){
+        (table.additionalIndexes as DiscountCategoryAdditionalIndexes).tierIndex = tierIndex;
+        (table.additionalIndexes as DiscountCategoryAdditionalIndexes).storeTierIndex = storeTierIndex;
     }
+
+    findDiscountCategoryTable(tierIndex: number, storeTierIndex: number){
+        return this.discountCategoryTables.find(x => 
+            (x.additionalIndexes as DiscountCategoryAdditionalIndexes).tierIndex === tierIndex && 
+            (x.additionalIndexes as DiscountCategoryAdditionalIndexes).storeTierIndex === storeTierIndex);
+    }
+
+    //#endregion
 
     override onBeforeSave(): void {
         let saveBody: TierSaveBody = new TierSaveBody();
@@ -251,10 +349,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         saveBody.storeTierDTOList = this.storeTierFormArray.getRawValue();
 
         saveBody.selectedDiscountCategoryDTOList = this.discountCategoryFormArray.value
-            .filter(x => x.selectedForStore)
-            .map(x => { return { discountCategoriesId: x.id, discount: x.discount }});
-
-        console.log(saveBody)
+            .filter(x => this.discountCategorySelectedList.some(s => s.id === x.id && s.additionalIndexes.tierIndex === x.tierClientIndex && s.additionalIndexes.storeTierIndex === x.storeTierClientIndex))
 
         this.saveBody = saveBody;
     }
