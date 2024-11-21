@@ -86,6 +86,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
+        public async Task<TierSaveBodyDTO> LoadTierSaveBodyDTO()
+        {
+            return await _loyalsBusinessService.LoadTierSaveBodyDTO();
+        }
+
+        [HttpGet]
+        [AuthGuard]
         public async Task<List<TierDTO>> LoadTierListFromLargestToSmallest()
         {
             return await _loyalsBusinessService.LoadTierDTOList(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderByDescending(x => x.ValidFrom), false);
@@ -98,19 +105,19 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.GetTierDTOForTheCurrentPartnerUser();
         }
 
-        [HttpPost]
-        [AuthGuard]
-        public async Task<List<StoreTierDTO>> LoadStoreTierDTOListForTierList(List<long> tierIds)
-        {
-            return await _loyalsBusinessService.LoadStoreTierDTOListForTierList(tierIds);
-        }
+        //[HttpPost]
+        //[AuthGuard]
+        //public async Task<List<StoreTierDTO>> LoadStoreTierDTOListForTierList(List<long> tierIds)
+        //{
+        //    return await _loyalsBusinessService.LoadStoreTierDTOListForTierList(tierIds);
+        //}
 
-        [HttpPost]
-        [AuthGuard]
-        public async Task<List<DiscountCategoryDTO>> LoadDiscountCategoryDTOListForCurrentPartner(List<long> storeTierIds)
-        {
-            return await _loyalsBusinessService.LoadDiscountCategoryDTOListForCurrentPartner(storeTierIds);
-        }
+        //[HttpPost]
+        //[AuthGuard]
+        //public async Task<List<DiscountCategoryDTO>> LoadDiscountCategoryDTOListForCurrentPartner(List<long> storeTierIds)
+        //{
+        //    return await _loyalsBusinessService.LoadDiscountCategoryDTOListForCurrentPartner(storeTierIds);
+        //}
 
         //[HttpGet]
         //[AuthGuard]

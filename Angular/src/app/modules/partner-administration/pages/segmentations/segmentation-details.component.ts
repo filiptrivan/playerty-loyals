@@ -9,7 +9,7 @@ import { Segmentation, SegmentationItem, SegmentationSaveBody } from 'src/app/bu
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
-import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
+import { BaseFormCopy, LastMenuIconIndexClicked } from 'src/app/core/components/base-form/base-form copy';
 import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
@@ -23,6 +23,7 @@ export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit
     segmentationItemsSaveBodyName: string = nameof<SegmentationSaveBody>('segmentationItemsDTO');
     segmentationItemsTranslationKey: string = new SegmentationItem().typeName;
     segmentationItemsFormArray: SoftFormArray<SegmentationItem[]>;
+    segmentationItemLastIndexClicked: LastMenuIconIndexClicked = new LastMenuIconIndexClicked();
     
     segmentationFormGroup: SoftFormGroup<Segmentation>;
     segmentationSaveBodyName: string = nameof<SegmentationSaveBody>('segmentationDTO');
@@ -72,7 +73,7 @@ export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit
 
     initSegmentationItemsFormArray(segmentationItems: SegmentationItem[]){
         this.segmentationItemsFormArray = this.initFormArray(segmentationItems, this.segmentationItemModel, this.segmentationItemsSaveBodyName, this.segmentationItemsTranslationKey, true);
-        this.crudMenu = this.getCrudMenuForOrderedData(this.segmentationItemsFormArray, new SegmentationItem({id: 0}));
+        this.crudMenu = this.getCrudMenuForOrderedData(this.segmentationItemsFormArray, new SegmentationItem({id: 0}), this.segmentationItemLastIndexClicked);
         this.segmentationItemsFormArray.validator = this.validatorService.isFormArrayEmpty(this.segmentationItemsFormArray);
     }
 

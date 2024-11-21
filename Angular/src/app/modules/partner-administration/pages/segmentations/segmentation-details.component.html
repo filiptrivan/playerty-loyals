@@ -21,7 +21,7 @@
                                 <panel-header [title]="t('SegmentationItemList')" icon="pi pi-tags"></panel-header>
                                 <panel-body [normalBottomPadding]="true">
                                     @for (formGroup of getFormArrayGroups(segmentationItemsFormArray); track formGroup; let index = $index; let last = $last) {
-                                        <index-card [index]="index" [last]="false" [crudMenu]="crudMenu" (onMenuIconClick)="lastMenuIconIndexClicked = $event">
+                                        <index-card [index]="index" [last]="false" [crudMenu]="crudMenu" (onMenuIconClick)="segmentationItemLastIndexClicked.index = $event">
                                             <form [formGroup]="formGroup" class="grid">
                                                 <div class="col-12">
                                                     <soft-textbox [control]="getSegmentationItemFormArrayControlByIndex(index)"></soft-textbox>

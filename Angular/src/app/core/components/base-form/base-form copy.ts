@@ -17,6 +17,7 @@ import { getParentUrl } from '../../services/helper-functions';
 import { TranslocoService } from '@jsverse/transloco';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
+import { BaseEntity } from '../../entities/base-entity';
 
 @Component({
   selector: 'base-form',
@@ -368,6 +369,9 @@ export class BaseFormCopy implements OnInit {
   }
 
   addNewFormControlToTheFormArray(formArray: SoftFormArray, modelConstructor: any, index: number, disableLambda?: (formControlName: string, model: any) => boolean) {
+    console.log(formArray)
+    console.log(index)
+
     if (index == null) {
       formArray.push(this.createFormGroup(modelConstructor, disableLambda));
     }else{
@@ -459,30 +463,49 @@ export class BaseFormCopy implements OnInit {
   onAfterSaveList(){}
   onAfterSaveListRequest(){}
 
-  lastMenuIconIndexClicked: number;
-
-  getCrudMenuForOrderedData(formArray: SoftFormArray, modelConstructor: any){
+  // FT: Sending class because of reference type
+  getCrudMenuForOrderedData(formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked){
     let crudMenuForOrderedData: MenuItem[] = [
         {label: this.translocoService.translate('Remove'), icon: 'pi pi-minus', command: () => {
-            this.removeFormControlFromTheFormArray(formArray, this.lastMenuIconIndexClicked);
+          this.onBeforeRemove(formArray, modelConstructor, lastMenuIconIndexClicked.index);
+          this.removeFormControlFromTheFormArray(formArray, lastMenuIconIndexClicked.index);
         }},
         {label: this.translocoService.translate('AddAbove'), icon: 'pi pi-arrow-up', command: () => {
-            this.onBeforeAddAbove(formArray, this.lastMenuIconIndexClicked);
-            this.addNewFormControlToTheFormArray(formArray, modelConstructor, this.lastMenuIconIndexClicked);
+          this.onBeforeAddAbove(formArray, modelConstructor, lastMenuIconIndexClicked.index);
+          this.addNewFormControlToTheFormArray(formArray, modelConstructor, lastMenuIconIndexClicked.index);
         }},
         {label: this.translocoService.translate('AddBelow'), icon: 'pi pi-arrow-down', command: () => {
-            this.onBeforeAddBelow(formArray, this.lastMenuIconIndexClicked);
-            this.addNewFormControlToTheFormArray(formArray, modelConstructor, this.lastMenuIconIndexClicked + 1);
+          this.onBeforeAddBelow(formArray, modelConstructor, lastMenuIconIndexClicked.index);
+          this.addNewFormControlToTheFormArray(formArray, modelConstructor, lastMenuIconIndexClicked.index + 1);
         }},
     ];
 
     return crudMenuForOrderedData;
   }
 
-  onBeforeAddAbove(formArray: SoftFormArray, lastMenuIconIndexClicked: number) {}
+  onBeforeRemove(formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: number) {}
 
-  onBeforeAddBelow(formArray: SoftFormArray, lastMenuIconIndexClicked: number) {}
+  onBeforeAddAbove(formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: number) {}
+
+  onBeforeAddBelow(formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: number) {}
 
   //#endregion
 
+}
+
+export class LastMenuIconIndexClicked extends BaseEntity
+{
+    index?: number;
+
+    constructor(
+    {
+        index,
+    }:{
+        index?: number;
+    } = {}
+    ) {
+        super('LastMenuIconIndexClicked'); 
+
+        this.index = index;
+    }
 }

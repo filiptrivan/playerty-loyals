@@ -10,6 +10,6 @@ namespace Playerty.Loyals.Business.DTO
     {
         public List<TierDTO> TierDTOList { get; set; }
         public List<StoreTierDTO> StoreTierDTOList { get; set; }
-        public List<DiscountCategoryDTO> SelectedDiscountCategoryDTOList { get; set; }
+        public List<StoreTierDiscountCategoryDTO> StoreTierDiscountCategoryDTOList { get; set; }
     }
 }

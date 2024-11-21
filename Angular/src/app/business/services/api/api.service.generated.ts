@@ -28,6 +28,7 @@ import { PartnerNotificationSaveBody } from '../../entities/generated/business-e
 import { QrCode } from '../../entities/generated/business-entities.generated';
 import { DiscountCategory } from '../../entities/generated/business-entities.generated';
 import { PartnerUser } from '../../entities/generated/business-entities.generated';
+import { StoreTierDiscountCategory } from '../../entities/generated/business-entities.generated';
 import { Gender } from '../../entities/generated/business-entities.generated';
 import { Store } from '../../entities/generated/business-entities.generated';
 import { PartnerNotificationPartnerUser } from '../../entities/generated/business-entities.generated';
@@ -36,7 +37,6 @@ import { TransactionStatus } from '../../entities/generated/business-entities.ge
 import { Transaction } from '../../entities/generated/business-entities.generated';
 import { PartnerRole } from '../../entities/generated/business-entities.generated';
 import { NotificationUser } from '../../entities/generated/business-entities.generated';
-import { StoreTierDiscountCategory } from '../../entities/generated/business-entities.generated';
 import { PartnerNotification } from '../../entities/generated/business-entities.generated';
 import { Partner } from '../../entities/generated/business-entities.generated';
 import { PartnerPermission } from '../../entities/generated/business-entities.generated';
@@ -326,20 +326,16 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.get<Tier[]>(`${environment.apiUrl}/Tier/LoadTierDTOList`);
     }
 
+    loadTierSaveBodyDTO(): Observable<TierSaveBody> {
+        return this.http.get<TierSaveBody>(`${environment.apiUrl}/Tier/LoadTierSaveBodyDTO`);
+    }
+
     loadTierListFromLargestToSmallest(): Observable<Tier[]> {
         return this.http.get<Tier[]>(`${environment.apiUrl}/Tier/LoadTierListFromLargestToSmallest`);
     }
 
     getTierForTheCurrentPartnerUser(): Observable<Tier> {
         return this.http.get<Tier>(`${environment.apiUrl}/Tier/GetTierForTheCurrentPartnerUser`);
-    }
-
-    loadStoreTierDTOListForTierList(tierIds: number[]): Observable<StoreTier[]> { 
-        return this.http.post<StoreTier[]>(`${environment.apiUrl}/Tier/LoadStoreTierDTOListForTierList`, tierIds, environment.httpOptions);
-    }
-
-    loadDiscountCategoryDTOListForCurrentPartner(storeTierIds: number[]): Observable<DiscountCategory[]> { 
-        return this.http.post<DiscountCategory[]>(`${environment.apiUrl}/Tier/LoadDiscountCategoryDTOListForCurrentPartner`, storeTierIds, environment.httpOptions);
     }
 
     loadPartnerRoleListForTable(dto: TableFilter): Observable<TableResponse> { 

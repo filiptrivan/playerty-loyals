@@ -9,9 +9,10 @@ import { DiscountCategory, StoreTier, Tier, TierSaveBody } from 'src/app/busines
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
-import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
+import { BaseFormCopy, LastMenuIconIndexClicked } from 'src/app/core/components/base-form/base-form copy';
 import { AllClickEvent, Column, RowClickEvent, SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { SoftFormArray, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { BaseEntity } from 'src/app/core/entities/base-entity';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
@@ -29,6 +30,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     tierTranslationKey: string = new Tier().typeName;
     tierFormArray: SoftFormArray<Tier[]>;
     tierCrudMenu: MenuItem[];
+    tierLastIndexClicked: LastMenuIconIndexClicked = new LastMenuIconIndexClicked();
 
     // StoreTier
     storeTierModel: StoreTier = new StoreTier();
@@ -37,6 +39,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     storeTierFormArray: SoftFormArray<StoreTier[]>;
     storeTierCrudMenu: MenuItem[];
     storeOptions: PrimengOption[];
+    storeTierLastIndexClicked: LastMenuIconIndexClicked = new LastMenuIconIndexClicked();
 
     // DiscountCategories M2M
     discountCategoryCols: Column[];
@@ -75,17 +78,19 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         ];
 
         forkJoin({
-            tierList: this.apiService.loadTierDTOList(),
-            storeNamebookList: this.apiService.loadStoreListForDropdown()
-        }).subscribe(({ tierList, storeNamebookList }) => {
-            this.initTierFormArray(tierList);
-            this.apiService.loadStoreTierDTOListForTierList(tierList.map(x => x.id)).subscribe(storeTierList => {
-                this.initStoreTierFormArray(storeTierList);
+            // tierList: this.apiService.loadTierDTOList(),
+            tierSaveBody: this.apiService.loadTierSaveBodyDTO(),
+            storeNamebookList: this.apiService.loadStoreListForDropdown(),
+        }).subscribe(({ tierSaveBody, storeNamebookList }) => {
+            this.initTierFormArray(tierSaveBody.tierDTOList);
+            // this.initTierFormArray(tierList);
+            // this.apiService.loadStoreTierDTOListForTierList(tierList.map(x => x.id)).subscribe(storeTierList => {
+                this.initStoreTierFormArray(tierSaveBody.storeTierDTOList);
 
-                this.apiService.loadDiscountCategoryDTOListForCurrentPartner(storeTierList.map(x => x.id)).subscribe(discountCategories => {
-                    this.initDiscountCategoriesFormArray(discountCategories);
-                });
-            });
+                // this.apiService.loadDiscountCategoryDTOListForCurrentPartner(storeTierList.map(x => x.id)).subscribe(discountCategories => {
+                    this.initDiscountCategoriesFormArray(tierSaveBody.discountCategoryDTOList);
+                // });
+            // });
 
             this.storeOptions = storeNamebookList.map(n => { return { label: n.displayName, value: n.id }});
         });
@@ -95,7 +100,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
 
     initTierFormArray(tierList: Tier[]){
         this.tierFormArray = this.initFormArray(tierList, this.tierModel, this.tierDTOListSaveBodyName, this.tierTranslationKey, true);
-        this.tierCrudMenu = this.getCrudMenuForOrderedData(this.tierFormArray, new Tier({id: 0}));
+        this.tierCrudMenu = this.getCrudMenuForOrderedData(this.tierFormArray, new Tier({id: 0}), this.tierLastIndexClicked);
         this.tierFormArray.validator = this.validatorService.isFormArrayEmpty(this.tierFormArray);
     }
 
@@ -103,8 +108,8 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         this.addNewFormControlToTheFormArray(this.tierFormArray, new Tier({id: 0}), index);
     }
 
-    override onBeforeAddBelow(formArray: SoftFormArray, lastMenuIconIndexClicked: number): void {
-        if (formArray.translationKey === this.tierTranslationKey) {
+    override onBeforeAddBelow(formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: number): void {
+        if (modelConstructor.typeName === this.tierModel.typeName) {
             this.storeTierFormArray.value.forEach((storeTier, index) => {
                 if (storeTier.tierClientIndex == null || storeTier.tierClientIndex <= lastMenuIconIndexClicked)
                     return;
@@ -129,16 +134,16 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         }
     }
 
-    override onBeforeAddAbove(formArray: SoftFormArray, lastMenuIconIndexClicked: number): void {
-        if (formArray.translationKey === this.tierTranslationKey) {
-            this.storeTierFormArray.value.forEach((storeTier, index) => {
+    override onBeforeAddAbove(formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: number): void {
+        if (modelConstructor.typeName === this.tierModel.typeName) {
+            this.storeTierFormArray.value.forEach((storeTier, index) => { // FT: Adjusting storeTier indexes
                 if (storeTier.tierClientIndex == null || storeTier.tierClientIndex < lastMenuIconIndexClicked)
                     return;
                 
                 (this.storeTierFormArray.controls[index] as SoftFormGroup<StoreTier>).controls.tierClientIndex.setValue(storeTier.tierClientIndex + 1);
             });
 
-            this.discountCategoryFormArray.value.forEach((discountCategory, index) => {
+            this.discountCategoryFormArray.value.forEach((discountCategory, index) => { // FT: Adjusting discountCategory indexes
                 if (discountCategory.tierClientIndex == null || discountCategory.tierClientIndex < lastMenuIconIndexClicked)
                     return;
                 
@@ -153,6 +158,9 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
                 // table.clientLoad();
             });
         }
+        else if (modelConstructor.typeName === this.storeTierModel.typeName) {
+            
+        }
     }
 
     getTierFormArrayControlByIndex(formControlName: keyof Tier & string, index: number){
@@ -166,7 +174,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     initStoreTierFormArray(storeTierList: StoreTier[]){
         // this.assignStoreTierListIndexes(storeTierList);
         this.storeTierFormArray = this.initFormArray(storeTierList, this.storeTierModel, this.storeTierDTOListSaveBodyName, this.storeTierTranslationKey);
-        this.storeTierCrudMenu = this.getCrudMenuForOrderedData(this.storeTierFormArray, new StoreTier({id: 0}));
+        this.storeTierCrudMenu = this.getCrudMenuForOrderedData(this.storeTierFormArray, new StoreTier({id: 0}), this.storeTierLastIndexClicked);
     }
 
     addNewStoreTier(tierIndex: number){

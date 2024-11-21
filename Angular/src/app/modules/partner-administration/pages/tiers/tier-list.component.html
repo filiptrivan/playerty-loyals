@@ -6,7 +6,7 @@
             <panel-body [normalBottomPadding]="true">
     
                 @for (tierFormGroup of getFormArrayGroups(this.tierFormArray); track tierIndex; let tierIndex = $index; let last = $last) {
-                    <index-card [index]="tierIndex" [last]="false" [crudMenu]="tierCrudMenu" (onMenuIconClick)="lastMenuIconIndexClicked = $event">
+                    <index-card [index]="tierIndex" [last]="false" [crudMenu]="tierCrudMenu" (onMenuIconClick)="tierLastIndexClicked.index = $event">
                         <form [formGroup]="tierFormGroup" class="grid">
                             <div class="col-12 md:col-4">
                                 <soft-textbox [control]="getTierFormArrayControlByIndex('name', tierIndex)"></soft-textbox>
@@ -23,7 +23,7 @@
 
                             <div class="col-12">
                                 @for (storeTierFormGroup of getStoreTierFormArrayGroups(tierIndex); track storeTierIndex; let storeTierIndex = $index; let last = $last) {
-                                    <index-card [index]="storeTierIndex" [showRemoveIcon]="true" (onRemoveIconClick)="removeStoreTier(tierIndex, storeTierIndex)" [last]="false">
+                                    <index-card [index]="storeTierIndex" [crudMenu]="storeTierCrudMenu" (onMenuIconClick)="storeTierLastIndexClicked.index = $event" [last]="false">
                                         <form [formGroup]="storeTierFormGroup" class="grid">
                                             <div class="col-12">
                                                 <soft-dropdown [control]="getStoreTierFormArrayControl('storeId', storeTierIndex, tierIndex)" (onChange)="storeChange($event, tierIndex, storeTierIndex)" [options]="storeOptions"></soft-dropdown>
