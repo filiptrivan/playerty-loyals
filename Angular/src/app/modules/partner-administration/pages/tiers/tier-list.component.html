@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">
-    @defer (when tierFormArray != null && storeTierFormArray != null && discountCategoryFormArray != null) {
+    @defer (when tierFormArray != null && storeTierFormArray != null && storeTierDiscountCategoryFormArray != null) {
         <soft-panel>
             <panel-header [title]="detailsTitle" [bigTitle]="true" icon="pi pi-crown"></panel-header>
     
@@ -29,16 +29,16 @@
                                                 <soft-dropdown [control]="getStoreTierFormArrayControl('storeId', storeTierIndex, tierIndex)" (onChange)="storeChange($event, tierIndex, storeTierIndex)" [options]="storeOptions"></soft-dropdown>
                                             </div>
                                             <div class="col-12">
-                                                <soft-data-table #discountCategoryTable
+                                                <soft-data-table #storeTierDiscountCategoryTable
                                                 [getFormArrayItems]="getDiscountCategoryFormArrayItems" 
                                                 [getSoftFormControl]="getDiscountCategoryFormArrayControl" 
-                                                [getAlreadySelectedItemIds]="getAlreadySelectedDiscountCategoryIdsForStore" 
+                                                [getAlreadySelectedItemIds]="getAlreadySelectedStoreTierDiscountCategoryIdsForStore" 
                                                 [getAlreadySelectedItems]="getAlreadySelectedDiscountCategoryListForStore"
                                                 (onIsAllSelectedChange)="allSelected($event)"
                                                 (onRowSelect)="rowSelect($event)" (onRowUnselect)="rowUnselect($event)" 
-                                                selectionMode="multiple" [showAddButton]="false" [tableTitle]="t('DiscountCategoryList')" [cols]="discountCategoryCols" [hasLazyLoad]="false" [showPaginator]="false"
+                                                selectionMode="multiple" [showAddButton]="false" [tableTitle]="t('DiscountCategoryList')" [cols]="storeTierDiscountCategoryCols" [hasLazyLoad]="false" [showPaginator]="false"
                                                 [showExportToExcelButton]="false" [formArrayControlNamesFromHtml]="formArrayControlNamesFromHtml" 
-                                                [additionalIndexes]="getDiscountCategoryAdditionalIndexes(tierIndex, storeTierIndex)"
+                                                [additionalIndexes]="getStoreTierDiscountCategoryAdditionalIndexes(tierIndex, storeTierIndexe)"
                                                 ></soft-data-table>
                                             </div>
                                         </form>

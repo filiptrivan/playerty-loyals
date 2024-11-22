@@ -1,6 +1,7 @@
 ﻿using Laraue.EfCoreTriggers.Common.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Hosting;
 using Playerty.Loyals.Business.Entities;
 using Playerty.Loyals.Business.Services;
 using Playerty.Loyals.Shared.Terms;
@@ -84,10 +85,10 @@ namespace Playerty.Loyals.Infrastructure
                 .HasMany(e => e.DiscountCategories)
                 .WithMany(e => e.StoreTiers)
                 .UsingEntity<StoreTierDiscountCategory>(
-                    j => j.HasOne<DiscountCategory>()
+                    j => j.HasOne<DiscountCategory>(x => x.DiscountCategory)
                           .WithMany()
                           .HasForeignKey(ru => ru.DiscountCategoriesId),
-                    j => j.HasOne<StoreTier>()
+                    j => j.HasOne<StoreTier>(x => x.StoreTier)
                           .WithMany()
                           .HasForeignKey(ru => ru.StoreTiersId)
                 );

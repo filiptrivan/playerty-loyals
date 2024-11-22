@@ -207,8 +207,8 @@ namespace Playerty.Loyals.Services
                         savedStoreTierDTO.TierClientIndex = i;
                         storeTierResultDTOList.Add(savedStoreTierDTO);
 
-                        List<DiscountCategoryDTO> discountCategoryDTOList = tierSaveBodyDTO.SelectedDiscountCategoryDTOList.Where(x => x.TierClientIndex == i && x.StoreTierClientIndex == j).ToList();
-                        await UpdateDiscountCategoryListForStoreTier(savedStoreTierDTO.Id, discountCategoryDTOList);
+                        List<StoreTierDiscountCategoryDTO> storeTierDiscountCategoryDTOList = tierSaveBodyDTO.StoreTierDiscountCategoryDTOList.Where(x => x.SelectedForStore == true && x.TierClientIndex == i && x.StoreTierClientIndex == j).ToList();
+                        await UpdateDiscountCategoryListForStoreTier(savedStoreTierDTO.Id, storeTierDiscountCategoryDTOList);
                     }
                 }
 
@@ -342,9 +342,12 @@ namespace Playerty.Loyals.Services
                 List<StoreTierDiscountCategoryDTO> storeTierDiscountCategoryResultDTOList = discountCategoryDTOList
                     .Select(x => new StoreTierDiscountCategoryDTO
                     {
+                        Id = x.Id,
+                        DiscountCategoryId = x.Id,
                         DiscountCategoryDisplayName = x.Name,
                         SelectedForStore = false,
                         Discount = null,
+                        StoreId = x.StoreId, // FT: Needs StoreId because when we add a new table on the client we have to separate which data to show
                     })
                     .ToList();
 
@@ -361,9 +364,10 @@ namespace Playerty.Loyals.Services
 
                     for (int j = 0; j < storeTierIdsForTierList.Count; j++)
                     {
-                        storeTierDTOForTierList[j].TierClientIndex = j;
+                        storeTierDTOForTierList[j].TierClientIndex = i;
 
                         List<StoreTierDiscountCategoryDTO> storeTierDiscountCategoryDTOList = discountCategoryDTOList
+                            .Where(x => x.StoreId == storeTierDTOForTierList[j].StoreId)
                             .Select(x =>
                             {
                                 StoreTierDiscountCategoryDTO selectedStoreTierDiscountCategoryDTO = selectedStoreTierDiscountCategoryDTOList
@@ -372,6 +376,7 @@ namespace Playerty.Loyals.Services
 
                                 return new StoreTierDiscountCategoryDTO
                                 {
+                                    Id = x.Id,
                                     DiscountCategoryDisplayName = x.Name,
                                     SelectedForStore = selectedStoreTierDiscountCategoryDTO != null,
                                     Discount = selectedStoreTierDiscountCategoryDTO?.Discount,
