@@ -22,6 +22,7 @@ namespace Playerty.Loyals.Business.Entities
         [IgnorePropertyInDTO]
         public long DiscountCategoriesId { get; set; }
 
+        [Required]
         [Range(0, 100)]
         public int Discount { get; set; } // FT: It can't be byte because of fluent validation
     }

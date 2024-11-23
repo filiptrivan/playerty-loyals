@@ -23,10 +23,13 @@ namespace Playerty.Loyals.Business.Entities
         public int? UpdatePointsInterval { get; set; }
 
         [StringLength(1000, MinimumLength = 1)]
-        public string LoadPurchasesEndpoint { get; set; }
+        public string GetPurchasesEndpoint { get; set; }
 
         [StringLength(1000, MinimumLength = 1)]
-        public string LoadReversalsEndpoint { get; set; }
+        public string GetReversalsEndpoint { get; set; }
+
+        [StringLength(1000, MinimumLength = 1)]
+        public string GetDiscountCategoriesEndpoint { get; set; }
 
         [StringLength(1000, MinimumLength = 1)]
         public string CreateUserEndpoint { get; set; }

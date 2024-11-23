@@ -137,10 +137,12 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('Segmentation');
             case 'updatePointsInterval':
                 return this.translocoService.translate('UpdatePointsInterval');
-            case 'loadPurchasesEndpoint':
-                return this.translocoService.translate('LoadPurchasesEndpoint');
-            case 'loadReversalsEndpoint':
-                return this.translocoService.translate('LoadReversalsEndpoint');
+            case 'getPurchasesEndpoint':
+                return this.translocoService.translate('GetPurchasesEndpoint');
+            case 'getReversalsEndpoint':
+                return this.translocoService.translate('GetReversalsEndpoint');
+            case 'getDiscountCategoriesEndpoint':
+                return this.translocoService.translate('GetDiscountCategoriesEndpoint');
             case 'createUserEndpoint':
                 return this.translocoService.translate('CreateUserEndpoint');
             case 'updateUserGroupEndpoint':

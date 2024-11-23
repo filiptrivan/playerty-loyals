@@ -1040,8 +1040,9 @@ export class Store extends BaseEntity
 {
     name?: string;
 	updatePointsInterval?: number;
-	loadPurchasesEndpoint?: string;
-	loadReversalsEndpoint?: string;
+	getPurchasesEndpoint?: string;
+	getReversalsEndpoint?: string;
+	getDiscountCategoriesEndpoint?: string;
 	createUserEndpoint?: string;
 	updateUserGroupEndpoint?: string;
 	partnerDisplayName?: string;
@@ -1055,8 +1056,9 @@ export class Store extends BaseEntity
     {
         name,
 		updatePointsInterval,
-		loadPurchasesEndpoint,
-		loadReversalsEndpoint,
+		getPurchasesEndpoint,
+		getReversalsEndpoint,
+		getDiscountCategoriesEndpoint,
 		createUserEndpoint,
 		updateUserGroupEndpoint,
 		partnerDisplayName,
@@ -1068,8 +1070,9 @@ export class Store extends BaseEntity
     }:{
         name?: string;
 		updatePointsInterval?: number;
-		loadPurchasesEndpoint?: string;
-		loadReversalsEndpoint?: string;
+		getPurchasesEndpoint?: string;
+		getReversalsEndpoint?: string;
+		getDiscountCategoriesEndpoint?: string;
 		createUserEndpoint?: string;
 		updateUserGroupEndpoint?: string;
 		partnerDisplayName?: string;
@@ -1084,8 +1087,9 @@ export class Store extends BaseEntity
 
         this.name = name;
 		this.updatePointsInterval = updatePointsInterval;
-		this.loadPurchasesEndpoint = loadPurchasesEndpoint;
-		this.loadReversalsEndpoint = loadReversalsEndpoint;
+		this.getPurchasesEndpoint = getPurchasesEndpoint;
+		this.getReversalsEndpoint = getReversalsEndpoint;
+		this.getDiscountCategoriesEndpoint = getDiscountCategoriesEndpoint;
 		this.createUserEndpoint = createUserEndpoint;
 		this.updateUserGroupEndpoint = updateUserGroupEndpoint;
 		this.partnerDisplayName = partnerDisplayName;

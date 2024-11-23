@@ -185,10 +185,13 @@ namespace Playerty.Loyals.Services
 
             await _context.WithTransactionAsync(async () =>
             {
-                List<int> tierIdsDTO = tierSaveBodyDTO.TierDTOList.Select(x => x.Id).ToList();
+                List<int> tierIdsDTO = tierSaveBodyDTO.TierDTOList.Select(x => x.Id).ToList(); // TODO FT: Check if user is authorized to delete passed tiers
+                List<int> tierIdListToDelete = _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode() && tierIdsDTO.Contains(x.Id) == false).Select(x => x.Id).ToList();
+                await DeleteTierListAsync(tierIdListToDelete, false);
 
-                IQueryable<Tier> tiersForDeleteQuery = _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode() && tierIdsDTO.Contains(x.Id) == false);
-                await DeleteTiers(tiersForDeleteQuery);
+                List<long> storeTierIdsDTO = tierSaveBodyDTO.StoreTierDTOList.Select(x => x.Id).ToList(); // TODO FT: Check if user is authorized to delete passed store tiers
+                List<long> storeTierIdListToDelete = _context.DbSet<StoreTier>().Where(x => tierIdsDTO.Contains(x.Tier.Id) && storeTierIdsDTO.Contains(x.Id) == false).Select(x => x.Id).ToList();
+                await DeleteStoreTierListAsync(storeTierIdListToDelete, false);
 
                 for (int i = 0; i < tierSaveBodyDTO.TierDTOList.Count; i++)
                 {
@@ -218,19 +221,6 @@ namespace Playerty.Loyals.Services
             tierSaveBodyDTO.StoreTierDTOList = storeTierResultDTOList;
 
             return tierSaveBodyDTO;
-        }
-
-        private async Task DeleteTiers(IQueryable<Tier> tiersForDeleteQuery)
-        {
-            await _context.WithTransactionAsync(async () =>
-            {
-                //await SetEveryUsersTierToNullForTheProvidedTiers(await tiersForDeleteQuery.Select(x => x.Id).ToListAsync()); // FT: SET NULL is doing this for us.
-
-                // FT: Can't use execute delete because of disabled changes tracker, we need to know which tiers are deleted so we can update partner users.
-                _context.DbSet<Tier>().RemoveRange(await tiersForDeleteQuery.ToListAsync());
-
-                await _context.SaveChangesAsync();
-            });
         }
 
         public async Task UpdatePartnerUsersTiers()
@@ -329,7 +319,7 @@ namespace Playerty.Loyals.Services
 
             await _context.WithTransactionAsync(async () =>
             {
-                List<TierDTO> tierDTOList = await LoadTierDTOList(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderByDescending(x => x.ValidFrom), false);
+                List<TierDTO> tierDTOList = await LoadTierDTOList(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
                 List<int> tierIds = tierDTOList.Select(x => x.Id).ToList();
 
                 List<StoreTierDTO> storeTierDTOList = await LoadStoreTierDTOList(_context.DbSet<StoreTier>().Where(x => tierIds.Contains(x.Tier.Id)), false);
@@ -1030,10 +1020,7 @@ namespace Playerty.Loyals.Services
         /// </summary>
         public async Task SyncDiscountCategories()
         {
-            List<DiscountCategoryDTO> discountCategoryApiDTOList = _wingsApiService.GetDiscountCategoriesDTO();
-
-            if (discountCategoryApiDTOList.Count() != discountCategoryApiDTOList.DistinctBy(x => x.Code).Count())
-                throw new BusinessException("Partner mora da prosledi jedinstvene kodove za kategorije.");
+            List<DiscountCategoryDTO> discountCategoryApiDTOList = await _wingsApiService.GetDiscountCategoryDTOList();
 
             await _context.WithTransactionAsync(async () =>
             {

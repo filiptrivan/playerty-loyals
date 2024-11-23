@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Playerty.Loyals.Business.DTO;
+using Playerty.Loyals.Business.Entities;
+using Soft.Generator.Shared.Extensions;
 using Soft.Generator.Shared.Interfaces;
+using Soft.Generator.Shared.SoftExceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +17,12 @@ namespace Playerty.Loyals.Business.Services
     {
         private readonly HttpClient _client;
         private readonly IApplicationDbContext _context;
+        private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
 
-        public WingsApiService(IApplicationDbContext context) 
+        public WingsApiService(IApplicationDbContext context, PartnerUserAuthenticationService partnerUserAuthenticationService)
         {
             _context = context;
+            _partnerUserAuthenticationService = partnerUserAuthenticationService;
         }
 
         //public async Task<List<Purchace>> LoadNewPurchacesSinceAsync()
@@ -87,25 +93,70 @@ namespace Playerty.Loyals.Business.Services
             return products;
         }
 
-        public List<DiscountCategoryDTO> GetDiscountCategoriesDTO()
+        /// <summary>
+        /// Get discount category list of the current partner.
+        /// </summary>
+        public async Task<List<DiscountCategoryDTO>> GetDiscountCategoryDTOList()
         {
-            List<DiscountCategoryDTO> discountCategoryDTOList = new List<DiscountCategoryDTO>
+            List<Store> storeList = null;
+
+            await _context.WithTransactionAsync(async () =>
             {
-                new DiscountCategoryDTO { Name = "Bosch", Code = "B-H-2024", StoreId = 1 },
-                new DiscountCategoryDTO { Name = "Makita", Code = "M-D-2024", StoreId = 1 },
-                new DiscountCategoryDTO { Name = "DeWalt", Code = "D-S-2024", StoreId = 1 },
-                new DiscountCategoryDTO { Name = "Stanley", Code = "S-H-2024", StoreId = 1 },
-                new DiscountCategoryDTO { Name = "Bosch", Code = "B-G-2024", StoreId = 1 },
-                new DiscountCategoryDTO { Name = "Milwaukee", Code = "M-I-2024", StoreId = 1 },
-                new DiscountCategoryDTO { Name = "Black+Decker", Code = "B-J-2024", StoreId = 1 },
-                new DiscountCategoryDTO { Name = "Hilti", Code = "H-L-2024", StoreId = 1 },
-                new DiscountCategoryDTO { Name = "Ryobi", Code = "R-C-2024", StoreId = 1 },
-                new DiscountCategoryDTO { Name = "Nike", Code = "N-I-2024", StoreId = 2 },
-                new DiscountCategoryDTO { Name = "Addidas", Code = "A-J-2024", StoreId = 2 },
-                new DiscountCategoryDTO { Name = "Puma", Code = "P-L-2024", StoreId = 2 },
-                new DiscountCategoryDTO { Name = "Umbro", Code = "U-C-2024", StoreId = 2 },
-                //new ProductDTO { Id = 10, Name = "Festool Sander", Brand = "Festool", Price = 28000, Code = "F-S-2024", LinkToWebsite = "abc", Description = "A premium sander, designed for smooth finishes on woodworking projects." },
-            };
+                storeList = await _context.DbSet<Store>()
+                    .AsNoTracking() // FT: Important for safe use of the entity outside the transaction.
+                    .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
+                    .ToListAsync();
+            });
+
+            List<DiscountCategoryDTO> discountCategoryDTOList = new List<DiscountCategoryDTO>();
+
+            int count = 0;
+
+            foreach (Store store in storeList)
+            {
+                List<DiscountCategoryDTO> discountCategoryHelperDTOList = null;
+
+                if (count == 0)
+                {
+                    discountCategoryHelperDTOList = new List<DiscountCategoryDTO>  // change with: api(store.GetDiscountCategoriesEndpoint)...
+                    {
+                        new DiscountCategoryDTO { Name = "Bosch", Code = "B-H-2024" },
+                        new DiscountCategoryDTO { Name = "Makita", Code = "M-D-2024" },
+                        new DiscountCategoryDTO { Name = "DeWalt", Code = "D-S-2024" },
+                        new DiscountCategoryDTO { Name = "Stanley", Code = "S-H-2024" },
+                        new DiscountCategoryDTO { Name = "Bosch", Code = "B-G-2024" },
+                        new DiscountCategoryDTO { Name = "Milwaukee", Code = "M-I-2024" },
+                        new DiscountCategoryDTO { Name = "Black+Decker", Code = "B-J-2024" },
+                        new DiscountCategoryDTO { Name = "Hilti", Code = "H-L-2024" },
+                        new DiscountCategoryDTO { Name = "Ryobi", Code = "R-C-2024" },
+                        new DiscountCategoryDTO { Name = "Nike", Code = "N-I-2024" },
+                        new DiscountCategoryDTO { Name = "Addidas", Code = "A-J-2024" },
+                        new DiscountCategoryDTO { Name = "Puma", Code = "P-L-2024" },
+                        new DiscountCategoryDTO { Name = "Umbro", Code = "U-C-2024" },
+                    };
+                }
+                else if (count == 1)
+                {
+                    discountCategoryHelperDTOList = new List<DiscountCategoryDTO>  // change with: api(store.GetDiscountCategoriesEndpoint)...
+                    {
+                        new DiscountCategoryDTO { Name = "Nike", Code = "N-I-2024" },
+                        new DiscountCategoryDTO { Name = "Addidas", Code = "A-J-2024" },
+                        new DiscountCategoryDTO { Name = "Puma", Code = "P-L-2024" },
+                        new DiscountCategoryDTO { Name = "Umbro", Code = "U-C-2024" },
+                    };
+                }
+
+                if (discountCategoryHelperDTOList.Count != discountCategoryHelperDTOList.DistinctBy(x => x.Code).Count())
+                    throw new BusinessException("Partner mora da prosledi jedinstvene kodove za kategorije.");
+
+                foreach (DiscountCategoryDTO discountCategoryHelperDTO in discountCategoryHelperDTOList)
+                    discountCategoryHelperDTO.StoreId = store.Id;
+
+                discountCategoryDTOList.AddRange(discountCategoryHelperDTOList);
+
+                count++;
+            }
+
 
             return discountCategoryDTOList;
         }

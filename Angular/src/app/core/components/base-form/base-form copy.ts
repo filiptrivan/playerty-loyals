@@ -377,21 +377,20 @@ export class BaseFormCopy implements OnInit {
   }
 
   removeFormControlFromTheFormArray(formArray: SoftFormArray, index: number) {
+    if(index == null)
+      throw new Error('Can not pass null index.');
+
     formArray.removeAt(index);
   }
 
   removeFormControlsFromTheFormArray(formArray: SoftFormArray, indexes: number[]) {
-    const controlsHelper = [];
+    // Sort indexes in descending order to avoid index shifts when removing controls
+    const sortedIndexes = indexes.sort((a, b) => b - a);
 
-    formArray.controls.forEach(control => {
-      controlsHelper.push(control);
-    }); 
-
-    formArray.clear();
-
-    controlsHelper.forEach((control, index) => {
-      if(indexes.includes(index) === false)
-        formArray.push(control);
+    sortedIndexes.forEach(index => {
+      if (index >= 0 && index < formArray.length) {
+        formArray.removeAt(index);
+      }
     });
   }
 

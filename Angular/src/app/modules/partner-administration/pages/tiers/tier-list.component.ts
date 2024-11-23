@@ -11,7 +11,7 @@ import { TranslateClassNamesService } from 'src/app/business/services/translates
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 import { BaseFormCopy, LastMenuIconIndexClicked } from 'src/app/core/components/base-form/base-form copy';
 import { AllClickEvent, Column, RowClickEvent, SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';
-import { SoftFormArray, SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { SoftFormArray, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
@@ -45,10 +45,8 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     storeTierDiscountCategoriesSaveBodyName: string = nameof<TierSaveBody>('storeTierDiscountCategoryDTOList');
     storeTierDiscountCategoriesTranslationKey: string = new StoreTierDiscountCategory().typeName;
     storeTierDiscountCategoryFormArray: SoftFormArray<StoreTierDiscountCategory[]>;
-    storeTierDiscountCategoryLength: number;
     alreadySelectedDiscountCategoryListForStore: StoreTierDiscountCategory[] = [];
     alreadySelectedStoreTierDiscountCategoryIdsForStore: number[] = [];
-    // storeTierDiscountCategorySelectedList: {id: number, additionalIndexes: StoreTierDiscountCategoryAdditionalIndexes}[] = [];
     @ViewChildren('storeTierDiscountCategoryTable') storeTierDiscountCategoryTables: QueryList<SoftDataTableComponent>; // FT: Made for refreshing table
 
     constructor(
@@ -76,19 +74,12 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         ];
 
         forkJoin({
-            // tierList: this.apiService.loadTierDTOList(),
             tierSaveBody: this.apiService.loadTierSaveBodyDTO(),
             storeNamebookList: this.apiService.loadStoreListForDropdown(),
         }).subscribe(({ tierSaveBody, storeNamebookList }) => {
             this.initTierFormArray(tierSaveBody.tierDTOList);
-            // this.initTierFormArray(tierList);
-            // this.apiService.loadStoreTierDTOListForTierList(tierList.map(x => x.id)).subscribe(storeTierList => {
-                this.initStoreTierFormArray(tierSaveBody.storeTierDTOList);
-
-                // this.apiService.loadDiscountCategoryDTOListForCurrentPartner(storeTierList.map(x => x.id)).subscribe(discountCategories => {
-                    this.initStoreTierDiscountCategoriesFormArray(tierSaveBody.storeTierDiscountCategoryDTOList);
-                // });
-            // });
+            this.initStoreTierFormArray(tierSaveBody.storeTierDTOList);
+            this.initStoreTierDiscountCategoriesFormArray(tierSaveBody.storeTierDiscountCategoryDTOList);
 
             this.storeOptions = storeNamebookList.map(n => { return { label: n.displayName, value: n.id }});
         });
@@ -97,9 +88,9 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     //#region Tier
 
     initTierFormArray(tierList: Tier[]){
-        this.tierFormArray = this.initFormArray(tierList, this.tierModel, this.tierDTOListSaveBodyName, this.tierTranslationKey, true);
+        this.tierFormArray = this.initFormArray(tierList, this.tierModel, this.tierDTOListSaveBodyName, this.tierTranslationKey, false);
         this.tierCrudMenu = this.getCrudMenuForOrderedData(this.tierFormArray, new Tier({id: 0}), this.tierLastIndexClicked);
-        this.tierFormArray.validator = this.validatorService.isFormArrayEmpty(this.tierFormArray);
+        // this.tierFormArray.validator = this.validatorService.isFormArrayEmpty(this.tierFormArray); // FT: When deleting every tier, we should let it be empty
     }
 
     addNewTier(index: number){
@@ -136,7 +127,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
             if (storeTierDiscountCategory.tierClientIndex === tierIndex && storeTierDiscountCategory.storeTierClientIndex === storeTierIndex)
                 storeTierDiscountCategoryIndexesForRemove.push(i);
 
-            if (i >= this.storeTierDiscountCategoryLength)
+            if (storeTierDiscountCategory.tierClientIndex !== null || storeTierDiscountCategory.storeTierClientIndex !== null)
                 continue;
 
             if (storeTierDiscountCategory.storeId !== event.value) // FT: Skipping the storeTierDiscountCategory from the first (eg. 14) which are not from the selected store
@@ -201,8 +192,6 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         );
         
         this.alreadySelectedStoreTierDiscountCategoryIdsForStore = storeTierDiscountCategories.filter(x => x.selectedForStore).map(x => x.id);
-
-        this.storeTierDiscountCategoryLength = storeTierDiscountCategories.length;
     }
 
     getAlreadySelectedStoreTierDiscountCategoryIdsForStore = (additionalIndexes: StoreTierDiscountCategoryAdditionalIndexes): number[] => {
@@ -294,7 +283,6 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     }
 
     getStoreTierDiscountCategoryAdditionalIndexes(tierIndex: number, storeTierIndex: number){
-        console.log(new StoreTierDiscountCategoryAdditionalIndexes({tierIndex: tierIndex, storeTierIndex: storeTierIndex}))
         return new StoreTierDiscountCategoryAdditionalIndexes({tierIndex: tierIndex, storeTierIndex: storeTierIndex});
     }
 
@@ -353,7 +341,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
 
             // FT: Adjusting indexes for storeTierDiscountCategoryFormArray
             this.storeTierDiscountCategoryFormArray.value.forEach((storeTierDiscountCategory, index) => {
-                if (storeTierDiscountCategory.storeTierClientIndex === this.storeTierLastIndexClicked.index)
+                if (storeTierDiscountCategory.tierClientIndex === this.tierLastIndexClicked.index && storeTierDiscountCategory.storeTierClientIndex === this.storeTierLastIndexClicked.index)
                     storeTierDiscountCategoryIndexesForRemove.push(index);
 
                 if (storeTierDiscountCategory.tierClientIndex == null || 
@@ -541,20 +529,3 @@ class StoreTierDiscountCategoryAdditionalIndexes {
         this.storeTierIndex = storeTierIndex;
     }
 };
-
-// export class LastStoreTierMenuIconIndexClicked extends LastMenuIconIndexClicked
-// {
-//     tierClientIndex?: number;
-
-//     constructor(
-//     {
-//         tierClientIndex,
-//     }:{
-//         tierClientIndex?: number;
-//     } = {}
-//     ) {
-//         super(); 
-
-//         this.tierClientIndex = tierClientIndex;
-//     }
-// }

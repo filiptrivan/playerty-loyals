@@ -13,16 +13,19 @@
                             <soft-number [control]="control('updatePointsInterval', storeFormGroup)"></soft-number>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-textbox [control]="control('loadPurchasesEndpoint', storeFormGroup)"></soft-textbox>
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <soft-textbox [control]="control('loadReversalsEndpoint', storeFormGroup)"></soft-textbox>
-                        </div>
-                        <div class="col-12 md:col-6">
                             <soft-textbox [control]="control('createUserEndpoint', storeFormGroup)"></soft-textbox>
                         </div>
                         <div class="col-12 md:col-6">
                             <soft-textbox [control]="control('updateUserGroupEndpoint', storeFormGroup)"></soft-textbox>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-textbox [control]="control('getPurchasesEndpoint', storeFormGroup)"></soft-textbox>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-textbox [control]="control('getReversalsEndpoint', storeFormGroup)"></soft-textbox>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-textbox [control]="control('getDiscountCategoriesEndpoint', storeFormGroup)"></soft-textbox>
                         </div>
                     </form>
                 </panel-body>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Playerty.Loyals.Business.DTO
 {
-    [CustomValidator("RuleFor(x => x.Discount).GreaterThanOrEqualTo(0).LessThanOrEqualTo(100);")]
+    //[CustomValidator("RuleFor(x => x.Discount).GreaterThanOrEqualTo(0).LessThanOrEqualTo(100);")]
     public partial class StoreTierDiscountCategoryDTO
     {
         /// <summary>
