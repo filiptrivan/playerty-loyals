@@ -4,6 +4,7 @@ export interface SoftValidatorFn extends ValidatorFn {
     hasNotEmptyRule?: boolean;
 }
 
+// FT: It's made like generic type because of <number>, <string> etc. not to put class like User.
 export class SoftFormControl<T = any> extends FormControl<T> {
     public label: string;
     public required: boolean;

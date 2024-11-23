@@ -330,7 +330,7 @@ export class BaseFormCopy implements OnInit {
       return (formArray.controls[index] as SoftFormGroup<T>).controls[formControlName] as SoftFormControl;
     }
 
-    return filteredFormGroups[index].controls[formControlName] as SoftFormControl;
+    return filteredFormGroups[index]?.controls[formControlName] as SoftFormControl; // FT: Don't change this. It's always possible that change detection occurs before something.
   }
 
   getFormArrayControls<T>(formControlName: keyof T & string, formArraySaveBodyName: string, filter?: (formGroups: SoftFormGroup<T>[]) => SoftFormGroup<T>[]): SoftFormControl[] {
@@ -369,9 +369,6 @@ export class BaseFormCopy implements OnInit {
   }
 
   addNewFormControlToTheFormArray(formArray: SoftFormArray, modelConstructor: any, index: number, disableLambda?: (formControlName: string, model: any) => boolean) {
-    console.log(formArray)
-    console.log(index)
-
     if (index == null) {
       formArray.push(this.createFormGroup(modelConstructor, disableLambda));
     }else{
@@ -431,63 +428,69 @@ export class BaseFormCopy implements OnInit {
     return true;
   }
 
-  checkFormArrayValidity(): boolean {
-    // if(this.formArray == null)
-      return true;
+  // checkFormArrayValidity(): boolean {
+  //   // if(this.formArray == null)
+  //     return true;
 
-    let invalid: boolean = false;
+  //   let invalid: boolean = false;
 
-    // (this.formArray.controls as FormGroup[]).forEach(formGroup => {
-    //   Object.keys(formGroup.controls).forEach(key => {
-    //     let formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
-    //     formControl.markAsDirty();
-    //     if (formControl.invalid && this.formArrayControlNamesFromHtml.includes(formControl.label)) {
-    //       invalid = true;
-    //     }
-    //   });
-    // });
+  //   // (this.formArray.controls as FormGroup[]).forEach(formGroup => {
+  //   //   Object.keys(formGroup.controls).forEach(key => {
+  //   //     let formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
+  //   //     formControl.markAsDirty();
+  //   //     if (formControl.invalid && this.formArrayControlNamesFromHtml.includes(formControl.label)) {
+  //   //       invalid = true;
+  //   //     }
+  //   //   });
+  //   // });
 
-    if (invalid || this.invalidForm) {
-      this.messageService.warningMessage(
-        $localize`:@@YouHaveSomeInvalidFieldsDescription:Some of the fields on the form are not valid, please check which ones and try again.`,
-        $localize`:@@YouHaveSomeInvalidFieldsTitle:You have some invalid fields`, 
-      );
+  //   if (invalid || this.invalidForm) {
+  //     this.messageService.warningMessage(
+  //       $localize`:@@YouHaveSomeInvalidFieldsDescription:Some of the fields on the form are not valid, please check which ones and try again.`,
+  //       $localize`:@@YouHaveSomeInvalidFieldsTitle:You have some invalid fields`, 
+  //     );
 
-      return false;
-    }
+  //     return false;
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 
   onBeforeSaveList(){}
   onAfterSaveList(){}
   onAfterSaveListRequest(){}
 
-  // FT: Sending class because of reference type
-  getCrudMenuForOrderedData(formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked){
+  // FT: Sending LastMenuIconIndexClicked class because of reference type
+  getCrudMenuForOrderedData(formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean = false){
     let crudMenuForOrderedData: MenuItem[] = [
         {label: this.translocoService.translate('Remove'), icon: 'pi pi-minus', command: () => {
           this.onBeforeRemove(formArray, modelConstructor, lastMenuIconIndexClicked.index);
-          this.removeFormControlFromTheFormArray(formArray, lastMenuIconIndexClicked.index);
+          if (adjustFormArrayManually === false) {
+            this.removeFormControlFromTheFormArray(formArray, lastMenuIconIndexClicked.index);
+          }
         }},
         {label: this.translocoService.translate('AddAbove'), icon: 'pi pi-arrow-up', command: () => {
           this.onBeforeAddAbove(formArray, modelConstructor, lastMenuIconIndexClicked.index);
-          this.addNewFormControlToTheFormArray(formArray, modelConstructor, lastMenuIconIndexClicked.index);
+          if (adjustFormArrayManually === false) {
+            this.addNewFormControlToTheFormArray(formArray, modelConstructor, lastMenuIconIndexClicked.index);
+          }
         }},
         {label: this.translocoService.translate('AddBelow'), icon: 'pi pi-arrow-down', command: () => {
           this.onBeforeAddBelow(formArray, modelConstructor, lastMenuIconIndexClicked.index);
-          this.addNewFormControlToTheFormArray(formArray, modelConstructor, lastMenuIconIndexClicked.index + 1);
+          if (adjustFormArrayManually === false) {
+            this.addNewFormControlToTheFormArray(formArray, modelConstructor, lastMenuIconIndexClicked.index + 1);
+          }
         }},
     ];
 
     return crudMenuForOrderedData;
   }
 
-  onBeforeRemove(formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: number) {}
+  onBeforeRemove(formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number) {}
 
-  onBeforeAddAbove(formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: number) {}
+  onBeforeAddAbove(formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number) {}
 
-  onBeforeAddBelow(formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: number) {}
+  onBeforeAddBelow(formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number) {}
 
   //#endregion
 

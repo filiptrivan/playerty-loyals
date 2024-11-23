@@ -23,7 +23,7 @@
 
                             <div class="col-12">
                                 @for (storeTierFormGroup of getStoreTierFormArrayGroups(tierIndex); track storeTierIndex; let storeTierIndex = $index; let last = $last) {
-                                    <index-card [index]="storeTierIndex" [crudMenu]="storeTierCrudMenu" (onMenuIconClick)="storeTierLastIndexClicked.index = $event" [last]="false">
+                                    <index-card [index]="storeTierIndex" [crudMenu]="storeTierCrudMenu" (onMenuIconClick)="storeTierLastIndexClicked.index = $event; tierLastIndexClicked.index = tierIndex" [last]="false">
                                         <form [formGroup]="storeTierFormGroup" class="grid">
                                             <div class="col-12">
                                                 <soft-dropdown [control]="getStoreTierFormArrayControl('storeId', storeTierIndex, tierIndex)" (onChange)="storeChange($event, tierIndex, storeTierIndex)" [options]="storeOptions"></soft-dropdown>
@@ -38,7 +38,7 @@
                                                 (onRowSelect)="rowSelect($event)" (onRowUnselect)="rowUnselect($event)" 
                                                 selectionMode="multiple" [showAddButton]="false" [tableTitle]="t('DiscountCategoryList')" [cols]="storeTierDiscountCategoryCols" [hasLazyLoad]="false" [showPaginator]="false"
                                                 [showExportToExcelButton]="false" [formArrayControlNamesFromHtml]="formArrayControlNamesFromHtml" 
-                                                [additionalIndexes]="getStoreTierDiscountCategoryAdditionalIndexes(tierIndex, storeTierIndexe)"
+                                                [additionalIndexes]="getStoreTierDiscountCategoryAdditionalIndexes(tierIndex, storeTierIndex)"
                                                 ></soft-data-table>
                                             </div>
                                         </form>

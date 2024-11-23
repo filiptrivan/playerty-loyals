@@ -147,12 +147,8 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('UpdateUserGroupEndpoint');
             case 'storeTier':
                 return this.translocoService.translate('StoreTier');
-            case 'storeTiers':
-                return this.translocoService.translate('StoreTiers');
             case 'discountCategory':
                 return this.translocoService.translate('DiscountCategory');
-            case 'discountCategories':
-                return this.translocoService.translate('DiscountCategories');
             case 'validFrom':
                 return this.translocoService.translate('ValidFrom');
             case 'validTo':

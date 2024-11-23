@@ -188,7 +188,6 @@ namespace Playerty.Loyals.Services
                 List<int> tierIdsDTO = tierSaveBodyDTO.TierDTOList.Select(x => x.Id).ToList();
 
                 IQueryable<Tier> tiersForDeleteQuery = _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode() && tierIdsDTO.Contains(x.Id) == false);
-
                 await DeleteTiers(tiersForDeleteQuery);
 
                 for (int i = 0; i < tierSaveBodyDTO.TierDTOList.Count; i++)

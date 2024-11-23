@@ -267,10 +267,8 @@ export class StoreTierDiscountCategory extends BaseEntity
 	tierClientIndex?: number;
 	storeTierDisplayName?: string;
 	storeTierId?: number;
-	storeTiersId?: number;
 	discountCategoryDisplayName?: string;
 	discountCategoryId?: number;
-	discountCategoriesId?: number;
 	discount?: number;
 
     constructor(
@@ -282,10 +280,8 @@ export class StoreTierDiscountCategory extends BaseEntity
 		tierClientIndex,
 		storeTierDisplayName,
 		storeTierId,
-		storeTiersId,
 		discountCategoryDisplayName,
 		discountCategoryId,
-		discountCategoriesId,
 		discount
     }:{
         id?: number;
@@ -295,10 +291,8 @@ export class StoreTierDiscountCategory extends BaseEntity
 		tierClientIndex?: number;
 		storeTierDisplayName?: string;
 		storeTierId?: number;
-		storeTiersId?: number;
 		discountCategoryDisplayName?: string;
 		discountCategoryId?: number;
-		discountCategoriesId?: number;
 		discount?: number;     
     } = {}
     ) {
@@ -311,10 +305,8 @@ export class StoreTierDiscountCategory extends BaseEntity
 		this.tierClientIndex = tierClientIndex;
 		this.storeTierDisplayName = storeTierDisplayName;
 		this.storeTierId = storeTierId;
-		this.storeTiersId = storeTiersId;
 		this.discountCategoryDisplayName = discountCategoryDisplayName;
 		this.discountCategoryId = discountCategoryId;
-		this.discountCategoriesId = discountCategoriesId;
 		this.discount = discount;
     }
 }
