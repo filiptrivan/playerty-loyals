@@ -82,16 +82,14 @@ namespace Playerty.Loyals.Infrastructure
                 .HasKey(ru => new { ru.StoreTiersId, ru.DiscountCategoriesId });
 
             modelBuilder.Entity<StoreTier>()
-                .HasMany(e => e.DiscountCategories)
-                .WithMany(e => e.StoreTiers)
-                .UsingEntity<StoreTierDiscountCategory>(
-                    j => j.HasOne<DiscountCategory>(x => x.DiscountCategory)
-                          .WithMany()
-                          .HasForeignKey(ru => ru.DiscountCategoriesId),
-                    j => j.HasOne<StoreTier>(x => x.StoreTier)
-                          .WithMany()
-                          .HasForeignKey(ru => ru.StoreTiersId)
-                );
+                .HasMany(e => e.StoreTierDiscountCategories)
+                .WithOne(e => e.StoreTier)
+                .HasForeignKey(e => e.StoreTiersId);
+
+            modelBuilder.Entity<DiscountCategory>()
+                .HasMany(e => e.StoreTierDiscountCategories)
+                .WithOne(e => e.DiscountCategory)
+                .HasForeignKey(e => e.DiscountCategoriesId);
 
             modelBuilder.Entity<Tier>()
                 .HasMany(e => e.PartnerUsers)

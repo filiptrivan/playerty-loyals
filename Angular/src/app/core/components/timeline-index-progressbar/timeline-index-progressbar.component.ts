@@ -35,7 +35,7 @@ export class TimelineIndexProgressbarComponent {
         }
 
     ngOnInit(){
-        // console.log(this.last);
+        this.changeConnector();
     }
 
     isCurrentTier(tier: Tier){

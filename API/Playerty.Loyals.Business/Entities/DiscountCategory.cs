@@ -23,6 +23,6 @@ namespace Playerty.Loyals.Business.Entities
         [ManyToOneRequired]
         public virtual Store Store { get; set; }
 
-        public virtual List<StoreTier> StoreTiers { get; set; }
+        public virtual List<StoreTierDiscountCategory> StoreTierDiscountCategories { get; }
     }
 }

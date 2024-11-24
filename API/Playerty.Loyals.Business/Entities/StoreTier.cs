@@ -17,6 +17,7 @@ namespace Playerty.Loyals.Business.Entities
         [ManyToOneRequired]
         public virtual Tier Tier { get; set; }
 
-        public virtual List<DiscountCategory> DiscountCategories { get; set; }
+        [Map]
+        public virtual List<StoreTierDiscountCategory> StoreTierDiscountCategories { get; }
     }
 }

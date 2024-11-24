@@ -19,10 +19,13 @@
 				<div class="header" style="margin-bottom: 10px;">{{tier.name}}</div>
 				<div class="text-wrapper">
 					{{tier.description}}
-					<div *ngFor="let store of tier.stores">
-						<div *ngFor="let discountCategory of store.discountCategoryList">
-							eee
-						</div>
+					<div *ngFor="let storeTier of tier.storeTiersDTOList">
+						{{storeTier.storeDisplayName}}
+						<ul>
+							<li *ngFor="let storeTierDiscountCategory of storeTier.storeTierDiscountCategoriesDTOList">
+								{{storeTierDiscountCategory.discountCategoryDisplayName}}: {{storeTierDiscountCategory.discount}}%
+							</li>
+						</ul>
 					</div>
 				</div>
 			  </div>

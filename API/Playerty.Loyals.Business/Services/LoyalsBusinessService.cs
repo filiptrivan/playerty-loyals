@@ -389,6 +389,49 @@ namespace Playerty.Loyals.Services
             return tierSaveBodyDTO;
         }
 
+        public async Task<List<TierDTO>> LoadTierListForDisplay()
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                List<TierDTO> tierDTOList = new List<TierDTO>();
+
+                List<Tier> tierList = await LoadTierList(_context.DbSet<Tier>()
+                    .AsNoTracking()
+                    .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
+                    .Include(x => x.StoreTiers)
+                        .ThenInclude(x => x.Store)
+                    .Include(x => x.StoreTiers)
+                        .ThenInclude(x => x.StoreTierDiscountCategories)
+                            .ThenInclude(x => x.DiscountCategory)
+                    .Include(x => x.Partner)
+                    .OrderByDescending(x => x.ValidFrom), false);
+
+                foreach (Tier tier in tierList)
+                {
+                    TierDTO tierDTO = tier.Adapt<TierDTO>(Mapper.TierToDTOConfig());
+                    tierDTO.StoreTiersDTOList = new List<StoreTierDTO>();
+
+                    foreach (StoreTier storeTier in tier.StoreTiers)
+                    {
+                        StoreTierDTO storeTierDTO = storeTier.Adapt<StoreTierDTO>(Mapper.StoreTierToDTOConfig());
+                        storeTierDTO.StoreTierDiscountCategoriesDTOList = new List<StoreTierDiscountCategoryDTO>();
+
+                        foreach (StoreTierDiscountCategory storeTierDiscountCategory in storeTier.StoreTierDiscountCategories)
+                        {
+                            StoreTierDiscountCategoryDTO storeTierDiscountCategoryDTO = storeTierDiscountCategory.Adapt<StoreTierDiscountCategoryDTO>(Mapper.StoreTierDiscountCategoryToDTOConfig());
+                            storeTierDTO.StoreTierDiscountCategoriesDTOList.Add(storeTierDiscountCategoryDTO);
+                        }
+
+                        tierDTO.StoreTiersDTOList.Add(storeTierDTO);
+                    }
+
+                    tierDTOList.Add(tierDTO);
+                }
+
+                return tierDTOList;
+            });
+        }
+
         #endregion
 
         #region Partner
@@ -1032,7 +1075,7 @@ namespace Playerty.Loyals.Services
                     DiscountCategoryDTOValidationRules validationRules = new DiscountCategoryDTOValidationRules();
                     validationRules.ValidateAndThrow(discountCategoryApiDTO);
 
-                    DiscountCategory discountCategory = discountCategoryList.Where(x => x.Code == discountCategoryApiDTO.Code).SingleOrDefault();
+                    DiscountCategory discountCategory = discountCategoryList.Where(x => x.Code == discountCategoryApiDTO.Code && x.Store.Id == discountCategoryApiDTO.StoreId).SingleOrDefault();
 
                     if (discountCategory == null) // Add new
                     {
