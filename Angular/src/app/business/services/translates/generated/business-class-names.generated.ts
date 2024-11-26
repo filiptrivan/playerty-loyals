@@ -81,6 +81,8 @@ export class TranslateClassNamesBusinessService {
                 return this.translocoService.translate('QrCode');
             case 'Tier':
                 return this.translocoService.translate('Tier');
+            case 'StoreUpdatePointsScheduledTask':
+                return this.translocoService.translate('StoreUpdatePointsScheduledTask');
             default:
                 return null;
         }

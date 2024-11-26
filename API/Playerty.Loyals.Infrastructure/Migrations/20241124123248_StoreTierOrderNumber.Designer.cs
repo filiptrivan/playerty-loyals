@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Playerty.Loyals.Infrastructure;
 
@@ -11,9 +12,11 @@ using Playerty.Loyals.Infrastructure;
 namespace Playerty.Loyals.Infrastructure.Migrations
 {
     [DbContext(typeof(PLApplicationDbContext))]
-    partial class PLApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241124123248_StoreTierOrderNumber")]
+    partial class StoreTierOrderNumber
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +40,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("PartnerRolesId");
 
-                    b.ToTable("PartnerPermissionPartnerRole", (string)null);
+                    b.ToTable("PartnerPermissionPartnerRole");
                 });
 
             modelBuilder.Entity("PartnerRolePartnerUser", b =>
@@ -52,7 +55,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("PartnerUsersId");
 
-                    b.ToTable("PartnerRolePartnerUser", (string)null);
+                    b.ToTable("PartnerRolePartnerUser");
                 });
 
             modelBuilder.Entity("PartnerUserSegmentation", b =>
@@ -67,7 +70,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("PartnerUsersThatHasFilledSegmentationId");
 
-                    b.ToTable("PartnerUserSegmentation", (string)null);
+                    b.ToTable("PartnerUserSegmentation");
                 });
 
             modelBuilder.Entity("PartnerUserSegmentationItem", b =>
@@ -82,7 +85,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("PartnerUsersId");
 
-                    b.ToTable("PartnerUserSegmentationItem", (string)null);
+                    b.ToTable("PartnerUserSegmentationItem");
                 });
 
             modelBuilder.Entity("PermissionRole", b =>
@@ -97,7 +100,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("RolesId");
 
-                    b.ToTable("PermissionRole", (string)null);
+                    b.ToTable("PermissionRole");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.DiscountCategory", b =>
@@ -134,7 +137,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("StoreId");
 
-                    b.ToTable("DiscountCategories", (string)null);
+                    b.ToTable("DiscountCategories");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Gender", b =>
@@ -152,7 +155,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genders", (string)null);
+                    b.ToTable("Genders");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Notification", b =>
@@ -193,7 +196,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Notification");
 
@@ -215,7 +218,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("NotificationUser", (string)null);
+                    b.ToTable("NotificationUser");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Partner", b =>
@@ -262,7 +265,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.HasIndex("Slug")
                         .IsUnique();
 
-                    b.ToTable("Partners", (string)null);
+                    b.ToTable("Partners");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerNotificationPartnerUser", b =>
@@ -280,7 +283,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("PartnerUsersId");
 
-                    b.ToTable("PartnerNotificationPartnerUser", (string)null);
+                    b.ToTable("PartnerNotificationPartnerUser");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerPermission", b =>
@@ -310,7 +313,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.ToTable("PartnerPermissions", (string)null);
+                    b.ToTable("PartnerPermissions");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerRole", b =>
@@ -346,7 +349,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("PartnerId");
 
-                    b.ToTable("PartnerRoles", (string)null);
+                    b.ToTable("PartnerRoles");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerUser", b =>
@@ -386,7 +389,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PartnerUsers", (string)null);
+                    b.ToTable("PartnerUsers");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Segmentation", b =>
@@ -425,7 +428,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("PartnerId");
 
-                    b.ToTable("Segmentations", (string)null);
+                    b.ToTable("Segmentations");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.SegmentationItem", b =>
@@ -460,7 +463,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("SegmentationId");
 
-                    b.ToTable("SegmentationItems", (string)null);
+                    b.ToTable("SegmentationItems");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Store", b =>
@@ -515,7 +518,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("PartnerId");
 
-                    b.ToTable("Stores", (string)null);
+                    b.ToTable("Stores");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.StoreTier", b =>
@@ -550,7 +553,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("TierId");
 
-                    b.ToTable("StoreTiers", (string)null);
+                    b.ToTable("StoreTiers");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.StoreTierDiscountCategory", b =>
@@ -568,7 +571,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("DiscountCategoriesId");
 
-                    b.ToTable("StoreTierDiscountCategory", (string)null);
+                    b.ToTable("StoreTierDiscountCategory");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Tier", b =>
@@ -610,7 +613,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("PartnerId");
 
-                    b.ToTable("Tiers", (string)null);
+                    b.ToTable("Tiers");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.Transaction", b =>
@@ -647,7 +650,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Transactions", (string)null);
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.TransactionProduct", b =>
@@ -668,7 +671,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("TransactionId");
 
-                    b.ToTable("TransactionProducts", (string)null);
+                    b.ToTable("TransactionProducts");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.TransactionStatus", b =>
@@ -693,7 +696,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("TransactionId");
 
-                    b.ToTable("TransactionStatuses", (string)null);
+                    b.ToTable("TransactionStatuses");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.UserExtended", b =>
@@ -741,7 +744,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("GenderId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Soft.Generator.Security.Entities.Permission", b =>
@@ -771,7 +774,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.ToTable("Permissions", (string)null);
+                    b.ToTable("Permissions");
                 });
 
             modelBuilder.Entity("Soft.Generator.Security.Entities.Role", b =>
@@ -802,7 +805,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Soft.Generator.Security.Entities.RoleUser", b =>
@@ -817,7 +820,7 @@ namespace Playerty.Loyals.Infrastructure.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("RoleUser", (string)null);
+                    b.ToTable("RoleUser");
                 });
 
             modelBuilder.Entity("Playerty.Loyals.Business.Entities.PartnerNotification", b =>

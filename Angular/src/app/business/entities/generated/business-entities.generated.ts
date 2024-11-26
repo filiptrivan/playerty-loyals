@@ -30,6 +30,7 @@ export class Store extends BaseEntity
 {
     name?: string;
 	updatePointsInterval?: number;
+	updatePointsStartDatetime?: Date;
 	getPurchasesEndpoint?: string;
 	getReversalsEndpoint?: string;
 	getDiscountCategoriesEndpoint?: string;
@@ -46,6 +47,7 @@ export class Store extends BaseEntity
     {
         name,
 		updatePointsInterval,
+		updatePointsStartDatetime,
 		getPurchasesEndpoint,
 		getReversalsEndpoint,
 		getDiscountCategoriesEndpoint,
@@ -60,6 +62,7 @@ export class Store extends BaseEntity
     }:{
         name?: string;
 		updatePointsInterval?: number;
+		updatePointsStartDatetime?: Date;
 		getPurchasesEndpoint?: string;
 		getReversalsEndpoint?: string;
 		getDiscountCategoriesEndpoint?: string;
@@ -77,6 +80,7 @@ export class Store extends BaseEntity
 
         this.name = name;
 		this.updatePointsInterval = updatePointsInterval;
+		this.updatePointsStartDatetime = updatePointsStartDatetime;
 		this.getPurchasesEndpoint = getPurchasesEndpoint;
 		this.getReversalsEndpoint = getReversalsEndpoint;
 		this.getDiscountCategoriesEndpoint = getDiscountCategoriesEndpoint;
@@ -208,7 +212,8 @@ export class NotificationSaveBody extends BaseEntity
 
 export class StoreTier extends BaseEntity
 {
-    storeDisplayName?: string;
+    orderNumber?: number;
+	storeDisplayName?: string;
 	storeId?: number;
 	tierDisplayName?: string;
 	tierId?: number;
@@ -220,7 +225,8 @@ export class StoreTier extends BaseEntity
 
     constructor(
     {
-        storeDisplayName,
+        orderNumber,
+		storeDisplayName,
 		storeId,
 		tierDisplayName,
 		tierId,
@@ -230,7 +236,8 @@ export class StoreTier extends BaseEntity
 		modifiedAt,
 		tierClientIndex
     }:{
-        storeDisplayName?: string;
+        orderNumber?: number;
+		storeDisplayName?: string;
 		storeId?: number;
 		tierDisplayName?: string;
 		tierId?: number;
@@ -243,7 +250,8 @@ export class StoreTier extends BaseEntity
     ) {
         super('StoreTier'); 
 
-        this.storeDisplayName = storeDisplayName;
+        this.orderNumber = orderNumber;
+		this.storeDisplayName = storeDisplayName;
 		this.storeId = storeId;
 		this.tierDisplayName = tierDisplayName;
 		this.tierId = tierId;
@@ -1254,6 +1262,52 @@ export class Tier extends BaseEntity
 		this.validTo = validTo;
 		this.partnerDisplayName = partnerDisplayName;
 		this.partnerId = partnerId;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
+export class StoreUpdatePointsScheduledTask extends BaseEntity
+{
+    shouldStartedAt?: Date;
+	finishedAt?: Date;
+	storeDisplayName?: string;
+	storeId?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        shouldStartedAt,
+		finishedAt,
+		storeDisplayName,
+		storeId,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        shouldStartedAt?: Date;
+		finishedAt?: Date;
+		storeDisplayName?: string;
+		storeId?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('StoreUpdatePointsScheduledTask'); 
+
+        this.shouldStartedAt = shouldStartedAt;
+		this.finishedAt = finishedAt;
+		this.storeDisplayName = storeDisplayName;
+		this.storeId = storeId;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;

@@ -21,6 +21,9 @@ using Azure.Storage.Blobs;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
+using Quartz;
+using Playerty.Loyals.Business.Services;
+using Playerty.Loyals.Business.BackroundJobs;
 
 public class Startup
 {
@@ -65,12 +68,15 @@ public class Startup
                     ClockSkew = TimeSpan.FromMinutes(Playerty.Loyals.WebAPI.SettingsProvider.Current.ClockSkewMinutes),
                 };
             });
+
         services.AddAuthorization();
 
         services.AddHttpContextAccessor();
+
         services.AddCors();
 
-        services.Configure<RequestLocalizationOptions>(options => // FT: It's mandatory to be before AddControllers
+        // FT: It's mandatory to be before AddControllers
+        services.Configure<RequestLocalizationOptions>(options => 
         {
             CultureInfo[] supportedCultures = new[]
             {
@@ -104,8 +110,8 @@ public class Startup
             });
         });
 
-        services.AddDbContext<IApplicationDbContext, PLApplicationDbContext>( // https://youtu.be/bN57EDYD6M0?si=CVztRqlj0hBSrFXb
-            options =>
+        // https://youtu.be/bN57EDYD6M0?si=CVztRqlj0hBSrFXb
+        services.AddDbContext<IApplicationDbContext, PLApplicationDbContext>(options =>
             {
                 options
                     .UseLazyLoadingProxies()
@@ -113,14 +119,23 @@ public class Startup
                     //.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
             });
 
-        services.AddSwaggerGen(c =>
+        services.AddSwaggerGen(options =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo
+            options.SwaggerDoc("v1", new OpenApiInfo
             {
                 Title = "Playerty.Loyals.WebAPI",
                 Version = "v1"
             });
         });
+
+        services.AddQuartz();
+
+        services.AddQuartzHostedService(options =>
+        {
+            options.WaitForJobsToComplete = true; // FT: If the application is turning off while the job is running, it will not turn off till the job is done.
+        });
+
+        services.ConfigureOptions<UpdatePointsBackgroundJobSetup>();
     }
 
     public void ConfigureContainer(IServiceContainer container)

@@ -21,6 +21,8 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('Id');
             case 'updatePointsInterval':
                 return this.translocoService.translate('UpdatePointsInterval');
+            case 'updatePointsStartDatetime':
+                return this.translocoService.translate('UpdatePointsStartDatetime');
             case 'getPurchasesEndpoint':
                 return this.translocoService.translate('GetPurchasesEndpoint');
             case 'getReversalsEndpoint':
@@ -171,6 +173,10 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('StoreTierClientIndex');
             case 'pointsForTheFirstTimeFill':
                 return this.translocoService.translate('PointsForTheFirstTimeFill');
+            case 'shouldStartedAt':
+                return this.translocoService.translate('ShouldStartedAt');
+            case 'finishedAt':
+                return this.translocoService.translate('FinishedAt');
             default:
                 return null;
         }

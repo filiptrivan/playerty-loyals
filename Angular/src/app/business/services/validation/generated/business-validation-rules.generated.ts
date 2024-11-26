@@ -45,6 +45,8 @@ export class ValidatorBusinessService {
 
 
 
+        case 'orderNumberStoreTier':
+            return this.orderNumberStoreTierValidator(formControl);
         case 'storeIdStoreTier':
             return this.storeIdStoreTierValidator(formControl);
         case 'tierIdStoreTier':
@@ -168,6 +170,11 @@ export class ValidatorBusinessService {
             return this.validToTierValidator(formControl);
         case 'partnerIdTier':
             return this.partnerIdTierValidator(formControl);
+
+        case 'shouldStartedAtStoreUpdatePointsScheduledTask':
+            return this.shouldStartedAtStoreUpdatePointsScheduledTaskValidator(formControl);
+        case 'storeIdStoreUpdatePointsScheduledTask':
+            return this.storeIdStoreUpdatePointsScheduledTaskValidator(formControl);
 
             default:
                 return null;
@@ -367,6 +374,20 @@ export class ValidatorBusinessService {
 
 
 
+
+    orderNumberStoreTierValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const orderNumberValid = notEmptyRule;
+
+            return orderNumberValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
 
     storeIdStoreTierValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
@@ -1144,6 +1165,35 @@ export class ValidatorBusinessService {
             const partnerIdValid = notEmptyRule;
 
             return partnerIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+
+    shouldStartedAtStoreUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const shouldStartedAtValid = notEmptyRule;
+
+            return shouldStartedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    storeIdStoreUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const storeIdValid = notEmptyRule;
+
+            return storeIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
         return validator;

@@ -1,5 +1,7 @@
 ﻿using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.BaseEntities;
+using Soft.Generator.Shared.Entities;
+using Soft.Generator.Shared.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,18 +11,14 @@ using System.Threading.Tasks;
 
 namespace Playerty.Loyals.Business.Entities
 {
-    public class StoreTier : BusinessObject<long>
+    public class StoreUpdatePointsScheduledTask : BusinessObject<long>
     {
         [Required]
-        public int OrderNumber { get; set; }
+        public DateTime ShouldStartedAt { get; set; }
+
+        public DateTime? FinishedAt { get; set; }
 
         [ManyToOneRequired]
         public virtual Store Store { get; set; }
-
-        [ManyToOneRequired]
-        public virtual Tier Tier { get; set; }
-
-        [Map]
-        public virtual List<StoreTierDiscountCategory> StoreTierDiscountCategories { get; }
     }
 }

@@ -1,51 +1,56 @@
 # C#
-.vs/
-*.exe
-*.dll
-*.log
+**/.vs/
+**/*.exe
+**/*.dll
+**/*.log
 **/bin/
 **/obj/
-.DS_Store
+**/*.user
+**/*.suo
+**/*.pdb
 
 # Angular
-
-# Compiled output
-/Angular/dist
-/Angular/tmp
-/Angular/out-tsc
-/Angular/bazel-out
+**/dist/
+**/tmp/
+**/out-tsc/
+**/bazel-out/
+**/.angular/cache/
 
 # Node
-/Angular/node_modules
-/Angular/npm-debug.log
-/Angular/yarn-error.log
+**/node_modules/
+**/npm-debug.log
+**/yarn-error.log
+**/*.env
+**/*.env.local
 
 # IDEs and editors
-/Angular/.idea/
-/Angular/.project
-/Angular/.classpath
-/Angular/.c9/
-*.launch
-/Angular/.settings/
-*.sublime-workspace
+**/.idea/
+**/.project
+**/.classpath
+**/.c9/
+**/*.launch
+**/.settings/
+**/*.sublime-workspace
 
 # Visual Studio Code
-/Angular/.vscode/*
-/Angular/!.vscode/settings.json
-/Angular/!.vscode/tasks.json
-/Angular/!.vscode/launch.json
-/Angular/!.vscode/extensions.json
-/Angular/.history/*
+**/.vscode/*
+**/!.vscode/settings.json
+**/!.vscode/tasks.json
+**/!.vscode/launch.json
+**/!.vscode/extensions.json
+**/.history/*
 
 # Miscellaneous
-/Angular/.angular/cache
-/Angular/.sass-cache/
-/Angular/connect.lock
-/Angular/coverage
-/Angular/libpeerconnection.log
-/Angular/testem.log
-/Angular/typings
+**/.sass-cache/
+**/connect.lock
+**/coverage
+**/libpeerconnection.log
+**/testem.log
+**/typings
+**/*.pid
+**/*.bak
+**/*.tmp
 
 # System files
-/Angular/.DS_Store
-/Angular/Thumbs.db
+**/.DS_Store
+**/Thumbs.db

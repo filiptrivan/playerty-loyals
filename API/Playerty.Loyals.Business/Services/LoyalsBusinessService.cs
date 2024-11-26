@@ -205,6 +205,7 @@ namespace Playerty.Loyals.Services
                     {
                         StoreTierDTO storeTierDTO = storeTierDTOList[j];
                         storeTierDTO.TierId = savedTierDTO.Id;
+                        storeTierDTO.OrderNumber = j + 1;
                         StoreTierDTO savedStoreTierDTO = await SaveStoreTierAndReturnDTOAsync(storeTierDTO, false, false);
                         savedStoreTierDTO.TierClientIndex = i;
                         storeTierResultDTOList.Add(savedStoreTierDTO);
@@ -322,7 +323,7 @@ namespace Playerty.Loyals.Services
                 List<TierDTO> tierDTOList = await LoadTierDTOList(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
                 List<int> tierIds = tierDTOList.Select(x => x.Id).ToList();
 
-                List<StoreTierDTO> storeTierDTOList = await LoadStoreTierDTOList(_context.DbSet<StoreTier>().Where(x => tierIds.Contains(x.Tier.Id)), false);
+                List<StoreTierDTO> storeTierDTOList = await LoadStoreTierDTOList(_context.DbSet<StoreTier>().Where(x => tierIds.Contains(x.Tier.Id)).OrderBy(x => x.OrderNumber), false);
                 List<long> storeTierIds = storeTierDTOList.Select(x => x.Id).ToList();
 
                 await SyncDiscountCategories();
@@ -411,7 +412,7 @@ namespace Playerty.Loyals.Services
                     TierDTO tierDTO = tier.Adapt<TierDTO>(Mapper.TierToDTOConfig());
                     tierDTO.StoreTiersDTOList = new List<StoreTierDTO>();
 
-                    foreach (StoreTier storeTier in tier.StoreTiers)
+                    foreach (StoreTier storeTier in tier.StoreTiers.OrderBy(x => x.OrderNumber))
                     {
                         StoreTierDTO storeTierDTO = storeTier.Adapt<StoreTierDTO>(Mapper.StoreTierToDTOConfig());
                         storeTierDTO.StoreTierDiscountCategoriesDTOList = new List<StoreTierDiscountCategoryDTO>();
@@ -606,6 +607,18 @@ namespace Playerty.Loyals.Services
                     }
                 }
 
+                await _context.SaveChangesAsync();
+            });
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="pointsToAdd">Can be negative value also</param>
+        public async Task UpdatePointsForThePartnerUser(PartnerUser partnerUser, int pointsToAdd)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                partnerUser.Points += pointsToAdd;
                 await _context.SaveChangesAsync();
             });
         }
