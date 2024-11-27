@@ -37,12 +37,11 @@ namespace Playerty.Loyals.Infrastructure
         public DbSet<SegmentationItem> SegmentationItems { get; set; }
         public DbSet<Tier> Tiers { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<TransactionProduct> TransactionProducts { get; set; }
-        public DbSet<TransactionStatus> TransactionStatuses { get; set; }
         public DbSet<Store> Stores { get; set; }
         public DbSet<StoreTier> StoreTiers { get; set; }
         public DbSet<DiscountCategory> DiscountCategories { get; set; }
         public DbSet<StoreTierDiscountCategory> StoreTierDiscountCategory { get; set; } // M2M
+        public DbSet<StoreUpdatePointsScheduledTask> StoreUpdatePointsScheduledTasks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

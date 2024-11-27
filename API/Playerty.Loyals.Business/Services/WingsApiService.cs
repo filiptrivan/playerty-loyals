@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Playerty.Loyals.Business.DTO;
+using Playerty.Loyals.Business.DTO.Helpers;
 using Playerty.Loyals.Business.Entities;
 using Soft.Generator.Shared.Extensions;
 using Soft.Generator.Shared.Interfaces;
@@ -23,6 +24,28 @@ namespace Playerty.Loyals.Business.Services
         {
             _context = context;
             _partnerUserAuthenticationService = partnerUserAuthenticationService;
+        }
+
+        public async Task<List<ExternalTransactionDTO>> GetTransactionList(string transactionsEndpoint, DateTime getTransactionsSince)
+        {
+            if (transactionsEndpoint == "creative-brackets")
+            {
+                return new List<ExternalTransactionDTO>
+                {
+                    new ExternalTransactionDTO { Price = 200.00M, ProductCategoryName = "SG Tools", ProductName = "Dijamant", UserEmail = "filiptrivan5@gmail.com", BoughtAt = DateTime.Now.AddHours(-2) },
+                    new ExternalTransactionDTO { Price = 400.00M, ProductCategoryName = "Bosch", ProductName = "Hilti", UserEmail = "filiptrivan5@gmail.com", BoughtAt = DateTime.Now.AddHours(-2) },
+                    new ExternalTransactionDTO { Price = -200.00M, ProductCategoryName = "SG Tools", ProductName = "Dijamant", UserEmail = "filiptrivan5@gmail.com", BoughtAt = DateTime.Now.AddHours(-2) },
+                };
+            }
+            else // wings
+            {
+                return new List<ExternalTransactionDTO>
+                {
+                    new ExternalTransactionDTO { Price = 500.00M, ProductCategoryName = "Makita", ProductName = "Usisivac", UserEmail = "filiptrivan5@gmail.com", BoughtAt = DateTime.Now.AddHours(-2) },
+                    new ExternalTransactionDTO { Price = 1000.00M, ProductCategoryName = "Dewalt", ProductName = "Cekic", UserEmail = "filiptrivan5@gmail.com", BoughtAt = DateTime.Now.AddHours(-2) },
+                    new ExternalTransactionDTO { Price = -500.00M, ProductCategoryName = "Makita", ProductName = "Usisivac", UserEmail = "filiptrivan5@gmail.com", BoughtAt = DateTime.Now.AddHours(-2) },
+                };
+            }
         }
 
         //public async Task<List<Purchace>> LoadNewPurchacesSinceAsync()

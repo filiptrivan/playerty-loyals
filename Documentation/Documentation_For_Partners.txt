@@ -1,0 +1,2 @@
+1. Da li imaju odvojene tabele za purchase i za reversal i da li da gadjam odvojene endpointe?
+ - Treba da mi naprave 

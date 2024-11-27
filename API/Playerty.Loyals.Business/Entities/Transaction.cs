@@ -13,9 +13,13 @@ namespace Playerty.Loyals.Business.Entities
     // FT: It's business object but only the system can modify it, the system can modify it's statuses
     public class Transaction : BusinessObject<long>
     {
-        [SoftDisplayName]
         [Required]
-        public Guid Guid { get; set; }
+        [StringLength(500, MinimumLength = 1)]
+        public string ProductName { get; set; }
+
+        [Required]
+        [StringLength(500, MinimumLength = 1)]
+        public string ProductCategoryName { get; set; }
 
         [Precision(16, 2)]
         [Required]
@@ -28,11 +32,6 @@ namespace Playerty.Loyals.Business.Entities
         public int Points { get; set; }
 
         [ManyToOneRequired]
-        public virtual UserExtended User {  get; set; }
-
-        /// <summary>
-        /// Making the list because we should show to user statuses like this: Completed -> Returned -> Shipped...
-        /// </summary>
-        public virtual List<TransactionStatus> Statuses { get; set; }
+        public virtual PartnerUser PartnerUser {  get; set; }
     }
 }

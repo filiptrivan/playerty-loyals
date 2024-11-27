@@ -38,6 +38,10 @@ namespace Playerty.Loyals.Business.Entities
         [StringLength(1000, MinimumLength = 1)]
         public string ProductsRecommendationEndpoint { get; set; }
 
+        [Precision(10, 2)]
+        [Required]
+        public decimal PointsMultiplier { get; set; }
+
         public virtual List<PartnerUser> Users { get; set; }
         public virtual List<Tier> Tiers { get; set; }
         public virtual List<PartnerNotification> PartnerNotifications { get; set; }

@@ -25,10 +25,7 @@ namespace Playerty.Loyals.Business.Entities
         public DateTime? UpdatePointsStartDatetime { get; set; }
 
         [StringLength(1000, MinimumLength = 1)]
-        public string GetPurchasesEndpoint { get; set; }
-
-        [StringLength(1000, MinimumLength = 1)]
-        public string GetReversalsEndpoint { get; set; }
+        public string GetTransactionsEndpoint { get; set; }
 
         [StringLength(1000, MinimumLength = 1)]
         public string GetDiscountCategoriesEndpoint { get; set; }
@@ -43,5 +40,7 @@ namespace Playerty.Loyals.Business.Entities
         public virtual Partner Partner { get; set; }
 
         public virtual List<StoreTier> StoreTiers { get; set; }
+
+        public virtual List<StoreUpdatePointsScheduledTask> StoreUpdatePointsScheduledTasks { get; set; }
     }
 }

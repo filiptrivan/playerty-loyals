@@ -21,7 +21,8 @@ import { TranslateLabelsService } from 'src/app/business/services/translates/tra
     ]
 })
 export class SoftCalendarComponent extends BaseControl implements OnInit {
-    
+    @Input() showTime: boolean = false;
+
     constructor(
         protected override translocoService: TranslocoService,
         protected override translateLabelsService: TranslateLabelsService,

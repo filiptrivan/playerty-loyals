@@ -10,6 +10,7 @@ using Soft.Generator.Shared.Emailing;
 using Playerty.Loyals.Services;
 using Playerty.Loyals.Business.Services;
 using Playerty.Loyals.Business.Entities;
+using Playerty.Loyals.Business.BackroundJobs;
 
 namespace Playerty.Loyals.WebAPI.DI
 {
@@ -36,6 +37,7 @@ namespace Playerty.Loyals.WebAPI.DI
             registry.Register<BusinessBusinessServiceGenerated>();
             registry.Register<PartnerUserAuthenticationService>();
             registry.Register<WingsApiService>();
+            registry.RegisterSingleton<UpdatePointsScheduler>();
         }
 
         /// <summary>

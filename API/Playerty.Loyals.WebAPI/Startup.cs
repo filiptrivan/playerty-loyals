@@ -24,6 +24,8 @@ using System.Globalization;
 using Quartz;
 using Playerty.Loyals.Business.Services;
 using Playerty.Loyals.Business.BackroundJobs;
+using Playerty.Loyals.Services;
+using Microsoft.Win32;
 
 public class Startup
 {
@@ -135,7 +137,9 @@ public class Startup
             options.WaitForJobsToComplete = true; // FT: If the application is turning off while the job is running, it will not turn off till the job is done.
         });
 
-        services.ConfigureOptions<UpdatePointsBackgroundJobSetup>();
+        //services.ConfigureOptions<UpdatePointsBackgroundJobSetup>();
+
+        services.AddHostedService<UpdatePointsHostedService>();
     }
 
     public void ConfigureContainer(IServiceContainer container)
@@ -156,6 +160,11 @@ public class Startup
             GenerateAngularCode();
             app.UseDeveloperExceptionPage();
         }
+
+        //UpdatePointsScheduler updatePointsScheduler = app.ApplicationServices.GetRequiredService<UpdatePointsScheduler>();
+        //await updatePointsScheduler.InitializeAsync();
+        //LoyalsBusinessService loyalsBusinessService = app.ApplicationServices.GetRequiredService<LoyalsBusinessService>();
+        //await loyalsBusinessService..ContinueJobs();
 
         RequestLocalizationOptions localizationOptions = app.ApplicationServices
             .GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;

@@ -12,6 +12,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Playerty.Loyals.Business.Services;
+using Playerty.Loyals.Business.DTO.Helpers;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Database;
 
 namespace Playerty.Loyals.Business.BackroundJobs
 {
@@ -32,68 +34,84 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
         public async Task Execute(IJobExecutionContext jobExecutionContext)
         {
-            long storeId = jobExecutionContext.JobDetail.JobDataMap.GetLong("StoreId");
-            DateTime now = DateTime.Now;
-            //DateTime shouldStartedAtForSave = jobExecutionContext.JobDetail.JobDataMap.GetDateTime("ShouldStartedAtForSave");
+            Store store = null;
 
-            // If shouldStartedAtForSave == null and last ShouldStartedAt == null, get the FirstStart from the database and save with that
-
-            await _context.WithTransactionAsync(async () =>
+            try
             {
-                Store store = await _loyalsBusinessService.LoadInstanceAsync<Store, long>(storeId, null);
-                int interval = (int)store.UpdatePointsInterval; // FT: If it is null, it should never arrive here
-                DateTime startDateTime = store.UpdatePointsStartDatetime.Value; // FT: If it is null, it should never arrive here
+                _logger.LogInformation(jobExecutionContext.ToString());
+                long storeId = jobExecutionContext.JobDetail.JobDataMap.GetLong("StoreId");
+                DateTime now = DateTime.Now;
 
-                StoreUpdatePointsScheduledTask storeUpdatePointsScheduledTask = await _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == storeId).OrderByDescending(x => x.ShouldStartedAt).FirstOrDefaultAsync();
-                DateTime? lastShouldStartedAt = storeUpdatePointsScheduledTask.ShouldStartedAt;
-
-                DateTime shouldStartedAtForSave = GetShouldStartedAtForSave(interval, startDateTime, lastShouldStartedAt, now);
-
-                StoreUpdatePointsScheduledTask savedStoreUpdatePointsScheduledTask = await _loyalsBusinessService.SaveStoreUpdatePointsScheduledTaskAndReturnDomainAsync(new StoreUpdatePointsScheduledTaskDTO
+                await _context.WithTransactionAsync(async () =>
                 {
-                    ShouldStartedAt = shouldStartedAtForSave,
-                    StoreId = storeId,
-                });
+                    DbSet<StoreUpdatePointsScheduledTask> dbSet = _context.DbSet<StoreUpdatePointsScheduledTask>();
 
-                // FT: If lastShouldStartedAt == null that means that this is the first update ever for this store
-                List<TransactionDTO> transactionDTOList = _wingsApiService.GetTransactionList(store.GetTransactionsEndpoint, lastShouldStartedAt ?? startDateTime);
-                List<string> userEmailList = transactionDTOList.Select(x => x.UserEmail).ToList();
-                var userIdAndEmailList = _context.DbSet<UserExtended>()
-                    .Where(x => userEmailList.Contains(x.Email))
-                    .Select(x => new 
-                    { 
-                        Id = x.Id,
-                        Email = x.Email,
-                    })
-                    .ToList();
+                    store = await _loyalsBusinessService.LoadInstanceAsync<Store, long>(storeId, null);
 
-                foreach (TransactionDTO transactionDTO in transactionDTOList)
-                {
-                    long partnerUserId = userIdAndEmailList.Where(x => x.Email == transactionDTO.UserEmail).Select(x => x.Id).Single();
+                    int interval = (int)store.UpdatePointsInterval; // FT: If it is null, it should never arrive here
+                    DateTime startDateTime = store.UpdatePointsStartDatetime.Value; // FT: If it is null, it should never arrive here
 
-                    int points = transactionDTO.Price * store.Partner.PointsMultiplier;
+                    StoreUpdatePointsScheduledTask storeUpdatePointsScheduledTask = await _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == storeId).OrderByDescending(x => x.ShouldStartedAt).FirstOrDefaultAsync();
+                    DateTime? lastShouldStartedAt = storeUpdatePointsScheduledTask?.ShouldStartedAt;
 
-                    TransactionDTO transactionDTOForSave = new TransactionDTO
+                //});
+
+                //await _context.WithTransactionAsync(async () =>
+                //{
+                    // FT: If lastShouldStartedAt == null that means that this is the first update ever for this store
+                    List<ExternalTransactionDTO> externalTransactionDTOList = await _wingsApiService.GetTransactionList(store.GetTransactionsEndpoint, lastShouldStartedAt ?? startDateTime);
+
+                    List<string> userEmailList = externalTransactionDTOList.Select(x => x.UserEmail).ToList();
+
+                    List<PartnerUser> partnerUserList = _context.DbSet<PartnerUser>()
+                        .Include(x => x.User)
+                        .Where(x => x.Partner.Id == store.Partner.Id && userEmailList.Contains(x.User.Email))
+                        .ToList();
+
+                    // FT: when we make an agreement with the partners that they update the categories, we will just send them an email, the update of your points failed, due to mismatched categories, please harmonize the categories and stop the execution manually.
+                    // await _loyalsBusinessService.SyncDiscountCategories(); // FT: You don't need to sync here, we will just use passed name as category
+
+                    foreach (ExternalTransactionDTO externalTransactionDTO in externalTransactionDTOList)
                     {
-                        ProductName = transactionDTO.ProductName,
-                        ProductCategory = transactionDTO.ProductCategoryCode, // FT: Maybe Sync categories before this
-                        Price = transactionDTO.Price,
-                        Points = points,
-                        PartnerUserId = userId,
+                        PartnerUser partnerUser = partnerUserList.Where(x => x.User.Email == externalTransactionDTO.UserEmail).Single();
+
+                        int pointsFromTransaction = (int)Math.Floor(externalTransactionDTO.Price * store.Partner.PointsMultiplier); // FT: Test this for negative and positive price
+
+                        TransactionDTO transactionDTO = new TransactionDTO
+                        {
+                            ProductName = externalTransactionDTO.ProductName,
+                            ProductCategoryName = externalTransactionDTO.ProductCategoryName,
+                            Price = externalTransactionDTO.Price,
+                            Points = pointsFromTransaction,
+                            PartnerUserId = partnerUser.Id,
+                        };
+
+                        await _loyalsBusinessService.UpdatePointsForThePartnerUser(partnerUser, pointsFromTransaction);
+                    }
+
+                    DateTime shouldStartedAtForSave = GetShouldStartedAtForSave(interval, startDateTime, lastShouldStartedAt, now);
+
+                    StoreUpdatePointsScheduledTask savedStoreUpdatePointsScheduledTask = new StoreUpdatePointsScheduledTask
+                    {
+                        ShouldStartedAt = shouldStartedAtForSave,
+                        Store = store,
                     };
 
-                    _loyalsBusinessService.Points;
+                    await dbSet.AddAsync(savedStoreUpdatePointsScheduledTask);
 
-                    if (transactionDTO.Price >= 0)
+                    int rows = await _context.SaveChangesAsync();
 
-                }
-                // Save StoreUpdatePointsScheduledTask
-                // Get all purchases and deletes from api
-                // update points
-            });
+                    _logger.LogInformation($"ROWS EFFECTED: {rows}");
+                });
 
-            _logger.LogInformation($"{DateTime.UtcNow}");
-            //return Task.CompletedTask;
+                _logger.LogInformation($"{DateTime.UtcNow}");
+            }
+            catch (Exception)
+            {
+                _logger.LogError($"{DateTime.UtcNow}, STORE: {store.Id}");
+
+                throw;
+            }
         }
 
 
@@ -104,13 +122,16 @@ namespace Playerty.Loyals.Business.BackroundJobs
                 lastShouldStartedAt = startDateTime;
             }
 
-            TimeSpan intervalTimeSpan = TimeSpan.FromHours(interval);
+            //TimeSpan intervalTimeSpan = TimeSpan.FromHours(interval);
+            TimeSpan intervalTimeSpan = TimeSpan.FromSeconds(interval);
 
             TimeSpan elapsedTime = now - lastShouldStartedAt.Value;
 
-            int numberOfIntervals = (int)(elapsedTime.TotalHours / intervalTimeSpan.TotalHours); // FT: The cast to int is always rounding to the lower decimal place
+            //int numberOfIntervals = (int)(elapsedTime.TotalHours / intervalTimeSpan.TotalHours); // FT: The cast to int is always rounding to the lower decimal place
+            int numberOfIntervals = (int)(elapsedTime.TotalSeconds / intervalTimeSpan.TotalSeconds); // FT: The cast to int is always rounding to the lower decimal place
 
-            return lastShouldStartedAt.Value.AddHours(numberOfIntervals * intervalTimeSpan.TotalHours);
+            //return lastShouldStartedAt.Value.AddHours(numberOfIntervals * intervalTimeSpan.TotalHours);
+            return lastShouldStartedAt.Value.AddSeconds(numberOfIntervals * intervalTimeSpan.TotalSeconds);
         }
 
     }

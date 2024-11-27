@@ -19,6 +19,7 @@ using Playerty.Loyals.Business.ValidationRules;
 using System.Collections.Generic;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Database;
 using System.Linq;
+using Playerty.Loyals.Business.BackroundJobs;
 
 namespace Playerty.Loyals.Services
 {
@@ -32,9 +33,10 @@ namespace Playerty.Loyals.Services
         private readonly EmailingService _emailingService;
         private readonly BlobContainerClient _blobContainerClient;
         private readonly WingsApiService _wingsApiService;
+        private readonly UpdatePointsScheduler _updatePointsScheduler;
 
         public LoyalsBusinessService(IApplicationDbContext context, ExcelService excelService, Playerty.Loyals.Business.Services.AuthorizationBusinessService authorizationService, SecurityBusinessService<UserExtended> securityBusinessService, AuthenticationService authenticationService,
-            PartnerUserAuthenticationService partnerUserAuthenticationService, EmailingService emailingService, BlobContainerClient blobContainerClient, WingsApiService wingsApiService)
+            PartnerUserAuthenticationService partnerUserAuthenticationService, EmailingService emailingService, BlobContainerClient blobContainerClient, WingsApiService wingsApiService, UpdatePointsScheduler updatePointsScheduler)
             : base(context, excelService, authorizationService, blobContainerClient)
         {
             _context = context;
@@ -45,6 +47,7 @@ namespace Playerty.Loyals.Services
             _emailingService = emailingService;
             _blobContainerClient = blobContainerClient;
             _wingsApiService = wingsApiService;
+            _updatePointsScheduler = updatePointsScheduler;
         }
 
         #region User
@@ -1056,19 +1059,35 @@ namespace Playerty.Loyals.Services
 
         public async Task<StoreDTO> SaveStoreExtendedAsync(StoreSaveBodyDTO storeSaveBodyDTO)
         {
-            return await _context.WithTransactionAsync(async () =>
+            DateTimeOffset? scheduledJobResult = null;
+            StoreDTO savedStoreDTO = null;
+
+            try
             {
-                int currentPartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
-                storeSaveBodyDTO.StoreDTO.PartnerId = currentPartnerId;
+                if ((storeSaveBodyDTO.StoreDTO.UpdatePointsInterval == null && storeSaveBodyDTO.StoreDTO.UpdatePointsStartDatetime != null) ||
+                    (storeSaveBodyDTO.StoreDTO.UpdatePointsInterval != null && storeSaveBodyDTO.StoreDTO.UpdatePointsStartDatetime == null))
+                    throw new BusinessException("Ako želite da ažurirate poene na određenom intervalu, morate da popunite polje interval i polje početak ažuriranja.");
 
-                StoreDTO savedStoreDTO = await SaveStoreAndReturnDTOAsync(storeSaveBodyDTO.StoreDTO, false, false);
+                await _context.WithTransactionAsync(async () =>
+                {
+                    int currentPartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
+                    storeSaveBodyDTO.StoreDTO.PartnerId = currentPartnerId;
 
-                await SyncDiscountCategories();
+                    savedStoreDTO = await SaveStoreAndReturnDTOAsync(storeSaveBodyDTO.StoreDTO, false, false);
+                });
 
-                //await UpdateDiscountCategoryListForStoreTableClientSelection(storeSaveBodyDTO.SelectedStoreDiscountCategoryDTOList, savedStoreDTO.Id);
+                if (savedStoreDTO.UpdatePointsInterval != null && savedStoreDTO.UpdatePointsStartDatetime != null)
+                    scheduledJobResult = await _updatePointsScheduler.ScheduleJob(savedStoreDTO.Id, savedStoreDTO.UpdatePointsInterval.Value, savedStoreDTO.UpdatePointsStartDatetime.Value);
 
                 return savedStoreDTO;
-            });
+            }
+            catch (Exception)
+            {
+                if (scheduledJobResult != null)
+                    await _updatePointsScheduler.DeleteJob(storeSaveBodyDTO.StoreDTO.Id);
+
+                throw;
+            }
         }
 
         /// <summary>
