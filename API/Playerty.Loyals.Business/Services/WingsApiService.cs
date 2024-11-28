@@ -26,7 +26,7 @@ namespace Playerty.Loyals.Business.Services
             _partnerUserAuthenticationService = partnerUserAuthenticationService;
         }
 
-        public async Task<List<ExternalTransactionDTO>> GetTransactionList(string transactionsEndpoint, DateTime getTransactionsSince)
+        public async Task<List<ExternalTransactionDTO>> GetTransactionList(string transactionsEndpoint, DateTime dateFrom, DateTime dateTo)
         {
             if (transactionsEndpoint == "creative-brackets")
             {

@@ -764,6 +764,32 @@ export class TierSaveBody extends BaseEntity
 }
 
 
+export class UpdatePoints extends BaseEntity
+{
+    storeId?: number;
+	storeVersion?: number;
+	fromDate?: Date;
+
+    constructor(
+    {
+        storeId,
+		storeVersion,
+		fromDate
+    }:{
+        storeId?: number;
+		storeVersion?: number;
+		fromDate?: Date;     
+    } = {}
+    ) {
+        super('UpdatePoints'); 
+
+        this.storeId = storeId;
+		this.storeVersion = storeVersion;
+		this.fromDate = fromDate;
+    }
+}
+
+
 export class UserExtendedSaveBody extends BaseEntity
 {
     userExtendedDTO?: UserExtended;
@@ -1113,7 +1139,7 @@ export class Store extends BaseEntity
 export class StoreUpdatePointsScheduledTask extends BaseEntity
 {
     shouldStartedAt?: Date;
-	finishedAt?: Date;
+	isManual?: boolean;
 	storeDisplayName?: string;
 	storeId?: number;
 	version?: number;
@@ -1124,7 +1150,7 @@ export class StoreUpdatePointsScheduledTask extends BaseEntity
     constructor(
     {
         shouldStartedAt,
-		finishedAt,
+		isManual,
 		storeDisplayName,
 		storeId,
 		version,
@@ -1133,7 +1159,7 @@ export class StoreUpdatePointsScheduledTask extends BaseEntity
 		modifiedAt
     }:{
         shouldStartedAt?: Date;
-		finishedAt?: Date;
+		isManual?: boolean;
 		storeDisplayName?: string;
 		storeId?: number;
 		version?: number;
@@ -1145,7 +1171,7 @@ export class StoreUpdatePointsScheduledTask extends BaseEntity
         super('StoreUpdatePointsScheduledTask'); 
 
         this.shouldStartedAt = shouldStartedAt;
-		this.finishedAt = finishedAt;
+		this.isManual = isManual;
 		this.storeDisplayName = storeDisplayName;
 		this.storeId = storeId;
 		this.version = version;

@@ -1066,7 +1066,13 @@ namespace Playerty.Loyals.Services
             {
                 if ((storeSaveBodyDTO.StoreDTO.UpdatePointsInterval == null && storeSaveBodyDTO.StoreDTO.UpdatePointsStartDatetime != null) ||
                     (storeSaveBodyDTO.StoreDTO.UpdatePointsInterval != null && storeSaveBodyDTO.StoreDTO.UpdatePointsStartDatetime == null))
-                    throw new BusinessException("Ako želite da ažurirate poene na određenom intervalu, morate da popunite polje interval i polje početak ažuriranja.");
+                    throw new BusinessException("Ako želite da ažurirate poene na određenom intervalu, morate da popunite polje interval i polje početak ažuriranja."); // TODO FT: Return message, don't throw
+
+                DateTime now = DateTime.Now;
+
+                // FT: We redundantly check both here and inside the ScheduleJob method, in the method due to the programming principle, and here so that they do not enter the transaction and block other threads from executing
+                if (storeSaveBodyDTO.StoreDTO.UpdatePointsStartDatetime != null && storeSaveBodyDTO.StoreDTO.UpdatePointsStartDatetime.Value <= now)
+                    throw new BusinessException("Vreme početka ažuriranja poena mora biti veće od sadašnjeg trenutka.");
 
                 await _context.WithTransactionAsync(async () =>
                 {
@@ -1074,10 +1080,10 @@ namespace Playerty.Loyals.Services
                     storeSaveBodyDTO.StoreDTO.PartnerId = currentPartnerId;
 
                     savedStoreDTO = await SaveStoreAndReturnDTOAsync(storeSaveBodyDTO.StoreDTO, false, false);
-                });
 
-                if (savedStoreDTO.UpdatePointsInterval != null && savedStoreDTO.UpdatePointsStartDatetime != null)
-                    scheduledJobResult = await _updatePointsScheduler.ScheduleJob(savedStoreDTO.Id, savedStoreDTO.UpdatePointsInterval.Value, savedStoreDTO.UpdatePointsStartDatetime.Value);
+                    if (savedStoreDTO.UpdatePointsInterval != null && savedStoreDTO.UpdatePointsStartDatetime != null)
+                        scheduledJobResult = await _updatePointsScheduler.ScheduleJob(savedStoreDTO.Id, savedStoreDTO.UpdatePointsInterval.Value, savedStoreDTO.UpdatePointsStartDatetime.Value, now);
+                });
 
                 return savedStoreDTO;
             }
@@ -1088,6 +1094,40 @@ namespace Playerty.Loyals.Services
 
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Pass fromDate only if it is the first time
+        /// </summary>
+        public async Task UpdatePoints(long storeId, int version, DateTime? fromDate)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                DateTime now = DateTime.Now;
+                Store store = await LoadInstanceAsync<Store, long>(storeId, version);
+
+                if ((store.StoreUpdatePointsScheduledTasks == null || store.StoreUpdatePointsScheduledTasks.Count == 0) && fromDate == null)
+                    throw new BusinessException("Zato što prvi put ažurirate poene, morate da odredite datum od kada želite da počnete."); // TODO FT: Make better message
+                else if (store.StoreUpdatePointsScheduledTasks.Count > 0 && fromDate != null)
+                    throw new BusinessException("Zato što ste već jednom ažurirali poene, ne možete više da popunjavate polje od kada želite."); // TODO FT: Make better message
+
+                int firstManualStartInterval;
+
+                if (fromDate == null)
+                {
+                    firstManualStartInterval = 0;
+                }
+                else
+                {
+                    //firstManualStartInterval = (int)(now - fromDate.Value).TotalHours; // FT: If you can let the user choose only minutes on UI (without seconds), because of this (int), he will not update some data.
+                    firstManualStartInterval = (int)(now - fromDate.Value).TotalMinutes;
+
+                    if (firstManualStartInterval <= 0)
+                        throw new BusinessException("Sati za koje ćete da ažurirate poene moraju da budu veći od 0.");
+                }
+
+                await _updatePointsScheduler.ScheduleJobManually(storeId, firstManualStartInterval, now);
+            });
         }
 
         /// <summary>

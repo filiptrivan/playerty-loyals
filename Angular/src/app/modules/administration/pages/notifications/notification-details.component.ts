@@ -72,7 +72,7 @@ export class NotificationDetailsComponent extends BaseForm<Notification> impleme
 
     sendEmailNotification(){
         this.apiService.sendNotificationEmail(this.modelId, this.model.version).subscribe(() => {
-            this.messageService.successMessage(this.translocoService.translate('SuccessfulEmailAttempt'));
+            this.messageService.successMessage(this.translocoService.translate('SuccessfulAttempt'));
         });
     }
 

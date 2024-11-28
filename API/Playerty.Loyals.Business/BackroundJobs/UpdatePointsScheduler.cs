@@ -11,6 +11,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Playerty.Loyals.Business.DTO;
+using Soft.Generator.Shared.SoftExceptions;
 
 namespace Playerty.Loyals.Business.BackroundJobs
 {
@@ -19,7 +21,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
         private readonly ISchedulerFactory _schedulerFactory;
         private IScheduler _scheduler;
 
-        public UpdatePointsScheduler(ISchedulerFactory schedulerFactory, IApplicationDbContext context)
+        public UpdatePointsScheduler(ISchedulerFactory schedulerFactory)
         {
             _schedulerFactory = schedulerFactory;
         }
@@ -36,23 +38,49 @@ namespace Playerty.Loyals.Business.BackroundJobs
         /// </summary>
         public async Task ContinueJob(long storeId, int interval, DateTime startDateTime, DateTime? lastShouldStartedAt)
         {
-            JobKey jobKey = new JobKey($"{nameof(UpdatePointsScheduler)}_{storeId}");
-
             DateTime now = DateTime.Now;
 
-            DateTimeOffset nextRunOffset = GetNextRunOffset(interval, startDateTime, lastShouldStartedAt, now);
-               
+            DateTime nextRunDateTime = GetNextRunDateTime(interval, startDateTime, lastShouldStartedAt, now);
+
+            if (nextRunDateTime == now)
+            {
+                DateTime shouldStartedAtForSave = UpdatePointsBackgroundJobHelpers.GetShouldStartedAtForSave(interval, startDateTime, lastShouldStartedAt, now);
+
+                ITrigger initialTrigger = TriggerBuilder.Create()
+                    .WithIdentity($"InitialTrigger_{nameof(UpdatePointsScheduler)}_{storeId}")
+                    .StartAt(now)
+                    .WithSimpleSchedule(x => x
+                        .WithMisfireHandlingInstructionNextWithRemainingCount())
+                    .Build();
+
+                //nextRunDateTime = shouldStartedAtForSave.AddHours(interval);
+                nextRunDateTime = shouldStartedAtForSave.AddMinutes(interval);
+
+                JobKey initialJobKey = new JobKey($"InitialJob_{nameof(UpdatePointsScheduler)}_{storeId}");
+
+                IJobDetail initialJob = JobBuilder.Create<UpdatePointsBackgroundJob>()
+                    .StoreDurably(false) // Automatically remove the job after execution
+                    .WithIdentity(initialJobKey)
+                    .UsingJobData("StoreId", storeId)
+                    .Build();
+
+                await _scheduler.ScheduleJob(initialJob, initialTrigger);
+            }
+
+            DateTimeOffset nextRunOffset = new DateTimeOffset(nextRunDateTime);
+
             ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity($"Trigger_{storeId}")
-                //.StartAt(nextRunOffset)
-                .StartAt(now)
+                .WithIdentity($"Trigger_{nameof(UpdatePointsScheduler)}_{storeId}")
+                .StartAt(nextRunOffset)
+                //.StartAt(now)
                 .WithSimpleSchedule(x => x
                     //.WithIntervalInHours(interval)
-                    .WithIntervalInSeconds(5)
-                    .RepeatForever())
+                    .WithIntervalInMinutes(interval)
+                    .RepeatForever()
+                    .WithMisfireHandlingInstructionNextWithRemainingCount())
                 .Build();
 
-            //DateTime shouldStartedAtForSave = GetShouldStartedAtForSave(interval, startDateTime, lastShouldStartedAt, now);
+            JobKey jobKey = new JobKey($"Job_{nameof(UpdatePointsScheduler)}_{storeId}");
 
             IJobDetail job = JobBuilder.Create<UpdatePointsBackgroundJob>()
                 .WithIdentity(jobKey)
@@ -62,7 +90,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
             await _scheduler.ScheduleJob(job, trigger);
         }
 
-        private static DateTimeOffset GetNextRunOffset(int interval, DateTime startDateTime, DateTime? lastShouldStartedAt, DateTime now)
+        private static DateTime GetNextRunDateTime(int interval, DateTime startDateTime, DateTime? lastShouldStartedAt, DateTime now)
         {
             DateTime nextRun;
 
@@ -75,41 +103,29 @@ namespace Playerty.Loyals.Business.BackroundJobs
                 // 1. lastShouldStartedAt can't be greater then now
                 // 2. If lastShouldStartedAt is way before, nextRun <= now will handle that
                 // 3. If now - lastShouldStartedAt < interval, this else is handling that
-                nextRun = lastShouldStartedAt.Value.AddHours(interval);
+                //nextRun = lastShouldStartedAt.Value.AddHours(interval);
+                nextRun = lastShouldStartedAt.Value.AddMinutes(interval);
             }
 
             if (nextRun <= now)
-                nextRun = now.AddMinutes(1); // Default to run 1 minute from now if overdue
+                nextRun = now; // Default to run 1 minute from now if overdue
 
-            return new DateTimeOffset(nextRun);
+            return nextRun;
         }
-
-        //private static DateTime GetShouldStartedAtForSave(int interval, DateTime startDateTime, DateTime? lastShouldStartedAt, DateTime now)
-        //{
-        //    if (lastShouldStartedAt == null)
-        //    {
-        //        lastShouldStartedAt = startDateTime;
-        //    }
-
-        //    TimeSpan intervalTimeSpan = TimeSpan.FromHours(interval);
-
-        //    TimeSpan elapsedTime = now - lastShouldStartedAt.Value;
-
-        //    int numberOfIntervals = (int)(elapsedTime.TotalHours / intervalTimeSpan.TotalHours); // FT: The cast to int is always rounding to the lower decimal place
-
-        //    return lastShouldStartedAt.Value.AddHours(numberOfIntervals * intervalTimeSpan.TotalHours);
-        //}
 
         /// <summary>
         /// Use this method when saving store and the <paramref name="startDateTime"/> is not null
         /// You need to validate is startDateTime <= now before calling this method
         /// Handle errors and use try catch around this method
         /// </summary>
-        public async Task<DateTimeOffset?> ScheduleJob(long storeId, int interval, DateTime startDateTime)
+        public async Task<DateTimeOffset?> ScheduleJob(long storeId, int interval, DateTime startDateTime, DateTime now)
         {
+            if (startDateTime <= now)
+                throw new BusinessException("Vreme početka ažuriranja poena mora biti veće od sadašnjeg trenutka.");
+
             DateTimeOffset? result = null;
 
-            JobKey jobKey = new JobKey($"{nameof(UpdatePointsScheduler)}_{storeId}");
+            JobKey jobKey = new JobKey($"Job_{nameof(UpdatePointsScheduler)}_{storeId}");
             TriggerKey triggerKey = new TriggerKey($"Trigger_{storeId}");
 
             DateTimeOffset nextRunOffset = new DateTimeOffset(startDateTime);
@@ -118,8 +134,10 @@ namespace Playerty.Loyals.Business.BackroundJobs
                 .WithIdentity(triggerKey)
                 .StartAt(nextRunOffset)
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInHours(interval)
-                    .RepeatForever())
+                    //.WithIntervalInHours(interval)
+                    .WithIntervalInMinutes(interval)
+                    .RepeatForever()
+                    .WithMisfireHandlingInstructionNowWithRemainingCount()) // FT: Just in case, since we have already checked that startDateTime cannot be greater than now, it will start immediately and continue at the interval. There is a very small chance of this happening, it's a matter of milliseconds.
                 .Build();
 
             ITrigger existingTrigger = await _scheduler.GetTrigger(triggerKey);
@@ -137,6 +155,39 @@ namespace Playerty.Loyals.Business.BackroundJobs
             {
                 result = await _scheduler.RescheduleJob(triggerKey, trigger);
             }
+
+            return result;
+        }
+
+        /// <summary>
+        /// TODO FT: Add summary
+        /// </summary>
+        /// <exception cref="HackerException"></exception>
+        public async Task<DateTimeOffset?> ScheduleJobManually(long storeId, int firstManualStartInterval, DateTime now)
+        {
+            if (firstManualStartInterval < 0)
+                throw new HackerException($"Can not pass negative value for {nameof(firstManualStartInterval)}.");
+
+            DateTimeOffset? result = null;
+
+            JobKey jobKey = new JobKey($"ManualJob_{nameof(UpdatePointsScheduler)}_{storeId}");
+            TriggerKey triggerKey = new TriggerKey($"ManualTrigger_{storeId}");
+
+            ITrigger trigger = TriggerBuilder.Create()
+                .WithIdentity(triggerKey)
+                .StartAt(now)
+                .WithSimpleSchedule(x => x
+                    .WithMisfireHandlingInstructionNowWithRemainingCount()) // FT: Just in case, since we have already checked that startDateTime cannot be greater than now, it will start immediately and continue at the interval. There is a very small chance of this happening, it's a matter of milliseconds.
+                .Build();
+
+            IJobDetail job = JobBuilder.Create<UpdatePointsBackgroundJob>()
+                .StoreDurably(false) // Automatically remove the job after execution
+                .WithIdentity(jobKey)
+                .UsingJobData("StoreId", storeId)
+                .UsingJobData("FirstManualStartInterval", firstManualStartInterval)
+                .Build();
+
+            result = await _scheduler.ScheduleJob(job, trigger);
 
             return result;
         }

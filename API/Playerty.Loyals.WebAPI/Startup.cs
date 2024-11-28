@@ -161,11 +161,6 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
-        //UpdatePointsScheduler updatePointsScheduler = app.ApplicationServices.GetRequiredService<UpdatePointsScheduler>();
-        //await updatePointsScheduler.InitializeAsync();
-        //LoyalsBusinessService loyalsBusinessService = app.ApplicationServices.GetRequiredService<LoyalsBusinessService>();
-        //await loyalsBusinessService..ContinueJobs();
-
         RequestLocalizationOptions localizationOptions = app.ApplicationServices
             .GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;
 

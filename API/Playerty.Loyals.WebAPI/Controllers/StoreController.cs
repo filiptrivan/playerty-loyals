@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Playerty.Loyals.Business.DTO;
+using Playerty.Loyals.Business.DTO.Helpers;
 using Playerty.Loyals.Business.Entities;
 using Playerty.Loyals.Business.Services;
 using Playerty.Loyals.Services;
@@ -40,7 +41,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         public async Task<IActionResult> ExportStoreListToExcel(TableFilterDTO dto)
         {
             byte[] fileContent = await _loyalsBusinessService.ExportStoreListToExcel(dto, _context.DbSet<Store>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
-            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Segmentacije.xlsx"));
+            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Prodavnice.xlsx"));
         }
 
         [HttpDelete]
@@ -85,6 +86,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.SaveStoreExtendedAsync(storeSaveBodyDTO);
         }
 
+        [HttpPost]
+        [AuthGuard]
+        public async Task UpdatePoints(UpdatePointsDTO updatePointsDTO)
+        {
+            await _loyalsBusinessService.UpdatePoints(updatePointsDTO.StoreId, updatePointsDTO.StoreVersion, updatePointsDTO.FromDate);
+        }
+
         //[HttpGet]
         //[AuthGuard]
         //public async Task<List<StoreDTO>> GetStoreListForTheCurrentPartner()
@@ -106,5 +114,19 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.LoadStoreListForDropdown(_context.DbSet<Store>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
+        [HttpPost]
+        [AuthGuard]
+        public async Task<TableResponseDTO<StoreUpdatePointsScheduledTaskDTO>> LoadStoreUpdatePointsScheduledTaskListForTable(TableFilterDTO dto)
+        {   
+            return await _loyalsBusinessService.LoadStoreUpdatePointsScheduledTaskListForTable(dto, _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == dto.AdditionalFilterIdLong).OrderByDescending(x => x.ShouldStartedAt), false);
+        }
+
+        [HttpPost]
+        [AuthGuard]
+        public async Task<IActionResult> ExportStoreUpdatePointsScheduledTaskListToExcel(TableFilterDTO dto)
+        {
+            byte[] fileContent = await _loyalsBusinessService.ExportStoreUpdatePointsScheduledTaskListToExcel(dto, _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == dto.AdditionalFilterIdLong).OrderByDescending(x => x.ShouldStartedAt), false);
+            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Izvršena_Ažuriranja_Poena.xlsx"));
+        }
     }
 }

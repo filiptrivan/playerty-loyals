@@ -16,7 +16,8 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public DateTime ShouldStartedAt { get; set; }
 
-        public DateTime? FinishedAt { get; set; }
+        [Required]
+        public bool IsManual { get; set; }
 
         [ManyToOneRequired]
         public virtual Store Store { get; set; }

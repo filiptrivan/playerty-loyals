@@ -24,13 +24,19 @@ namespace Playerty.Loyals.Business.BackroundJobs
             _updatePointsScheduler = updatePointsScheduler;
         }
 
+        /// <summary>
+        /// FT: If this breaks, you will see when starting server, so i think we don't need to make try catch here
+        /// </summary>
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             await _updatePointsScheduler.InitializeAsync();
 
             await _context.WithTransactionAsync(async () =>
             {
-                List<Store> storeList = await _context.DbSet<Store>().Where(x => x.UpdatePointsInterval != null && x.UpdatePointsStartDatetime != null).ToListAsync();
+                List<Store> storeList = await _context.DbSet<Store>()
+                    .Where(x => x.UpdatePointsInterval != null && x.UpdatePointsStartDatetime != null)
+                    .Include(x => x.StoreUpdatePointsScheduledTasks)
+                    .ToListAsync();
 
                 foreach (Store store in storeList)
                 {

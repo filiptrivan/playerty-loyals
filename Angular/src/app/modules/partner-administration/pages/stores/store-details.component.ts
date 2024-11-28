@@ -1,6 +1,7 @@
-import { SoftFormGroup } from '../../../../core/components/soft-form-control/soft-form-control';
+import { StoreUpdatePointsScheduledTask, UpdatePoints } from './../../../../business/entities/generated/business-entities.generated';
+import { SoftFormControl, SoftFormGroup } from '../../../../core/components/soft-form-control/soft-form-control';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { forkJoin } from 'rxjs';
@@ -11,6 +12,7 @@ import { ValidatorService } from 'src/app/business/services/validation/validatio
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { Column, SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 
 @Component({
     selector: 'store-details',
@@ -18,11 +20,14 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
-    tableControllerName: string = 'Store';
-    objectNameForTheRequest: string = 'DiscountCategory';
-
     storeFormGroup: SoftFormGroup<Store>;
     storeSaveBodyName: string = nameof<StoreSaveBody>('storeDTO');
+
+    storeUpdatePointsScheduledTaskTableCols: Column[];
+    storeUpdatePointsScheduledTaskTableObjectNameForTheRequest: string = 'StoreUpdatePointsScheduledTask';
+    storeUpdatePointsScheduledTaskTableTotalRecords: number;
+
+    updatePointsFromDate = new SoftFormControl<Date>(null, {updateOn: 'change'})
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -44,6 +49,8 @@ export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
         this.saveMethodName = 'SaveStore';
         this.detailsTitle = this.translocoService.translate('Store');
 
+        this.initializeStoreUpdatePointsScheduledTaskTableCols();
+
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
 
@@ -57,6 +64,26 @@ export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
             }else{
                 this.storeFormGroup = this.initFormGroup(new Store({id: 0}), this.storeSaveBodyName);
             }
+        });
+    }
+
+    initializeStoreUpdatePointsScheduledTaskTableCols(){
+        this.storeUpdatePointsScheduledTaskTableCols = [
+            {name: this.translocoService.translate('ShouldStartedAt'), filterType: 'date', field: 'shouldStartedAt', showMatchModes: true, showTime: true},
+            {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true, showTime: true},
+            {name: this.translocoService.translate('IsManuallyStarted'), filterType: 'boolean', field: 'isManual'},
+        ]
+    }
+    
+    scheduleJobManually(){
+        const updatePointsDTO: UpdatePoints = {
+            storeId: this.modelId, 
+            storeVersion: this.storeFormGroup.getRawValue().version, 
+            fromDate: this.updatePointsFromDate.value,
+        }
+
+        this.apiService.updatePoints(updatePointsDTO).subscribe(() => {
+            this.messageService.successMessage(this.translocoService.translate('SuccessfulAttempt'));
         });
     }
 

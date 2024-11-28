@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Playerty.Loyals.Business.Services;
 using Playerty.Loyals.Business.DTO.Helpers;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Database;
+using Mapster;
 
 namespace Playerty.Loyals.Business.BackroundJobs
 {
@@ -38,8 +39,11 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
             try
             {
-                _logger.LogInformation(jobExecutionContext.ToString());
                 long storeId = jobExecutionContext.JobDetail.JobDataMap.GetLong("StoreId");
+                int? firstManualStartInterval = jobExecutionContext.JobDetail.JobDataMap.ContainsKey("FirstManualStartInterval")
+                    ? jobExecutionContext.JobDetail.JobDataMap.GetInt("FirstManualStartInterval")
+                    : null;
+
                 DateTime now = DateTime.Now;
 
                 await _context.WithTransactionAsync(async () =>
@@ -48,18 +52,43 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
                     store = await _loyalsBusinessService.LoadInstanceAsync<Store, long>(storeId, null);
 
-                    int interval = (int)store.UpdatePointsInterval; // FT: If it is null, it should never arrive here
-                    DateTime startDateTime = store.UpdatePointsStartDatetime.Value; // FT: If it is null, it should never arrive here
+                    int? interval = store.UpdatePointsInterval; // FT: It can com
 
-                    StoreUpdatePointsScheduledTask storeUpdatePointsScheduledTask = await _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == storeId).OrderByDescending(x => x.ShouldStartedAt).FirstOrDefaultAsync();
-                    DateTime? lastShouldStartedAt = storeUpdatePointsScheduledTask?.ShouldStartedAt;
+                    DateTime? lastShouldStartedAt = await _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == storeId && x.IsManual != true).OrderByDescending(x => x.ShouldStartedAt).Select(x => x.ShouldStartedAt).FirstOrDefaultAsync();
+                    DateTime? lastWithManualsShouldStartedAt = await _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == storeId).OrderByDescending(x => x.ShouldStartedAt).Select(x => x.ShouldStartedAt).FirstOrDefaultAsync();
 
-                //});
+                    DateTime? startDateTime = store.UpdatePointsStartDatetime; // FT: When the startDateTime == null, the user is manually starting the update
 
-                //await _context.WithTransactionAsync(async () =>
-                //{
-                    // FT: If lastShouldStartedAt == null that means that this is the first update ever for this store
-                    List<ExternalTransactionDTO> externalTransactionDTOList = await _wingsApiService.GetTransactionList(store.GetTransactionsEndpoint, lastShouldStartedAt ?? startDateTime);
+                    DateTime shouldStartedAtForSave;
+
+                    if (firstManualStartInterval == null) // FT: If it's not manual update
+                    {
+                        shouldStartedAtForSave = UpdatePointsBackgroundJobHelpers.GetShouldStartedAtForSave(interval.Value, startDateTime.Value, lastShouldStartedAt, now);
+                    }
+                    else
+                    {
+                        shouldStartedAtForSave = now; // FT: When the user has not startDateTime, he is only manually starting the update
+                    }
+
+                    DateTime dateFrom;
+
+                    if (lastWithManualsShouldStartedAt == null) // FT: If lastShouldStartedAt == null that means that this is the first update ever for this store
+                    {
+                        if (firstManualStartInterval == null || firstManualStartInterval == 0)
+                        {
+                            dateFrom = shouldStartedAtForSave.AddHours(-interval.Value);
+                        }
+                        else
+                        {
+                            dateFrom = shouldStartedAtForSave.AddHours(-firstManualStartInterval.Value);
+                        }
+                    }
+                    else
+                    {
+                        dateFrom = lastWithManualsShouldStartedAt.Value;
+                    }
+
+                    List<ExternalTransactionDTO> externalTransactionDTOList = await _wingsApiService.GetTransactionList(store.GetTransactionsEndpoint, dateFrom, shouldStartedAtForSave);
 
                     List<string> userEmailList = externalTransactionDTOList.Select(x => x.UserEmail).ToList();
 
@@ -87,24 +116,20 @@ namespace Playerty.Loyals.Business.BackroundJobs
                         };
 
                         await _loyalsBusinessService.UpdatePointsForThePartnerUser(partnerUser, pointsFromTransaction);
+                        await _loyalsBusinessService.SaveTransactionAndReturnDomainAsync(transactionDTO, false, false);
                     }
-
-                    DateTime shouldStartedAtForSave = GetShouldStartedAtForSave(interval, startDateTime, lastShouldStartedAt, now);
 
                     StoreUpdatePointsScheduledTask savedStoreUpdatePointsScheduledTask = new StoreUpdatePointsScheduledTask
                     {
                         ShouldStartedAt = shouldStartedAtForSave,
                         Store = store,
+                        IsManual = firstManualStartInterval != null
                     };
 
                     await dbSet.AddAsync(savedStoreUpdatePointsScheduledTask);
 
-                    int rows = await _context.SaveChangesAsync();
-
-                    _logger.LogInformation($"ROWS EFFECTED: {rows}");
+                    await _context.SaveChangesAsync();
                 });
-
-                _logger.LogInformation($"{DateTime.UtcNow}");
             }
             catch (Exception)
             {
@@ -112,26 +137,6 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
                 throw;
             }
-        }
-
-
-        private static DateTime GetShouldStartedAtForSave(int interval, DateTime startDateTime, DateTime? lastShouldStartedAt, DateTime now)
-        {
-            if (lastShouldStartedAt == null)
-            {
-                lastShouldStartedAt = startDateTime;
-            }
-
-            //TimeSpan intervalTimeSpan = TimeSpan.FromHours(interval);
-            TimeSpan intervalTimeSpan = TimeSpan.FromSeconds(interval);
-
-            TimeSpan elapsedTime = now - lastShouldStartedAt.Value;
-
-            //int numberOfIntervals = (int)(elapsedTime.TotalHours / intervalTimeSpan.TotalHours); // FT: The cast to int is always rounding to the lower decimal place
-            int numberOfIntervals = (int)(elapsedTime.TotalSeconds / intervalTimeSpan.TotalSeconds); // FT: The cast to int is always rounding to the lower decimal place
-
-            //return lastShouldStartedAt.Value.AddHours(numberOfIntervals * intervalTimeSpan.TotalHours);
-            return lastShouldStartedAt.Value.AddSeconds(numberOfIntervals * intervalTimeSpan.TotalSeconds);
         }
 
     }

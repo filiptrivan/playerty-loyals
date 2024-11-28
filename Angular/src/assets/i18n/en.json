@@ -67,7 +67,7 @@
   "Name": "Name",
   "PointsForTheFirstTimeFill": "Points for the first time fill",
   "Title": "Title",
-  "SuccessfulEmailAttempt": "Your email attempt has been processed.",
+  "SuccessfulAttempt": "Your attempt has been processed.",
   "MarkAsRead": "Missing value for 'MarkAsRead'",
   "MarkAsUnread": "Missing value for 'MarkAsUnread'",
   "Email": "Email",

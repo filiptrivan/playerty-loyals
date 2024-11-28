@@ -85,6 +85,7 @@ export class ValidatorBusinessService {
 
 
 
+
         case 'nameGender':
             return this.nameGenderValidator(formControl);
 
@@ -143,6 +144,8 @@ export class ValidatorBusinessService {
 
         case 'shouldStartedAtStoreUpdatePointsScheduledTask':
             return this.shouldStartedAtStoreUpdatePointsScheduledTaskValidator(formControl);
+        case 'isManualStoreUpdatePointsScheduledTask':
+            return this.isManualStoreUpdatePointsScheduledTaskValidator(formControl);
         case 'storeIdStoreUpdatePointsScheduledTask':
             return this.storeIdStoreUpdatePointsScheduledTaskValidator(formControl);
 
@@ -565,6 +568,7 @@ export class ValidatorBusinessService {
 
 
 
+
     nameGenderValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
@@ -969,6 +973,20 @@ export class ValidatorBusinessService {
             const shouldStartedAtValid = notEmptyRule;
 
             return shouldStartedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    isManualStoreUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const isManualValid = notEmptyRule;
+
+            return isManualValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
         return validator;

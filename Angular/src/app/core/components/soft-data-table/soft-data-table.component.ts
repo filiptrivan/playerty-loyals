@@ -36,7 +36,6 @@ import { SoftFormControl } from '../soft-form-control/soft-form-control';
     FormsModule,
     CommonModule,
     PrimengModule,
-    SoftDeleteConfirmationComponent,
     TranslocoDirective,
     SoftControlsModule,
   ],
@@ -53,6 +52,8 @@ export class SoftDataTableComponent implements OnInit {
   @Input() controllerName: string;
   @Input() showPaginator: boolean = true; // FT: Pass only when hasLazyLoad === false
   totalRecords: number;
+  @Output() onTotalRecordsChange: EventEmitter<number> = new EventEmitter();;
+  
   lastLazyLoadEvent: TableLazyLoadEvent;
   loading: boolean = true;
   
@@ -74,6 +75,7 @@ export class SoftDataTableComponent implements OnInit {
   matchModeNumberOptions: SelectItem[] = [];
   @Input() showAddButton: boolean = true; 
   @Input() showExportToExcelButton: boolean = true;
+  @Input() showReloadTableButton: boolean = false;
 
   deleteRef: DynamicDialogRef;
 
@@ -125,6 +127,7 @@ export class SoftDataTableComponent implements OnInit {
     this.lastLazyLoadEvent = event;
 
     let tableFilter: TableFilter = event as unknown as TableFilter;
+    tableFilter.additionalFilterIdLong = this.additionalFilterIdLong;
 
     this.onLazyLoad.next(tableFilter);
 
@@ -132,6 +135,7 @@ export class SoftDataTableComponent implements OnInit {
       next: async (res) => { 
         this.items = res.data;
         this.totalRecords = res.totalRecords;
+        this.onTotalRecordsChange.next(res.totalRecords);
         
         if (this.selectedLazyLoadObservableMethod != null) {
           let selectedRowsMethodResult: SelectedRowsMethodResult = await firstValueFrom(this.selectedLazyLoadObservableMethod(tableFilter));
@@ -172,6 +176,7 @@ export class SoftDataTableComponent implements OnInit {
 
     this.loadFormArrayItems();
     this.totalRecords = this.items.length;
+    this.onTotalRecordsChange.next(this.items.length);
 
     if (this.getAlreadySelectedItemIds) {
       this.selectedItemIds = this.getAlreadySelectedItemIds(this.additionalIndexes);
@@ -281,8 +286,14 @@ export class SoftDataTableComponent implements OnInit {
       this.deleteRef.onClose.subscribe((deletedSuccessfully: boolean)=>{
         if(deletedSuccessfully == true)
           this.messageService.successMessage(this.translocoService.translate('SuccessfullyDeletedMessage'));
-          this.lazyLoad(this.lastLazyLoadEvent);
+          this.reloadTable();
       });
+  }
+
+  reloadTable(){
+    this.loading = true;
+    this.items = null;
+    this.lazyLoad(this.lastLazyLoadEvent);
   }
 
   showActions(): boolean {
@@ -316,7 +327,12 @@ export class SoftDataTableComponent implements OnInit {
         case 'text':
           return rowData[col.field];
         case 'date':
-          return formatDate(rowData[col.field], 'dd.MM.yyyy.', this.locale);
+          if (col.showTime) {
+            return formatDate(rowData[col.field], 'dd.MM.yyyy. HH:mm', this.locale);
+          }
+          else{
+            return formatDate(rowData[col.field], 'dd.MM.yyyy.', this.locale);
+          }
         case 'multiselect':
           return rowData[col.field];
         case 'boolean':
@@ -468,13 +484,14 @@ export class Column {
   name: string;
   field?: string;
   filterField?: string; // FT: Made specificaly for multiautocomplete, maybe for something more in the future
-  filterType?: string;
+  filterType?: 'text' | 'date' | 'multiselect' | 'boolean' | 'numeric' | 'dropdown';
   filterPlaceholder?: string;
   showMatchModes?: boolean;
   showAddButton?: boolean;
   dropdownOrMultiselectValues?: PrimengOption[];
   actions?: Action[];
   editable?: boolean;
+  showTime?: boolean;
 }
 
 export class SelectedRowsMethodResult {

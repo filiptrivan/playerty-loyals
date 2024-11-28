@@ -91,6 +91,10 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('StoreTierDTOList');
             case 'storeTierDiscountCategoryDTOList':
                 return this.translocoService.translate('StoreTierDiscountCategoryDTOList');
+            case 'storeVersion':
+                return this.translocoService.translate('StoreVersion');
+            case 'fromDate':
+                return this.translocoService.translate('FromDate');
             case 'version':
                 return this.translocoService.translate('Version');
             case 'createdAt':
@@ -153,8 +157,8 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('DiscountCategory');
             case 'shouldStartedAt':
                 return this.translocoService.translate('ShouldStartedAt');
-            case 'finishedAt':
-                return this.translocoService.translate('FinishedAt');
+            case 'isManual':
+                return this.translocoService.translate('IsManual');
             case 'validFrom':
                 return this.translocoService.translate('ValidFrom');
             case 'validTo':

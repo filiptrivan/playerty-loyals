@@ -55,6 +55,8 @@ export class TranslateClassNamesBusinessService {
                 return this.translocoService.translate('StoreSaveBody');
             case 'TierSaveBody':
                 return this.translocoService.translate('TierSaveBody');
+            case 'UpdatePoints':
+                return this.translocoService.translate('UpdatePoints');
             case 'UserExtendedSaveBody':
                 return this.translocoService.translate('UserExtendedSaveBody');
             case 'Gender':

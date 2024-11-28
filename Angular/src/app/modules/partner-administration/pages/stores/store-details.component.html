@@ -1,7 +1,7 @@
 <ng-container *transloco="let t">
     @defer (when storeFormGroup != null) {
         <soft-card [title]="detailsTitle" icon="pi pi-hashtag">
-            <soft-panel>
+            <soft-panel [isFirstMultiplePanel]="true">
                 <panel-header></panel-header>
     
                 <panel-body>
@@ -34,10 +34,31 @@
                     <p-button (onClick)="onSave()" [label]="t('Save')" icon="pi pi-save"></p-button>
                     <soft-return-button></soft-return-button>
                 </panel-footer>
+
+            </soft-panel>
+            <soft-panel *ngIf="this.modelId > 0" [isLastMultiplePanel]="true">
+                <panel-header [title]="t('StoreUpdatePointsScheduledTaskList')" icon="pi pi-clock"></panel-header>
     
+                <panel-body>
+                    <form [formGroup]="formGroup" class="grid">
+                        <div class="col-12">
+                            <soft-data-table [tableTitle]="t('SuccessfullyDoneStoreUpdatePointsScheduledTaskList')" [cols]="storeUpdatePointsScheduledTaskTableCols" 
+                            [controllerName]="controllerName" [objectNameForTheRequest]="storeUpdatePointsScheduledTaskTableObjectNameForTheRequest" [additionalFilterIdLong]="modelId" [showAddButton]="false" [rows]="5"
+                            (onTotalRecordsChange)="storeUpdatePointsScheduledTaskTableTotalRecords = $event" [showReloadTableButton]="true">
+                            </soft-data-table>
+                        </div>
+                        <div *ngIf="storeUpdatePointsScheduledTaskTableTotalRecords === 0" class="col-12">
+                            <soft-calendar [control]="updatePointsFromDate" [showTime]="true" [label]="t('UpdatePointsFromDate')"></soft-calendar>
+                        </div>
+                    </form>
+                </panel-body>
+    
+                <panel-footer>
+                    <p-button (onClick)="scheduleJobManually()" [label]="t('UpdatePoints')" icon="pi pi-history"></p-button>
+                </panel-footer>
             </soft-panel>
         </soft-card>
     } @placeholder {
-        <card-skeleton [height]="502"></card-skeleton>
+        <card-skeleton [height]="702"></card-skeleton>
     }
 </ng-container>
