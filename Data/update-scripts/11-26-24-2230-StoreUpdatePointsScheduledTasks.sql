@@ -43,7 +43,7 @@ GO
 ALTER TABLE [Transactions] ADD [ProductName] nvarchar(500) NOT NULL;
 GO
 
-ALTER TABLE [Stores] ADD [UpdatePointsStartDatetime] datetime2 NULL;
+ALTER TABLE [Stores] ADD [UpdatePointsStartDate] datetime2 NULL;
 GO
 
 ALTER TABLE [Partners] ADD [PointsMultiplier] decimal(10,2) NULL;

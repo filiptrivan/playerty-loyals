@@ -774,6 +774,18 @@ namespace Playerty.Loyals.Services
             });
         }
 
+        public async Task<TableResponseDTO<TransactionDTO>> LoadTransactionListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                long partnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
+
+                TableResponseDTO<TransactionDTO> transactionTableResponse = await LoadTransactionListForTable(tableFilterDTO, _context.DbSet<Transaction>().Where(x => x.PartnerUser.Id == partnerUserId).OrderByDescending(x => x.Id), false);
+
+                return transactionTableResponse;
+            });
+        }
+
         #endregion
 
         #region Gender
@@ -1064,14 +1076,14 @@ namespace Playerty.Loyals.Services
 
             try
             {
-                if ((storeSaveBodyDTO.StoreDTO.UpdatePointsInterval == null && storeSaveBodyDTO.StoreDTO.UpdatePointsStartDatetime != null) ||
-                    (storeSaveBodyDTO.StoreDTO.UpdatePointsInterval != null && storeSaveBodyDTO.StoreDTO.UpdatePointsStartDatetime == null))
+                if ((storeSaveBodyDTO.StoreDTO.UpdatePointsInterval == null && storeSaveBodyDTO.StoreDTO.UpdatePointsStartDate != null) ||
+                    (storeSaveBodyDTO.StoreDTO.UpdatePointsInterval != null && storeSaveBodyDTO.StoreDTO.UpdatePointsStartDate == null))
                     throw new BusinessException("Ako želite da ažurirate poene na određenom intervalu, morate da popunite polje interval i polje početak ažuriranja."); // TODO FT: Return message, don't throw
 
                 DateTime now = DateTime.Now;
 
                 // FT: We redundantly check both here and inside the ScheduleJob method, in the method due to the programming principle, and here so that they do not enter the transaction and block other threads from executing
-                if (storeSaveBodyDTO.StoreDTO.UpdatePointsStartDatetime != null && storeSaveBodyDTO.StoreDTO.UpdatePointsStartDatetime.Value <= now)
+                if (storeSaveBodyDTO.StoreDTO.UpdatePointsStartDate != null && storeSaveBodyDTO.StoreDTO.UpdatePointsStartDate.Value <= now)
                     throw new BusinessException("Vreme početka ažuriranja poena mora biti veće od sadašnjeg trenutka.");
 
                 await _context.WithTransactionAsync(async () =>
@@ -1081,8 +1093,8 @@ namespace Playerty.Loyals.Services
 
                     savedStoreDTO = await SaveStoreAndReturnDTOAsync(storeSaveBodyDTO.StoreDTO, false, false);
 
-                    if (savedStoreDTO.UpdatePointsInterval != null && savedStoreDTO.UpdatePointsStartDatetime != null)
-                        scheduledJobResult = await _updatePointsScheduler.ScheduleJob(savedStoreDTO.Id, savedStoreDTO.UpdatePointsInterval.Value, savedStoreDTO.UpdatePointsStartDatetime.Value, now);
+                    if (savedStoreDTO.UpdatePointsInterval != null && savedStoreDTO.UpdatePointsStartDate != null)
+                        scheduledJobResult = await _updatePointsScheduler.ScheduleJob(savedStoreDTO.Id, savedStoreDTO.UpdatePointsInterval.Value, savedStoreDTO.UpdatePointsStartDate.Value, now);
                 });
 
                 return savedStoreDTO;

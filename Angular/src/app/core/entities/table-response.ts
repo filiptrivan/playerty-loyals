@@ -1,5 +1,5 @@
-export class TableResponse {
-    data?: any[];
+export class TableResponse<T = any> {
+    data?: T[];
     totalRecords: number;
 }
     

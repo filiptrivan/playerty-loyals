@@ -22,7 +22,7 @@ namespace Playerty.Loyals.Business.Entities
         [GreaterThanOrEqualTo(1)]
         public int? UpdatePointsInterval { get; set; }
 
-        public DateTime? UpdatePointsStartDatetime { get; set; }
+        public DateTime? UpdatePointsStartDate { get; set; }
 
         [StringLength(1000, MinimumLength = 1)]
         public string GetTransactionsEndpoint { get; set; }

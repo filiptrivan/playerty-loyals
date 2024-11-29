@@ -69,7 +69,8 @@ export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
 
     initializeStoreUpdatePointsScheduledTaskTableCols(){
         this.storeUpdatePointsScheduledTaskTableCols = [
-            {name: this.translocoService.translate('ShouldStartedAt'), filterType: 'date', field: 'shouldStartedAt', showMatchModes: true, showTime: true},
+            {name: this.translocoService.translate('TransactionsFrom'), filterType: 'date', field: 'transactionsFrom', showMatchModes: true, showTime: true},
+            {name: this.translocoService.translate('TransactionsTo'), filterType: 'date', field: 'transactionsTo', showMatchModes: true, showTime: true},
             {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true, showTime: true},
             {name: this.translocoService.translate('IsManuallyStarted'), filterType: 'boolean', field: 'isManual'},
         ]

@@ -10,6 +10,12 @@
                             <soft-textbox [control]="control('name', storeFormGroup)"></soft-textbox>
                         </div>
                         <div class="col-12 md:col-6">
+                            <soft-textbox [control]="control('getTransactionsEndpoint', storeFormGroup)"></soft-textbox>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-calendar [control]="control('updatePointsStartDate', storeFormGroup)" [showTime]="true"></soft-calendar>
+                        </div>
+                        <div class="col-12 md:col-6">
                             <soft-number [control]="control('updatePointsInterval', storeFormGroup)"></soft-number>
                         </div>
                         <div class="col-12 md:col-6">
@@ -19,13 +25,7 @@
                             <soft-textbox [control]="control('updateUserGroupEndpoint', storeFormGroup)"></soft-textbox>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-textbox [control]="control('getTransactionsEndpoint', storeFormGroup)"></soft-textbox>
-                        </div>
-                        <div class="col-12 md:col-6">
                             <soft-textbox [control]="control('getDiscountCategoriesEndpoint', storeFormGroup)"></soft-textbox>
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <soft-calendar [control]="control('updatePointsStartDatetime', storeFormGroup)" [showTime]="true"></soft-calendar>
                         </div>
                     </form>
                 </panel-body>

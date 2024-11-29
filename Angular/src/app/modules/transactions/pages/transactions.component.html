@@ -1,0 +1,58 @@
+<ng-container *transloco="let t">
+  <div class="card dashboard-card-wrapper">
+    <div class="big-header" style="margin-bottom: 10px;">
+      {{t('TransactionList')}}
+      <div class="bold-header-separator"></div>
+    </div>
+    <div style="display: flex; flex-direction: column; position: relative; z-index: 2;">
+      <div style="display: flex; justify-content: space-between;">
+      </div>
+      @for (currentPartnerUserTransaction of currentPartnerUserTransactions?.data; track $index) {
+        <div [class]="(currentPartnerUserTransaction.price < 0 ? 'error-color-light' : '') + ' notification-border'" style="padding: 18px; margin: 0px;">
+          <div class="text-wrapper">
+            <div class="header" style="margin-bottom: 10px; display: flex; justify-content: space-between; position: relative;">
+              <div>
+                <div>{{currentPartnerUserTransaction.productName}}</div>
+                <div class="header-separator"></div>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="text-align: center;">
+                  <div style="font-size: 16px; font-weight: 700;">
+                    {{currentPartnerUserTransaction.boughtAt.getDay()}}
+                  </div>
+                  <div style="font-size: 14px; font-weight: 600;" class="gray-color">
+                    {{getMonth(currentPartnerUserTransaction.boughtAt.getMonth() + 1)}}
+                  </div>
+                </div>
+                <div>
+                  {{currentPartnerUserTransaction.productCategoryName}}
+                </div>
+              </div>
+              <div style="font-size: 16px; font-weight: 700;">
+                {{currentPartnerUserTransaction.price}} RSD
+              </div>
+<!-- {{currentPartnerUserTransaction.productImageUrl}}
+{{currentPartnerUserTransaction.productCategoryImageUrl}}
+{{currentPartnerUserTransaction.points}}
+{{currentPartnerUserTransaction.storeDisplayName}} -->
+            </div>
+          </div>
+        </div>
+      }
+      @if (currentPartnerUserTransactions?.totalRecords === 0) {
+        {{t('YouDoNotHaveAnyNotifications')}}
+      }
+    </div>
+    <p-paginator
+      (onPageChange)="onLazyLoad($event)"
+      [first]="tableFilter.first"
+      [rows]="tableFilter.rows" 
+      [totalRecords]="currentPartnerUserTransactions?.totalRecords">
+    </p-paginator>
+    <div class="card-overflow-icon">
+      <i class="pi pi-wallet"></i>
+    </div>
+  </div>
+</ng-container>

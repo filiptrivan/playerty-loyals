@@ -16,5 +16,8 @@ namespace Playerty.Loyals.Business.DTO.Helpers
         public string ProductName { get; set; }
         public string ProductCategoryName { get; set; }
         public DateTime? BoughtAt { get; set; }
+        public string ProductImageUrl { get; set; }
+        public string ProductCategoryImageUrl { get; set; }
+
     }
 }

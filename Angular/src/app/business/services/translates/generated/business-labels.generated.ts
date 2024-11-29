@@ -141,8 +141,8 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('Segmentation');
             case 'updatePointsInterval':
                 return this.translocoService.translate('UpdatePointsInterval');
-            case 'updatePointsStartDatetime':
-                return this.translocoService.translate('UpdatePointsStartDatetime');
+            case 'updatePointsStartDate':
+                return this.translocoService.translate('UpdatePointsStartDate');
             case 'getTransactionsEndpoint':
                 return this.translocoService.translate('GetTransactionsEndpoint');
             case 'getDiscountCategoriesEndpoint':
@@ -155,8 +155,10 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('StoreTier');
             case 'discountCategory':
                 return this.translocoService.translate('DiscountCategory');
-            case 'shouldStartedAt':
-                return this.translocoService.translate('ShouldStartedAt');
+            case 'transactionsFrom':
+                return this.translocoService.translate('TransactionsFrom');
+            case 'transactionsTo':
+                return this.translocoService.translate('TransactionsTo');
             case 'isManual':
                 return this.translocoService.translate('IsManual');
             case 'validFrom':
@@ -165,8 +167,14 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('ValidTo');
             case 'productName':
                 return this.translocoService.translate('ProductName');
+            case 'productImageUrl':
+                return this.translocoService.translate('ProductImageUrl');
             case 'productCategoryName':
                 return this.translocoService.translate('ProductCategoryName');
+            case 'productCategoryImageUrl':
+                return this.translocoService.translate('ProductCategoryImageUrl');
+            case 'boughtAt':
+                return this.translocoService.translate('BoughtAt');
             case 'partnerUser':
                 return this.translocoService.translate('PartnerUser');
             case 'password':

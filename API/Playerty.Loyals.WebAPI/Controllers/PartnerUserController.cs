@@ -134,5 +134,12 @@ namespace Playerty.Loyals.WebAPI.Controllers
             await _loyalsBusinessService.AddPartnerUserForTheCurrentUser(partnerId);
         }
 
+        [HttpPost]
+        [AuthGuard]
+        public async Task<TableResponseDTO<TransactionDTO>> LoadTransactionListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
+        {
+            return await _loyalsBusinessService.LoadTransactionListForTheCurrentPartnerUser(tableFilterDTO);
+        }
+
     }
 }

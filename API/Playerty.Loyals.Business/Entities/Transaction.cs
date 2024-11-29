@@ -17,13 +17,22 @@ namespace Playerty.Loyals.Business.Entities
         [StringLength(500, MinimumLength = 1)]
         public string ProductName { get; set; }
 
+        [StringLength(1000, MinimumLength = 1)]
+        public string ProductImageUrl { get; set; }
+
         [Required]
         [StringLength(500, MinimumLength = 1)]
         public string ProductCategoryName { get; set; }
 
+        [StringLength(1000, MinimumLength = 1)]
+        public string ProductCategoryImageUrl { get; set; }
+
         [Precision(16, 2)]
         [Required]
         public decimal Price { get; set; }
+
+        [Required]
+        public DateTime BoughtAt { get; set; }
 
         /// <summary>
         /// Always round the points on the upper decimal
@@ -33,5 +42,8 @@ namespace Playerty.Loyals.Business.Entities
 
         [ManyToOneRequired]
         public virtual PartnerUser PartnerUser {  get; set; }
+
+        [ManyToOneRequired]
+        public virtual Store Store { get; set; }
     }
 }

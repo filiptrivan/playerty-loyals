@@ -142,8 +142,10 @@ export class ValidatorBusinessService {
         case 'partnerIdStore':
             return this.partnerIdStoreValidator(formControl);
 
-        case 'shouldStartedAtStoreUpdatePointsScheduledTask':
-            return this.shouldStartedAtStoreUpdatePointsScheduledTaskValidator(formControl);
+        case 'transactionsFromStoreUpdatePointsScheduledTask':
+            return this.transactionsFromStoreUpdatePointsScheduledTaskValidator(formControl);
+        case 'transactionsToStoreUpdatePointsScheduledTask':
+            return this.transactionsToStoreUpdatePointsScheduledTaskValidator(formControl);
         case 'isManualStoreUpdatePointsScheduledTask':
             return this.isManualStoreUpdatePointsScheduledTaskValidator(formControl);
         case 'storeIdStoreUpdatePointsScheduledTask':
@@ -162,14 +164,22 @@ export class ValidatorBusinessService {
 
         case 'productNameTransaction':
             return this.productNameTransactionValidator(formControl);
+        case 'productImageUrlTransaction':
+            return this.productImageUrlTransactionValidator(formControl);
         case 'productCategoryNameTransaction':
             return this.productCategoryNameTransactionValidator(formControl);
+        case 'productCategoryImageUrlTransaction':
+            return this.productCategoryImageUrlTransactionValidator(formControl);
         case 'priceTransaction':
             return this.priceTransactionValidator(formControl);
+        case 'boughtAtTransaction':
+            return this.boughtAtTransactionValidator(formControl);
         case 'pointsTransaction':
             return this.pointsTransactionValidator(formControl);
         case 'partnerUserIdTransaction':
             return this.partnerUserIdTransactionValidator(formControl);
+        case 'storeIdTransaction':
+            return this.storeIdTransactionValidator(formControl);
 
             default:
                 return null;
@@ -964,15 +974,29 @@ export class ValidatorBusinessService {
     }
 
 
-    shouldStartedAtStoreUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
+    transactionsFromStoreUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
-            const shouldStartedAtValid = notEmptyRule;
+            const transactionsFromValid = notEmptyRule;
 
-            return shouldStartedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+            return transactionsFromValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    transactionsToStoreUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const transactionsToValid = notEmptyRule;
+
+            return transactionsToValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
         return validator;
@@ -1104,6 +1128,22 @@ export class ValidatorBusinessService {
         return validator;
     }
 
+    productImageUrlTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const max = 1000;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const productImageUrlValid = stringLengthRule;
+
+            return productImageUrlValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+    }
+
     productCategoryNameTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
@@ -1121,6 +1161,22 @@ export class ValidatorBusinessService {
         return validator;
     }
 
+    productCategoryImageUrlTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const max = 1000;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const productCategoryImageUrlValid = stringLengthRule;
+
+            return productCategoryImageUrlValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+    }
+
     priceTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
@@ -1134,6 +1190,20 @@ export class ValidatorBusinessService {
             const priceValid = notEmptyRule && precisionScaleRule;
 
             return priceValid ? null : { _ : this.translocoService.translate('NotEmptyPrecisionScale', {precision, scale}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    boughtAtTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const boughtAtValid = notEmptyRule;
+
+            return boughtAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
         return validator;
@@ -1162,6 +1232,20 @@ export class ValidatorBusinessService {
             const partnerUserIdValid = notEmptyRule;
 
             return partnerUserIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    storeIdTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const storeIdValid = notEmptyRule;
+
+            return storeIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
         return validator;

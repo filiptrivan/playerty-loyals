@@ -7,12 +7,13 @@ import { PaginatorState } from 'primeng/paginator';
 import { TableFilterContext } from 'src/app/core/entities/table-filter-context';
 import { TableResponse } from 'src/app/core/entities/table-response';
 import { TranslocoService } from '@jsverse/transloco';
+import { Notification } from 'src/app/business/entities/generated/business-entities.generated';
 
 @Component({
   templateUrl: './notification.component.html',
 })
 export class NotificationComponent implements OnInit {
-  currentUserNotifications: TableResponse;
+  currentUserNotifications: TableResponse<Notification>;
 
   crudMenu: MenuItem[] = [];
 

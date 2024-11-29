@@ -118,14 +118,14 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<TableResponseDTO<StoreUpdatePointsScheduledTaskDTO>> LoadStoreUpdatePointsScheduledTaskListForTable(TableFilterDTO dto)
         {   
-            return await _loyalsBusinessService.LoadStoreUpdatePointsScheduledTaskListForTable(dto, _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == dto.AdditionalFilterIdLong).OrderByDescending(x => x.ShouldStartedAt), false);
+            return await _loyalsBusinessService.LoadStoreUpdatePointsScheduledTaskListForTable(dto, _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == dto.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo), false);
         }
 
         [HttpPost]
         [AuthGuard]
         public async Task<IActionResult> ExportStoreUpdatePointsScheduledTaskListToExcel(TableFilterDTO dto)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportStoreUpdatePointsScheduledTaskListToExcel(dto, _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == dto.AdditionalFilterIdLong).OrderByDescending(x => x.ShouldStartedAt), false);
+            byte[] fileContent = await _loyalsBusinessService.ExportStoreUpdatePointsScheduledTaskListToExcel(dto, _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == dto.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Izvršena_Ažuriranja_Poena.xlsx"));
         }
     }

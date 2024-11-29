@@ -14,7 +14,10 @@ namespace Playerty.Loyals.Business.Entities
     public class StoreUpdatePointsScheduledTask : BusinessObject<long>
     {
         [Required]
-        public DateTime ShouldStartedAt { get; set; }
+        public DateTime TransactionsFrom { get; set; }
+
+        [Required]
+        public DateTime TransactionsTo { get; set; }
 
         [Required]
         public bool IsManual { get; set; }

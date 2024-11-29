@@ -22,7 +22,6 @@ namespace Playerty.Loyals.WebAPI.Controllers
         private readonly LoyalsBusinessService _loyalsBusinessService;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
 
-
         public TierController(IJwtAuthManager jwtAuthManagerService, IApplicationDbContext context, AuthenticationService authenticationService,
             LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService)
             : base()

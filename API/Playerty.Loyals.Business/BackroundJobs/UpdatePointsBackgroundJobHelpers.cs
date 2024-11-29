@@ -17,6 +17,10 @@ namespace Playerty.Loyals.Business.BackroundJobs
             {
                 lastShouldStartedAt = startDateTime;
             }
+            else if (lastShouldStartedAt != null && startDateTime > lastShouldStartedAt.Value) // FT: This is happening when the partner change the update points starting time, not for the first time
+            {
+                lastShouldStartedAt = startDateTime;
+            }
 
             //TimeSpan intervalTimeSpan = TimeSpan.FromHours(interval);
             TimeSpan intervalTimeSpan = TimeSpan.FromMinutes(interval);

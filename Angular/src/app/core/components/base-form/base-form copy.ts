@@ -99,7 +99,7 @@ export class BaseFormCopy implements OnInit {
 
   // FT: If we put onChange to true, we are validating control on change not on blur.
   // FT: If we assign model, we are taking validators for the other class
-  control(formControlName: string, formGroup: FormGroup, customValidation: boolean = false, disable: boolean = false) {
+  control<T extends BaseEntity>(formControlName: string & keyof T, formGroup: SoftFormGroup<T>, customValidation: boolean = false, disable: boolean = false) {
     // let formGroup: FormGroup = this.formGroup.controls[model.typeName] as FormGroup;
   
     if (formGroup == null)

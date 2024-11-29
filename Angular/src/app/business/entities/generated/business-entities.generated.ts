@@ -1074,7 +1074,7 @@ export class Store extends BaseEntity
 {
     name?: string;
 	updatePointsInterval?: number;
-	updatePointsStartDatetime?: Date;
+	updatePointsStartDate?: Date;
 	getTransactionsEndpoint?: string;
 	getDiscountCategoriesEndpoint?: string;
 	createUserEndpoint?: string;
@@ -1090,7 +1090,7 @@ export class Store extends BaseEntity
     {
         name,
 		updatePointsInterval,
-		updatePointsStartDatetime,
+		updatePointsStartDate,
 		getTransactionsEndpoint,
 		getDiscountCategoriesEndpoint,
 		createUserEndpoint,
@@ -1104,7 +1104,7 @@ export class Store extends BaseEntity
     }:{
         name?: string;
 		updatePointsInterval?: number;
-		updatePointsStartDatetime?: Date;
+		updatePointsStartDate?: Date;
 		getTransactionsEndpoint?: string;
 		getDiscountCategoriesEndpoint?: string;
 		createUserEndpoint?: string;
@@ -1121,7 +1121,7 @@ export class Store extends BaseEntity
 
         this.name = name;
 		this.updatePointsInterval = updatePointsInterval;
-		this.updatePointsStartDatetime = updatePointsStartDatetime;
+		this.updatePointsStartDate = updatePointsStartDate;
 		this.getTransactionsEndpoint = getTransactionsEndpoint;
 		this.getDiscountCategoriesEndpoint = getDiscountCategoriesEndpoint;
 		this.createUserEndpoint = createUserEndpoint;
@@ -1138,7 +1138,8 @@ export class Store extends BaseEntity
 
 export class StoreUpdatePointsScheduledTask extends BaseEntity
 {
-    shouldStartedAt?: Date;
+    transactionsFrom?: Date;
+	transactionsTo?: Date;
 	isManual?: boolean;
 	storeDisplayName?: string;
 	storeId?: number;
@@ -1149,7 +1150,8 @@ export class StoreUpdatePointsScheduledTask extends BaseEntity
 
     constructor(
     {
-        shouldStartedAt,
+        transactionsFrom,
+		transactionsTo,
 		isManual,
 		storeDisplayName,
 		storeId,
@@ -1158,7 +1160,8 @@ export class StoreUpdatePointsScheduledTask extends BaseEntity
 		createdAt,
 		modifiedAt
     }:{
-        shouldStartedAt?: Date;
+        transactionsFrom?: Date;
+		transactionsTo?: Date;
 		isManual?: boolean;
 		storeDisplayName?: string;
 		storeId?: number;
@@ -1170,7 +1173,8 @@ export class StoreUpdatePointsScheduledTask extends BaseEntity
     ) {
         super('StoreUpdatePointsScheduledTask'); 
 
-        this.shouldStartedAt = shouldStartedAt;
+        this.transactionsFrom = transactionsFrom;
+		this.transactionsTo = transactionsTo;
 		this.isManual = isManual;
 		this.storeDisplayName = storeDisplayName;
 		this.storeId = storeId;
@@ -1239,11 +1243,16 @@ export class Tier extends BaseEntity
 export class Transaction extends BaseEntity
 {
     productName?: string;
+	productImageUrl?: string;
 	productCategoryName?: string;
+	productCategoryImageUrl?: string;
 	price?: number;
+	boughtAt?: Date;
 	points?: number;
 	partnerUserDisplayName?: string;
 	partnerUserId?: number;
+	storeDisplayName?: string;
+	storeId?: number;
 	version?: number;
 	id?: number;
 	createdAt?: Date;
@@ -1252,22 +1261,32 @@ export class Transaction extends BaseEntity
     constructor(
     {
         productName,
+		productImageUrl,
 		productCategoryName,
+		productCategoryImageUrl,
 		price,
+		boughtAt,
 		points,
 		partnerUserDisplayName,
 		partnerUserId,
+		storeDisplayName,
+		storeId,
 		version,
 		id,
 		createdAt,
 		modifiedAt
     }:{
         productName?: string;
+		productImageUrl?: string;
 		productCategoryName?: string;
+		productCategoryImageUrl?: string;
 		price?: number;
+		boughtAt?: Date;
 		points?: number;
 		partnerUserDisplayName?: string;
 		partnerUserId?: number;
+		storeDisplayName?: string;
+		storeId?: number;
 		version?: number;
 		id?: number;
 		createdAt?: Date;
@@ -1277,11 +1296,16 @@ export class Transaction extends BaseEntity
         super('Transaction'); 
 
         this.productName = productName;
+		this.productImageUrl = productImageUrl;
 		this.productCategoryName = productCategoryName;
+		this.productCategoryImageUrl = productCategoryImageUrl;
 		this.price = price;
+		this.boughtAt = boughtAt;
 		this.points = points;
 		this.partnerUserDisplayName = partnerUserDisplayName;
 		this.partnerUserId = partnerUserId;
+		this.storeDisplayName = storeDisplayName;
+		this.storeId = storeId;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;

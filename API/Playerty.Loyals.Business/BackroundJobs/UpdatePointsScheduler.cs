@@ -126,7 +126,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
             DateTimeOffset? result = null;
 
             JobKey jobKey = new JobKey($"Job_{nameof(UpdatePointsScheduler)}_{storeId}");
-            TriggerKey triggerKey = new TriggerKey($"Trigger_{storeId}");
+            TriggerKey triggerKey = new TriggerKey($"Trigger_{nameof(UpdatePointsScheduler)}_{storeId}");
 
             DateTimeOffset nextRunOffset = new DateTimeOffset(startDateTime);
 

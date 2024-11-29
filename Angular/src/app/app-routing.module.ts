@@ -47,6 +47,11 @@ import { NotAuthGuard } from './core/guards/not-auth.guard';
                         loadChildren: () => import('./modules/tiers/tiers.module').then(m => m.TiersModule),
                         canActivate: [AuthGuard]
                     },
+                    { 
+                        path: '',
+                        loadChildren: () => import('./modules/transactions/transactions.module').then(m => m.TransactionsModule),
+                        canActivate: [AuthGuard]
+                    },
                 ],
             },
             {

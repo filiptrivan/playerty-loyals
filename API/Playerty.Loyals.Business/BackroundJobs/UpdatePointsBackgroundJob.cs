@@ -40,6 +40,8 @@ namespace Playerty.Loyals.Business.BackroundJobs
             try
             {
                 long storeId = jobExecutionContext.JobDetail.JobDataMap.GetLong("StoreId");
+
+                // FT: It's null only if it's not called from manual update, if it's not first and called from manual update it will be 0
                 int? firstManualStartInterval = jobExecutionContext.JobDetail.JobDataMap.ContainsKey("FirstManualStartInterval")
                     ? jobExecutionContext.JobDetail.JobDataMap.GetInt("FirstManualStartInterval")
                     : null;
@@ -54,10 +56,10 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
                     int? interval = store.UpdatePointsInterval; // FT: It can com
 
-                    DateTime? lastShouldStartedAt = await _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == storeId && x.IsManual != true).OrderByDescending(x => x.ShouldStartedAt).Select(x => x.ShouldStartedAt).FirstOrDefaultAsync();
-                    DateTime? lastWithManualsShouldStartedAt = await _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == storeId).OrderByDescending(x => x.ShouldStartedAt).Select(x => x.ShouldStartedAt).FirstOrDefaultAsync();
+                    DateTime? lastShouldStartedAt = await _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == storeId && x.IsManual != true).OrderByDescending(x => x.TransactionsTo).Select(x => x.TransactionsTo).FirstOrDefaultAsync();
+                    DateTime? lastWithManualsShouldStartedAt = await _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == storeId).OrderByDescending(x => x.TransactionsTo).Select(x => x.TransactionsTo).FirstOrDefaultAsync();
 
-                    DateTime? startDateTime = store.UpdatePointsStartDatetime; // FT: When the startDateTime == null, the user is manually starting the update
+                    DateTime? startDateTime = store.UpdatePointsStartDate; // FT: When the startDateTime == null, the user is manually starting the update
 
                     DateTime shouldStartedAtForSave;
 
@@ -78,7 +80,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
                         {
                             dateFrom = shouldStartedAtForSave.AddHours(-interval.Value);
                         }
-                        else
+                        else // FT: If the first update ever is manual
                         {
                             dateFrom = shouldStartedAtForSave.AddHours(-firstManualStartInterval.Value);
                         }
@@ -92,10 +94,10 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
                     List<string> userEmailList = externalTransactionDTOList.Select(x => x.UserEmail).ToList();
 
-                    List<PartnerUser> partnerUserList = _context.DbSet<PartnerUser>()
+                    List<PartnerUser> partnerUserList = await _context.DbSet<PartnerUser>()
                         .Include(x => x.User)
                         .Where(x => x.Partner.Id == store.Partner.Id && userEmailList.Contains(x.User.Email))
-                        .ToList();
+                        .ToListAsync();
 
                     // FT: when we make an agreement with the partners that they update the categories, we will just send them an email, the update of your points failed, due to mismatched categories, please harmonize the categories and stop the execution manually.
                     // await _loyalsBusinessService.SyncDiscountCategories(); // FT: You don't need to sync here, we will just use passed name as category
@@ -109,10 +111,14 @@ namespace Playerty.Loyals.Business.BackroundJobs
                         TransactionDTO transactionDTO = new TransactionDTO
                         {
                             ProductName = externalTransactionDTO.ProductName,
+                            ProductImageUrl = externalTransactionDTO.ProductImageUrl,
                             ProductCategoryName = externalTransactionDTO.ProductCategoryName,
+                            ProductCategoryImageUrl = externalTransactionDTO.ProductCategoryImageUrl,
                             Price = externalTransactionDTO.Price,
                             Points = pointsFromTransaction,
                             PartnerUserId = partnerUser.Id,
+                            BoughtAt = externalTransactionDTO.BoughtAt,
+                            StoreId = store.Id,
                         };
 
                         await _loyalsBusinessService.UpdatePointsForThePartnerUser(partnerUser, pointsFromTransaction);
@@ -121,9 +127,10 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
                     StoreUpdatePointsScheduledTask savedStoreUpdatePointsScheduledTask = new StoreUpdatePointsScheduledTask
                     {
-                        ShouldStartedAt = shouldStartedAtForSave,
+                        TransactionsFrom = dateFrom,
+                        TransactionsTo = shouldStartedAtForSave,
                         Store = store,
-                        IsManual = firstManualStartInterval != null
+                        IsManual = firstManualStartInterval != null,
                     };
 
                     await dbSet.AddAsync(savedStoreUpdatePointsScheduledTask);

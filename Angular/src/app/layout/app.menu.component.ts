@@ -66,12 +66,12 @@ export class AppMenuComponent implements OnInit {
                             routerLink: [`/tiers`],
                             visible: partner != null
                         },
-                        // {
-                        //     label: 'Points',
-                        //     icon: 'pi pi-fw pi-heart',
-                        //     routerLink: [`/points`],
-                        //     visible: true
-                        // },
+                        {
+                            label: this.translocoService.translate('TransactionList'),
+                            icon: 'pi pi-fw pi-wallet',
+                            routerLink: [`/transactions`],
+                            visible: true
+                        },
                         {
                             label: this.translocoService.translate('PartnerList'),
                             icon: 'pi pi-fw pi-at',

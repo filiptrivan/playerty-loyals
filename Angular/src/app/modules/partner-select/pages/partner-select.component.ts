@@ -1,4 +1,3 @@
-import { forkJoin } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { Partner } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
