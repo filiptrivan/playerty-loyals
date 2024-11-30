@@ -86,6 +86,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.SaveStoreExtendedAsync(storeSaveBodyDTO);
         }
 
+        [HttpPut]
+        [AuthGuard]
+        public async Task<int> SaveStoreUpdatePointsData(StoreUpdatePointsDataBodyDTO storeUpdatePointsDataBodyDTO)
+        {
+            return await _loyalsBusinessService.SaveStoreUpdatePointsDataAsync(storeUpdatePointsDataBodyDTO);
+        }
+
         [HttpPost]
         [AuthGuard]
         public async Task UpdatePoints(UpdatePointsDTO updatePointsDTO)

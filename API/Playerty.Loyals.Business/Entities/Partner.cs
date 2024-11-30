@@ -19,6 +19,11 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public string Name { get; set; }
 
+        [CustomValidator("EmailAddress()")]
+        [StringLength(70, MinimumLength = 5)]
+        [Required]
+        public string Email { get; set; }
+
         [StringLength(100, MinimumLength = 1)]
         [Required]
         public string Slug { get; set; } // FT: The user will input the slug, and the slug will be the code in the same time

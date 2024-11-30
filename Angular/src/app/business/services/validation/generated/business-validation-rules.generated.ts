@@ -83,6 +83,9 @@ export class ValidatorBusinessService {
 
 
 
+        case 'updatePointsIntervalStoreUpdatePointsDataBody':
+            return this.updatePointsIntervalStoreUpdatePointsDataBodyValidator(formControl);
+
 
 
 
@@ -92,6 +95,8 @@ export class ValidatorBusinessService {
 
         case 'namePartner':
             return this.namePartnerValidator(formControl);
+        case 'emailPartner':
+            return this.emailPartnerValidator(formControl);
         case 'slugPartner':
             return this.slugPartnerValidator(formControl);
         case 'logoImagePartner':
@@ -576,6 +581,22 @@ export class ValidatorBusinessService {
 
 
 
+    updatePointsIntervalStoreUpdatePointsDataBodyValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
+
+            const updatePointsIntervalValid = numberMinRangeRule;
+
+            return updatePointsIntervalValid ? null : { _ : this.translocoService.translate('NumberRangeMin', {min}) };
+        };
+        
+        return validator;
+    }
+
+
 
 
 
@@ -610,6 +631,24 @@ export class ValidatorBusinessService {
             const nameValid = notEmptyRule && stringLengthRule;
 
             return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    emailPartnerValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 5;
+        const max = 70;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+            const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
+
+            return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
         return validator;

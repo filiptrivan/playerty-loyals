@@ -36,7 +36,9 @@ export class SoftFormGroup<TValue = any> extends FormGroup {
     override getRawValue(): TValue { // FT: Doing this because .value gets only not disabled values
         return super.getRawValue() as TValue;
     }
+
     public name?: string; // FT: Using for nested form groups
+    public controlNamesFromHtml?: string[] = [];
 }
 
 export class SoftFormArray<TValue = any> extends FormArray {

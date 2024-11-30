@@ -16,13 +16,16 @@
                             <soft-textbox [control]="control('slug')"></soft-textbox>
                         </div>
                         <div class="col-12 md:col-6">
+                            <soft-textbox [control]="control('email')"></soft-textbox>
+                        </div>
+                        <div class="col-12 md:col-6">
                             <soft-colorpick [control]="control('primaryColor', true)"></soft-colorpick>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-textbox [control]="control('productsRecommendationEndpoint')"></soft-textbox>
+                            <soft-number [control]="control('pointsMultiplier')" [decimal]="true" [maxFractionDigits]="2"></soft-number>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-number [control]="control('pointsMultiplier')" [decimal]="true" [maxFractionDigits]="2"></soft-number>
+                            <soft-textbox [control]="control('productsRecommendationEndpoint')"></soft-textbox>
                         </div>
                     </form>
                 </panel-body>

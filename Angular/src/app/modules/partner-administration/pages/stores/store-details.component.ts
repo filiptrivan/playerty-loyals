@@ -1,7 +1,7 @@
-import { StoreUpdatePointsScheduledTask, UpdatePoints } from './../../../../business/entities/generated/business-entities.generated';
+import { StoreUpdatePointsDataBody, UpdatePoints } from './../../../../business/entities/generated/business-entities.generated';
 import { SoftFormControl, SoftFormGroup } from '../../../../core/components/soft-form-control/soft-form-control';
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { forkJoin } from 'rxjs';
@@ -12,7 +12,7 @@ import { ValidatorService } from 'src/app/business/services/validation/validatio
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
-import { Column, SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';
+import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 
 @Component({
     selector: 'store-details',
@@ -22,12 +22,14 @@ import { Column, SoftDataTableComponent } from 'src/app/core/components/soft-dat
 export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
     storeFormGroup: SoftFormGroup<Store>;
     storeSaveBodyName: string = nameof<StoreSaveBody>('storeDTO');
-
+    
     storeUpdatePointsScheduledTaskTableCols: Column[];
     storeUpdatePointsScheduledTaskTableObjectNameForTheRequest: string = 'StoreUpdatePointsScheduledTask';
     storeUpdatePointsScheduledTaskTableTotalRecords: number;
+    
+    manualUpdatePointsFromDate = new SoftFormControl<Date>(null, {updateOn: 'change'})
 
-    updatePointsFromDate = new SoftFormControl<Date>(null, {updateOn: 'change'})
+    storeUpdatePointsDataFormGroup: SoftFormGroup<StoreUpdatePointsDataBody>;
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -60,13 +62,14 @@ export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
                 })
                 .subscribe(({ store }) => {
                     this.storeFormGroup = this.initFormGroup(new Store(store), this.storeSaveBodyName);
+                    this.initStoreUpdatePointsDataFormGroup(store);
                 });
             }else{
                 this.storeFormGroup = this.initFormGroup(new Store({id: 0}), this.storeSaveBodyName);
             }
         });
     }
-
+    
     initializeStoreUpdatePointsScheduledTaskTableCols(){
         this.storeUpdatePointsScheduledTaskTableCols = [
             {name: this.translocoService.translate('TransactionsFrom'), filterType: 'date', field: 'transactionsFrom', showMatchModes: true, showTime: true},
@@ -75,24 +78,40 @@ export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
             {name: this.translocoService.translate('IsManuallyStarted'), filterType: 'boolean', field: 'isManual'},
         ]
     }
+
+    initStoreUpdatePointsDataFormGroup(store: Store){
+        this.storeUpdatePointsDataFormGroup = this.createFormGroup(new StoreUpdatePointsDataBody({storeId: this.modelId, updatePointsStartDate: store.updatePointsStartDate, updatePointsInterval: store.updatePointsInterval}))
+    }
+    
+    onSaveStoreUpdatePointsData(){
+        this.apiService.saveStoreUpdatePointsData(this.storeUpdatePointsDataFormGroup.getRawValue()).subscribe((version) => {
+            this.messageService.successMessage(this.translocoService.translate('SuccessfulSaveToastDescription'));
+
+            this.storeFormGroup.controls.updatePointsInterval.setValue(this.storeUpdatePointsDataFormGroup.controls.updatePointsInterval.getRawValue());
+            this.storeFormGroup.controls.updatePointsStartDate.setValue(this.storeUpdatePointsDataFormGroup.controls.updatePointsStartDate.getRawValue());
+            this.storeFormGroup.controls.version.setValue(version);
+        });
+    }
     
     scheduleJobManually(){
         const updatePointsDTO: UpdatePoints = {
             storeId: this.modelId, 
             storeVersion: this.storeFormGroup.getRawValue().version, 
-            fromDate: this.updatePointsFromDate.value,
+            fromDate: this.manualUpdatePointsFromDate.getRawValue(),
         }
-
+        
         this.apiService.updatePoints(updatePointsDTO).subscribe(() => {
             this.messageService.successMessage(this.translocoService.translate('SuccessfulAttempt'));
+
+            this.manualUpdatePointsFromDate.setValue(null);
         });
     }
-
+    
     override onBeforeSave(): void {
         let saveBody: StoreSaveBody = new StoreSaveBody();
-
+        
         saveBody.storeDTO = this.storeFormGroup.getRawValue();
-
+        
         this.saveBody = saveBody;
     }
 }

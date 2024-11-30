@@ -196,9 +196,9 @@ public class Startup
 
                 if (contextFeature != null)
                 {
-                    // TODO FT: log here
                     Guid guid = Guid.NewGuid();
                     Exception exception = contextFeature.Error;
+                    // TODO FT: log here
                     string exceptionString = "";
 
                     if (env.IsDevelopment())

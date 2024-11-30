@@ -1,7 +1,7 @@
 <ng-container *transloco="let t">
     @defer (when storeFormGroup != null) {
         <soft-card [title]="detailsTitle" icon="pi pi-hashtag">
-            <soft-panel [isFirstMultiplePanel]="true">
+            <soft-panel [isFirstMultiplePanel]="this.modelId > 0">
                 <panel-header></panel-header>
     
                 <panel-body>
@@ -11,12 +11,6 @@
                         </div>
                         <div class="col-12 md:col-6">
                             <soft-textbox [control]="control('getTransactionsEndpoint', storeFormGroup)"></soft-textbox>
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <soft-calendar [control]="control('updatePointsStartDate', storeFormGroup)" [showTime]="true"></soft-calendar>
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <soft-number [control]="control('updatePointsInterval', storeFormGroup)"></soft-number>
                         </div>
                         <div class="col-12 md:col-6">
                             <soft-textbox [control]="control('createUserEndpoint', storeFormGroup)"></soft-textbox>
@@ -32,12 +26,32 @@
     
                 <panel-footer>
                     <p-button (onClick)="onSave()" [label]="t('Save')" icon="pi pi-save"></p-button>
-                    <soft-return-button></soft-return-button>
                 </panel-footer>
 
             </soft-panel>
+
+            <soft-panel *ngIf="this.modelId > 0" [isMiddleMultiplePanel]="true">
+                <panel-header [title]="t('StoreUpdatePointsData')" icon="pi pi-calendar-clock"></panel-header>
+    
+                <panel-body>
+                    <form [formGroup]="formGroup" class="grid">
+                        <div class="col-12 md:col-6">
+                            <soft-calendar [control]="control('updatePointsStartDate', storeUpdatePointsDataFormGroup, true)" [showTime]="true"></soft-calendar>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-number [control]="control('updatePointsInterval', storeUpdatePointsDataFormGroup, true)"></soft-number>
+                        </div>
+                    </form>
+                </panel-body>
+    
+                <panel-footer>
+                    <p-button (onClick)="onSaveStoreUpdatePointsData()" [label]="t('Save')" icon="pi pi-save"></p-button>
+                </panel-footer>
+
+            </soft-panel>
+
             <soft-panel *ngIf="this.modelId > 0" [isLastMultiplePanel]="true">
-                <panel-header [title]="t('StoreUpdatePointsScheduledTaskList')" icon="pi pi-clock"></panel-header>
+                <panel-header [title]="t('SuccessfullyDoneStoreUpdatePointsScheduledTaskList')" icon="pi pi-clock"></panel-header>
     
                 <panel-body>
                     <form [formGroup]="formGroup" class="grid">
@@ -48,7 +62,8 @@
                             </soft-data-table>
                         </div>
                         <div *ngIf="storeUpdatePointsScheduledTaskTableTotalRecords === 0" class="col-12">
-                            <soft-calendar [control]="updatePointsFromDate" [showTime]="true" [label]="t('UpdatePointsFromDate')"></soft-calendar>
+                            <soft-calendar [control]="manualUpdatePointsFromDate" [showTime]="true" [label]="t('ManualUpdatePointsFromDate')" [showTooltip]="true" 
+                            tooltipText="Ovo polje možete popuniti samo kada nemate nijedno uspešno izvršeno ažuriranje poena do sad, kako bi znali od kog momenta želite da obradimo Vaše prethodne transakcije."></soft-calendar>
                         </div>
                     </form>
                 </panel-body>

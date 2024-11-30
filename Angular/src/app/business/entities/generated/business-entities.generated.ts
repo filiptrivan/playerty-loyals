@@ -738,6 +738,32 @@ export class StoreSaveBody extends BaseEntity
 }
 
 
+export class StoreUpdatePointsDataBody extends BaseEntity
+{
+    storeId?: number;
+	updatePointsStartDate?: Date;
+	updatePointsInterval?: number;
+
+    constructor(
+    {
+        storeId,
+		updatePointsStartDate,
+		updatePointsInterval
+    }:{
+        storeId?: number;
+		updatePointsStartDate?: Date;
+		updatePointsInterval?: number;     
+    } = {}
+    ) {
+        super('StoreUpdatePointsDataBody'); 
+
+        this.storeId = storeId;
+		this.updatePointsStartDate = updatePointsStartDate;
+		this.updatePointsInterval = updatePointsInterval;
+    }
+}
+
+
 export class TierSaveBody extends BaseEntity
 {
     tierDTOList?: Tier[];
@@ -863,6 +889,7 @@ export class NotificationUser extends BaseEntity
 export class Partner extends BaseEntity
 {
     name?: string;
+	email?: string;
 	slug?: string;
 	logoImageData?: string;
 	logoImage?: string;
@@ -877,6 +904,7 @@ export class Partner extends BaseEntity
     constructor(
     {
         name,
+		email,
 		slug,
 		logoImageData,
 		logoImage,
@@ -889,6 +917,7 @@ export class Partner extends BaseEntity
 		modifiedAt
     }:{
         name?: string;
+		email?: string;
 		slug?: string;
 		logoImageData?: string;
 		logoImage?: string;
@@ -904,6 +933,7 @@ export class Partner extends BaseEntity
         super('Partner'); 
 
         this.name = name;
+		this.email = email;
 		this.slug = slug;
 		this.logoImageData = logoImageData;
 		this.logoImage = logoImage;

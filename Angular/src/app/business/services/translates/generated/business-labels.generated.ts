@@ -85,6 +85,10 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('SegmentationItemsDTO');
             case 'storeDTO':
                 return this.translocoService.translate('StoreDTO');
+            case 'updatePointsStartDate':
+                return this.translocoService.translate('UpdatePointsStartDate');
+            case 'updatePointsInterval':
+                return this.translocoService.translate('UpdatePointsInterval');
             case 'tierDTOList':
                 return this.translocoService.translate('TierDTOList');
             case 'storeTierDTOList':
@@ -139,10 +143,6 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('OrderNumber');
             case 'segmentation':
                 return this.translocoService.translate('Segmentation');
-            case 'updatePointsInterval':
-                return this.translocoService.translate('UpdatePointsInterval');
-            case 'updatePointsStartDate':
-                return this.translocoService.translate('UpdatePointsStartDate');
             case 'getTransactionsEndpoint':
                 return this.translocoService.translate('GetTransactionsEndpoint');
             case 'getDiscountCategoriesEndpoint':

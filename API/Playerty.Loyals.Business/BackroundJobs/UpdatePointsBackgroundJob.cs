@@ -15,22 +15,30 @@ using Playerty.Loyals.Business.Services;
 using Playerty.Loyals.Business.DTO.Helpers;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Database;
 using Mapster;
+using Nucleus.Core.Exceptions;
+using Soft.Generator.Shared.Emailing;
 
 namespace Playerty.Loyals.Business.BackroundJobs
 {
+    // FT: The DisallowConcurrentExecution attribute is mandatory because if 2 instances read the same data they will save the TransactionsFrom as the same time which should not happen.
+    // If you have multiple instances of a job identified by different JobKey values, they can run concurrently, but if they share the same JobKey, only one instance will run at a time
+    [DisallowConcurrentExecution]
     public class UpdatePointsBackgroundJob : IJob
     {
         private readonly LoyalsBusinessService _loyalsBusinessService;
         private readonly WingsApiService _wingsApiService;
         private readonly IApplicationDbContext _context;
         private readonly ILogger<UpdatePointsBackgroundJob> _logger;
+        private readonly EmailingService _emailingService;
 
-        public UpdatePointsBackgroundJob(LoyalsBusinessService loyalsBusinessService, WingsApiService wingsApiService, IApplicationDbContext context, ILogger<UpdatePointsBackgroundJob> logger)
+        public UpdatePointsBackgroundJob(LoyalsBusinessService loyalsBusinessService, WingsApiService wingsApiService, IApplicationDbContext context, ILogger<UpdatePointsBackgroundJob> logger, 
+            EmailingService emailingService)
         {
             _loyalsBusinessService = loyalsBusinessService;
             _wingsApiService = wingsApiService;
             _context = context;
             _logger = logger;
+            _emailingService = emailingService;
         }
 
         public async Task Execute(IJobExecutionContext jobExecutionContext)
@@ -54,10 +62,22 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
                     store = await _loyalsBusinessService.LoadInstanceAsync<Store, long>(storeId, null);
 
-                    int? interval = store.UpdatePointsInterval; // FT: It can com
+                    if (store.GetTransactionsEndpoint == null)
+                        throw new BusinessException("Na svom profilu partnera morate da popunite polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
 
-                    DateTime? lastShouldStartedAt = await _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == storeId && x.IsManual != true).OrderByDescending(x => x.TransactionsTo).Select(x => x.TransactionsTo).FirstOrDefaultAsync();
-                    DateTime? lastWithManualsShouldStartedAt = await _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == storeId).OrderByDescending(x => x.TransactionsTo).Select(x => x.TransactionsTo).FirstOrDefaultAsync();
+                    int? interval = store.UpdatePointsInterval;
+
+                    DateTime? lastShouldStartedAt = await _context.DbSet<StoreUpdatePointsScheduledTask>()
+                        .Where(x => x.Store.Id == storeId && x.IsManual != true)
+                        .OrderByDescending(x => x.TransactionsTo)
+                        .Select(x => (DateTime?)x.TransactionsTo)
+                        .FirstOrDefaultAsync();
+
+                    DateTime? lastWithManualsShouldStartedAt = await _context.DbSet<StoreUpdatePointsScheduledTask>()
+                        .Where(x => x.Store.Id == storeId)
+                        .OrderByDescending(x => x.TransactionsTo)
+                        .Select(x => (DateTime?)x.TransactionsTo)
+                        .FirstOrDefaultAsync();
 
                     DateTime? startDateTime = store.UpdatePointsStartDate; // FT: When the startDateTime == null, the user is manually starting the update
 
@@ -138,9 +158,22 @@ namespace Playerty.Loyals.Business.BackroundJobs
                     await _context.SaveChangesAsync();
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.UtcNow}, STORE: {store.Id}");
+                _logger.LogError(ex.ToString());
+
+                if (ex is BusinessException)
+                {
+                    await _emailingService.SendEmailAsync(store.Partner.Email, "Greška prilikom ažuriranja poena", ex.Message);
+                }
+                else
+                {
+                    await _emailingService.SendEmailAsync(
+                        store.Partner.Email, 
+                        "Greška prilikom ažuriranja poena", 
+                        "Došlo je do greške pri ažuriranju poena. Molimo Vas da pokušate ponovo. Ako se problem ponovi, kontaktirajte podršku."
+                    );
+                }
 
                 throw;
             }

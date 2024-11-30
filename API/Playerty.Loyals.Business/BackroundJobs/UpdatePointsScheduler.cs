@@ -53,8 +53,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
                         .WithMisfireHandlingInstructionNextWithRemainingCount())
                     .Build();
 
-                //nextRunDateTime = shouldStartedAtForSave.AddHours(interval);
-                nextRunDateTime = shouldStartedAtForSave.AddMinutes(interval);
+                nextRunDateTime = shouldStartedAtForSave.AddHours(interval);
 
                 JobKey initialJobKey = new JobKey($"InitialJob_{nameof(UpdatePointsScheduler)}_{storeId}");
 
@@ -72,10 +71,8 @@ namespace Playerty.Loyals.Business.BackroundJobs
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity($"Trigger_{nameof(UpdatePointsScheduler)}_{storeId}")
                 .StartAt(nextRunOffset)
-                //.StartAt(now)
                 .WithSimpleSchedule(x => x
-                    //.WithIntervalInHours(interval)
-                    .WithIntervalInMinutes(interval)
+                    .WithIntervalInHours(interval)
                     .RepeatForever()
                     .WithMisfireHandlingInstructionNextWithRemainingCount())
                 .Build();
@@ -103,12 +100,11 @@ namespace Playerty.Loyals.Business.BackroundJobs
                 // 1. lastShouldStartedAt can't be greater then now
                 // 2. If lastShouldStartedAt is way before, nextRun <= now will handle that
                 // 3. If now - lastShouldStartedAt < interval, this else is handling that
-                //nextRun = lastShouldStartedAt.Value.AddHours(interval);
-                nextRun = lastShouldStartedAt.Value.AddMinutes(interval);
+                nextRun = lastShouldStartedAt.Value.AddHours(interval);
             }
 
             if (nextRun <= now)
-                nextRun = now; // Default to run 1 minute from now if overdue
+                nextRun = now;
 
             return nextRun;
         }
@@ -134,8 +130,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
                 .WithIdentity(triggerKey)
                 .StartAt(nextRunOffset)
                 .WithSimpleSchedule(x => x
-                    //.WithIntervalInHours(interval)
-                    .WithIntervalInMinutes(interval)
+                    .WithIntervalInHours(interval)
                     .RepeatForever()
                     .WithMisfireHandlingInstructionNowWithRemainingCount()) // FT: Just in case, since we have already checked that startDateTime cannot be greater than now, it will start immediately and continue at the interval. There is a very small chance of this happening, it's a matter of milliseconds.
                 .Build();
@@ -181,12 +176,13 @@ namespace Playerty.Loyals.Business.BackroundJobs
                 .Build();
 
             IJobDetail job = JobBuilder.Create<UpdatePointsBackgroundJob>()
-                .StoreDurably(false) // Automatically remove the job after execution
                 .WithIdentity(jobKey)
+                .StoreDurably(false) // Automatically remove the job after execution
                 .UsingJobData("StoreId", storeId)
                 .UsingJobData("FirstManualStartInterval", firstManualStartInterval)
                 .Build();
 
+            await _scheduler.DeleteJob(jobKey); // FT: Just in case, if the user quickly double-clicks or the execution takes time
             result = await _scheduler.ScheduleJob(job, trigger);
 
             return result;

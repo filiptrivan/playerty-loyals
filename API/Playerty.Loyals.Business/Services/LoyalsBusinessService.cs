@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Database;
 using System.Linq;
 using Playerty.Loyals.Business.BackroundJobs;
+using Soft.Generator.Shared.Helpers;
 
 namespace Playerty.Loyals.Services
 {
@@ -300,23 +301,6 @@ namespace Playerty.Loyals.Services
             });
         }
 
-        //public async Task<List<StoreTierDTO>> LoadStoreTierDTOListForTierList(List<long> tierIds)
-        //{
-        //    List<StoreTierDTO> storeTierDTOList = await LoadStoreTierDTOList(_context.DbSet<StoreTier>().Where(x => tierIds.Contains(x.Tier.Id)), false);
-
-        //    for (int i = 0; i < tierIds.Count; i++)
-        //    {
-        //        List<StoreTierDTO> storeTierDTOForTierList = storeTierDTOList.Where(x => x.TierId == tierIds[i]).ToList();
-
-        //        foreach (StoreTierDTO storeTierDTO in storeTierDTOForTierList)
-        //        {
-        //            storeTierDTO.TierClientIndex = i;
-        //        }
-        //    }
-
-        //    return storeTierDTOList;
-        //}
-
         public async Task<TierSaveBodyDTO> LoadTierSaveBodyDTO()
         {
             TierSaveBodyDTO tierSaveBodyDTO = new TierSaveBodyDTO();
@@ -570,7 +554,7 @@ namespace Playerty.Loyals.Services
 
                 await UpdateSegmentationItemListForPartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO.Id, partnerUserSaveBodyDTO.SelectedSegmentationItemIds);
 
-                int pointsBeforeSave = await GetPointsForThePartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO.Id);
+                int pointsBeforeSave = await _context.DbSet<PartnerUser>().Where(x => x.Id == partnerUserSaveBodyDTO.PartnerUserDTO.Id).Select(x => x.Points).SingleAsync();
 
                 PartnerUser savedPartnerUser = await SavePartnerUserAndReturnDomainAsync(partnerUserSaveBodyDTO.PartnerUserDTO, false, false); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
 
@@ -584,14 +568,6 @@ namespace Playerty.Loyals.Services
                     UserExtendedDTO = savedUserExtendedDTO,
                     PartnerUserDTO = savedPartnerUser.Adapt<PartnerUserDTO>(Mapper.PartnerUserToDTOConfig()),
                 };
-            });
-        }
-
-        public async Task<int> GetPointsForThePartnerUser(long partnerUserId)
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                return _context.DbSet<PartnerUser>().Where(x => x.Id == partnerUserId).Select(x => x.Points).Single();
             });
         }
 
@@ -622,7 +598,8 @@ namespace Playerty.Loyals.Services
             await _context.WithTransactionAsync(async () =>
             {
                 partnerUser.Points += pointsToAdd;
-                await _context.SaveChangesAsync();
+
+                await UpdatePartnerUserTier(partnerUser);
             });
         }
 
@@ -1071,38 +1048,80 @@ namespace Playerty.Loyals.Services
 
         public async Task<StoreDTO> SaveStoreExtendedAsync(StoreSaveBodyDTO storeSaveBodyDTO)
         {
+            if (storeSaveBodyDTO.StoreDTO.Id == 0 && (storeSaveBodyDTO.StoreDTO.UpdatePointsInterval != null || storeSaveBodyDTO.StoreDTO.UpdatePointsStartDate != null))
+                throw new HackerException("Can't save UpdatePointsInterval nor UpdatePointsStartDate from here.");
+
+            return await _context.WithTransactionAsync(async () =>
+            {
+                int currentPartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
+                storeSaveBodyDTO.StoreDTO.PartnerId = currentPartnerId;
+
+                if (storeSaveBodyDTO.StoreDTO.Id > 0)
+                {
+                    Store storeBeforeSave = await LoadInstanceAsync<Store, long>(storeSaveBodyDTO.StoreDTO.Id, storeSaveBodyDTO.StoreDTO.Version);
+
+                    if ((storeBeforeSave.UpdatePointsInterval != storeSaveBodyDTO.StoreDTO.UpdatePointsInterval) || 
+                        (!Helper.AreDatesEqualToSeconds(storeBeforeSave.UpdatePointsStartDate, storeSaveBodyDTO.StoreDTO.UpdatePointsStartDate)))
+                        throw new HackerException("Can't save UpdatePointsInterval nor UpdatePointsStartDate from here.");
+                }
+
+
+                return await SaveStoreAndReturnDTOAsync(storeSaveBodyDTO.StoreDTO, false, false);
+            });
+        }
+
+        public async Task<int> SaveStoreUpdatePointsDataAsync(StoreUpdatePointsDataBodyDTO storeUpdatePointsDataBodyDTO)
+        {
             DateTimeOffset? scheduledJobResult = null;
-            StoreDTO savedStoreDTO = null;
 
             try
             {
-                if ((storeSaveBodyDTO.StoreDTO.UpdatePointsInterval == null && storeSaveBodyDTO.StoreDTO.UpdatePointsStartDate != null) ||
-                    (storeSaveBodyDTO.StoreDTO.UpdatePointsInterval != null && storeSaveBodyDTO.StoreDTO.UpdatePointsStartDate == null))
-                    throw new BusinessException("Ako želite da ažurirate poene na određenom intervalu, morate da popunite polje interval i polje početak ažuriranja."); // TODO FT: Return message, don't throw
+                if ((storeUpdatePointsDataBodyDTO.UpdatePointsInterval == null && storeUpdatePointsDataBodyDTO.UpdatePointsStartDate != null) ||
+                    (storeUpdatePointsDataBodyDTO.UpdatePointsInterval != null && storeUpdatePointsDataBodyDTO.UpdatePointsStartDate == null))
+                    throw new BusinessException("Ako želite da ažurirate poene na određenom intervalu, morate da popunite polje interval i polje početak ažuriranja.");
+
+                if (storeUpdatePointsDataBodyDTO.UpdatePointsInterval <= 0)
+                    throw new HackerException($"The negative or zero interval can't be saved (StoreId: {storeUpdatePointsDataBodyDTO.StoreId}).");
 
                 DateTime now = DateTime.Now;
 
                 // FT: We redundantly check both here and inside the ScheduleJob method, in the method due to the programming principle, and here so that they do not enter the transaction and block other threads from executing
-                if (storeSaveBodyDTO.StoreDTO.UpdatePointsStartDate != null && storeSaveBodyDTO.StoreDTO.UpdatePointsStartDate.Value <= now)
+                if (storeUpdatePointsDataBodyDTO.UpdatePointsStartDate != null && storeUpdatePointsDataBodyDTO.UpdatePointsStartDate.Value <= now)
                     throw new BusinessException("Vreme početka ažuriranja poena mora biti veće od sadašnjeg trenutka.");
 
-                await _context.WithTransactionAsync(async () =>
+                return await _context.WithTransactionAsync(async () =>
                 {
-                    int currentPartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
-                    storeSaveBodyDTO.StoreDTO.PartnerId = currentPartnerId;
+                    Store store = await LoadInstanceAsync<Store, long>(storeUpdatePointsDataBodyDTO.StoreId, null);
 
-                    savedStoreDTO = await SaveStoreAndReturnDTOAsync(storeSaveBodyDTO.StoreDTO, false, false);
+                    if (store.GetTransactionsEndpoint == null)
+                        throw new BusinessException("Na svom profilu partnera morate da popunite polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
 
-                    if (savedStoreDTO.UpdatePointsInterval != null && savedStoreDTO.UpdatePointsStartDate != null)
-                        scheduledJobResult = await _updatePointsScheduler.ScheduleJob(savedStoreDTO.Id, savedStoreDTO.UpdatePointsInterval.Value, savedStoreDTO.UpdatePointsStartDate.Value, now);
+                    store.UpdatePointsInterval = storeUpdatePointsDataBodyDTO.UpdatePointsInterval;
+                    store.UpdatePointsStartDate = storeUpdatePointsDataBodyDTO.UpdatePointsStartDate;
+
+                    await _context.SaveChangesAsync();
+
+                    if (storeUpdatePointsDataBodyDTO.UpdatePointsInterval != null && storeUpdatePointsDataBodyDTO.UpdatePointsStartDate != null)
+                    {
+                        scheduledJobResult = await _updatePointsScheduler.ScheduleJob(
+                            storeUpdatePointsDataBodyDTO.StoreId,
+                            storeUpdatePointsDataBodyDTO.UpdatePointsInterval.Value,
+                            storeUpdatePointsDataBodyDTO.UpdatePointsStartDate.Value,
+                            now
+                        );
+                    }
+                    else if (storeUpdatePointsDataBodyDTO.UpdatePointsInterval == null && storeUpdatePointsDataBodyDTO.UpdatePointsStartDate == null)
+                    {
+                        await _updatePointsScheduler.DeleteJob(storeUpdatePointsDataBodyDTO.StoreId);
+                    }
+
+                    return store.Version;
                 });
-
-                return savedStoreDTO;
             }
             catch (Exception)
             {
                 if (scheduledJobResult != null)
-                    await _updatePointsScheduler.DeleteJob(storeSaveBodyDTO.StoreDTO.Id);
+                    await _updatePointsScheduler.DeleteJob(storeUpdatePointsDataBodyDTO.StoreId);
 
                 throw;
             }
@@ -1118,6 +1137,9 @@ namespace Playerty.Loyals.Services
                 DateTime now = DateTime.Now;
                 Store store = await LoadInstanceAsync<Store, long>(storeId, version);
 
+                if (store.GetTransactionsEndpoint == null)
+                    throw new BusinessException("Na svom profilu partnera morate da popunite polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
+
                 if ((store.StoreUpdatePointsScheduledTasks == null || store.StoreUpdatePointsScheduledTasks.Count == 0) && fromDate == null)
                     throw new BusinessException("Zato što prvi put ažurirate poene, morate da odredite datum od kada želite da počnete."); // TODO FT: Make better message
                 else if (store.StoreUpdatePointsScheduledTasks.Count > 0 && fromDate != null)
@@ -1131,8 +1153,7 @@ namespace Playerty.Loyals.Services
                 }
                 else
                 {
-                    //firstManualStartInterval = (int)(now - fromDate.Value).TotalHours; // FT: If you can let the user choose only minutes on UI (without seconds), because of this (int), he will not update some data.
-                    firstManualStartInterval = (int)(now - fromDate.Value).TotalMinutes;
+                    firstManualStartInterval = (int)(now - fromDate.Value).TotalHours; // FT: If you can let the user choose only minutes on UI (without seconds), because of this (int), he will not update some data.
 
                     if (firstManualStartInterval <= 0)
                         throw new BusinessException("Sati za koje ćete da ažurirate poene moraju da budu veći od 0.");

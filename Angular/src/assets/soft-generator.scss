@@ -410,17 +410,21 @@
 
 .multiple-panel-middle{
 	.p-panel-header {
-		border-bottom-left-radius: 0%;
-		border-bottom-right-radius: 0%;
-		border-top-left-radius: 0%;
-		border-top-right-radius: 0%;
+		border-top-left-radius: 0px;
+		border-top-right-radius: 0px;
+	}
+
+	.p-panel .p-panel-content {
+		border-bottom-left-radius: 0px;
+		border-bottom-right-radius: 0px;
+		border-bottom: none;
 	}
 }
 
 .multiple-panel-last{
 	.p-panel-header {
-		border-top-left-radius: 0%;
-		border-top-right-radius: 0%;
+		border-top-left-radius: 0px;
+		border-top-right-radius: 0px;
 	}
 }
 

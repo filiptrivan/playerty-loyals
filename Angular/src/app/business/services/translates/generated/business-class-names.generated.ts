@@ -53,6 +53,8 @@ export class TranslateClassNamesBusinessService {
                 return this.translocoService.translate('SegmentationSaveBody');
             case 'StoreSaveBody':
                 return this.translocoService.translate('StoreSaveBody');
+            case 'StoreUpdatePointsDataBody':
+                return this.translocoService.translate('StoreUpdatePointsDataBody');
             case 'TierSaveBody':
                 return this.translocoService.translate('TierSaveBody');
             case 'UpdatePoints':

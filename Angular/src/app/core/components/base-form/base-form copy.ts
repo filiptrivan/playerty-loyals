@@ -100,10 +100,11 @@ export class BaseFormCopy implements OnInit {
   // FT: If we put onChange to true, we are validating control on change not on blur.
   // FT: If we assign model, we are taking validators for the other class
   control<T extends BaseEntity>(formControlName: string & keyof T, formGroup: SoftFormGroup<T>, customValidation: boolean = false, disable: boolean = false) {
-    // let formGroup: FormGroup = this.formGroup.controls[model.typeName] as FormGroup;
-  
     if (formGroup == null)
       return null; // FT: When we initialized form group again this will happen
+
+    if(formGroup.controlNamesFromHtml.findIndex(x => x === formControlName) === -1)
+      formGroup.controlNamesFromHtml.push(formControlName);
 
     let formControl: SoftFormControl = formGroup.controls[formControlName] as SoftFormControl;
 
@@ -212,11 +213,12 @@ export class BaseFormCopy implements OnInit {
     Object.keys(this.formGroup.controls).forEach(key => {
       const formGroup = this.formGroup.controls[key] as FormGroup;
 
-      if (formGroup instanceof FormGroup){
+      if (formGroup instanceof SoftFormGroup){
         Object.keys(formGroup.controls).forEach(key => {
           const formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
-          formControl.markAsDirty();
-          if (formControl.invalid) {
+
+          if (formGroup.controlNamesFromHtml.includes(formControl.label) && formControl.invalid) {
+            formControl.markAsDirty();
             invalid = true;
           }
         });
@@ -224,7 +226,7 @@ export class BaseFormCopy implements OnInit {
 
     });
 
-    if (invalid || this.invalidForm) {
+    if (invalid) {
       return false;
     }
 
@@ -406,8 +408,9 @@ export class BaseFormCopy implements OnInit {
         (formArray.controls as FormGroup[]).forEach(formGroup => {
           Object.keys(formGroup.controls).forEach(key => {
             const formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesn't work
-            formControl.markAsDirty();
+
             if (this.formArrayControlNamesFromHtml.includes(formControl.label) && formControl.invalid) {
+              formControl.markAsDirty();
               invalid = true;
             }
           });
