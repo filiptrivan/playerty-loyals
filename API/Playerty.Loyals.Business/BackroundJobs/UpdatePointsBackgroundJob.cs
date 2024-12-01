@@ -5,6 +5,7 @@ using Playerty.Loyals.Services;
 using Quartz;
 using Soft.Generator.Shared.Extensions;
 using Soft.Generator.Shared.Interfaces;
+using Soft.Generator.Shared.SoftExceptions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Playerty.Loyals.Business.Services;
-using Playerty.Loyals.Business.DTO.Helpers;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Database;
 using Mapster;
-using Nucleus.Core.Exceptions;
 using Soft.Generator.Shared.Emailing;
 
 namespace Playerty.Loyals.Business.BackroundJobs
@@ -41,6 +40,10 @@ namespace Playerty.Loyals.Business.BackroundJobs
             _emailingService = emailingService;
         }
 
+        //List<long> alreadyExecutingStoreIds = new List<long>();
+        private static readonly HashSet<long> alreadyExecutingStoreIds = new HashSet<long>();
+        private static readonly object lockObject = new object();
+
         public async Task Execute(IJobExecutionContext jobExecutionContext)
         {
             Store store = null;
@@ -54,6 +57,8 @@ namespace Playerty.Loyals.Business.BackroundJobs
                     ? jobExecutionContext.JobDetail.JobDataMap.GetInt("FirstManualStartInterval")
                     : null;
 
+                var e = jobExecutionContext.JobDetail.Key;
+
                 DateTime now = DateTime.Now;
 
                 await _context.WithTransactionAsync(async () =>
@@ -63,7 +68,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
                     store = await _loyalsBusinessService.LoadInstanceAsync<Store, long>(storeId, null);
 
                     if (store.GetTransactionsEndpoint == null)
-                        throw new BusinessException("Na svom profilu partnera morate da popunite polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
+                        throw new BusinessException($"Na stranici prodavnice '{store.Name}' morate da sačuvate popunjeno polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
 
                     int? interval = store.UpdatePointsInterval;
 
@@ -98,11 +103,13 @@ namespace Playerty.Loyals.Business.BackroundJobs
                     {
                         if (firstManualStartInterval == null || firstManualStartInterval == 0)
                         {
-                            dateFrom = shouldStartedAtForSave.AddHours(-interval.Value);
+                            //dateFrom = shouldStartedAtForSave.AddHours(-interval.Value);
+                            dateFrom = shouldStartedAtForSave.AddMinutes(-interval.Value);
                         }
                         else // FT: If the first update ever is manual
                         {
-                            dateFrom = shouldStartedAtForSave.AddHours(-firstManualStartInterval.Value);
+                            //dateFrom = shouldStartedAtForSave.AddHours(-firstManualStartInterval.Value);
+                            dateFrom = shouldStartedAtForSave.AddMinutes(-firstManualStartInterval.Value);
                         }
                     }
                     else
@@ -126,7 +133,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
                     {
                         PartnerUser partnerUser = partnerUserList.Where(x => x.User.Email == externalTransactionDTO.UserEmail).Single();
 
-                        int pointsFromTransaction = (int)Math.Floor(externalTransactionDTO.Price * store.Partner.PointsMultiplier); // FT: Test this for negative and positive price
+                        int pointsFromTransaction = (int)Math.Floor((decimal)externalTransactionDTO.Price * store.Partner.PointsMultiplier); // FT: Test this for negative and positive price
 
                         TransactionDTO transactionDTO = new TransactionDTO
                         {
@@ -161,10 +168,13 @@ namespace Playerty.Loyals.Business.BackroundJobs
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-
+                
                 if (ex is BusinessException)
                 {
-                    await _emailingService.SendEmailAsync(store.Partner.Email, "Greška prilikom ažuriranja poena", ex.Message);
+                    await _emailingService.SendEmailAsync(store.Partner.Email, 
+                        "Greška prilikom ažuriranja poena", 
+                        $"Prodavnica: {store.Name}. {ex.Message}"
+                    );
                 }
                 else
                 {
@@ -174,8 +184,6 @@ namespace Playerty.Loyals.Business.BackroundJobs
                         "Došlo je do greške pri ažuriranju poena. Molimo Vas da pokušate ponovo. Ako se problem ponovi, kontaktirajte podršku."
                     );
                 }
-
-                throw;
             }
         }
 

@@ -33,6 +33,8 @@ export class TranslateClassNamesBusinessService {
                 return this.translocoService.translate('UserExtended');
             case 'Brand':
                 return this.translocoService.translate('Brand');
+            case 'ExternalTransaction':
+                return this.translocoService.translate('ExternalTransaction');
             case 'MergedPartnerUser':
                 return this.translocoService.translate('MergedPartnerUser');
             case 'NotificationSaveBody':

@@ -7,7 +7,8 @@
  - Mozda je ok sledeca implementacija: Korisnik na PL pravi partner profil, u tom trenutku saljemo api request, ako u CB postoji korisnik sa tim mejlom ne menjamo ga, ako ne postoji dodajemo ga. Sa ovom implementacijom prethodna stavka nije vazna.
  X Kad god se korisniku azuriraju poeni (Scheduled task, prvi put popunjeno, manuelno menjanje) treba da se okine request azuriranja poena.
  - Kad se okine scheduled task automatski ili manuelno, tad cemo da izvrsimo i update poena korisnika (trazimo korisnika sa tim mejlom, azuriramo mu poene i azuriramo mu nivo odanosti na CB)
- - Treba da dodaju polja 1. Points (opciono), 2. Veza ka Tieru (ja mogu da saljem TierCode)
+ - Treba da dodaju polja 1. Points (opciono), 2. Veza ka Tieru (ja mogu da saljem TierCode-ove)
+ - Na PL, korisnik se menja pri sledećim operacijama: 1. SavePartnerUser 2. Scheduled Task za ažuriranje poena 3. Prvi put popunjavanje nekih informacija (u sklopu SavePartnerUser) 4. Pravljenje partner user profila
  
 3. Da li im slati poene i cuvati na korisniku ili oni da gadjaju PL endpoint kad zele da prikazuju poene korisnika?
  - I ovde mozda 'Sync' dugme na PL, svakim klikom na 'Sync' da se za tog korisnika azuriraju poeni na CB, ako se desi da ne postoji korisnik kod njih na PL mu izbacimo poruku da prvo mora da uradi 'Sync' korisnika.
@@ -26,3 +27,6 @@ X 5. Oni ako zele treba da dovuku sve podatke sa moje stranice 'Nivoi odanosti'
 6. Save nivoa odanosti
  - Kad se klikne dugme 'Sync' kod njih na CB treba da se sacuvaju svi nivoi odanosti iz PL i svi napravljeni popusti sa PL
  - Mozda i na PL prikazati vizuelno korisniku kakvo je stanje sa sinhronizacijama, da bude svestan gde mu se koji podaci razlikuju
+
+7. ProductDTO
+ - Poslati 9 proizvoda za homepage

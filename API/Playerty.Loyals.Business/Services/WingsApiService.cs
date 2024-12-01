@@ -1,51 +1,68 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Playerty.Loyals.Business.DTO;
-using Playerty.Loyals.Business.DTO.Helpers;
 using Playerty.Loyals.Business.Entities;
 using Soft.Generator.Shared.Extensions;
 using Soft.Generator.Shared.Interfaces;
 using Soft.Generator.Shared.SoftExceptions;
+using Playerty.Loyals.Business.ValidationRules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace Playerty.Loyals.Business.Services
 {
     public class WingsApiService
     {
-        private readonly HttpClient _client;
+        private readonly HttpClient _httpClient;
         private readonly IApplicationDbContext _context;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
 
-        public WingsApiService(IApplicationDbContext context, PartnerUserAuthenticationService partnerUserAuthenticationService)
+        public WingsApiService(HttpClient httpClient, IApplicationDbContext context, PartnerUserAuthenticationService partnerUserAuthenticationService)
         {
+            _httpClient = httpClient;
             _context = context;
             _partnerUserAuthenticationService = partnerUserAuthenticationService;
         }
 
         public async Task<List<ExternalTransactionDTO>> GetTransactionList(string transactionsEndpoint, DateTime dateFrom, DateTime dateTo)
         {
-            if (transactionsEndpoint == "creative-brackets")
+            //string query = $"?dateFrom={dateFrom:yyyy-MM-dd}&dateTo={dateTo:yyyy-MM-dd}";
+
+            string fullUrl = $"{transactionsEndpoint}";
+
+            HttpResponseMessage response = await _httpClient.GetAsync(fullUrl);
+
+            response.EnsureSuccessStatusCode();
+
+            List<ExternalTransactionDTO> externalTransactionDTOList = await response.Content.ReadFromJsonAsync<List<ExternalTransactionDTO>>();
+
+            List<string> validationErrorMessages = new List<string>();
+
+            foreach (ExternalTransactionDTO externalTransactionDTO in externalTransactionDTOList)
             {
-                return new List<ExternalTransactionDTO>
+                ExternalTransactionDTOValidationRules validationRules = new ExternalTransactionDTOValidationRules();
+                ValidationResult validationResult = validationRules.Validate(externalTransactionDTO);
+
+                foreach (ValidationFailure validationFailure in validationResult.Errors)
                 {
-                    new ExternalTransactionDTO { Price = 200.00M, ProductCategoryName = "SG Tools", ProductName = "Dijamant", UserEmail = "filiptrivan5@gmail.com", BoughtAt = DateTime.Now.AddHours(-2) },
-                    new ExternalTransactionDTO { Price = 400.00M, ProductCategoryName = "Bosch", ProductName = "Hilti", UserEmail = "filiptrivan5@gmail.com", BoughtAt = DateTime.Now.AddHours(-2) },
-                    new ExternalTransactionDTO { Price = -200.00M, ProductCategoryName = "SG Tools", ProductName = "Dijamant", UserEmail = "filiptrivan5@gmail.com", BoughtAt = DateTime.Now.AddHours(-2) },
-                };
+                    if (validationErrorMessages.Contains(validationFailure.ErrorMessage) == false)
+                    {
+                        validationErrorMessages.Add(validationFailure.ErrorMessage);
+                    }
+                }
             }
-            else // wings
-            {
-                return new List<ExternalTransactionDTO>
-                {
-                    new ExternalTransactionDTO { Price = 500.00M, ProductCategoryName = "Makita", ProductName = "Usisivac", UserEmail = "filiptrivan5@gmail.com", BoughtAt = DateTime.Now.AddHours(-2) },
-                    new ExternalTransactionDTO { Price = 1000.00M, ProductCategoryName = "Dewalt", ProductName = "Cekic", UserEmail = "filiptrivan5@gmail.com", BoughtAt = DateTime.Now.AddHours(-2) },
-                    new ExternalTransactionDTO { Price = -500.00M, ProductCategoryName = "Makita", ProductName = "Usisivac", UserEmail = "filiptrivan5@gmail.com", BoughtAt = DateTime.Now.AddHours(-2) },
-                };
-            }
+
+            if (validationErrorMessages.Count > 0)
+                throw new BusinessException($"Greške prilikom preuzimanja transakcija u nekom od objekata:\n{string.Join("\n", validationErrorMessages)}");
+
+            return externalTransactionDTOList;
         }
 
         //public async Task<List<Purchace>> LoadNewPurchacesSinceAsync()

@@ -75,6 +75,8 @@ public class Startup
 
         services.AddHttpContextAccessor();
 
+        services.AddHttpClient();
+
         services.AddCors();
 
         // FT: It's mandatory to be before AddControllers

@@ -454,6 +454,48 @@ export class Brand extends BaseEntity
 }
 
 
+export class ExternalTransaction extends BaseEntity
+{
+    userEmail?: string;
+	productName?: string;
+	productImageUrl?: string;
+	productCategoryName?: string;
+	productCategoryImageUrl?: string;
+	price?: number;
+	boughtAt?: Date;
+
+    constructor(
+    {
+        userEmail,
+		productName,
+		productImageUrl,
+		productCategoryName,
+		productCategoryImageUrl,
+		price,
+		boughtAt
+    }:{
+        userEmail?: string;
+		productName?: string;
+		productImageUrl?: string;
+		productCategoryName?: string;
+		productCategoryImageUrl?: string;
+		price?: number;
+		boughtAt?: Date;     
+    } = {}
+    ) {
+        super('ExternalTransaction'); 
+
+        this.userEmail = userEmail;
+		this.productName = productName;
+		this.productImageUrl = productImageUrl;
+		this.productCategoryName = productCategoryName;
+		this.productCategoryImageUrl = productCategoryImageUrl;
+		this.price = price;
+		this.boughtAt = boughtAt;
+    }
+}
+
+
 export class MergedPartnerUser extends BaseEntity
 {
     

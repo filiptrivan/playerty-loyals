@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Playerty.Loyals.Business.DTO;
-using Playerty.Loyals.Business.DTO.Helpers;
 using Playerty.Loyals.Business.Entities;
 using Playerty.Loyals.Business.Services;
 using Playerty.Loyals.Services;

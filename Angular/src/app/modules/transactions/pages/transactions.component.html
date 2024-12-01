@@ -8,16 +8,16 @@
       <div style="display: flex; justify-content: space-between;">
       </div>
       @for (currentPartnerUserTransaction of currentPartnerUserTransactions?.data; track $index) {
-        <div [class]="(currentPartnerUserTransaction.price < 0 ? 'error-color-light' : '') + ' notification-border'" style="padding: 18px; margin: 0px;">
+        <div class="notification-border" style="padding: 18px; margin: 0px;">
           <div class="text-wrapper">
-            <div class="header" style="margin-bottom: 10px; display: flex; justify-content: space-between; position: relative;">
+            <!-- <div class="header" style="margin-bottom: 10px; display: flex; justify-content: space-between; position: relative;">
               <div>
                 <div>{{currentPartnerUserTransaction.productName}}</div>
                 <div class="header-separator"></div>
               </div>
-            </div>
-            <div style="display: flex; justify-content: space-between;">
-              <div style="display: flex; align-items: center; gap: 10px;">
+            </div> -->
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="display: flex; align-items: center; gap: 20px;">
                 <div style="text-align: center;">
                   <div style="font-size: 16px; font-weight: 700;">
                     {{currentPartnerUserTransaction.boughtAt.getDay()}}
@@ -26,12 +26,31 @@
                     {{getMonth(currentPartnerUserTransaction.boughtAt.getMonth() + 1)}}
                   </div>
                 </div>
+                <div class="vertical-gray-separator" style="height: 40px;"></div>
                 <div>
-                  {{currentPartnerUserTransaction.productCategoryName}}
+                  <div style="font-size: 16px; font-weight: 700;">
+                    {{currentPartnerUserTransaction.productName}}
+                  </div>
+                  <div style="font-size: 14px; font-weight: 600;" class="gray-color">
+                    {{currentPartnerUserTransaction.productCategoryName}}
+                  </div>
                 </div>
               </div>
-              <div style="font-size: 16px; font-weight: 700;">
-                {{currentPartnerUserTransaction.price}} RSD
+              <div *ngIf="currentPartnerUserTransaction.price < 0" style="text-align: right;">
+                <div class="error-color-font" style="font-size: 19px; font-weight: 700;">
+                  {{currentPartnerUserTransaction.points}} <i class="pi pi-star"></i>
+                </div>
+                <div style="font-size: 14px; font-weight: 600;" class="gray-color">
+                  {{currentPartnerUserTransaction.price}} RSD 
+                </div>
+              </div>
+              <div *ngIf="currentPartnerUserTransaction.price >= 0" style="text-align: right;">
+                <div class="success-color-font" style="font-size: 19px; font-weight: 700;">
+                  +{{currentPartnerUserTransaction.points}} <i class="pi pi-star"></i>
+                </div>
+                <div style="font-size: 14px; font-weight: 600;" class="gray-color">
+                  {{currentPartnerUserTransaction.price}} RSD 
+                </div>
               </div>
 <!-- {{currentPartnerUserTransaction.productImageUrl}}
 {{currentPartnerUserTransaction.productCategoryImageUrl}}

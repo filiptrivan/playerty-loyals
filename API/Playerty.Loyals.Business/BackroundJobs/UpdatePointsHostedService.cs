@@ -34,7 +34,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
             await _context.WithTransactionAsync(async () =>
             {
                 List<Store> storeList = await _context.DbSet<Store>()
-                    .Where(x => x.UpdatePointsInterval != null && x.UpdatePointsStartDate != null)
+                    .Where(x => x.UpdatePointsInterval != null && x.UpdatePointsStartDate != null && x.GetTransactionsEndpoint != null)
                     .Include(x => x.StoreUpdatePointsScheduledTasks)
                     .ToListAsync();
 

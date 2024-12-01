@@ -1080,7 +1080,7 @@ namespace Playerty.Loyals.Services
                     (storeUpdatePointsDataBodyDTO.UpdatePointsInterval != null && storeUpdatePointsDataBodyDTO.UpdatePointsStartDate == null))
                     throw new BusinessException("Ako želite da ažurirate poene na određenom intervalu, morate da popunite polje interval i polje početak ažuriranja.");
 
-                if (storeUpdatePointsDataBodyDTO.UpdatePointsInterval <= 0)
+                if (storeUpdatePointsDataBodyDTO.UpdatePointsInterval != null && storeUpdatePointsDataBodyDTO.UpdatePointsInterval <= 0)
                     throw new HackerException($"The negative or zero interval can't be saved (StoreId: {storeUpdatePointsDataBodyDTO.StoreId}).");
 
                 DateTime now = DateTime.Now;
@@ -1094,7 +1094,7 @@ namespace Playerty.Loyals.Services
                     Store store = await LoadInstanceAsync<Store, long>(storeUpdatePointsDataBodyDTO.StoreId, null);
 
                     if (store.GetTransactionsEndpoint == null)
-                        throw new BusinessException("Na svom profilu partnera morate da popunite polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
+                        throw new BusinessException("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
 
                     store.UpdatePointsInterval = storeUpdatePointsDataBodyDTO.UpdatePointsInterval;
                     store.UpdatePointsStartDate = storeUpdatePointsDataBodyDTO.UpdatePointsStartDate;
@@ -1138,7 +1138,7 @@ namespace Playerty.Loyals.Services
                 Store store = await LoadInstanceAsync<Store, long>(storeId, version);
 
                 if (store.GetTransactionsEndpoint == null)
-                    throw new BusinessException("Na svom profilu partnera morate da popunite polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
+                    throw new BusinessException("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
 
                 if ((store.StoreUpdatePointsScheduledTasks == null || store.StoreUpdatePointsScheduledTasks.Count == 0) && fromDate == null)
                     throw new BusinessException("Zato što prvi put ažurirate poene, morate da odredite datum od kada želite da počnete."); // TODO FT: Make better message

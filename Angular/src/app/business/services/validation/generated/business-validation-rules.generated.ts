@@ -73,6 +73,21 @@ export class ValidatorBusinessService {
             return this.numberOfFailedAttemptsInARowUserExtendedValidator(formControl);
 
 
+        case 'userEmailExternalTransaction':
+            return this.userEmailExternalTransactionValidator(formControl);
+        case 'productNameExternalTransaction':
+            return this.productNameExternalTransactionValidator(formControl);
+        case 'productImageUrlExternalTransaction':
+            return this.productImageUrlExternalTransactionValidator(formControl);
+        case 'productCategoryNameExternalTransaction':
+            return this.productCategoryNameExternalTransactionValidator(formControl);
+        case 'productCategoryImageUrlExternalTransaction':
+            return this.productCategoryImageUrlExternalTransactionValidator(formControl);
+        case 'priceExternalTransaction':
+            return this.priceExternalTransactionValidator(formControl);
+        case 'boughtAtExternalTransaction':
+            return this.boughtAtExternalTransactionValidator(formControl);
+
 
 
 
@@ -569,6 +584,123 @@ export class ValidatorBusinessService {
         return validator;
     }
 
+
+
+    userEmailExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 5;
+        const max = 70;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+            const userEmailValid = notEmptyRule && stringLengthRule && emailAddressRule;
+
+            return userEmailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    productNameExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 500;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const productNameValid = notEmptyRule && stringLengthRule;
+
+            return productNameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    productImageUrlExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const max = 1000;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const productImageUrlValid = stringLengthRule;
+
+            return productImageUrlValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+    }
+
+    productCategoryNameExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 500;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const productCategoryNameValid = notEmptyRule && stringLengthRule;
+
+            return productCategoryNameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    productCategoryImageUrlExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const max = 1000;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const productCategoryImageUrlValid = stringLengthRule;
+
+            return productCategoryImageUrlValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+    }
+
+    priceExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const precision = 16;
+        const scale = 2;
+        const ignoreTrailingZeros = false;
+        const precisionScaleRule = validatePrecisionScale(value, precision, scale, ignoreTrailingZeros) || (typeof value === 'undefined' || value === null || value === '');
+
+            const priceValid = notEmptyRule && precisionScaleRule;
+
+            return priceValid ? null : { _ : this.translocoService.translate('NotEmptyPrecisionScale', {precision, scale}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    boughtAtExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const boughtAtValid = notEmptyRule;
+
+            return boughtAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
 
 
 

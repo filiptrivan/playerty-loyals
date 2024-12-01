@@ -37,6 +37,20 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('Code');
             case 'pointsMultiplier':
                 return this.translocoService.translate('PointsMultiplier');
+            case 'userEmail':
+                return this.translocoService.translate('UserEmail');
+            case 'productName':
+                return this.translocoService.translate('ProductName');
+            case 'productImageUrl':
+                return this.translocoService.translate('ProductImageUrl');
+            case 'productCategoryName':
+                return this.translocoService.translate('ProductCategoryName');
+            case 'productCategoryImageUrl':
+                return this.translocoService.translate('ProductCategoryImageUrl');
+            case 'price':
+                return this.translocoService.translate('Price');
+            case 'boughtAt':
+                return this.translocoService.translate('BoughtAt');
             case 'notificationDTO':
                 return this.translocoService.translate('NotificationDTO');
             case 'tableFilter':
@@ -71,8 +85,6 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('SelectedSegmentationItemIds');
             case 'description':
                 return this.translocoService.translate('Description');
-            case 'price':
-                return this.translocoService.translate('Price');
             case 'category':
                 return this.translocoService.translate('Category');
             case 'linkToWebsite':
@@ -165,16 +177,6 @@ export class TranslateLabelsBusinessService {
                 return this.translocoService.translate('ValidFrom');
             case 'validTo':
                 return this.translocoService.translate('ValidTo');
-            case 'productName':
-                return this.translocoService.translate('ProductName');
-            case 'productImageUrl':
-                return this.translocoService.translate('ProductImageUrl');
-            case 'productCategoryName':
-                return this.translocoService.translate('ProductCategoryName');
-            case 'productCategoryImageUrl':
-                return this.translocoService.translate('ProductCategoryImageUrl');
-            case 'boughtAt':
-                return this.translocoService.translate('BoughtAt');
             case 'partnerUser':
                 return this.translocoService.translate('PartnerUser');
             case 'password':
