@@ -30,7 +30,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
         private readonly ILogger<UpdatePointsBackgroundJob> _logger;
         private readonly EmailingService _emailingService;
 
-        public UpdatePointsBackgroundJob(LoyalsBusinessService loyalsBusinessService, WingsApiService wingsApiService, IApplicationDbContext context, ILogger<UpdatePointsBackgroundJob> logger, 
+        public UpdatePointsBackgroundJob(LoyalsBusinessService loyalsBusinessService, WingsApiService wingsApiService, IApplicationDbContext context, ILogger<UpdatePointsBackgroundJob> logger,
             EmailingService emailingService)
         {
             _loyalsBusinessService = loyalsBusinessService;
@@ -126,12 +126,24 @@ namespace Playerty.Loyals.Business.BackroundJobs
                         .Where(x => x.Partner.Id == store.Partner.Id && userEmailList.Contains(x.User.Email))
                         .ToListAsync();
 
+                    int successfullyProcessedTransactions = 0;
+
                     // FT: when we make an agreement with the partners that they update the categories, we will just send them an email, the update of your points failed, due to mismatched categories, please harmonize the categories and stop the execution manually.
                     // await _loyalsBusinessService.SyncDiscountCategories(); // FT: You don't need to sync here, we will just use passed name as category
 
+                    List<string> partnerUserWhichDoesNotExistList = new List<string>();
+                    List<string> partnerUserWhichUpdateFailedList = new List<string>();
+                    List<string> partnerUserWhichUpdateSucceededList = new List<string>();
+
                     foreach (ExternalTransactionDTO externalTransactionDTO in externalTransactionDTOList)
                     {
-                        PartnerUser partnerUser = partnerUserList.Where(x => x.User.Email == externalTransactionDTO.UserEmail).Single();
+                        PartnerUser partnerUser = partnerUserList.Where(x => x.User.Email == externalTransactionDTO.UserEmail).SingleOrDefault();
+
+                        if (partnerUser == null)
+                        {
+                            partnerUserWhichDoesNotExistList.Add(externalTransactionDTO.UserEmail);
+                            continue;
+                        }
 
                         int pointsFromTransaction = (int)Math.Floor((decimal)externalTransactionDTO.Price * store.Partner.PointsMultiplier); // FT: Test this for negative and positive price
 
@@ -148,8 +160,18 @@ namespace Playerty.Loyals.Business.BackroundJobs
                             StoreId = store.Id,
                         };
 
-                        await _loyalsBusinessService.UpdatePointsForThePartnerUser(partnerUser, pointsFromTransaction);
-                        await _loyalsBusinessService.SaveTransactionAndReturnDomainAsync(transactionDTO, false, false);
+                        try
+                        {
+                            await _loyalsBusinessService.UpdatePointsForThePartnerUser(partnerUser, pointsFromTransaction);
+                            await _loyalsBusinessService.SaveTransactionAndReturnDomainAsync(transactionDTO, false, false);
+
+                            partnerUserWhichUpdateSucceededList.Add(externalTransactionDTO.UserEmail);
+                            successfullyProcessedTransactions++;
+                        }
+                        catch (Exception)
+                        {
+                            partnerUserWhichUpdateFailedList.Add(externalTransactionDTO.UserEmail);
+                        }
                     }
 
                     StoreUpdatePointsScheduledTask savedStoreUpdatePointsScheduledTask = new StoreUpdatePointsScheduledTask
@@ -163,24 +185,48 @@ namespace Playerty.Loyals.Business.BackroundJobs
                     await dbSet.AddAsync(savedStoreUpdatePointsScheduledTask);
 
                     await _context.SaveChangesAsync();
+
+                    await _emailingService.SendEmailAsync(
+                        store.Partner.Email,
+                        "Uspešno izvršeno ažuriranje poena",
+                        $$"""
+Interval u kom su obrađene transakcije: {{dateFrom.ToString("dd.MM.yyyy. HH:mm")}} - {{shouldStartedAtForSave.ToString("dd.MM.yyyy. HH:mm")}}. <br/>
+<br/>
+Ukupan broj obrađenih transakcija: {{externalTransactionDTOList.Count}}. <br/>
+<br/>
+Ukupan broj uspešno obrađenih transakcija: {{successfullyProcessedTransactions}}. <br/>
+<br/>
+Ukupan broj neuspešno obrađenih transakcija: {{externalTransactionDTOList.Count - successfullyProcessedTransactions}}. <br/>
+<br/>
+Korisnici kojima su uspešno ažurirani poeni ({{partnerUserWhichUpdateSucceededList.Count}}): <br/>
+    {{string.Join(",<br/>    ", partnerUserWhichUpdateSucceededList)}}
+<br/>
+Korisnici kojima nismo uspeli da ažuriramo poene, a postoje u 'loyalty program' sistemu ({{partnerUserWhichUpdateFailedList.Count}}): <br/>
+    {{string.Join(",<br/>    ", partnerUserWhichUpdateFailedList)}}
+<br/>
+Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty program' sistemu ({{partnerUserWhichDoesNotExistList.Count}}): <br/>
+    {{string.Join(",<br/>    ", partnerUserWhichDoesNotExistList)}}
+<br/>
+"""
+                    );
                 });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                
+
                 if (ex is BusinessException)
                 {
-                    await _emailingService.SendEmailAsync(store.Partner.Email, 
-                        "Greška prilikom ažuriranja poena", 
+                    await _emailingService.SendEmailAsync(store.Partner.Email,
+                        "Greška prilikom ažuriranja poena",
                         $"Prodavnica: {store.Name}. {ex.Message}"
                     );
                 }
                 else
                 {
                     await _emailingService.SendEmailAsync(
-                        store.Partner.Email, 
-                        "Greška prilikom ažuriranja poena", 
+                        store.Partner.Email,
+                        "Greška prilikom ažuriranja poena",
                         "Došlo je do greške pri ažuriranju poena. Molimo Vas da pokušate ponovo. Ako se problem ponovi, kontaktirajte podršku."
                     );
                 }

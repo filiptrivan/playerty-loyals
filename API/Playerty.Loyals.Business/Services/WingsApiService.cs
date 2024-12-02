@@ -33,13 +33,21 @@ namespace Playerty.Loyals.Business.Services
 
         public async Task<List<ExternalTransactionDTO>> GetTransactionList(string transactionsEndpoint, DateTime dateFrom, DateTime dateTo)
         {
-            //string query = $"?dateFrom={dateFrom:yyyy-MM-dd}&dateTo={dateTo:yyyy-MM-dd}";
+            string query = $"?dateFrom={dateFrom:o}&dateTo={dateTo:o}";
 
-            string fullUrl = $"{transactionsEndpoint}";
+            string fullUrl = $"{transactionsEndpoint}/{query}";
 
-            HttpResponseMessage response = await _httpClient.GetAsync(fullUrl);
+            HttpResponseMessage response = null;
 
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                response = await _httpClient.GetAsync(fullUrl);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (Exception ex)
+            {
+                HandleExternalApiException(ex);
+            }
 
             List<ExternalTransactionDTO> externalTransactionDTOList = await response.Content.ReadFromJsonAsync<List<ExternalTransactionDTO>>();
 
@@ -53,16 +61,42 @@ namespace Playerty.Loyals.Business.Services
                 foreach (ValidationFailure validationFailure in validationResult.Errors)
                 {
                     if (validationErrorMessages.Contains(validationFailure.ErrorMessage) == false)
-                    {
                         validationErrorMessages.Add(validationFailure.ErrorMessage);
-                    }
                 }
             }
 
             if (validationErrorMessages.Count > 0)
-                throw new BusinessException($"Greške prilikom preuzimanja transakcija u nekom od objekata:\n{string.Join("\n", validationErrorMessages)}");
+                throw new BusinessException($"Došlo je do grešaka prilikom validacije podataka za obradu transakcija:<br/>    {string.Join("<br/>    ", validationErrorMessages)}");
 
             return externalTransactionDTOList;
+        }
+
+        public void HandleExternalApiException(Exception ex)
+        {
+            if (ex is HttpRequestException)
+            {
+                throw new BusinessException("Došlo je do greške prilikom HTTP zahteva. Proverite URL i mrežnu konekciju.");
+            }
+            else if (ex is TaskCanceledException timeoutEx && !timeoutEx.CancellationToken.IsCancellationRequested)
+            {
+                throw new BusinessException("Zahtev je istekao. Proverite mrežnu konekciju servera.");
+            }
+            else if (ex is TaskCanceledException canceledEx && canceledEx.CancellationToken.IsCancellationRequested)
+            {
+                throw new BusinessException("Zahtev je otkazan. Proverite da li je zahtev ručno prekinut ili pokušajte ponovo.");
+            }
+            else if (ex is InvalidOperationException)
+            {
+                throw new BusinessException("Došlo je do greške u konfiguraciji klijenta ili zahteva. Obratite se podršci.");
+            }
+            else if (ex is OperationCanceledException)
+            {
+                throw new BusinessException("Operacija je prekinuta. Pokušajte ponovo.");
+            }
+            else
+            {
+                throw new BusinessException("Došlo je do neočekivane greške. Obratite se podršci.");
+            }
         }
 
         //public async Task<List<Purchace>> LoadNewPurchacesSinceAsync()

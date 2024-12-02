@@ -10,9 +10,10 @@
  - Treba da dodaju polja 1. Points (opciono), 2. Veza ka Tieru (ja mogu da saljem TierCode-ove)
  - Na PL, korisnik se menja pri sledećim operacijama: 1. SavePartnerUser 2. Scheduled Task za ažuriranje poena 3. Prvi put popunjavanje nekih informacija (u sklopu SavePartnerUser) 4. Pravljenje partner user profila
  
-3. Da li im slati poene i cuvati na korisniku ili oni da gadjaju PL endpoint kad zele da prikazuju poene korisnika?
+X 3. Da li im slati poene i cuvati na korisniku ili oni da gadjaju PL endpoint kad zele da prikazuju poene korisnika?
  - I ovde mozda 'Sync' dugme na PL, svakim klikom na 'Sync' da se za tog korisnika azuriraju poeni na CB, ako se desi da ne postoji korisnik kod njih na PL mu izbacimo poruku da prvo mora da uradi 'Sync' korisnika.
  - Za poene bi onda pravili 2 'Sync'-a jer kad se klikne na 'Sync' u sklopu strane Prodavnica, tad se izvrsi 'Sync' poena, ali samo za korisnike koji su kupili tog dana.
+ - ODGOVOR: Cuvati na korisniku, i u sklopu Save partner user mislim da je pokriveno sve ostalo
  
 4. Dovlacenje discount kategorija
  - Mozda napraviti 'Sync' dugme koje ce da vrsi sinhronizaciju.

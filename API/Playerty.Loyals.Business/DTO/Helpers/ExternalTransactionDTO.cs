@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Playerty.Loyals.Business.DTO
 {
     /// <summary>
-    /// TODO FT: Maybe set all to nullable and validate so you can return good message to the consumer
+    /// Set all to nullable because of validation and returning the good message to the consumer
     /// </summary>
     [CustomValidator("RuleFor(x => x.UserEmail).EmailAddress().Length(5, 70).NotEmpty();")]
     [CustomValidator("RuleFor(x => x.ProductName).NotEmpty().Length(1, 500);")]
