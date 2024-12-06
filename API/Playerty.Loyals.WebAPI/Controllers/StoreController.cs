@@ -18,14 +18,16 @@ namespace Playerty.Loyals.WebAPI.Controllers
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
         private readonly LoyalsBusinessService _loyalsBusinessService;
         private readonly WingsApiService _wingsApiService;
+        private readonly SyncService _syncService;
 
-
-        public StoreController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService, WingsApiService wingsApiService)
+        public StoreController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService, WingsApiService wingsApiService,
+            SyncService syncService)
         {
             _context = context;
             _loyalsBusinessService = loyalsBusinessService;
             _partnerUserAuthenticationService = partnerUserAuthenticationService;
             _wingsApiService = wingsApiService;
+            _syncService = syncService;
         }
 
         [HttpPost]
@@ -55,6 +57,13 @@ namespace Playerty.Loyals.WebAPI.Controllers
         public async Task<StoreDTO> GetStore(int id)
         {
             return await _loyalsBusinessService.GetStoreDTOAsync(id, false);
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task SyncDiscountCategories(long storeId)
+        {
+            await _syncService.SyncDiscountCategories(storeId);
         }
 
         //[HttpGet]

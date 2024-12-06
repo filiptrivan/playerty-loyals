@@ -21,6 +21,7 @@ using OfficeOpenXml.FormulaParsing.Excel.Functions.Database;
 using System.Linq;
 using Playerty.Loyals.Business.BackroundJobs;
 using Soft.Generator.Shared.Helpers;
+using System.Diagnostics;
 
 namespace Playerty.Loyals.Services
 {
@@ -312,8 +313,6 @@ namespace Playerty.Loyals.Services
 
                 List<StoreTierDTO> storeTierDTOList = await LoadStoreTierDTOList(_context.DbSet<StoreTier>().Where(x => tierIds.Contains(x.Tier.Id)).OrderBy(x => x.OrderNumber), false);
                 List<long> storeTierIds = storeTierDTOList.Select(x => x.Id).ToList();
-
-                await SyncDiscountCategories();
 
                 List<DiscountCategoryDTO> discountCategoryDTOList = await LoadDiscountCategoryDTOList(_context.DbSet<DiscountCategory>().Where(x => x.Store.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false); // 14
                 List<StoreTierDiscountCategoryDTO> storeTierDiscountCategoryResultDTOList = discountCategoryDTOList
@@ -1004,48 +1003,6 @@ namespace Playerty.Loyals.Services
 
         #region Store
 
-        /// <summary>
-        /// When we need order numbers on M2M
-        /// FT: The first elements of the list with StoreTierId == 0 will be used for adding new StoreTier in the list on the UI
-        /// </summary>
-        //public async Task<List<DiscountCategoryDTO>> LoadDiscountCategoryDTOListForCurrentPartner(List<long> storeTierIds)
-        //{
-        //    return await _context.WithTransactionAsync(async () =>
-        //    {
-        //        await SyncDiscountCategories();
-
-        //        IQueryable<DiscountCategory> discountCategoryQuery = _context.DbSet<DiscountCategory>().Where(x => x.Store.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode());
-
-        //        List<DiscountCategoryDTO> discountCategoryDTOList = await LoadDiscountCategoryDTOList(discountCategoryQuery, false); // 14
-
-        //        List<DiscountCategoryDTO> discountCategoryResultDTOList = discountCategoryDTOList.ToList(); // 14
-
-        //        List<StoreTierDiscountCategory> storeTierDiscountCategoryList = await _context.DbSet<StoreTierDiscountCategory>().AsNoTracking().Where(x => storeTierIds.Contains(x.StoreTiersId)).ToListAsync();
-        //        //List<long> selectedDiscountCategoryIdsForStore = storeTierDiscountCategoryList.Select(x => x.DiscountCategoriesId).ToList();
-
-        //        for (int i = 0; i < storeTierIds.Count; i++)
-        //        {
-        //            List<DiscountCategoryDTO> helper = discountCategoryDTOList.ToList(); // 14
-
-        //            foreach (DiscountCategoryDTO discountCategoryDTO in helper)
-        //            {
-        //                StoreTierDiscountCategory storeDiscountCategory = storeTierDiscountCategoryList.Where(x => x.DiscountCategoriesId == discountCategoryDTO.Id && x.StoreTiersId == storeTierIds[i]).SingleOrDefault();
-
-        //                if (storeDiscountCategory != null)
-        //                {
-        //                    discountCategoryDTO.SelectedForStore = true;
-        //                    discountCategoryDTO.Discount = storeDiscountCategory.Discount;
-        //                    discountCategoryDTO.StoreTierId = storeTierIds[i];
-        //                }
-        //            }
-
-        //            discountCategoryResultDTOList = discountCategoryResultDTOList.Concat(helper).ToList(); // 20
-        //        }
-
-        //        return discountCategoryDTOList;
-        //    });
-        //}
-
         public async Task<StoreDTO> SaveStoreExtendedAsync(StoreSaveBodyDTO storeSaveBodyDTO)
         {
             if (storeSaveBodyDTO.StoreDTO.Id == 0 && (storeSaveBodyDTO.StoreDTO.UpdatePointsInterval != null || storeSaveBodyDTO.StoreDTO.UpdatePointsStartDate != null))
@@ -1130,328 +1087,23 @@ namespace Playerty.Loyals.Services
         /// <summary>
         /// Pass fromDate only if it is the first time
         /// </summary>
-        public async Task UpdatePoints(long storeId, int version, DateTime? fromDate)
+        public async Task UpdatePoints(long storeId, int version, DateTime manualDateFrom, DateTime manualDateTo)
         {
+            if (manualDateTo <= manualDateFrom)
+                throw new HackerException($"Store: {storeId}. Can not pass greater {nameof(manualDateTo)} then {nameof(manualDateFrom)} in manually started points update.");
+
             await _context.WithTransactionAsync(async () =>
             {
-                DateTime now = DateTime.Now;
                 Store store = await LoadInstanceAsync<Store, long>(storeId, version);
 
                 if (store.GetTransactionsEndpoint == null)
                     throw new BusinessException("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
 
-                if ((store.StoreUpdatePointsScheduledTasks == null || store.StoreUpdatePointsScheduledTasks.Count == 0) && fromDate == null)
-                    throw new BusinessException("Zato što prvi put ažurirate poene, morate da odredite datum od kada želite da počnete."); // TODO FT: Make better message
-                else if (store.StoreUpdatePointsScheduledTasks.Count > 0 && fromDate != null)
-                    throw new BusinessException("Zato što ste već jednom ažurirali poene, ne možete više da popunjavate polje od kada želite."); // TODO FT: Make better message
-
-                int firstManualStartInterval;
-
-                if (fromDate == null)
-                {
-                    firstManualStartInterval = 0;
-                }
-                else
-                {
-                    firstManualStartInterval = (int)(now - fromDate.Value).TotalHours; // FT: If you can let the user choose only minutes on UI (without seconds), because of this (int), he will not update some data.
-
-                    if (firstManualStartInterval <= 0)
-                        throw new BusinessException("Sati za koje ćete da ažurirate poene moraju da budu veći od 0.");
-                }
-
-                await _updatePointsScheduler.ScheduleJobManually(storeId, firstManualStartInterval, now);
+                await _updatePointsScheduler.ScheduleJobManually(storeId, manualDateFrom, manualDateTo);
             });
         }
-
-        /// <summary>
-        /// TODO FT: Move to Sync service
-        /// </summary>
-        public async Task SyncDiscountCategories()
-        {
-            List<DiscountCategoryDTO> discountCategoryApiDTOList = await _wingsApiService.GetDiscountCategoryDTOList();
-
-            await _context.WithTransactionAsync(async () =>
-            {
-                DbSet<DiscountCategory> dbSet = _context.DbSet<DiscountCategory>();
-                List<DiscountCategory> discountCategoryList = await _context.DbSet<DiscountCategory>().Where(x => x.Store.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).ToListAsync();
-
-                foreach (DiscountCategoryDTO discountCategoryApiDTO in discountCategoryApiDTOList)
-                {
-                    DiscountCategoryDTOValidationRules validationRules = new DiscountCategoryDTOValidationRules();
-                    validationRules.ValidateAndThrow(discountCategoryApiDTO);
-
-                    DiscountCategory discountCategory = discountCategoryList.Where(x => x.Code == discountCategoryApiDTO.Code && x.Store.Id == discountCategoryApiDTO.StoreId).SingleOrDefault();
-
-                    if (discountCategory == null) // Add new
-                    {
-                        discountCategory = discountCategoryApiDTO.Adapt<DiscountCategory>(Mapper.DiscountCategoryDTOToEntityConfig());
-                        await dbSet.AddAsync(discountCategory);
-                    }
-                    else // Update
-                    {
-                        discountCategoryApiDTO.Adapt(discountCategory, Mapper.DiscountCategoryDTOToEntityConfig());
-                        dbSet.Update(discountCategory);
-
-                        discountCategoryList.Remove(discountCategory);
-                    }
-
-                    discountCategory.Store = await LoadInstanceAsync<Store, long>((long)discountCategoryApiDTO.StoreId, null);
-                }
-
-                _context.DbSet<DiscountCategory>().RemoveRange(discountCategoryList);
-
-                await _context.SaveChangesAsync();
-            });
-        }
-
-        /// <summary>
-        /// Need to put validation so user can not assign any other partners discount category nor store
-        /// Passing store id because when we are making new object we don't know which id it has
-        /// </summary>
-        //public async Task UpdateDiscountCategoryListForStoreTableClientSelection(List<StoreDiscountCategoryDTO> selectedDTOList, long storeId)
-        //{
-        //    if (selectedDTOList == null)
-        //        return;
-
-        //    List<StoreDiscountCategoryDTO> selectedDTOListHelper = selectedDTOList.ToList();
-
-        //    await _context.WithTransactionAsync((Func<Task>)(async () =>
-        //    {
-        //        // FT: Not doing authorization here, because we can not figure out here if we are updating while inserting object (eg. User), or updating object, we will always get the id which is not 0 here.
-
-        //        DbSet<StoreTierDiscountCategory> dbSet = _context.DbSet<StoreTierDiscountCategory>();
-        //        List<StoreTierDiscountCategory> storeDiscountCategoryList = await _context.DbSet<StoreTierDiscountCategory>().Where(x => x.StoresId == storeId).ToListAsync();
-
-        //        foreach (Business.DTO.StoreDiscountCategoryDTO selectedStoreDiscountCategoryDTO in selectedDTOListHelper)
-        //        {
-        //            Business.ValidationRules.StoreDiscountCategoryDTOValidationRules validationRules = new Business.ValidationRules.StoreDiscountCategoryDTOValidationRules();
-        //            DefaultValidatorExtensions.ValidateAndThrow<Business.DTO.StoreDiscountCategoryDTO>(validationRules, (Business.DTO.StoreDiscountCategoryDTO)selectedStoreDiscountCategoryDTO);
-
-        //            StoreTierDiscountCategory storeDiscountCategory = storeDiscountCategoryList.Where(x => x.DiscountCategoriesId == selectedStoreDiscountCategoryDTO.DiscountCategoriesId).SingleOrDefault();
-
-        //            if (storeDiscountCategory == null)
-        //            {
-        //                storeDiscountCategory = TypeAdapter.Adapt<StoreTierDiscountCategory>(selectedStoreDiscountCategoryDTO, (TypeAdapterConfig)Mapper.StoreDiscountCategoryDTOToEntityConfig());
-        //                storeDiscountCategory.StoresId = storeId;
-        //                _context.DbSet<StoreTierDiscountCategory>().Add(storeDiscountCategory);
-        //            }
-        //            else
-        //            {
-        //                selectedStoreDiscountCategoryDTO.Adapt<Business.DTO.StoreDiscountCategoryDTO, StoreTierDiscountCategory>(storeDiscountCategory, (TypeAdapterConfig)Mapper.StoreDiscountCategoryDTOToEntityConfig());
-        //                dbSet.Update(storeDiscountCategory);
-
-        //                storeDiscountCategoryList.Remove(storeDiscountCategory);
-        //            }
-        //        }
-
-        //        _context.DbSet<StoreTierDiscountCategory>().RemoveRange(storeDiscountCategoryList);
-
-        //        await _context.SaveChangesAsync();
-        //    }));
-        //}
-
-        /// <summary>
-        /// TODO FT: Add to generator, lazy load
-        /// </summary>
-        //public async Task<TableResponseDTO<DiscountCategoryDTO>> LoadDiscountCategoryForStoreForTable(TableFilterDTO tableFilterPayload)
-        //{
-        //    TableResponseDTO<DiscountCategoryDTO> tableResponse = new TableResponseDTO<DiscountCategoryDTO>();
-
-        //    await _context.WithTransactionAsync(async () =>
-        //    {
-        //        IQueryable<DiscountCategory> query = _context.DbSet<DiscountCategory>()
-        //            .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
-        //            .Where(x => x.Stores
-        //                .Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)); // storeId
-
-        //        PaginationResult<DiscountCategory> paginationResult = await LoadDiscountCategoryListForPagination(tableFilterPayload, query);
-
-        //        tableResponse.Data = await paginationResult.Query
-        //            .ProjectToType<DiscountCategoryDTO>(Mapper.DiscountCategoryProjectToConfig())
-        //            .ToListAsync();
-
-        //        tableResponse.TotalRecords = tableResponse.Data.Count;
-        //    });
-
-        //    return tableResponse;
-        //}
-
-        /// <summary>
-        /// TODO FT: Add to generator, client table, without additional fields in M2M
-        /// </summary>
-        //public async Task<List<long>> LoadSelectedDiscountCategoryIdsForStore(IQueryable<DiscountCategory> query, long storeId)
-        //{
-        //    return await _context.WithTransactionAsync(async () =>
-        //    {
-        //        List<long> ids = await query
-        //            .AsNoTracking()
-        //            .Where(x => x.Stores
-        //                .Any(x => x.Id == storeId))
-        //            .Select(x => x.Id)
-        //            .ToListAsync();
-
-        //        return ids;
-        //    });
-        //}
-
-        /// <summary>
-        /// TODO FT: Add to generator, client table, with additional fields in M2M
-        /// </summary>
-        //public async Task<List<DiscountCategoryDTO>> LoadSelectedDiscountCategoryListForStore(IQueryable<DiscountCategory> discountCategoryQuery, long storeId)
-        //{
-        //    return await _context.WithTransactionAsync(async () =>
-        //    {
-        //        List<DiscountCategoryDTO> dtoList = await discountCategoryQuery
-        //            .AsNoTracking()
-        //            .Where(x => x.Stores
-        //                .Any(x => x.Id == storeId))
-        //            .ProjectToType<DiscountCategoryDTO>(Mapper.DiscountCategoryToDTOConfig())
-        //            .ToListAsync();
-
-        //        return dtoList;
-        //    });
-        //}
 
         #endregion
     }
 
 }
-
-
-//protected override void OnBeforeUserExtendedIsMapped(UserExtendedDTO dto)
-//{
-//dto.Password = BCrypt.Net.BCrypt.EnhancedHashPassword(dto.Password); // FT: We don't need this because we will read hashed password from the database
-//}
-
-#region Scheduled tasks
-
-//public async Task LoadTransactionsAndAddPointsToUsers()
-//{
-//    //_context
-//}
-
-#endregion
-
-//public async Task AddPointsToTheUser(string email, Guid transactionCode, List<ProductDTO> productsDTO)
-//{
-//    await _context.WithTransactionAsync(async () =>
-//    {
-//        UserExtended user = await _context.DbSet<UserExtended>().Where(x => x.Email == email).SingleOrDefaultAsync();
-
-//        Transaction transaction = new Transaction();
-//        transaction.Guid = transactionCode;
-//        transaction.Statuses.Add(await LoadInstanceAsync<TransactionStatus, byte>((byte)TransactionStatusCodes.Completed));
-
-//        foreach (ProductDTO productDTO in productsDTO)
-//        {
-//            TransactionProduct transactionProduct = new TransactionProduct 
-//            {
-//                ProductId = productDTO.Id,
-//                Transaction = transaction,
-//            };
-//            _context.DbSet<TransactionProduct>().Add(transactionProduct);
-//            user.Points += (int)productDTO.Price * SettingsProvider.Current.PointsMultiplier; // TODO FT: Always round on the upper decimal
-//        }
-
-//        Tier tier = await GetTierForThePoints(user.Points);
-//        user.Tier = tier;
-
-//        await _context.SaveChangesAsync();
-//    });
-//}
-
-// Tabele: sve ok
-//public async Task RemovePointsFromTheUser(string email, Guid transactionCode)
-//{
-//    await _context.WithTransactionAsync(async () =>
-//    {
-//        UserExtended user = await _context.DbSet<UserExtended>().Where(x => x.Email == email).SingleOrDefaultAsync();
-//        Transaction transaction = await _context.DbSet<Transaction>().Where(x => x.Guid == transactionCode).SingleOrDefaultAsync();
-//        transaction.Statuses.Add(await LoadInstanceAsync<TransactionStatus, byte>((byte)TransactionStatusCodes.Cancelled));
-//        user.Points -= (int)transaction.Points;
-//    });
-//}
-
-//// Maloprodaja
-//public async Task<QrCodeDTO> GetQrCodeDataForTheCurrentUser()
-//{
-//    string email = null;
-//    int discount = 0;
-
-//    await _context.WithTransactionAsync(async () =>
-//    {
-//        UserExtended user = await _authenticationService.GetCurrentUser<UserExtended>();
-//        discount = user.Tier.Discount;
-//        email = user.Email;
-//    });
-
-//    Guid transactionCode = new Guid();
-
-//    return new QrCodeDTO 
-//    {
-//        Email = email,
-//        TransactionCode = transactionCode,
-//        Discount = discount
-//    };
-//}
-
-//private bool ExistsInCache(string sixDigitCode)
-//{
-//    return true;
-//}
-
-//// Maloprodaja - new
-//public async Task<QrCodeDTO> GetRetailDataForTheCart(string discountVerificationCode, List<ProductDTO> productsDTO)
-//{
-//    DiscountVerificationDTO discountVerification = TryGetValue(discountVerificationCode);
-
-//    if (discountVerification == null)
-//        throw new Exception("The six digit code you provided doesn't exist.");
-
-//    Guid transactionCode = new Guid();
-
-//    decimal priceBeforeDiscount = 0;
-//    decimal priceAfterDiscount = 0;
-
-//    foreach (ProductDTO productDTO in productsDTO)
-//    {
-//        priceBeforeDiscount += productDTO.Price;
-//        decimal productDiscount = GetProductDiscountForTheUser();
-//        priceAfterDiscount += (productDTO.Discount / 100) * productDTO.Price;
-//        // 1. da li cuvati brednove kod sebe i slati samo brandCode sa svakim proizvodom ili
-//        // 2. slati productDTO.brand.tiers
-//        // 3. sa njihovog apija dovucem tiere, pa u tierima trazim tier sa kodom trenutnog korisnika, onda u brendovima trazim brend trenutnog proizvoda
-//    }
-
-//    decimal totalDiscount = priceAfterDiscount * 100 / priceAfterDiscount;
-
-//    return new QrCodeDTO
-//    {
-//        Email = discountVerification.Email,
-//        TransactionCode = transactionCode,
-//        Discount = discount,
-//    };
-
-//}
-
-//// Internet: Ne treba ni da mi dokazuje i upisuje kod, samo moraju da poboljsaju autentifikaciju
-
-
-//public async Task<OnlineShopDTO> GetDiscountForTheUser(string email)
-//{
-//    int discount = 0;
-
-//    await _context.WithTransactionAsync(async () =>
-//    {
-//        PartnerUser partnerUser = await _context.DbSet<PartnerUser>().Where(x => x.User.Email == email).SingleOrDefaultAsync();
-//        discount = partnerUser.Tier.Discount;
-//    });
-
-//    Guid transactionCode = new Guid();
-
-//    return new OnlineShopDTO
-//    {
-//        TransactionCode = transactionCode,
-//        Discount = discount
-//    };
-//}

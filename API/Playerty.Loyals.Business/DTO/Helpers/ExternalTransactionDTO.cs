@@ -11,6 +11,7 @@ namespace Playerty.Loyals.Business.DTO
     /// Set all to nullable because of validation and returning the good message to the consumer
     /// </summary>
     [CustomValidator("RuleFor(x => x.UserEmail).EmailAddress().Length(5, 70).NotEmpty();")]
+    [CustomValidator("RuleFor(x => x.Code).Length(1, 20).NotEmpty();")]
     [CustomValidator("RuleFor(x => x.ProductName).NotEmpty().Length(1, 500);")]
     [CustomValidator("RuleFor(x => x.ProductImageUrl).Length(1, 1000).Unless(i => string.IsNullOrEmpty(i.ProductImageUrl));")]
     [CustomValidator("RuleFor(x => x.ProductCategoryName).NotEmpty().Length(1, 500);")]
@@ -20,6 +21,8 @@ namespace Playerty.Loyals.Business.DTO
     public class ExternalTransactionDTO
     {
         public string UserEmail { get; set; }
+
+        public string Code { get; set; }
 
         public string ProductName { get; set; }
 

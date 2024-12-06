@@ -103,6 +103,7 @@
   "Yes": "Da",
   "No": "Ne",
   "SuccessfulSaveToastDescription": "Uspešno sačuvano.",
+  "SuccessfulSyncToastDescription": "Uspešno ste ažurirali podatke.",
   "YouHaveSomeInvalidFieldsDescription": "Neka od polja na formi nisu ispravno uneta, molimo Vas da proverite koja i pokušate ponovo.",
   "YouHaveSomeInvalidFieldsTitle": "Neispravna polja na formi",
   "Remove": "Ukloni",

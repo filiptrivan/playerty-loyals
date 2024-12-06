@@ -40,10 +40,6 @@ namespace Playerty.Loyals.Business.BackroundJobs
             _emailingService = emailingService;
         }
 
-        //List<long> alreadyExecutingStoreIds = new List<long>();
-        private static readonly HashSet<long> alreadyExecutingStoreIds = new HashSet<long>();
-        private static readonly object lockObject = new object();
-
         public async Task Execute(IJobExecutionContext jobExecutionContext)
         {
             Store store = null;
@@ -52,9 +48,12 @@ namespace Playerty.Loyals.Business.BackroundJobs
             {
                 long storeId = jobExecutionContext.JobDetail.JobDataMap.GetLong("StoreId");
 
-                // FT: It's null only if it's not called from manual update, if it's not first and called from manual update it will be 0
-                int? firstManualStartInterval = jobExecutionContext.JobDetail.JobDataMap.ContainsKey("FirstManualStartInterval")
-                    ? jobExecutionContext.JobDetail.JobDataMap.GetInt("FirstManualStartInterval")
+                DateTime? manualDateFrom = jobExecutionContext.JobDetail.JobDataMap.ContainsKey("ManualDateFrom")
+                    ? jobExecutionContext.JobDetail.JobDataMap.GetDateTime("ManualDateFrom")
+                    : null;
+
+                DateTime? manualDateTo = jobExecutionContext.JobDetail.JobDataMap.ContainsKey("ManualDateTo")
+                    ? jobExecutionContext.JobDetail.JobDataMap.GetDateTime("ManualDateTo")
                     : null;
 
                 var e = jobExecutionContext.JobDetail.Key;
@@ -88,20 +87,20 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
                     DateTime shouldStartedAtForSave;
 
-                    if (firstManualStartInterval == null) // FT: If it's not manual update
+                    if (manualDateFrom == null && manualDateTo == null) // FT: If it's not manual update
                     {
                         shouldStartedAtForSave = UpdatePointsBackgroundJobHelpers.GetShouldStartedAtForSave(interval.Value, startDateTime.Value, lastShouldStartedAt, now);
                     }
                     else
                     {
-                        shouldStartedAtForSave = now; // FT: When the user has not startDateTime, he is only manually starting the update
+                        shouldStartedAtForSave = manualDateTo.Value; // FT: When the user has not startDateTime, he is only manually starting the update
                     }
 
                     DateTime dateFrom;
 
                     if (lastWithManualsShouldStartedAt == null) // FT: If lastShouldStartedAt == null that means that this is the first update ever for this store
                     {
-                        if (firstManualStartInterval == null || firstManualStartInterval == 0)
+                        if (manualDateFrom == null && manualDateTo == null)
                         {
                             //dateFrom = shouldStartedAtForSave.AddHours(-interval.Value);
                             dateFrom = shouldStartedAtForSave.AddMinutes(-interval.Value);
@@ -109,7 +108,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
                         else // FT: If the first update ever is manual
                         {
                             //dateFrom = shouldStartedAtForSave.AddHours(-firstManualStartInterval.Value);
-                            dateFrom = shouldStartedAtForSave.AddMinutes(-firstManualStartInterval.Value);
+                            dateFrom = manualDateFrom.Value;
                         }
                     }
                     else
@@ -117,7 +116,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
                         dateFrom = lastWithManualsShouldStartedAt.Value;
                     }
 
-                    List<ExternalTransactionDTO> externalTransactionDTOList = await _wingsApiService.GetTransactionList(store.GetTransactionsEndpoint, dateFrom, shouldStartedAtForSave);
+                    List<ExternalTransactionDTO> externalTransactionDTOList = await _wingsApiService.GetExternalTransactionDTOList(store.GetTransactionsEndpoint, dateFrom, shouldStartedAtForSave);
 
                     List<string> userEmailList = externalTransactionDTOList.Select(x => x.UserEmail).ToList();
 
@@ -134,9 +133,16 @@ namespace Playerty.Loyals.Business.BackroundJobs
                     List<string> partnerUserWhichDoesNotExistList = new List<string>();
                     List<string> partnerUserWhichUpdateFailedList = new List<string>();
                     List<string> partnerUserWhichUpdateSucceededList = new List<string>();
+                    List<string> partnerUserWhichWeAlreadyUpdatedForThisPeriodList = new List<string>();
 
                     foreach (ExternalTransactionDTO externalTransactionDTO in externalTransactionDTOList)
                     {
+                        if (_context.DbSet<Transaction>().Any(x => x.Code == externalTransactionDTO.Code))
+                        {
+                            partnerUserWhichWeAlreadyUpdatedForThisPeriodList.Add(externalTransactionDTO.UserEmail); // TODO FT: This doesn't have sence, you should store transaction here, and put user email in the brackets, also then we should show the table of the transactions on the client.
+                            continue;
+                        }
+
                         PartnerUser partnerUser = partnerUserList.Where(x => x.User.Email == externalTransactionDTO.UserEmail).SingleOrDefault();
 
                         if (partnerUser == null)
@@ -179,7 +185,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
                         TransactionsFrom = dateFrom,
                         TransactionsTo = shouldStartedAtForSave,
                         Store = store,
-                        IsManual = firstManualStartInterval != null,
+                        IsManual = manualDateFrom != null && manualDateTo != null,
                     };
 
                     await dbSet.AddAsync(savedStoreUpdatePointsScheduledTask);

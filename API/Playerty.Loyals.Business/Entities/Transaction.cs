@@ -17,6 +17,13 @@ namespace Playerty.Loyals.Business.Entities
         [StringLength(500, MinimumLength = 1)]
         public string ProductName { get; set; }
 
+        /// <summary>
+        /// Unique identifier
+        /// </summary>
+        [Required]
+        [StringLength(20, MinimumLength = 1)]
+        public string Code { get; set; }
+
         [StringLength(1000, MinimumLength = 1)]
         public string ProductImageUrl { get; set; }
 

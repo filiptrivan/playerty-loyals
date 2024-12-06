@@ -139,8 +139,6 @@ public class Startup
             options.WaitForJobsToComplete = true; // FT: If the application is turning off while the job is running, it will not turn off till the job is done.
         });
 
-        //services.ConfigureOptions<UpdatePointsBackgroundJobSetup>();
-
         services.AddHostedService<UpdatePointsHostedService>();
     }
 
@@ -303,7 +301,8 @@ public class Startup
 
     private static void GenerateMergeMethodForTranslates(string baseServicePath, List<string> projectNames)
     {
-        if (baseServicePath == null) return;
+        if (baseServicePath == null) 
+            return;
 
         List<string> dataClassNamesHelper = new List<string>();
         List<string> servicesClassNamesHelper = new List<string>();

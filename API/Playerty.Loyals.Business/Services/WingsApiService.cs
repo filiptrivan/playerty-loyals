@@ -31,17 +31,15 @@ namespace Playerty.Loyals.Business.Services
             _partnerUserAuthenticationService = partnerUserAuthenticationService;
         }
 
-        public async Task<List<ExternalTransactionDTO>> GetTransactionList(string transactionsEndpoint, DateTime dateFrom, DateTime dateTo)
+        public async Task<List<ExternalTransactionDTO>> GetExternalTransactionDTOList(string transactionsEndpoint, DateTime dateFrom, DateTime dateTo)
         {
-            string query = $"?dateFrom={dateFrom:o}&dateTo={dateTo:o}";
-
-            string fullUrl = $"{transactionsEndpoint}/{query}";
+            string url = $"{transactionsEndpoint}/?dateFrom={dateFrom:o}&dateTo={dateTo:o}";
 
             HttpResponseMessage response = null;
 
             try
             {
-                response = await _httpClient.GetAsync(fullUrl);
+                response = await _httpClient.GetAsync(url);
                 response.EnsureSuccessStatusCode();
             }
             catch (Exception ex)
@@ -69,6 +67,50 @@ namespace Playerty.Loyals.Business.Services
                 throw new BusinessException($"Došlo je do grešaka prilikom validacije podataka za obradu transakcija:<br/>    {string.Join("<br/>    ", validationErrorMessages)}");
 
             return externalTransactionDTOList;
+        }
+
+        /// <summary>
+        /// Get discount category list of the current partner.
+        /// </summary>
+        public async Task<List<ExternalDiscountCategoryDTO>> GetExternalDiscountCategoryDTOList(Store store)
+        {
+            string url = store.GetDiscountCategoriesEndpoint;
+
+            HttpResponseMessage response = null;
+
+            try
+            {
+                response = await _httpClient.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (Exception ex)
+            {
+                HandleExternalApiException(ex);
+            }
+
+            List<ExternalDiscountCategoryDTO> externalDiscountCategoryDTOList = await response.Content.ReadFromJsonAsync<List<ExternalDiscountCategoryDTO>>();
+
+            if (externalDiscountCategoryDTOList.Count != externalDiscountCategoryDTOList.DistinctBy(x => x.Code).Count())
+                throw new BusinessException("Partner mora da prosledi jedinstvene kodove za kategorije.");
+
+            List<string> validationErrorMessages = new List<string>();
+
+            foreach (ExternalDiscountCategoryDTO externalDiscountCategoryDTO in externalDiscountCategoryDTOList)
+            {
+                ExternalDiscountCategoryDTOValidationRules validationRules = new ExternalDiscountCategoryDTOValidationRules();
+                ValidationResult validationResult = validationRules.Validate(externalDiscountCategoryDTO);
+
+                foreach (ValidationFailure validationFailure in validationResult.Errors)
+                {
+                    if (validationErrorMessages.Contains(validationFailure.ErrorMessage) == false)
+                        validationErrorMessages.Add(validationFailure.ErrorMessage);
+                }
+            }
+
+            if (validationErrorMessages.Count > 0)
+                throw new BusinessException($"Došlo je do grešaka prilikom validacije podataka za preuzimanje kategorija:    {string.Join("    ", validationErrorMessages)}");
+
+            return externalDiscountCategoryDTOList;
         }
 
         public void HandleExternalApiException(Exception ex)
@@ -99,37 +141,6 @@ namespace Playerty.Loyals.Business.Services
             }
         }
 
-        //public async Task<List<Purchace>> LoadNewPurchacesSinceAsync()
-        //{
-        //    HttpClient client = new HttpClient();
-        //    client.BaseAddress = 
-        //    string endpoint = $"/buyings?from={lastRunTime:yyyy-MM-ddTHH:mm:ssZ}";
-
-        //    try
-        //    {
-        //        // Send request to Wings API to get buyings after the last run time
-        //        HttpResponseMessage response = await _client.GetAsync(endpoint);
-
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            string data = await response.Content.ReadAsStringAsync();
-        //            Console.WriteLine("New Buyings Data: " + data);
-
-        //            // Process and load buyings (e.g., Deserialize the data)
-        //            // var buyings = JsonConvert.DeserializeObject<List<Buying>>(data);
-        //            // ProcessBuyings(buyings);
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Exception caught: {ex.Message}");
-        //    }
-        //}
-
         public async Task<List<ProductDTO>> GetRecommendedProductsForTheCurrentPartnerUserAsync()
         {
             //HttpClient client = new HttpClient();
@@ -146,7 +157,6 @@ namespace Playerty.Loyals.Business.Services
 
             return null;
         }
-
 
         public List<ProductDTO> GetProductsForTheRecommendationAsync()
         {
@@ -165,77 +175,6 @@ namespace Playerty.Loyals.Business.Services
             };
 
             return products;
-        }
-
-        /// <summary>
-        /// Get discount category list of the current partner.
-        /// </summary>
-        public async Task<List<DiscountCategoryDTO>> GetDiscountCategoryDTOList()
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                var storeTupleList = await _context.DbSet<Store>()
-                    .AsNoTracking()
-                    .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
-                    .Select(x => new
-                    {
-                        Id = x.Id,
-                        GetDiscountCategoriesEndpoint = x.GetDiscountCategoriesEndpoint,
-                    })
-                    .ToListAsync();
-
-                List<DiscountCategoryDTO> discountCategoryDTOList = new List<DiscountCategoryDTO>();
-
-                int count = 0;
-
-                foreach (var store in storeTupleList)
-                {
-                    List<DiscountCategoryDTO> discountCategoryHelperDTOList = null;
-
-                    if (count == 0)
-                    {
-                        discountCategoryHelperDTOList = new List<DiscountCategoryDTO>  // change with: api(store.GetDiscountCategoriesEndpoint)...
-                        {
-                            new DiscountCategoryDTO { Name = "Bosch", Code = "B-H-2024" },
-                            new DiscountCategoryDTO { Name = "Makita", Code = "M-D-2024" },
-                            new DiscountCategoryDTO { Name = "DeWalt", Code = "D-S-2024" },
-                            new DiscountCategoryDTO { Name = "Stanley", Code = "S-H-2024" },
-                            new DiscountCategoryDTO { Name = "Bosch", Code = "B-G-2024" },
-                            new DiscountCategoryDTO { Name = "Milwaukee", Code = "M-I-2024" },
-                            new DiscountCategoryDTO { Name = "Black+Decker", Code = "B-J-2024" },
-                            new DiscountCategoryDTO { Name = "Hilti", Code = "H-L-2024" },
-                            new DiscountCategoryDTO { Name = "Ryobi", Code = "R-C-2024" },
-                        };
-                    }
-                    else if (count == 1)
-                    {
-                        discountCategoryHelperDTOList = new List<DiscountCategoryDTO>  // change with: api(store.GetDiscountCategoriesEndpoint)...
-                        {
-                            new DiscountCategoryDTO { Name = "Nike", Code = "N-I-2024" },
-                            new DiscountCategoryDTO { Name = "Addidas", Code = "A-J-2024" },
-                            new DiscountCategoryDTO { Name = "Puma", Code = "P-L-2024" },
-                            new DiscountCategoryDTO { Name = "Umbro", Code = "U-C-2024" },
-                        };
-                    }
-                    else
-                    {
-                        break;
-                    }
-
-                    if (discountCategoryHelperDTOList.Count != discountCategoryHelperDTOList.DistinctBy(x => x.Code).Count())
-                        throw new BusinessException("Partner mora da prosledi jedinstvene kodove za kategorije.");
-
-                    foreach (DiscountCategoryDTO discountCategoryHelperDTO in discountCategoryHelperDTOList)
-                        discountCategoryHelperDTO.StoreId = store.Id;
-
-                    discountCategoryDTOList.AddRange(discountCategoryHelperDTOList);
-
-                    count++;
-                }
-
-                return discountCategoryDTOList;
-            });
-
         }
     }
 }

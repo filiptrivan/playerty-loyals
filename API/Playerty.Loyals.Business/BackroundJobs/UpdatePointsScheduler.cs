@@ -162,10 +162,10 @@ namespace Playerty.Loyals.Business.BackroundJobs
         /// TODO FT: Add summary
         /// </summary>
         /// <exception cref="HackerException"></exception>
-        public async Task<DateTimeOffset?> ScheduleJobManually(long storeId, int firstManualStartInterval, DateTime now)
+        public async Task<DateTimeOffset?> ScheduleJobManually(long storeId, DateTime manualDateFrom, DateTime manualDateTo)
         {
-            if (firstManualStartInterval < 0)
-                throw new HackerException($"Can not pass negative value for {nameof(firstManualStartInterval)}.");
+            if (manualDateTo <= manualDateFrom)
+                throw new HackerException($"Store: {storeId}. Can not pass greater {nameof(manualDateTo)} then {nameof(manualDateFrom)} in manually started points update.");
 
             DateTimeOffset? result = null;
 
@@ -181,7 +181,8 @@ namespace Playerty.Loyals.Business.BackroundJobs
                 .WithIdentity(jobKey)
                 .StoreDurably(false) // Automatically remove the job after execution
                 .UsingJobData("StoreId", storeId)
-                .UsingJobData("FirstManualStartInterval", firstManualStartInterval)
+                .UsingJobData("ManualDateFrom", manualDateFrom.ToString())
+                .UsingJobData("ManualDateTo", manualDateTo.ToString())
                 .Build();
 
             await _scheduler.DeleteJob(jobKey); // FT: Just in case, if the user quickly double-clicks or the execution takes time

@@ -106,6 +106,12 @@ export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
             this.manualUpdatePointsFromDate.setValue(null);
         });
     }
+
+    onSyncDiscountCategories(){
+        this.apiService.syncDiscountCategories(this.modelId).subscribe(() => {
+            this.messageService.successMessage(this.translocoService.translate('SuccessfulSyncToastDescription'));
+        })
+    }
     
     override onBeforeSave(): void {
         let saveBody: StoreSaveBody = new StoreSaveBody();

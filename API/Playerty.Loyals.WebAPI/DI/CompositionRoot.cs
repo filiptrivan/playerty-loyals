@@ -16,7 +16,7 @@ namespace Playerty.Loyals.WebAPI.DI
 {
     public class CompositionRoot : ICompositionRoot
     {
-        private void ComposeUnified(IServiceRegistry registry)
+        public virtual void Compose(IServiceRegistry registry)
         {
             // Framework
             registry.Register<AuthenticationService>();
@@ -37,16 +37,8 @@ namespace Playerty.Loyals.WebAPI.DI
             registry.Register<BusinessBusinessServiceGenerated>();
             registry.Register<PartnerUserAuthenticationService>();
             registry.Register<WingsApiService>();
+            registry.Register<SyncService>();
             registry.RegisterSingleton<UpdatePointsScheduler>();
-        }
-
-        /// <summary>
-        /// Place here all common services for solution. 
-        /// </summary>
-        /// <param name="registry"></param>
-        public virtual void Compose(IServiceRegistry registry)
-        {
-            ComposeUnified(registry);
         }
     }
 }
