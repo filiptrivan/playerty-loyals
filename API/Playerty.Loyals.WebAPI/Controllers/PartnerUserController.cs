@@ -43,17 +43,17 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserListForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserTableData(TableFilterDTO tableFilterDTO)
         {
             // FT: Ordering by because of notifications
-            return await _loyalsBusinessService.LoadPartnerUserListForTable(dto, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.Id), false);
+            return await _loyalsBusinessService.LoadPartnerUserTableData(tableFilterDTO, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.Id), false);
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task<IActionResult> ExportPartnerUserListToExcel(TableFilterDTO dto)
+        public async Task<IActionResult> ExportPartnerUserTableDataToExcel(TableFilterDTO tableFilterDTO)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportPartnerUserListToExcel(dto, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            byte[] fileContent = await _loyalsBusinessService.ExportPartnerUserTableDataToExcel(tableFilterDTO, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Korisnici.xlsx"));
         }
 

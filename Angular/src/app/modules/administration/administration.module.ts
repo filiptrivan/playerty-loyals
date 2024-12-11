@@ -9,7 +9,7 @@ import { SoftDataTableComponent } from 'src/app/core/components/soft-data-table/
 import { RoleListComponent } from './pages/roles/role-list.component';
 import { RoleDetailsComponent } from './pages/roles/role-details.component';
 import { NotificationDetailsComponent } from './pages/notifications/notification-details.component';
-import { NotificationListComponent } from './pages/notifications/notification-list.component';
+import { NotificationTableComponent } from './pages/notifications/notification-table.component';
 import { SegmentationSelectComponent } from './partials/segmentation-select.component';
 import { PartnerListComponent } from './pages/partners/partner-list.component';
 import { PartnerDetailsComponent } from './pages/partners/partner-details.component';
@@ -35,7 +35,7 @@ const routes: Routes = [
     },
     {
         path: 'notifications',
-        component: NotificationListComponent,
+        component: NotificationTableComponent,
     },
     {
         path: 'notifications/:id',
@@ -66,7 +66,7 @@ const routes: Routes = [
         UserDetailsComponent, 
         RoleListComponent,
         RoleDetailsComponent,
-        NotificationListComponent,
+        NotificationTableComponent,
         NotificationDetailsComponent,
         PartnerListComponent,
         PartnerDetailsComponent,

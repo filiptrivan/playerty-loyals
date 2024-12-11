@@ -23,7 +23,7 @@ export class SoftDeleteConfirmationComponent {
   constructor(public ref: DynamicDialogRef, public config: DynamicDialogConfig, private apiService: ApiService) {}
 
   accept(){
-    this.apiService.deleteItemFromTable(this.config.data.controllerName, this.config.data.methodPartName, this.config.data.id).subscribe({
+    this.config.data.deleteItemFromTableObservableMethod(this.config.data.id).subscribe({
       next: () => {
         this.ref.close(true) // deleted succesfully
       },

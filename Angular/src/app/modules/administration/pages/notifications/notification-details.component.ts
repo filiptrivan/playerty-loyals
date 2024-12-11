@@ -23,8 +23,11 @@ export class NotificationDetailsComponent extends BaseForm<Notification> impleme
 
     text: string;
 
-    cols: Column[];
-    tableControllerName: string = 'Auth';
+    userTableCols: Column[];
+    loadUserTableDataObservableMethod = this.apiService.loadUserTableData;
+    exportUserTableDataToExcelObservableMethod = this.apiService.exportUserTableDataToExcel;
+    deleteUserObservableMethod = this.apiService.deleteUser;
+
     override controllerName: string = 'Auth';
     objectNameForTheRequest: string = 'User';
     
@@ -76,19 +79,19 @@ export class NotificationDetailsComponent extends BaseForm<Notification> impleme
         });
     }
 
-    async populateUserTableCols(){
-        this.cols = [
+    populateUserTableCols(){
+        this.userTableCols = [
             {name: this.translocoService.translate('User'), filterType: 'text', field: 'email'},
             {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true},
         ]
     }
 
-    // FT HACK: Using arrow function solved the problem with undefined this.modelId
+    // FT: Using arrow function solved the problem with undefined this.modelId
     selectedUserLazyLoad = (event: TableFilter): Observable<SelectedRowsMethodResult> => {
         let tableFilter: TableFilter = event;
         tableFilter.additionalFilterIdLong = this.modelId;
         
-        return this.apiService.loadListForTable('Auth', 'UserForNotification', tableFilter).pipe(
+        return this.apiService.loadUserForNotificationTableData(tableFilter).pipe(
             map(res => {
                 let result = new SelectedRowsMethodResult();
                 result.fakeSelectedItems = res.data.map(x => x.id);

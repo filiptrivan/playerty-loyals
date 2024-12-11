@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
+import { ApiService } from 'src/app/business/services/api/api.service';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 
 @Component({
@@ -9,10 +10,13 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
 })
 export class RoleListComponent implements OnInit {
     cols: Column[];
-    controllerName: string = 'Auth';
-    objectNameForTheRequest: string = 'Role';
+
+    loadRoleTableDataObservableMethod = this.apiService.loadRoleTableData;
+    exportRoleTableDataToExcelObservableMethod = this.apiService.exportRoleTableDataToExcel;
+    deleteRoleObservableMethod = this.apiService.deleteRole;
 
     constructor(
+        private apiService: ApiService,
         private translocoService: TranslocoService,
     ) { }
 

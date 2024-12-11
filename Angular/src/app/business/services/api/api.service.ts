@@ -17,22 +17,22 @@ export class ApiService extends ApiGeneratedService {
         super(http);
     }
     
-    loadListForTable(controllerName: string, methodPartName: string, body: TableFilter): Observable<TableResponse> {
-        return this.http.post<TableResponse>(`${environment.apiUrl}/${controllerName}/Load${methodPartName}ListForTable`, body, environment.httpSkipSpinnerOptions);
-    }
+    // loadTableData(controllerName: string, methodPartName: string, body: TableFilter): Observable<TableResponse> {
+    //     return this.http.post<TableResponse>(`${environment.apiUrl}/${controllerName}/Load${methodPartName}TableData`, body, environment.httpSkipSpinnerOptions);
+    // }
 
-    exportListToExcel(controllerName: string, methodPartName: string, body: TableLazyLoadEvent) {
-        return this.exportListToExcelObservable(controllerName, methodPartName, body).subscribe(res => {
+    exportListToExcel(exportTableDataToExcelObservableMethod: (tableFilter: TableFilter) => Observable<any>, tableFilter: TableFilter) {
+        exportTableDataToExcelObservableMethod(tableFilter).subscribe(res => {
             let fileName = this.baseService.getFileNameFromContentDisposition(res, "ExcelExport.xlsx");
             FileSaver.saveAs(res.body, decodeURIComponent(fileName));
         });
     }
 
-    exportListToExcelObservable(controllerName: string, methodPartName: string, body: TableLazyLoadEvent) {
-        return this.http.post(`${environment.apiUrl}/${controllerName}/Export${methodPartName}ListToExcel`, body, { observe: 'response', responseType: 'blob' });
-    }
+    // exportListToExcelObservable(controllerName: string, methodPartName: string, body: TableFilter) {
+    //     return this.http.post(`${environment.apiUrl}/${controllerName}/Export${methodPartName}TableDataToExcel`, body, { observe: 'response', responseType: 'blob' });
+    // }
 
-    deleteItemFromTable(controllerName: string, methodPartName: string, id: number): Observable<any> {
-        return this.http.delete(`${environment.apiUrl}/${controllerName}/Delete${methodPartName}?id=${id}`);
-    }
+    // deleteItemFromTable(controllerName: string, methodPartName: string, id: number): Observable<any> {
+    //     return this.http.delete(`${environment.apiUrl}/${controllerName}/Delete${methodPartName}?id=${id}`);
+    // }
 }

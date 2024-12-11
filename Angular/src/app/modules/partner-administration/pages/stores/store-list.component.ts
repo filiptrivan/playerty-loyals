@@ -1,6 +1,7 @@
 import { TranslocoService } from '@jsverse/transloco';
 import { Component, OnInit } from '@angular/core';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
+import { ApiService } from 'src/app/business/services/api/api.service';
 
 @Component({
     selector: 'store-list',
@@ -9,11 +10,14 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
 })
 export class StoreListComponent implements OnInit {
     cols: Column[];
-    controllerName: string = 'Store';
-    objectNameForTheRequest: string = 'Store';
+    
+    loadStoreTableDataObservableMethod = this.apiService.loadStoreTableData;
+    exportStoreTableDataToExcelObservableMethod = this.apiService.exportStoreTableDataToExcel;
+    deleteStoreObservableMethod = this.apiService.deleteStore;
 
     constructor(
-        private translocoService: TranslocoService
+        private apiService: ApiService,
+        private translocoService: TranslocoService,
     ) { }
 
     ngOnInit(){

@@ -1,18 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
+import { ApiService } from 'src/app/business/services/api/api.service';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 
 @Component({
-    selector: 'notification-list',
-    templateUrl: './notification-list.component.html',
+    selector: 'notification-table',
+    templateUrl: './notification-table.component.html',
     styles: []
 })
-export class NotificationListComponent implements OnInit {
+export class NotificationTableComponent implements OnInit {
     cols: Column[];
-    controllerName: string = 'Auth';
-    objectNameForTheRequest: string = 'Notification';
+
+    loadNotificationTableDataObservableMethod = this.apiService.loadNotificationTableData;
+    exportNotificationTableDataToExcelObservableMethod = this.apiService.exportNotificationTableDataToExcel;
+    deleteNotificationObservableMethod = this.apiService.deleteNotification;
 
     constructor(
+        private apiService: ApiService,
         private translocoService: TranslocoService,
     ) { }
 
@@ -26,4 +30,5 @@ export class NotificationListComponent implements OnInit {
             {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true},
         ]
     }
+    
 }

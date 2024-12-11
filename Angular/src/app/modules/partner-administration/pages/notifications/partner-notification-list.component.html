@@ -1,4 +1,10 @@
 <ng-container *transloco="let t">
-    <soft-data-table [tableTitle]="t('NotificationList')" [cols]="cols" [controllerName]="controllerName" [objectNameForTheRequest]="objectNameForTheRequest">
+    <soft-data-table 
+    [tableTitle]="t('NotificationList')" 
+    [cols]="cols" 
+    [loadTableDataObservableMethod]="loadPartnerNotificationTableDataObservableMethod" 
+    [exportTableDataToExcelObservableMethod]="exportPartnerNotificationTableDataToExcelObservableMethod"
+    [deleteItemFromTableObservableMethod]="deletePartnerNotificationObservableMethod"
+    >
     </soft-data-table>
 </ng-container>

@@ -497,11 +497,11 @@ export class ValidatorServiceGenerated {
         }
 
         // Recursively process all referenced assemblies
-        foreach (var referencedAssemblyName in assembly.GetReferencedAssemblies())
+        foreach (AssemblyName referencedAssemblyName in assembly.GetReferencedAssemblies())
         {
             try
             {
-                var referencedAssembly = Assembly.Load(referencedAssemblyName);
+                Assembly referencedAssembly = Assembly.Load(referencedAssemblyName);
                 FindAllDtoTypesInAssemblies(referencedAssembly, visitedAssemblies, dtoTypes);
             }
             catch (Exception ex)

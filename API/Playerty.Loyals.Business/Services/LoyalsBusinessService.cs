@@ -113,7 +113,7 @@ namespace Playerty.Loyals.Services
         }
 
         // FT: Add this to the generator
-        public async Task<TableResponseDTO<UserExtendedDTO>> LoadUserForNotificationListForTable(TableFilterDTO tableFilterPayload)
+        public async Task<TableResponseDTO<UserExtendedDTO>> LoadUserForNotificationTableData(TableFilterDTO tableFilterPayload)
         {
             TableResponseDTO<UserExtendedDTO> tableResponse = new TableResponseDTO<UserExtendedDTO>();
 
@@ -673,7 +673,7 @@ namespace Playerty.Loyals.Services
             });
         }
 
-        public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserForPartnerNotificationListForTable(TableFilterDTO tableFilterPayload)
+        public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserForPartnerNotificationTableData(TableFilterDTO tableFilterPayload)
         {
             TableResponseDTO<PartnerUserDTO> tableResponse = new TableResponseDTO<PartnerUserDTO>();
 
@@ -756,7 +756,7 @@ namespace Playerty.Loyals.Services
             {
                 long partnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
 
-                TableResponseDTO<TransactionDTO> transactionTableResponse = await LoadTransactionListForTable(tableFilterDTO, _context.DbSet<Transaction>().Where(x => x.PartnerUser.Id == partnerUserId).OrderByDescending(x => x.Id), false);
+                TableResponseDTO<TransactionDTO> transactionTableResponse = await LoadTransactionTableData(tableFilterDTO, _context.DbSet<Transaction>().Where(x => x.PartnerUser.Id == partnerUserId).OrderByDescending(x => x.Id), false);
 
                 return transactionTableResponse;
             });

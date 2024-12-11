@@ -1,3 +1,4 @@
+import { ApiService } from './../../../../business/services/api/api.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { Component, OnInit } from '@angular/core';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
@@ -9,10 +10,13 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
 })
 export class UserListComponent implements OnInit {
     cols: Column[];
-    controllerName: string = 'Auth';
-    objectNameForTheRequest: string = 'User';
+    
+    loadUserTableDataObservableMethod = this.apiService.loadUserTableData;
+    exportUserTableDataToExcelObservableMethod = this.apiService.exportUserTableDataToExcel;
+    deleteUserObservableMethod = this.apiService.deleteUser;
 
     constructor(
+        private apiService: ApiService,
         private translocoService: TranslocoService,
     ) { }
 

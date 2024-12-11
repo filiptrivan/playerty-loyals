@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
+import { ApiService } from 'src/app/business/services/api/api.service';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 
 @Component({
@@ -9,10 +10,13 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
 })
 export class PartnerNotificationListComponent implements OnInit {
     cols: Column[];
-    controllerName: string = 'PartnerNotification';
-    objectNameForTheRequest: string = 'PartnerNotification';
+    
+    loadPartnerNotificationTableDataObservableMethod = this.apiService.loadPartnerNotificationTableData;
+    exportPartnerNotificationTableDataToExcelObservableMethod = this.apiService.exportPartnerNotificationTableDataToExcel;
+    deletePartnerNotificationObservableMethod = this.apiService.deletePartnerNotification;
 
     constructor(
+        private apiService: ApiService,
         private translocoService: TranslocoService,
     ) { }
 

@@ -31,16 +31,16 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<PartnerRoleDTO>> LoadPartnerRoleListForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<PartnerRoleDTO>> LoadPartnerRoleTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadPartnerRoleListForTable(dto, _context.DbSet<PartnerRole>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.LoadPartnerRoleTableData(tableFilterDTO, _context.DbSet<PartnerRole>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task<IActionResult> ExportPartnerRoleListToExcel(TableFilterDTO dto)
+        public async Task<IActionResult> ExportPartnerRoleTableDataToExcel(TableFilterDTO tableFilterDTO)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportPartnerRoleListToExcel(dto, _context.DbSet<PartnerRole>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            byte[] fileContent = await _loyalsBusinessService.ExportPartnerRoleTableDataToExcel(tableFilterDTO, _context.DbSet<PartnerRole>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Uloge.xlsx"));
         }
 

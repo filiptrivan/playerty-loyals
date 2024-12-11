@@ -31,16 +31,16 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<PartnerNotificationDTO>> LoadPartnerNotificationListForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<PartnerNotificationDTO>> LoadPartnerNotificationTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadPartnerNotificationListForTable(dto, _context.DbSet<PartnerNotification>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.LoadPartnerNotificationTableData(tableFilterDTO, _context.DbSet<PartnerNotification>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task<IActionResult> ExportPartnerNotificationListToExcel(TableFilterDTO dto)
+        public async Task<IActionResult> ExportPartnerNotificationTableDataToExcel(TableFilterDTO tableFilterDTO)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportPartnerNotificationListToExcel(dto, _context.DbSet<PartnerNotification>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            byte[] fileContent = await _loyalsBusinessService.ExportPartnerNotificationTableDataToExcel(tableFilterDTO, _context.DbSet<PartnerNotification>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Notifikacije.xlsx"));
         }
 
@@ -67,9 +67,9 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserForPartnerNotificationListForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserForPartnerNotificationTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadPartnerUserForPartnerNotificationListForTable(dto);
+            return await _loyalsBusinessService.LoadPartnerUserForPartnerNotificationTableData(tableFilterDTO);
         }
 
         [HttpPut]

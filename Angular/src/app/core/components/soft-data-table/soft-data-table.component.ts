@@ -15,6 +15,7 @@ import { PrimengOption } from '../../entities/primeng-option';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { SoftControlsModule } from '../../controls/soft-controls.module';
 import { SoftFormControl } from '../soft-form-control/soft-form-control';
+import { TableResponse } from '../../entities/table-response';
 
 @Component({
   selector: 'soft-data-table',
@@ -48,12 +49,14 @@ export class SoftDataTableComponent implements OnInit {
   @Input() items: any[]; // FT: Pass only when hasLazyLoad === false
   @Input() rows: number = 10;
   @Input() cols: Column[];
-  @Input() objectNameForTheRequest: string;
-  @Input() controllerName: string;
   @Input() showPaginator: boolean = true; // FT: Pass only when hasLazyLoad === false
   totalRecords: number;
   @Output() onTotalRecordsChange: EventEmitter<number> = new EventEmitter();;
   
+  @Input() loadTableDataObservableMethod: (tableFilter: TableFilter) => Observable<TableResponse>;
+  @Input() exportTableDataToExcelObservableMethod: (tableFilter: TableFilter) => Observable<any>;
+  @Input() deleteItemFromTableObservableMethod: (rowId: number) => Observable<any>;
+
   lastLazyLoadEvent: TableLazyLoadEvent;
   loading: boolean = true;
   
@@ -104,9 +107,6 @@ export class SoftDataTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.controllerName == null)
-      this.controllerName = this.objectNameForTheRequest;
-
     this.matchModeDateOptions = [
       { label: this.translocoService.translate('DatesBefore'), value: 'dateBefore' },
       { label: this.translocoService.translate('DatesAfter'), value: 'dateAfter' },
@@ -130,8 +130,8 @@ export class SoftDataTableComponent implements OnInit {
     tableFilter.additionalFilterIdLong = this.additionalFilterIdLong;
 
     this.onLazyLoad.next(tableFilter);
-
-    this.apiService.loadListForTable(this.controllerName, this.objectNameForTheRequest, tableFilter).subscribe({
+    
+    this.loadTableDataObservableMethod(tableFilter).subscribe({
       next: async (res) => { 
         this.items = res.data;
         this.totalRecords = res.totalRecords;
@@ -280,7 +280,7 @@ export class SoftDataTableComponent implements OnInit {
       { 
         header: this.translocoService.translate('AreYouSureToDelete'),
         width: '400px',
-        data:{controllerName: this.controllerName, methodPartName: this.objectNameForTheRequest, id: rowId, } 
+        data:{ deleteItemFromTableObservableMethod: this.deleteItemFromTableObservableMethod, id: rowId, } 
       });
 
       this.deleteRef.onClose.subscribe((deletedSuccessfully: boolean)=>{
@@ -451,7 +451,10 @@ export class SoftDataTableComponent implements OnInit {
   //#endregion
 
   exportListToExcel() {
-    this.apiService.exportListToExcel(this.controllerName, this.objectNameForTheRequest, this.lastLazyLoadEvent);
+    let tableFilter: TableFilter = event as unknown as TableFilter;
+    tableFilter.additionalFilterIdLong = this.additionalFilterIdLong;
+
+    this.apiService.exportListToExcel(this.exportTableDataToExcelObservableMethod, tableFilter);
   }
 
   clear(table: Table) {

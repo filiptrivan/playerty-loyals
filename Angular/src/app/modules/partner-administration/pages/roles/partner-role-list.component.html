@@ -1,4 +1,10 @@
 <ng-container *transloco="let t">
-    <soft-data-table [tableTitle]="t('RoleList')" [cols]="cols" [controllerName]="controllerName" [objectNameForTheRequest]="objectNameForTheRequest">
+    <soft-data-table 
+    [tableTitle]="t('RoleList')" 
+    [cols]="cols" 
+    [loadTableDataObservableMethod]="loadPartnerRoleTableDataObservableMethod" 
+    [exportTableDataToExcelObservableMethod]="exportPartnerRoleTableDataToExcelObservableMethod"
+    [deleteItemFromTableObservableMethod]="deletePartnerRoleObservableMethod"
+    >
     </soft-data-table>
 </ng-container>

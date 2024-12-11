@@ -28,16 +28,16 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<SegmentationDTO>> LoadSegmentationListForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<SegmentationDTO>> LoadSegmentationTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadSegmentationListForTable(dto, _context.DbSet<Segmentation>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.LoadSegmentationTableData(tableFilterDTO, _context.DbSet<Segmentation>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task<IActionResult> ExportSegmentationListToExcel(TableFilterDTO dto)
+        public async Task<IActionResult> ExportSegmentationTableDataToExcel(TableFilterDTO tableFilterDTO)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportSegmentationListToExcel(dto, _context.DbSet<Segmentation>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            byte[] fileContent = await _loyalsBusinessService.ExportSegmentationTableDataToExcel(tableFilterDTO, _context.DbSet<Segmentation>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Segmentacije.xlsx"));
         }
 

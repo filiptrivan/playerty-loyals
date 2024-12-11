@@ -1,4 +1,10 @@
 <ng-container *transloco="let t">
-    <soft-data-table [tableTitle]="t('SegmentationList')" [cols]="cols" [controllerName]="controllerName" [objectNameForTheRequest]="objectNameForTheRequest">
+    <soft-data-table 
+    [tableTitle]="t('SegmentationList')" 
+    [cols]="cols" 
+    [loadTableDataObservableMethod]="loadSegmentationTableDataObservableMethod" 
+    [exportTableDataToExcelObservableMethod]="exportSegmentationTableDataToExcelObservableMethod"
+    [deleteItemFromTableObservableMethod]="deleteSegmentationObservableMethod"
+    >
     </soft-data-table>
 </ng-container>

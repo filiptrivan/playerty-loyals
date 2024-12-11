@@ -24,9 +24,10 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
 
     text: string;
 
-    cols: Column[];
-    tableControllerName: string = 'PartnerUser';
-    objectNameForTheRequest: string = 'PartnerUser';
+    partnerUserTableCols: Column[];
+    loadPartnerUserTableDataObservableMethod = this.apiService.loadPartnerUserTableData;
+    exportPartnerUserTableDataToExcelObservableMethod = this.apiService.exportPartnerUserTableDataToExcel;
+    deletePartnerUserObservableMethod = this.apiService.deletePartnerUser;
     
     newlySelectedPartnerUserList: number[] = [];
     unselectedPartnerUserList: number[] = [];
@@ -78,7 +79,7 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
     }
 
     async populatePartnerUserTableCols(){
-        this.cols = [
+        this.partnerUserTableCols = [
             {name: this.translocoService.translate('User'), filterType: 'text', field: 'userDisplayName'},
             {name: this.translocoService.translate('Points'), filterType: 'numeric', field: 'points', showMatchModes: true},
             {name: this.translocoService.translate('Tier'), filterType: 'multiselect', field: 'tierDisplayName', filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(this.partnerService.loadTierListForDropdown()) },
@@ -87,12 +88,12 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
         ]
     }
 
-    // FT HACK: Using arrow function solved the problem with undefined this.modelId
+    // FT: Using arrow function solved the problem with undefined this.modelId
     selectedPartnerUserLazyLoad = (event: TableFilter): Observable<SelectedRowsMethodResult> => {
         let tableFilter: TableFilter = event;
         tableFilter.additionalFilterIdLong = this.modelId;
         
-        return this.apiService.loadListForTable('PartnerNotification', 'PartnerUserForPartnerNotification', tableFilter).pipe(
+        return this.apiService.loadPartnerUserForPartnerNotificationTableData(tableFilter).pipe(
             map(res => {
                 let result = new SelectedRowsMethodResult();
                 result.fakeSelectedItems = res.data.map(x => x.id);

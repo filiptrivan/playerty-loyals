@@ -17,7 +17,11 @@
                             <soft-textarea [control]="control('description')"></soft-textarea>
                         </div>
                         <div class="col-12">
-                            <soft-data-table [tableTitle]="t('Recipients')" [cols]="cols" [controllerName]="tableControllerName" [objectNameForTheRequest]="objectNameForTheRequest" [showAddButton]="false" selectionMode="multiple"
+                            <soft-data-table [tableTitle]="t('Recipients')" [cols]="userTableCols" 
+                            [loadTableDataObservableMethod]="loadUserTableDataObservableMethod" 
+                            [exportTableDataToExcelObservableMethod]="exportUserTableDataToExcelObservableMethod"
+                            [deleteItemFromTableObservableMethod]="deleteUserObservableMethod"
+                            [showAddButton]="false" selectionMode="multiple"
                             [newlySelectedItems]="newlySelectedUserList" [unselectedItems]="unselectedUserList" [rows]="5" (onLazyLoad)="onLazyLoad($event)"
                             [selectedLazyLoadObservableMethod]="selectedUserLazyLoad" (onIsAllSelectedChange)="isAllSelectedChange($event)"></soft-data-table>
                         </div>

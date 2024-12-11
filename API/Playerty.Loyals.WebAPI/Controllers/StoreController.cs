@@ -3,6 +3,7 @@ using Playerty.Loyals.Business.DTO;
 using Playerty.Loyals.Business.Entities;
 using Playerty.Loyals.Business.Services;
 using Playerty.Loyals.Services;
+using Playerty.Loyals.Shared.Terms;
 using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.DTO;
 using Soft.Generator.Shared.Helpers;
@@ -32,16 +33,16 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<StoreDTO>> LoadStoreListForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<StoreDTO>> LoadStoreTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadStoreListForTable(dto, _context.DbSet<Store>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.LoadStoreTableData(tableFilterDTO, _context.DbSet<Store>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task<IActionResult> ExportStoreListToExcel(TableFilterDTO dto)
+        public async Task<IActionResult> ExportStoreTableDataToExcel(TableFilterDTO tableFilterDTO)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportStoreListToExcel(dto, _context.DbSet<Store>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            byte[] fileContent = await _loyalsBusinessService.ExportStoreTableDataToExcel(tableFilterDTO, _context.DbSet<Store>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Prodavnice.xlsx"));
         }
 
@@ -105,7 +106,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task UpdatePoints(UpdatePointsDTO updatePointsDTO)
         {
-            await _loyalsBusinessService.UpdatePoints(updatePointsDTO.StoreId, updatePointsDTO.StoreVersion, updatePointsDTO.FromDate);
+            await _loyalsBusinessService.UpdatePoints(updatePointsDTO.StoreId, updatePointsDTO.StoreVersion, updatePointsDTO.FromDate, updatePointsDTO.ToDate);
         }
 
         //[HttpGet]
@@ -131,16 +132,16 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<StoreUpdatePointsScheduledTaskDTO>> LoadStoreUpdatePointsScheduledTaskListForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<StoreUpdatePointsScheduledTaskDTO>> LoadStoreUpdatePointsScheduledTaskTableData(TableFilterDTO tableFilterDTO)
         {   
-            return await _loyalsBusinessService.LoadStoreUpdatePointsScheduledTaskListForTable(dto, _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == dto.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo), false);
+            return await _loyalsBusinessService.LoadStoreUpdatePointsScheduledTaskTableData(tableFilterDTO, _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == tableFilterDTO.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo), false);
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task<IActionResult> ExportStoreUpdatePointsScheduledTaskListToExcel(TableFilterDTO dto)
+        public async Task<IActionResult> ExportStoreUpdatePointsScheduledTaskTableDataToExcel(TableFilterDTO tableFilterDTO)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportStoreUpdatePointsScheduledTaskListToExcel(dto, _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == dto.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo), false);
+            byte[] fileContent = await _loyalsBusinessService.ExportStoreUpdatePointsScheduledTaskTableDataToExcel(tableFilterDTO, _context.DbSet<StoreUpdatePointsScheduledTask>().Where(x => x.Store.Id == tableFilterDTO.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Izvršena_Ažuriranja_Poena.xlsx"));
         }
     }

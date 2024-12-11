@@ -10,6 +10,7 @@ namespace Playerty.Loyals.Business.DTO
     {
         public long StoreId { get; set; }
         public int StoreVersion { get; set; }
-        public DateTime? FromDate { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
     }
 }

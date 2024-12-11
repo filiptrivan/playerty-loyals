@@ -32,16 +32,16 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<PartnerDTO>> LoadPartnerListForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<PartnerDTO>> LoadPartnerTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadPartnerListForTable(dto, _context.DbSet<Partner>(), false);
+            return await _loyalsBusinessService.LoadPartnerTableData(tableFilterDTO, _context.DbSet<Partner>(), false);
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task<IActionResult> ExportPartnerListToExcel(TableFilterDTO dto)
+        public async Task<IActionResult> ExportPartnerTableDataToExcel(TableFilterDTO tableFilterDTO)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportPartnerListToExcel(dto, _context.DbSet<Partner>(), false);
+            byte[] fileContent = await _loyalsBusinessService.ExportPartnerTableDataToExcel(tableFilterDTO, _context.DbSet<Partner>(), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Partneri.xlsx"));
         }
 

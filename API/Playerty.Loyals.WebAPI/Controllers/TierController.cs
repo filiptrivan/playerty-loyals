@@ -35,16 +35,16 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<TierDTO>> LoadTierListForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<TierDTO>> LoadTierTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadTierListForTable(dto, _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
+            return await _loyalsBusinessService.LoadTierTableData(tableFilterDTO, _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task<IActionResult> ExportTierListToExcel(TableFilterDTO dto)
+        public async Task<IActionResult> ExportTierTableDataToExcel(TableFilterDTO tableFilterDTO)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportTierListToExcel(dto, _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
+            byte[] fileContent = await _loyalsBusinessService.ExportTierTableDataToExcel(tableFilterDTO, _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Nivoi_Lojalnosti.xlsx"));
         }
 

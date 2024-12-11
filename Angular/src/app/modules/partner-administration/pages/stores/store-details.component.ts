@@ -25,6 +25,8 @@ export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
     
     storeUpdatePointsScheduledTaskTableCols: Column[];
     storeUpdatePointsScheduledTaskTableObjectNameForTheRequest: string = 'StoreUpdatePointsScheduledTask';
+    loadStoreUpdatePointsScheduledTaskTableDataObservableMethod = this.apiService.loadStoreUpdatePointsScheduledTaskTableData;
+    exportStoreUpdatePointsScheduledTaskTableDataToExcelObservableMethod = this.apiService.exportStoreUpdatePointsScheduledTaskTableDataToExcel;
     storeUpdatePointsScheduledTaskTableTotalRecords: number;
     
     manualUpdatePointsFromDate = new SoftFormControl<Date>(null, {updateOn: 'change'})

@@ -108,17 +108,17 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<UserExtendedDTO>> LoadUserListForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<UserExtendedDTO>> LoadUserTableData(TableFilterDTO tableFilterDTO)
         {
             // FT: Ordering by because of notifications
-            return await _loyalsBusinessService.LoadUserExtendedListForTable(dto, _context.DbSet<UserExtended>().OrderBy(x => x.Id));
+            return await _loyalsBusinessService.LoadUserExtendedTableData(tableFilterDTO, _context.DbSet<UserExtended>().OrderBy(x => x.Id));
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task<IActionResult> ExportUserListToExcel(TableFilterDTO dto)
+        public async Task<IActionResult> ExportUserTableDataToExcel(TableFilterDTO tableFilterDTO)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportUserExtendedListToExcel(dto, _context.DbSet<UserExtended>().OrderBy(x => x.Id));
+            byte[] fileContent = await _loyalsBusinessService.ExportUserExtendedTableDataToExcel(tableFilterDTO, _context.DbSet<UserExtended>().OrderBy(x => x.Id));
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"{SharedTerms.UserExcel}.xlsx"));
         }
 
@@ -183,16 +183,16 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<NotificationDTO>> LoadNotificationListForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<NotificationDTO>> LoadNotificationTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadNotificationListForTable(dto, _context.DbSet<Notification>().Where(a => EF.Property<string>(a, "Discriminator") == nameof(Notification))); // TODO FT: Make one more table, don't do this
+            return await _loyalsBusinessService.LoadNotificationTableData(tableFilterDTO, _context.DbSet<Notification>().Where(a => EF.Property<string>(a, "Discriminator") == nameof(Notification))); // TODO FT: Make one more table, don't do this
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task<IActionResult> ExportNotificationListToExcel(TableFilterDTO dto)
+        public async Task<IActionResult> ExportNotificationTableDataToExcel(TableFilterDTO tableFilterDTO)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportNotificationListToExcel(dto, _context.DbSet<Notification>().Where(a => EF.Property<string>(a, "Discriminator") == nameof(Notification))); // TODO FT: Make one more table, don't do this
+            byte[] fileContent = await _loyalsBusinessService.ExportNotificationTableDataToExcel(tableFilterDTO, _context.DbSet<Notification>().Where(a => EF.Property<string>(a, "Discriminator") == nameof(Notification))); // TODO FT: Make one more table, don't do this
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"{SharedTerms.NotificationExcel}.xlsx"));
         }
 
@@ -219,9 +219,9 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<UserExtendedDTO>> LoadUserForNotificationListForTable(TableFilterDTO dto)
+        public async Task<TableResponseDTO<UserExtendedDTO>> LoadUserForNotificationTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadUserForNotificationListForTable(dto);
+            return await _loyalsBusinessService.LoadUserForNotificationTableData(tableFilterDTO);
         }
 
         [HttpGet]
