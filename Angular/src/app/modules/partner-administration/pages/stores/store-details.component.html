@@ -47,6 +47,11 @@
     
                 <panel-footer>
                     <p-button (onClick)="onSaveStoreUpdatePointsData()" [label]="t('Save')" icon="pi pi-save"></p-button>
+                    <!-- savedStoreUpdatePointsStartDate != null && savedStoreUpdatePointsInterval != null && savedStoreGetTransactionsEndpoint != null &&  -->
+                    <p-button *ngIf="savedStoreUpdatePointsScheduledTaskIsPaused === false" 
+                    (onClick)="onSaveStoreUpdatePointsData()" [label]="t('PauseUpdatePointsScheduledTask')" icon="pi pi-pause" severity="warning"></p-button>
+                    <p-button *ngIf="savedStoreUpdatePointsScheduledTaskIsPaused === true" 
+                    (onClick)="onSaveStoreUpdatePointsData()" [label]="t('StartUpdatePointsScheduledTask')" icon="pi pi-play" severity="success"></p-button>
                 </panel-footer>
 
             </soft-panel>
@@ -64,9 +69,11 @@
                             (onTotalRecordsChange)="storeUpdatePointsScheduledTaskTableTotalRecords = $event" [showReloadTableButton]="true">
                             </soft-data-table>
                         </div>
-                        <div *ngIf="storeUpdatePointsScheduledTaskTableTotalRecords === 0" class="col-12">
-                            <soft-calendar [control]="manualUpdatePointsFromDate" [showTime]="true" [label]="t('ManualUpdatePointsFromDate')" [showTooltip]="true" 
-                            tooltipText="Ovo polje možete popuniti samo kada nemate nijedno uspešno izvršeno ažuriranje poena do sad, kako bi znali od kog momenta želite da obradimo Vaše prethodne transakcije."></soft-calendar>
+                        <div class="col-12 md:col-6">
+                            <soft-calendar [control]="manualUpdatePointsFromDate" [showTime]="true" [label]="t('ManualUpdatePointsFromDate')"></soft-calendar>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-calendar [control]="manualUpdatePointsToDate" [showTime]="true" [label]="t('ManualUpdatePointsToDate')"></soft-calendar>
                         </div>
                     </form>
                 </panel-body>

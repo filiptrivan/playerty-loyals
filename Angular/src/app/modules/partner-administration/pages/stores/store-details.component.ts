@@ -30,8 +30,11 @@ export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
     storeUpdatePointsScheduledTaskTableTotalRecords: number;
     
     manualUpdatePointsFromDate = new SoftFormControl<Date>(null, {updateOn: 'change'})
+    manualUpdatePointsToDate = new SoftFormControl<Date>(null, {updateOn: 'change'})
 
     storeUpdatePointsDataFormGroup: SoftFormGroup<StoreUpdatePointsDataBody>;
+
+    savedStoreUpdatePointsScheduledTaskIsPaused: boolean = null;
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -63,7 +66,9 @@ export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
                     store: this.apiService.getStore(this.modelId),
                 })
                 .subscribe(({ store }) => {
+                    this.savedStoreUpdatePointsScheduledTaskIsPaused = store.updatePointsScheduledTaskIsPaused;
                     this.storeFormGroup = this.initFormGroup(new Store(store), this.storeSaveBodyName);
+
                     this.initStoreUpdatePointsDataFormGroup(store);
                 });
             }else{
@@ -100,12 +105,14 @@ export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
             storeId: this.modelId, 
             storeVersion: this.storeFormGroup.getRawValue().version, 
             fromDate: this.manualUpdatePointsFromDate.getRawValue(),
+            toDate: this.manualUpdatePointsToDate.getRawValue(),
         }
         
         this.apiService.updatePoints(updatePointsDTO).subscribe(() => {
             this.messageService.successMessage(this.translocoService.translate('SuccessfulAttempt'));
 
             this.manualUpdatePointsFromDate.setValue(null);
+            this.manualUpdatePointsToDate.setValue(null);
         });
     }
 
@@ -121,5 +128,9 @@ export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
         saveBody.storeDTO = this.storeFormGroup.getRawValue();
         
         this.saveBody = saveBody;
+    }
+
+    override onAfterSave(): void {
+        this.savedStoreUpdatePointsScheduledTaskIsPaused = this.storeFormGroup.controls.updatePointsScheduledTaskIsPaused.getRawValue();
     }
 }

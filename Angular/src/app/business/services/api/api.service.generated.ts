@@ -401,6 +401,10 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.put<number>(`${environment.apiUrl}/Store/SaveStoreUpdatePointsData`, storeUpdatePointsDataBodyDTO, environment.httpOptions);
     }
 
+    changeScheduledTaskUpdatePointsStatus = (storeId: number, storeVersion: number): Observable<any> => {
+        return this.http.get<any>(`${environment.apiUrl}/Store/ChangeScheduledTaskUpdatePointsStatus?storeId=${storeId}&storeVersion=${storeVersion}`);
+    }
+
     updatePoints = (updatePointsDTO: UpdatePoints): Observable<any> => { 
         return this.http.post<any>(`${environment.apiUrl}/Store/UpdatePoints`, updatePointsDTO, environment.httpOptions);
     }

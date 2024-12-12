@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.BaseEntities;
 using System;
@@ -10,7 +11,9 @@ using System.Threading.Tasks;
 
 namespace Playerty.Loyals.Business.Entities
 {
-    // FT: It's business object but only the system can modify it, the system can modify it's statuses
+    /// <summary>
+    /// FT: It's business object but only the system can modify it, the system can modify it's statuses
+    /// </summary>
     public class Transaction : BusinessObject<long>
     {
         [Required]
@@ -18,7 +21,7 @@ namespace Playerty.Loyals.Business.Entities
         public string ProductName { get; set; }
 
         /// <summary>
-        /// Unique identifier
+        /// Unique transaction code for the particular store, so we don't make it globally unique in SQL Server
         /// </summary>
         [Required]
         [StringLength(20, MinimumLength = 1)]

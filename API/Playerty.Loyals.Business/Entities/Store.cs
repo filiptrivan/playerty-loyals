@@ -36,6 +36,8 @@ namespace Playerty.Loyals.Business.Entities
         [StringLength(1000, MinimumLength = 1)]
         public string UpdateUserGroupEndpoint { get; set; }
 
+        public bool? UpdatePointsScheduledTaskIsPaused { get; set; }
+
         [ManyToOneRequired]
         public virtual Partner Partner { get; set; }
 

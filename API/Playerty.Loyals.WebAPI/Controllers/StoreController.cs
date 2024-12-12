@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Playerty.Loyals.Business.DTO;
 using Playerty.Loyals.Business.Entities;
 using Playerty.Loyals.Business.Services;
@@ -102,11 +103,18 @@ namespace Playerty.Loyals.WebAPI.Controllers
             return await _loyalsBusinessService.SaveStoreUpdatePointsDataAsync(storeUpdatePointsDataBodyDTO);
         }
 
+        [HttpGet]
+        [AuthGuard]
+        public async Task ChangeScheduledTaskUpdatePointsStatus(long storeId, int storeVersion)
+        {
+            await _loyalsBusinessService.ChangeScheduledTaskUpdatePointsStatusAsync(storeId, storeVersion);
+        }
+
         [HttpPost]
         [AuthGuard]
         public async Task UpdatePoints(UpdatePointsDTO updatePointsDTO)
         {
-            await _loyalsBusinessService.UpdatePoints(updatePointsDTO.StoreId, updatePointsDTO.StoreVersion, updatePointsDTO.FromDate, updatePointsDTO.ToDate);
+            await _loyalsBusinessService.UpdatePointsAsync(updatePointsDTO.StoreId, updatePointsDTO.StoreVersion, updatePointsDTO.FromDate, updatePointsDTO.ToDate);
         }
 
         //[HttpGet]

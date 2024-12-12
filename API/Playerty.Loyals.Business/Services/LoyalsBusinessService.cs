@@ -1017,7 +1017,7 @@ namespace Playerty.Loyals.Services
                 {
                     Store storeBeforeSave = await LoadInstanceAsync<Store, long>(storeSaveBodyDTO.StoreDTO.Id, storeSaveBodyDTO.StoreDTO.Version);
 
-                    if ((storeBeforeSave.UpdatePointsInterval != storeSaveBodyDTO.StoreDTO.UpdatePointsInterval) || 
+                    if ((storeBeforeSave.UpdatePointsInterval != storeSaveBodyDTO.StoreDTO.UpdatePointsInterval) ||
                         (!Helper.AreDatesEqualToSeconds(storeBeforeSave.UpdatePointsStartDate, storeSaveBodyDTO.StoreDTO.UpdatePointsStartDate)))
                         throw new HackerException("Can't save UpdatePointsInterval nor UpdatePointsStartDate from here.");
                 }
@@ -1048,7 +1048,7 @@ namespace Playerty.Loyals.Services
 
                 return await _context.WithTransactionAsync(async () =>
                 {
-                    Store store = await LoadInstanceAsync<Store, long>(storeUpdatePointsDataBodyDTO.StoreId, null);
+                    Store store = await LoadInstanceAsync<Store, long>(storeUpdatePointsDataBodyDTO.StoreId, storeUpdatePointsDataBodyDTO.StoreVersion);
 
                     if (store.GetTransactionsEndpoint == null)
                         throw new BusinessException("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
@@ -1056,10 +1056,11 @@ namespace Playerty.Loyals.Services
                     store.UpdatePointsInterval = storeUpdatePointsDataBodyDTO.UpdatePointsInterval;
                     store.UpdatePointsStartDate = storeUpdatePointsDataBodyDTO.UpdatePointsStartDate;
 
-                    await _context.SaveChangesAsync();
-
                     if (storeUpdatePointsDataBodyDTO.UpdatePointsInterval != null && storeUpdatePointsDataBodyDTO.UpdatePointsStartDate != null)
                     {
+                        store.UpdatePointsScheduledTaskIsPaused = false;
+                        await _context.SaveChangesAsync();
+
                         scheduledJobResult = await _updatePointsScheduler.ScheduleJob(
                             storeUpdatePointsDataBodyDTO.StoreId,
                             storeUpdatePointsDataBodyDTO.UpdatePointsInterval.Value,
@@ -1069,8 +1070,12 @@ namespace Playerty.Loyals.Services
                     }
                     else if (storeUpdatePointsDataBodyDTO.UpdatePointsInterval == null && storeUpdatePointsDataBodyDTO.UpdatePointsStartDate == null)
                     {
+                        store.UpdatePointsScheduledTaskIsPaused = true;
+                        await _context.SaveChangesAsync();
+
                         await _updatePointsScheduler.DeleteJob(storeUpdatePointsDataBodyDTO.StoreId);
                     }
+
 
                     return store.Version;
                 });
@@ -1084,22 +1089,94 @@ namespace Playerty.Loyals.Services
             }
         }
 
+        public async Task<int> ChangeScheduledTaskUpdatePointsStatusAsync(long storeId, int storeVersion)
+        {
+            bool scheduledJobContinued = false;
+
+            try
+            {
+                return await _context.WithTransactionAsync(async () =>
+                {
+                    Store store = await LoadInstanceAsync<Store, long>(storeId, storeVersion);
+
+                    List<string> exceptions = new List<string>();
+
+                    if (store.GetTransactionsEndpoint == null)
+                        exceptions.Add("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
+
+                    if (store.UpdatePointsInterval == null)
+                        exceptions.Add("Morate da popunite i sačuvate polje 'Interval ažuriranja', kako biste pokrenuli ažuriranje poena.");
+
+                    if (store.UpdatePointsStartDate == null)
+                        exceptions.Add("Morate da popunite i sačuvate polje 'Početak ažuriranja', kako biste pokrenuli ažuriranje poena.");
+
+                    if (store.UpdatePointsScheduledTaskIsPaused == null)
+                        exceptions.Add("Pre promene statusa, morate da pokrenete automatsko ažuriranje.");
+
+                    if (exceptions.Count > 0)
+                        throw new BusinessException(string.Join("\n", exceptions));
+
+                    store.UpdatePointsScheduledTaskIsPaused = !store.UpdatePointsScheduledTaskIsPaused.Value;
+
+                    await _context.SaveChangesAsync();
+
+                    if (store.UpdatePointsScheduledTaskIsPaused.Value)
+                    {
+                        await _updatePointsScheduler.DeleteJob(storeId);
+                    }
+                    else
+                    {
+                        StoreUpdatePointsScheduledTask lastStoreUpdatePointsScheduledTask = store.StoreUpdatePointsScheduledTasks.OrderByDescending(x => x.TransactionsTo).FirstOrDefault();
+
+                        scheduledJobContinued = await _updatePointsScheduler.ContinueJob(
+                            store.Id,
+                            store.UpdatePointsInterval.Value,
+                            store.UpdatePointsStartDate.Value,
+                            lastStoreUpdatePointsScheduledTask?.TransactionsTo
+                        );
+                    }
+
+                    return store.Version;
+                });
+            }
+            catch (Exception)
+            {
+                if (scheduledJobContinued == true)
+                    await _updatePointsScheduler.DeleteJob(storeId);
+
+                throw;
+            }
+        }
+
         /// <summary>
         /// Pass fromDate only if it is the first time
         /// </summary>
-        public async Task UpdatePoints(long storeId, int version, DateTime manualDateFrom, DateTime manualDateTo)
+        public async Task UpdatePointsAsync(long storeId, int storeVersion, DateTime manualDateFrom, DateTime manualDateTo)
         {
             if (manualDateTo <= manualDateFrom)
                 throw new HackerException($"Store: {storeId}. Can not pass greater {nameof(manualDateTo)} then {nameof(manualDateFrom)} in manually started points update.");
 
             await _context.WithTransactionAsync(async () =>
             {
-                Store store = await LoadInstanceAsync<Store, long>(storeId, version);
+                Store store = await LoadInstanceAsync<Store, long>(storeId, storeVersion);
 
                 if (store.GetTransactionsEndpoint == null)
                     throw new BusinessException("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
 
                 await _updatePointsScheduler.ScheduleJobManually(storeId, manualDateFrom, manualDateTo);
+            });
+        }
+
+        #endregion
+
+        #region Transaction
+
+        protected override async Task OnBeforeTransactionIsMapped(TransactionDTO transactionDTO)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                if (await _context.DbSet<Transaction>().AnyAsync(x => x.Store.Id == (long)transactionDTO.StoreId && x.Code == transactionDTO.Code))
+                    throw new BusinessException($"Transakcija '{transactionDTO.Code}' već postoji u sistemu.");
             });
         }
 

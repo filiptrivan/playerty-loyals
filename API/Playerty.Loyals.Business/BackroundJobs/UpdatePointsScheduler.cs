@@ -36,7 +36,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
         /// If <paramref name="lastShouldStartedAt"/> is null, that means that the job didn't started even once. We are sending that argument from StoreUpdatePointsScheduledTask table.
         /// <paramref name="interval"/> is in hours.
         /// </summary>
-        public async Task ContinueJob(long storeId, int interval, DateTime startDateTime, DateTime? lastShouldStartedAt)
+        public async Task<bool> ContinueJob(long storeId, int interval, DateTime startDateTime, DateTime? lastShouldStartedAt)
         {
             DateTime now = DateTime.Now;
 
@@ -87,6 +87,8 @@ namespace Playerty.Loyals.Business.BackroundJobs
             IReadOnlyCollection<ITrigger> readonlyTriggers = triggers.AsReadOnly();
 
             await _scheduler.ScheduleJob(job, triggers, false);
+
+            return true;
         }
 
         private static DateTime GetNextRunDateTime(int interval, DateTime startDateTime, DateTime? lastShouldStartedAt, DateTime now)

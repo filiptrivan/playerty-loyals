@@ -11,6 +11,7 @@ namespace Playerty.Loyals.Business.DTO
     public class StoreUpdatePointsDataBodyDTO
     {
         public long StoreId { get; set; }
+        public int StoreVersion { get; set; }
 
         public DateTime? UpdatePointsStartDate { get; set; }
 

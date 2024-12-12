@@ -56,8 +56,6 @@ namespace Playerty.Loyals.Business.BackroundJobs
                     ? jobExecutionContext.JobDetail.JobDataMap.GetDateTime("ManualDateTo")
                     : null;
 
-                var e = jobExecutionContext.JobDetail.Key;
-
                 DateTime now = DateTime.Now;
 
                 await _context.WithTransactionAsync(async () =>
@@ -85,38 +83,32 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
                     DateTime? startDateTime = store.UpdatePointsStartDate; // FT: When the startDateTime == null, the user is manually starting the update
 
-                    DateTime shouldStartedAtForSave;
+                    DateTime dateTo;
 
                     if (manualDateFrom == null && manualDateTo == null) // FT: If it's not manual update
-                    {
-                        shouldStartedAtForSave = UpdatePointsBackgroundJobHelpers.GetShouldStartedAtForSave(interval.Value, startDateTime.Value, lastShouldStartedAt, now);
-                    }
+                        dateTo = UpdatePointsBackgroundJobHelpers.GetShouldStartedAtForSave(interval.Value, startDateTime.Value, lastShouldStartedAt, now);
                     else
-                    {
-                        shouldStartedAtForSave = manualDateTo.Value; // FT: When the user has not startDateTime, he is only manually starting the update
-                    }
+                        dateTo = manualDateTo.Value; // FT: When the user has not startDateTime, he is only manually starting the update
 
                     DateTime dateFrom;
 
                     if (lastWithManualsShouldStartedAt == null) // FT: If lastShouldStartedAt == null that means that this is the first update ever for this store
                     {
                         if (manualDateFrom == null && manualDateTo == null)
-                        {
                             //dateFrom = shouldStartedAtForSave.AddHours(-interval.Value);
-                            dateFrom = shouldStartedAtForSave.AddMinutes(-interval.Value);
-                        }
+                            dateFrom = dateTo.AddMinutes(-interval.Value);
                         else // FT: If the first update ever is manual
-                        {
-                            //dateFrom = shouldStartedAtForSave.AddHours(-firstManualStartInterval.Value);
                             dateFrom = manualDateFrom.Value;
-                        }
                     }
                     else
                     {
-                        dateFrom = lastWithManualsShouldStartedAt.Value;
+                        if (manualDateFrom == null && manualDateTo == null)
+                            dateFrom = lastWithManualsShouldStartedAt.Value;
+                        else // FT: manual
+                            dateFrom = manualDateFrom.Value;
                     }
 
-                    List<ExternalTransactionDTO> externalTransactionDTOList = await _wingsApiService.GetExternalTransactionDTOList(store.GetTransactionsEndpoint, dateFrom, shouldStartedAtForSave);
+                    List<ExternalTransactionDTO> externalTransactionDTOList = await _wingsApiService.GetExternalTransactionDTOList(store.GetTransactionsEndpoint, dateFrom, dateTo);
 
                     List<string> userEmailList = externalTransactionDTOList.Select(x => x.UserEmail).ToList();
 
@@ -125,27 +117,25 @@ namespace Playerty.Loyals.Business.BackroundJobs
                         .Where(x => x.Partner.Id == store.Partner.Id && userEmailList.Contains(x.User.Email))
                         .ToListAsync();
 
-                    int successfullyProcessedTransactions = 0;
-
                     // FT: when we make an agreement with the partners that they update the categories, we will just send them an email, the update of your points failed, due to mismatched categories, please harmonize the categories and stop the execution manually.
                     // await _loyalsBusinessService.SyncDiscountCategories(); // FT: You don't need to sync here, we will just use passed name as category
 
                     List<string> partnerUserWhichDoesNotExistList = new List<string>();
-                    List<string> partnerUserWhichUpdateFailedList = new List<string>();
-                    List<string> partnerUserWhichUpdateSucceededList = new List<string>();
-                    List<string> partnerUserWhichWeAlreadyUpdatedForThisPeriodList = new List<string>();
+                    List<string> transactionWhichUpdateFailedList = new List<string>();
+                    List<string> transactionWhichUpdateSucceededList = new List<string>();
+                    List<string> transactionWhichWeAlreadyUpdatedForThisPeriodList = new List<string>();
 
                     foreach (ExternalTransactionDTO externalTransactionDTO in externalTransactionDTOList)
                     {
-                        if (_context.DbSet<Transaction>().Any(x => x.Code == externalTransactionDTO.Code))
+                        if (await _context.DbSet<Transaction>().AnyAsync(x => x.Store.Id == storeId && x.Code == externalTransactionDTO.Code))
                         {
-                            partnerUserWhichWeAlreadyUpdatedForThisPeriodList.Add(externalTransactionDTO.UserEmail); // TODO FT: This doesn't have sence, you should store transaction here, and put user email in the brackets, also then we should show the table of the transactions on the client.
+                            transactionWhichWeAlreadyUpdatedForThisPeriodList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail})"); // TODO FT: This doesn't have sence, you should store transaction here, and put user email in the brackets, also then we should show the table of the transactions on the client.
                             continue;
                         }
 
                         PartnerUser partnerUser = partnerUserList.Where(x => x.User.Email == externalTransactionDTO.UserEmail).SingleOrDefault();
 
-                        if (partnerUser == null)
+                        if (partnerUser == null && partnerUserWhichDoesNotExistList.Contains(externalTransactionDTO.UserEmail) == false)
                         {
                             partnerUserWhichDoesNotExistList.Add(externalTransactionDTO.UserEmail);
                             continue;
@@ -171,19 +161,21 @@ namespace Playerty.Loyals.Business.BackroundJobs
                             await _loyalsBusinessService.UpdatePointsForThePartnerUser(partnerUser, pointsFromTransaction);
                             await _loyalsBusinessService.SaveTransactionAndReturnDomainAsync(transactionDTO, false, false);
 
-                            partnerUserWhichUpdateSucceededList.Add(externalTransactionDTO.UserEmail);
-                            successfullyProcessedTransactions++;
-                        }
-                        catch (Exception)
+                            transactionWhichUpdateSucceededList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail})");
+                      }
+                        catch (Exception ex)
                         {
-                            partnerUserWhichUpdateFailedList.Add(externalTransactionDTO.UserEmail);
+                            if (ex is BusinessException)
+                                transactionWhichUpdateFailedList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail}): {ex.Message}");
+                            else
+                                transactionWhichUpdateFailedList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail})");
                         }
                     }
 
                     StoreUpdatePointsScheduledTask savedStoreUpdatePointsScheduledTask = new StoreUpdatePointsScheduledTask
                     {
                         TransactionsFrom = dateFrom,
-                        TransactionsTo = shouldStartedAtForSave,
+                        TransactionsTo = dateTo,
                         Store = store,
                         IsManual = manualDateFrom != null && manualDateTo != null,
                     };
@@ -196,19 +188,18 @@ namespace Playerty.Loyals.Business.BackroundJobs
                         store.Partner.Email,
                         "Uspešno izvršeno ažuriranje poena",
                         $$"""
-Interval u kom su obrađene transakcije: {{dateFrom.ToString("dd.MM.yyyy. HH:mm")}} - {{shouldStartedAtForSave.ToString("dd.MM.yyyy. HH:mm")}}. <br/>
+Interval u kom su obrađene transakcije: {{dateFrom.ToString("dd.MM.yyyy. HH:mm")}} - {{dateTo.ToString("dd.MM.yyyy. HH:mm")}}. <br/>
 <br/>
 Ukupan broj obrađenih transakcija: {{externalTransactionDTOList.Count}}. <br/>
 <br/>
-Ukupan broj uspešno obrađenih transakcija: {{successfullyProcessedTransactions}}. <br/>
+Uspešno obrađene transakcije ({{transactionWhichUpdateSucceededList.Count}}): <br/>
+    {{string.Join(",<br/>    ", transactionWhichUpdateSucceededList)}}
 <br/>
-Ukupan broj neuspešno obrađenih transakcija: {{externalTransactionDTOList.Count - successfullyProcessedTransactions}}. <br/>
+Neuspešno obrađene transakcije ({{transactionWhichUpdateFailedList.Count}}): <br/>
+    {{string.Join(",<br/>    ", transactionWhichUpdateFailedList)}}
 <br/>
-Korisnici kojima su uspešno ažurirani poeni ({{partnerUserWhichUpdateSucceededList.Count}}): <br/>
-    {{string.Join(",<br/>    ", partnerUserWhichUpdateSucceededList)}}
-<br/>
-Korisnici kojima nismo uspeli da ažuriramo poene, a postoje u 'loyalty program' sistemu ({{partnerUserWhichUpdateFailedList.Count}}): <br/>
-    {{string.Join(",<br/>    ", partnerUserWhichUpdateFailedList)}}
+Već obrađene transakcije u prosleđenom periodu ({{transactionWhichWeAlreadyUpdatedForThisPeriodList.Count}}): <br/>
+    {{string.Join(",<br/>    ", transactionWhichWeAlreadyUpdatedForThisPeriodList)}}
 <br/>
 Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty program' sistemu ({{partnerUserWhichDoesNotExistList.Count}}): <br/>
     {{string.Join(",<br/>    ", partnerUserWhichDoesNotExistList)}}
@@ -233,7 +224,7 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
                     await _emailingService.SendEmailAsync(
                         store.Partner.Email,
                         "Greška prilikom ažuriranja poena",
-                        "Došlo je do greške pri ažuriranju poena. Molimo Vas da pokušate ponovo. Ako se problem ponovi, kontaktirajte podršku."
+                        "Došlo je do greške prilikom ažuriranja poena. Molimo Vas da pokušate ponovo. Ako se problem ponovi, kontaktirajte podršku."
                     );
                 }
             }
