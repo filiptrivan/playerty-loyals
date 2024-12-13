@@ -1,0 +1,418 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Playerty Loyals API",
+      "version": "1.0.0",
+      "description": "
+      ### U dokumentaciji koristićemo skraćenice: \n
+      - **PL:** Playerty Loyals \n
+      - **PS:**  Poslovni sistem \n
+      - **PA:**  Poslovna aplikacija \n
+      ### Opis naziva: \n
+      - **Partner:** Pod partnerom se podrazumevaju različiti partneri koji koriste PL sistem npr. `Stridon Group DOO` \n
+      - **Poslovni sistem:** Pod poslovnim sistemima se smatraju npr. `Online - Prodavnica Alata`, `Maloprodaja - Stridon`, oba poslovna sistema pripadaju jednom partneru **Stridon Group DOO**, jedan partner može da ima **n poslovnih sistema**, poslovni sistem ne vezujemo za jedan fizički objekat (Maloprodaja Vojislava Ilića 141g), već za PA **(ReadyCMS, Wings...)**. \n
+      - **Poslovna aplikacija:** Pod poslovnom aplikacijom se smatraju `ReadyCMS`, `Wings`... \n
+      ",
+    },
+    "paths": {
+      "/api/PlayertyLoyals/GetTransactionList": {
+        "get": {
+          "summary": "Dohvatanje transakcija za zadati period",
+          "description": "
+          ### Objašnjenje transakcije: \n
+          Pod jednom transakcijom se smatra `račun`/`korpa`/`skup stavki računa`. \n
+          - **Primer u Online PA:** Npr. ako je korisnik ušao na sajt, kupio **dve Bosch bušilice** i stavio to u **jednu korpu (transakciju)**, platio je/poručio i izašao sa sajta. Nakon toga, setio se da je zaboravio da kupi burgiju, vratio se na sajt, napravio novu **korpu (transakciju)** i kupio burgiju. U primeru korisnik je napravio `dve transakcije`, sa ukupno `tri stavke transakcije`. \n
+          - **Primer u maloprodajnoj PA:** Npr. ako je korisnik ušao u radnju, kupio **dve Bosch bušilice** i stavio to na **jedan račun (transakciju)**, platio je i izašao iz radnje. Nakon toga, setio se da je zaboravio da kupi burgiju, vratio se u prodavnicu, napravio novi **račun (transakciju)** i kupio burgiju. U primeru korisnik je napravio `dve transakcije`, sa ukupno `tri stavke transakcije`. \n
+          
+          This endpoint returns a list of transactions made by users within a specified date range. Each transaction represents a set of purchased or returned products during a single purchase session. Transactions are categorized as either successful (completed purchases) or cancelled (returned products). The system adds or subtracts loyalty points based on whether the transaction is successful or cancelled.\n\n
+          ### Important Notes:\n\n- **IsCancelled:** When a transaction is a cancellation (for a returned product), the partner should send everything the same as for a regular transaction with `IsCancelled: false` but set `IsCancelled: true` to indicate the reversal. This is preferred over using negative prices.\n- Partners can choose to either send a transaction with `IsCancelled: true` or use negative prices for cancellations based on their preferred integration method.\n\n
+          ",
+          "parameters": [
+            {
+              "name": "dateFrom",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "description": "Datum od kog uzimamo transakcije."
+            },
+            {
+              "name": "dateTo",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "description": "Datum do kog uzimamo transakcije."
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Lista transakcija za zadati period.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "Code": {
+                          "type": "string",
+                          "description": "A unique identifier for the transaction."
+                        },
+                        "UserEmail": {
+                          "type": "string",
+                          "description": "The email address of the user who made the purchase."
+                        },
+                        "BoughtAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "The timestamp of when the transaction occurred."
+                        },
+                        "Price": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "Ukupna cena transakcije."
+                        },
+                        "TransactionItems": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "Product": {
+                                "type": "object",
+                                "properties": {
+                                  "Name": {
+                                    "type": "string",
+                                    "description": "Naziv proizvoda (npr. `Bosch burgija`)."
+                                  },
+                                  "Code": {
+                                    "type": "string",
+                                    "description": "Šifra proizvoda (npr. `GSB 18-2 RE`)."
+                                  },
+                                  "ImageUrl": {
+                                    "type": "string"
+                                  },
+                                  "CategoryName": {
+                                    "type": "string",
+                                    "description": "Naziv kategorije (npr. `Bosch`)."
+                                  },
+                                  "CategoryImageUrl": {
+                                    "type": "string"
+                                  },
+                                  "Price": {
+                                    "type": "number",
+                                    "format": "float",
+                                    "description": "Cena pojedinačnog proizvoda u transakciji (suma svih cena proizvoda u transakciji mora da bude jednaka ceni transakcije)."
+                                  }
+                                }
+                              },
+                              "Quantity": {
+                                "type": "number",
+                                "format": "int32",
+                                "description": "Broj komada proizvoda."
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Pogrešan zahtev.",
+              "content": {
+                "text/plain": {
+                  "examples": {
+                    "invalid_period": {
+                      "summary": "Period veći od godinu dana",
+                      "value": "Ne možete da zadate period veći od godinu dana."
+                    },
+                    "invalid_date_range": {
+                      "summary": "Nevažeći opseg datuma",
+                      "value": "dateFrom ne može da bude veći od dateTo."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/PlayertyLoyals/GetTransactionListForTheUser": {
+        "get": {
+          "summary": "Identična metoda kao GetTransactionList, samo za jednog korisnika.",
+          "parameters": [
+            {
+              "name": "userEmail",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "dateFrom",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            {
+              "name": "dateTo",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Lista transakcija za zadati period za zadatog korisnika.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "Code": {
+                          "type": "string",
+                          "description": "A unique identifier for the transaction."
+                        },
+                        "UserEmail": {
+                          "type": "string",
+                          "description": "The email address of the user who made the purchase."
+                        },
+                        "BoughtAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "description": "The timestamp of when the transaction occurred."
+                        },
+                        "Price": {
+                          "type": "number",
+                          "format": "float",
+                          "description": "Ukupna cena transakcije."
+                        },
+                        "TransactionItems": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "Product": {
+                                "type": "object",
+                                "properties": {
+                                  "Name": {
+                                    "type": "string",
+                                    "description": "Naziv proizvoda (npr. `Bosch burgija`)."
+                                  },
+                                  "Code": {
+                                    "type": "string",
+                                    "description": "Šifra proizvoda (npr. `GSB 18-2 RE`)."
+                                  },
+                                  "ImageUrl": {
+                                    "type": "string"
+                                  },
+                                  "CategoryName": {
+                                    "type": "string",
+                                    "description": "Naziv kategorije (npr. `Bosch`)."
+                                  },
+                                  "CategoryImageUrl": {
+                                    "type": "string"
+                                  },
+                                  "Price": {
+                                    "type": "number",
+                                    "format": "float",
+                                    "description": "Cena pojedinačnog proizvoda u transakciji (suma svih cena proizvoda u transakciji mora da bude jednaka ceni transakcije)."
+                                  }
+                                }
+                              },
+                              "Quantity": {
+                                "type": "number",
+                                "format": "int32",
+                                "description": "Broj komada proizvoda."
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Pogrešan zahtev.",
+              "content": {
+                "text/plain": {
+                  "examples": {
+                    "invalid_period": {
+                      "summary": "Period veći od godinu dana",
+                      "value": "Ne možete da zadate period veći od godinu dana."
+                    },
+                    "invalid_date_range": {
+                      "summary": "Nevažeći opseg datuma",
+                      "value": "dateFrom ne može da bude veći od dateTo."
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Korisnik za zadatu email adresu **nije pronađen** u sistemu."
+            }
+          }
+        }
+      },
+      "/api/PlayertyLoyals/SaveUser": {
+        "put": {
+          "summary": "Ubacivanje/ažuriranje korisnika",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalUserDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "204": {
+              "description": "Korisnik je uspešno sačuvan."
+            }
+          }
+        }
+      },
+      "/api/PlayertyLoyals/GetDiscountCategoryList": {
+        "get": {
+          "summary": "Retrieve discount categories",
+          "responses": {
+            "200": {
+              "description": "List of discount categories",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ExternalDiscountCategoryDTO"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/PlayertyLoyals/SaveTiers": {
+        "put": {
+          "summary": "Save or update tiers",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExternalTierDTO"
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "204": {
+              "description": "Tiers saved or updated successfully"
+            }
+          }
+        }
+      },
+      "/api/PlayertyLoyals/GetRecommendationProductList": {
+        "get": {
+          "summary": "Retrieve recommended products",
+          "responses": {
+            "200": {
+              "description": "List of recommended products",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/ExternalProductDTO"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "ExternalTransactionDTO": {
+          "type": "object",
+          "properties": {
+            "Code": { "type": "string" },
+            "UserEmail": { "type": "string" },
+            "BoughtAt": { "type": "string", "format": "date-time" },
+            "Price": { "type": "number", "format": "decimal" },
+            "Products": {
+              "type": "array",
+              "items": { "$ref": "#/components/schemas/ExternalProductDTO" }
+            }
+          }
+        },
+        "ExternalProductDTO": {
+          "type": "object",
+          "properties": {
+            "Name": { "type": "string" },
+            "ImageUrl": { "type": "string" },
+            "CategoryName": { "type": "string" },
+            "CategoryImageUrl": { "type": "string" },
+            "Price": { "type": "number", "format": "decimal" },
+            "Description": { "type": "string" },
+            "Code": { "type": "string" },
+            "LinkToWebsite": { "type": "string" }
+          }
+        },
+        "ExternalUserDTO": {
+          "type": "object",
+          "properties": {
+            "Email": { "type": "string" },
+            "Points": { "type": "integer" },
+            "TierCode": { "type": "string" }
+          }
+        },
+        "ExternalDiscountCategoryDTO": {
+          "type": "object",
+          "properties": {
+            "Name": { "type": "string" },
+            "Code": { "type": "string" },
+            "Discount": { "type": "number", "format": "decimal" }
+          }
+        },
+        "ExternalTierDTO": {
+          "type": "object",
+          "properties": {
+            "Code": { "type": "string" },
+            "Name": { "type": "string" },
+            "ExternalDiscountCategoryDTOList": {
+              "type": "array",
+              "items": { "$ref": "#/components/schemas/ExternalDiscountCategoryDTO" }
+            }
+          }
+        }
+      }
+    }
+  }
+  
