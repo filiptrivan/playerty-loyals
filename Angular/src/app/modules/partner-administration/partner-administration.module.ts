@@ -17,7 +17,7 @@ import { SegmentationDetailsComponent } from './pages/segmentations/segmentation
 import { SegmentationSelectComponent } from '../administration/partials/segmentation-select.component';
 import { UserProgressbarComponent } from "../../business/components/user-progressbar/user-progressbar.component";
 import { TranslocoDirective } from '@jsverse/transloco';
-import { StoreListComponent } from './pages/stores/store-list.component';
+import { StoreTableComponent } from './pages/stores/store-list.component';
 import { StoreDetailsComponent } from './pages/stores/store-details.component';
 
 const routes: Routes = [
@@ -55,7 +55,7 @@ const routes: Routes = [
     },
     {
         path: 'stores',
-        component: StoreListComponent,
+        component: StoreTableComponent,
     },
     {
         path: 'stores/:id',
@@ -89,7 +89,7 @@ const routes: Routes = [
         PartnerNotificationDetailsComponent,
         SegmentationListComponent,
         SegmentationDetailsComponent,
-        StoreListComponent,
+        StoreTableComponent,
         StoreDetailsComponent,
     ],
     providers:[]

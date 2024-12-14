@@ -2,6 +2,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { Component, OnInit } from '@angular/core';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { ApiService } from 'src/app/business/services/api/api.service';
+import { Segmentation } from 'src/app/business/entities/generated/business-entities.generated';
 
 @Component({
     selector: 'segmentation-list',
@@ -9,7 +10,7 @@ import { ApiService } from 'src/app/business/services/api/api.service';
     styles: []
 })
 export class SegmentationListComponent implements OnInit {
-    cols: Column[];
+    cols: Column<Segmentation>[];
 
     loadSegmentationTableDataObservableMethod = this.apiService.loadSegmentationTableData;
     exportSegmentationTableDataToExcelObservableMethod = this.apiService.exportSegmentationTableDataToExcel;

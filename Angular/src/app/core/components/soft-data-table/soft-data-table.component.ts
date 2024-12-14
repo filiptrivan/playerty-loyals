@@ -477,15 +477,34 @@ export class SoftDataTableComponent implements OnInit {
 }
 
 export class Action {
-  name: string;
-  field: string;
+  name?: string;
+  field?: string;
   icon?: string;
   onClick?: () => void;
+
+  constructor(
+    {
+      name,
+      field,
+      icon,
+      onClick,
+    }:{
+      name?: string;
+      field?: string;
+      icon?: string;
+      onClick?: () => void;
+    } = {}
+    ) {
+      this.name = name;
+      this.field = field;
+      this.icon = icon;
+      this.onClick = onClick;
+  }
 }
 
-export class Column {
+export class Column<T = any> {
   name: string;
-  field?: string;
+  field?: string & keyof T;
   filterField?: string; // FT: Made specificaly for multiautocomplete, maybe for something more in the future
   filterType?: 'text' | 'date' | 'multiselect' | 'boolean' | 'numeric' | 'dropdown';
   filterPlaceholder?: string;

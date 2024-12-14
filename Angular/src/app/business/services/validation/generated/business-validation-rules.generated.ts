@@ -16,14 +16,13 @@ export class ValidatorBusinessService {
 
     getValidator(formControl: SoftFormControl, className: string): SoftValidatorFn {
         switch(formControl.label + className){
-        case 'nameGender':
-            return this.nameGenderValidator(formControl);
+        case 'namePartnerPermission':
+            return this.namePartnerPermissionValidator(formControl);
+        case 'descriptionPartnerPermission':
+            return this.descriptionPartnerPermissionValidator(formControl);
+        case 'codePartnerPermission':
+            return this.codePartnerPermissionValidator(formControl);
 
-
-        case 'nameExternalDiscountCategory':
-            return this.nameExternalDiscountCategoryValidator(formControl);
-        case 'codeExternalDiscountCategory':
-            return this.codeExternalDiscountCategoryValidator(formControl);
 
         case 'nameSegmentation':
             return this.nameSegmentationValidator(formControl);
@@ -34,32 +33,6 @@ export class ValidatorBusinessService {
         case 'partnerIdSegmentation':
             return this.partnerIdSegmentationValidator(formControl);
 
-        case 'discountStoreTierDiscountCategory':
-            return this.discountStoreTierDiscountCategoryValidator(formControl);
-
-
-
-        case 'nameStore':
-            return this.nameStoreValidator(formControl);
-        case 'updatePointsIntervalStore':
-            return this.updatePointsIntervalStoreValidator(formControl);
-        case 'getTransactionsEndpointStore':
-            return this.getTransactionsEndpointStoreValidator(formControl);
-        case 'getDiscountCategoriesEndpointStore':
-            return this.getDiscountCategoriesEndpointStoreValidator(formControl);
-        case 'createUserEndpointStore':
-            return this.createUserEndpointStoreValidator(formControl);
-        case 'updateUserGroupEndpointStore':
-            return this.updateUserGroupEndpointStoreValidator(formControl);
-        case 'partnerIdStore':
-            return this.partnerIdStoreValidator(formControl);
-
-        case 'nameDiscountCategory':
-            return this.nameDiscountCategoryValidator(formControl);
-        case 'codeDiscountCategory':
-            return this.codeDiscountCategoryValidator(formControl);
-        case 'storeIdDiscountCategory':
-            return this.storeIdDiscountCategoryValidator(formControl);
 
         case 'nameTier':
             return this.nameTierValidator(formControl);
@@ -72,12 +45,12 @@ export class ValidatorBusinessService {
         case 'partnerIdTier':
             return this.partnerIdTierValidator(formControl);
 
-        case 'namePartnerRole':
-            return this.namePartnerRoleValidator(formControl);
-        case 'descriptionPartnerRole':
-            return this.descriptionPartnerRoleValidator(formControl);
-        case 'partnerIdPartnerRole':
-            return this.partnerIdPartnerRoleValidator(formControl);
+        case 'nameSegmentationItem':
+            return this.nameSegmentationItemValidator(formControl);
+        case 'orderNumberSegmentationItem':
+            return this.orderNumberSegmentationItemValidator(formControl);
+        case 'segmentationIdSegmentationItem':
+            return this.segmentationIdSegmentationItemValidator(formControl);
 
         case 'orderNumberStoreTier':
             return this.orderNumberStoreTierValidator(formControl);
@@ -86,6 +59,9 @@ export class ValidatorBusinessService {
         case 'tierIdStoreTier':
             return this.tierIdStoreTierValidator(formControl);
 
+
+
+
         case 'titleNotification':
             return this.titleNotificationValidator(formControl);
         case 'descriptionNotification':
@@ -93,61 +69,9 @@ export class ValidatorBusinessService {
         case 'emailBodyNotification':
             return this.emailBodyNotificationValidator(formControl);
 
-        case 'partnerIdPartnerNotification':
-            return this.partnerIdPartnerNotificationValidator(formControl);
-        case 'titlePartnerNotification':
-            return this.titlePartnerNotificationValidator(formControl);
-        case 'descriptionPartnerNotification':
-            return this.descriptionPartnerNotificationValidator(formControl);
-        case 'emailBodyPartnerNotification':
-            return this.emailBodyPartnerNotificationValidator(formControl);
 
-        case 'emailUserExtended':
-            return this.emailUserExtendedValidator(formControl);
-        case 'passwordUserExtended':
-            return this.passwordUserExtendedValidator(formControl);
-        case 'hasLoggedInWithExternalProviderUserExtended':
-            return this.hasLoggedInWithExternalProviderUserExtendedValidator(formControl);
-        case 'numberOfFailedAttemptsInARowUserExtended':
-            return this.numberOfFailedAttemptsInARowUserExtendedValidator(formControl);
-
-        case 'pointsPartnerUser':
-            return this.pointsPartnerUserValidator(formControl);
-        case 'partnerIdPartnerUser':
-            return this.partnerIdPartnerUserValidator(formControl);
-        case 'userIdPartnerUser':
-            return this.userIdPartnerUserValidator(formControl);
-
-
-        case 'nameSegmentationItem':
-            return this.nameSegmentationItemValidator(formControl);
-        case 'orderNumberSegmentationItem':
-            return this.orderNumberSegmentationItemValidator(formControl);
-        case 'segmentationIdSegmentationItem':
-            return this.segmentationIdSegmentationItemValidator(formControl);
-
-
-
-        case 'updatePointsIntervalStoreUpdatePointsDataBody':
-            return this.updatePointsIntervalStoreUpdatePointsDataBodyValidator(formControl);
-
-        case 'userEmailExternalTransaction':
-            return this.userEmailExternalTransactionValidator(formControl);
-        case 'codeExternalTransaction':
-            return this.codeExternalTransactionValidator(formControl);
-        case 'productNameExternalTransaction':
-            return this.productNameExternalTransactionValidator(formControl);
-        case 'productImageUrlExternalTransaction':
-            return this.productImageUrlExternalTransactionValidator(formControl);
-        case 'productCategoryNameExternalTransaction':
-            return this.productCategoryNameExternalTransactionValidator(formControl);
-        case 'productCategoryImageUrlExternalTransaction':
-            return this.productCategoryImageUrlExternalTransactionValidator(formControl);
-        case 'priceExternalTransaction':
-            return this.priceExternalTransactionValidator(formControl);
-        case 'boughtAtExternalTransaction':
-            return this.boughtAtExternalTransactionValidator(formControl);
-
+        case 'discountStoreTierDiscountCategory':
+            return this.discountStoreTierDiscountCategoryValidator(formControl);
 
         case 'productNameTransaction':
             return this.productNameTransactionValidator(formControl);
@@ -170,6 +94,43 @@ export class ValidatorBusinessService {
         case 'storeIdTransaction':
             return this.storeIdTransactionValidator(formControl);
 
+        case 'nameStore':
+            return this.nameStoreValidator(formControl);
+        case 'updatePointsIntervalStore':
+            return this.updatePointsIntervalStoreValidator(formControl);
+        case 'getTransactionsEndpointStore':
+            return this.getTransactionsEndpointStoreValidator(formControl);
+        case 'getDiscountCategoriesEndpointStore':
+            return this.getDiscountCategoriesEndpointStoreValidator(formControl);
+        case 'createUserEndpointStore':
+            return this.createUserEndpointStoreValidator(formControl);
+        case 'updateUserGroupEndpointStore':
+            return this.updateUserGroupEndpointStoreValidator(formControl);
+        case 'partnerIdStore':
+            return this.partnerIdStoreValidator(formControl);
+
+        case 'nameExternalDiscountCategory':
+            return this.nameExternalDiscountCategoryValidator(formControl);
+        case 'codeExternalDiscountCategory':
+            return this.codeExternalDiscountCategoryValidator(formControl);
+
+
+
+        case 'emailUserExtended':
+            return this.emailUserExtendedValidator(formControl);
+        case 'passwordUserExtended':
+            return this.passwordUserExtendedValidator(formControl);
+        case 'hasLoggedInWithExternalProviderUserExtended':
+            return this.hasLoggedInWithExternalProviderUserExtendedValidator(formControl);
+        case 'numberOfFailedAttemptsInARowUserExtended':
+            return this.numberOfFailedAttemptsInARowUserExtendedValidator(formControl);
+
+        case 'nameDiscountCategory':
+            return this.nameDiscountCategoryValidator(formControl);
+        case 'codeDiscountCategory':
+            return this.codeDiscountCategoryValidator(formControl);
+        case 'storeIdDiscountCategory':
+            return this.storeIdDiscountCategoryValidator(formControl);
 
         case 'transactionsFromStoreUpdatePointsScheduledTask':
             return this.transactionsFromStoreUpdatePointsScheduledTaskValidator(formControl);
@@ -181,18 +142,56 @@ export class ValidatorBusinessService {
             return this.storeIdStoreUpdatePointsScheduledTaskValidator(formControl);
 
 
+        case 'userEmailExternalTransaction':
+            return this.userEmailExternalTransactionValidator(formControl);
+        case 'codeExternalTransaction':
+            return this.codeExternalTransactionValidator(formControl);
+        case 'productNameExternalTransaction':
+            return this.productNameExternalTransactionValidator(formControl);
+        case 'productImageUrlExternalTransaction':
+            return this.productImageUrlExternalTransactionValidator(formControl);
+        case 'productCategoryNameExternalTransaction':
+            return this.productCategoryNameExternalTransactionValidator(formControl);
+        case 'productCategoryImageUrlExternalTransaction':
+            return this.productCategoryImageUrlExternalTransactionValidator(formControl);
+        case 'priceExternalTransaction':
+            return this.priceExternalTransactionValidator(formControl);
+        case 'boughtAtExternalTransaction':
+            return this.boughtAtExternalTransactionValidator(formControl);
 
 
+        case 'namePartnerRole':
+            return this.namePartnerRoleValidator(formControl);
+        case 'descriptionPartnerRole':
+            return this.descriptionPartnerRoleValidator(formControl);
+        case 'partnerIdPartnerRole':
+            return this.partnerIdPartnerRoleValidator(formControl);
 
 
+        case 'updatePointsIntervalStoreUpdatePointsDataBody':
+            return this.updatePointsIntervalStoreUpdatePointsDataBodyValidator(formControl);
 
 
-        case 'namePartnerPermission':
-            return this.namePartnerPermissionValidator(formControl);
-        case 'descriptionPartnerPermission':
-            return this.descriptionPartnerPermissionValidator(formControl);
-        case 'codePartnerPermission':
-            return this.codePartnerPermissionValidator(formControl);
+        case 'nameGender':
+            return this.nameGenderValidator(formControl);
+
+
+        case 'partnerIdPartnerNotification':
+            return this.partnerIdPartnerNotificationValidator(formControl);
+        case 'titlePartnerNotification':
+            return this.titlePartnerNotificationValidator(formControl);
+        case 'descriptionPartnerNotification':
+            return this.descriptionPartnerNotificationValidator(formControl);
+        case 'emailBodyPartnerNotification':
+            return this.emailBodyPartnerNotificationValidator(formControl);
+
+        case 'pointsPartnerUser':
+            return this.pointsPartnerUserValidator(formControl);
+        case 'partnerIdPartnerUser':
+            return this.partnerIdPartnerUserValidator(formControl);
+        case 'userIdPartnerUser':
+            return this.userIdPartnerUserValidator(formControl);
+
 
         case 'namePartner':
             return this.namePartnerValidator(formControl);
@@ -210,19 +209,20 @@ export class ValidatorBusinessService {
             return this.pointsMultiplierPartnerValidator(formControl);
 
 
+
             default:
                 return null;
         }
     }
 
 
-    nameGenderValidator(control: SoftFormControl): SoftValidatorFn {
+    namePartnerPermissionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
-        const max = 70;
+        const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
             const nameValid = notEmptyRule && stringLengthRule;
@@ -233,26 +233,23 @@ export class ValidatorBusinessService {
         return validator;
     }
 
-
-
-    nameExternalDiscountCategoryValidator(control: SoftFormControl): SoftValidatorFn {
+    descriptionPartnerPermissionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
-        const max = 255;
+            const min = 1;
+        const max = 400;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
-            const nameValid = notEmptyRule && stringLengthRule;
+            const descriptionValid = stringLengthRule;
 
-            return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+            return descriptionValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        validator.hasNotEmptyRule = true;
+        
         return validator;
     }
 
-    codeExternalDiscountCategoryValidator(control: SoftFormControl): SoftValidatorFn {
+    codePartnerPermissionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -268,6 +265,7 @@ export class ValidatorBusinessService {
         validator.hasNotEmptyRule = true;
         return validator;
     }
+
 
 
     nameSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
@@ -333,186 +331,6 @@ export class ValidatorBusinessService {
         return validator;
     }
 
-
-    discountStoreTierDiscountCategoryValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const max = 100;
-        const numberMaxRangeRule = (value <= max) || (typeof value === 'undefined' || value === null || value === '');
-        const min = 0;
-        const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
-
-            const discountValid = notEmptyRule && numberMaxRangeRule && numberMinRangeRule;
-
-            return discountValid ? null : { _ : this.translocoService.translate('NotEmptyNumberRangeMaxNumberRangeMin', {max, min}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-
-
-
-    nameStoreValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
-        const max = 255;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const nameValid = notEmptyRule && stringLengthRule;
-
-            return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    updatePointsIntervalStoreValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const min = 1;
-        const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
-
-            const updatePointsIntervalValid = numberMinRangeRule;
-
-            return updatePointsIntervalValid ? null : { _ : this.translocoService.translate('NumberRangeMin', {min}) };
-        };
-        
-        return validator;
-    }
-
-    getTransactionsEndpointStoreValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const min = 1;
-        const max = 1000;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const getTransactionsEndpointValid = stringLengthRule;
-
-            return getTransactionsEndpointValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
-        };
-        
-        return validator;
-    }
-
-    getDiscountCategoriesEndpointStoreValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const min = 1;
-        const max = 1000;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const getDiscountCategoriesEndpointValid = stringLengthRule;
-
-            return getDiscountCategoriesEndpointValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
-        };
-        
-        return validator;
-    }
-
-    createUserEndpointStoreValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const min = 1;
-        const max = 1000;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const createUserEndpointValid = stringLengthRule;
-
-            return createUserEndpointValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
-        };
-        
-        return validator;
-    }
-
-    updateUserGroupEndpointStoreValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const min = 1;
-        const max = 1000;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const updateUserGroupEndpointValid = stringLengthRule;
-
-            return updateUserGroupEndpointValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
-        };
-        
-        return validator;
-    }
-
-    partnerIdStoreValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const partnerIdValid = notEmptyRule;
-
-            return partnerIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-
-    nameDiscountCategoryValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
-        const max = 255;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const nameValid = notEmptyRule && stringLengthRule;
-
-            return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    codeDiscountCategoryValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
-        const max = 100;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const codeValid = notEmptyRule && stringLengthRule;
-
-            return codeValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    storeIdDiscountCategoryValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const storeIdValid = notEmptyRule;
-
-            return storeIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
 
 
     nameTierValidator(control: SoftFormControl): SoftValidatorFn {
@@ -595,13 +413,13 @@ export class ValidatorBusinessService {
     }
 
 
-    namePartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
+    nameSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
-        const max = 255;
+        const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
             const nameValid = notEmptyRule && stringLengthRule;
@@ -612,31 +430,29 @@ export class ValidatorBusinessService {
         return validator;
     }
 
-    descriptionPartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const min = 1;
-        const max = 400;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const descriptionValid = stringLengthRule;
-
-            return descriptionValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
-        };
-        
-        return validator;
-    }
-
-    partnerIdPartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
+    orderNumberSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
-            const partnerIdValid = notEmptyRule;
+            const orderNumberValid = notEmptyRule;
 
-            return partnerIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+            return orderNumberValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    segmentationIdSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const segmentationIdValid = notEmptyRule;
+
+            return segmentationIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
         return validator;
@@ -684,6 +500,9 @@ export class ValidatorBusinessService {
         validator.hasNotEmptyRule = true;
         return validator;
     }
+
+
+
 
 
     titleNotificationValidator(control: SoftFormControl): SoftValidatorFn {
@@ -737,375 +556,24 @@ export class ValidatorBusinessService {
     }
 
 
-    partnerIdPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
+
+    discountStoreTierDiscountCategoryValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const partnerIdValid = notEmptyRule;
-
-            return partnerIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    titlePartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
         const max = 100;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const titleValid = notEmptyRule && stringLengthRule;
-
-            return titleValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    descriptionPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
-        const max = 400;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const descriptionValid = notEmptyRule && stringLengthRule;
-
-            return descriptionValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    emailBodyPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const min = 1;
-        const max = 1000;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const emailBodyValid = stringLengthRule;
-
-            return emailBodyValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
-        };
-        
-        return validator;
-    }
-
-
-    emailUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 5;
-        const max = 70;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
-            const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
-
-            return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    passwordUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const min = 40;
-        const max = 80;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const passwordValid = stringLengthRule;
-
-            return passwordValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
-        };
-        
-        return validator;
-    }
-
-    hasLoggedInWithExternalProviderUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const hasLoggedInWithExternalProviderValid = notEmptyRule;
-
-            return hasLoggedInWithExternalProviderValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    numberOfFailedAttemptsInARowUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const numberOfFailedAttemptsInARowValid = notEmptyRule;
-
-            return numberOfFailedAttemptsInARowValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-
-    pointsPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const pointsValid = notEmptyRule;
-
-            return pointsValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    partnerIdPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const partnerIdValid = notEmptyRule;
-
-            return partnerIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    userIdPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const userIdValid = notEmptyRule;
-
-            return userIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-
-
-    nameSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
-        const max = 100;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const nameValid = notEmptyRule && stringLengthRule;
-
-            return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    orderNumberSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const orderNumberValid = notEmptyRule;
-
-            return orderNumberValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    segmentationIdSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const segmentationIdValid = notEmptyRule;
-
-            return segmentationIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-
-
-
-    updatePointsIntervalStoreUpdatePointsDataBodyValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const min = 1;
+        const numberMaxRangeRule = (value <= max) || (typeof value === 'undefined' || value === null || value === '');
+        const min = 0;
         const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
 
-            const updatePointsIntervalValid = numberMinRangeRule;
+            const discountValid = notEmptyRule && numberMaxRangeRule && numberMinRangeRule;
 
-            return updatePointsIntervalValid ? null : { _ : this.translocoService.translate('NumberRangeMin', {min}) };
-        };
-        
-        return validator;
-    }
-
-
-    userEmailExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 5;
-        const max = 70;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
-            const userEmailValid = notEmptyRule && stringLengthRule && emailAddressRule;
-
-            return userEmailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
+            return discountValid ? null : { _ : this.translocoService.translate('NotEmptyNumberRangeMaxNumberRangeMin', {max, min}) };
         };
         validator.hasNotEmptyRule = true;
         return validator;
     }
-
-    codeExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
-        const max = 20;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const codeValid = notEmptyRule && stringLengthRule;
-
-            return codeValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    productNameExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
-        const max = 500;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const productNameValid = notEmptyRule && stringLengthRule;
-
-            return productNameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    productImageUrlExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const min = 1;
-        const max = 1000;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const productImageUrlValid = stringLengthRule;
-
-            return productImageUrlValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
-        };
-        
-        return validator;
-    }
-
-    productCategoryNameExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
-        const max = 500;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const productCategoryNameValid = notEmptyRule && stringLengthRule;
-
-            return productCategoryNameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    productCategoryImageUrlExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const min = 1;
-        const max = 1000;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const productCategoryImageUrlValid = stringLengthRule;
-
-            return productCategoryImageUrlValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
-        };
-        
-        return validator;
-    }
-
-    priceExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const precision = 16;
-        const scale = 2;
-        const ignoreTrailingZeros = false;
-        const precisionScaleRule = validatePrecisionScale(value, precision, scale, ignoreTrailingZeros) || (typeof value === 'undefined' || value === null || value === '');
-
-            const priceValid = notEmptyRule && precisionScaleRule;
-
-            return priceValid ? null : { _ : this.translocoService.translate('NotEmptyPrecisionScale', {precision, scale}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    boughtAtExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const boughtAtValid = notEmptyRule;
-
-            return boughtAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
 
 
     productNameTransactionValidator(control: SoftFormControl): SoftValidatorFn {
@@ -1266,6 +734,265 @@ export class ValidatorBusinessService {
     }
 
 
+    nameStoreValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 255;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const nameValid = notEmptyRule && stringLengthRule;
+
+            return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    updatePointsIntervalStoreValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
+
+            const updatePointsIntervalValid = numberMinRangeRule;
+
+            return updatePointsIntervalValid ? null : { _ : this.translocoService.translate('NumberRangeMin', {min}) };
+        };
+        
+        return validator;
+    }
+
+    getTransactionsEndpointStoreValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const max = 1000;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const getTransactionsEndpointValid = stringLengthRule;
+
+            return getTransactionsEndpointValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+    }
+
+    getDiscountCategoriesEndpointStoreValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const max = 1000;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const getDiscountCategoriesEndpointValid = stringLengthRule;
+
+            return getDiscountCategoriesEndpointValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+    }
+
+    createUserEndpointStoreValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const max = 1000;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const createUserEndpointValid = stringLengthRule;
+
+            return createUserEndpointValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+    }
+
+    updateUserGroupEndpointStoreValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const max = 1000;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const updateUserGroupEndpointValid = stringLengthRule;
+
+            return updateUserGroupEndpointValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+    }
+
+    partnerIdStoreValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const partnerIdValid = notEmptyRule;
+
+            return partnerIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+
+    nameExternalDiscountCategoryValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 255;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const nameValid = notEmptyRule && stringLengthRule;
+
+            return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    codeExternalDiscountCategoryValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const codeValid = notEmptyRule && stringLengthRule;
+
+            return codeValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+
+
+
+    emailUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 5;
+        const max = 70;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+            const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
+
+            return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    passwordUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 40;
+        const max = 80;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const passwordValid = stringLengthRule;
+
+            return passwordValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+    }
+
+    hasLoggedInWithExternalProviderUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const hasLoggedInWithExternalProviderValid = notEmptyRule;
+
+            return hasLoggedInWithExternalProviderValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    numberOfFailedAttemptsInARowUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const numberOfFailedAttemptsInARowValid = notEmptyRule;
+
+            return numberOfFailedAttemptsInARowValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+
+    nameDiscountCategoryValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 255;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const nameValid = notEmptyRule && stringLengthRule;
+
+            return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    codeDiscountCategoryValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const codeValid = notEmptyRule && stringLengthRule;
+
+            return codeValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    storeIdDiscountCategoryValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const storeIdValid = notEmptyRule;
+
+            return storeIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
 
     transactionsFromStoreUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
@@ -1325,19 +1052,148 @@ export class ValidatorBusinessService {
 
 
 
+    userEmailExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 5;
+        const max = 70;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
+            const userEmailValid = notEmptyRule && stringLengthRule && emailAddressRule;
 
+            return userEmailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
 
-
-
-    namePartnerPermissionValidator(control: SoftFormControl): SoftValidatorFn {
+    codeExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
-        const max = 100;
+        const max = 20;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const codeValid = notEmptyRule && stringLengthRule;
+
+            return codeValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    productNameExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 500;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const productNameValid = notEmptyRule && stringLengthRule;
+
+            return productNameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    productImageUrlExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const max = 1000;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const productImageUrlValid = stringLengthRule;
+
+            return productImageUrlValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+    }
+
+    productCategoryNameExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 500;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const productCategoryNameValid = notEmptyRule && stringLengthRule;
+
+            return productCategoryNameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    productCategoryImageUrlExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const max = 1000;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const productCategoryImageUrlValid = stringLengthRule;
+
+            return productCategoryImageUrlValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+    }
+
+    priceExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const precision = 16;
+        const scale = 2;
+        const ignoreTrailingZeros = false;
+        const precisionScaleRule = validatePrecisionScale(value, precision, scale, ignoreTrailingZeros) || (typeof value === 'undefined' || value === null || value === '');
+
+            const priceValid = notEmptyRule && precisionScaleRule;
+
+            return priceValid ? null : { _ : this.translocoService.translate('NotEmptyPrecisionScale', {precision, scale}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    boughtAtExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const boughtAtValid = notEmptyRule;
+
+            return boughtAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+
+
+    namePartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 255;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
             const nameValid = notEmptyRule && stringLengthRule;
@@ -1348,7 +1204,7 @@ export class ValidatorBusinessService {
         return validator;
     }
 
-    descriptionPartnerPermissionValidator(control: SoftFormControl): SoftValidatorFn {
+    descriptionPartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1364,7 +1220,73 @@ export class ValidatorBusinessService {
         return validator;
     }
 
-    codePartnerPermissionValidator(control: SoftFormControl): SoftValidatorFn {
+    partnerIdPartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const partnerIdValid = notEmptyRule;
+
+            return partnerIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+
+
+    updatePointsIntervalStoreUpdatePointsDataBodyValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
+
+            const updatePointsIntervalValid = numberMinRangeRule;
+
+            return updatePointsIntervalValid ? null : { _ : this.translocoService.translate('NumberRangeMin', {min}) };
+        };
+        
+        return validator;
+    }
+
+
+
+    nameGenderValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 70;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const nameValid = notEmptyRule && stringLengthRule;
+
+            return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+
+
+    partnerIdPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const partnerIdValid = notEmptyRule;
+
+            return partnerIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    titlePartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1373,13 +1295,90 @@ export class ValidatorBusinessService {
         const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
-            const codeValid = notEmptyRule && stringLengthRule;
+            const titleValid = notEmptyRule && stringLengthRule;
 
-            return codeValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+            return titleValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
         return validator;
     }
+
+    descriptionPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 400;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const descriptionValid = notEmptyRule && stringLengthRule;
+
+            return descriptionValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    emailBodyPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const max = 1000;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const emailBodyValid = stringLengthRule;
+
+            return emailBodyValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+    }
+
+
+    pointsPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const pointsValid = notEmptyRule;
+
+            return pointsValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    partnerIdPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const partnerIdValid = notEmptyRule;
+
+            return partnerIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    userIdPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const userIdValid = notEmptyRule;
+
+            return userIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
 
 
     namePartnerValidator(control: SoftFormControl): SoftValidatorFn {
@@ -1498,6 +1497,7 @@ export class ValidatorBusinessService {
         validator.hasNotEmptyRule = true;
         return validator;
     }
+
 
 
 
