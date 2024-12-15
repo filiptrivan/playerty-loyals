@@ -15,6 +15,7 @@ export class PanelHeaderComponent implements OnInit {
   @Input() title: string;
   @Input() bigTitle: boolean;
   @Input() index: number;
+  @Input() tabs: SoftTab[];
 
   constructor(
     private translocoService: TranslocoService
@@ -24,4 +25,40 @@ export class PanelHeaderComponent implements OnInit {
     if (this.title == null)
       this.title = this.translocoService.translate('Details')
   }
+
+  setTabIsSelected(tab: SoftTab){
+    this.tabs.forEach(t => {
+      t.isSelected = false;
+    });
+
+    tab.isSelected = true;
+  }
+}
+
+export class SoftTab
+{
+    label?: string;
+    value?: number;
+    icon?: string;
+    isSelected?: boolean;
+  
+    constructor(
+    {
+        label,
+        value,
+        icon,
+        isSelected,
+    }:{
+        label?: string;
+        value?: number;
+        icon?: string;
+        isSelected?: boolean;
+    } = {}
+    ) {
+        this.label = label;
+        this.value = value;
+        this.icon = icon;
+        this.isSelected = isSelected;
+    }
+
 }

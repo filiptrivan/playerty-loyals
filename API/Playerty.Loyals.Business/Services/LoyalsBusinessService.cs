@@ -1153,6 +1153,11 @@ namespace Playerty.Loyals.Services
         /// </summary>
         public async Task UpdatePointsAsync(long storeId, int storeVersion, DateTime manualDateFrom, DateTime manualDateTo)
         {
+            DateTime now = DateTime.Now;
+
+            if (manualDateTo >= now)
+                throw new BusinessException("Datum do kog želite da ažurirate poene ne sme biti veći od sadašnjeg trenutka.");
+
             if (manualDateTo <= manualDateFrom)
                 throw new HackerException($"Store: {storeId}. Can not pass greater {nameof(manualDateTo)} then {nameof(manualDateFrom)} in manually started points update.");
 

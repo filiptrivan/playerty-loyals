@@ -46,9 +46,7 @@ export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit
     }
          
     override ngOnInit() {
-        this.controllerName = 'Segmentation';
-        this.saveMethodName = 'SaveSegmentation';
-        this.detailsTitle = this.translocoService.translate('Segmentation');
+        this.saveObservableMethod = this.apiService.saveSegmentation;
 
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];

@@ -146,6 +146,10 @@
                   "invalid_date_range": {
                     "summary": "Nevažeći opseg datuma",
                     "value": "dateFrom ne može da bude veći od dateTo."
+                  },
+                  "invalid_date_to": {
+                    "summary": "Nevažeći datum 'do'",
+                    "value": "Datum do kog želite da ažurirate poene ne sme biti veći od sadašnjeg trenutka."
                   }
                 }
               }
@@ -276,6 +280,10 @@
                   "invalid_date_range": {
                     "summary": "Nevažeći opseg datuma",
                     "value": "dateFrom ne može da bude veći od dateTo."
+                  },
+                  "invalid_date_to": {
+                    "summary": "Nevažeći datum 'do'",
+                    "value": "Datum do kog želite da ažurirate poene ne sme biti veći od sadašnjeg trenutka."
                   }
                 }
               }

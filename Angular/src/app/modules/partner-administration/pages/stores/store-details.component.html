@@ -1,6 +1,6 @@
 <ng-container *transloco="let t">
     @defer (when storeFormGroup != null) {
-        <soft-card [title]="detailsTitle" icon="pi pi-hashtag">
+        <soft-card [title]="t('Store')" icon="pi pi-hashtag">
             <soft-panel [isFirstMultiplePanel]="this.modelId > 0">
                 <panel-header></panel-header>
     
@@ -47,7 +47,6 @@
     
                 <panel-footer>
                     <p-button (onClick)="onSaveStoreUpdatePointsData()" [label]="t('Save')" icon="pi pi-save"></p-button>
-                    <!-- savedStoreUpdatePointsStartDate != null && savedStoreUpdatePointsInterval != null && savedStoreGetTransactionsEndpoint != null &&  -->
                     <p-button *ngIf="savedStoreUpdatePointsScheduledTaskIsPaused === false" 
                     (onClick)="onSaveStoreUpdatePointsData()" [label]="t('PauseUpdatePointsScheduledTask')" icon="pi pi-pause" severity="warning"></p-button>
                     <p-button *ngIf="savedStoreUpdatePointsScheduledTaskIsPaused === true" 
@@ -55,6 +54,27 @@
                 </panel-footer>
 
             </soft-panel>
+
+            <!-- <soft-panel *ngIf="this.modelId > 0" [isMiddleMultiplePanel]="true">
+                <panel-header [title]="t('StoreUpdatePointsData')" icon="pi pi-calendar-clock" [tabs]="tabs"></panel-header>
+    
+                <panel-body *ngIf="selectedTab(tabs) === 1">
+                    HELLO 1
+                </panel-body>
+
+                <panel-footer *ngIf="selectedTab(tabs) === 1">
+                    FOOTER 1
+                </panel-footer>
+
+                <panel-body *ngIf="selectedTab(tabs) === 2">
+                    HELLO 2
+                </panel-body>
+
+                <panel-footer *ngIf="selectedTab(tabs) === 2">
+                    FOOTER 2
+                </panel-footer>
+
+            </soft-panel> -->
 
             <soft-panel *ngIf="this.modelId > 0" [isLastMultiplePanel]="true">
                 <panel-header [title]="t('SuccessfullyDoneStoreUpdatePointsScheduledTaskList')" icon="pi pi-clock"></panel-header>

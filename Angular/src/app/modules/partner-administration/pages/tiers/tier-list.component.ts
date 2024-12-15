@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { MenuItem } from 'primeng/api';
 import { DropdownChangeEvent } from 'primeng/dropdown';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { DiscountCategory, StoreTier, StoreTierDiscountCategory, Tier, TierSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
@@ -22,6 +22,8 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class TierListComponent extends BaseFormCopy implements OnInit {
+    override saveObservableMethod = this.apiService.saveTier; 
+
     // Tier
     tierModel: Tier = new Tier();
     tierDTOListSaveBodyName: string = nameof<TierSaveBody>('tierDTOList');
@@ -65,9 +67,6 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         }
          
     override ngOnInit() {
-        this.controllerName = 'Tier';
-        this.detailsTitle = this.translocoService.translate('TierList');
-
         this.storeTierDiscountCategoryCols = [
             {name: this.translocoService.translate('Name'), filterType: 'text', field: 'discountCategoryDisplayName'},
             {name: this.translocoService.translate('Discount'), filterType: 'numeric', field: 'discount', showMatchModes: true, editable: true},

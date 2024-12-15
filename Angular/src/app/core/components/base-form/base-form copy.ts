@@ -18,6 +18,9 @@ import { TranslocoService } from '@jsverse/transloco';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 import { BaseEntity } from '../../entities/base-entity';
+import { Observable } from 'rxjs';
+import { SoftTab } from '../soft-panels/panel-header/panel-header.component';
+import { SoftGlobal } from '../../soft-global';
 
 @Component({
   selector: 'base-form',
@@ -31,8 +34,7 @@ export class BaseFormCopy implements OnInit {
   modelId: number;
   detailsTitle: string;
   invalidForm: boolean = false; // FT: We are using this only if we manualy add some form field on the UI, like multiautocomplete, autocomplete etc...
-  controllerName: string;
-  saveMethodName: string;
+  saveObservableMethod: (saveBody: any) => Observable<any>;
 
   private modelDiffer: KeyValueDiffer<string, any>;
 
@@ -135,9 +137,10 @@ export class BaseFormCopy implements OnInit {
     let isFormArrayValid: boolean = this.areFormArraysValid();
 
     if(isValid && isFormArrayValid){
-      const saveMethodName = this.saveMethodName ?? `Save${this.controllerName}`;
+      // const saveMethodName = this.saveMethodName ?? `Save${this.controllerName}`;
       
-      this.http.put<any>(environment.apiUrl + `/${this.controllerName}/${saveMethodName}`, this.saveBody, environment.httpOptions).subscribe(res => {
+      // this.http.put<any>(environment.apiUrl + `/${this.controllerName}/${saveMethodName}`, this.saveBody, environment.httpOptions).subscribe(res => {
+      this.saveObservableMethod(this.saveBody).subscribe(res => {
         this.messageService.successMessage(this.translocoService.translate('SuccessfulSaveToastDescription'));
 
         Object.keys(res).forEach((key) => {
@@ -494,6 +497,19 @@ export class BaseFormCopy implements OnInit {
 
   onBeforeAddBelow(formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number) {}
 
+  //#endregion
+
+  //#region Helpers
+  selectedTab(tabs: SoftTab[]): number {
+    const tab = SoftGlobal.singleOrDefault(tabs, x => x.isSelected);
+
+    if (tab) {
+      return tab.value;
+    }
+    else{
+      return null;
+    }
+  }
   //#endregion
 
 }

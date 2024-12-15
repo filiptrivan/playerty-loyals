@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { Store, StoreSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
@@ -13,6 +13,8 @@ import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
+import { SoftTab } from 'src/app/core/components/soft-panels/panel-header/panel-header.component';
+import { PrimeIcons } from 'primeng/api';
 
 @Component({
     selector: 'store-details',
@@ -20,6 +22,8 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
     styles: [],
 })
 export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
+    override saveObservableMethod = this.apiService.saveStore;
+
     storeFormGroup: SoftFormGroup<Store>;
     storeSaveBodyName: string = nameof<StoreSaveBody>('storeDTO');
     
@@ -35,6 +39,12 @@ export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
     storeUpdatePointsDataFormGroup: SoftFormGroup<StoreUpdatePointsDataBody>;
 
     savedStoreUpdatePointsScheduledTaskIsPaused: boolean = null;
+
+    // FT: Tab example
+    // tabs: SoftTab[] = [
+    //     {label: 'Hello', icon: PrimeIcons.ANDROID, value: 1, isSelected: true},
+    //     {label: 'World is better place now', icon: PrimeIcons.AMAZON, value: 2}
+    // ];
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -52,10 +62,6 @@ export class StoreDetailsComponent extends BaseFormCopy implements OnInit {
     }
          
     override ngOnInit() {
-        this.controllerName = 'Store';
-        this.saveMethodName = 'SaveStore';
-        this.detailsTitle = this.translocoService.translate('Store');
-
         this.initializeStoreUpdatePointsScheduledTaskTableCols();
 
         this.route.params.subscribe((params) => {

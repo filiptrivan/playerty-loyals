@@ -19,6 +19,7 @@ import { UserProgressbarComponent } from "../../business/components/user-progres
 import { TranslocoDirective } from '@jsverse/transloco';
 import { StoreTableComponent } from './pages/stores/store-list.component';
 import { StoreDetailsComponent } from './pages/stores/store-details.component';
+import { CommonModule } from '@angular/common';
 
 const routes: Routes = [
     {
@@ -70,6 +71,7 @@ const routes: Routes = [
 @NgModule({
     imports: [
         RouterModule.forChild(routes),
+        CommonModule,
         PrimengModule,
         SoftDataTableComponent,
         SoftControlsModule,

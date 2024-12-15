@@ -5,66 +5,113 @@ import { ApiService } from 'src/app/business/services/api/api.service';
 import { Store, TableFilter } from 'src/app/business/entities/generated/business-entities.generated';
 import { Observable } from 'rxjs';
 import { TableResponse } from 'src/app/core/entities/table-response';
+import { CardSkeletonComponent } from 'src/app/core/components/card-skeleton/card-skeleton.component';
+import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
+import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 
 @Component({
-    template: `
-    `,
-    standalone: true,
-    imports: [],
-    styles: []
-})
-export class StoreTableBaseComponent implements OnInit {
-    cols: Column<Store>[];
-    
-    loadStoreTableDataObservableMethod = this.apiService.loadStoreTableData;
-    exportStoreTableDataToExcelObservableMethod = this.apiService.exportStoreTableDataToExcel;
-    deleteStoreObservableMethod = this.apiService.deleteStore;
-
-    constructor(
-        protected apiService: ApiService,
-        protected translocoService: TranslocoService,
-    ) { 
-        this.cols = [
-            {name: this.translocoService.translate('Actions'), actions: [
-                {name: this.translocoService.translate('Details'), field: 'Details'},
-                {name: this.translocoService.translate('Delete'), field: 'Delete'},
-            ]},
-            {name: this.translocoService.translate('Name'), filterType: 'text', field: 'name'},
-            {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true},
-        ];
-    }
-
-    ngOnInit(){
-    }
-}
-
-@Component({
-    selector: 'store-table-base',
+    selector: 'store-details-base',
     template: `
 <ng-container *transloco="let t">
-    <soft-data-table 
-    [tableTitle]="t('StoreList')" 
-    [cols]="cols" 
-    [loadTableDataObservableMethod]="loadStoreTableDataObservableMethod" 
-    [exportTableDataToExcelObservableMethod]="exportStoreTableDataToExcelObservableMethod"
-    [deleteItemFromTableObservableMethod]="deleteStoreObservableMethod"
-    >
-    </soft-data-table>
+    @defer (when storeFormGroup != null) {
+        <soft-card [title]="t('Store')" icon="pi pi-hashtag">
+            <soft-panel [isFirstMultiplePanel]="this.modelId > 0">
+                <panel-header></panel-header>
+    
+                <panel-body>
+                    <form [formGroup]="formGroup" class="grid">
+                        <div class="col-12 md:col-6">
+                            <soft-textbox [control]="control('name', storeFormGroup)"></soft-textbox>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-textbox [control]="control('getTransactionsEndpoint', storeFormGroup)"></soft-textbox>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-textbox [control]="control('createUserEndpoint', storeFormGroup)"></soft-textbox>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-textbox [control]="control('updateUserGroupEndpoint', storeFormGroup)"></soft-textbox>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-textbox [control]="control('getDiscountCategoriesEndpoint', storeFormGroup)"></soft-textbox>
+                        </div>
+                    </form>
+                </panel-body>
+    
+                <panel-footer>
+                    <p-button (onClick)="onSave()" [label]="t('Save')" icon="pi pi-save"></p-button>
+                    <p-button (onClick)="onSyncDiscountCategories()" [label]="t('SyncDiscountCategories')" icon="pi pi-sync"></p-button>
+                </panel-footer>
+
+            </soft-panel>
+
+            <soft-panel *ngIf="this.modelId > 0" [isMiddleMultiplePanel]="true">
+                <panel-header [title]="t('StoreUpdatePointsData')" icon="pi pi-calendar-clock"></panel-header>
+    
+                <panel-body>
+                    <form [formGroup]="formGroup" class="grid">
+                        <div class="col-12 md:col-6">
+                            <soft-calendar [control]="control('updatePointsStartDate', storeUpdatePointsDataFormGroup, true)" [showTime]="true"></soft-calendar>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-number [control]="control('updatePointsInterval', storeUpdatePointsDataFormGroup, true)"></soft-number>
+                        </div>
+                    </form>
+                </panel-body>
+    
+                <panel-footer>
+                    <p-button (onClick)="onSaveStoreUpdatePointsData()" [label]="t('Save')" icon="pi pi-save"></p-button>
+                    <p-button *ngIf="savedStoreUpdatePointsScheduledTaskIsPaused === false" 
+                    (onClick)="onSaveStoreUpdatePointsData()" [label]="t('PauseUpdatePointsScheduledTask')" icon="pi pi-pause" severity="warning"></p-button>
+                    <p-button *ngIf="savedStoreUpdatePointsScheduledTaskIsPaused === true" 
+                    (onClick)="onSaveStoreUpdatePointsData()" [label]="t('StartUpdatePointsScheduledTask')" icon="pi pi-play" severity="success"></p-button>
+                </panel-footer>
+
+            </soft-panel>
+
+            <soft-panel *ngIf="this.modelId > 0" [isLastMultiplePanel]="true">
+                <panel-header [title]="t('SuccessfullyDoneStoreUpdatePointsScheduledTaskList')" icon="pi pi-clock"></panel-header>
+    
+                <panel-body>
+                    <form [formGroup]="formGroup" class="grid">
+                        <div class="col-12">
+                            <soft-data-table [tableTitle]="t('SuccessfullyDoneStoreUpdatePointsScheduledTaskList')" [cols]="storeUpdatePointsScheduledTaskTableCols" 
+                            [loadTableDataObservableMethod]="loadStoreUpdatePointsScheduledTaskTableDataObservableMethod" 
+                            [exportTableDataToExcelObservableMethod]="exportStoreUpdatePointsScheduledTaskTableDataToExcelObservableMethod"
+                            [additionalFilterIdLong]="modelId" [showAddButton]="false" [rows]="5"
+                            (onTotalRecordsChange)="storeUpdatePointsScheduledTaskTableTotalRecords = $event" [showReloadTableButton]="true">
+                            </soft-data-table>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-calendar [control]="manualUpdatePointsFromDate" [showTime]="true" [label]="t('ManualUpdatePointsFromDate')"></soft-calendar>
+                        </div>
+                        <div class="col-12 md:col-6">
+                            <soft-calendar [control]="manualUpdatePointsToDate" [showTime]="true" [label]="t('ManualUpdatePointsToDate')"></soft-calendar>
+                        </div>
+                    </form>
+                </panel-body>
+    
+                <panel-footer>
+                    <p-button (onClick)="scheduleJobManually()" [label]="t('UpdatePoints')" icon="pi pi-history"></p-button>
+                </panel-footer>
+            </soft-panel>
+        </soft-card>
+    } @placeholder {
+        <card-skeleton [height]="702"></card-skeleton>
+    }
 </ng-container>
     `,
     standalone: true,
     imports: [
-        SoftDataTableComponent,
+        PrimengModule,
+        SoftControlsModule,
+        CardSkeletonComponent,
         TranslocoDirective,
     ],
     styles: []
 })
-export class StoreTableHtmlBaseComponent implements OnInit {
+export class StoreDetailsBaseComponent implements OnInit {
     @Input() cols: Column<Store>[];
-    
-    @Input() loadStoreTableDataObservableMethod: (tableFilterDTO: TableFilter) => Observable<TableResponse>;
-    @Input() exportStoreTableDataToExcelObservableMethod: (tableFilterDTO: TableFilter) => any;
-    @Input() deleteStoreObservableMethod: (rowId: number) => any;
 
     constructor(
     ) { 

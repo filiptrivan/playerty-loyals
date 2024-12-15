@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit, ViewChild } from
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { firstValueFrom, forkJoin } from 'rxjs';
+import { firstValueFrom, forkJoin, Observable } from 'rxjs';
 import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
 import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, Tier, UserExtended } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
@@ -22,6 +22,8 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit {
+    override saveObservableMethod = this.apiService.savePartnerUser;
+
     roleOptions: PrimengOption[];
     partnerRoleOptions: PrimengOption[];
     genderOptions: PrimengOption[];
@@ -65,9 +67,6 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
 
     override ngOnInit() {
         this.formGroup = new FormGroup({});
-
-        this.controllerName = 'PartnerUser';
-        this.saveMethodName = 'SavePartnerUser';
 
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
