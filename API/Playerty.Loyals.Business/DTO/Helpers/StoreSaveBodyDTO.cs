@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Playerty.Loyals.Business.DTO
 {
-    public class StoreSaveBodyDTO
+    public partial class StoreSaveBodyDTO
     {
-        public StoreDTO StoreDTO { get; set; }
     }
 }

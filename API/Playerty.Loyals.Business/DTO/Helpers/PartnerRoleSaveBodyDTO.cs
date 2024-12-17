@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Playerty.Loyals.Business.DTO
 {
-    public class PartnerRoleSaveBodyDTO
+    public partial class PartnerRoleSaveBodyDTO
     {
-        public PartnerRoleDTO PartnerRoleDTO { get; set; }
         public List<int> SelectedPermissionIds { get; set; }
         public List<long> SelectedPartnerUserIds { get; set; }
     }

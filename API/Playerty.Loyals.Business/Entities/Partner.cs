@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+using Soft.Generator.Shared.Attributes.EF;
 using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.BaseEntities;
 using System;

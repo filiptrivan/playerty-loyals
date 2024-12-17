@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace Playerty.Loyals.Business.DTO
 {
-    public class NotificationSaveBodyDTO : TableSelectionDTO<long>
+    public partial class NotificationSaveBodyDTO : LazyTableSelectionDTO<long>
     {
-        public NotificationDTO NotificationDTO { get; set; }
         public bool IsMarkedAsRead { get; set; }
     }
 }

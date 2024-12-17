@@ -19,6 +19,7 @@ export class ValidatorBusinessService {
         case 'nameGender':
             return this.nameGenderValidator(formControl);
 
+
         case 'nameStore':
             return this.nameStoreValidator(formControl);
         case 'updatePointsIntervalStore':
@@ -34,12 +35,15 @@ export class ValidatorBusinessService {
         case 'partnerIdStore':
             return this.partnerIdStoreValidator(formControl);
 
+
         case 'nameSegmentationItem':
             return this.nameSegmentationItemValidator(formControl);
         case 'orderNumberSegmentationItem':
             return this.orderNumberSegmentationItemValidator(formControl);
         case 'segmentationIdSegmentationItem':
             return this.segmentationIdSegmentationItemValidator(formControl);
+
+
 
 
 
@@ -52,6 +56,7 @@ export class ValidatorBusinessService {
 
 
 
+
         case 'emailUserExtended':
             return this.emailUserExtendedValidator(formControl);
         case 'passwordUserExtended':
@@ -60,6 +65,7 @@ export class ValidatorBusinessService {
             return this.hasLoggedInWithExternalProviderUserExtendedValidator(formControl);
         case 'numberOfFailedAttemptsInARowUserExtended':
             return this.numberOfFailedAttemptsInARowUserExtendedValidator(formControl);
+
 
 
         case 'productNameTransaction':
@@ -82,6 +88,7 @@ export class ValidatorBusinessService {
             return this.partnerUserIdTransactionValidator(formControl);
         case 'storeIdTransaction':
             return this.storeIdTransactionValidator(formControl);
+
 
 
         case 'namePartnerRole':
@@ -131,8 +138,10 @@ export class ValidatorBusinessService {
         case 'storeIdDiscountCategory':
             return this.storeIdDiscountCategoryValidator(formControl);
 
+
         case 'updatePointsIntervalStoreUpdatePointsDataBody':
             return this.updatePointsIntervalStoreUpdatePointsDataBodyValidator(formControl);
+
 
 
         case 'discountStoreTierDiscountCategory':
@@ -159,6 +168,7 @@ export class ValidatorBusinessService {
             return this.isManualStoreUpdatePointsScheduledTaskValidator(formControl);
         case 'storeIdStoreUpdatePointsScheduledTask':
             return this.storeIdStoreUpdatePointsScheduledTaskValidator(formControl);
+
 
 
         case 'nameSegmentation':
@@ -189,6 +199,7 @@ export class ValidatorBusinessService {
             return this.productsRecommendationEndpointPartnerValidator(formControl);
         case 'pointsMultiplierPartner':
             return this.pointsMultiplierPartnerValidator(formControl);
+
 
         case 'namePartnerPermission':
             return this.namePartnerPermissionValidator(formControl);
@@ -232,6 +243,7 @@ export class ValidatorBusinessService {
         validator.hasNotEmptyRule = true;
         return validator;
     }
+
 
 
     nameStoreValidator(control: SoftFormControl): SoftValidatorFn {
@@ -345,6 +357,7 @@ export class ValidatorBusinessService {
     }
 
 
+
     nameSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
@@ -393,6 +406,8 @@ export class ValidatorBusinessService {
 
 
 
+
+
     orderNumberStoreTierValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
@@ -434,6 +449,7 @@ export class ValidatorBusinessService {
         validator.hasNotEmptyRule = true;
         return validator;
     }
+
 
 
 
@@ -499,6 +515,7 @@ export class ValidatorBusinessService {
         validator.hasNotEmptyRule = true;
         return validator;
     }
+
 
 
 
@@ -658,6 +675,7 @@ export class ValidatorBusinessService {
         validator.hasNotEmptyRule = true;
         return validator;
     }
+
 
 
 
@@ -988,6 +1006,7 @@ export class ValidatorBusinessService {
     }
 
 
+
     updatePointsIntervalStoreUpdatePointsDataBodyValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
@@ -1002,6 +1021,7 @@ export class ValidatorBusinessService {
         
         return validator;
     }
+
 
 
 
@@ -1148,6 +1168,7 @@ export class ValidatorBusinessService {
         validator.hasNotEmptyRule = true;
         return validator;
     }
+
 
 
 
@@ -1366,6 +1387,7 @@ export class ValidatorBusinessService {
         validator.hasNotEmptyRule = true;
         return validator;
     }
+
 
 
     namePartnerPermissionValidator(control: SoftFormControl): SoftValidatorFn {

@@ -1,4 +1,4 @@
-﻿using Soft.Generator.Shared.Attributes;
+﻿using Soft.Generator.Shared.Attributes.EF;
 using Soft.Generator.Shared.BaseEntities;
 using Soft.Generator.Shared.Entities;
 using Soft.Generator.Shared.Interfaces;

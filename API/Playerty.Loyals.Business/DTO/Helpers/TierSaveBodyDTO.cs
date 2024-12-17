@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Playerty.Loyals.Business.DTO
 {
-    public class TierSaveBodyDTO
+    public partial class TierSaveBodyDTO
     {
         public List<TierDTO> TierDTOList { get; set; }
         public List<StoreTierDTO> StoreTierDTOList { get; set; }

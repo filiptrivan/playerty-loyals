@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Playerty.Loyals.Business.DTO
 {
-    public class SegmentationSaveBodyDTO
+    public partial class SegmentationSaveBodyDTO
     {
-        public SegmentationDTO SegmentationDTO { get; set; }
         public List<SegmentationItemDTO> SegmentationItemsDTO { get; set; }
     }
 }

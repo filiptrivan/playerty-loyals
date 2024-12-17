@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Playerty.Loyals.Business.DTO
 {
     [CustomValidator("RuleFor(x => x.UpdatePointsInterval).GreaterThanOrEqualTo(1).Unless(i => i.UpdatePointsInterval == null);")]
-    public class StoreUpdatePointsDataBodyDTO
+    public partial class StoreUpdatePointsDataBodyDTO
     {
         public long StoreId { get; set; }
         public int StoreVersion { get; set; }
