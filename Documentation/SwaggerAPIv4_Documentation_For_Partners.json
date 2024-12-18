@@ -1,0 +1,470 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Playerty Loyals API",
+    "version": "1.0.0",
+    "description": "
+    Dokumentacija predstavlja uputstvo za poslovne aplikacije partnera, šta treba da implementiraju kao i granične slučajeve koje treba da pokriju. \n
+    ### U dokumentaciji koristimo skraćenice: \n
+    - **PL:** Playerty Loyals \n \n
+    - **PS:**  Poslovni sistem \n \n
+    - **PA:**  Poslovna aplikacija \n \n
+    ### Objašnjenja naziva: \n
+    - **Partner:** Pod partnerom se podrazumevaju različiti partneri koji koriste PL sistem npr. `Stridon Group DOO` \n \n
+    - **Poslovni sistem:** Pod poslovnim sistemima se smatraju npr. `Online - Prodavnica Alata`, `Maloprodaja - Stridon`, oba poslovna sistema pripadaju jednom partneru **Stridon Group DOO**, jedan partner može da ima **n poslovnih sistema**, poslovni sistem ne vezujemo za jedan fizički objekat (Maloprodaja Vojislava Ilića 141g), već za PA **(ReadyCMS, Wings...)**. \n \n
+    - **Poslovna aplikacija:** Pod poslovnom aplikacijom se smatraju `ReadyCMS`, `Wings`... \n \n
+    - **Nivo lojalnosti:** Pod nivoima lojalnosti se smatraju npr. `Bronza`, `Srebro`, `Zlato`... Svaki korisnik može da pripada samo jednom nivou lojalnosti. \n \n
+    ",
+  },
+  "paths": {
+    "/api/PA/GetTransactionList": {
+      "get": {
+        "summary": "Dohvatanje transakcija za zadati period",
+        "description": "
+        ### Objašnjenje transakcije: \n
+        Pod jednom transakcijom se smatra `račun`/`korpa`/`skup stavki računa`. \n
+        - **Primer u Online PA:** Npr. ako je korisnik ušao na sajt, kupio **dve Bosch bušilice** i stavio to u **jednu korpu (transakciju)**, platio je/poručio i izašao sa sajta. Nakon toga, setio se da je zaboravio da kupi burgiju, vratio se na sajt, napravio novu **korpu (transakciju)** i kupio burgiju. U primeru korisnik je napravio `dve transakcije`, sa ukupno `tri stavke transakcije`. \n \n
+        
+        - **Primer u maloprodajnoj PA:** Npr. ako je korisnik ušao u radnju, kupio **dve Bosch bušilice** i stavio to na **jedan račun (transakciju)**, platio je i izašao iz radnje. Nakon toga, setio se da je zaboravio da kupi burgiju, vratio se u prodavnicu, napravio novi **račun (transakciju)** i kupio burgiju. U primeru korisnik je napravio `dve transakcije`, sa ukupno `tri stavke transakcije`. \n
+        
+        ### Šta metoda treba da radi? \n
+        - Metoda treba da vraća sve transakcije za zadati period, pod svim transakcijama se smatraju: \n 
+          \t 1. Uspešno izvršene kupovine (sa cenama u plusu) i \n
+          \t 2. Povrati (cene u minusu) \n
+          \t \t - Kad se šalje transakcija koja predstavlja povrat, polje 'PurchaseTransactionCode' mora biti popunjeno i treba da označava kod transakcije za koju je napravljen povrat. \n
+          \t \t - Ako u sistemu PL ne uspemo da pronađemo transakciju sa 'PurchaseTransactionCode', smatraćemo da taj korisnik nikada nije ni kupio taj proizvod, te mu nećemo ni oduzeti poene, tj. ignorisaćemo ovu transakciju. \n
+          \t \t - Ako pošaljete transakciju sa cenom u minusu, dok je 'PurchaseTransactionCode' == null, takođe ćemo ignorisati ovu transakciju. \n
+        ",
+        "parameters": [
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Datum od kog uzimamo transakcije."
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "description": "Datum do kog uzimamo transakcije."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista transakcija za zadati period.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "Code": {
+                        "type": "string",
+                        "description": "Jedinstveni kod transakcije, ako je PL već obradio transakciju sa ovim kodom PL će baciti grešku, i neće obraditi ovu transakciju."
+                      },
+                      "UserEmail": {
+                        "type": "string",
+                        "description": "Email adresa korisnika koji je izvršio kupovinu."
+                      },
+                      "BoughtAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Datum kupovine proizvoda. Sistem funkcionalno ne zavisi od ovog podatka, služi samo za prikaz korisnicima u listi transakcija."
+                      },
+                      "Price": {
+                        "type": "number",
+                        "format": "float",
+                        "description": "Ukupna cena transakcije (negativna za povrate)."
+                      },
+                      "PurchaseTransactionCode": {
+                        "type": "string",
+                        "description": "Kad se šalje transakcija koja predstavlja povrat, polje mora biti popunjeno i treba da označava kod transakcije za koju je napravljen povrat."
+                      },
+                      "TransactionItems": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "Product": {
+                              "type": "object",
+                              "properties": {
+                                "Name": {
+                                  "type": "string",
+                                  "description": "Naziv proizvoda (npr. `Bosch burgija`)."
+                                },
+                                "Code": {
+                                  "type": "string",
+                                  "description": "Šifra proizvoda (npr. `GSB 18-2 RE`)."
+                                },
+                                "ImageUrl": {
+                                  "type": "string"
+                                },
+                                "ProductGroupName": {
+                                  "type": "string",
+                                  "description": "Naziv grupe proizvoda (npr. `Bosch`)."
+                                },
+                                "ProductGroupImageUrl": {
+                                  "type": "string"
+                                },
+                                "Price": {
+                                  "type": "number",
+                                  "format": "float",
+                                  "description": "Cena pojedinačnog proizvoda u transakciji (suma svih cena proizvoda u transakciji mora da bude jednaka ceni transakcije)."
+                                }
+                              }
+                            },
+                            "Quantity": {
+                              "type": "number",
+                              "format": "int32",
+                              "description": "Broj komada proizvoda."
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Pogrešan zahtev.",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "invalid_period": {
+                    "summary": "Period veći od godinu dana",
+                    "value": "Ne možete da zadate period veći od godinu dana."
+                  },
+                  "invalid_date_range": {
+                    "summary": "Nevažeći opseg datuma",
+                    "value": "dateFrom ne može da bude veći od dateTo."
+                  },
+                  "invalid_date_to": {
+                    "summary": "Nevažeći datum 'do'",
+                    "value": "Datum do kog želite da ažurirate poene ne sme biti veći od sadašnjeg trenutka."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/PA/GetTransactionListForUsers": {
+      "get": {
+        "summary": "Identična metoda kao GetTransactionList, samo za tačno zadate korisnike",
+        "description": "
+        - **Objašnjenje zašto nam je potrebna ova metoda:** U slučaju da administratoru partnera stigne mejl da za dva korisnika (npr. filiptrivan@gmail.com i aleksatrivan@gmail.com) automatsko ažuriranje poena nije uspelo, administrator, za određeni period, manuelno može da ponovi ažuriranje, samo za ta dva korisnika. \n \n
+        - Metoda radi identično kao i 'GetTransactionList', samo za `tačno zadate korisnike`.
+        ",
+        "parameters": [
+          {
+            "name": "userEmail",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista transakcija za zadati period za zadatog korisnika.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "Code": {
+                        "type": "string",
+                        "description": "Jedinstveni kod transakcije, ako je PL već obradio transakciju sa ovim kodom PL će baciti grešku, i neće obraditi ovu transakciju."
+                      },
+                      "UserEmail": {
+                        "type": "string",
+                        "description": "Email adresa korisnika koji je izvršio kupovinu."
+                      },
+                      "BoughtAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Datum kupovine proizvoda. Sistem funkcionalno ne zavisi od ovog podatka, služi samo za prikaz korisnicima u listi transakcija."
+                      },
+                      "Price": {
+                        "type": "number",
+                        "format": "float",
+                        "description": "Ukupna cena transakcije (negativna za povrate)."
+                      },
+                      "PurchaseTransactionCode": {
+                        "type": "string",
+                        "description": "Kad se šalje transakcija koja predstavlja povrat, polje mora biti popunjeno i treba da označava kod transakcije za koju je napravljen povrat."
+                      },
+                      "TransactionItems": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "Product": {
+                              "type": "object",
+                              "properties": {
+                                "Name": {
+                                  "type": "string",
+                                  "description": "Naziv proizvoda (npr. `Bosch burgija`)."
+                                },
+                                "Code": {
+                                  "type": "string",
+                                  "description": "Šifra proizvoda (npr. `GSB 18-2 RE`)."
+                                },
+                                "ImageUrl": {
+                                  "type": "string"
+                                },
+                                "ProductGroupName": {
+                                  "type": "string",
+                                  "description": "Naziv grupe proizvoda (npr. `Bosch`)."
+                                },
+                                "ProductGroupImageUrl": {
+                                  "type": "string"
+                                },
+                                "Price": {
+                                  "type": "number",
+                                  "format": "float",
+                                  "description": "Cena pojedinačnog proizvoda u transakciji (suma svih cena proizvoda u transakciji mora da bude jednaka ceni transakcije)."
+                                }
+                              }
+                            },
+                            "Quantity": {
+                              "type": "number",
+                              "format": "int32",
+                              "description": "Broj komada proizvoda."
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Pogrešan zahtev.",
+            "content": {
+              "text/plain": {
+                "examples": {
+                  "invalid_period": {
+                    "summary": "Period veći od godinu dana",
+                    "value": "Ne možete da zadate period veći od godinu dana."
+                  },
+                  "invalid_date_range": {
+                    "summary": "Nevažeći opseg datuma",
+                    "value": "dateFrom ne može da bude veći od dateTo."
+                  },
+                  "invalid_date_to": {
+                    "summary": "Nevažeći datum 'do'",
+                    "value": "Datum do kog želite da ažurirate poene ne sme biti veći od sadašnjeg trenutka."
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Korisnik za zadatu email adresu **nije pronađen** u sistemu."
+          }
+        }
+      }
+    },
+    "/api/PA/SaveUser": {
+      "put": {
+        "summary": "Ubacivanje/ažuriranje korisnika",
+        "description": "
+        ### Šta metoda treba da radi? \n
+        - **Pronađe korisnika:** Metoda bi trebalo da pronađe korisnika sa zadatom email adresom, ako ne uspe da ga pronađe treba da napravi novog korisnika u PA sistemu. \n \n
+        - **Dodeli nivo lojalnosti korisniku:** Zadati kod nivoa lojalnosti ('TierCode') sistem treba da pokuša da pronađe, **ako uspe** treba i da ga dodeli korisniku, **ako ne uspe**, baca grešku sa porukom: **'Nivo lojalnosti za zadati kod nije pronađen u sistemu'**. (*TBD: ako ne uspe da pronađe prvi put, treba da okine zahtev ka PL i sinhronizuje podatke, ako i nakon toga nije uspeo da pronađe, baca grešku*.)
+        ",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExternalUserDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "Nivo lojalnosti za zadati kod **nije pronađen** u sistemu."
+          }
+        }
+      }
+    },
+    "/api/PA/GetDiscountProductGroupList": {
+      "get": {
+        "summary": "Dohvatanje grupa proizvoda za određivanje popusta za te grupe u PL sistemu",
+        "description": "
+        ### Objašnjenja: \n
+        - **Grupa proizvoda:** Pod grupama proizvoda se smatraju `Bosch`, `Makita`, `Električni alat`, `Ostalo`... \n \n
+        - **Discount atribut:** Kad PL sistem dovlači grupe proizvoda sa PA, PA **ne treba da popunjava 'Discount' atribut**, smisao Discount atributa je u drugoj metodi (SaveTiers). (*TBD: Ako je PA zbog razumevanja lakše da se za to naprave dve različite klase možemo tako da uradimo.*)
+        ",
+        "responses": {
+          "200": {
+            "description": "Lista grupa proizvoda",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExternalDiscountProductGroupDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/PA/SaveTiers": {
+      "put": {
+        "summary": "Ubacivanje/ažuriranje nivoa lojalnosti",
+        "description": "
+        ### Šta metoda treba da radi? \n
+        - Treba da sačuva prosleđene podatke o nivoima lojalnosti u PA sistemu. \n \n
+        - Prolazi kroz svaki nivo lojalnosti, ako pronađe nivo lojalnosti za zadati 'Code' treba da ga ažurira, ako ne pronađe treba da ga doda, za one koji već postoje u PA, a nisu poslati od strane PL, treba da obriše. \n \n
+        - Za svaki nivo lojalnosti, treba da prođe i kroz svaku grupu proizvoda i izvrši identičnu logiku na osnovu atributa 'Code', kao i za nivo lojalnosti.
+        ",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ExternalTierDTO"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/PA/GetRecommendationProductList": {
+      "get": {
+        "summary": "Retrieve recommended products",
+        "description": "
+        ### Šta metoda treba da radi? \n
+        - Metoda treba da vrati tačno 9 proizvoda koji će se prikazivati na početnoj strani PL. \n
+        - Ako metoda ne vrati tačno 9 proizvoda PL neće prihvatiti podatke i baciće grešku. \n
+        - (*TBD: U parametrima će se proslediti korisnik, kog PA može da iskoristi kako bi kroz recommendation sistem vratila najadekvatnije proizvode za tog korisnika*)
+        ",
+        "responses": {
+          "200": {
+            "description": "Lista preporučenih proizvoda",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExternalProductDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ExternalTransactionDTO": {
+        "type": "object",
+        "properties": {
+          "Code": { "type": "string" },
+          "UserEmail": { "type": "string" },
+          "BoughtAt": { "type": "string", "format": "date-time" },
+          "Price": { "type": "number", "format": "decimal" },
+          "Products": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ExternalProductDTO" }
+          }
+        }
+      },
+      "ExternalProductDTO": {
+        "type": "object",
+        "properties": {
+          "Name": { "type": "string" },
+          "ImageUrl": { "type": "string" },
+          "ProductGroupName": { "type": "string" },
+          "ProductGroupImageUrl": { "type": "string" },
+          "Price": { "type": "number", "format": "decimal" },
+          "Description": { "type": "string" },
+          "Code": { "type": "string", "description": "Šifra proizvoda, nije važna za funkcionalnost sistema, samo će biti prikazana u listi transakcija korisnika. Logički bi trebalo da bude jedinstvena, ali PL sistem neče to zahtevati." },
+          "LinkToWebsite": { "type": "string" }
+        }
+      },
+      "ExternalUserDTO": {
+        "type": "object",
+        "properties": {
+          "Email": { "type": "string" },
+          "Points": { "type": "integer" },
+          "TierCode": { "type": "string" }
+        }
+      },
+      "ExternalDiscountProductGroupDTO": {
+        "type": "object",
+        "properties": {
+          "Name": { "type": "string" },
+          "Code": { "type": "string", "description": "Kod **jedinstveno određuje** grupu proizvoda." },
+          "Discount": { "type": "number", "format": "decimal" }
+        }
+      },
+      "ExternalTierDTO": {
+        "type": "object",
+        "properties": {
+          "Code": { "type": "string" },
+          "Name": { "type": "string" },
+          "ExternalDiscountProductGroupDTOList": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ExternalDiscountProductGroupDTO" }
+          }
+        }
+      }
+    }
+  }
+}

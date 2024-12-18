@@ -1,19 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Playerty.Loyals.Business.Entities;
-using Soft.Generator.Infrastructure.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Playerty.Loyals.Infrastructure
 {
-    public class PLApplicationDbContextGenerated : ApplicationDbContext<UserExtended> // https://stackoverflow.com/questions/41829229/how-do-i-implement-dbcontext-inheritance-for-multiple-databases-in-ef7-net-co
+    public partial class PLApplicationDbContext
     {
-
-        public PLApplicationDbContextGenerated(DbContextOptions<PLApplicationDbContext> options)
-                : base(options)
+        public PLApplicationDbContext(DbContextOptions<PLApplicationDbContext> options)
+        : base(options)
         {
         }
 

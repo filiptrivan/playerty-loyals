@@ -10,16 +10,14 @@ namespace Playerty.Loyals.Business.Entities
 {
     public class StoreTierDiscountCategory
     {
-        [MainEntityManyToMany(nameof(StoreTier))] // TODO FT: Change the generator, we don't need nameof now.
         public virtual StoreTier StoreTier { get; set; }
 
-        [IgnorePropertyInDTO]
+        [M2MMaintanceEntityKey(nameof(StoreTier))]
         public long StoreTiersId { get; set; }
 
-        [ExtendManyToMany(nameof(DiscountCategory))]
         public virtual DiscountCategory DiscountCategory { get; set; }
 
-        [IgnorePropertyInDTO]
+        [M2MExtendEntityKey(nameof(DiscountCategory))]
         public long DiscountCategoriesId { get; set; }
 
         [Required]

@@ -1,102 +1,95 @@
 import { BaseEntity } from "../../../core/entities/base-entity";
 import { TableFilterContext } from "src/app/core/entities/table-filter-context";
 import { TableFilterSortMeta } from "src/app/core/entities/table-filter-sort-meta";
+import { MimeTypes } from "src/app/core/entities/mime-type";
 import { RegistrationVerificationResultStatusCodes } from "../../enums/generated/security-enums.generated";
-export class ExternalProvider extends BaseEntity
+
+
+export class RefreshToken extends BaseEntity
 {
-    idToken?: string;
+    email?: string;
+	ipAddress?: string;
 	browserId?: string;
+	tokenString?: string;
+	expireAt?: Date;
 
     constructor(
     {
-        idToken,
-		browserId
-    }:{
-        idToken?: string;
-		browserId?: string;     
-    } = {}
-    ) {
-        super('ExternalProvider'); 
-
-        this.idToken = idToken;
-		this.browserId = browserId;
-    }
-}
-
-export class RefreshTokenRequest extends BaseEntity
-{
-    refreshToken?: string;
-	browserId?: string;
-
-    constructor(
-    {
-        refreshToken,
-		browserId
-    }:{
-        refreshToken?: string;
-		browserId?: string;     
-    } = {}
-    ) {
-        super('RefreshTokenRequest'); 
-
-        this.refreshToken = refreshToken;
-		this.browserId = browserId;
-    }
-}
-
-export class VerificationTokenRequest extends BaseEntity
-{
-    verificationCode?: string;
-	browserId?: string;
-	email?: string;
-
-    constructor(
-    {
-        verificationCode,
+        email,
+		ipAddress,
 		browserId,
-		email
+		tokenString,
+		expireAt
     }:{
-        verificationCode?: string;
+        email?: string;
+		ipAddress?: string;
 		browserId?: string;
-		email?: string;     
+		tokenString?: string;
+		expireAt?: Date;     
     } = {}
     ) {
-        super('VerificationTokenRequest'); 
+        super('RefreshToken'); 
 
-        this.verificationCode = verificationCode;
+        this.email = email;
+		this.ipAddress = ipAddress;
 		this.browserId = browserId;
-		this.email = email;
+		this.tokenString = tokenString;
+		this.expireAt = expireAt;
     }
 }
 
-export class Permission extends BaseEntity
+
+export class RoleSaveBody extends BaseEntity
 {
-    name?: string;
-	description?: string;
-	id?: number;
-	createdAt?: Date;
+    selectedPermissionIds?: number[];
+	selectedUserIds?: number[];
+	roleDTO?: Role;
 
     constructor(
     {
-        name,
-		description,
-		id,
-		createdAt
+        selectedPermissionIds,
+		selectedUserIds,
+		roleDTO
     }:{
-        name?: string;
-		description?: string;
-		id?: number;
-		createdAt?: Date;     
+        selectedPermissionIds?: number[];
+		selectedUserIds?: number[];
+		roleDTO?: Role;     
     } = {}
     ) {
-        super('Permission'); 
+        super('RoleSaveBody'); 
 
-        this.name = name;
-		this.description = description;
-		this.id = id;
-		this.createdAt = createdAt;
+        this.selectedPermissionIds = selectedPermissionIds;
+		this.selectedUserIds = selectedUserIds;
+		this.roleDTO = roleDTO;
     }
 }
+
+
+export class ForgotPassword extends BaseEntity
+{
+    email?: string;
+	newPassword?: string;
+	browserId?: string;
+
+    constructor(
+    {
+        email,
+		newPassword,
+		browserId
+    }:{
+        email?: string;
+		newPassword?: string;
+		browserId?: string;     
+    } = {}
+    ) {
+        super('ForgotPassword'); 
+
+        this.email = email;
+		this.newPassword = newPassword;
+		this.browserId = browserId;
+    }
+}
+
 
 export class Role extends BaseEntity
 {
@@ -135,38 +128,32 @@ export class Role extends BaseEntity
     }
 }
 
-export class RefreshToken extends BaseEntity
+
+export class VerificationTokenRequest extends BaseEntity
 {
-    email?: string;
-	ipAddress?: string;
+    verificationCode?: string;
 	browserId?: string;
-	tokenString?: string;
-	expireAt?: Date;
+	email?: string;
 
     constructor(
     {
-        email,
-		ipAddress,
+        verificationCode,
 		browserId,
-		tokenString,
-		expireAt
+		email
     }:{
-        email?: string;
-		ipAddress?: string;
+        verificationCode?: string;
 		browserId?: string;
-		tokenString?: string;
-		expireAt?: Date;     
+		email?: string;     
     } = {}
     ) {
-        super('RefreshToken'); 
+        super('VerificationTokenRequest'); 
 
-        this.email = email;
-		this.ipAddress = ipAddress;
+        this.verificationCode = verificationCode;
 		this.browserId = browserId;
-		this.tokenString = tokenString;
-		this.expireAt = expireAt;
+		this.email = email;
     }
 }
+
 
 export class ForgotPasswordVerificationToken extends BaseEntity
 {
@@ -201,80 +188,6 @@ export class ForgotPasswordVerificationToken extends BaseEntity
     }
 }
 
-export class RegistrationVerificationResult extends BaseEntity
-{
-    status?: RegistrationVerificationResultStatusCodes;
-	message?: string;
-
-    constructor(
-    {
-        status,
-		message
-    }:{
-        status?: RegistrationVerificationResultStatusCodes;
-		message?: string;     
-    } = {}
-    ) {
-        super('RegistrationVerificationResult'); 
-
-        this.status = status;
-		this.message = message;
-    }
-}
-
-export class RegistrationVerificationToken extends BaseEntity
-{
-    email?: string;
-	password?: string;
-	browserId?: string;
-	expireAt?: Date;
-
-    constructor(
-    {
-        email,
-		password,
-		browserId,
-		expireAt
-    }:{
-        email?: string;
-		password?: string;
-		browserId?: string;
-		expireAt?: Date;     
-    } = {}
-    ) {
-        super('RegistrationVerificationToken'); 
-
-        this.email = email;
-		this.password = password;
-		this.browserId = browserId;
-		this.expireAt = expireAt;
-    }
-}
-
-export class Registration extends BaseEntity
-{
-    email?: string;
-	password?: string;
-	browserId?: string;
-
-    constructor(
-    {
-        email,
-		password,
-		browserId
-    }:{
-        email?: string;
-		password?: string;
-		browserId?: string;     
-    } = {}
-    ) {
-        super('Registration'); 
-
-        this.email = email;
-		this.password = password;
-		this.browserId = browserId;
-    }
-}
 
 export class Login extends BaseEntity
 {
@@ -301,88 +214,32 @@ export class Login extends BaseEntity
     }
 }
 
-export class LoginVerificationToken extends BaseEntity
+
+export class Registration extends BaseEntity
 {
     email?: string;
-	userId?: number;
-	browserId?: string;
-	expireAt?: Date;
-
-    constructor(
-    {
-        email,
-		userId,
-		browserId,
-		expireAt
-    }:{
-        email?: string;
-		userId?: number;
-		browserId?: string;
-		expireAt?: Date;     
-    } = {}
-    ) {
-        super('LoginVerificationToken'); 
-
-        this.email = email;
-		this.userId = userId;
-		this.browserId = browserId;
-		this.expireAt = expireAt;
-    }
-}
-
-export class ForgotPassword extends BaseEntity
-{
-    email?: string;
-	newPassword?: string;
+	password?: string;
 	browserId?: string;
 
     constructor(
     {
         email,
-		newPassword,
+		password,
 		browserId
     }:{
         email?: string;
-		newPassword?: string;
+		password?: string;
 		browserId?: string;     
     } = {}
     ) {
-        super('ForgotPassword'); 
+        super('Registration'); 
 
         this.email = email;
-		this.newPassword = newPassword;
+		this.password = password;
 		this.browserId = browserId;
     }
 }
 
-export class AuthResult extends BaseEntity
-{
-    userId?: number;
-	email?: string;
-	accessToken?: string;
-	refreshToken?: string;
-
-    constructor(
-    {
-        userId,
-		email,
-		accessToken,
-		refreshToken,
-    }:{
-        userId?: number;
-		email?: string;
-		accessToken?: string;
-		refreshToken?: string;
-    } = {}
-    ) {
-        super('AuthResult'); 
-
-        this.userId = userId;
-		this.email = email;
-		this.accessToken = accessToken;
-		this.refreshToken = refreshToken;
-    }
-}
 
 export class JwtAuthResult extends BaseEntity
 {
@@ -413,30 +270,258 @@ export class JwtAuthResult extends BaseEntity
     }
 }
 
-export class RoleSaveBody extends BaseEntity
+
+export class LoginVerificationToken extends BaseEntity
 {
-    roleExtendedDTO?: Role;
-	selectedUserIds?: number[];
-	selectedPermissionIds?: number[];
+    email?: string;
+	userId?: number;
+	browserId?: string;
+	expireAt?: Date;
 
     constructor(
     {
-        roleExtendedDTO,
-		selectedUserIds,
-		selectedPermissionIds
+        email,
+		userId,
+		browserId,
+		expireAt
     }:{
-        roleExtendedDTO?: Role;
-		selectedUserIds?: number[];     
-		selectedPermissionIds?: number[];     
+        email?: string;
+		userId?: number;
+		browserId?: string;
+		expireAt?: Date;     
     } = {}
     ) {
-        super('RoleSaveBody'); 
+        super('LoginVerificationToken'); 
 
-        this.roleExtendedDTO = roleExtendedDTO;
-		this.selectedUserIds = selectedUserIds;
-		this.selectedPermissionIds = selectedPermissionIds;
+        this.email = email;
+		this.userId = userId;
+		this.browserId = browserId;
+		this.expireAt = expireAt;
     }
 }
+
+
+export class RegistrationVerificationToken extends BaseEntity
+{
+    email?: string;
+	password?: string;
+	browserId?: string;
+	expireAt?: Date;
+
+    constructor(
+    {
+        email,
+		password,
+		browserId,
+		expireAt
+    }:{
+        email?: string;
+		password?: string;
+		browserId?: string;
+		expireAt?: Date;     
+    } = {}
+    ) {
+        super('RegistrationVerificationToken'); 
+
+        this.email = email;
+		this.password = password;
+		this.browserId = browserId;
+		this.expireAt = expireAt;
+    }
+}
+
+
+export class RoleUser extends BaseEntity
+{
+    rolesId?: number;
+	usersId?: number;
+
+    constructor(
+    {
+        rolesId,
+		usersId
+    }:{
+        rolesId?: number;
+		usersId?: number;     
+    } = {}
+    ) {
+        super('RoleUser'); 
+
+        this.rolesId = rolesId;
+		this.usersId = usersId;
+    }
+}
+
+
+export class RoleUserSaveBody extends BaseEntity
+{
+    roleUserDTO?: RoleUser;
+
+    constructor(
+    {
+        roleUserDTO
+    }:{
+        roleUserDTO?: RoleUser;     
+    } = {}
+    ) {
+        super('RoleUserSaveBody'); 
+
+        this.roleUserDTO = roleUserDTO;
+    }
+}
+
+
+export class RefreshTokenRequest extends BaseEntity
+{
+    refreshToken?: string;
+	browserId?: string;
+
+    constructor(
+    {
+        refreshToken,
+		browserId
+    }:{
+        refreshToken?: string;
+		browserId?: string;     
+    } = {}
+    ) {
+        super('RefreshTokenRequest'); 
+
+        this.refreshToken = refreshToken;
+		this.browserId = browserId;
+    }
+}
+
+
+export class Permission extends BaseEntity
+{
+    name?: string;
+	nameLatin?: string;
+	description?: string;
+	descriptionLatin?: string;
+	code?: string;
+	id?: number;
+
+    constructor(
+    {
+        name,
+		nameLatin,
+		description,
+		descriptionLatin,
+		code,
+		id
+    }:{
+        name?: string;
+		nameLatin?: string;
+		description?: string;
+		descriptionLatin?: string;
+		code?: string;
+		id?: number;     
+    } = {}
+    ) {
+        super('Permission'); 
+
+        this.name = name;
+		this.nameLatin = nameLatin;
+		this.description = description;
+		this.descriptionLatin = descriptionLatin;
+		this.code = code;
+		this.id = id;
+    }
+}
+
+
+export class PermissionSaveBody extends BaseEntity
+{
+    permissionDTO?: Permission;
+
+    constructor(
+    {
+        permissionDTO
+    }:{
+        permissionDTO?: Permission;     
+    } = {}
+    ) {
+        super('PermissionSaveBody'); 
+
+        this.permissionDTO = permissionDTO;
+    }
+}
+
+
+export class RegistrationVerificationResult extends BaseEntity
+{
+    status?: RegistrationVerificationResultStatusCodes;
+	message?: string;
+
+    constructor(
+    {
+        status,
+		message
+    }:{
+        status?: RegistrationVerificationResultStatusCodes;
+		message?: string;     
+    } = {}
+    ) {
+        super('RegistrationVerificationResult'); 
+
+        this.status = status;
+		this.message = message;
+    }
+}
+
+
+export class AuthResult extends BaseEntity
+{
+    userId?: number;
+	email?: string;
+	accessToken?: string;
+	refreshToken?: string;
+
+    constructor(
+    {
+        userId,
+		email,
+		accessToken,
+		refreshToken
+    }:{
+        userId?: number;
+		email?: string;
+		accessToken?: string;
+		refreshToken?: string;     
+    } = {}
+    ) {
+        super('AuthResult'); 
+
+        this.userId = userId;
+		this.email = email;
+		this.accessToken = accessToken;
+		this.refreshToken = refreshToken;
+    }
+}
+
+
+export class ExternalProvider extends BaseEntity
+{
+    idToken?: string;
+	browserId?: string;
+
+    constructor(
+    {
+        idToken,
+		browserId
+    }:{
+        idToken?: string;
+		browserId?: string;     
+    } = {}
+    ) {
+        super('ExternalProvider'); 
+
+        this.idToken = idToken;
+		this.browserId = browserId;
+    }
+}
+
 
 // FT HACK: Fake generated class, because of api imports
 export class Namebook extends BaseEntity
@@ -461,6 +546,28 @@ export class Namebook extends BaseEntity
 }
 
 // FT HACK: Fake generated class, because of api imports
+export class Codebook extends BaseEntity
+{
+    code?: string;
+    displayName?: string;
+
+    constructor(
+    {
+        code,
+        displayName,
+    }:{
+        code?: string;
+        displayName?: string;
+    } = {}
+    ) {
+        super('Codebook');
+
+        this.code = code;
+        this.displayName = displayName;
+    }
+}
+
+// FT HACK: Fake generated class, because of api imports
 export class TableFilter extends BaseEntity
 {
     filters?: Map<string, TableFilterContext[]>;
@@ -469,6 +576,8 @@ export class TableFilter extends BaseEntity
     sortField?: string;
     sortOrder?: number;
     multiSortMeta?: TableFilterSortMeta[];
+    additionalFilterIdInt?: number;
+    additionalFilterIdLong?: number;
 
     constructor(
     {
@@ -477,7 +586,9 @@ export class TableFilter extends BaseEntity
         rows,
         sortField,
         sortOrder,
-        multiSortMeta
+        multiSortMeta,
+        additionalFilterIdInt,
+        additionalFilterIdLong,
     }:{
         filters?: Map<string, TableFilterContext[]>;
         first?: number;
@@ -485,6 +596,8 @@ export class TableFilter extends BaseEntity
         sortField?: string;
         sortOrder?: number;
         multiSortMeta?: TableFilterSortMeta[];
+        additionalFilterIdInt?: number;
+        additionalFilterIdLong?: number;
     } = {}
     ) {
         super('TableFilter');
@@ -495,6 +608,8 @@ export class TableFilter extends BaseEntity
         this.sortField = sortField;
         this.sortOrder = sortOrder;
         this.multiSortMeta = multiSortMeta;
+        this.additionalFilterIdInt = additionalFilterIdInt;
+        this.additionalFilterIdLong = additionalFilterIdLong;
     }
 }
 
