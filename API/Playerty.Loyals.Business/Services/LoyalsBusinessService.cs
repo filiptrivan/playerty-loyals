@@ -186,7 +186,7 @@ namespace Playerty.Loyals.Services
             }
 
             List<TierDTO> tierResultDTOList = new List<TierDTO>();
-            List<StoreTierDTO> storeTierResultDTOList = new List<StoreTierDTO>();
+            List<BusinessSystemTierDTO> businessSystemTierResultDTOList = new List<BusinessSystemTierDTO>();
 
             await _context.WithTransactionAsync(async () =>
             {
@@ -194,9 +194,9 @@ namespace Playerty.Loyals.Services
                 List<int> tierIdListToDelete = _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode() && tierIdsDTO.Contains(x.Id) == false).Select(x => x.Id).ToList();
                 await DeleteTierListAsync(tierIdListToDelete, false);
 
-                List<long> storeTierIdsDTO = tierSaveBodyDTO.StoreTierDTOList.Select(x => x.Id).ToList(); // TODO FT: Check if user is authorized to delete passed store tiers
-                List<long> storeTierIdListToDelete = _context.DbSet<StoreTier>().Where(x => tierIdsDTO.Contains(x.Tier.Id) && storeTierIdsDTO.Contains(x.Id) == false).Select(x => x.Id).ToList();
-                await DeleteStoreTierListAsync(storeTierIdListToDelete, false);
+                List<long> businessSystemTierIdsDTO = tierSaveBodyDTO.BusinessSystemTierDTOList.Select(x => x.Id).ToList(); // TODO FT: Check if user is authorized to delete passed businessSystem tiers
+                List<long> businessSystemTierIdListToDelete = _context.DbSet<BusinessSystemTier>().Where(x => tierIdsDTO.Contains(x.Tier.Id) && businessSystemTierIdsDTO.Contains(x.Id) == false).Select(x => x.Id).ToList();
+                await DeleteBusinessSystemTierListAsync(businessSystemTierIdListToDelete, false);
 
                 for (int i = 0; i < tierSaveBodyDTO.TierDTOList.Count; i++)
                 {
@@ -205,18 +205,18 @@ namespace Playerty.Loyals.Services
                     TierDTO savedTierDTO = await SaveTierAndReturnDTOAsync(tierDTO, false, false);
                     tierResultDTOList.Add(savedTierDTO);
 
-                    List<StoreTierDTO> storeTierDTOList = tierSaveBodyDTO.StoreTierDTOList.Where(x => x.TierClientIndex == i).ToList();
-                    for (int j = 0; j < storeTierDTOList.Count; j++)
+                    List<BusinessSystemTierDTO> businessSystemTierDTOList = tierSaveBodyDTO.BusinessSystemTierDTOList.Where(x => x.TierClientIndex == i).ToList();
+                    for (int j = 0; j < businessSystemTierDTOList.Count; j++)
                     {
-                        StoreTierDTO storeTierDTO = storeTierDTOList[j];
-                        storeTierDTO.TierId = savedTierDTO.Id;
-                        storeTierDTO.OrderNumber = j + 1;
-                        StoreTierDTO savedStoreTierDTO = await SaveStoreTierAndReturnDTOAsync(storeTierDTO, false, false);
-                        savedStoreTierDTO.TierClientIndex = i;
-                        storeTierResultDTOList.Add(savedStoreTierDTO);
+                        BusinessSystemTierDTO businessSystemTierDTO = businessSystemTierDTOList[j];
+                        businessSystemTierDTO.TierId = savedTierDTO.Id;
+                        businessSystemTierDTO.OrderNumber = j + 1;
+                        BusinessSystemTierDTO savedBusinessSystemTierDTO = await SaveBusinessSystemTierAndReturnDTOAsync(businessSystemTierDTO, false, false);
+                        savedBusinessSystemTierDTO.TierClientIndex = i;
+                        businessSystemTierResultDTOList.Add(savedBusinessSystemTierDTO);
 
-                        List<StoreTierDiscountCategoryDTO> storeTierDiscountCategoryDTOList = tierSaveBodyDTO.StoreTierDiscountCategoryDTOList.Where(x => x.SelectedForStore == true && x.TierClientIndex == i && x.StoreTierClientIndex == j).ToList();
-                        await UpdateDiscountCategoryListForStoreTier(savedStoreTierDTO.Id, storeTierDiscountCategoryDTOList);
+                        List<BusinessSystemTierDiscountProductGroupDTO> businessSystemTierDiscountProductGroupDTOList = tierSaveBodyDTO.BusinessSystemTierDiscountProductGroupDTOList.Where(x => x.SelectedForBusinessSystem == true && x.TierClientIndex == i && x.BusinessSystemTierClientIndex == j).ToList();
+                        await UpdateDiscountProductGroupListForBusinessSystemTier(savedBusinessSystemTierDTO.Id, businessSystemTierDiscountProductGroupDTOList);
                     }
                 }
 
@@ -224,7 +224,7 @@ namespace Playerty.Loyals.Services
             });
 
             tierSaveBodyDTO.TierDTOList = tierResultDTOList;
-            tierSaveBodyDTO.StoreTierDTOList = storeTierResultDTOList;
+            tierSaveBodyDTO.BusinessSystemTierDTOList = businessSystemTierResultDTOList;
 
             return tierSaveBodyDTO;
         }
@@ -311,66 +311,66 @@ namespace Playerty.Loyals.Services
                 List<TierDTO> tierDTOList = await LoadTierDTOList(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
                 List<int> tierIds = tierDTOList.Select(x => x.Id).ToList();
 
-                List<StoreTierDTO> storeTierDTOList = await LoadStoreTierDTOList(_context.DbSet<StoreTier>().Where(x => tierIds.Contains(x.Tier.Id)).OrderBy(x => x.OrderNumber), false);
-                List<long> storeTierIds = storeTierDTOList.Select(x => x.Id).ToList();
+                List<BusinessSystemTierDTO> businessSystemTierDTOList = await LoadBusinessSystemTierDTOList(_context.DbSet<BusinessSystemTier>().Where(x => tierIds.Contains(x.Tier.Id)).OrderBy(x => x.OrderNumber), false);
+                List<long> businessSystemTierIds = businessSystemTierDTOList.Select(x => x.Id).ToList();
 
-                List<DiscountCategoryDTO> discountCategoryDTOList = await LoadDiscountCategoryDTOList(_context.DbSet<DiscountCategory>().Where(x => x.Store.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false); // 14
-                List<StoreTierDiscountCategoryDTO> storeTierDiscountCategoryResultDTOList = discountCategoryDTOList
-                    .Select(x => new StoreTierDiscountCategoryDTO
+                List<DiscountProductGroupDTO> discountCategoryDTOList = await LoadDiscountProductGroupDTOList(_context.DbSet<DiscountProductGroup>().Where(x => x.BusinessSystem.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false); // 14
+                List<BusinessSystemTierDiscountProductGroupDTO> businessSystemTierDiscountProductGroupResultDTOList = discountCategoryDTOList
+                    .Select(x => new BusinessSystemTierDiscountProductGroupDTO
                     {
                         Id = x.Id,
-                        DiscountCategoryId = x.Id,
-                        DiscountCategoryDisplayName = x.Name,
-                        SelectedForStore = false,
+                        DiscountProductGroupId = x.Id,
+                        DiscountProductGroupDisplayName = x.Name,
+                        SelectedForBusinessSystem = false,
                         Discount = null,
-                        StoreId = x.StoreId, // FT: Needs StoreId because when we add a new table on the client we have to separate which data to show
+                        BusinessSystemId = x.BusinessSystemId, // FT: Needs BusinessSystemId because when we add a new table on the client we have to separate which data to show
                     })
                     .ToList();
 
-                List<StoreTierDiscountCategoryDTO> selectedStoreTierDiscountCategoryDTOList = await _context.DbSet<StoreTierDiscountCategory>() // TODO FT: Add to generator
+                List<BusinessSystemTierDiscountProductGroupDTO> selectedBusinessSystemTierDiscountProductGroupDTOList = await _context.DbSet<BusinessSystemTierDiscountProductGroup>() // TODO FT: Add to generator
                     .AsNoTracking()
-                    .Where(x => storeTierIds.Contains(x.StoreTier.Id))
-                    .ProjectToType<StoreTierDiscountCategoryDTO>(Mapper.StoreTierDiscountCategoryToDTOConfig())
+                    .Where(x => businessSystemTierIds.Contains(x.BusinessSystemTier.Id))
+                    .ProjectToType<BusinessSystemTierDiscountProductGroupDTO>(Mapper.BusinessSystemTierDiscountProductGroupToDTOConfig())
                     .ToListAsync();
 
                 for (int i = 0; i < tierIds.Count; i++)
                 {
-                    List<StoreTierDTO> storeTierDTOForTierList = storeTierDTOList.Where(x => x.TierId == tierIds[i]).ToList();
-                    List<long> storeTierIdsForTierList = storeTierDTOForTierList.Select(x => x.Id).ToList();
+                    List<BusinessSystemTierDTO> businessSystemTierDTOForTierList = businessSystemTierDTOList.Where(x => x.TierId == tierIds[i]).ToList();
+                    List<long> businessSystemTierIdsForTierList = businessSystemTierDTOForTierList.Select(x => x.Id).ToList();
 
-                    for (int j = 0; j < storeTierIdsForTierList.Count; j++)
+                    for (int j = 0; j < businessSystemTierIdsForTierList.Count; j++)
                     {
-                        storeTierDTOForTierList[j].TierClientIndex = i;
+                        businessSystemTierDTOForTierList[j].TierClientIndex = i;
 
-                        List<StoreTierDiscountCategoryDTO> storeTierDiscountCategoryDTOList = discountCategoryDTOList
-                            .Where(x => x.StoreId == storeTierDTOForTierList[j].StoreId)
+                        List<BusinessSystemTierDiscountProductGroupDTO> businessSystemTierDiscountProductGroupDTOList = discountCategoryDTOList
+                            .Where(x => x.BusinessSystemId == businessSystemTierDTOForTierList[j].BusinessSystemId)
                             .Select(x =>
                             {
-                                StoreTierDiscountCategoryDTO selectedStoreTierDiscountCategoryDTO = selectedStoreTierDiscountCategoryDTOList
-                                    .Where(s => s.DiscountCategoryId == x.Id && s.StoreTierId == storeTierIdsForTierList[j])
+                                BusinessSystemTierDiscountProductGroupDTO selectedBusinessSystemTierDiscountProductGroupDTO = selectedBusinessSystemTierDiscountProductGroupDTOList
+                                    .Where(s => s.DiscountProductGroupId == x.Id && s.BusinessSystemTierId == businessSystemTierIdsForTierList[j])
                                     .SingleOrDefault();
 
-                                return new StoreTierDiscountCategoryDTO
+                                return new BusinessSystemTierDiscountProductGroupDTO
                                 {
                                     Id = x.Id,
-                                    DiscountCategoryDisplayName = x.Name,
-                                    SelectedForStore = selectedStoreTierDiscountCategoryDTO != null,
-                                    Discount = selectedStoreTierDiscountCategoryDTO?.Discount,
-                                    DiscountCategoryId = x.Id,
-                                    StoreTierId = storeTierIdsForTierList[j],
+                                    DiscountProductGroupDisplayName = x.Name,
+                                    SelectedForBusinessSystem = selectedBusinessSystemTierDiscountProductGroupDTO != null,
+                                    Discount = selectedBusinessSystemTierDiscountProductGroupDTO?.Discount,
+                                    DiscountProductGroupId = x.Id,
+                                    BusinessSystemTierId = businessSystemTierIdsForTierList[j],
                                     TierClientIndex = i,
-                                    StoreTierClientIndex = j,
+                                    BusinessSystemTierClientIndex = j,
                                 };
                             })
                             .ToList();
 
-                        storeTierDiscountCategoryResultDTOList = storeTierDiscountCategoryResultDTOList.Concat(storeTierDiscountCategoryDTOList).ToList();
+                        businessSystemTierDiscountProductGroupResultDTOList = businessSystemTierDiscountProductGroupResultDTOList.Concat(businessSystemTierDiscountProductGroupDTOList).ToList();
                     }
                 }
 
                 tierSaveBodyDTO.TierDTOList = tierDTOList;
-                tierSaveBodyDTO.StoreTierDTOList = storeTierDTOList;
-                tierSaveBodyDTO.StoreTierDiscountCategoryDTOList = storeTierDiscountCategoryResultDTOList;
+                tierSaveBodyDTO.BusinessSystemTierDTOList = businessSystemTierDTOList;
+                tierSaveBodyDTO.BusinessSystemTierDiscountProductGroupDTOList = businessSystemTierDiscountProductGroupResultDTOList;
             });
 
             return tierSaveBodyDTO;
@@ -385,31 +385,31 @@ namespace Playerty.Loyals.Services
                 List<Tier> tierList = await LoadTierList(_context.DbSet<Tier>()
                     .AsNoTracking()
                     .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
-                    .Include(x => x.StoreTiers)
-                        .ThenInclude(x => x.Store)
-                    .Include(x => x.StoreTiers)
-                        .ThenInclude(x => x.StoreTierDiscountCategories)
-                            .ThenInclude(x => x.DiscountCategory)
+                    .Include(x => x.BusinessSystemTiers)
+                        .ThenInclude(x => x.BusinessSystem)
+                    .Include(x => x.BusinessSystemTiers)
+                        .ThenInclude(x => x.BusinessSystemTierDiscountProductGroups)
+                            .ThenInclude(x => x.DiscountProductGroup)
                     .Include(x => x.Partner)
                     .OrderByDescending(x => x.ValidFrom), false);
 
                 foreach (Tier tier in tierList)
                 {
                     TierDTO tierDTO = tier.Adapt<TierDTO>(Mapper.TierToDTOConfig());
-                    tierDTO.StoreTiersDTOList = new List<StoreTierDTO>();
+                    tierDTO.BusinessSystemTiersDTOList = new List<BusinessSystemTierDTO>();
 
-                    foreach (StoreTier storeTier in tier.StoreTiers.OrderBy(x => x.OrderNumber))
+                    foreach (BusinessSystemTier businessSystemTier in tier.BusinessSystemTiers.OrderBy(x => x.OrderNumber))
                     {
-                        StoreTierDTO storeTierDTO = storeTier.Adapt<StoreTierDTO>(Mapper.StoreTierToDTOConfig());
-                        storeTierDTO.StoreTierDiscountCategoriesDTOList = new List<StoreTierDiscountCategoryDTO>();
+                        BusinessSystemTierDTO businessSystemTierDTO = businessSystemTier.Adapt<BusinessSystemTierDTO>(Mapper.BusinessSystemTierToDTOConfig());
+                        businessSystemTierDTO.BusinessSystemTierDiscountProductGroupsDTOList = new List<BusinessSystemTierDiscountProductGroupDTO>();
 
-                        foreach (StoreTierDiscountCategory storeTierDiscountCategory in storeTier.StoreTierDiscountCategories)
+                        foreach (BusinessSystemTierDiscountProductGroup businessSystemTierDiscountProductGroup in businessSystemTier.BusinessSystemTierDiscountProductGroups)
                         {
-                            StoreTierDiscountCategoryDTO storeTierDiscountCategoryDTO = storeTierDiscountCategory.Adapt<StoreTierDiscountCategoryDTO>(Mapper.StoreTierDiscountCategoryToDTOConfig());
-                            storeTierDTO.StoreTierDiscountCategoriesDTOList.Add(storeTierDiscountCategoryDTO);
+                            BusinessSystemTierDiscountProductGroupDTO businessSystemTierDiscountProductGroupDTO = businessSystemTierDiscountProductGroup.Adapt<BusinessSystemTierDiscountProductGroupDTO>((TypeAdapterConfig)Mapper.BusinessSystemTierDiscountProductGroupToDTOConfig());
+                            businessSystemTierDTO.BusinessSystemTierDiscountProductGroupsDTOList.Add(businessSystemTierDiscountProductGroupDTO);
                         }
 
-                        tierDTO.StoreTiersDTOList.Add(storeTierDTO);
+                        tierDTO.BusinessSystemTiersDTOList.Add(businessSystemTierDTO);
                     }
 
                     tierDTOList.Add(tierDTO);
@@ -832,24 +832,24 @@ namespace Playerty.Loyals.Services
             {
                 long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
 
-                var notificationUsersQuery = _context.DbSet<NotificationUser>()
-                    .Where(x => x.UsersId == currentUserId)
+                var notificationUsersQuery = _context.DbSet<UserNotification>()
+                    .Where(x => x.UserId == currentUserId)
                     .Select(x => new
                     {
-                        UserId = x.UsersId,
-                        NotificationId = x.NotificationsId,
+                        UserId = x.UserId,
+                        NotificationId = x.NotificationId,
                         IsMarkedAsRead = x.IsMarkedAsRead,
-                        Discriminator = nameof(NotificationUser),
+                        Discriminator = nameof(UserNotification),
                     });
 
-                var partnerNotificationPartnerUsersQuery = _context.DbSet<PartnerNotificationPartnerUser>()
-                    .Where(x => x.PartnerUsersId == currentPartnerUserId)
+                var partnerNotificationPartnerUsersQuery = _context.DbSet<PartnerUserPartnerNotification>()
+                    .Where(x => x.PartnerUserId == currentPartnerUserId)
                     .Select(x => new
                     {
-                        UserId = x.PartnerUsersId,
-                        NotificationId = x.PartnerNotificationsId,
+                        UserId = x.PartnerUserId,
+                        NotificationId = x.PartnerNotificationId,
                         IsMarkedAsRead = x.IsMarkedAsRead,
-                        Discriminator = nameof(PartnerNotificationPartnerUser),
+                        Discriminator = nameof(PartnerUserPartnerNotification),
                     });
 
                 var combinedQuery = notificationUsersQuery.Concat(partnerNotificationPartnerUsersQuery); // FT: Concat instead of union because it includes duplicates
@@ -867,7 +867,7 @@ namespace Playerty.Loyals.Services
                 {
                     NotificationDTO notificationDTO = new NotificationDTO();
 
-                    if (item.Discriminator == nameof(NotificationUser))
+                    if (item.Discriminator == nameof(UserNotification))
                     {
                         Notification notification = await LoadInstanceAsync<Notification, long>(item.NotificationId, null);
                         notificationDTO.Id = notification.Id;
@@ -876,7 +876,7 @@ namespace Playerty.Loyals.Services
                         notificationDTO.CreatedAt = notification.CreatedAt;
                         notificationDTO.IsMarkedAsRead = item.IsMarkedAsRead;
                     }
-                    else if (item.Discriminator == nameof(PartnerNotificationPartnerUser))
+                    else if (item.Discriminator == nameof(PartnerUserPartnerNotification))
                     {
                         PartnerNotification partnerNotification = await LoadInstanceAsync<PartnerNotification, long>(item.NotificationId, null);
                         notificationDTO.Id = partnerNotification.Id;
@@ -906,11 +906,11 @@ namespace Playerty.Loyals.Services
             {
                 long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
 
-                var notificationUsersQuery = _context.DbSet<NotificationUser>()
-                    .Where(x => x.UsersId == currentUserId && x.IsMarkedAsRead == false);
+                var notificationUsersQuery = _context.DbSet<UserNotification>()
+                    .Where(x => x.UserId == currentUserId && x.IsMarkedAsRead == false);
 
-                var partnerNotificationPartnerUsersQuery = _context.DbSet<PartnerNotificationPartnerUser>()
-                    .Where(x => x.PartnerUsersId == currentPartnerUserId && x.IsMarkedAsRead == false);
+                var partnerNotificationPartnerUsersQuery = _context.DbSet<PartnerUserPartnerNotification>()
+                    .Where(x => x.PartnerUserId == currentPartnerUserId && x.IsMarkedAsRead == false);
 
                 int count = await notificationUsersQuery.CountAsync() + await partnerNotificationPartnerUsersQuery.CountAsync();
 
@@ -1001,95 +1001,95 @@ namespace Playerty.Loyals.Services
 
         #endregion
 
-        #region Store
+        #region BusinessSystem
 
-        public async Task<StoreDTO> SaveStoreExtendedAsync(StoreSaveBodyDTO storeSaveBodyDTO)
+        public async Task<BusinessSystemDTO> SaveBusinessSystemExtendedAsync(BusinessSystemSaveBodyDTO businessSystemSaveBodyDTO)
         {
-            if (storeSaveBodyDTO.StoreDTO.Id == 0 && (storeSaveBodyDTO.StoreDTO.UpdatePointsInterval != null || storeSaveBodyDTO.StoreDTO.UpdatePointsStartDate != null))
+            if (businessSystemSaveBodyDTO.BusinessSystemDTO.Id == 0 && (businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsInterval != null || businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsStartDate != null))
                 throw new HackerException("Can't save UpdatePointsInterval nor UpdatePointsStartDate from here.");
 
             return await _context.WithTransactionAsync(async () =>
             {
                 int currentPartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
-                storeSaveBodyDTO.StoreDTO.PartnerId = currentPartnerId;
+                businessSystemSaveBodyDTO.BusinessSystemDTO.PartnerId = currentPartnerId;
 
-                if (storeSaveBodyDTO.StoreDTO.Id > 0)
+                if (businessSystemSaveBodyDTO.BusinessSystemDTO.Id > 0)
                 {
-                    Store storeBeforeSave = await LoadInstanceAsync<Store, long>(storeSaveBodyDTO.StoreDTO.Id, storeSaveBodyDTO.StoreDTO.Version);
+                    BusinessSystem businessSystemBeforeSave = await LoadInstanceAsync<BusinessSystem, long>(businessSystemSaveBodyDTO.BusinessSystemDTO.Id, businessSystemSaveBodyDTO.BusinessSystemDTO.Version);
 
-                    if ((storeBeforeSave.UpdatePointsInterval != storeSaveBodyDTO.StoreDTO.UpdatePointsInterval) ||
-                        (!Helper.AreDatesEqualToSeconds(storeBeforeSave.UpdatePointsStartDate, storeSaveBodyDTO.StoreDTO.UpdatePointsStartDate)))
+                    if ((businessSystemBeforeSave.UpdatePointsInterval != businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsInterval) ||
+                        (!Helper.AreDatesEqualToSeconds(businessSystemBeforeSave.UpdatePointsStartDate, businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsStartDate)))
                         throw new HackerException("Can't save UpdatePointsInterval nor UpdatePointsStartDate from here.");
                 }
 
 
-                return await SaveStoreAndReturnDTOAsync(storeSaveBodyDTO.StoreDTO, false, false);
+                return await SaveBusinessSystemAndReturnDTOAsync(businessSystemSaveBodyDTO.BusinessSystemDTO, false, false);
             });
         }
 
-        public async Task<int> SaveStoreUpdatePointsDataAsync(StoreUpdatePointsDataBodyDTO storeUpdatePointsDataBodyDTO)
+        public async Task<int> SaveBusinessSystemUpdatePointsDataAsync(BusinessSystemUpdatePointsDataBodyDTO businessSystemUpdatePointsDataBodyDTO)
         {
             DateTimeOffset? scheduledJobResult = null;
 
             try
             {
-                if ((storeUpdatePointsDataBodyDTO.UpdatePointsInterval == null && storeUpdatePointsDataBodyDTO.UpdatePointsStartDate != null) ||
-                    (storeUpdatePointsDataBodyDTO.UpdatePointsInterval != null && storeUpdatePointsDataBodyDTO.UpdatePointsStartDate == null))
+                if ((businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval == null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate != null) ||
+                    (businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval != null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate == null))
                     throw new BusinessException("Ako želite da ažurirate poene na određenom intervalu, morate da popunite polje interval i polje početak ažuriranja.");
 
-                if (storeUpdatePointsDataBodyDTO.UpdatePointsInterval != null && storeUpdatePointsDataBodyDTO.UpdatePointsInterval <= 0)
-                    throw new HackerException($"The negative or zero interval can't be saved (StoreId: {storeUpdatePointsDataBodyDTO.StoreId}).");
+                if (businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval != null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval <= 0)
+                    throw new HackerException($"The negative or zero interval can't be saved (BusinessSystemId: {businessSystemUpdatePointsDataBodyDTO.BusinessSystemId}).");
 
                 DateTime now = DateTime.Now;
 
                 // FT: We redundantly check both here and inside the ScheduleJob method, in the method due to the programming principle, and here so that they do not enter the transaction and block other threads from executing
-                if (storeUpdatePointsDataBodyDTO.UpdatePointsStartDate != null && storeUpdatePointsDataBodyDTO.UpdatePointsStartDate.Value <= now)
+                if (businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate != null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate.Value <= now)
                     throw new BusinessException("Vreme početka ažuriranja poena mora biti veće od sadašnjeg trenutka.");
 
                 return await _context.WithTransactionAsync(async () =>
                 {
-                    Store store = await LoadInstanceAsync<Store, long>(storeUpdatePointsDataBodyDTO.StoreId, storeUpdatePointsDataBodyDTO.StoreVersion);
+                    BusinessSystem businessSystem = await LoadInstanceAsync<BusinessSystem, long>(businessSystemUpdatePointsDataBodyDTO.BusinessSystemId, businessSystemUpdatePointsDataBodyDTO.BusinessSystemVersion);
 
-                    if (store.GetTransactionsEndpoint == null)
+                    if (businessSystem.GetTransactionsEndpoint == null)
                         throw new BusinessException("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
 
-                    store.UpdatePointsInterval = storeUpdatePointsDataBodyDTO.UpdatePointsInterval;
-                    store.UpdatePointsStartDate = storeUpdatePointsDataBodyDTO.UpdatePointsStartDate;
+                    businessSystem.UpdatePointsInterval = businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval;
+                    businessSystem.UpdatePointsStartDate = businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate;
 
-                    if (storeUpdatePointsDataBodyDTO.UpdatePointsInterval != null && storeUpdatePointsDataBodyDTO.UpdatePointsStartDate != null)
+                    if (businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval != null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate != null)
                     {
-                        store.UpdatePointsScheduledTaskIsPaused = false;
+                        businessSystem.UpdatePointsScheduledTaskIsPaused = false;
                         await _context.SaveChangesAsync();
 
                         scheduledJobResult = await _updatePointsScheduler.ScheduleJob(
-                            storeUpdatePointsDataBodyDTO.StoreId,
-                            storeUpdatePointsDataBodyDTO.UpdatePointsInterval.Value,
-                            storeUpdatePointsDataBodyDTO.UpdatePointsStartDate.Value,
+                            businessSystemUpdatePointsDataBodyDTO.BusinessSystemId,
+                            businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval.Value,
+                            businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate.Value,
                             now
                         );
                     }
-                    else if (storeUpdatePointsDataBodyDTO.UpdatePointsInterval == null && storeUpdatePointsDataBodyDTO.UpdatePointsStartDate == null)
+                    else if (businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval == null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate == null)
                     {
-                        store.UpdatePointsScheduledTaskIsPaused = true;
+                        businessSystem.UpdatePointsScheduledTaskIsPaused = true;
                         await _context.SaveChangesAsync();
 
-                        await _updatePointsScheduler.DeleteJob(storeUpdatePointsDataBodyDTO.StoreId);
+                        await _updatePointsScheduler.DeleteJob(businessSystemUpdatePointsDataBodyDTO.BusinessSystemId);
                     }
 
 
-                    return store.Version;
+                    return businessSystem.Version;
                 });
             }
             catch (Exception)
             {
                 if (scheduledJobResult != null)
-                    await _updatePointsScheduler.DeleteJob(storeUpdatePointsDataBodyDTO.StoreId);
+                    await _updatePointsScheduler.DeleteJob(businessSystemUpdatePointsDataBodyDTO.BusinessSystemId);
 
                 throw;
             }
         }
 
-        public async Task<int> ChangeScheduledTaskUpdatePointsStatusAsync(long storeId, int storeVersion)
+        public async Task<int> ChangeScheduledTaskUpdatePointsStatusAsync(long businessSystemId, int businessSystemVersion)
         {
             bool scheduledJobContinued = false;
 
@@ -1097,52 +1097,52 @@ namespace Playerty.Loyals.Services
             {
                 return await _context.WithTransactionAsync(async () =>
                 {
-                    Store store = await LoadInstanceAsync<Store, long>(storeId, storeVersion);
+                    BusinessSystem businessSystem = await LoadInstanceAsync<BusinessSystem, long>(businessSystemId, businessSystemVersion);
 
                     List<string> exceptions = new List<string>();
 
-                    if (store.GetTransactionsEndpoint == null)
+                    if (businessSystem.GetTransactionsEndpoint == null)
                         exceptions.Add("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
 
-                    if (store.UpdatePointsInterval == null)
+                    if (businessSystem.UpdatePointsInterval == null)
                         exceptions.Add("Morate da popunite i sačuvate polje 'Interval ažuriranja', kako biste pokrenuli ažuriranje poena.");
 
-                    if (store.UpdatePointsStartDate == null)
+                    if (businessSystem.UpdatePointsStartDate == null)
                         exceptions.Add("Morate da popunite i sačuvate polje 'Početak ažuriranja', kako biste pokrenuli ažuriranje poena.");
 
-                    if (store.UpdatePointsScheduledTaskIsPaused == null)
+                    if (businessSystem.UpdatePointsScheduledTaskIsPaused == null)
                         exceptions.Add("Pre promene statusa, morate da pokrenete automatsko ažuriranje.");
 
                     if (exceptions.Count > 0)
                         throw new BusinessException(string.Join("\n", exceptions));
 
-                    store.UpdatePointsScheduledTaskIsPaused = !store.UpdatePointsScheduledTaskIsPaused.Value;
+                    businessSystem.UpdatePointsScheduledTaskIsPaused = !businessSystem.UpdatePointsScheduledTaskIsPaused.Value;
 
                     await _context.SaveChangesAsync();
 
-                    if (store.UpdatePointsScheduledTaskIsPaused.Value)
+                    if (businessSystem.UpdatePointsScheduledTaskIsPaused.Value)
                     {
-                        await _updatePointsScheduler.DeleteJob(storeId);
+                        await _updatePointsScheduler.DeleteJob(businessSystemId);
                     }
                     else
                     {
-                        StoreUpdatePointsScheduledTask lastStoreUpdatePointsScheduledTask = store.StoreUpdatePointsScheduledTasks.OrderByDescending(x => x.TransactionsTo).FirstOrDefault();
+                        BusinessSystemUpdatePointsScheduledTask lastBusinessSystemUpdatePointsScheduledTask = businessSystem.BusinessSystemUpdatePointsScheduledTasks.OrderByDescending(x => x.TransactionsTo).FirstOrDefault();
 
                         scheduledJobContinued = await _updatePointsScheduler.ContinueJob(
-                            store.Id,
-                            store.UpdatePointsInterval.Value,
-                            store.UpdatePointsStartDate.Value,
-                            lastStoreUpdatePointsScheduledTask?.TransactionsTo
+                            businessSystem.Id,
+                            businessSystem.UpdatePointsInterval.Value,
+                            businessSystem.UpdatePointsStartDate.Value,
+                            lastBusinessSystemUpdatePointsScheduledTask?.TransactionsTo
                         );
                     }
 
-                    return store.Version;
+                    return businessSystem.Version;
                 });
             }
             catch (Exception)
             {
                 if (scheduledJobContinued == true)
-                    await _updatePointsScheduler.DeleteJob(storeId);
+                    await _updatePointsScheduler.DeleteJob(businessSystemId);
 
                 throw;
             }
@@ -1151,7 +1151,7 @@ namespace Playerty.Loyals.Services
         /// <summary>
         /// Pass fromDate only if it is the first time
         /// </summary>
-        public async Task UpdatePointsAsync(long storeId, int storeVersion, DateTime manualDateFrom, DateTime manualDateTo)
+        public async Task UpdatePointsAsync(long businessSystemId, int businessSystemVersion, DateTime manualDateFrom, DateTime manualDateTo)
         {
             DateTime now = DateTime.Now;
 
@@ -1159,16 +1159,16 @@ namespace Playerty.Loyals.Services
                 throw new BusinessException("Datum do kog želite da ažurirate poene ne sme biti veći od sadašnjeg trenutka.");
 
             if (manualDateTo <= manualDateFrom)
-                throw new HackerException($"Store: {storeId}. Can not pass greater {nameof(manualDateTo)} then {nameof(manualDateFrom)} in manually started points update.");
+                throw new HackerException($"BusinessSystem: {businessSystemId}. Can not pass greater {nameof(manualDateTo)} then {nameof(manualDateFrom)} in manually started points update.");
 
             await _context.WithTransactionAsync(async () =>
             {
-                Store store = await LoadInstanceAsync<Store, long>(storeId, storeVersion);
+                BusinessSystem businessSystem = await LoadInstanceAsync<BusinessSystem, long>(businessSystemId, businessSystemVersion);
 
-                if (store.GetTransactionsEndpoint == null)
+                if (businessSystem.GetTransactionsEndpoint == null)
                     throw new BusinessException("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
 
-                await _updatePointsScheduler.ScheduleJobManually(storeId, manualDateFrom, manualDateTo);
+                await _updatePointsScheduler.ScheduleJobManually(businessSystemId, manualDateFrom, manualDateTo);
             });
         }
 
@@ -1180,7 +1180,7 @@ namespace Playerty.Loyals.Services
         {
             await _context.WithTransactionAsync(async () =>
             {
-                if (await _context.DbSet<Transaction>().AnyAsync(x => x.Store.Id == (long)transactionDTO.StoreId && x.Code == transactionDTO.Code))
+                if (await EntityFrameworkQueryableExtensions.AnyAsync<Transaction>(_context.DbSet<Transaction>(), x => x.BusinessSystem.Id == (long)transactionDTO.BusinessSystemId && x.Code == transactionDTO.Code))
                     throw new BusinessException($"Transakcija '{transactionDTO.Code}' već postoji u sistemu.");
             });
         }

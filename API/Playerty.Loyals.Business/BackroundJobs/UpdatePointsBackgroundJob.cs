@@ -42,11 +42,11 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
         public async Task Execute(IJobExecutionContext jobExecutionContext)
         {
-            Store store = null;
+            BusinessSystem businessSystem = null;
 
             try
             {
-                long storeId = jobExecutionContext.JobDetail.JobDataMap.GetLong("StoreId");
+                long businessSystemId = jobExecutionContext.JobDetail.JobDataMap.GetLong("BusinessSystemId");
 
                 DateTime? manualDateFrom = jobExecutionContext.JobDetail.JobDataMap.ContainsKey("ManualDateFrom")
                     ? jobExecutionContext.JobDetail.JobDataMap.GetDateTime("ManualDateFrom")
@@ -60,28 +60,28 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
                 await _context.WithTransactionAsync(async () =>
                 {
-                    DbSet<StoreUpdatePointsScheduledTask> dbSet = _context.DbSet<StoreUpdatePointsScheduledTask>();
+                    DbSet<BusinessSystemUpdatePointsScheduledTask> dbSet = _context.DbSet<BusinessSystemUpdatePointsScheduledTask>();
 
-                    store = await _loyalsBusinessService.LoadInstanceAsync<Store, long>(storeId, null);
+                    businessSystem = await _loyalsBusinessService.LoadInstanceAsync<BusinessSystem, long>(businessSystemId, null);
 
-                    if (store.GetTransactionsEndpoint == null)
-                        throw new BusinessException($"Na stranici prodavnice '{store.Name}' morate da sačuvate popunjeno polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
+                    if (businessSystem.GetTransactionsEndpoint == null)
+                        throw new BusinessException($"Na stranici prodavnice '{businessSystem.Name}' morate da sačuvate popunjeno polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
 
-                    int? interval = store.UpdatePointsInterval;
+                    int? interval = businessSystem.UpdatePointsInterval;
 
-                    DateTime? lastShouldStartedAt = await _context.DbSet<StoreUpdatePointsScheduledTask>()
-                        .Where(x => x.Store.Id == storeId && x.IsManual != true)
+                    DateTime? lastShouldStartedAt = await _context.DbSet<BusinessSystemUpdatePointsScheduledTask>()
+                        .Where(x => x.BusinessSystem.Id == businessSystemId && x.IsManual != true)
                         .OrderByDescending(x => x.TransactionsTo)
                         .Select(x => (DateTime?)x.TransactionsTo)
                         .FirstOrDefaultAsync();
 
-                    DateTime? lastWithManualsShouldStartedAt = await _context.DbSet<StoreUpdatePointsScheduledTask>()
-                        .Where(x => x.Store.Id == storeId)
+                    DateTime? lastWithManualsShouldStartedAt = await _context.DbSet<BusinessSystemUpdatePointsScheduledTask>()
+                        .Where(x => x.BusinessSystem.Id == businessSystemId)
                         .OrderByDescending(x => x.TransactionsTo)
                         .Select(x => (DateTime?)x.TransactionsTo)
                         .FirstOrDefaultAsync();
 
-                    DateTime? startDateTime = store.UpdatePointsStartDate; // FT: When the startDateTime == null, the user is manually starting the update
+                    DateTime? startDateTime = businessSystem.UpdatePointsStartDate; // FT: When the startDateTime == null, the user is manually starting the update
 
                     DateTime dateTo;
 
@@ -92,7 +92,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
                     DateTime dateFrom;
 
-                    if (lastWithManualsShouldStartedAt == null) // FT: If lastShouldStartedAt == null that means that this is the first update ever for this store
+                    if (lastWithManualsShouldStartedAt == null) // FT: If lastShouldStartedAt == null that means that this is the first update ever for this businessSystem
                     {
                         if (manualDateFrom == null && manualDateTo == null)
                             //dateFrom = shouldStartedAtForSave.AddHours(-interval.Value);
@@ -108,13 +108,13 @@ namespace Playerty.Loyals.Business.BackroundJobs
                             dateFrom = manualDateFrom.Value;
                     }
 
-                    List<ExternalTransactionDTO> externalTransactionDTOList = await _wingsApiService.GetExternalTransactionDTOList(store.GetTransactionsEndpoint, dateFrom, dateTo);
+                    List<ExternalTransactionDTO> externalTransactionDTOList = await _wingsApiService.GetExternalTransactionDTOList(businessSystem.GetTransactionsEndpoint, dateFrom, dateTo);
 
                     List<string> userEmailList = externalTransactionDTOList.Select(x => x.UserEmail).ToList();
 
                     List<PartnerUser> partnerUserList = await _context.DbSet<PartnerUser>()
                         .Include(x => x.User)
-                        .Where(x => x.Partner.Id == store.Partner.Id && userEmailList.Contains(x.User.Email))
+                        .Where(x => x.Partner.Id == businessSystem.Partner.Id && userEmailList.Contains(x.User.Email))
                         .ToListAsync();
 
                     // FT: when we make an agreement with the partners that they update the categories, we will just send them an email, the update of your points failed, due to mismatched categories, please harmonize the categories and stop the execution manually.
@@ -127,9 +127,9 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
                     foreach (ExternalTransactionDTO externalTransactionDTO in externalTransactionDTOList)
                     {
-                        if (await _context.DbSet<Transaction>().AnyAsync(x => x.Store.Id == storeId && x.Code == externalTransactionDTO.Code))
+                        if (await _context.DbSet<Transaction>().AnyAsync(x => x.BusinessSystem.Id == businessSystemId && x.Code == externalTransactionDTO.Code))
                         {
-                            transactionWhichWeAlreadyUpdatedForThisPeriodList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail})"); // TODO FT: This doesn't have sence, you should store transaction here, and put user email in the brackets, also then we should show the table of the transactions on the client.
+                            transactionWhichWeAlreadyUpdatedForThisPeriodList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail})"); // TODO FT: This doesn't have sence, you should businessSystem transaction here, and put user email in the brackets, also then we should show the table of the transactions on the client.
                             continue;
                         }
 
@@ -141,7 +141,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
                             continue;
                         }
 
-                        int pointsFromTransaction = (int)Math.Floor((decimal)externalTransactionDTO.Price * store.Partner.PointsMultiplier); // FT: Test this for negative and positive price
+                        int pointsFromTransaction = (int)Math.Floor((decimal)externalTransactionDTO.Price * businessSystem.Partner.PointsMultiplier); // FT: Test this for negative and positive price
 
                         TransactionDTO transactionDTO = new TransactionDTO
                         {
@@ -153,7 +153,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
                             Points = pointsFromTransaction,
                             PartnerUserId = partnerUser.Id,
                             BoughtAt = externalTransactionDTO.BoughtAt,
-                            StoreId = store.Id,
+                            BusinessSystemId = businessSystem.Id,
                         };
 
                         try
@@ -172,20 +172,20 @@ namespace Playerty.Loyals.Business.BackroundJobs
                         }
                     }
 
-                    StoreUpdatePointsScheduledTask savedStoreUpdatePointsScheduledTask = new StoreUpdatePointsScheduledTask
+                    BusinessSystemUpdatePointsScheduledTask savedBusinessSystemUpdatePointsScheduledTask = new BusinessSystemUpdatePointsScheduledTask
                     {
                         TransactionsFrom = dateFrom,
                         TransactionsTo = dateTo,
-                        Store = store,
+                        BusinessSystem = businessSystem,
                         IsManual = manualDateFrom != null && manualDateTo != null,
                     };
 
-                    await dbSet.AddAsync(savedStoreUpdatePointsScheduledTask);
+                    await dbSet.AddAsync(savedBusinessSystemUpdatePointsScheduledTask);
 
                     await _context.SaveChangesAsync();
 
                     await _emailingService.SendEmailAsync(
-                        store.Partner.Email,
+                        businessSystem.Partner.Email,
                         "Uspešno izvršeno ažuriranje poena",
                         $$"""
 Interval u kom su obrađene transakcije: {{dateFrom.ToString("dd.MM.yyyy. HH:mm")}} - {{dateTo.ToString("dd.MM.yyyy. HH:mm")}}. <br/>
@@ -214,15 +214,15 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
 
                 if (ex is BusinessException)
                 {
-                    await _emailingService.SendEmailAsync(store.Partner.Email,
+                    await _emailingService.SendEmailAsync(businessSystem.Partner.Email,
                         "Greška prilikom ažuriranja poena",
-                        $"Prodavnica: {store.Name}. {ex.Message}"
+                        $"Prodavnica: {businessSystem.Name}. {ex.Message}"
                     );
                 }
                 else
                 {
                     await _emailingService.SendEmailAsync(
-                        store.Partner.Email,
+                        businessSystem.Partner.Email,
                         "Greška prilikom ažuriranja poena",
                         "Došlo je do greške prilikom ažuriranja poena. Molimo Vas da pokušate ponovo. Ako se problem ponovi, kontaktirajte podršku."
                     );

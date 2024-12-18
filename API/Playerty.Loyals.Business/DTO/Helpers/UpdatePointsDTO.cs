@@ -8,8 +8,8 @@ namespace Playerty.Loyals.Business.DTO
 {
     public class UpdatePointsDTO
     {
-        public long StoreId { get; set; }
-        public int StoreVersion { get; set; }
+        public long BusinessSystemId { get; set; }
+        public int BusinessSystemVersion { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
     }

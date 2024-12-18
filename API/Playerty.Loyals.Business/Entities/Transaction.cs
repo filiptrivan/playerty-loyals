@@ -21,7 +21,7 @@ namespace Playerty.Loyals.Business.Entities
         public string ProductName { get; set; }
 
         /// <summary>
-        /// Unique transaction code for the particular store, so we don't make it globally unique in SQL Server
+        /// Unique transaction code for the particular business system, so we don't make it globally unique in SQL Server
         /// </summary>
         [Required]
         [StringLength(20, MinimumLength = 1)]
@@ -54,6 +54,6 @@ namespace Playerty.Loyals.Business.Entities
         public virtual PartnerUser PartnerUser {  get; set; }
 
         [ManyToOneRequired]
-        public virtual Store Store { get; set; }
+        public virtual BusinessSystem BusinessSystem { get; set; }
     }
 }

@@ -33,16 +33,16 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
             await _context.WithTransactionAsync(async () =>
             {
-                List<Store> storeList = await _context.DbSet<Store>()
+                List<BusinessSystem> businessSystemList = await _context.DbSet<BusinessSystem>()
                     .Where(x => x.UpdatePointsInterval != null && x.UpdatePointsStartDate != null && x.GetTransactionsEndpoint != null && x.UpdatePointsScheduledTaskIsPaused == false)
-                    .Include(x => x.StoreUpdatePointsScheduledTasks)
+                    .Include(x => x.BusinessSystemUpdatePointsScheduledTasks)
                     .ToListAsync();
 
-                foreach (Store store in storeList)
+                foreach (BusinessSystem businessSystem in businessSystemList)
                 {
-                    StoreUpdatePointsScheduledTask lastStoreUpdatePointsScheduledTask = store.StoreUpdatePointsScheduledTasks.OrderByDescending(x => x.TransactionsTo).FirstOrDefault();
+                    BusinessSystemUpdatePointsScheduledTask lastBusinessSystemUpdatePointsScheduledTask = businessSystem.BusinessSystemUpdatePointsScheduledTasks.OrderByDescending(x => x.TransactionsTo).FirstOrDefault();
 
-                    await _updatePointsScheduler.ContinueJob(store.Id, store.UpdatePointsInterval.Value, store.UpdatePointsStartDate.Value, lastStoreUpdatePointsScheduledTask?.TransactionsTo);
+                    await _updatePointsScheduler.ContinueJob(businessSystem.Id, businessSystem.UpdatePointsInterval.Value, businessSystem.UpdatePointsStartDate.Value, lastBusinessSystemUpdatePointsScheduledTask?.TransactionsTo);
                 }
             });
         }

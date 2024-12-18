@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Soft.Generator.Security.Interface;
 using Soft.Generator.Security.Services;
-using Soft.Generator.Infrastructure.Data;
+using Soft.Generator.Infrastructure;
 using Soft.Generator.Security.SecurityControllers;
 using Soft.Generator.Shared.Interfaces;
 using Playerty.Loyals.Business.Entities;

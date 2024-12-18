@@ -33,10 +33,10 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
         /// <summary>
         /// Use this method on Startup
-        /// If <paramref name="lastShouldStartedAt"/> is null, that means that the job didn't started even once. We are sending that argument from StoreUpdatePointsScheduledTask table.
+        /// If <paramref name="lastShouldStartedAt"/> is null, that means that the job didn't started even once. We are sending that argument from BusinessSystemUpdatePointsScheduledTask table.
         /// <paramref name="interval"/> is in hours.
         /// </summary>
-        public async Task<bool> ContinueJob(long storeId, int interval, DateTime startDateTime, DateTime? lastShouldStartedAt)
+        public async Task<bool> ContinueJob(long businessSystemId, int interval, DateTime startDateTime, DateTime? lastShouldStartedAt)
         {
             DateTime now = DateTime.Now;
 
@@ -50,7 +50,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
                 //nextRunDateTime = shouldStartedAtForSave.AddHours(interval);
                 nextRunDateTime = shouldStartedAtForSave.AddMinutes(interval);
 
-                TriggerKey initialTriggerKey = new TriggerKey($"InitialTrigger_{nameof(UpdatePointsScheduler)}_{storeId}");
+                TriggerKey initialTriggerKey = new TriggerKey($"InitialTrigger_{nameof(UpdatePointsScheduler)}_{businessSystemId}");
                 initialTrigger = TriggerBuilder.Create()
                     .WithIdentity(initialTriggerKey)
                     .WithPriority(6) // FT: Default is 5
@@ -60,7 +60,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
 
             DateTimeOffset nextRunOffset = new DateTimeOffset(nextRunDateTime);
 
-            TriggerKey triggerKey = new TriggerKey($"Trigger_{nameof(UpdatePointsScheduler)}_{storeId}");
+            TriggerKey triggerKey = new TriggerKey($"Trigger_{nameof(UpdatePointsScheduler)}_{businessSystemId}");
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity(triggerKey)
                 .StartAt(nextRunOffset)
@@ -71,10 +71,10 @@ namespace Playerty.Loyals.Business.BackroundJobs
                     .WithMisfireHandlingInstructionNextWithRemainingCount())
                 .Build();
 
-            JobKey jobKey = new JobKey($"Job_{nameof(UpdatePointsScheduler)}_{storeId}");
+            JobKey jobKey = new JobKey($"Job_{nameof(UpdatePointsScheduler)}_{businessSystemId}");
             IJobDetail job = JobBuilder.Create<UpdatePointsBackgroundJob>()
                 .WithIdentity(jobKey)
-                .UsingJobData("StoreId", storeId)
+                .UsingJobData("BusinessSystemId", businessSystemId)
                 .Build();
 
             List<ITrigger> triggers = new List<ITrigger> { trigger };
@@ -115,19 +115,19 @@ namespace Playerty.Loyals.Business.BackroundJobs
         }
 
         /// <summary>
-        /// Use this method when saving store and the <paramref name="startDateTime"/> is not null
+        /// Use this method when saving businessSystem and the <paramref name="startDateTime"/> is not null
         /// You need to validate is startDateTime <= now before calling this method
         /// Handle errors and use try catch around this method
         /// </summary>
-        public async Task<DateTimeOffset?> ScheduleJob(long storeId, int interval, DateTime startDateTime, DateTime now)
+        public async Task<DateTimeOffset?> ScheduleJob(long businessSystemId, int interval, DateTime startDateTime, DateTime now)
         {
             if (startDateTime <= now)
                 throw new BusinessException("Vreme početka ažuriranja poena mora biti veće od sadašnjeg trenutka.");
 
             DateTimeOffset? result = null;
 
-            JobKey jobKey = new JobKey($"Job_{nameof(UpdatePointsScheduler)}_{storeId}");
-            TriggerKey triggerKey = new TriggerKey($"Trigger_{nameof(UpdatePointsScheduler)}_{storeId}");
+            JobKey jobKey = new JobKey($"Job_{nameof(UpdatePointsScheduler)}_{businessSystemId}");
+            TriggerKey triggerKey = new TriggerKey($"Trigger_{nameof(UpdatePointsScheduler)}_{businessSystemId}");
 
             DateTimeOffset nextRunOffset = new DateTimeOffset(startDateTime);
 
@@ -147,7 +147,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
             {
                 IJobDetail job = JobBuilder.Create<UpdatePointsBackgroundJob>()
                     .WithIdentity(jobKey)
-                    .UsingJobData("StoreId", storeId)
+                    .UsingJobData("BusinessSystemId", businessSystemId)
                     .Build();
 
                 result = await _scheduler.ScheduleJob(job, trigger);
@@ -164,15 +164,15 @@ namespace Playerty.Loyals.Business.BackroundJobs
         /// TODO FT: Add summary
         /// </summary>
         /// <exception cref="HackerException"></exception>
-        public async Task<DateTimeOffset?> ScheduleJobManually(long storeId, DateTime manualDateFrom, DateTime manualDateTo)
+        public async Task<DateTimeOffset?> ScheduleJobManually(long businessSystemId, DateTime manualDateFrom, DateTime manualDateTo)
         {
             if (manualDateTo <= manualDateFrom)
-                throw new HackerException($"Store: {storeId}. Can not pass greater {nameof(manualDateTo)} then {nameof(manualDateFrom)} in manually started points update.");
+                throw new HackerException($"BusinessSystem: {businessSystemId}. Can not pass greater {nameof(manualDateTo)} then {nameof(manualDateFrom)} in manually started points update.");
 
             DateTimeOffset? result = null;
 
-            JobKey jobKey = new JobKey($"ManualJob_{nameof(UpdatePointsScheduler)}_{storeId}");
-            TriggerKey triggerKey = new TriggerKey($"ManualTrigger_{storeId}");
+            JobKey jobKey = new JobKey($"ManualJob_{nameof(UpdatePointsScheduler)}_{businessSystemId}");
+            TriggerKey triggerKey = new TriggerKey($"ManualTrigger_{businessSystemId}");
 
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity(triggerKey)
@@ -182,7 +182,7 @@ namespace Playerty.Loyals.Business.BackroundJobs
             IJobDetail job = JobBuilder.Create<UpdatePointsBackgroundJob>()
                 .WithIdentity(jobKey)
                 .StoreDurably(false) // Automatically remove the job after execution
-                .UsingJobData("StoreId", storeId)
+                .UsingJobData("BusinessSystemId", businessSystemId)
                 .UsingJobData("ManualDateFrom", manualDateFrom.ToString())
                 .UsingJobData("ManualDateTo", manualDateTo.ToString())
                 .Build();
@@ -193,9 +193,9 @@ namespace Playerty.Loyals.Business.BackroundJobs
             return result;
         }
 
-        public async Task DeleteJob(long storeId)
+        public async Task DeleteJob(long businessSystemId)
         {
-            JobKey jobKey = new JobKey($"{nameof(UpdatePointsScheduler)}_{storeId}");
+            JobKey jobKey = new JobKey($"{nameof(UpdatePointsScheduler)}_{businessSystemId}");
 
             await _scheduler.DeleteJob(jobKey);
         }

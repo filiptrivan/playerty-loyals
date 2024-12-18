@@ -9,7 +9,7 @@ namespace Playerty.Loyals.Business.DTO
     public partial class TierSaveBodyDTO
     {
         public List<TierDTO> TierDTOList { get; set; }
-        public List<StoreTierDTO> StoreTierDTOList { get; set; }
-        public List<StoreTierDiscountCategoryDTO> StoreTierDiscountCategoryDTOList { get; set; }
+        public List<BusinessSystemTierDTO> BusinessSystemTierDTOList { get; set; }
+        public List<BusinessSystemTierDiscountProductGroupDTO> BusinessSystemTierDiscountProductGroupDTOList { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Playerty.Loyals.Business.Entities
 {
@@ -48,7 +49,7 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public decimal PointsMultiplier { get; set; }
 
-        public virtual List<PartnerUser> Users { get; set; }
+        public virtual List<PartnerUser> PartnerUsers { get; set; }
         public virtual List<Tier> Tiers { get; set; }
         public virtual List<PartnerNotification> PartnerNotifications { get; set; }
         public virtual List<PartnerRole> PartnerRoles { get; set; }

@@ -15,12 +15,122 @@ export class TranslateLabelsLoyalsService {
     {
         switch(name) 
         {
-            case 'checked':
-                return this.translocoService.translate('Checked');
+            case 'name':
+                return this.translocoService.translate('Name');
+            case 'description':
+                return this.translocoService.translate('Description');
+            case 'code':
+                return this.translocoService.translate('Code');
+            case 'id':
+                return this.translocoService.translate('Id');
+            case 'partnerPermissionDTO':
+                return this.translocoService.translate('PartnerPermissionDTO');
+            case 'tierDTOList':
+                return this.translocoService.translate('TierDTOList');
+            case 'storeTierDTOList':
+                return this.translocoService.translate('StoreTierDTOList');
+            case 'storeTierDiscountProductGroupDTOList':
+                return this.translocoService.translate('StoreTierDiscountProductGroupDTOList');
+            case 'tierClientIndex':
+                return this.translocoService.translate('TierClientIndex');
+            case 'transactionsFrom':
+                return this.translocoService.translate('TransactionsFrom');
+            case 'transactionsTo':
+                return this.translocoService.translate('TransactionsTo');
+            case 'isManual':
+                return this.translocoService.translate('IsManual');
+            case 'store':
+                return this.translocoService.translate('Store');
+            case 'version':
+                return this.translocoService.translate('Version');
+            case 'createdAt':
+                return this.translocoService.translate('CreatedAt');
+            case 'modifiedAt':
+                return this.translocoService.translate('ModifiedAt');
+            case 'storeUpdatePointsScheduledTaskDTO':
+                return this.translocoService.translate('StoreUpdatePointsScheduledTaskDTO');
+            case 'genderDTO':
+                return this.translocoService.translate('GenderDTO');
+            case 'validFrom':
+                return this.translocoService.translate('ValidFrom');
+            case 'validTo':
+                return this.translocoService.translate('ValidTo');
+            case 'partner':
+                return this.translocoService.translate('Partner');
+            case 'tierDTO':
+                return this.translocoService.translate('TierDTO');
+            case 'segmentationItemsDTO':
+                return this.translocoService.translate('SegmentationItemsDTO');
+            case 'partnerRoleDTO':
+                return this.translocoService.translate('PartnerRoleDTO');
+            case 'storeVersion':
+                return this.translocoService.translate('StoreVersion');
+            case 'updatePointsStartDate':
+                return this.translocoService.translate('UpdatePointsStartDate');
+            case 'updatePointsInterval':
+                return this.translocoService.translate('UpdatePointsInterval');
+            case 'storeTier':
+                return this.translocoService.translate('StoreTier');
+            case 'storeTiers':
+                return this.translocoService.translate('StoreTiers');
+            case 'discountCategory':
+                return this.translocoService.translate('DiscountProductGroup');
+            case 'discountCategories':
+                return this.translocoService.translate('DiscountCategories');
+            case 'discount':
+                return this.translocoService.translate('Discount');
+            case 'storeTierDiscountProductGroupDTO':
+                return this.translocoService.translate('StoreTierDiscountProductGroupDTO');
+            case 'orderNumber':
+                return this.translocoService.translate('OrderNumber');
+            case 'tier':
+                return this.translocoService.translate('Tier');
+            case 'storeTierDTO':
+                return this.translocoService.translate('StoreTierDTO');
+            case 'getTransactionsEndpoint':
+                return this.translocoService.translate('GetTransactionsEndpoint');
+            case 'getDiscountCategoriesEndpoint':
+                return this.translocoService.translate('GetDiscountCategoriesEndpoint');
+            case 'createUserEndpoint':
+                return this.translocoService.translate('CreateUserEndpoint');
+            case 'updateUserGroupEndpoint':
+                return this.translocoService.translate('UpdateUserGroupEndpoint');
+            case 'updatePointsScheduledTaskIsPaused':
+                return this.translocoService.translate('UpdatePointsScheduledTaskIsPaused');
+            case 'storeDTO':
+                return this.translocoService.translate('StoreDTO');
+            case 'discountCategoryDTO':
+                return this.translocoService.translate('DiscountProductGroupDTO');
+            case 'selectedPermissionIds':
+                return this.translocoService.translate('SelectedPermissionIds');
+            case 'selectedPartnerUserIds':
+                return this.translocoService.translate('SelectedPartnerUserIds');
+            case 'selectedPartnerRoleIds':
+                return this.translocoService.translate('SelectedPartnerRoleIds');
+            case 'selectedSegmentationItemIds':
+                return this.translocoService.translate('SelectedSegmentationItemIds');
+            case 'userExtendedDTO':
+                return this.translocoService.translate('UserExtendedDTO');
+            case 'selectedRoleIds':
+                return this.translocoService.translate('SelectedRoleIds');
+            case 'title':
+                return this.translocoService.translate('Title');
+            case 'emailBody':
+                return this.translocoService.translate('EmailBody');
             case 'partnerNotificationDTO':
                 return this.translocoService.translate('PartnerNotificationDTO');
+            case 'partnerNotifications':
+                return this.translocoService.translate('PartnerNotifications');
+            case 'partnerUsers':
+                return this.translocoService.translate('PartnerUsers');
             case 'isMarkedAsRead':
                 return this.translocoService.translate('IsMarkedAsRead');
+            case 'partnerNotificationPartnerUserDTO':
+                return this.translocoService.translate('PartnerNotificationPartnerUserDTO');
+            case 'pointsForTheFirstTimeFill':
+                return this.translocoService.translate('PointsForTheFirstTimeFill');
+            case 'segmentationDTO':
+                return this.translocoService.translate('SegmentationDTO');
             case 'tableFilter':
                 return this.translocoService.translate('TableFilter');
             case 'selectedIds':
@@ -29,112 +139,30 @@ export class TranslateLabelsLoyalsService {
                 return this.translocoService.translate('UnselectedIds');
             case 'isAllSelected':
                 return this.translocoService.translate('IsAllSelected');
-            case 'partnerRoleDTO':
-                return this.translocoService.translate('PartnerRoleDTO');
-            case 'selectedPermissionIds':
-                return this.translocoService.translate('SelectedPermissionIds');
-            case 'selectedPartnerUserIds':
-                return this.translocoService.translate('SelectedPartnerUserIds');
-            case 'notificationDTO':
-                return this.translocoService.translate('NotificationDTO');
-            case 'storeTier':
-                return this.translocoService.translate('StoreTier');
-            case 'discountCategory':
-                return this.translocoService.translate('DiscountCategory');
-            case 'discount':
-                return this.translocoService.translate('Discount');
-            case 'name':
-                return this.translocoService.translate('Name');
-            case 'description':
-                return this.translocoService.translate('Description');
-            case 'validFrom':
-                return this.translocoService.translate('ValidFrom');
-            case 'validTo':
-                return this.translocoService.translate('ValidTo');
-            case 'partner':
-                return this.translocoService.translate('Partner');
-            case 'version':
-                return this.translocoService.translate('Version');
-            case 'id':
-                return this.translocoService.translate('Id');
-            case 'createdAt':
-                return this.translocoService.translate('CreatedAt');
-            case 'modifiedAt':
-                return this.translocoService.translate('ModifiedAt');
-            case 'code':
-                return this.translocoService.translate('Code');
+            case 'checked':
+                return this.translocoService.translate('Checked');
+            case 'userEmail':
+                return this.translocoService.translate('UserEmail');
+            case 'productName':
+                return this.translocoService.translate('ProductName');
+            case 'productImageUrl':
+                return this.translocoService.translate('ProductImageUrl');
+            case 'productCategoryName':
+                return this.translocoService.translate('ProductCategoryName');
+            case 'productCategoryImageUrl':
+                return this.translocoService.translate('ProductCategoryImageUrl');
             case 'price':
                 return this.translocoService.translate('Price');
-            case 'category':
-                return this.translocoService.translate('Category');
-            case 'linkToWebsite':
-                return this.translocoService.translate('LinkToWebsite');
-            case 'transactionCode':
-                return this.translocoService.translate('TransactionCode');
-            case 'storeDTO':
-                return this.translocoService.translate('StoreDTO');
-            case 'store':
-                return this.translocoService.translate('Store');
-            case 'selectedForStore':
-                return this.translocoService.translate('SelectedForStore');
-            case 'storeTierClientIndex':
-                return this.translocoService.translate('StoreTierClientIndex');
-            case 'tierClientIndex':
-                return this.translocoService.translate('TierClientIndex');
-            case 'product':
-                return this.translocoService.translate('Product');
-            case 'transaction':
-                return this.translocoService.translate('Transaction');
-            case 'guid':
-                return this.translocoService.translate('Guid');
+            case 'boughtAt':
+                return this.translocoService.translate('BoughtAt');
             case 'points':
                 return this.translocoService.translate('Points');
-            case 'user':
-                return this.translocoService.translate('User');
-            case 'tierDTOList':
-                return this.translocoService.translate('TierDTOList');
-            case 'storeTierDTOList':
-                return this.translocoService.translate('StoreTierDTOList');
-            case 'storeTierDiscountCategoryDTOList':
-                return this.translocoService.translate('StoreTierDiscountCategoryDTOList');
-            case 'segmentationDTO':
-                return this.translocoService.translate('SegmentationDTO');
-            case 'segmentationItemsDTO':
-                return this.translocoService.translate('SegmentationItemsDTO');
-            case 'title':
-                return this.translocoService.translate('Title');
-            case 'emailBody':
-                return this.translocoService.translate('EmailBody');
-            case 'pointsForTheFirstTimeFill':
-                return this.translocoService.translate('PointsForTheFirstTimeFill');
-            case 'tier':
-                return this.translocoService.translate('Tier');
+            case 'partnerUser':
+                return this.translocoService.translate('PartnerUser');
+            case 'transactionDTO':
+                return this.translocoService.translate('TransactionDTO');
             case 'email':
                 return this.translocoService.translate('Email');
-            case 'checkedSegmentationItems':
-                return this.translocoService.translate('CheckedSegmentationItems');
-            case 'nameLatin':
-                return this.translocoService.translate('NameLatin');
-            case 'pointsMultiplier':
-                return this.translocoService.translate('PointsMultiplier');
-            case 'userExtendedDTO':
-                return this.translocoService.translate('UserExtendedDTO');
-            case 'selectedRoleIds':
-                return this.translocoService.translate('SelectedRoleIds');
-            case 'slug':
-                return this.translocoService.translate('Slug');
-            case 'logoImageData':
-                return this.translocoService.translate('LogoImageData');
-            case 'logoImage':
-                return this.translocoService.translate('LogoImage');
-            case 'primaryColor':
-                return this.translocoService.translate('PrimaryColor');
-            case 'productsRecommendationEndpoint':
-                return this.translocoService.translate('ProductsRecommendationEndpoint');
-            case 'partnerNotifications':
-                return this.translocoService.translate('PartnerNotifications');
-            case 'partnerUsers':
-                return this.translocoService.translate('PartnerUsers');
             case 'password':
                 return this.translocoService.translate('Password');
             case 'hasLoggedInWithExternalProvider':
@@ -145,30 +173,54 @@ export class TranslateLabelsLoyalsService {
                 return this.translocoService.translate('BirthDate');
             case 'gender':
                 return this.translocoService.translate('Gender');
-            case 'updatePointsInterval':
-                return this.translocoService.translate('UpdatePointsInterval');
-            case 'loadPurchasesEndpoint':
-                return this.translocoService.translate('GetPurchasesEndpoint');
-            case 'loadReversalsEndpoint':
-                return this.translocoService.translate('GetReversalsEndpoint');
-            case 'createUserEndpoint':
-                return this.translocoService.translate('CreateUserEndpoint');
-            case 'updateUserGroupEndpoint':
-                return this.translocoService.translate('UpdateUserGroupEndpoint');
-            case 'orderNumber':
-                return this.translocoService.translate('OrderNumber');
-            case 'segmentation':
-                return this.translocoService.translate('Segmentation');
+            case 'transactionCode':
+                return this.translocoService.translate('TransactionCode');
+            case 'category':
+                return this.translocoService.translate('Category');
+            case 'linkToWebsite':
+                return this.translocoService.translate('LinkToWebsite');
+            case 'nameLatin':
+                return this.translocoService.translate('NameLatin');
+            case 'pointsMultiplier':
+                return this.translocoService.translate('PointsMultiplier');
             case 'notifications':
                 return this.translocoService.translate('Notifications');
             case 'users':
                 return this.translocoService.translate('Users');
+            case 'notificationUserDTO':
+                return this.translocoService.translate('NotificationUserDTO');
+            case 'notificationDTO':
+                return this.translocoService.translate('NotificationDTO');
+            case 'fromDate':
+                return this.translocoService.translate('FromDate');
+            case 'toDate':
+                return this.translocoService.translate('ToDate');
+            case 'user':
+                return this.translocoService.translate('User');
+            case 'checkedSegmentationItems':
+                return this.translocoService.translate('CheckedSegmentationItems');
             case 'partnerUserDTO':
                 return this.translocoService.translate('PartnerUserDTO');
-            case 'selectedPartnerRoleIds':
-                return this.translocoService.translate('SelectedPartnerRoleIds');
-            case 'selectedSegmentationItemIds':
-                return this.translocoService.translate('SelectedSegmentationItemIds');
+            case 'selectedForStore':
+                return this.translocoService.translate('SelectedForStore');
+            case 'storeTierClientIndex':
+                return this.translocoService.translate('StoreTierClientIndex');
+            case 'slug':
+                return this.translocoService.translate('Slug');
+            case 'logoImageData':
+                return this.translocoService.translate('LogoImageData');
+            case 'logoImage':
+                return this.translocoService.translate('LogoImage');
+            case 'primaryColor':
+                return this.translocoService.translate('PrimaryColor');
+            case 'productsRecommendationEndpoint':
+                return this.translocoService.translate('ProductsRecommendationEndpoint');
+            case 'partnerDTO':
+                return this.translocoService.translate('PartnerDTO');
+            case 'segmentation':
+                return this.translocoService.translate('Segmentation');
+            case 'segmentationItemDTO':
+                return this.translocoService.translate('SegmentationItemDTO');
             default:
                 return null;
         }

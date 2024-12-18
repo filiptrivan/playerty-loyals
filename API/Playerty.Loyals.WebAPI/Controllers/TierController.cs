@@ -106,16 +106,16 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         //[HttpPost]
         //[AuthGuard]
-        //public async Task<List<StoreTierDTO>> LoadStoreTierDTOListForTierList(List<long> tierIds)
+        //public async Task<List<BusinessSystemTierDTO>> LoadBusinessSystemTierDTOListForTierList(List<long> tierIds)
         //{
-        //    return await _loyalsBusinessService.LoadStoreTierDTOListForTierList(tierIds);
+        //    return await _loyalsBusinessService.LoadBusinessSystemTierDTOListForTierList(tierIds);
         //}
 
         //[HttpPost]
         //[AuthGuard]
-        //public async Task<List<DiscountCategoryDTO>> LoadDiscountCategoryDTOListForCurrentPartner(List<long> storeTierIds)
+        //public async Task<List<DiscountProductGroupDTO>> LoadDiscountProductGroupDTOListForCurrentPartner(List<long> businessSystemTierIds)
         //{
-        //    return await _loyalsBusinessService.LoadDiscountCategoryDTOListForCurrentPartner(storeTierIds);
+        //    return await _loyalsBusinessService.LoadDiscountProductGroupDTOListForCurrentPartner(businessSystemTierIds);
         //}
 
         //[HttpGet]

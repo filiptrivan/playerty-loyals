@@ -10,13 +10,20 @@ using System.Threading.Tasks;
 
 namespace Playerty.Loyals.Business.Entities
 {
-    public class Gender : ReadonlyObject<int>
+    public class DiscountProductGroup : BusinessObject<long>
     {
         [SoftDisplayName]
-        [StringLength(70, MinimumLength = 1)]
+        [StringLength(255, MinimumLength = 1)]
         [Required]
         public string Name { get; set; }
 
-        public virtual List<UserExtended> Users { get; set; }
+        [StringLength(100, MinimumLength = 1)]
+        [Required]
+        public string Code { get; set; }
+
+        [ManyToOneRequired]
+        public virtual BusinessSystem BusinessSystem { get; set; }
+
+        public virtual List<BusinessSystemTierDiscountProductGroup> BusinessSystemTierDiscountProductGroups { get; }
     }
 }

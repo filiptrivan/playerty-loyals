@@ -115,7 +115,7 @@ public class Startup
         });
 
         // https://youtu.be/bN57EDYD6M0?si=CVztRqlj0hBSrFXb
-        services.AddDbContext<IApplicationDbContext, PLApplicationDbContext>(options =>
+        services.AddDbContext<IApplicationDbContext, PlayertyApplicationDbContext>(options =>
             {
                 options
                     .UseLazyLoadingProxies()

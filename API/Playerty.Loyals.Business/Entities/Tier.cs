@@ -43,6 +43,6 @@ namespace Playerty.Loyals.Business.Entities
         /// FT: Deleted the setter from the property, because EF make some unintentional Change Tracking, and saves those in DataBase.
         /// </summary>
         [Map]
-        public virtual List<StoreTier> StoreTiers { get; }
+        public virtual List<BusinessSystemTier> BusinessSystemTiers { get; }
     }
 }

@@ -72,9 +72,9 @@ namespace Playerty.Loyals.Business.Services
         /// <summary>
         /// Get discount category list of the current partner.
         /// </summary>
-        public async Task<List<ExternalDiscountCategoryDTO>> GetExternalDiscountCategoryDTOList(Store store)
+        public async Task<List<ExternalDiscountProductGroupDTO>> GetExternalDiscountProductGroupDTOList(BusinessSystem businessSystem)
         {
-            string url = store.GetDiscountCategoriesEndpoint;
+            string url = businessSystem.GetDiscountCategoriesEndpoint;
 
             HttpResponseMessage response = null;
 
@@ -88,17 +88,17 @@ namespace Playerty.Loyals.Business.Services
                 HandleExternalApiException(ex);
             }
 
-            List<ExternalDiscountCategoryDTO> externalDiscountCategoryDTOList = await response.Content.ReadFromJsonAsync<List<ExternalDiscountCategoryDTO>>();
+            List<ExternalDiscountProductGroupDTO> externalDiscountProductGroupDTOList = await response.Content.ReadFromJsonAsync<List<ExternalDiscountProductGroupDTO>>();
 
-            if (externalDiscountCategoryDTOList.Count != externalDiscountCategoryDTOList.DistinctBy(x => x.Code).Count())
+            if (externalDiscountProductGroupDTOList.Count != externalDiscountProductGroupDTOList.DistinctBy(x => x.Code).Count())
                 throw new BusinessException("Partner mora da prosledi jedinstvene kodove za kategorije.");
 
             List<string> validationErrorMessages = new List<string>();
 
-            foreach (ExternalDiscountCategoryDTO externalDiscountCategoryDTO in externalDiscountCategoryDTOList)
+            foreach (ExternalDiscountProductGroupDTO externalDiscountProductGroupDTO in externalDiscountProductGroupDTOList)
             {
-                ExternalDiscountCategoryDTOValidationRules validationRules = new ExternalDiscountCategoryDTOValidationRules();
-                ValidationResult validationResult = validationRules.Validate(externalDiscountCategoryDTO);
+                ExternalDiscountProductGroupDTOValidationRules validationRules = new ExternalDiscountProductGroupDTOValidationRules();
+                ValidationResult validationResult = validationRules.Validate(externalDiscountProductGroupDTO);
 
                 foreach (ValidationFailure validationFailure in validationResult.Errors)
                 {
@@ -110,7 +110,7 @@ namespace Playerty.Loyals.Business.Services
             if (validationErrorMessages.Count > 0)
                 throw new BusinessException($"Došlo je do grešaka prilikom validacije podataka za preuzimanje kategorija:    {string.Join("    ", validationErrorMessages)}");
 
-            return externalDiscountCategoryDTOList;
+            return externalDiscountProductGroupDTOList;
         }
 
         public void HandleExternalApiException(Exception ex)
