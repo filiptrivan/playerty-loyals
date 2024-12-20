@@ -49,9 +49,16 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public decimal PointsMultiplier { get; set; }
 
-        public virtual List<PartnerUser> PartnerUsers { get; set; }
-        public virtual List<Tier> Tiers { get; set; }
-        public virtual List<PartnerNotification> PartnerNotifications { get; set; }
-        public virtual List<PartnerRole> PartnerRoles { get; set; }
+        public virtual List<PartnerUser> PartnerUsers { get; } = new();
+
+        public virtual List<Tier> Tiers { get; } = new();
+
+        public virtual List<PartnerNotification> PartnerNotifications { get; } = new();
+
+        public virtual List<PartnerRole> PartnerRoles { get; } = new();
+
+        public virtual List<BusinessSystem> BusinessSystems { get; } = new();
+
+        public virtual List<Segmentation> Segmentations { get; } = new();
     }
 }

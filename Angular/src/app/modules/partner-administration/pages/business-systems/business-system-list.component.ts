@@ -2,19 +2,19 @@ import { TranslocoService } from '@jsverse/transloco';
 import { Component, OnInit } from '@angular/core';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { Store } from 'src/app/business/entities/generated/business-entities.generated';
+import { BusinessSystem } from 'src/app/business/entities/generated/business-entities.generated';
 
 @Component({
-    selector: 'store-list',
-    templateUrl: './store-list.component.html',
+    selector: 'business-system-list',
+    templateUrl: './business-system-list.component.html',
     styles: []
 })
-export class StoreTableComponent implements OnInit {
-    cols: Column<Store>[];
+export class BusinessSystemTableComponent implements OnInit {
+    cols: Column<BusinessSystem>[];
     
-    loadStoreTableDataObservableMethod = this.apiService.loadStoreTableData;
-    exportStoreTableDataToExcelObservableMethod = this.apiService.exportStoreTableDataToExcel;
-    deleteStoreObservableMethod = this.apiService.deleteStore;
+    loadBusinessSystemTableDataObservableMethod = this.apiService.loadBusinessSystemTableData;
+    exportBusinessSystemTableDataToExcelObservableMethod = this.apiService.exportBusinessSystemTableDataToExcel;
+    deleteBusinessSystemObservableMethod = this.apiService.deleteBusinessSystem;
 
     constructor(
         private apiService: ApiService,

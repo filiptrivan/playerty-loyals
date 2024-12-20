@@ -19,11 +19,11 @@
 				<div class="header" style="margin-bottom: 10px;">{{tier.name}}</div>
 				<div class="text-wrapper">
 					{{tier.description}}
-					<div *ngFor="let storeTier of tier.storeTiersDTOList">
-						{{storeTier.storeDisplayName}}
+					<div *ngFor="let businessSystemTier of tier.businessSystemTiersDTOList">
+						{{businessSystemTier.businessSystemDisplayName}}
 						<ul>
-							<li *ngFor="let storeTierDiscountProductGroup of storeTier.storeTierDiscountCategoriesDTOList">
-								{{storeTierDiscountProductGroup.discountCategoryDisplayName}}: {{storeTierDiscountProductGroup.discount}}%
+							<li *ngFor="let businessSystemTierDiscountProductGroup of businessSystemTier.businessSystemTierDiscountCategoriesDTOList">
+								{{businessSystemTierDiscountProductGroup.discountCategoryDisplayName}}: {{businessSystemTierDiscountProductGroup.discount}}%
 							</li>
 						</ul>
 					</div>

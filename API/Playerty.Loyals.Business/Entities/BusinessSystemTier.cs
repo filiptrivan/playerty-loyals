@@ -14,13 +14,13 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public int OrderNumber { get; set; }
 
-        [ManyToOneRequired]
+        [ManyToOneRequired(nameof(BusinessSystem.BusinessSystemTiers))]
         public virtual BusinessSystem BusinessSystem { get; set; }
 
-        [ManyToOneRequired]
+        [ManyToOneRequired(nameof(Tier.BusinessSystemTiers))]
         public virtual Tier Tier { get; set; }
 
         [Map]
-        public virtual List<BusinessSystemTierDiscountProductGroup> BusinessSystemTierDiscountProductGroups { get; }
+        public virtual List<BusinessSystemTierDiscountProductGroup> BusinessSystemTierDiscountProductGroups { get; } = new();
     }
 }

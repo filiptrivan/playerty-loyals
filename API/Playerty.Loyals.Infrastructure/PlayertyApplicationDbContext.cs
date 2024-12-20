@@ -35,7 +35,7 @@ namespace Playerty.Loyals.Infrastructure
 
             if (newPartners.Count != 0)
             {
-                List<UserExtended> users = await Users.ToListAsync();
+                List<UserExtended> users = await User.ToListAsync();
 
                 foreach (Partner partner in newPartners)
                 {

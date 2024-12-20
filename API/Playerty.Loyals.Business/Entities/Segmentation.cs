@@ -23,12 +23,11 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public int PointsForTheFirstTimeFill { get; set; }
 
-        [ManyToOneRequired]
+        [ManyToOneRequired(nameof(Partner.Segmentations))]
         public virtual Partner Partner { get; set; }
 
-        [Required]
-        public virtual List<SegmentationItem> SegmentationItems { get; set; }
+        public virtual List<SegmentationItem> SegmentationItems { get; } = new();
 
-        public virtual List<PartnerUser> PartnerUsersThatHasFilledSegmentation { get; set; }
+        public virtual List<PartnerUser> PartnerUsersThatHasFilledSegmentation { get; } = new();
     }
 }

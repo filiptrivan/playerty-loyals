@@ -11,8 +11,8 @@ namespace Playerty.Loyals.Business.Entities
 {
     public class PartnerNotification : Notification
     {
-        [ManyToOneRequired]
+        [ManyToOneRequired(nameof(Partner.PartnerNotifications))]
         public virtual Partner Partner { get; set; }
-        public virtual List<PartnerUser> PartnerUsers { get; set; }
+        public virtual List<PartnerUser> PartnerUsers { get; } = new();
     }
 }

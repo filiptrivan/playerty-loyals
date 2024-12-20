@@ -10,15 +10,11 @@ namespace Playerty.Loyals.Business.Entities
 {
     public class BusinessSystemTierDiscountProductGroup
     {
+        [M2MMaintanceEntity(nameof(BusinessSystemTier.BusinessSystemTierDiscountProductGroups))]
         public virtual BusinessSystemTier BusinessSystemTier { get; set; }
 
-        [M2MMaintanceEntityKey(nameof(BusinessSystemTier))]
-        public long BusinessSystemTierId { get; set; }
-
+        [M2MExtendEntity(nameof(DiscountProductGroup.BusinessSystemTierDiscountProductGroups))]
         public virtual DiscountProductGroup DiscountProductGroup { get; set; }
-
-        [M2MExtendEntityKey(nameof(DiscountProductGroup))]
-        public long DiscountProductGroupId { get; set; }
 
         [Required]
         [Range(0, 100)]

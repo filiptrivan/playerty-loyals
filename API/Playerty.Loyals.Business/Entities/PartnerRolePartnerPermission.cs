@@ -1,6 +1,7 @@
 ﻿using Soft.Generator.Shared.Attributes.EF;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,14 +10,10 @@ namespace Playerty.Loyals.Business.Entities
 {
     public class PartnerRolePartnerPermission
     {
+        [M2MMaintanceEntity(nameof(PartnerRole.PartnerPermissions))]
         public virtual PartnerRole PartnerRole { get; set; }
 
-        [M2MMaintanceEntityKey(nameof(PartnerRole))]
-        public int PartnerRoleId { get; set; }
-
+        [M2MExtendEntity(nameof(PartnerPermission.PartnerRoles))]
         public virtual PartnerPermission PartnerPermission { get; set; }
-
-        [M2MExtendEntityKey(nameof(PartnerPermission))]
-        public int PartnerPermissionId { get; set; }
     }
 }

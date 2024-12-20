@@ -173,9 +173,9 @@ export class AppMenuComponent implements OnInit {
                                     // }
                                 },
                                 {
-                                    label: this.translocoService.translate('StoreList'),
+                                    label: this.translocoService.translate('BusinessSystemList'),
                                     icon: 'pi pi-fw pi-shop',
-                                    routerLink: [`/${environment.partnerAdministrationSlug}/stores`],
+                                    routerLink: [`/${environment.partnerAdministrationSlug}/business-systems`],
                                     visible: true,
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
                                     //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadSegmentation]))

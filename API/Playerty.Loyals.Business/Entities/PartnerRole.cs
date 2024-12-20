@@ -20,11 +20,11 @@ namespace Playerty.Loyals.Business.Entities
         [StringLength(400, MinimumLength = 1)]
         public string Description { get; set; }
 
-        [ManyToOneRequired]
+        [ManyToOneRequired(nameof(Partner.PartnerRoles))]
         public virtual Partner Partner { get; set; }
 
-        public virtual List<PartnerUser> PartnerUsers { get; set; }
+        public virtual List<PartnerUser> PartnerUsers { get; } = new();
 
-        public virtual List<PartnerPermission> PartnerPermissions { get; set; }
+        public virtual List<PartnerPermission> PartnerPermissions { get; } = new();
     }
 }

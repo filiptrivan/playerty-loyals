@@ -5,7 +5,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { MenuItem } from 'primeng/api';
 import { DropdownChangeEvent } from 'primeng/dropdown';
 import { forkJoin, Observable } from 'rxjs';
-import { DiscountProductGroup, StoreTier, StoreTierDiscountProductGroup, Tier, TierSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
+import { DiscountProductGroup, BusinessSystemTier, BusinessSystemTierDiscountProductGroup, Tier, TierSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
@@ -32,24 +32,24 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     tierCrudMenu: MenuItem[];
     tierLastIndexClicked: LastMenuIconIndexClicked = new LastMenuIconIndexClicked();
 
-    // StoreTier
-    storeTierModel: StoreTier = new StoreTier();
-    storeTierDTOListSaveBodyName: string = nameof<TierSaveBody>('storeTierDTOList');
-    storeTierTranslationKey: string = new StoreTier().typeName;
-    storeTierFormArray: SoftFormArray<StoreTier[]>;
-    storeTierCrudMenu: MenuItem[];
-    storeOptions: PrimengOption[];
-    storeTierLastIndexClicked: LastMenuIconIndexClicked = new LastMenuIconIndexClicked();
+    // BusinessSystemTier
+    businessSystemTierModel: BusinessSystemTier = new BusinessSystemTier();
+    businessSystemTierDTOListSaveBodyName: string = nameof<TierSaveBody>('businessSystemTierDTOList');
+    businessSystemTierTranslationKey: string = new BusinessSystemTier().typeName;
+    businessSystemTierFormArray: SoftFormArray<BusinessSystemTier[]>;
+    businessSystemTierCrudMenu: MenuItem[];
+    businessSystemOptions: PrimengOption[];
+    businessSystemTierLastIndexClicked: LastMenuIconIndexClicked = new LastMenuIconIndexClicked();
 
-    // StoreTierDiscountProductGroup M2M
-    storeTierDiscountProductGroupCols: Column[];
-    storeTierDiscountProductGroupModel: StoreTierDiscountProductGroup = new StoreTierDiscountProductGroup();
-    storeTierDiscountCategoriesSaveBodyName: string = nameof<TierSaveBody>('storeTierDiscountProductGroupDTOList');
-    storeTierDiscountCategoriesTranslationKey: string = new StoreTierDiscountProductGroup().typeName;
-    storeTierDiscountProductGroupFormArray: SoftFormArray<StoreTierDiscountProductGroup[]>;
-    alreadySelectedDiscountProductGroupListForStore: StoreTierDiscountProductGroup[] = [];
-    alreadySelectedStoreTierDiscountProductGroupIdsForStore: number[] = [];
-    @ViewChildren('storeTierDiscountProductGroupTable') storeTierDiscountProductGroupTables: QueryList<SoftDataTableComponent>; // FT: Made for refreshing table
+    // BusinessSystemTierDiscountProductGroup M2M
+    businessSystemTierDiscountProductGroupCols: Column[];
+    businessSystemTierDiscountProductGroupModel: BusinessSystemTierDiscountProductGroup = new BusinessSystemTierDiscountProductGroup();
+    businessSystemTierDiscountCategoriesSaveBodyName: string = nameof<TierSaveBody>('businessSystemTierDiscountProductGroupDTOList');
+    businessSystemTierDiscountCategoriesTranslationKey: string = new BusinessSystemTierDiscountProductGroup().typeName;
+    businessSystemTierDiscountProductGroupFormArray: SoftFormArray<BusinessSystemTierDiscountProductGroup[]>;
+    alreadySelectedDiscountProductGroupListForBusinessSystem: BusinessSystemTierDiscountProductGroup[] = [];
+    alreadySelectedBusinessSystemTierDiscountProductGroupIdsForBusinessSystem: number[] = [];
+    @ViewChildren('businessSystemTierDiscountProductGroupTable') businessSystemTierDiscountProductGroupTables: QueryList<SoftDataTableComponent>; // FT: Made for refreshing table
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -67,20 +67,20 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         }
          
     override ngOnInit() {
-        this.storeTierDiscountProductGroupCols = [
+        this.businessSystemTierDiscountProductGroupCols = [
             {name: this.translocoService.translate('Name'), filterType: 'text', field: 'discountCategoryDisplayName'},
             {name: this.translocoService.translate('Discount'), filterType: 'numeric', field: 'discount', showMatchModes: true, editable: true},
         ];
 
         forkJoin({
             tierSaveBody: this.apiService.loadTierSaveBodyDTO(),
-            storeNamebookList: this.apiService.loadStoreListForDropdown(),
-        }).subscribe(({ tierSaveBody, storeNamebookList }) => {
+            businessSystemNamebookList: this.apiService.loadBusinessSystemListForDropdown(),
+        }).subscribe(({ tierSaveBody, businessSystemNamebookList }) => {
             this.initTierFormArray(tierSaveBody.tierDTOList);
-            this.initStoreTierFormArray(tierSaveBody.storeTierDTOList);
-            this.initStoreTierDiscountCategoriesFormArray(tierSaveBody.storeTierDiscountProductGroupDTOList);
+            this.initBusinessSystemTierFormArray(tierSaveBody.businessSystemTierDTOList);
+            this.initBusinessSystemTierDiscountCategoriesFormArray(tierSaveBody.businessSystemTierDiscountProductGroupDTOList);
 
-            this.storeOptions = storeNamebookList.map(n => { return { label: n.displayName, value: n.id }});
+            this.businessSystemOptions = businessSystemNamebookList.map(n => { return { label: n.displayName, value: n.id }});
         });
     }
 
@@ -102,74 +102,74 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
 
     //#endregion
 
-    //#region StoreTier
+    //#region BusinessSystemTier
 
-    initStoreTierFormArray(storeTierList: StoreTier[]){
-        // this.assignStoreTierListIndexes(storeTierList);
-        this.storeTierFormArray = this.initFormArray(storeTierList, this.storeTierModel, this.storeTierDTOListSaveBodyName, this.storeTierTranslationKey);
-        this.storeTierCrudMenu = this.getCrudMenuForOrderedData(this.storeTierFormArray, new StoreTier({id: 0}), this.storeTierLastIndexClicked, true);
+    initBusinessSystemTierFormArray(businessSystemTierList: BusinessSystemTier[]){
+        // this.assignBusinessSystemTierListIndexes(businessSystemTierList);
+        this.businessSystemTierFormArray = this.initFormArray(businessSystemTierList, this.businessSystemTierModel, this.businessSystemTierDTOListSaveBodyName, this.businessSystemTierTranslationKey);
+        this.businessSystemTierCrudMenu = this.getCrudMenuForOrderedData(this.businessSystemTierFormArray, new BusinessSystemTier({id: 0}), this.businessSystemTierLastIndexClicked, true);
     }
 
-    addNewStoreTier(tierIndex: number, formArrayIndex: number = null){
+    addNewBusinessSystemTier(tierIndex: number, formArrayIndex: number = null){
         // FT: For the Tier we are not assigning index because we are sending the ordered list from the UI and we will get the index in foreach on the backend, but here we need orderNumber so we can filter 
-        this.addNewFormControlToTheFormArray(this.storeTierFormArray, new StoreTier({id: 0, tierClientIndex: tierIndex}), formArrayIndex);
+        this.addNewFormControlToTheFormArray(this.businessSystemTierFormArray, new BusinessSystemTier({id: 0, tierClientIndex: tierIndex}), formArrayIndex);
     }
 
-    // FT: Adding new table of storeTierDiscountProductGroup for the selected store
-    storeChange(event: DropdownChangeEvent, tierIndex: number, storeTierIndex: number){
-        let storeTierDiscountProductGroupArrayForInsert: DiscountProductGroup[] = [];
-        let storeTierDiscountProductGroupIndexesForRemove: number[] = [];
+    // FT: Adding new table of businessSystemTierDiscountProductGroup for the selected businessSystem
+    businessSystemChange(event: DropdownChangeEvent, tierIndex: number, businessSystemTierIndex: number){
+        let businessSystemTierDiscountProductGroupArrayForInsert: DiscountProductGroup[] = [];
+        let businessSystemTierDiscountProductGroupIndexesForRemove: number[] = [];
 
-        for (let i = 0; i < this.storeTierDiscountProductGroupFormArray.value.length; i++) {
-            const storeTierDiscountProductGroup = this.storeTierDiscountProductGroupFormArray.value[i];
+        for (let i = 0; i < this.businessSystemTierDiscountProductGroupFormArray.value.length; i++) {
+            const businessSystemTierDiscountProductGroup = this.businessSystemTierDiscountProductGroupFormArray.value[i];
 
-            if (storeTierDiscountProductGroup.tierClientIndex === tierIndex && storeTierDiscountProductGroup.storeTierClientIndex === storeTierIndex)
-                storeTierDiscountProductGroupIndexesForRemove.push(i);
+            if (businessSystemTierDiscountProductGroup.tierClientIndex === tierIndex && businessSystemTierDiscountProductGroup.businessSystemTierClientIndex === businessSystemTierIndex)
+                businessSystemTierDiscountProductGroupIndexesForRemove.push(i);
 
-            if (storeTierDiscountProductGroup.tierClientIndex !== null || storeTierDiscountProductGroup.storeTierClientIndex !== null)
+            if (businessSystemTierDiscountProductGroup.tierClientIndex !== null || businessSystemTierDiscountProductGroup.businessSystemTierClientIndex !== null)
                 continue;
 
-            if (storeTierDiscountProductGroup.storeId !== event.value) // FT: Skipping the storeTierDiscountProductGroup from the first (eg. 14) which are not from the selected store
+            if (businessSystemTierDiscountProductGroup.businessSystemId !== event.value) // FT: Skipping the businessSystemTierDiscountProductGroup from the first (eg. 14) which are not from the selected businessSystem
                 continue;
 
-            let newStoreTierDiscountProductGroup: StoreTierDiscountProductGroup = new StoreTierDiscountProductGroup(storeTierDiscountProductGroup);
-            newStoreTierDiscountProductGroup.storeTierClientIndex = storeTierIndex;
-            newStoreTierDiscountProductGroup.tierClientIndex = tierIndex;
+            let newBusinessSystemTierDiscountProductGroup: BusinessSystemTierDiscountProductGroup = new BusinessSystemTierDiscountProductGroup(businessSystemTierDiscountProductGroup);
+            newBusinessSystemTierDiscountProductGroup.businessSystemTierClientIndex = businessSystemTierIndex;
+            newBusinessSystemTierDiscountProductGroup.tierClientIndex = tierIndex;
 
-            storeTierDiscountProductGroupArrayForInsert.push(newStoreTierDiscountProductGroup);
+            businessSystemTierDiscountProductGroupArrayForInsert.push(newBusinessSystemTierDiscountProductGroup);
         }
         
-        this.removeFormControlsFromTheFormArray(this.storeTierDiscountProductGroupFormArray, storeTierDiscountProductGroupIndexesForRemove);
+        this.removeFormControlsFromTheFormArray(this.businessSystemTierDiscountProductGroupFormArray, businessSystemTierDiscountProductGroupIndexesForRemove);
 
-        storeTierDiscountProductGroupArrayForInsert.forEach(newDiscountProductGroup => {
-            this.addNewFormControlToTheFormArray(this.storeTierDiscountProductGroupFormArray, newDiscountProductGroup, null, this.discountDisableLambda)
+        businessSystemTierDiscountProductGroupArrayForInsert.forEach(newDiscountProductGroup => {
+            this.addNewFormControlToTheFormArray(this.businessSystemTierDiscountProductGroupFormArray, newDiscountProductGroup, null, this.discountDisableLambda)
         });
 
-        const storeTierDiscountProductGroupTable: SoftDataTableComponent = this.findStoreTierDiscountProductGroupTable(tierIndex, storeTierIndex);
+        const businessSystemTierDiscountProductGroupTable: SoftDataTableComponent = this.findBusinessSystemTierDiscountProductGroupTable(tierIndex, businessSystemTierIndex);
 
-        storeTierDiscountProductGroupTable.clientLoad();
+        businessSystemTierDiscountProductGroupTable.clientLoad();
     }
 
-    getStoreTierFormArrayControl(formControlName: keyof StoreTier & string, index: number, tierIndex: number){
-        return this.getFormArrayControlByIndex<StoreTier>(formControlName, this.storeTierDTOListSaveBodyName, index, 
-            (formGroups: SoftFormGroup<StoreTier>[]): SoftFormGroup[] => {
+    getBusinessSystemTierFormArrayControl(formControlName: keyof BusinessSystemTier & string, index: number, tierIndex: number){
+        return this.getFormArrayControlByIndex<BusinessSystemTier>(formControlName, this.businessSystemTierDTOListSaveBodyName, index, 
+            (formGroups: SoftFormGroup<BusinessSystemTier>[]): SoftFormGroup[] => {
                 return formGroups.filter(x => x.controls.tierClientIndex.value === tierIndex);
             });
     }
 
-    getStoreTierFormArrayGroups(tierIndex: number){
-        let formGroups: SoftFormGroup<StoreTier>[] = this.getFormArrayGroups(this.storeTierFormArray);
+    getBusinessSystemTierFormArrayGroups(tierIndex: number){
+        let formGroups: SoftFormGroup<BusinessSystemTier>[] = this.getFormArrayGroups(this.businessSystemTierFormArray);
         return formGroups.filter(x => x.controls.tierClientIndex.value === tierIndex)
     }
 
-    getStoreTierIndexInTheFormArray(tierIndex: number, storeTierIndex: number){
-        const storeTierList = this.storeTierFormArray.value;
+    getBusinessSystemTierIndexInTheFormArray(tierIndex: number, businessSystemTierIndex: number){
+        const businessSystemTierList = this.businessSystemTierFormArray.value;
 
         let j: number = 0
 
-        for (let i = 0; i < storeTierList.length; i++) {
-            if (storeTierList[i].tierClientIndex === tierIndex) {
-                if (j === storeTierIndex){
+        for (let i = 0; i < businessSystemTierList.length; i++) {
+            if (businessSystemTierList[i].tierClientIndex === tierIndex) {
+                if (j === businessSystemTierIndex){
                     return i;
                 }
                 else{
@@ -185,43 +185,43 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
 
     //#region DiscountProductGroup M2M
 
-    initStoreTierDiscountCategoriesFormArray(storeTierDiscountCategories: StoreTierDiscountProductGroup[]){
-        this.storeTierDiscountProductGroupFormArray = this.initFormArray(storeTierDiscountCategories, this.storeTierDiscountProductGroupModel, this.storeTierDiscountCategoriesSaveBodyName, this.storeTierDiscountCategoriesTranslationKey, false, 
+    initBusinessSystemTierDiscountCategoriesFormArray(businessSystemTierDiscountCategories: BusinessSystemTierDiscountProductGroup[]){
+        this.businessSystemTierDiscountProductGroupFormArray = this.initFormArray(businessSystemTierDiscountCategories, this.businessSystemTierDiscountProductGroupModel, this.businessSystemTierDiscountCategoriesSaveBodyName, this.businessSystemTierDiscountCategoriesTranslationKey, false, 
             this.discountDisableLambda
         );
         
-        this.alreadySelectedStoreTierDiscountProductGroupIdsForStore = storeTierDiscountCategories.filter(x => x.selectedForStore).map(x => x.id);
+        this.alreadySelectedBusinessSystemTierDiscountProductGroupIdsForBusinessSystem = businessSystemTierDiscountCategories.filter(x => x.selectedForBusinessSystem).map(x => x.id);
     }
 
-    getAlreadySelectedStoreTierDiscountProductGroupIdsForStore = (additionalIndexes: StoreTierDiscountProductGroupAdditionalIndexes): number[] => {
-        return this.storeTierDiscountProductGroupFormArray.value.filter(x => x.storeTierClientIndex === additionalIndexes.storeTierIndex && x.tierClientIndex === additionalIndexes.tierIndex && x.selectedForStore).map(x => x.id);
+    getAlreadySelectedBusinessSystemTierDiscountProductGroupIdsForBusinessSystem = (additionalIndexes: BusinessSystemTierDiscountProductGroupAdditionalIndexes): number[] => {
+        return this.businessSystemTierDiscountProductGroupFormArray.value.filter(x => x.businessSystemTierClientIndex === additionalIndexes.businessSystemTierIndex && x.tierClientIndex === additionalIndexes.tierIndex && x.selectedForBusinessSystem).map(x => x.id);
     }
 
-    getAlreadySelectedDiscountProductGroupListForStore = (additionalIndexes: StoreTierDiscountProductGroupAdditionalIndexes) => {
-        return this.storeTierDiscountProductGroupFormArray.value.filter(x => x.storeTierClientIndex === additionalIndexes.storeTierIndex && x.tierClientIndex === additionalIndexes.tierIndex && x.selectedForStore);
+    getAlreadySelectedDiscountProductGroupListForBusinessSystem = (additionalIndexes: BusinessSystemTierDiscountProductGroupAdditionalIndexes) => {
+        return this.businessSystemTierDiscountProductGroupFormArray.value.filter(x => x.businessSystemTierClientIndex === additionalIndexes.businessSystemTierIndex && x.tierClientIndex === additionalIndexes.tierIndex && x.selectedForBusinessSystem);
     }
 
-    discountDisableLambda = (formControlName: string, model: StoreTierDiscountProductGroup): boolean => {
-        if(formControlName === nameof<StoreTierDiscountProductGroup>('discount') && model.selectedForStore !== true){
+    discountDisableLambda = (formControlName: string, model: BusinessSystemTierDiscountProductGroup): boolean => {
+        if(formControlName === nameof<BusinessSystemTierDiscountProductGroup>('discount') && model.selectedForBusinessSystem !== true){
             return true;
         }
 
         return false;
     }
 
-    getDiscountProductGroupFormArrayItems = (additionalIndexes: StoreTierDiscountProductGroupAdditionalIndexes) => {
-        return this.storeTierDiscountProductGroupFormArray.value.filter(x => x.storeTierClientIndex === additionalIndexes.storeTierIndex && x.tierClientIndex === additionalIndexes.tierIndex);
+    getDiscountProductGroupFormArrayItems = (additionalIndexes: BusinessSystemTierDiscountProductGroupAdditionalIndexes) => {
+        return this.businessSystemTierDiscountProductGroupFormArray.value.filter(x => x.businessSystemTierClientIndex === additionalIndexes.businessSystemTierIndex && x.tierClientIndex === additionalIndexes.tierIndex);
     }
 
     allSelected(event: AllClickEvent){
-        const additionalIndexes = event.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes;
+        const additionalIndexes = event.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes;
 
-        const discountFormControls = this.getFormArrayControls<StoreTierDiscountProductGroup>('discount', this.storeTierDiscountCategoriesSaveBodyName, (formGroups: SoftFormGroup<StoreTierDiscountProductGroup>[]): SoftFormGroup[] => {
-            return formGroups.filter(x => x.controls.storeTierClientIndex.value === additionalIndexes.storeTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
+        const discountFormControls = this.getFormArrayControls<BusinessSystemTierDiscountProductGroup>('discount', this.businessSystemTierDiscountCategoriesSaveBodyName, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
+            return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
-        const selectedFormControls = this.getFormArrayControls<StoreTierDiscountProductGroup>('selectedForStore', this.storeTierDiscountCategoriesSaveBodyName, (formGroups: SoftFormGroup<StoreTierDiscountProductGroup>[]): SoftFormGroup[] => {
-            return formGroups.filter(x => x.controls.storeTierClientIndex.value === additionalIndexes.storeTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
+        const selectedFormControls = this.getFormArrayControls<BusinessSystemTierDiscountProductGroup>('selectedForBusinessSystem', this.businessSystemTierDiscountCategoriesSaveBodyName, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
+            return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
         if (event.checked === true) {
@@ -245,14 +245,14 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     }
 
     rowSelect(event: RowClickEvent){
-        const additionalIndexes = event.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes;
+        const additionalIndexes = event.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes;
 
-        const discountFormControl = this.getFormArrayControlByIndex<StoreTierDiscountProductGroup>('discount', this.storeTierDiscountCategoriesSaveBodyName, event.index, (formGroups: SoftFormGroup<StoreTierDiscountProductGroup>[]): SoftFormGroup[] => {
-            return formGroups.filter(x => x.controls.storeTierClientIndex.value === additionalIndexes.storeTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
+        const discountFormControl = this.getFormArrayControlByIndex<BusinessSystemTierDiscountProductGroup>('discount', this.businessSystemTierDiscountCategoriesSaveBodyName, event.index, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
+            return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
-        const selectedFormControl = this.getFormArrayControlByIndex<StoreTierDiscountProductGroup>('selectedForStore', this.storeTierDiscountCategoriesSaveBodyName, event.index, (formGroups: SoftFormGroup<StoreTierDiscountProductGroup>[]): SoftFormGroup[] => {
-            return formGroups.filter(x => x.controls.storeTierClientIndex.value === additionalIndexes.storeTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
+        const selectedFormControl = this.getFormArrayControlByIndex<BusinessSystemTierDiscountProductGroup>('selectedForBusinessSystem', this.businessSystemTierDiscountCategoriesSaveBodyName, event.index, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
+            return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
         discountFormControl.enable();
@@ -260,111 +260,111 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     }
 
     rowUnselect(event: RowClickEvent){
-        const additionalIndexes = event.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes;
+        const additionalIndexes = event.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes;
 
-        const discountFormControl = this.getFormArrayControlByIndex<StoreTierDiscountProductGroup>('discount', this.storeTierDiscountCategoriesSaveBodyName, event.index, (formGroups: SoftFormGroup<StoreTierDiscountProductGroup>[]): SoftFormGroup[] => {
-            return formGroups.filter(x => x.controls.storeTierClientIndex.value === additionalIndexes.storeTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
+        const discountFormControl = this.getFormArrayControlByIndex<BusinessSystemTierDiscountProductGroup>('discount', this.businessSystemTierDiscountCategoriesSaveBodyName, event.index, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
+            return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
-        const selectedFormControl = this.getFormArrayControlByIndex<StoreTierDiscountProductGroup>('selectedForStore', this.storeTierDiscountCategoriesSaveBodyName, event.index, (formGroups: SoftFormGroup<StoreTierDiscountProductGroup>[]): SoftFormGroup[] => {
-            return formGroups.filter(x => x.controls.storeTierClientIndex.value === additionalIndexes.storeTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
+        const selectedFormControl = this.getFormArrayControlByIndex<BusinessSystemTierDiscountProductGroup>('selectedForBusinessSystem', this.businessSystemTierDiscountCategoriesSaveBodyName, event.index, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
+            return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
         discountFormControl.disable();
         selectedFormControl.setValue(false);
     }
 
-    getDiscountProductGroupFormArrayControl = (formControlName: keyof StoreTierDiscountProductGroup & string, index: number, additionalIndexes: StoreTierDiscountProductGroupAdditionalIndexes) => {
-        return this.getFormArrayControlByIndex<StoreTierDiscountProductGroup>(formControlName, this.storeTierDiscountCategoriesSaveBodyName, index, 
-            (formGroups: SoftFormGroup<StoreTierDiscountProductGroup>[]): SoftFormGroup[] => {
-                return formGroups.filter(x => x.controls.tierClientIndex.value === additionalIndexes.tierIndex && x.controls.storeTierClientIndex.value === additionalIndexes.storeTierIndex);
+    getDiscountProductGroupFormArrayControl = (formControlName: keyof BusinessSystemTierDiscountProductGroup & string, index: number, additionalIndexes: BusinessSystemTierDiscountProductGroupAdditionalIndexes) => {
+        return this.getFormArrayControlByIndex<BusinessSystemTierDiscountProductGroup>(formControlName, this.businessSystemTierDiscountCategoriesSaveBodyName, index, 
+            (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
+                return formGroups.filter(x => x.controls.tierClientIndex.value === additionalIndexes.tierIndex && x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex);
             });
     }
 
-    getStoreTierDiscountProductGroupAdditionalIndexes(tierIndex: number, storeTierIndex: number){
-        return new StoreTierDiscountProductGroupAdditionalIndexes({tierIndex: tierIndex, storeTierIndex: storeTierIndex});
+    getBusinessSystemTierDiscountProductGroupAdditionalIndexes(tierIndex: number, businessSystemTierIndex: number){
+        return new BusinessSystemTierDiscountProductGroupAdditionalIndexes({tierIndex: tierIndex, businessSystemTierIndex: businessSystemTierIndex});
     }
 
-    setStoreTierDiscountProductGroupAdditionalIndexes(table: SoftDataTableComponent, tierIndex: number, storeTierIndex: number){
-        (table.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes).tierIndex = tierIndex;
-        (table.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes).storeTierIndex = storeTierIndex;
+    setBusinessSystemTierDiscountProductGroupAdditionalIndexes(table: SoftDataTableComponent, tierIndex: number, businessSystemTierIndex: number){
+        (table.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).tierIndex = tierIndex;
+        (table.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).businessSystemTierIndex = businessSystemTierIndex;
     }
 
-    findStoreTierDiscountProductGroupTable(tierIndex: number, storeTierIndex: number){
-        return this.storeTierDiscountProductGroupTables.find(x => 
-            (x.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes).tierIndex === tierIndex && 
-            (x.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes).storeTierIndex === storeTierIndex);
+    findBusinessSystemTierDiscountProductGroupTable(tierIndex: number, businessSystemTierIndex: number){
+        return this.businessSystemTierDiscountProductGroupTables.find(x => 
+            (x.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).tierIndex === tierIndex && 
+            (x.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).businessSystemTierIndex === businessSystemTierIndex);
     }
 
     //#endregion
 
     override onBeforeRemove(formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number): void {
         if (modelConstructor.typeName === this.tierModel.typeName) {
-            let storeTierIndexesForRemove: number[] = [];
-            let storeTierDiscountProductGroupIndexesForRemove: number[] = [];
+            let businessSystemTierIndexesForRemove: number[] = [];
+            let businessSystemTierDiscountProductGroupIndexesForRemove: number[] = [];
 
-            // FT: Adjusting indexes for storeTierFormArray
-            this.storeTierFormArray.value.forEach((storeTier, index) => {
-                if (storeTier.tierClientIndex == this.tierLastIndexClicked.index)
-                    storeTierIndexesForRemove.push(index);
+            // FT: Adjusting indexes for businessSystemTierFormArray
+            this.businessSystemTierFormArray.value.forEach((businessSystemTier, index) => {
+                if (businessSystemTier.tierClientIndex == this.tierLastIndexClicked.index)
+                    businessSystemTierIndexesForRemove.push(index);
 
-                if (storeTier.tierClientIndex == null || storeTier.tierClientIndex <= this.tierLastIndexClicked.index)
+                if (businessSystemTier.tierClientIndex == null || businessSystemTier.tierClientIndex <= this.tierLastIndexClicked.index)
                     return;
                 
-                (this.storeTierFormArray.controls[index] as SoftFormGroup<StoreTier>).controls.tierClientIndex.setValue(storeTier.tierClientIndex - 1);
+                (this.businessSystemTierFormArray.controls[index] as SoftFormGroup<BusinessSystemTier>).controls.tierClientIndex.setValue(businessSystemTier.tierClientIndex - 1);
             });
 
-            // FT: Adjusting indexes for storeTierDiscountProductGroupFormArray
-            this.storeTierDiscountProductGroupFormArray.value.forEach((storeTierDiscountProductGroup, index) => {
-                if (storeTierDiscountProductGroup.tierClientIndex == this.tierLastIndexClicked.index)
-                    storeTierDiscountProductGroupIndexesForRemove.push(index);
+            // FT: Adjusting indexes for businessSystemTierDiscountProductGroupFormArray
+            this.businessSystemTierDiscountProductGroupFormArray.value.forEach((businessSystemTierDiscountProductGroup, index) => {
+                if (businessSystemTierDiscountProductGroup.tierClientIndex == this.tierLastIndexClicked.index)
+                    businessSystemTierDiscountProductGroupIndexesForRemove.push(index);
 
-                if (storeTierDiscountProductGroup.tierClientIndex == null || storeTierDiscountProductGroup.tierClientIndex <= this.tierLastIndexClicked.index)
+                if (businessSystemTierDiscountProductGroup.tierClientIndex == null || businessSystemTierDiscountProductGroup.tierClientIndex <= this.tierLastIndexClicked.index)
                     return;
                 
-                (this.storeTierDiscountProductGroupFormArray.controls[index] as SoftFormGroup<StoreTierDiscountProductGroup>).controls.tierClientIndex.setValue(storeTierDiscountProductGroup.tierClientIndex - 1);
+                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SoftFormGroup<BusinessSystemTierDiscountProductGroup>).controls.tierClientIndex.setValue(businessSystemTierDiscountProductGroup.tierClientIndex - 1);
             });
 
-            this.removeFormControlsFromTheFormArray(this.storeTierDiscountProductGroupFormArray, storeTierDiscountProductGroupIndexesForRemove);
-            this.removeFormControlsFromTheFormArray(this.storeTierFormArray, storeTierIndexesForRemove);
+            this.removeFormControlsFromTheFormArray(this.businessSystemTierDiscountProductGroupFormArray, businessSystemTierDiscountProductGroupIndexesForRemove);
+            this.removeFormControlsFromTheFormArray(this.businessSystemTierFormArray, businessSystemTierIndexesForRemove);
 
             // FT: Adjust all additional indexes on tables where tierIndex is greater then last clicked
-            let storeTierDiscountProductGroupTablesForTier = this.storeTierDiscountProductGroupTables.filter(x => (x.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes).tierIndex >= this.tierLastIndexClicked.index);
-            storeTierDiscountProductGroupTablesForTier.forEach(table => {
+            let businessSystemTierDiscountProductGroupTablesForTier = this.businessSystemTierDiscountProductGroupTables.filter(x => (x.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).tierIndex >= this.tierLastIndexClicked.index);
+            businessSystemTierDiscountProductGroupTablesForTier.forEach(table => {
                 table.clientLoad();
             });
         }
-        else if (modelConstructor.typeName === this.storeTierModel.typeName) {
-            let storeTierDiscountProductGroupIndexesForRemove: number[] = [];
+        else if (modelConstructor.typeName === this.businessSystemTierModel.typeName) {
+            let businessSystemTierDiscountProductGroupIndexesForRemove: number[] = [];
             modelConstructor.tierClientIndex = this.tierLastIndexClicked.index;
 
-            // FT: Adjusting indexes for storeTierDiscountProductGroupFormArray
-            this.storeTierDiscountProductGroupFormArray.value.forEach((storeTierDiscountProductGroup, index) => {
-                if (storeTierDiscountProductGroup.tierClientIndex === this.tierLastIndexClicked.index && storeTierDiscountProductGroup.storeTierClientIndex === this.storeTierLastIndexClicked.index)
-                    storeTierDiscountProductGroupIndexesForRemove.push(index);
+            // FT: Adjusting indexes for businessSystemTierDiscountProductGroupFormArray
+            this.businessSystemTierDiscountProductGroupFormArray.value.forEach((businessSystemTierDiscountProductGroup, index) => {
+                if (businessSystemTierDiscountProductGroup.tierClientIndex === this.tierLastIndexClicked.index && businessSystemTierDiscountProductGroup.businessSystemTierClientIndex === this.businessSystemTierLastIndexClicked.index)
+                    businessSystemTierDiscountProductGroupIndexesForRemove.push(index);
 
-                if (storeTierDiscountProductGroup.tierClientIndex == null || 
-                    storeTierDiscountProductGroup.storeTierClientIndex == null || 
-                    storeTierDiscountProductGroup.tierClientIndex !== this.tierLastIndexClicked.index || 
-                    storeTierDiscountProductGroup.storeTierClientIndex <= this.storeTierLastIndexClicked.index
+                if (businessSystemTierDiscountProductGroup.tierClientIndex == null || 
+                    businessSystemTierDiscountProductGroup.businessSystemTierClientIndex == null || 
+                    businessSystemTierDiscountProductGroup.tierClientIndex !== this.tierLastIndexClicked.index || 
+                    businessSystemTierDiscountProductGroup.businessSystemTierClientIndex <= this.businessSystemTierLastIndexClicked.index
                 ) {
                     return;
                 }
                 
-                (this.storeTierDiscountProductGroupFormArray.controls[index] as SoftFormGroup<StoreTierDiscountProductGroup>).controls.storeTierClientIndex.setValue(storeTierDiscountProductGroup.storeTierClientIndex - 1);
+                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SoftFormGroup<BusinessSystemTierDiscountProductGroup>).controls.businessSystemTierClientIndex.setValue(businessSystemTierDiscountProductGroup.businessSystemTierClientIndex - 1);
            });
 
-           this.removeFormControlsFromTheFormArray(this.storeTierDiscountProductGroupFormArray, storeTierDiscountProductGroupIndexesForRemove);
+           this.removeFormControlsFromTheFormArray(this.businessSystemTierDiscountProductGroupFormArray, businessSystemTierDiscountProductGroupIndexesForRemove);
            
-           let formArrayIndex: number = this.getStoreTierIndexInTheFormArray(this.tierLastIndexClicked.index, this.storeTierLastIndexClicked.index);
-           this.removeFormControlFromTheFormArray(this.storeTierFormArray, formArrayIndex);
+           let formArrayIndex: number = this.getBusinessSystemTierIndexInTheFormArray(this.tierLastIndexClicked.index, this.businessSystemTierLastIndexClicked.index);
+           this.removeFormControlFromTheFormArray(this.businessSystemTierFormArray, formArrayIndex);
 
-           // FT: Adjust all additional indexes on tables where storeTierIndex is greater then last clicked
-           let storeTierDiscountProductGroupTablesForTier = this.storeTierDiscountProductGroupTables.filter(x => 
-               (x.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes).tierIndex === this.tierLastIndexClicked.index &&
-               (x.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes).storeTierIndex >= this.storeTierLastIndexClicked.index);
+           // FT: Adjust all additional indexes on tables where businessSystemTierIndex is greater then last clicked
+           let businessSystemTierDiscountProductGroupTablesForTier = this.businessSystemTierDiscountProductGroupTables.filter(x => 
+               (x.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).tierIndex === this.tierLastIndexClicked.index &&
+               (x.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).businessSystemTierIndex >= this.businessSystemTierLastIndexClicked.index);
 
-           storeTierDiscountProductGroupTablesForTier.forEach(table => {
+           businessSystemTierDiscountProductGroupTablesForTier.forEach(table => {
                table.clientLoad(); // FT: Because we changed additional indexes, items also change
            });
         }
@@ -372,118 +372,118 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
 
     override onBeforeAddBelow(formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number): void {
         if (modelConstructor.typeName === this.tierModel.typeName) {
-            // FT: Adjusting indexes for storeTierFormArray
-            this.storeTierFormArray.value.forEach((storeTier, index) => {
-                if (storeTier.tierClientIndex == null || storeTier.tierClientIndex <= this.tierLastIndexClicked.index)
+            // FT: Adjusting indexes for businessSystemTierFormArray
+            this.businessSystemTierFormArray.value.forEach((businessSystemTier, index) => {
+                if (businessSystemTier.tierClientIndex == null || businessSystemTier.tierClientIndex <= this.tierLastIndexClicked.index)
                     return;
                 
-                (this.storeTierFormArray.controls[index] as SoftFormGroup<StoreTier>).controls.tierClientIndex.setValue(storeTier.tierClientIndex + 1);
+                (this.businessSystemTierFormArray.controls[index] as SoftFormGroup<BusinessSystemTier>).controls.tierClientIndex.setValue(businessSystemTier.tierClientIndex + 1);
             });
 
-            // FT: Adjusting indexes for storeTierDiscountProductGroupFormArray
-            this.storeTierDiscountProductGroupFormArray.value.forEach((storeTierDiscountProductGroup, index) => {
-                if (storeTierDiscountProductGroup.tierClientIndex == null || storeTierDiscountProductGroup.tierClientIndex <= this.tierLastIndexClicked.index)
+            // FT: Adjusting indexes for businessSystemTierDiscountProductGroupFormArray
+            this.businessSystemTierDiscountProductGroupFormArray.value.forEach((businessSystemTierDiscountProductGroup, index) => {
+                if (businessSystemTierDiscountProductGroup.tierClientIndex == null || businessSystemTierDiscountProductGroup.tierClientIndex <= this.tierLastIndexClicked.index)
                     return;
                 
-                (this.storeTierDiscountProductGroupFormArray.controls[index] as SoftFormGroup<StoreTierDiscountProductGroup>).controls.tierClientIndex.setValue(storeTierDiscountProductGroup.tierClientIndex + 1);
+                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SoftFormGroup<BusinessSystemTierDiscountProductGroup>).controls.tierClientIndex.setValue(businessSystemTierDiscountProductGroup.tierClientIndex + 1);
             });
 
             // FT: We don't need to do this because change detection from the html does it for us.
             // FT: Adjust all additional indexes on tables where tierIndex is greater then last clicked
-            // let storeTierDiscountProductGroupTablesForTier = this.storeTierDiscountProductGroupTables.filter(x => (x.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes).tierIndex > this.tierLastIndexClicked.index);
-            // storeTierDiscountProductGroupTablesForTier.forEach(table => {
-                // const additionalIndexes = table.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes;
-                // this.setStoreTierDiscountProductGroupAdditionalIndexes(table, additionalIndexes.tierIndex + 1, additionalIndexes.storeTierIndex);
+            // let businessSystemTierDiscountProductGroupTablesForTier = this.businessSystemTierDiscountProductGroupTables.filter(x => (x.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).tierIndex > this.tierLastIndexClicked.index);
+            // businessSystemTierDiscountProductGroupTablesForTier.forEach(table => {
+                // const additionalIndexes = table.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes;
+                // this.setBusinessSystemTierDiscountProductGroupAdditionalIndexes(table, additionalIndexes.tierIndex + 1, additionalIndexes.businessSystemTierIndex);
                 // table.clientLoad();
             // });
         }
-        else if (modelConstructor.typeName === this.storeTierModel.typeName) {
+        else if (modelConstructor.typeName === this.businessSystemTierModel.typeName) {
             modelConstructor.tierClientIndex = this.tierLastIndexClicked.index;
 
-            // FT: Adjusting indexes for storeTierDiscountProductGroupFormArray
-            this.storeTierDiscountProductGroupFormArray.value.forEach((storeTierDiscountProductGroup, index) => {
-                if (storeTierDiscountProductGroup.tierClientIndex == null || 
-                    storeTierDiscountProductGroup.storeTierClientIndex == null || 
-                    storeTierDiscountProductGroup.tierClientIndex != this.tierLastIndexClicked.index || 
-                    storeTierDiscountProductGroup.storeTierClientIndex <= this.storeTierLastIndexClicked.index
+            // FT: Adjusting indexes for businessSystemTierDiscountProductGroupFormArray
+            this.businessSystemTierDiscountProductGroupFormArray.value.forEach((businessSystemTierDiscountProductGroup, index) => {
+                if (businessSystemTierDiscountProductGroup.tierClientIndex == null || 
+                    businessSystemTierDiscountProductGroup.businessSystemTierClientIndex == null || 
+                    businessSystemTierDiscountProductGroup.tierClientIndex != this.tierLastIndexClicked.index || 
+                    businessSystemTierDiscountProductGroup.businessSystemTierClientIndex <= this.businessSystemTierLastIndexClicked.index
                 ) {
                     return;
                 }
                 
-                (this.storeTierDiscountProductGroupFormArray.controls[index] as SoftFormGroup<StoreTierDiscountProductGroup>).controls.storeTierClientIndex.setValue(storeTierDiscountProductGroup.storeTierClientIndex + 1);
+                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SoftFormGroup<BusinessSystemTierDiscountProductGroup>).controls.businessSystemTierClientIndex.setValue(businessSystemTierDiscountProductGroup.businessSystemTierClientIndex + 1);
             });
 
-            // FT: Adjust all additional indexes on tables where storeTierIndex is greater then last clicked
-            let storeTierDiscountProductGroupTablesForTier = this.storeTierDiscountProductGroupTables.filter(x => 
-                (x.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes).tierIndex === this.tierLastIndexClicked.index &&
-                (x.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes).storeTierIndex > this.storeTierLastIndexClicked.index);
+            // FT: Adjust all additional indexes on tables where businessSystemTierIndex is greater then last clicked
+            let businessSystemTierDiscountProductGroupTablesForTier = this.businessSystemTierDiscountProductGroupTables.filter(x => 
+                (x.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).tierIndex === this.tierLastIndexClicked.index &&
+                (x.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).businessSystemTierIndex > this.businessSystemTierLastIndexClicked.index);
 
-            storeTierDiscountProductGroupTablesForTier.forEach(table => {
+            businessSystemTierDiscountProductGroupTablesForTier.forEach(table => {
                 table.clientLoad(); // FT: Because we changed additional indexes the items also changes
             });
 
-            let formArrayIndex: number = this.getStoreTierIndexInTheFormArray(this.tierLastIndexClicked.index, this.storeTierLastIndexClicked.index);
-            this.addNewStoreTier(this.tierLastIndexClicked.index, formArrayIndex + 1);
+            let formArrayIndex: number = this.getBusinessSystemTierIndexInTheFormArray(this.tierLastIndexClicked.index, this.businessSystemTierLastIndexClicked.index);
+            this.addNewBusinessSystemTier(this.tierLastIndexClicked.index, formArrayIndex + 1);
         }
     }
 
     override onBeforeAddAbove(formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number): void {
         if (modelConstructor.typeName === this.tierModel.typeName) {
-            // FT: Adjusting indexes for storeTierFormArray
-            this.storeTierFormArray.value.forEach((storeTier, index) => { // FT: Adjusting storeTier indexes
-                if (storeTier.tierClientIndex == null || storeTier.tierClientIndex < this.tierLastIndexClicked.index)
+            // FT: Adjusting indexes for businessSystemTierFormArray
+            this.businessSystemTierFormArray.value.forEach((businessSystemTier, index) => { // FT: Adjusting businessSystemTier indexes
+                if (businessSystemTier.tierClientIndex == null || businessSystemTier.tierClientIndex < this.tierLastIndexClicked.index)
                     return;
                 
-                (this.storeTierFormArray.controls[index] as SoftFormGroup<StoreTier>).controls.tierClientIndex.setValue(storeTier.tierClientIndex + 1);
+                (this.businessSystemTierFormArray.controls[index] as SoftFormGroup<BusinessSystemTier>).controls.tierClientIndex.setValue(businessSystemTier.tierClientIndex + 1);
             });
 
-            // FT: Adjusting indexes for storeTierDiscountProductGroupFormArray
-            this.storeTierDiscountProductGroupFormArray.value.forEach((storeTierDiscountProductGroup, index) => {
-                if (storeTierDiscountProductGroup.tierClientIndex == null || storeTierDiscountProductGroup.tierClientIndex < this.tierLastIndexClicked.index)
+            // FT: Adjusting indexes for businessSystemTierDiscountProductGroupFormArray
+            this.businessSystemTierDiscountProductGroupFormArray.value.forEach((businessSystemTierDiscountProductGroup, index) => {
+                if (businessSystemTierDiscountProductGroup.tierClientIndex == null || businessSystemTierDiscountProductGroup.tierClientIndex < this.tierLastIndexClicked.index)
                     return;
                 
-                (this.storeTierDiscountProductGroupFormArray.controls[index] as SoftFormGroup<StoreTierDiscountProductGroup>).controls.tierClientIndex.setValue(storeTierDiscountProductGroup.tierClientIndex + 1);
+                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SoftFormGroup<BusinessSystemTierDiscountProductGroup>).controls.tierClientIndex.setValue(businessSystemTierDiscountProductGroup.tierClientIndex + 1);
             });
 
             // FT: We don't need to do this because change detection from the html does it for us.
-            // let discountCategoryTablesForTier = this.storeTierDiscountProductGroupTables.filter(x => (x.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes).tierIndex >= lastMenuIconIndexClicked);
+            // let discountCategoryTablesForTier = this.businessSystemTierDiscountProductGroupTables.filter(x => (x.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).tierIndex >= lastMenuIconIndexClicked);
             // discountCategoryTablesForTier.forEach(table => {
-            //     const additionalIndexes = table.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes;
-            //     this.setStoreTierDiscountProductGroupAdditionalIndexes(table, additionalIndexes.tierIndex + 1, additionalIndexes.storeTierIndex);
+            //     const additionalIndexes = table.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes;
+            //     this.setBusinessSystemTierDiscountProductGroupAdditionalIndexes(table, additionalIndexes.tierIndex + 1, additionalIndexes.businessSystemTierIndex);
             //     table.clientLoad();
             // });
         }
-        else if (modelConstructor.typeName === this.storeTierModel.typeName) {
+        else if (modelConstructor.typeName === this.businessSystemTierModel.typeName) {
             modelConstructor.tierClientIndex = this.tierLastIndexClicked.index;
 
-            // FT: Adjusting indexes for storeTierDiscountProductGroupFormArray
-            this.storeTierDiscountProductGroupFormArray.value.forEach((storeTierDiscountProductGroup, index) => {
-                if (storeTierDiscountProductGroup.tierClientIndex == null || 
-                    storeTierDiscountProductGroup.storeTierClientIndex == null || 
-                    storeTierDiscountProductGroup.tierClientIndex != this.tierLastIndexClicked.index || 
-                    storeTierDiscountProductGroup.storeTierClientIndex < this.storeTierLastIndexClicked.index
+            // FT: Adjusting indexes for businessSystemTierDiscountProductGroupFormArray
+            this.businessSystemTierDiscountProductGroupFormArray.value.forEach((businessSystemTierDiscountProductGroup, index) => {
+                if (businessSystemTierDiscountProductGroup.tierClientIndex == null || 
+                    businessSystemTierDiscountProductGroup.businessSystemTierClientIndex == null || 
+                    businessSystemTierDiscountProductGroup.tierClientIndex != this.tierLastIndexClicked.index || 
+                    businessSystemTierDiscountProductGroup.businessSystemTierClientIndex < this.businessSystemTierLastIndexClicked.index
                 ) {
                     return;
                 }
                 
-                (this.storeTierDiscountProductGroupFormArray.controls[index] as SoftFormGroup<StoreTierDiscountProductGroup>).controls.storeTierClientIndex.setValue(storeTierDiscountProductGroup.storeTierClientIndex + 1);
+                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SoftFormGroup<BusinessSystemTierDiscountProductGroup>).controls.businessSystemTierClientIndex.setValue(businessSystemTierDiscountProductGroup.businessSystemTierClientIndex + 1);
             });
 
-            // FT: Adjust all additional indexes on tables where storeTierIndex is greater then last clicked
-            let storeTierDiscountProductGroupTablesForTier = this.storeTierDiscountProductGroupTables.filter(x => 
-                (x.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes).tierIndex === this.tierLastIndexClicked.index &&
-                (x.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes).storeTierIndex >= this.storeTierLastIndexClicked.index);
+            // FT: Adjust all additional indexes on tables where businessSystemTierIndex is greater then last clicked
+            let businessSystemTierDiscountProductGroupTablesForTier = this.businessSystemTierDiscountProductGroupTables.filter(x => 
+                (x.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).tierIndex === this.tierLastIndexClicked.index &&
+                (x.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).businessSystemTierIndex >= this.businessSystemTierLastIndexClicked.index);
 
-            storeTierDiscountProductGroupTablesForTier.forEach(table => {
+            businessSystemTierDiscountProductGroupTablesForTier.forEach(table => {
                 // FT: We don't need to do this because change detection from the html does it for us.
-                // const additionalIndexes = table.additionalIndexes as StoreTierDiscountProductGroupAdditionalIndexes;
-                // this.setStoreTierDiscountProductGroupAdditionalIndexes(table, additionalIndexes.tierIndex, additionalIndexes.storeTierIndex + 1); 
+                // const additionalIndexes = table.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes;
+                // this.setBusinessSystemTierDiscountProductGroupAdditionalIndexes(table, additionalIndexes.tierIndex, additionalIndexes.businessSystemTierIndex + 1); 
 
                 table.clientLoad(); // FT: Because we changed additional indexes the items also changes
             });
 
-            let formArrayIndex: number = this.getStoreTierIndexInTheFormArray(this.tierLastIndexClicked.index, this.storeTierLastIndexClicked.index);
-            this.addNewStoreTier(this.tierLastIndexClicked.index, formArrayIndex);
+            let formArrayIndex: number = this.getBusinessSystemTierIndexInTheFormArray(this.tierLastIndexClicked.index, this.businessSystemTierLastIndexClicked.index);
+            this.addNewBusinessSystemTier(this.tierLastIndexClicked.index, formArrayIndex);
         }
     }
 
@@ -491,18 +491,18 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         let saveBody: TierSaveBody = new TierSaveBody();
 
         saveBody.tierDTOList = this.tierFormArray.getRawValue();
-        saveBody.storeTierDTOList = this.storeTierFormArray.getRawValue();
+        saveBody.businessSystemTierDTOList = this.businessSystemTierFormArray.getRawValue();
 
-        saveBody.storeTierDiscountProductGroupDTOList = this.storeTierDiscountProductGroupFormArray.value;
+        saveBody.businessSystemTierDiscountProductGroupDTOList = this.businessSystemTierDiscountProductGroupFormArray.value;
 
         this.saveBody = saveBody;
     }
 
     override onAfterSave(): void {
-        const selectedFormControls = this.getFormArrayControls<StoreTierDiscountProductGroup>('selectedForStore', this.storeTierDiscountCategoriesSaveBodyName);
+        const selectedFormControls = this.getFormArrayControls<BusinessSystemTierDiscountProductGroup>('selectedForBusinessSystem', this.businessSystemTierDiscountCategoriesSaveBodyName);
         
         selectedFormControls.forEach((selectedFormControl, index) => {
-            const discountFormControl = this.getFormArrayControlByIndex<StoreTierDiscountProductGroup>('discount', this.storeTierDiscountCategoriesSaveBodyName, index)
+            const discountFormControl = this.getFormArrayControlByIndex<BusinessSystemTierDiscountProductGroup>('discount', this.businessSystemTierDiscountCategoriesSaveBodyName, index)
 
             if (selectedFormControl.value === false){
                 discountFormControl.disable();
@@ -511,20 +511,20 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     }
 }
 
-class StoreTierDiscountProductGroupAdditionalIndexes {
+class BusinessSystemTierDiscountProductGroupAdditionalIndexes {
     tierIndex?: number;
-    storeTierIndex?: number;
+    businessSystemTierIndex?: number;
 
     constructor(
         {
             tierIndex, 
-            storeTierIndex
+            businessSystemTierIndex
         }:{
             tierIndex?: number; 
-            storeTierIndex?: number;
+            businessSystemTierIndex?: number;
         } = {}
     ) {
         this.tierIndex = tierIndex;
-        this.storeTierIndex = storeTierIndex;
+        this.businessSystemTierIndex = businessSystemTierIndex;
     }
 };

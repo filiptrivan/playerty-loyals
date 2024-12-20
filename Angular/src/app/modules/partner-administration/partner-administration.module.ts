@@ -17,8 +17,8 @@ import { SegmentationDetailsComponent } from './pages/segmentations/segmentation
 import { SegmentationSelectComponent } from '../administration/partials/segmentation-select.component';
 import { UserProgressbarComponent } from "../../business/components/user-progressbar/user-progressbar.component";
 import { TranslocoDirective } from '@jsverse/transloco';
-import { StoreTableComponent } from './pages/stores/store-list.component';
-import { StoreDetailsComponent } from './pages/stores/store-details.component';
+import { BusinessSystemTableComponent } from './pages/business-systems/business-system-list.component';
+import { BusinessSystemDetailsComponent } from './pages/business-systems/business-system-details.component';
 import { CommonModule } from '@angular/common';
 
 const routes: Routes = [
@@ -55,12 +55,12 @@ const routes: Routes = [
         component: SegmentationDetailsComponent,
     },
     {
-        path: 'stores',
-        component: StoreTableComponent,
+        path: 'business-systems',
+        component: BusinessSystemTableComponent,
     },
     {
-        path: 'stores/:id',
-        component: StoreDetailsComponent,
+        path: 'business-systems/:id',
+        component: BusinessSystemDetailsComponent,
     },
     {
         path: 'tiers',
@@ -91,8 +91,8 @@ const routes: Routes = [
         PartnerNotificationDetailsComponent,
         SegmentationListComponent,
         SegmentationDetailsComponent,
-        StoreTableComponent,
-        StoreDetailsComponent,
+        BusinessSystemTableComponent,
+        BusinessSystemDetailsComponent,
     ],
     providers:[]
 })

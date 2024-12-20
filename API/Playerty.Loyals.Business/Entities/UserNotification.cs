@@ -12,15 +12,11 @@ namespace Playerty.Loyals.Business.Entities
 {
     public class UserNotification 
     {
+        [M2MMaintanceEntity(nameof(Notification.Users))]
         public virtual Notification Notification { get; set; }
 
-        [M2MMaintanceEntityKey(nameof(Notification))]
-        public long NotificationId { get; set; }
-
+        [M2MExtendEntity(nameof(User.Notifications))]
         public virtual UserExtended User { get; set; }
-
-        [M2MExtendEntityKey(nameof(User))]
-        public long UserId { get; set; }
 
         public bool IsMarkedAsRead { get; set; }
     }

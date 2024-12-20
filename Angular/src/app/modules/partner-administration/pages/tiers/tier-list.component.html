@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">
-    @defer (when tierFormArray != null && storeTierFormArray != null && storeTierDiscountProductGroupFormArray != null) {
+    @defer (when tierFormArray != null && businessSystemTierFormArray != null && businessSystemTierDiscountProductGroupFormArray != null) {
         <soft-panel>
             <panel-header [title]="t('TierList')" [bigTitle]="true" icon="pi pi-crown"></panel-header>
     
@@ -22,23 +22,23 @@
                             </div>
 
                             <div class="col-12">
-                                @for (storeTierFormGroup of getStoreTierFormArrayGroups(tierIndex); track storeTierIndex; let storeTierIndex = $index; let last = $last) {
-                                    <index-card [index]="storeTierIndex" [crudMenu]="storeTierCrudMenu" (onMenuIconClick)="storeTierLastIndexClicked.index = $event; tierLastIndexClicked.index = tierIndex" [last]="false">
-                                        <form [formGroup]="storeTierFormGroup" class="grid">
+                                @for (businessSystemTierFormGroup of getBusinessSystemTierFormArrayGroups(tierIndex); track businessSystemTierIndex; let businessSystemTierIndex = $index; let last = $last) {
+                                    <index-card [index]="businessSystemTierIndex" [crudMenu]="businessSystemTierCrudMenu" (onMenuIconClick)="businessSystemTierLastIndexClicked.index = $event; tierLastIndexClicked.index = tierIndex" [last]="false">
+                                        <form [formGroup]="businessSystemTierFormGroup" class="grid">
                                             <div class="col-12">
-                                                <soft-dropdown [control]="getStoreTierFormArrayControl('storeId', storeTierIndex, tierIndex)" (onChange)="storeChange($event, tierIndex, storeTierIndex)" [options]="storeOptions"></soft-dropdown>
+                                                <soft-dropdown [control]="getBusinessSystemTierFormArrayControl('businessSystemId', businessSystemTierIndex, tierIndex)" (onChange)="businessSystemChange($event, tierIndex, businessSystemTierIndex)" [options]="businessSystemOptions"></soft-dropdown>
                                             </div>
                                             <div class="col-12">
-                                                <soft-data-table #storeTierDiscountProductGroupTable
+                                                <soft-data-table #businessSystemTierDiscountProductGroupTable
                                                 [getFormArrayItems]="getDiscountProductGroupFormArrayItems" 
                                                 [getSoftFormControl]="getDiscountProductGroupFormArrayControl" 
-                                                [getAlreadySelectedItemIds]="getAlreadySelectedStoreTierDiscountProductGroupIdsForStore" 
-                                                [getAlreadySelectedItems]="getAlreadySelectedDiscountProductGroupListForStore"
+                                                [getAlreadySelectedItemIds]="getAlreadySelectedBusinessSystemTierDiscountProductGroupIdsForBusinessSystem" 
+                                                [getAlreadySelectedItems]="getAlreadySelectedDiscountProductGroupListForBusinessSystem"
                                                 (onIsAllSelectedChange)="allSelected($event)"
                                                 (onRowSelect)="rowSelect($event)" (onRowUnselect)="rowUnselect($event)" 
-                                                selectionMode="multiple" [showAddButton]="false" [tableTitle]="t('DiscountProductGroupList')" [cols]="storeTierDiscountProductGroupCols" [hasLazyLoad]="false" [showPaginator]="false"
+                                                selectionMode="multiple" [showAddButton]="false" [tableTitle]="t('DiscountProductGroupList')" [cols]="businessSystemTierDiscountProductGroupCols" [hasLazyLoad]="false" [showPaginator]="false"
                                                 [showExportToExcelButton]="false" [formArrayControlNamesFromHtml]="formArrayControlNamesFromHtml" 
-                                                [additionalIndexes]="getStoreTierDiscountProductGroupAdditionalIndexes(tierIndex, storeTierIndex)"
+                                                [additionalIndexes]="getBusinessSystemTierDiscountProductGroupAdditionalIndexes(tierIndex, businessSystemTierIndex)"
                                                 ></soft-data-table>
                                             </div>
                                         </form>
@@ -46,7 +46,7 @@
                                 }
 
                                 <div>
-                                    <p-button (onClick)="addNewStoreTier(tierIndex)" [label]="t('AddNewStoreTier')" icon="pi pi-plus"></p-button>
+                                    <p-button (onClick)="addNewBusinessSystemTier(tierIndex)" [label]="t('AddNewBusinessSystemTier')" icon="pi pi-plus"></p-button>
                                 </div>
                             </div>
     

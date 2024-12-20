@@ -119,8 +119,8 @@ public class Startup
             {
                 options
                     .UseLazyLoadingProxies()
-                    .UseSqlServer(Playerty.Loyals.WebAPI.SettingsProvider.Current.ConnectionString);
-                    //.LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+                    .UseSqlServer(Playerty.Loyals.WebAPI.SettingsProvider.Current.ConnectionString)
+                    .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
             });
 
         services.AddSwaggerGen(options =>

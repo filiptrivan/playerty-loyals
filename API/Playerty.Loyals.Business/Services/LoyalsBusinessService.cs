@@ -437,7 +437,7 @@ namespace Playerty.Loyals.Services
                     await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.ReadPartner);
                 }
 
-                partnerQuery = partnerQuery.Where(x => x.Users.Any(x => x.User.Id == currentUserId));
+                partnerQuery = partnerQuery.Where(x => x.PartnerUsers.Any(x => x.User.Id == currentUserId));
 
                 if (!string.IsNullOrEmpty(query))
                     partnerQuery = partnerQuery.Where(x => x.Name.Contains(query));
@@ -460,7 +460,7 @@ namespace Playerty.Loyals.Services
 
             return await _context.WithTransactionAsync(async () =>
             {
-                return await _context.DbSet<Partner>().Where(x => x.Users.Any(x => x.User.Id == currentUserId)).Select(x => x.Id).ToListAsync();
+                return await _context.DbSet<Partner>().Where(x => x.PartnerUsers.Any(x => x.User.Id == currentUserId)).Select(x => x.Id).ToListAsync();
             });
         }
 
@@ -833,21 +833,21 @@ namespace Playerty.Loyals.Services
                 long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
 
                 var notificationUsersQuery = _context.DbSet<UserNotification>()
-                    .Where(x => x.UserId == currentUserId)
+                    .Where(x => x.User.Id == currentUserId)
                     .Select(x => new
                     {
-                        UserId = x.UserId,
-                        NotificationId = x.NotificationId,
+                        UserId = x.User.Id,
+                        NotificationId = x.Notification.Id,
                         IsMarkedAsRead = x.IsMarkedAsRead,
                         Discriminator = nameof(UserNotification),
                     });
 
                 var partnerNotificationPartnerUsersQuery = _context.DbSet<PartnerUserPartnerNotification>()
-                    .Where(x => x.PartnerUserId == currentPartnerUserId)
+                    .Where(x => x.PartnerUser.Id == currentPartnerUserId)
                     .Select(x => new
                     {
-                        UserId = x.PartnerUserId,
-                        NotificationId = x.PartnerNotificationId,
+                        UserId = x.PartnerUser.Id,
+                        NotificationId = x.PartnerNotification.Id,
                         IsMarkedAsRead = x.IsMarkedAsRead,
                         Discriminator = nameof(PartnerUserPartnerNotification),
                     });
@@ -907,10 +907,10 @@ namespace Playerty.Loyals.Services
                 long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
 
                 var notificationUsersQuery = _context.DbSet<UserNotification>()
-                    .Where(x => x.UserId == currentUserId && x.IsMarkedAsRead == false);
+                    .Where(x => x.User.Id == currentUserId && x.IsMarkedAsRead == false);
 
                 var partnerNotificationPartnerUsersQuery = _context.DbSet<PartnerUserPartnerNotification>()
-                    .Where(x => x.PartnerUserId == currentPartnerUserId && x.IsMarkedAsRead == false);
+                    .Where(x => x.PartnerUser.Id == currentPartnerUserId && x.IsMarkedAsRead == false);
 
                 int count = await notificationUsersQuery.CountAsync() + await partnerNotificationPartnerUsersQuery.CountAsync();
 

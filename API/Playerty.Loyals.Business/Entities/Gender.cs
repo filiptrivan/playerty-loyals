@@ -17,6 +17,6 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public string Name { get; set; }
 
-        public virtual List<UserExtended> Users { get; set; }
+        public virtual List<UserExtended> Users { get; } = new();
     }
 }

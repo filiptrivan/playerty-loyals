@@ -41,10 +41,10 @@ namespace Playerty.Loyals.Business.Entities
         [SetNull]
         public virtual Gender Gender { get; set; }
 
-        public virtual List<Role> Roles { get; set; }
+        public virtual List<Role> Roles { get; } = new();
 
-        public virtual List<Notification> Notifications { get; set; }
+        public virtual List<Notification> Notifications { get; } = new();
 
-        public virtual List<PartnerUser> PartnerUsers { get; set; }
+        public virtual List<PartnerUser> PartnerUsers { get; } = new();
     }
 }

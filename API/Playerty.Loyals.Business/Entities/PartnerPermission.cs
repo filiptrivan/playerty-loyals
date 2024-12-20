@@ -28,6 +28,6 @@ namespace Playerty.Loyals.Business.Entities
         [StringLength(100, MinimumLength = 1)]
         public string Code { get; set; }
 
-        public virtual List<PartnerRole> PartnerRoles { get; set; }
+        public virtual List<PartnerRole> PartnerRoles { get; } = new();
     }
 }

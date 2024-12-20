@@ -1,0 +1,10 @@
+<ng-container *transloco="let t">
+    <soft-data-table 
+    [tableTitle]="t('BusinessSystemList')" 
+    [cols]="cols" 
+    [loadTableDataObservableMethod]="loadBusinessSystemTableDataObservableMethod" 
+    [exportTableDataToExcelObservableMethod]="exportBusinessSystemTableDataToExcelObservableMethod"
+    [deleteItemFromTableObservableMethod]="deleteBusinessSystemObservableMethod"
+    >
+    </soft-data-table>
+</ng-container>

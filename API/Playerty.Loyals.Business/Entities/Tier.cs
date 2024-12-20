@@ -34,15 +34,15 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public int ValidTo { get; set; }
 
-        [ManyToOneRequired]
+        [ManyToOneRequired(nameof(Partner.Tiers))]
         public virtual Partner Partner { get; set; }
 
-        public virtual List<PartnerUser> PartnerUsers { get; set; }
+        public virtual List<PartnerUser> PartnerUsers { get; } = new();
 
         /// <summary>
         /// FT: Deleted the setter from the property, because EF make some unintentional Change Tracking, and saves those in DataBase.
         /// </summary>
         [Map]
-        public virtual List<BusinessSystemTier> BusinessSystemTiers { get; }
+        public virtual List<BusinessSystemTier> BusinessSystemTiers { get; } = new();
     }
 }

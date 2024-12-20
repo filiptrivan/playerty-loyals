@@ -21,9 +21,9 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public string Code { get; set; }
 
-        [ManyToOneRequired]
+        [ManyToOneRequired(nameof(BusinessSystem.DiscountProductGroups))]
         public virtual BusinessSystem BusinessSystem { get; set; }
 
-        public virtual List<BusinessSystemTierDiscountProductGroup> BusinessSystemTierDiscountProductGroups { get; }
+        public virtual List<BusinessSystemTierDiscountProductGroup> BusinessSystemTierDiscountProductGroups { get; } = new();
     }
 }

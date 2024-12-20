@@ -50,10 +50,10 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public int Points { get; set; }
 
-        [ManyToOneRequired]
+        [ManyToOneRequired(nameof(PartnerUser.Transactions))]
         public virtual PartnerUser PartnerUser {  get; set; }
 
-        [ManyToOneRequired]
+        [ManyToOneRequired(nameof(BusinessSystem.Transactions))]
         public virtual BusinessSystem BusinessSystem { get; set; }
     }
 }

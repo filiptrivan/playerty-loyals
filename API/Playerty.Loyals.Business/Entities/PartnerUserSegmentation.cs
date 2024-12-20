@@ -1,6 +1,8 @@
-﻿using Soft.Generator.Shared.Attributes.EF;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using Soft.Generator.Shared.Attributes.EF;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,14 +11,10 @@ namespace Playerty.Loyals.Business.Entities
 {
     public class PartnerUserSegmentation
     {
+        [M2MMaintanceEntity(nameof(PartnerUserThatHasFilledSegmentation.AlreadyFilledSegmentations))]
         public virtual PartnerUser PartnerUserThatHasFilledSegmentation { get; set; }
 
-        [M2MMaintanceEntityKey(nameof(PartnerUserThatHasFilledSegmentation))]
-        public long PartnerUserThatHasFilledSegmentationId { get; set; }
-
+        [M2MExtendEntity(nameof(AlreadyFilledSegmentation.PartnerUsersThatHasFilledSegmentation))]
         public virtual Segmentation AlreadyFilledSegmentation { get; set; }
-
-        [M2MExtendEntityKey(nameof(AlreadyFilledSegmentation))]
-        public int AlreadyFilledSegmentationId { get; set; }
     }
 }

@@ -9,14 +9,10 @@ namespace Playerty.Loyals.Business.Entities
 {
     public class PartnerUserSegmentationItem
     {
+        [M2MMaintanceEntity(nameof(PartnerUser.CheckedSegmentationItems))]
         public virtual PartnerUser PartnerUser { get; set; }
 
-        [M2MMaintanceEntityKey(nameof(PartnerUser))]
-        public long PartnerUserId { get; set; }
-
+        [M2MExtendEntity(nameof(CheckedSegmentationItem.PartnerUsers))]
         public virtual SegmentationItem CheckedSegmentationItem { get; set; }
-
-        [M2MExtendEntityKey(nameof(CheckedSegmentationItem))]
-        public long CheckedSegmentationItemId { get; set; }
     }
 }

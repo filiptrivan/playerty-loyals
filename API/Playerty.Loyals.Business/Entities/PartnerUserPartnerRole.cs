@@ -9,14 +9,10 @@ namespace Playerty.Loyals.Business.Entities
 {
     public class PartnerUserPartnerRole
     {
+        [M2MMaintanceEntity(nameof(PartnerRole.PartnerUsers))]
         public virtual PartnerRole PartnerRole { get; set; }
-        
-        [M2MMaintanceEntityKey(nameof(PartnerRole))]
-        public int PartnerRoleId { get; set; }
 
+        [M2MExtendEntity(nameof(PartnerUser.PartnerRoles))]
         public virtual PartnerUser PartnerUser { get; set; }
-
-        [M2MExtendEntityKey(nameof(PartnerUser))]
-        public long PartnerUserId { get; set; }
     }
 }

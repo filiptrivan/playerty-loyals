@@ -130,10 +130,10 @@
   "RefreshToken": "/",
   "IpAddress": "Ip adresa",
   "UpdatePointsStartDate": "Datum početka ažuriranja poena",
-  "StoreUpdatePointsScheduledTaskList": "Ažuriranja poena",
-  "SuccessfullyDoneStoreUpdatePointsScheduledTaskList": "Uspešno izvršena ažuriranja poena",
+  "BusinessSystemUpdatePointsScheduledTaskList": "Ažuriranja poena",
+  "SuccessfullyDoneBusinessSystemUpdatePointsScheduledTaskList": "Uspešno izvršena ažuriranja poena",
   "UpdatePoints": "Ažuriraj poene",
-  "StoreUpdatePointsData": "Podaci za automatsko ažuriranje poena",
+  "BusinessSystemUpdatePointsData": "Podaci za automatsko ažuriranje poena",
   "ManualUpdatePointsFromDate": "Manuelno ažuriranje poena od datuma",
   "ManualUpdatePointsToDate": "Manuelno ažuriranje poena do datuma",
   "Reload": "Osvežite",
@@ -313,6 +313,6 @@
   "YouDoNotHaveAnyNotifications": "Nemate nijednu notifikaciju.",
   "More than": "Više od",
   "BadRequestDetails": "Sistem ne može da obradi zahtev. Molimo vas da proverite zahtev i pokušate ponovo.",
-  "StoreList": "Prodavnice",
-  "Store": "Prodavnica"
+  "BusinessSystemList": "Prodavnice",
+  "BusinessSystem": "Prodavnica"
 }

@@ -1,0 +1,5 @@
+1. Napraviti foldere Playerty.Loyals i Soft.Generator unutar foldera u kom vam se nalaze ostali projekti
+2. Ako nemate git (proverite u cmd sa komandom git --version), instalirajte ga
+3. Forkujte ripozitorijum
+4. Klonirajte ripozitorijum
+5. 

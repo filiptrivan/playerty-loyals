@@ -1,25 +1,25 @@
 <ng-container *transloco="let t">
-    @defer (when storeFormGroup != null) {
-        <soft-card [title]="t('Store')" icon="pi pi-hashtag">
+    @defer (when businessSystemFormGroup != null) {
+        <soft-card [title]="t('BusinessSystem')" icon="pi pi-hashtag">
             <soft-panel [isFirstMultiplePanel]="this.modelId > 0">
                 <panel-header></panel-header>
     
                 <panel-body>
                     <form [formGroup]="formGroup" class="grid">
                         <div class="col-12 md:col-6">
-                            <soft-textbox [control]="control('name', storeFormGroup)"></soft-textbox>
+                            <soft-textbox [control]="control('name', businessSystemFormGroup)"></soft-textbox>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-textbox [control]="control('getTransactionsEndpoint', storeFormGroup)"></soft-textbox>
+                            <soft-textbox [control]="control('getTransactionsEndpoint', businessSystemFormGroup)"></soft-textbox>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-textbox [control]="control('createUserEndpoint', storeFormGroup)"></soft-textbox>
+                            <soft-textbox [control]="control('createUserEndpoint', businessSystemFormGroup)"></soft-textbox>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-textbox [control]="control('updateUserGroupEndpoint', storeFormGroup)"></soft-textbox>
+                            <soft-textbox [control]="control('updateUserGroupEndpoint', businessSystemFormGroup)"></soft-textbox>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-textbox [control]="control('getDiscountCategoriesEndpoint', storeFormGroup)"></soft-textbox>
+                            <soft-textbox [control]="control('getDiscountCategoriesEndpoint', businessSystemFormGroup)"></soft-textbox>
                         </div>
                     </form>
                 </panel-body>
@@ -32,31 +32,31 @@
             </soft-panel>
 
             <soft-panel *ngIf="this.modelId > 0" [isMiddleMultiplePanel]="true">
-                <panel-header [title]="t('StoreUpdatePointsData')" icon="pi pi-calendar-clock"></panel-header>
+                <panel-header [title]="t('BusinessSystemUpdatePointsData')" icon="pi pi-calendar-clock"></panel-header>
     
                 <panel-body>
                     <form [formGroup]="formGroup" class="grid">
                         <div class="col-12 md:col-6">
-                            <soft-calendar [control]="control('updatePointsStartDate', storeUpdatePointsDataFormGroup, true)" [showTime]="true"></soft-calendar>
+                            <soft-calendar [control]="control('updatePointsStartDate', businessSystemUpdatePointsDataFormGroup, true)" [showTime]="true"></soft-calendar>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-number [control]="control('updatePointsInterval', storeUpdatePointsDataFormGroup, true)"></soft-number>
+                            <soft-number [control]="control('updatePointsInterval', businessSystemUpdatePointsDataFormGroup, true)"></soft-number>
                         </div>
                     </form>
                 </panel-body>
     
                 <panel-footer>
-                    <p-button (onClick)="onSaveStoreUpdatePointsData()" [label]="t('Save')" icon="pi pi-save"></p-button>
-                    <p-button *ngIf="savedStoreUpdatePointsScheduledTaskIsPaused === false" 
-                    (onClick)="onSaveStoreUpdatePointsData()" [label]="t('PauseUpdatePointsScheduledTask')" icon="pi pi-pause" severity="warning"></p-button>
-                    <p-button *ngIf="savedStoreUpdatePointsScheduledTaskIsPaused === true" 
-                    (onClick)="onSaveStoreUpdatePointsData()" [label]="t('StartUpdatePointsScheduledTask')" icon="pi pi-play" severity="success"></p-button>
+                    <p-button (onClick)="onSaveBusinessSystemUpdatePointsData()" [label]="t('Save')" icon="pi pi-save"></p-button>
+                    <p-button *ngIf="savedBusinessSystemUpdatePointsScheduledTaskIsPaused === false" 
+                    (onClick)="onSaveBusinessSystemUpdatePointsData()" [label]="t('PauseUpdatePointsScheduledTask')" icon="pi pi-pause" severity="warning"></p-button>
+                    <p-button *ngIf="savedBusinessSystemUpdatePointsScheduledTaskIsPaused === true" 
+                    (onClick)="onSaveBusinessSystemUpdatePointsData()" [label]="t('StartUpdatePointsScheduledTask')" icon="pi pi-play" severity="success"></p-button>
                 </panel-footer>
 
             </soft-panel>
 
             <!-- <soft-panel *ngIf="this.modelId > 0" [isMiddleMultiplePanel]="true">
-                <panel-header [title]="t('StoreUpdatePointsData')" icon="pi pi-calendar-clock" [tabs]="tabs"></panel-header>
+                <panel-header [title]="t('BusinessSystemUpdatePointsData')" icon="pi pi-calendar-clock" [tabs]="tabs"></panel-header>
     
                 <panel-body *ngIf="selectedTab(tabs) === 1">
                     HELLO 1
@@ -77,16 +77,16 @@
             </soft-panel> -->
 
             <soft-panel *ngIf="this.modelId > 0" [isLastMultiplePanel]="true">
-                <panel-header [title]="t('SuccessfullyDoneStoreUpdatePointsScheduledTaskList')" icon="pi pi-clock"></panel-header>
+                <panel-header [title]="t('SuccessfullyDoneBusinessSystemUpdatePointsScheduledTaskList')" icon="pi pi-clock"></panel-header>
     
                 <panel-body>
                     <form [formGroup]="formGroup" class="grid">
                         <div class="col-12">
-                            <soft-data-table [tableTitle]="t('SuccessfullyDoneStoreUpdatePointsScheduledTaskList')" [cols]="storeUpdatePointsScheduledTaskTableCols" 
-                            [loadTableDataObservableMethod]="loadStoreUpdatePointsScheduledTaskTableDataObservableMethod" 
-                            [exportTableDataToExcelObservableMethod]="exportStoreUpdatePointsScheduledTaskTableDataToExcelObservableMethod"
+                            <soft-data-table [tableTitle]="t('SuccessfullyDoneBusinessSystemUpdatePointsScheduledTaskList')" [cols]="businessSystemUpdatePointsScheduledTaskTableCols" 
+                            [loadTableDataObservableMethod]="loadBusinessSystemUpdatePointsScheduledTaskTableDataObservableMethod" 
+                            [exportTableDataToExcelObservableMethod]="exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelObservableMethod"
                             [additionalFilterIdLong]="modelId" [showAddButton]="false" [rows]="5"
-                            (onTotalRecordsChange)="storeUpdatePointsScheduledTaskTableTotalRecords = $event" [showReloadTableButton]="true">
+                            (onTotalRecordsChange)="businessSystemUpdatePointsScheduledTaskTableTotalRecords = $event" [showReloadTableButton]="true">
                             </soft-data-table>
                         </div>
                         <div class="col-12 md:col-6">
