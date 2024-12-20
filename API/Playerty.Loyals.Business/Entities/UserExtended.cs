@@ -38,7 +38,7 @@ namespace Playerty.Loyals.Business.Entities
         /// <summary>
         /// [SET NULL] https://www.learnentityframeworkcore.com/conventions/one-to-many-relationship
         /// </summary>
-        [SetNull]
+        [SetNull(nameof(Gender.Users))]
         public virtual Gender Gender { get; set; }
 
         public virtual List<Role> Roles { get; } = new();
