@@ -22,8 +22,8 @@
 					<div *ngFor="let businessSystemTier of tier.businessSystemTiersDTOList">
 						{{businessSystemTier.businessSystemDisplayName}}
 						<ul>
-							<li *ngFor="let businessSystemTierDiscountProductGroup of businessSystemTier.businessSystemTierDiscountCategoriesDTOList">
-								{{businessSystemTierDiscountProductGroup.discountCategoryDisplayName}}: {{businessSystemTierDiscountProductGroup.discount}}%
+							<li *ngFor="let businessSystemTierDiscountProductGroup of businessSystemTier.businessSystemTierDiscountProductGroupsDTOList">
+								{{businessSystemTierDiscountProductGroup.discountProductGroupDisplayName}}: {{businessSystemTierDiscountProductGroup.discount}}%
 							</li>
 						</ul>
 					</div>

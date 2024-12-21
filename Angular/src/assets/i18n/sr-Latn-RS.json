@@ -313,6 +313,6 @@
   "YouDoNotHaveAnyNotifications": "Nemate nijednu notifikaciju.",
   "More than": "Više od",
   "BadRequestDetails": "Sistem ne može da obradi zahtev. Molimo vas da proverite zahtev i pokušate ponovo.",
-  "BusinessSystemList": "Prodavnice",
-  "BusinessSystem": "Prodavnica"
+  "BusinessSystemList": "Poslovni sistemi",
+  "BusinessSystem": "Poslovni sistem"
 }

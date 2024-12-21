@@ -42,7 +42,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     businessSystemTierLastIndexClicked: LastMenuIconIndexClicked = new LastMenuIconIndexClicked();
 
     // BusinessSystemTierDiscountProductGroup M2M
-    businessSystemTierDiscountProductGroupCols: Column[];
+    businessSystemTierDiscountProductGroupCols: Column<BusinessSystemTierDiscountProductGroup>[];
     businessSystemTierDiscountProductGroupModel: BusinessSystemTierDiscountProductGroup = new BusinessSystemTierDiscountProductGroup();
     businessSystemTierDiscountCategoriesSaveBodyName: string = nameof<TierSaveBody>('businessSystemTierDiscountProductGroupDTOList');
     businessSystemTierDiscountCategoriesTranslationKey: string = new BusinessSystemTierDiscountProductGroup().typeName;
@@ -68,7 +68,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
          
     override ngOnInit() {
         this.businessSystemTierDiscountProductGroupCols = [
-            {name: this.translocoService.translate('Name'), filterType: 'text', field: 'discountCategoryDisplayName'},
+            {name: this.translocoService.translate('Name'), filterType: 'text', field: 'discountProductGroupDisplayName'},
             {name: this.translocoService.translate('Discount'), filterType: 'numeric', field: 'discount', showMatchModes: true, editable: true},
         ];
 

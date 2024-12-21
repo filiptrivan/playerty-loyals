@@ -1,5 +1,17 @@
 1. Napraviti foldere Playerty.Loyals i Soft.Generator unutar foldera u kom vam se nalaze ostali projekti
 2. Ako nemate git (proverite u cmd sa komandom git --version), instalirajte ga
 3. Forkujte ripozitorijum
-4. Klonirajte ripozitorijum
-5. 
+4. Klonirajte ripozitorijum PL i SG
+5. Ako ne uspete da pogodite putanju iz prve (sto verovatno necete), treba da uklonite projekte iz Nuget solution foldera i dodate ih manuelno.
+6. Obrisite reference na sve projekte iz nuget folder-a i dodajte ih manuelno (obratite paznju na source generator treba manuelno da se doda ...)
+ - Ja treba da se potrudim da ubuduce ne komitujem project fajlove
+
+7. Proveriti node verziju (kod mene 20.18.1), angular cli verziju (kod mene 17.2.0), typescript verziju (kod mene 5.2.2), zone.js verziju (kod mene 0.14.10)
+8. ako imate problem prilikom izvrsavanja skripti u terminalu, u powershellu, kao administrator pokrenite ove skripte (prvu samo za proveru, ako je rezultat "Restricted", onda treba i drugu):
+Get-ExecutionPolicy 
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+
+9. Instalirati SQL express i instalirati ssms (2022) ako vec nemate.
+10. Napraviti novu bazu sa nazivom "PlayertyLoyals"
+11. Promeniti DataSource u connection stringu tako da odgovara vasem racunaru
+12. 
