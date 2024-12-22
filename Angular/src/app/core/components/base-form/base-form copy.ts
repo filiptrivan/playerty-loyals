@@ -13,14 +13,13 @@ import { HttpClient } from '@angular/common/http';
 import { SoftMessageService } from '../../services/soft-message.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-import { getParentUrl } from '../../services/helper-functions';
+import { getParentUrl, singleOrDefault } from '../../services/helper-functions';
 import { TranslocoService } from '@jsverse/transloco';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 import { BaseEntity } from '../../entities/base-entity';
 import { Observable } from 'rxjs';
 import { SoftTab } from '../soft-panels/panel-header/panel-header.component';
-import { SoftGlobal } from '../../soft-global';
 import { LastMenuIconIndexClicked } from '../../entities/last-menu-icon-index-clicked';
 
 @Component({
@@ -462,7 +461,7 @@ export class BaseFormCopy implements OnInit {
 
   //#region Helpers
   selectedTab(tabs: SoftTab[]): number {
-    const tab = SoftGlobal.singleOrDefault(tabs, x => x.isSelected);
+    const tab = singleOrDefault(tabs, x => x.isSelected);
 
     if (tab) {
       return tab.value;

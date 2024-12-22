@@ -7,7 +7,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SoftDeleteConfirmationComponent } from '../soft-delete-dialog/soft-delete-confirmation.component';
 import { CommonModule, formatDate } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PrimengModule } from 'src/app/layout/modules/primeng.module';
+import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { SoftMessageService } from '../../services/soft-message.service';
 import { TableFilter } from 'src/app/core/entities/table-filter';
 import { firstValueFrom, Observable } from 'rxjs';

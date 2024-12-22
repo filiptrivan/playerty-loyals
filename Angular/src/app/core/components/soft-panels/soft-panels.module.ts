@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PrimengModule } from 'src/app/layout/modules/primeng.module';
+import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { PanelBodyComponent } from './panel-body/panel-body.component';
 import { PanelFooterComponent } from './panel-footer/panel-footer.component';
 import { PanelHeaderComponent } from './panel-header/panel-header.component';

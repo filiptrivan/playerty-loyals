@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { PrimengModule } from 'src/app/layout/modules/primeng.module';
+import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { SoftPanelsModule } from "../soft-panels/soft-panels.module";
 import { Tier } from 'src/app/business/entities/generated/business-entities.generated';
 

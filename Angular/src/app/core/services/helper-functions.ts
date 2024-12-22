@@ -1,4 +1,5 @@
 import { AbstractControl } from "@angular/forms";
+import { Action, Column } from "../components/soft-data-table/soft-data-table.component";
 
 // Helper function for PrecisionScale validation (to be added in the TypeScript output):
 export function validatePrecisionScale(value: any, precision: number, scale: number, ignoreTrailingZeros: boolean): boolean {
@@ -105,3 +106,59 @@ export function getParentUrl(currentUrl: string){
     const parentUrl = urlSegments.join('/');
     return parentUrl;
 }
+
+export function capitalizeFirstLetter(inputString: string): string {
+    return inputString.charAt(0).toUpperCase() + inputString.slice(1);
+  }
+
+  // export function getMonth(number: number): string {
+  //   const months: string[] = [
+  //     "January", "February", "March", "April", "May", "June",
+  //     "July", "August", "September", "October", "November", "December"
+  //   ];
+    
+  //   if (number < 1 || number > 12) {
+  //     throw new Error("Invalid month number. It should be between 1 and 12.");
+  //   }
+    
+  //   return months[number - 1];
+  // }
+
+  export function getMonth(numberOfTheMonth: number): string {
+    const meseci: string[] = [
+      "Januar", "Februar", "Mart", "April", "Maj", "Jun",
+      "Jul", "Avgust", "Septembar", "Oktobar", "Novembar", "Decembar"
+    ];
+    
+    if (numberOfTheMonth < 1 || numberOfTheMonth > 12) {
+      console.error("Nevažeći broj meseca. Broj treba biti između 1 i 12.");
+    }
+    
+    return meseci[numberOfTheMonth - 1];
+  }
+
+  export function singleOrDefault <T>(array: T[], predicate: (item: T) => boolean): T | undefined {
+    const filtered = array.filter(predicate);
+    if (filtered.length > 1) {
+      throw new Error("Sequence contains more than one matching element.");
+    }
+    return filtered[0];
+  };
+
+  export function pushAction(cols: Column[], action: Action){
+    const actionsColumn = singleOrDefault(cols, x => x.actions != null);
+    if (actionsColumn) {
+        actionsColumn.actions = [...actionsColumn.actions, action];
+    }
+  }
+
+  export function deleteAction(cols: Column[], actionField: string): void {
+    const actionsColumn = singleOrDefault(cols, x => x.actions != null);
+
+    if (actionsColumn && actionsColumn.actions) {
+      const index = actionsColumn.actions.findIndex(a => a.field === actionField);
+      if (index !== -1) {
+        actionsColumn.actions.splice(index, 1);
+      }
+    }
+  }

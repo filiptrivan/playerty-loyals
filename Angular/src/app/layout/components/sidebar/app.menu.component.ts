@@ -1,0 +1,208 @@
+import { TranslocoService } from '@jsverse/transloco';
+import { Subscription } from 'rxjs';
+import { OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { LayoutService } from '../../service/app.layout.service';
+import { MenuItem } from 'primeng/api';
+import { PartnerService } from '../../../business/services/helper/partner.service';
+import { environment } from 'src/environments/environment';
+
+export interface SoftMenuItem extends MenuItem{
+    hasPermission?: (permissionCodes: string[]) => boolean;
+    showPartnerDialog?: boolean; 
+}
+
+@Component({
+    selector: 'app-menu',
+    templateUrl: './app.menu.component.html'
+})
+export class AppMenuComponent implements OnInit {
+    private partnerSubscription: Subscription | null = null;
+    
+    model: SoftMenuItem[] = [];
+
+    constructor(
+        public layoutService: LayoutService, 
+        private partnerService: PartnerService,
+        private translocoService: TranslocoService
+    ) {
+        
+    }
+
+    ngOnInit() {
+        this.partnerSubscription = this.partnerService.partner$.subscribe(partner => {
+            this.model = [
+                {
+                    items: [
+                        {
+                            label: `${partner?.name ?? environment.companyName}`,
+                            icon: 'pi pi-fw pi-at', 
+                            visible: true,
+                            items: [
+                                {
+                                    showPartnerDialog: true,
+                                }
+                            ]
+                        }
+                    ],
+                    visible: true,
+                },
+                {
+                    separator: true,
+                    visible: true,
+                },
+                {
+                    visible: true,
+                    items: [
+                        { 
+                            label: this.translocoService.translate('Home'), 
+                            icon: 'pi pi-fw pi-home', 
+                            routerLink: [''],
+                            visible: true,
+                        },
+                        {
+                            label: this.translocoService.translate('TierList'),
+                            icon: 'pi pi-fw pi-crown',
+                            routerLink: [`/tiers`],
+                            visible: partner != null
+                        },
+                        {
+                            label: this.translocoService.translate('TransactionList'),
+                            icon: 'pi pi-fw pi-wallet',
+                            routerLink: [`/transactions`],
+                            visible: true
+                        },
+                        {
+                            label: this.translocoService.translate('PartnerList'),
+                            icon: 'pi pi-fw pi-at',
+                            routerLink: [`/partner-select`],
+                            visible: true
+                        },
+                        {
+                            label: this.translocoService.translate('SuperAdministration'),
+                            icon: 'pi pi-fw pi-cog',
+                            visible: true,
+                            // hasPermission: (permissionCodes: string[]): boolean => { 
+                            //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]) ||
+                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]) ||
+                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]) || 
+                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
+                            // },
+                            items: [
+                                {
+                                    label: this.translocoService.translate('UserList'),
+                                    icon: 'pi pi-fw pi-user',
+                                    routerLink: [`/${environment.administrationSlug}/users`],
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]))
+                                    // } 
+                                    visible: true,
+                                },
+                                {
+                                    label: this.translocoService.translate('RoleList'),
+                                    icon: 'pi pi-fw pi-id-card',
+                                    routerLink: [`/${environment.administrationSlug}/roles`],
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]))
+                                    // }
+                                    visible: true,
+                                },
+                                {
+                                    label: this.translocoService.translate('NotificationList'),
+                                    icon: 'pi pi-fw pi-bell',
+                                    routerLink: [`/${environment.administrationSlug}/notifications`],
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
+                                    // }
+                                    visible: true,
+                                },
+                                {
+                                    label: this.translocoService.translate('PartnerList'),
+                                    icon: 'pi pi-fw pi-at',
+                                    routerLink: [`/${environment.administrationSlug}/partners`],
+                                    visible: true
+                                },
+                            ]
+                        },
+                        {
+                            label: this.translocoService.translate('Administration'),
+                            icon: 'pi pi-fw pi-cog',
+                            // hasPermission: (permissionCodes: string[]): boolean => { 
+                            //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]) ||
+                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]) ||
+                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]) || 
+                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification])) &&
+                            //             partner != null
+                            // },
+                            visible: true,
+                            items: [
+                                {
+                                    label: this.translocoService.translate('UserList'),
+                                    icon: 'pi pi-fw pi-user',
+                                    routerLink: [`/${environment.partnerAdministrationSlug}/users`],
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]))
+                                    // } 
+                                    visible: true,
+                                },
+                                {
+                                    label: this.translocoService.translate('RoleList'),
+                                    icon: 'pi pi-fw pi-id-card',
+                                    routerLink: [`/${environment.partnerAdministrationSlug}/roles`],
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]))
+                                    // }
+                                    visible: true,
+                                },
+                                {
+                                    label: this.translocoService.translate('NotificationList'),
+                                    icon: 'pi pi-fw pi-bell',
+                                    routerLink: [`/${environment.partnerAdministrationSlug}/notifications`],
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
+                                    // }
+                                    visible: true,
+                                },
+                                {
+                                    label: this.translocoService.translate('SegmentationList'),
+                                    icon: 'pi pi-fw pi-hashtag',
+                                    routerLink: [`/${environment.partnerAdministrationSlug}/segmentations`],
+                                    visible: true,
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadSegmentation]))
+                                    // }
+                                },
+                                {
+                                    label: this.translocoService.translate('BusinessSystemList'),
+                                    icon: 'pi pi-fw pi-shop',
+                                    routerLink: [`/${environment.partnerAdministrationSlug}/business-systems`],
+                                    visible: true,
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadSegmentation]))
+                                    // }
+                                },
+                                {
+                                    label: this.translocoService.translate('TierList'),
+                                    icon: 'pi pi-fw pi-crown',
+                                    routerLink: [`/${environment.partnerAdministrationSlug}/tiers`],
+                                    // hasPermission: (permissionCodes: string[]): boolean => { 
+                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]))
+                                    // }
+                                    visible: true,
+                                },
+                            ]
+                        },
+                    ]
+                },
+            ];
+        });
+    }
+
+
+    ngOnDestroy(): void {
+        if (this.partnerSubscription) {
+          this.partnerSubscription.unsubscribe();
+        }
+    }
+
+}

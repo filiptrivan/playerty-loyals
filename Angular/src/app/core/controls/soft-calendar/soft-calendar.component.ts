@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BaseControl } from '../base-control';
-import { PrimengModule } from 'src/app/layout/modules/primeng.module';
+import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RequiredComponent } from '../../components/required/required.component';

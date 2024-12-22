@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserListComponent } from './pages/users/user-list.component';
-import { PrimengModule } from 'src/app/layout/modules/primeng.module';
+import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { UserDetailsComponent } from './pages/users/user-details.component';
 import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
 import { CardSkeletonComponent } from "../../core/components/card-skeleton/card-skeleton.component";

@@ -2,11 +2,11 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NotfoundComponent } from './layout/components/notfound/notfound.component';
-import { AppLayoutModule } from './layout/app.layout.module';
+import { AppLayoutModule } from './layout/components/layout/app.layout.module';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
-import { CoreModule } from './core/core.module';
+import { CoreModule } from './core/modules/core.module';
 import { SoftMessageService } from './core/services/soft-message.service';
 import { SoftErrorHandler } from './core/handlers/soft-error-handler';
 import { BrowserModule } from '@angular/platform-browser';
@@ -19,6 +19,7 @@ import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-s
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { environment } from 'src/environments/environment';
 import { TranslocoRootModule } from './transloco-root.module';
+import { BusinessModule } from './business/business.module';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { TranslocoRootModule } from './transloco-root.module';
     SocialLoginModule,
     TranslocoRootModule,
     NgxSpinnerModule.forRoot({ type: 'ball-clip-rotate-multiple' }),
+    BusinessModule,
     CoreModule,
   ],
   providers: [

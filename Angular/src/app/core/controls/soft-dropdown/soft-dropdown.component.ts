@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { PrimengModule } from 'src/app/layout/modules/primeng.module';
+import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { RequiredComponent } from '../../components/required/required.component';
 import { BaseDropdownControl } from '../base-dropdown-control';
 import { TranslocoService } from '@jsverse/transloco';

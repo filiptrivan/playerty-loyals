@@ -1,7 +1,7 @@
 import { PreloadAllModules, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './layout/components/notfound/notfound.component';
-import { AppLayoutComponent } from "./layout/app.layout.component";
+import { AppLayoutComponent } from "./layout/components/layout/app.layout.component";
 import { AuthGuard } from './core/guards/auth.guard';
 import { NotAuthGuard } from './core/guards/not-auth.guard';
 
@@ -15,11 +15,6 @@ import { NotAuthGuard } from './core/guards/not-auth.guard';
                     {
                         path: '',
                         loadChildren: () => import('./layout/components/dashboard/dashboard.module').then(m => m.DashboardModule),
-                        canActivate: [AuthGuard]
-                    },
-                    { 
-                        path: 'documentation',
-                        loadChildren: () => import('./layout/components/documentation/documentation.module').then(m => m.DocumentationModule),
                         canActivate: [AuthGuard]
                     },
                     { 

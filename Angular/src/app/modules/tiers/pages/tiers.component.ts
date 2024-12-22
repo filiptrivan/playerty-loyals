@@ -4,7 +4,7 @@ import { PartnerUser, Tier } from 'src/app/business/entities/generated/business-
 import { forkJoin } from 'rxjs';
 import { TimelineIndexProgressbarComponent } from 'src/app/core/components/timeline-index-progressbar/timeline-index-progressbar.component';
 import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
-import { PrimengModule } from 'src/app/layout/modules/primeng.module';
+import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { PartnerService } from 'src/app/business/services/helper/partner.service';
 import { TranslocoDirective } from '@jsverse/transloco';
 

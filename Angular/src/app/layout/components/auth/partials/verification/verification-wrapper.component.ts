@@ -6,7 +6,7 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
-import { PrimengModule } from 'src/app/layout/modules/primeng.module';
+import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { VerificationTokenRequest } from 'src/app/business/entities/generated/security-entities.generated';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';

@@ -1,7 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { Router } from '@angular/router';
 import { CommonModule, Location } from "@angular/common";
-import { PrimengModule } from "src/app/layout/modules/primeng.module";
+import { PrimengModule } from "src/app/core/modules/primeng.module";
 import { getParentUrl } from "../../services/helper-functions";
 import { TranslocoDirective } from "@jsverse/transloco";
 

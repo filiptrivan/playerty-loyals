@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PrimengModule } from 'src/app/layout/modules/primeng.module';
+import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { CommonModule } from '@angular/common';
 import { RequiredComponent } from '../../components/required/required.component';
 import { BaseDropdownControl } from '../base-dropdown-control';
