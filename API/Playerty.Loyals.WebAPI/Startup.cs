@@ -3,7 +3,6 @@ using Soft.Generator.Shared.Helpers;
 using Soft.Generator.Shared.Extensions;
 using Playerty.Loyals.WebAPI.DI;
 using Playerty.Loyals.Infrastructure;
-using System.Reflection;
 using Quartz;
 using Playerty.Loyals.Business.BackroundJobs;
 

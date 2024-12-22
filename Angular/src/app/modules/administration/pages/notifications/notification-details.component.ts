@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { forkJoin, map, Observable } from 'rxjs';
 import { Notification, NotificationSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
-import { TableFilter } from 'src/app/business/entities/table-filter';
+import { TableFilter } from 'src/app/core/entities/table-filter';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';

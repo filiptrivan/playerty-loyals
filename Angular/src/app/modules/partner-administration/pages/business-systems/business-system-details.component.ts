@@ -73,12 +73,12 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
                 })
                 .subscribe(({ businessSystem }) => {
                     this.savedBusinessSystemUpdatePointsScheduledTaskIsPaused = businessSystem.updatePointsScheduledTaskIsPaused;
-                    this.businessSystemFormGroup = this.initFormGroup(new BusinessSystem(businessSystem), this.businessSystemSaveBodyName);
+                    this.initBusinessSystemFormGroup(new BusinessSystem(businessSystem));
 
                     this.initBusinessSystemUpdatePointsDataFormGroup(businessSystem);
                 });
             }else{
-                this.businessSystemFormGroup = this.initFormGroup(new BusinessSystem({id: 0}), this.businessSystemSaveBodyName);
+                this.initBusinessSystemFormGroup(new BusinessSystem({id: 0}));
             }
         });
     }
@@ -90,6 +90,10 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
             {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true, showTime: true},
             {name: this.translocoService.translate('IsManuallyStarted'), filterType: 'boolean', field: 'isManual'},
         ]
+    }
+
+    initBusinessSystemFormGroup(businessSystem: BusinessSystem){
+        this.businessSystemFormGroup = this.initFormGroup(new BusinessSystem(businessSystem), this.businessSystemSaveBodyName);
     }
 
     initBusinessSystemUpdatePointsDataFormGroup(businessSystem: BusinessSystem){

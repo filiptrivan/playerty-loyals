@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { TableFilter, Transaction } from 'src/app/business/entities/generated/business-entities.generated';
+import { Transaction } from 'src/app/business/entities/generated/business-entities.generated';
 import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
 import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -8,6 +8,7 @@ import { PaginatorState } from 'primeng/paginator';
 import { TableFilterContext } from 'src/app/core/entities/table-filter-context';
 import { TableResponse } from 'src/app/core/entities/table-response';
 import { SoftGlobal } from 'src/app/core/soft-global';
+import { TableFilter } from 'src/app/core/entities/table-filter';
 
 @Component({
   selector: 'transactions',

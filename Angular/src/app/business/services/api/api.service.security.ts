@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Namebook } from '../../entities/namebook';
+import { Namebook } from '../../../core/entities/namebook';
 import { Login, AuthResult, ForgotPassword, Registration, RegistrationVerificationResult, RefreshTokenRequest, Role } from '../../entities/generated/security-entities.generated';
-import { TableFilter } from '../../entities/table-filter';
+import { TableFilter } from '../../../core/entities/table-filter';
 import { TableResponse } from 'src/app/core/entities/table-response';
 
 @Injectable()

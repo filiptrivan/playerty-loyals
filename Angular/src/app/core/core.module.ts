@@ -7,7 +7,7 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { UnauthorizedInterceptor } from './interceptors/unauthorized.interceptor';
 import { HttpLoadingInterceptor } from './interceptors/http-loading.interceptor';
 import { JsonHttpInterceptor } from './interceptors/json-parser.interceptor';
-import { PartnerCodeInterceptor } from './interceptors/partner-code.interceptor';
+import { PartnerCodeInterceptor } from '../business/interceptors/partner-code.interceptor';
 
 @NgModule({
   declarations: [],

@@ -6,8 +6,6 @@ namespace Playerty.Loyals.WebAPI
     {
         public static void Main(string[] args)
         {
-            LogUtils.InitLog4Net("log4net.config");
-
             CreateHostBuilder(args).Build().Run();
         }
 

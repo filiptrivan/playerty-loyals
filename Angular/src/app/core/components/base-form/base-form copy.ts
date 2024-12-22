@@ -21,6 +21,7 @@ import { BaseEntity } from '../../entities/base-entity';
 import { Observable } from 'rxjs';
 import { SoftTab } from '../soft-panels/panel-header/panel-header.component';
 import { SoftGlobal } from '../../soft-global';
+import { LastMenuIconIndexClicked } from '../../entities/last-menu-icon-index-clicked';
 
 @Component({
   selector: 'base-form',
@@ -101,7 +102,7 @@ export class BaseFormCopy implements OnInit {
 
   // FT: If we put onChange to true, we are validating control on change not on blur.
   // FT: If we assign model, we are taking validators for the other class
-  control<T extends BaseEntity>(formControlName: string & keyof T, formGroup: SoftFormGroup<T>, customValidation: boolean = false, disable: boolean = false) {
+  control<T extends BaseEntity>(formControlName: string & keyof T, formGroup: SoftFormGroup<T>) {
     if (formGroup == null)
       return null; // FT: When we initialized form group again this will happen
 
@@ -114,19 +115,9 @@ export class BaseFormCopy implements OnInit {
       console.error(`The property ${formControlName} in the model ${formGroup.getRawValue().typeName} doesn't exist`);
       return null;
     }
-
-    if(customValidation == false)
-      this.setValidator(formControl, formGroup.getRawValue());
-    
-    if(disable == true)
-      formControl.disable();
-    
-    this.onAfterControlInitialization(formControlName);
   
     return formControl;
   }
-
-  onAfterControlInitialization(formControlName: string) { }
 
   onSave(reroute: boolean = true){
     this.onBeforeSave();
@@ -137,9 +128,7 @@ export class BaseFormCopy implements OnInit {
     let isFormArrayValid: boolean = this.areFormArraysValid();
 
     if(isValid && isFormArrayValid){
-      // const saveMethodName = this.saveMethodName ?? `Save${this.controllerName}`;
       
-      // this.http.put<any>(environment.apiUrl + `/${this.controllerName}/${saveMethodName}`, this.saveBody, environment.httpOptions).subscribe(res => {
       this.saveObservableMethod(this.saveBody).subscribe(res => {
         this.messageService.successMessage(this.translocoService.translate('SuccessfulSaveToastDescription'));
 
@@ -433,34 +422,6 @@ export class BaseFormCopy implements OnInit {
     return true;
   }
 
-  // checkFormArrayValidity(): boolean {
-  //   // if(this.formArray == null)
-  //     return true;
-
-  //   let invalid: boolean = false;
-
-  //   // (this.formArray.controls as FormGroup[]).forEach(formGroup => {
-  //   //   Object.keys(formGroup.controls).forEach(key => {
-  //   //     let formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
-  //   //     formControl.markAsDirty();
-  //   //     if (formControl.invalid && this.formArrayControlNamesFromHtml.includes(formControl.label)) {
-  //   //       invalid = true;
-  //   //     }
-  //   //   });
-  //   // });
-
-  //   if (invalid || this.invalidForm) {
-  //     this.messageService.warningMessage(
-  //       $localize`:@@YouHaveSomeInvalidFieldsDescription:Some of the fields on the form are not valid, please check which ones and try again.`,
-  //       $localize`:@@YouHaveSomeInvalidFieldsTitle:You have some invalid fields`, 
-  //     );
-
-  //     return false;
-  //   }
-
-  //   return true;
-  // }
-
   onBeforeSaveList(){}
   onAfterSaveList(){}
   onAfterSaveListRequest(){}
@@ -512,21 +473,4 @@ export class BaseFormCopy implements OnInit {
   }
   //#endregion
 
-}
-
-export class LastMenuIconIndexClicked extends BaseEntity
-{
-    index?: number;
-
-    constructor(
-    {
-        index,
-    }:{
-        index?: number;
-    } = {}
-    ) {
-        super('LastMenuIconIndexClicked'); 
-
-        this.index = index;
-    }
 }

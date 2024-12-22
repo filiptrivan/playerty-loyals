@@ -18,6 +18,7 @@ export class SoftMessageService { // TODO FT: nece da prikaze poruku ako je neki
       });
     });
   }
+
   warningMessage(detail: string, title: string = this.translocoService.translate('Warning')){
     this.zone.run(()=>{
       this.messageService.add({
@@ -28,6 +29,7 @@ export class SoftMessageService { // TODO FT: nece da prikaze poruku ako je neki
       });
     });
   }
+
   errorMessage(detail: string, title: string = this.translocoService.translate('Error')){
     this.zone.run(()=>{
       this.messageService.add({
@@ -38,4 +40,5 @@ export class SoftMessageService { // TODO FT: nece da prikaze poruku ako je neki
       });
     });
   }
+  
 }

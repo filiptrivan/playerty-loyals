@@ -54,22 +54,6 @@ export class PartnerService {
     });
   }
 
-  loadTierListForDropdown(): Observable<PrimengOption[]>{
-    return this.apiService.loadTierListForDropdown().pipe(
-        map(res => {
-            return res.map(x => ({ label: x.displayName, value: x.id }));
-        })
-    );
-  }
-
-  loadSegmentationItemListForPartnerForDropdown(): Observable<PrimengOption[]>{
-    return this.apiService.loadSegmentationItemListForDropdown().pipe(
-        map(res => {
-            return res.map(x => ({ label: x.displayName, value: x.id }));
-        })
-    );
-  }
-
   loadCurrentPartner(): Observable<Promise<Partner>> {
     return this.apiService.getCurrentPartner().pipe(
       map(async partner => {

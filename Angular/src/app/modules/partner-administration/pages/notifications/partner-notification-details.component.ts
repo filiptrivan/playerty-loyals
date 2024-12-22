@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { firstValueFrom, forkJoin, map, Observable } from 'rxjs';
 import { PartnerNotification, PartnerNotificationSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
-import { TableFilter } from 'src/app/business/entities/table-filter';
+import { TableFilter } from 'src/app/core/entities/table-filter';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
@@ -82,8 +82,8 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
         this.partnerUserTableCols = [
             {name: this.translocoService.translate('User'), filterType: 'text', field: 'userDisplayName'},
             {name: this.translocoService.translate('Points'), filterType: 'numeric', field: 'points', showMatchModes: true},
-            {name: this.translocoService.translate('Tier'), filterType: 'multiselect', field: 'tierDisplayName', filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(this.partnerService.loadTierListForDropdown()) },
-            {name: this.translocoService.translate('Segmentation'), filterType: 'multiselect', field: 'checkedSegmentationItemsCommaSeparated', dropdownOrMultiselectValues: await firstValueFrom(this.partnerService.loadSegmentationItemListForPartnerForDropdown()) },
+            {name: this.translocoService.translate('Tier'), filterType: 'multiselect', field: 'tierDisplayName', filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(this.apiService.loadPrimengListForDropdown(this.apiService.loadTierListForDropdown)) },
+            {name: this.translocoService.translate('Segmentation'), filterType: 'multiselect', field: 'checkedSegmentationItemsCommaSeparated', dropdownOrMultiselectValues: await firstValueFrom(this.apiService.loadPrimengListForDropdown(this.apiService.loadSegmentationItemListForDropdown)) },
             {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true},
         ]
     }

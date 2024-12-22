@@ -37,10 +37,10 @@
                 <panel-body>
                     <form [formGroup]="formGroup" class="grid">
                         <div class="col-12 md:col-6">
-                            <soft-calendar [control]="control('updatePointsStartDate', businessSystemUpdatePointsDataFormGroup, true)" [showTime]="true"></soft-calendar>
+                            <soft-calendar [control]="control('updatePointsStartDate', businessSystemUpdatePointsDataFormGroup)" [showTime]="true"></soft-calendar>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-number [control]="control('updatePointsInterval', businessSystemUpdatePointsDataFormGroup, true)"></soft-number>
+                            <soft-number [control]="control('updatePointsInterval', businessSystemUpdatePointsDataFormGroup)"></soft-number>
                         </div>
                     </form>
                 </panel-body>

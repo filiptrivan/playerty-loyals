@@ -2,7 +2,6 @@
 using Soft.Generator.Security.Interface;
 using Soft.Generator.Shared.Excel;
 using Soft.Generator.Security.Services;
-using System.Resources;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
 using Soft.Generator.Shared.SoftFluentValidation;
