@@ -1489,28 +1489,6 @@ export class BusinessSystemUpdatePointsDataBody extends BaseEntity
 }
 
 
-export class OnlineShop extends BaseEntity
-{
-    transactionCode?: any;
-	discount?: number;
-
-    constructor(
-    {
-        transactionCode,
-		discount
-    }:{
-        transactionCode?: any;
-		discount?: number;     
-    } = {}
-    ) {
-        super('OnlineShop'); 
-
-        this.transactionCode = transactionCode;
-		this.discount = discount;
-    }
-}
-
-
 export class SegmentationSaveBody extends BaseEntity
 {
     segmentationItemsDTO?: SegmentationItem[];

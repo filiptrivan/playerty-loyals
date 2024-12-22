@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RequiredComponent } from '../../components/required/required.component';
 import { BaseDropdownControl } from '../base-dropdown-control';
 import { TranslocoService } from '@jsverse/transloco';
-import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels.generated';
+import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels';
 
 @Component({
     selector: 'soft-multiselect',

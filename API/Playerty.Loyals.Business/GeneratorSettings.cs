@@ -10,11 +10,5 @@ namespace Playerty.Loyals.GeneratorSettings
 
         [Output(@"E:\Projects\Playerty.Loyals\Angular\src\app\business\enums\generated")]
         public string NgEnumsGenerator { get; set; }
-
-        [Output(@"E:\Projects\Playerty.Loyals\Angular\src\app\business\services\translates\generated")]
-        public string NgTranslatesGenerator { get; set; }
-
-        [Output(@"E:\Projects\Playerty.Loyals\Angular\src\app\business\services\validation\generated")]
-        public string NgValidatorsGenerator { get; set; }
     }
 }

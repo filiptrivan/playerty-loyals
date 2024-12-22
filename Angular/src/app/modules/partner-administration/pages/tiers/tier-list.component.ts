@@ -7,7 +7,7 @@ import { DropdownChangeEvent } from 'primeng/dropdown';
 import { forkJoin, Observable } from 'rxjs';
 import { DiscountProductGroup, BusinessSystemTier, BusinessSystemTierDiscountProductGroup, Tier, TierSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 import { BaseFormCopy, LastMenuIconIndexClicked } from 'src/app/core/components/base-form/base-form copy';
 import { AllClickEvent, Column, RowClickEvent, SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';

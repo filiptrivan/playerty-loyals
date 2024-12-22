@@ -10,7 +10,7 @@ import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { VerificationTokenRequest } from 'src/app/business/entities/generated/security-entities.generated';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 
 @Component({

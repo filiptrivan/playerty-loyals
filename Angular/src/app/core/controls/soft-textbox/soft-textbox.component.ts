@@ -5,7 +5,7 @@ import { PrimengModule } from 'src/app/layout/modules/primeng.module';
 import { RequiredComponent } from '../../components/required/required.component';
 import { CommonModule } from '@angular/common';
 import { TranslocoService } from '@jsverse/transloco';
-import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels.generated';
+import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels';
 
 @Component({
     selector: 'soft-textbox',

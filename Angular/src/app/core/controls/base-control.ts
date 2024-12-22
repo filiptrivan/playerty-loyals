@@ -3,7 +3,7 @@ import {
   } from '@angular/core';
 import { SoftFormControl } from '../components/soft-form-control/soft-form-control';
 import { TranslocoService } from '@jsverse/transloco';
-import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels.generated';
+import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels';
   
   @Component({
     selector: 'base-control',

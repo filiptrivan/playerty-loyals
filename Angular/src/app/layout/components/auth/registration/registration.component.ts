@@ -10,7 +10,7 @@ import { VerificationTypeCodes } from 'src/app/business/enums/verification-type-
 import { Registration } from 'src/app/business/entities/generated/security-entities.generated';
 import { RegistrationVerificationResultStatusCodes } from 'src/app/business/enums/generated/security-enums.generated';
 import { TranslocoService } from '@jsverse/transloco';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 
 @Component({

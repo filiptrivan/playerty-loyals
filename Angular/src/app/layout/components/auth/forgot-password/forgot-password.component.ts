@@ -7,7 +7,7 @@ import { BaseForm } from '../../../../core/components/base-form/base-form';
 import { HttpClient } from '@angular/common/http';
 import { ForgotPassword } from 'src/app/business/entities/generated/security-entities.generated';
 import { TranslocoService } from '@jsverse/transloco';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 
 @Component({

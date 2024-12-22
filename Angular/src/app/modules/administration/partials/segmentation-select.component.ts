@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 import { TranslocoService } from '@jsverse/transloco';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 
 @Component({

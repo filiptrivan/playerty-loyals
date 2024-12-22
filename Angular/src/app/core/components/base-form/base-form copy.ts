@@ -15,7 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { getParentUrl } from '../../services/helper-functions';
 import { TranslocoService } from '@jsverse/transloco';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 import { BaseEntity } from '../../entities/base-entity';
 import { Observable } from 'rxjs';

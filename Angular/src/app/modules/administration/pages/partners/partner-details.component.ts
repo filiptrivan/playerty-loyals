@@ -6,7 +6,7 @@ import { firstValueFrom, forkJoin } from 'rxjs';
 import { Partner } from 'src/app/business/entities/generated/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerService } from 'src/app/business/services/helper/partner.service';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';

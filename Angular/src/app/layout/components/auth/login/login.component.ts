@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment';
 import { VerificationTypeCodes } from 'src/app/business/enums/verification-type-codes';
 import { Login } from 'src/app/business/entities/generated/security-entities.generated';
 import { TranslocoService } from '@jsverse/transloco';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names.generated';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
 import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
 
 @Component({

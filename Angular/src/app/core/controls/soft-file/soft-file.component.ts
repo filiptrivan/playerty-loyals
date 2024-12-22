@@ -9,7 +9,7 @@ import { FileSelectEvent } from 'primeng/fileupload';
 import { Observable } from 'rxjs';
 import { getMimeTypeForFileName } from '../../services/helper-functions';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels.generated';
+import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels';
 
 @Component({
     selector: 'soft-file',
