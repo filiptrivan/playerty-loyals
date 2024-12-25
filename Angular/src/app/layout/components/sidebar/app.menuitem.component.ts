@@ -4,14 +4,14 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { firstValueFrom, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MenuService } from './app.menu.service';
-import { LayoutService } from '../../service/app.layout.service';
+import { LayoutService } from '../../services/app.layout.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { SoftMenuItem } from './app.menu.component';
 import { ApiService } from '../../../business/services/api/api.service';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { SoftFormControl } from '../../../core/components/soft-form-control/soft-form-control';
 import { environment } from 'src/environments/environment';
-import { PartnerService } from '../../../business/services/helper/partner.service';
+import { PartnerService } from '../../../business/services/helpers/partner.service';
 
 @Component({
     // eslint-disable-next-line @angular-eslint/component-selector

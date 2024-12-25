@@ -4,10 +4,10 @@ import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { filter, Subscription, switchMap } from 'rxjs';
 import { ApiService } from '../../../business/services/api/api.service';
-import { PartnerUser, UserExtended } from '../../../business/entities/generated/business-entities.generated';
-import { PartnerService } from '../../../business/services/helper/partner.service';
-import { LayoutService } from '../../service/app.layout.service';
+import { PartnerService } from '../../../business/services/helpers/partner.service';
+import { LayoutService } from '../../services/app.layout.service';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { PartnerUser, UserExtended } from 'src/app/business/entities/business-entities.generated';
 
 interface SoftMenuItem {
   label?: string;

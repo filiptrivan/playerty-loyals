@@ -2,15 +2,8 @@
     @if (showEmailSentDialog == false) {
         <auth (onCompanyNameChange)="companyNameChange($event)">
             <form [formGroup]="formGroup" style="margin-bottom: 16px;"> <!-- FT: We are not loading anything from the server here so we don't need defer block -->
-                <div class="col-12" style="padding: 0;">
+                <div class="col-12" style="padding-left: 0; padding-right: 0; margin-bottom: 32px;">
                     <soft-textbox textbox [control]="control('email')"></soft-textbox>
-                </div>
-                <div class="col-12" style="padding-left: 0; padding-right: 0;">
-                    <soft-password [control]="control('password')"></soft-password>
-                </div>
-                
-                <div class="flex align-items-center justify-content-between mb-4 gap-5" style="margin-bottom: 16px;">
-                    <a class="link no-underline" routerLink="/auth/forgot-password">{{t('ForgotPassword')}}</a>
                 </div>
                 
                 <div style="display: flex; flex-direction: column; gap: 16px;">
@@ -21,6 +14,6 @@
         </auth>
     }
     @else {
-        <login-verification [email]="model.email" [password]="model.password"></login-verification>
+        <login-verification [email]="model.email"></login-verification>
     }
 </ng-container>

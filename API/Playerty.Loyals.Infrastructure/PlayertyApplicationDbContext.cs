@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Playerty.Loyals.Business.Entities;
 using Soft.Generator.Infrastructure;
-using System.Data;
 
 namespace Playerty.Loyals.Infrastructure
 {

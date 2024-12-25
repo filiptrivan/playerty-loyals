@@ -82,21 +82,6 @@ namespace Playerty.Loyals.WebAPI.Controllers
             });
         }
 
-        /// <summary>
-        /// FT: Putting the method here because we need to make new partner user if he doesn't exist
-        /// </summary
-        [HttpPost]
-        public async Task<AuthResultDTO> ForgotPassword(VerificationTokenRequestDTO request)
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                AuthResultDTO authResultDTO = await _securityBusinessService.ForgotPassword(request);
-                await _loyalsBusinessService.AddPartnerUserAfterAuthResult(authResultDTO);
-                return authResultDTO;
-            });
-        }
-
-
         [HttpGet]
         [AuthGuard]
         [SkipSpinner]

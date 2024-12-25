@@ -8,7 +8,7 @@ import { PrimengModule } from '../../../core/modules/primeng.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { SoftAutocompleteComponent } from "../../../core/controls/soft-autocomplete/soft-autocomplete.component";
 import { TranslocoDirective } from '@jsverse/transloco';
-import { AppFooterComponent } from '../footer/app.footer.component';
+import { AppFooterComponent } from '../../../core/components/footer/app.footer.component';
 import { AppMenuComponent } from '../sidebar/app.menu.component';
 import { AppMenuitemComponent } from '../sidebar/app.menuitem.component';
 import { AppSidebarComponent } from '../sidebar/app.sidebar.component';

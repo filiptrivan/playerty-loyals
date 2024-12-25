@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Playerty.Loyals.Infrastructure;
 
@@ -11,9 +12,11 @@ using Playerty.Loyals.Infrastructure;
 namespace Playerty.Loyals.Infrastructure.Migrations
 {
     [DbContext(typeof(PlayertyApplicationDbContext))]
-    partial class PlayertyApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241225165927_DeletedPassword")]
+    partial class DeletedPassword
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -714,14 +717,14 @@ namespace Playerty.Loyals.Infrastructure.Migrations
                     b.Property<int?>("GenderId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("HasLoggedInWithExternalProvider")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsDisabled")
+                    b.Property<bool>("HasLoggedInWithExternalProvider")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("ModifiedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("NumberOfFailedAttemptsInARow")
+                        .HasColumnType("int");
 
                     b.Property<int>("Version")
                         .HasColumnType("int");

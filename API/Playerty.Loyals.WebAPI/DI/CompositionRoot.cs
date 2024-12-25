@@ -21,9 +21,7 @@ namespace Playerty.Loyals.WebAPI.DI
             registry.Register<AuthenticationService>();
             registry.Register<AuthorizationService>();
             registry.Register<SecurityBusinessService<UserExtended>>();
-            registry.Register<SecurityBusinessServiceGenerated<UserExtended>>();
-            registry.Register<Playerty.Loyals.Business.Services.AuthorizationBusinessService>();
-            registry.Register<Playerty.Loyals.Business.Services.AuthorizationBusinessServiceGenerated>();
+            registry.Register<Soft.Generator.Security.Services.BusinessServiceGenerated<UserExtended>>();
             registry.Register<Soft.Generator.Security.Services.AuthorizationBusinessService<UserExtended>>();
             registry.Register<Soft.Generator.Security.Services.AuthorizationBusinessServiceGenerated>();
             registry.Register<ExcelService>();
@@ -31,13 +29,15 @@ namespace Playerty.Loyals.WebAPI.DI
             registry.RegisterSingleton<IConfigureOptions<MvcOptions>, TranslatePropertiesConfiguration>();
             registry.RegisterSingleton<IJwtAuthManager, JwtAuthManagerService>();
 
-            // PL
+            // Business
             registry.Register<LoyalsBusinessService>();
-            registry.Register<BusinessBusinessServiceGenerated>();
+            registry.Register<Playerty.Loyals.Business.Services.BusinessServiceGenerated>();
             registry.Register<PartnerUserAuthenticationService>();
             registry.Register<WingsApiService>();
             registry.Register<SyncService>();
             registry.RegisterSingleton<UpdatePointsScheduler>();
+            registry.Register<Playerty.Loyals.Business.Services.AuthorizationBusinessService>();
+            registry.Register<Playerty.Loyals.Business.Services.AuthorizationBusinessServiceGenerated>();
         }
     }
 }

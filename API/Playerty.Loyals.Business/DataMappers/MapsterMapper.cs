@@ -16,41 +16,6 @@ namespace Playerty.Loyals.Business.DataMappers
     [CustomMapper]
     public static partial class Mapper
     {
-        public static TypeAdapterConfig UserExtendedToDTOConfig()
-        {
-            TypeAdapterConfig config = new TypeAdapterConfig();
 
-            config
-                .NewConfig<UserExtended, UserExtendedDTO>()
-                .Ignore(dest => dest.Password)
-                ;
-
-            return config;
-        }
-
-        [TableFiltersListener]
-        public static TypeAdapterConfig UserExtendedProjectToConfig()
-        {
-            TypeAdapterConfig config = new TypeAdapterConfig();
-
-            config
-                .NewConfig<UserExtended, UserExtendedDTO>()
-                .Ignore(dest => dest.Password)
-                ;
-
-            return config;
-        }
-
-        public static TypeAdapterConfig UserExtendedExcelProjectToConfig()
-        {
-            TypeAdapterConfig config = new TypeAdapterConfig();
-
-            config
-                .NewConfig<UserExtended, UserExtendedDTO>()
-                .Ignore(dest => dest.Password)
-                ;
-
-            return config;
-        }
     }
 }

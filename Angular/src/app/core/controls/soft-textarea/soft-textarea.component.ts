@@ -5,7 +5,7 @@ import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { RequiredComponent } from '../../components/required/required.component';
 import { CommonModule } from '@angular/common';
 import { TranslocoService } from '@jsverse/transloco';
-import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels';
+import { TranslateLabelsService } from 'src/app/business/services/translates/merge-labels';
 
 @Component({
     selector: 'soft-textarea',

@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, KeyValueDiffers, OnInit, Output } from '@angular/core';
-import { LayoutService } from '../../../../service/app.layout.service';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { HttpClient } from '@angular/common/http';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
@@ -7,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
-import { VerificationTokenRequest } from 'src/app/business/entities/generated/security-entities.generated';
+import { VerificationTokenRequest } from 'src/app/business/entities/security-entities.generated';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
-import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
+import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
+import { LayoutService } from 'src/app/layout/services/app.layout.service';
 
 @Component({
     selector: 'verification-wrapper',

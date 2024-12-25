@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { LayoutService } from "../../service/app.layout.service";
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -8,5 +7,5 @@ import { environment } from 'src/environments/environment';
 })
 export class AppFooterComponent {
     companyName: string = environment.companyName;
-    constructor(public layoutService: LayoutService) { }
+    constructor() { }
 }

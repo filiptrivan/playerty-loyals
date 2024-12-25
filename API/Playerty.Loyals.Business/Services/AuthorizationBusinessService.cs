@@ -1,11 +1,6 @@
 ﻿using Azure.Storage.Blobs;
-using Playerty.Loyals.Business.DTO;
-using Playerty.Loyals.Business.Entities;
-using Playerty.Loyals.Business.Enums;
 using Soft.Generator.Security.Services;
-using Soft.Generator.Shared.Extensions;
 using Soft.Generator.Shared.Interfaces;
-using Soft.Generator.Shared.SoftExceptions;
 
 namespace Playerty.Loyals.Business.Services
 {

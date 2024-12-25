@@ -1,21 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { LoginComponent } from './login/login.component';
 import { PrimengModule } from '../../../core/modules/primeng.module';
 import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
-import { AuthComponent } from './partials/auth.compoment';
-import { RegistrationVerificationComponent } from './partials/verification/registration-verification.component';
-import { LoginVerificationComponent } from './partials/verification/login-verification.component';
-import { ForgotPasswordVerificationComponent } from './partials/verification/forgot-password-verification.component';
+import { AuthComponent } from './partials/auth.component';
 import { TranslocoDirective } from '@jsverse/transloco';
+import { LoginVerificationComponent } from 'src/app/core/components/email-verification/login-verification.component';
+import { RegistrationVerificationComponent } from 'src/app/core/components/email-verification/registration-verification.component';
 
 const routes: Routes = [
-    { 
-        path: 'forgot-password', 
-        component: ForgotPasswordComponent
-    },
     { 
         path: 'registration', 
         component: RegistrationComponent
@@ -33,12 +27,10 @@ const routes: Routes = [
         PrimengModule,
         SoftControlsModule,
         LoginVerificationComponent,
-        ForgotPasswordVerificationComponent,
         RegistrationVerificationComponent,
         TranslocoDirective,
     ],
     declarations: [
-        ForgotPasswordComponent,
         RegistrationComponent,
         LoginComponent,
     ]

@@ -1,6 +1,6 @@
 import { environment } from "src/environments/environment";
 import { Injectable } from "@angular/core";
-import { TranslateClassNamesGeneratedService } from "./generated/class-names.generated";
+import { TranslateClassNamesGeneratedService } from "./class-names.generated";
 
 @Injectable({
     providedIn: 'root',

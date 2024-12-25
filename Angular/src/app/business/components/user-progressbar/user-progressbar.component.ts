@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { ApiService } from '../../services/api/api.service';
-import { PartnerUser, Tier } from '../../entities/generated/business-entities.generated';
+import { PartnerUser, Tier } from '../../entities/business-entities.generated';
 
 @Component({
     selector: 'user-progressbar',

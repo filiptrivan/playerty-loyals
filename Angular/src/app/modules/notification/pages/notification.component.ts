@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { TableFilter } from 'src/app/business/entities/generated/security-entities.generated';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { MenuItem } from 'primeng/api';
 import { PaginatorState } from 'primeng/paginator';
 import { TableFilterContext } from 'src/app/core/entities/table-filter-context';
 import { TableResponse } from 'src/app/core/entities/table-response';
 import { TranslocoService } from '@jsverse/transloco';
-import { Notification } from 'src/app/business/entities/generated/business-entities.generated';
+import { Notification } from 'src/app/business/entities/business-entities.generated';
+import { TableFilter } from 'src/app/core/entities/table-filter';
 
 @Component({
   templateUrl: './notification.component.html',

@@ -6,8 +6,8 @@ import { map, tap, delay, finalize } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { SocialUser, SocialAuthService } from '@abacritt/angularx-social-login';
-import { ExternalProvider, Login, VerificationTokenRequest, AuthResult, ForgotPassword, Registration, RegistrationVerificationResult, RefreshTokenRequest } from 'src/app/business/entities/generated/security-entities.generated';
-import { UserExtended } from 'src/app/business/entities/generated/business-entities.generated';
+import { ExternalProvider, Login, VerificationTokenRequest, AuthResult, Registration, RegistrationVerificationResult, RefreshTokenRequest } from 'src/app/business/entities/security-entities.generated';
+import { UserExtended } from 'src/app/business/entities/business-entities.generated';
 
 
 @Injectable({
@@ -82,19 +82,6 @@ export class AuthService implements OnDestroy {
     body.browserId = browserId;
     const loginResultObservable = this.http.post<AuthResult>(`${this.apiUrl}/Auth/Login`, body);
     return this.handleLoginResult(loginResultObservable);
-  }
-
-  sendForgotPasswordVerificationEmail(body: ForgotPassword): Observable<any> {
-    const browserId = this.getBrowserId();
-    body.browserId = browserId;
-    return this.apiService.sendForgotPasswordVerificationEmail(body);
-  }
-
-  forgotPassword(body: VerificationTokenRequest): Observable<Promise<AuthResult>> {
-    const browserId = this.getBrowserId();
-    body.browserId = browserId;
-    const forgotPasswordResultObservable = this.apiService.forgotPassword(body);
-    return this.handleLoginResult(forgotPasswordResultObservable);
   }
 
   loginExternal(body: ExternalProvider): Observable<Promise<AuthResult>> {

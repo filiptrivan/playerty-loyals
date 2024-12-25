@@ -1,6 +1,6 @@
 using Soft.Generator.Shared.Attributes;
 
-namespace Playerty.Loyals.GeneratorSettings
+namespace Playerty.Loyals.Infrastructure.GeneratorSettings
 {
     public class GeneratorSettings
     {

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, KeyValueDiffers, OnInit } from '@angular/core';
-import { Segmentation, SegmentationItem } from 'src/app/business/entities/generated/business-entities.generated';
+import { Segmentation, SegmentationItem } from 'src/app/business/entities/business-entities.generated';
 import { CardSkeletonComponent } from "../../../core/components/card-skeleton/card-skeleton.component";
 import { SoftCheckboxComponent } from 'src/app/core/controls/soft-checkbox/soft-checkbox.component';
 import { FormGroup } from '@angular/forms';
@@ -8,8 +8,8 @@ import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 import { TranslocoService } from '@jsverse/transloco';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
-import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
+import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 
 @Component({
     selector: 'segmentation-select',

@@ -1,20 +1,19 @@
-import { BusinessSystemUpdatePointsDataBody, UpdatePoints } from '../../../../business/entities/generated/business-entities.generated';
-import { SoftFormControl, SoftFormGroup } from '../../../../core/components/soft-form-control/soft-form-control';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { forkJoin, Observable } from 'rxjs';
-import { BusinessSystem, BusinessSystemSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
+import { BusinessSystem, BusinessSystemSaveBody, BusinessSystemUpdatePointsDataBody, UpdatePoints } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
-import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
+import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { SoftTab } from 'src/app/core/components/soft-panels/panel-header/panel-header.component';
 import { PrimeIcons } from 'primeng/api';
+import { SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 
 @Component({
     selector: 'business-system-details',

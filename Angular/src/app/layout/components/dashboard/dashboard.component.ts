@@ -1,11 +1,11 @@
-import { PartnerUser, Tier } from 'src/app/business/entities/generated/business-entities.generated';
+import { PartnerUser, Tier } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from '../../../business/services/api/api.service';
-import { LayoutService } from '../../service/app.layout.service';
+import { LayoutService } from '../../services/app.layout.service';
 import { Component, OnInit } from '@angular/core';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { firstValueFrom, Subscription } from 'rxjs';
-import { PartnerService } from 'src/app/business/services/helper/partner.service';
+import { PartnerService } from 'src/app/business/services/helpers/partner.service';
 
 @Component({
   templateUrl: './dashboard.component.html',

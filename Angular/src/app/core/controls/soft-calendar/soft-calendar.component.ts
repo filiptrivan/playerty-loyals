@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RequiredComponent } from '../../components/required/required.component';
 import { TranslocoService } from '@jsverse/transloco';
-import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels';
+import { TranslateLabelsService } from 'src/app/business/services/translates/merge-labels';
 
 @Component({
     selector: 'soft-calendar',

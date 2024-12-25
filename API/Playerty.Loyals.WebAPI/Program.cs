@@ -1,5 +1,3 @@
-using Nucleus.Core.Util;
-
 namespace Playerty.Loyals.WebAPI
 {
     public class Program

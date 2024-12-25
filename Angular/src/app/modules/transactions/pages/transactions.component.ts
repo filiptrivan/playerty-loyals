@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { Transaction } from 'src/app/business/entities/generated/business-entities.generated';
+import { Transaction } from 'src/app/business/entities/business-entities.generated';
 import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { TranslocoDirective } from '@jsverse/transloco';

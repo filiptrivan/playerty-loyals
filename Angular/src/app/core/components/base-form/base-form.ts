@@ -15,8 +15,8 @@ import { SoftMessageService } from '../../services/soft-message.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { TranslocoService } from '@jsverse/transloco';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
-import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
+import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 
 @Component({
   selector: 'base-form',

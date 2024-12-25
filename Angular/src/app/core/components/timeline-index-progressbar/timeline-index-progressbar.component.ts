@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { SoftPanelsModule } from "../soft-panels/soft-panels.module";
-import { Tier } from 'src/app/business/entities/generated/business-entities.generated';
+import { Tier } from 'src/app/business/entities/business-entities.generated';
 
 @Component({
     selector: 'timeline-index-progressbar',

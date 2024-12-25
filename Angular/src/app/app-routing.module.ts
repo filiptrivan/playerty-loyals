@@ -1,6 +1,6 @@
 import { PreloadAllModules, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { NotfoundComponent } from './layout/components/notfound/notfound.component';
+import { NotfoundComponent } from './core/components/notfound/notfound.component';
 import { AppLayoutComponent } from "./layout/components/layout/app.layout.component";
 import { AuthGuard } from './core/guards/auth.guard';
 import { NotAuthGuard } from './core/guards/not-auth.guard';

@@ -23,15 +23,9 @@ namespace Playerty.Loyals.Business.Entities
         [Required]
         public string Email { get; set; }
 
-        // FT HACK: Password is not required in database because of external provider login, but the DTO property Password is
-        [StringLength(80, MinimumLength = 40)]
-        public string Password { get; set; }
+        public bool? HasLoggedInWithExternalProvider { get; set; }
 
-        [Required]
-        public bool HasLoggedInWithExternalProvider { get; set; }
-
-        [Required]
-        public int NumberOfFailedAttemptsInARow { get; set; }
+        public bool? IsDisabled { get; set; }
 
         public DateTime? BirthDate { get; set; }
 

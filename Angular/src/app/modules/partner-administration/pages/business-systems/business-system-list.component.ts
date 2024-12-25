@@ -2,7 +2,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { Component, OnInit } from '@angular/core';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { BusinessSystem } from 'src/app/business/entities/generated/business-entities.generated';
+import { BusinessSystem } from 'src/app/business/entities/business-entities.generated';
 
 @Component({
     selector: 'business-system-list',

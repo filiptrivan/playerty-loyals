@@ -3,11 +3,11 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { firstValueFrom, forkJoin } from 'rxjs';
-import { Partner } from 'src/app/business/entities/generated/business-entities.generated';
+import { Partner } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { PartnerService } from 'src/app/business/services/helper/partner.service';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
-import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
+import { PartnerService } from 'src/app/business/services/helpers/partner.service';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
+import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 

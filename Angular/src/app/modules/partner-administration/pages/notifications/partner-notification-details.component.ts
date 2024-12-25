@@ -1,18 +1,18 @@
-import { PartnerService } from './../../../../business/services/helper/partner.service';
+import { PartnerService } from './../../../../business/services/helpers/partner.service';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { firstValueFrom, forkJoin, map, Observable } from 'rxjs';
-import { PartnerNotification, PartnerNotificationSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
 import { TableFilter } from 'src/app/core/entities/table-filter';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
-import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
+import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { AllClickEvent, Column, SelectedRowsMethodResult } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { PartnerNotification, PartnerNotificationSaveBody } from 'src/app/business/entities/business-entities.generated';
 
 @Component({
     selector: 'partner-notification-details',

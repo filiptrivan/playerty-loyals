@@ -2,9 +2,9 @@ import { TranslocoService } from '@jsverse/transloco';
 import { Subscription } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
-import { LayoutService } from '../../service/app.layout.service';
+import { LayoutService } from '../../services/app.layout.service';
 import { MenuItem } from 'primeng/api';
-import { PartnerService } from '../../../business/services/helper/partner.service';
+import { PartnerService } from '../../../business/services/helpers/partner.service';
 import { environment } from 'src/environments/environment';
 
 export interface SoftMenuItem extends MenuItem{

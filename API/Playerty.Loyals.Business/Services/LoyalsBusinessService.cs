@@ -25,7 +25,7 @@ using System.Diagnostics;
 
 namespace Playerty.Loyals.Services
 {
-    public class LoyalsBusinessService : BusinessBusinessServiceGenerated
+    public class LoyalsBusinessService : BusinessServiceGenerated
     {
         private readonly IApplicationDbContext _context;
         private readonly Playerty.Loyals.Business.Services.AuthorizationBusinessService _authorizationService;
@@ -58,9 +58,6 @@ namespace Playerty.Loyals.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                if (userExtendedSaveBodyDTO.UserExtendedDTO.Password != null)
-                    throw new HackerException("You can't change password from here.");
-
                 if (userExtendedSaveBodyDTO.UserExtendedDTO.Id == 0)
                     throw new HackerException("You can't add new user.");
 
@@ -72,7 +69,6 @@ namespace Playerty.Loyals.Services
                 if (userExtendedSaveBodyDTO.SelectedRoleIds != null)
                     await _securityBusinessService.UpdateRoleListForUser(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.SelectedRoleIds);
 
-                userExtendedSaveBodyDTO.UserExtendedDTO.Password = user.Password;
                 return await SaveUserExtendedAndReturnDTOAsync(userExtendedSaveBodyDTO.UserExtendedDTO, false, false); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
             });
         }

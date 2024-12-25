@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
-import { PartnerUser } from 'src/app/business/entities/generated/business-entities.generated';
+import { PartnerUser } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { PartnerService } from 'src/app/business/services/helper/partner.service';
+import { PartnerService } from 'src/app/business/services/helpers/partner.service';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 
 @Component({

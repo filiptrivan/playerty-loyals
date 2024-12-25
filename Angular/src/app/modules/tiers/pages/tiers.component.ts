@@ -1,11 +1,11 @@
 import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { PartnerUser, Tier } from 'src/app/business/entities/generated/business-entities.generated';
+import { PartnerUser, Tier } from 'src/app/business/entities/business-entities.generated';
 import { forkJoin } from 'rxjs';
 import { TimelineIndexProgressbarComponent } from 'src/app/core/components/timeline-index-progressbar/timeline-index-progressbar.component';
 import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
-import { PartnerService } from 'src/app/business/services/helper/partner.service';
+import { PartnerService } from 'src/app/business/services/helpers/partner.service';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({

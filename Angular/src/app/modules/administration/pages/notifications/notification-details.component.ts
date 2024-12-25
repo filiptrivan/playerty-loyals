@@ -3,11 +3,11 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { forkJoin, map, Observable } from 'rxjs';
-import { Notification, NotificationSaveBody } from 'src/app/business/entities/generated/business-entities.generated';
+import { Notification, NotificationSaveBody } from 'src/app/business/entities/business-entities.generated';
 import { TableFilter } from 'src/app/core/entities/table-filter';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/translated-class-names';
-import { ValidatorService } from 'src/app/business/services/validation/validation-rules';
+import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
+import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { AllClickEvent, Column, SelectedRowsMethodResult } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';

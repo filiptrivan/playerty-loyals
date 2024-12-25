@@ -5,7 +5,7 @@ import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { RequiredComponent } from '../../components/required/required.component';
 import { BaseDropdownControl } from '../base-dropdown-control';
 import { TranslocoService } from '@jsverse/transloco';
-import { TranslateLabelsService } from 'src/app/business/services/translates/translated-labels';
+import { TranslateLabelsService } from 'src/app/business/services/translates/merge-labels';
 import { DropdownChangeEvent } from 'primeng/dropdown';
 
 @Component({

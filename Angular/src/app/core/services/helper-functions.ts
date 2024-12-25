@@ -1,5 +1,6 @@
 import { AbstractControl } from "@angular/forms";
 import { Action, Column } from "../components/soft-data-table/soft-data-table.component";
+import { HttpResponse } from "@angular/common/http";
 
 // Helper function for PrecisionScale validation (to be added in the TypeScript output):
 export function validatePrecisionScale(value: any, precision: number, scale: number, ignoreTrailingZeros: boolean): boolean {
@@ -161,4 +162,22 @@ export function capitalizeFirstLetter(inputString: string): string {
         actionsColumn.actions.splice(index, 1);
       }
     }
+  }
+
+  export function getFileNameFromContentDisposition(
+    resp: HttpResponse<Blob>,
+    defaultName: string
+  ): string {
+    let fileName;
+    if (resp && resp.headers && resp.headers.get('Content-Disposition')) {
+      let val = resp.headers.get('Content-Disposition');
+      let start = val.indexOf('filename=');
+      if (start != -1) {
+        let end = val.indexOf(';', start);
+        fileName =
+          end != -1 ? val.substring(start + 9, end) : val.substring(start + 9);
+        fileName = fileName.split('"').join('');
+      }
+    }
+    return fileName ?? defaultName;
   }

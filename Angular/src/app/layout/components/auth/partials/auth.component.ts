@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { environment } from "src/environments/environment.prod";
-import { LayoutService } from "src/app/layout/service/app.layout.service";
-import { GoogleButtonComponent } from "./google-button.component";
+import { LayoutService } from "src/app/layout/services/app.layout.service";
+import { GoogleButtonComponent } from "../../../../core/components/google-button/google-button.component";
 import { CommonModule } from "@angular/common";
-import { PartnerService } from "src/app/business/services/helper/partner.service";
+import { PartnerService } from "src/app/business/services/helpers/partner.service";
 import { getHtmlImgDisplayString64 } from "src/app/core/services/helper-functions";
 import { Subscription } from "rxjs";
 import { TranslocoDirective } from "@jsverse/transloco";
@@ -36,7 +36,7 @@ export class AuthComponent {
         if (partner?.logoImageData) {
           this.image = getHtmlImgDisplayString64(partner.logoImageData);
         }else{
-          this.image = `assets/layout/images/${this.layoutService.config.colorScheme === 'light' ? 'logo-dark' : 'logo-white'}.svg`
+          this.image = `assets/primeng/images/${this.layoutService.config.colorScheme === 'light' ? 'logo-dark' : 'logo-white'}.svg`
         }
         
         this.companyName = partner?.name ?? environment.companyName;

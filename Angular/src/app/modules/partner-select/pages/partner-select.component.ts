@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Partner } from 'src/app/business/entities/generated/business-entities.generated';
+import { Partner } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { getHtmlImgDisplayString64 } from 'src/app/core/services/helper-functions';

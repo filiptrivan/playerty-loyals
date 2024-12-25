@@ -1,7 +1,7 @@
 import { TranslocoService } from '@jsverse/transloco';
 import { Component, OnInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
-import { PartnerService } from './business/services/helper/partner.service';
+import { PartnerService } from './business/services/helpers/partner.service';
 
 @Component({
     selector: 'app-root',

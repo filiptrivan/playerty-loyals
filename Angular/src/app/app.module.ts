@@ -1,7 +1,7 @@
 import { ErrorHandler, NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NotfoundComponent } from './layout/components/notfound/notfound.component';
+import { NotfoundComponent } from './core/components/notfound/notfound.component';
 import { AppLayoutModule } from './layout/components/layout/app.layout.module';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
@@ -13,7 +13,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ApiService } from './business/services/api/api.service';
-import { BaseService } from './core/services/base-service';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
@@ -72,7 +71,6 @@ import { BusinessModule } from './business/business.module';
       } as SocialAuthServiceConfig
     },
     ApiService,
-    BaseService,
     NgxSpinnerService,
   ],
   bootstrap: [AppComponent],

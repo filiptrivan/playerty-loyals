@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Namebook } from '../../../core/entities/namebook';
-import { Login, AuthResult, ForgotPassword, Registration, RegistrationVerificationResult, RefreshTokenRequest, Role } from '../../entities/generated/security-entities.generated';
 import { TableFilter } from '../../../core/entities/table-filter';
 import { TableResponse } from 'src/app/core/entities/table-response';
+import { Login, Registration, RegistrationVerificationResult, RefreshTokenRequest, AuthResult, Role } from '../../entities/security-entities.generated';
 
 @Injectable()
 export class ApiSecurityService {
@@ -17,10 +17,6 @@ export class ApiSecurityService {
     
     sendLoginVerificationEmail = (loginDTO: Login): Observable<any> => { 
         return this.http.post<any>(`${environment.apiUrl}/Auth/SendLoginVerificationEmail`, loginDTO, environment.httpOptions);
-    }
-
-    sendForgotPasswordVerificationEmail = (forgotPasswordDTO: ForgotPassword): Observable<any> => { 
-        return this.http.post<any>(`${environment.apiUrl}/Auth/SendForgotPasswordVerificationEmail`, forgotPasswordDTO, environment.httpOptions);
     }
 
     sendRegistrationVerificationEmail = (registrationDTO: Registration): Observable<RegistrationVerificationResult> => { 
