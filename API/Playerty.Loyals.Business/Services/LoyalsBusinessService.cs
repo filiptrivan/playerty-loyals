@@ -102,38 +102,10 @@ namespace Playerty.Loyals.Services
 
                 PaginationResult<UserExtended> paginationResult = await LoadUserExtendedListForPagination(notificationSaveBodyDTO.TableFilter, _context.DbSet<UserExtended>());
 
-                await UpdateUserExtendedListForNotificationTableSelection(paginationResult.Query, savedNotificationDTO.Id, notificationSaveBodyDTO);
+                await UpdateUserExtendedListForNotificationWithLazyTableSelection(paginationResult.Query, savedNotificationDTO.Id, notificationSaveBodyDTO);
 
                 return savedNotificationDTO;
             });
-        }
-
-        // FT: Add this to the generator
-        public async Task<TableResponseDTO<UserExtendedDTO>> LoadUserForNotificationTableData(TableFilterDTO tableFilterPayload)
-        {
-            TableResponseDTO<UserExtendedDTO> tableResponse = new TableResponseDTO<UserExtendedDTO>();
-
-            await _context.WithTransactionAsync(async () =>
-            {
-                IQueryable<UserExtended> query = _context.DbSet<UserExtended>()
-                    .OrderBy(x => x.Id) // FT: It's important that OrderBy is before skip and take
-                    .Skip(tableFilterPayload.First)
-                    .Take(tableFilterPayload.Rows)
-                    .Where(x => x.Notifications
-                        .Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)); // notificationId
-
-                PaginationResult<UserExtended> paginationResult = await LoadUserExtendedListForPagination(tableFilterPayload, query);
-
-                tableResponse.Data = await paginationResult.Query
-                    .ProjectToType<UserExtendedDTO>(Mapper.UserExtendedProjectToConfig())
-                    .ToListAsync();
-
-                int count = await _context.DbSet<UserExtended>().Where(x => x.Notifications.Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)).CountAsync();
-
-                tableResponse.TotalRecords = count;
-            });
-
-            return tableResponse;
         }
 
         public async Task SendNotificationEmail(long notificationId, int notificationVersion)
@@ -669,34 +641,6 @@ namespace Playerty.Loyals.Services
             });
         }
 
-        public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserForPartnerNotificationTableData(TableFilterDTO tableFilterPayload)
-        {
-            TableResponseDTO<PartnerUserDTO> tableResponse = new TableResponseDTO<PartnerUserDTO>();
-
-            await _context.WithTransactionAsync(async () =>
-            {
-                IQueryable<PartnerUser> query = _context.DbSet<PartnerUser>()
-                    .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
-                    .OrderBy(x => x.Id) // FT: It's important that OrderBy is before skip and take
-                    .Skip(tableFilterPayload.First)
-                    .Take(tableFilterPayload.Rows)
-                    .Where(x => x.PartnerNotifications
-                        .Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)); // partnerNotificationId
-
-                PaginationResult<PartnerUser> paginationResult = await LoadPartnerUserListForPagination(tableFilterPayload, query);
-
-                tableResponse.Data = await paginationResult.Query
-                    .ProjectToType<PartnerUserDTO>(Mapper.PartnerUserProjectToConfig())
-                    .ToListAsync();
-
-                int count = await _context.DbSet<PartnerUser>().Where(x => x.PartnerNotifications.Any(x => x.Id == tableFilterPayload.AdditionalFilterIdLong)).CountAsync();
-
-                tableResponse.TotalRecords = count;
-            });
-
-            return tableResponse;
-        }
-
         public async override Task<List<NamebookDTO<long>>> LoadPartnerUserListForAutocomplete(int limit, string query, IQueryable<PartnerUser> partnerUserQuery, bool authorize = true)
         {
             return await _context.WithTransactionAsync(async () =>
@@ -801,7 +745,7 @@ namespace Playerty.Loyals.Services
 
                 PaginationResult<PartnerUser> paginationResult = await LoadPartnerUserListForPagination(partnerNotificationSaveBodyDTO.TableFilter, allPartnerUsersQuery);
 
-                await UpdatePartnerUserListForPartnerNotificationTableSelection(paginationResult.Query, savedPartnerNotificationDTO.Id, partnerNotificationSaveBodyDTO);
+                await UpdatePartnerUserListForPartnerNotificationWithLazyTableSelection(paginationResult.Query, savedPartnerNotificationDTO.Id, partnerNotificationSaveBodyDTO);
 
                 return savedPartnerNotificationDTO;
             });

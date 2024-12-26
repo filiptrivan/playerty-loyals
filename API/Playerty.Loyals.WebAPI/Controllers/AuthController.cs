@@ -95,8 +95,7 @@ namespace Playerty.Loyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<TableResponseDTO<UserExtendedDTO>> LoadUserTableData(TableFilterDTO tableFilterDTO)
         {
-            // FT: Ordering by because of notifications
-            return await _loyalsBusinessService.LoadUserExtendedTableData(tableFilterDTO, _context.DbSet<UserExtended>().OrderBy(x => x.Id));
+            return await _loyalsBusinessService.LoadUserExtendedTableData(tableFilterDTO, _context.DbSet<UserExtended>().OrderBy(x => x.Id)); // FT: Ordering by because of notifications
         }
 
         [HttpPost]
@@ -204,9 +203,10 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<UserExtendedDTO>> LoadUserForNotificationTableData(TableFilterDTO tableFilterDTO)
+        public async Task<LazyLoadSelectedIdsResultDTO<long>> LazyLoadSelectedUserExtendedIdsForNotification(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadUserForNotificationTableData(tableFilterDTO);
+            return await _loyalsBusinessService.LazyLoadSelectedUserExtendedIdsForNotification(tableFilterDTO, _context.DbSet<UserExtended>()
+                .OrderBy(x => x.Id));
         }
 
         [HttpGet]

@@ -8,17 +8,23 @@ import { TableFilter } from 'src/app/core/entities/table-filter';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
-import { BaseForm } from 'src/app/core/components/base-form/base-form';
-import { AllClickEvent, Column, SelectedRowsMethodResult } from 'src/app/core/components/soft-data-table/soft-data-table.component';
-import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { AllClickEvent, Column  } from 'src/app/core/components/soft-data-table/soft-data-table.component';
+import { SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
+import { nameof } from 'src/app/core/services/helper-functions';
+import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
 
 @Component({
     selector: 'notification-details',
     templateUrl: './notification-details.component.html',
     styles: [],
 })
-export class NotificationDetailsComponent extends BaseForm<Notification> implements OnInit {
+export class NotificationDetailsComponent extends BaseFormCopy implements OnInit {
+    override saveObservableMethod: (saveBody: any) => Observable<any> = this.apiService.saveNotification;
+
+    notificationFormGroup: SoftFormGroup<Notification>;
+
     isMarkedAsRead = new SoftFormControl<boolean>(true, {updateOn: 'change'})
 
     text: string;
@@ -27,9 +33,6 @@ export class NotificationDetailsComponent extends BaseForm<Notification> impleme
     loadUserTableDataObservableMethod = this.apiService.loadUserTableData;
     exportUserTableDataToExcelObservableMethod = this.apiService.exportUserTableDataToExcel;
     deleteUserObservableMethod = this.apiService.deleteUser;
-
-    override controllerName: string = 'Auth';
-    objectNameForTheRequest: string = 'User';
     
     newlySelectedUserList: number[] = [];
     unselectedUserList: number[] = [];
@@ -60,21 +63,21 @@ export class NotificationDetailsComponent extends BaseForm<Notification> impleme
                 forkJoin({
                     notification: this.apiService.getNotification(this.modelId),
                   }).subscribe(({ notification }) => {
-                    this.init(new Notification(notification));
+                    this.initNotificationFormGroup(new Notification(notification));
                   });
             }
             else{
-                this.init(new Notification({id:0}));
+                 this.initNotificationFormGroup(new Notification({id:0}));
             }
         });
     }
 
-    init(model: Notification){
-        this.initFormGroup(model);
+    initNotificationFormGroup(notification: Notification){
+        this.notificationFormGroup = this.initFormGroup(notification, nameof<NotificationSaveBody>('notificationDTO'));
     }
 
     sendEmailNotification(){
-        this.apiService.sendNotificationEmail(this.modelId, this.model.version).subscribe(() => {
+        this.apiService.sendNotificationEmail(this.modelId, this.notificationFormGroup.getRawValue().version).subscribe(() => {
             this.messageService.successMessage(this.translocoService.translate('SuccessfulAttempt'));
         });
     }
@@ -87,18 +90,11 @@ export class NotificationDetailsComponent extends BaseForm<Notification> impleme
     }
 
     // FT: Using arrow function solved the problem with undefined this.modelId
-    selectedUserLazyLoad = (event: TableFilter): Observable<SelectedRowsMethodResult> => {
+    selectedUserLazyLoad = (event: TableFilter): Observable<LazyLoadSelectedIdsResult> => {
         let tableFilter: TableFilter = event;
         tableFilter.additionalFilterIdLong = this.modelId;
         
-        return this.apiService.loadUserForNotificationTableData(tableFilter).pipe(
-            map(res => {
-                let result = new SelectedRowsMethodResult();
-                result.fakeSelectedItems = res.data.map(x => x.id);
-                result.selectedTotalRecords = res.totalRecords;
-                return result;
-            })
-        );
+        return this.apiService.lazyLoadSelectedUserExtendedIdsForNotification(tableFilter);
     }
 
     isAllSelectedChange(event: AllClickEvent){
@@ -111,13 +107,15 @@ export class NotificationDetailsComponent extends BaseForm<Notification> impleme
 
     override onBeforeSave(): void {
         let saveBody = new NotificationSaveBody();
+
         saveBody.selectedIds = this.newlySelectedUserList;
         saveBody.unselectedIds = this.unselectedUserList;
         saveBody.isAllSelected = this.isAllSelected;
         saveBody.tableFilter = this.lastLazyLoadTableFilter;
 
         saveBody.isMarkedAsRead = this.isMarkedAsRead.value;
-        saveBody.notificationDTO = this.model;
+        saveBody.notificationDTO = this.notificationFormGroup.getRawValue();
+
         this.saveBody = saveBody;
     }
 }

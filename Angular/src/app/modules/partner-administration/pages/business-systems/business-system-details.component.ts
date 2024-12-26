@@ -92,7 +92,7 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
 
     initBusinessSystemFormGroup(businessSystem: BusinessSystem){
-        this.businessSystemFormGroup = this.initFormGroup(new BusinessSystem(businessSystem), this.businessSystemSaveBodyName);
+        this.businessSystemFormGroup = this.initFormGroup(businessSystem, this.businessSystemSaveBodyName);
     }
 
     initBusinessSystemUpdatePointsDataFormGroup(businessSystem: BusinessSystem){

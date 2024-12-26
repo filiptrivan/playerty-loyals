@@ -36,7 +36,8 @@
                                                 [getAlreadySelectedItems]="getAlreadySelectedDiscountProductGroupListForBusinessSystem"
                                                 (onIsAllSelectedChange)="allSelected($event)"
                                                 (onRowSelect)="rowSelect($event)" (onRowUnselect)="rowUnselect($event)" 
-                                                selectionMode="multiple" [showAddButton]="false" [tableTitle]="t('DiscountProductGroupList')" [cols]="businessSystemTierDiscountProductGroupCols" [hasLazyLoad]="false" [showPaginator]="false"
+                                                selectionMode="multiple" [showAddButton]="false" [tableTitle]="t('DiscountProductGroupList')" [cols]="businessSystemTierDiscountProductGroupCols" 
+                                                [hasLazyLoad]="false" [showPaginator]="false"
                                                 [showExportToExcelButton]="false" [formArrayControlNamesFromHtml]="formArrayControlNamesFromHtml" 
                                                 [additionalIndexes]="getBusinessSystemTierDiscountProductGroupAdditionalIndexes(tierIndex, businessSystemTierIndex)"
                                                 ></soft-data-table>

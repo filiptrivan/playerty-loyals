@@ -8,18 +8,24 @@ import { TableFilter } from 'src/app/core/entities/table-filter';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
-import { BaseForm } from 'src/app/core/components/base-form/base-form';
-import { AllClickEvent, Column, SelectedRowsMethodResult } from 'src/app/core/components/soft-data-table/soft-data-table.component';
-import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { AllClickEvent, Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
+import { SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 import { PartnerNotification, PartnerNotificationSaveBody } from 'src/app/business/entities/business-entities.generated';
+import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
+import { nameof } from 'src/app/core/services/helper-functions';
+import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
 
 @Component({
     selector: 'partner-notification-details',
     templateUrl: './partner-notification-details.component.html',
     styles: [],
 })
-export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotification> implements OnInit {
+export class PartnerNotificationDetailsComponent extends BaseFormCopy implements OnInit {
+    override saveObservableMethod: (saveBody: any) => Observable<any> = this.apiService.savePartnerNotification;
+
+    partnerNotificationFormGroup: SoftFormGroup<PartnerNotification>;
+
     isMarkedAsRead = new SoftFormControl<boolean>(true, {updateOn: 'change'})
 
     text: string;
@@ -45,7 +51,6 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
         protected override translateClassNamesService: TranslateClassNamesService,
         protected override validatorService: ValidatorService,
         private apiService: ApiService,
-        private partnerService: PartnerService
     ) {
         super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
     }
@@ -59,21 +64,21 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
                 forkJoin({
                     partnerNotification: this.apiService.getPartnerNotification(this.modelId),
                   }).subscribe(({ partnerNotification }) => {
-                    this.init(new PartnerNotification(partnerNotification));
+                    this.initPartnerNotificationFormGroup(new PartnerNotification(partnerNotification));
                   });
             }
             else{
-                this.init(new PartnerNotification({id:0}));
+                this.initPartnerNotificationFormGroup(new PartnerNotification({id:0}));
             }
         });
     }
 
-    init(model: PartnerNotification){
-        this.initFormGroup(model);
+    initPartnerNotificationFormGroup(partnerNotification: PartnerNotification){
+        this.partnerNotificationFormGroup = this.initFormGroup(partnerNotification, nameof<PartnerNotificationSaveBody>('partnerNotificationDTO'));
     }
 
     sendEmailNotification(){
-        this.apiService.sendPartnerNotificationEmail(this.modelId, this.model.version).subscribe(() => {
+        this.apiService.sendPartnerNotificationEmail(this.modelId, this.partnerNotificationFormGroup.getRawValue().version).subscribe(() => {
             this.messageService.successMessage(this.translocoService.translate('SuccessfulAttempt'));
         });
     }
@@ -89,18 +94,11 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
     }
 
     // FT: Using arrow function solved the problem with undefined this.modelId
-    selectedPartnerUserLazyLoad = (event: TableFilter): Observable<SelectedRowsMethodResult> => {
+    selectedPartnerUserLazyLoad = (event: TableFilter): Observable<LazyLoadSelectedIdsResult> => {
         let tableFilter: TableFilter = event;
         tableFilter.additionalFilterIdLong = this.modelId;
         
-        return this.apiService.loadPartnerUserForPartnerNotificationTableData(tableFilter).pipe(
-            map(res => {
-                let result = new SelectedRowsMethodResult();
-                result.fakeSelectedItems = res.data.map(x => x.id);
-                result.selectedTotalRecords = res.totalRecords;
-                return result;
-            })
-        );
+        return this.apiService.lazyLoadSelectedPartnerUserIdsForPartnerNotification(tableFilter);
     }
 
     isAllSelectedChange(event: AllClickEvent){
@@ -120,7 +118,8 @@ export class PartnerNotificationDetailsComponent extends BaseForm<PartnerNotific
         saveBody.tableFilter = this.lastLazyLoadTableFilter;
 
         saveBody.isMarkedAsRead = this.isMarkedAsRead.value;
-        saveBody.partnerNotificationDTO = this.model;
+        saveBody.partnerNotificationDTO = this.partnerNotificationFormGroup.getRawValue();
+
         this.saveBody = saveBody;
     }
 }

@@ -6,9 +6,64 @@ import { MimeTypes } from "src/app/core/entities/mime-type";
 
 
 
+export class BusinessSystemTierDiscountProductGroup extends BaseEntity
+{
+    id?: number;
+	businessSystemId?: number;
+	selectedForBusinessSystem?: boolean;
+	businessSystemTierClientIndex?: number;
+	tierClientIndex?: number;
+	businessSystemTierDisplayName?: string;
+	businessSystemTierId?: number;
+	discountProductGroupDisplayName?: string;
+	discountProductGroupId?: number;
+	discount?: number;
+
+    constructor(
+    {
+        id,
+		businessSystemId,
+		selectedForBusinessSystem,
+		businessSystemTierClientIndex,
+		tierClientIndex,
+		businessSystemTierDisplayName,
+		businessSystemTierId,
+		discountProductGroupDisplayName,
+		discountProductGroupId,
+		discount
+    }:{
+        id?: number;
+		businessSystemId?: number;
+		selectedForBusinessSystem?: boolean;
+		businessSystemTierClientIndex?: number;
+		tierClientIndex?: number;
+		businessSystemTierDisplayName?: string;
+		businessSystemTierId?: number;
+		discountProductGroupDisplayName?: string;
+		discountProductGroupId?: number;
+		discount?: number;     
+    } = {}
+    ) {
+        super('BusinessSystemTierDiscountProductGroup'); 
+
+        this.id = id;
+		this.businessSystemId = businessSystemId;
+		this.selectedForBusinessSystem = selectedForBusinessSystem;
+		this.businessSystemTierClientIndex = businessSystemTierClientIndex;
+		this.tierClientIndex = tierClientIndex;
+		this.businessSystemTierDisplayName = businessSystemTierDisplayName;
+		this.businessSystemTierId = businessSystemTierId;
+		this.discountProductGroupDisplayName = discountProductGroupDisplayName;
+		this.discountProductGroupId = discountProductGroupId;
+		this.discount = discount;
+    }
+}
+
+
 export class BusinessSystemTier extends BaseEntity
 {
-    orderNumber?: number;
+    tierClientIndex?: number;
+	orderNumber?: number;
 	businessSystemDisplayName?: string;
 	businessSystemId?: number;
 	tierDisplayName?: string;
@@ -17,11 +72,11 @@ export class BusinessSystemTier extends BaseEntity
 	id?: number;
 	createdAt?: Date;
 	modifiedAt?: Date;
-	tierClientIndex?: number;
 
     constructor(
     {
-        orderNumber,
+        tierClientIndex,
+		orderNumber,
 		businessSystemDisplayName,
 		businessSystemId,
 		tierDisplayName,
@@ -29,10 +84,10 @@ export class BusinessSystemTier extends BaseEntity
 		version,
 		id,
 		createdAt,
-		modifiedAt,
-		tierClientIndex
+		modifiedAt
     }:{
-        orderNumber?: number;
+        tierClientIndex?: number;
+		orderNumber?: number;
 		businessSystemDisplayName?: string;
 		businessSystemId?: number;
 		tierDisplayName?: string;
@@ -40,13 +95,13 @@ export class BusinessSystemTier extends BaseEntity
 		version?: number;
 		id?: number;
 		createdAt?: Date;
-		modifiedAt?: Date;
-		tierClientIndex?: number;     
+		modifiedAt?: Date;     
     } = {}
     ) {
         super('BusinessSystemTier'); 
 
-        this.orderNumber = orderNumber;
+        this.tierClientIndex = tierClientIndex;
+		this.orderNumber = orderNumber;
 		this.businessSystemDisplayName = businessSystemDisplayName;
 		this.businessSystemId = businessSystemId;
 		this.tierDisplayName = tierDisplayName;
@@ -55,72 +110,60 @@ export class BusinessSystemTier extends BaseEntity
 		this.id = id;
 		this.createdAt = createdAt;
 		this.modifiedAt = modifiedAt;
-		this.tierClientIndex = tierClientIndex;
     }
 }
 
 
-export class BusinessSystemTierSaveBody extends BaseEntity
+export class Notification extends BaseEntity
 {
-    businessSystemTierDTO?: BusinessSystemTier;
-
-    constructor(
-    {
-        businessSystemTierDTO
-    }:{
-        businessSystemTierDTO?: BusinessSystemTier;     
-    } = {}
-    ) {
-        super('BusinessSystemTierSaveBody'); 
-
-        this.businessSystemTierDTO = businessSystemTierDTO;
-    }
-}
-
-
-export class Gender extends BaseEntity
-{
-    name?: string;
+    isMarkedAsRead?: boolean;
+	title?: string;
+	description?: string;
+	emailBody?: string;
+	version?: number;
 	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
 
     constructor(
     {
-        name,
-		id
+        isMarkedAsRead,
+		title,
+		description,
+		emailBody,
+		version,
+		id,
+		createdAt,
+		modifiedAt
     }:{
-        name?: string;
-		id?: number;     
+        isMarkedAsRead?: boolean;
+		title?: string;
+		description?: string;
+		emailBody?: string;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
     } = {}
     ) {
-        super('Gender'); 
+        super('Notification'); 
 
-        this.name = name;
+        this.isMarkedAsRead = isMarkedAsRead;
+		this.title = title;
+		this.description = description;
+		this.emailBody = emailBody;
+		this.version = version;
 		this.id = id;
-    }
-}
-
-
-export class GenderSaveBody extends BaseEntity
-{
-    genderDTO?: Gender;
-
-    constructor(
-    {
-        genderDTO
-    }:{
-        genderDTO?: Gender;     
-    } = {}
-    ) {
-        super('GenderSaveBody'); 
-
-        this.genderDTO = genderDTO;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
     }
 }
 
 
 export class SegmentationItem extends BaseEntity
 {
-    name?: string;
+    checked?: boolean;
+	name?: string;
 	orderNumber?: number;
 	segmentationDisplayName?: string;
 	segmentationId?: number;
@@ -128,34 +171,34 @@ export class SegmentationItem extends BaseEntity
 	id?: number;
 	createdAt?: Date;
 	modifiedAt?: Date;
-	checked?: boolean;
 
     constructor(
     {
-        name,
+        checked,
+		name,
 		orderNumber,
 		segmentationDisplayName,
 		segmentationId,
 		version,
 		id,
 		createdAt,
-		modifiedAt,
-		checked
+		modifiedAt
     }:{
-        name?: string;
+        checked?: boolean;
+		name?: string;
 		orderNumber?: number;
 		segmentationDisplayName?: string;
 		segmentationId?: number;
 		version?: number;
 		id?: number;
 		createdAt?: Date;
-		modifiedAt?: Date;
-		checked?: boolean;     
+		modifiedAt?: Date;     
     } = {}
     ) {
         super('SegmentationItem'); 
 
-        this.name = name;
+        this.checked = checked;
+		this.name = name;
 		this.orderNumber = orderNumber;
 		this.segmentationDisplayName = segmentationDisplayName;
 		this.segmentationId = segmentationId;
@@ -163,73 +206,152 @@ export class SegmentationItem extends BaseEntity
 		this.id = id;
 		this.createdAt = createdAt;
 		this.modifiedAt = modifiedAt;
-		this.checked = checked;
     }
 }
 
 
-export class SegmentationItemSaveBody extends BaseEntity
+export class Brand extends BaseEntity
 {
-    segmentationItemDTO?: SegmentationItem;
+    name?: string;
+	nameLatin?: string;
+	code?: string;
+	pointsMultiplier?: number;
 
     constructor(
     {
-        segmentationItemDTO
+        name,
+		nameLatin,
+		code,
+		pointsMultiplier
     }:{
-        segmentationItemDTO?: SegmentationItem;     
+        name?: string;
+		nameLatin?: string;
+		code?: string;
+		pointsMultiplier?: number;     
     } = {}
     ) {
-        super('SegmentationItemSaveBody'); 
+        super('Brand'); 
 
-        this.segmentationItemDTO = segmentationItemDTO;
+        this.name = name;
+		this.nameLatin = nameLatin;
+		this.code = code;
+		this.pointsMultiplier = pointsMultiplier;
     }
 }
 
 
-export class PartnerUserSegmentation extends BaseEntity
+export class BusinessSystemUpdatePointsDataBody extends BaseEntity
 {
-    partnerUserThatHasFilledSegmentationDisplayName?: string;
-	partnerUserThatHasFilledSegmentationId?: number;
-	alreadyFilledSegmentationDisplayName?: string;
-	alreadyFilledSegmentationId?: number;
+    businessSystemId?: number;
+	businessSystemVersion?: number;
+	updatePointsStartDate?: Date;
+	updatePointsInterval?: number;
 
     constructor(
     {
-        partnerUserThatHasFilledSegmentationDisplayName,
-		partnerUserThatHasFilledSegmentationId,
-		alreadyFilledSegmentationDisplayName,
-		alreadyFilledSegmentationId
+        businessSystemId,
+		businessSystemVersion,
+		updatePointsStartDate,
+		updatePointsInterval
     }:{
-        partnerUserThatHasFilledSegmentationDisplayName?: string;
-		partnerUserThatHasFilledSegmentationId?: number;
-		alreadyFilledSegmentationDisplayName?: string;
-		alreadyFilledSegmentationId?: number;     
+        businessSystemId?: number;
+		businessSystemVersion?: number;
+		updatePointsStartDate?: Date;
+		updatePointsInterval?: number;     
     } = {}
     ) {
-        super('PartnerUserSegmentation'); 
+        super('BusinessSystemUpdatePointsDataBody'); 
 
-        this.partnerUserThatHasFilledSegmentationDisplayName = partnerUserThatHasFilledSegmentationDisplayName;
-		this.partnerUserThatHasFilledSegmentationId = partnerUserThatHasFilledSegmentationId;
-		this.alreadyFilledSegmentationDisplayName = alreadyFilledSegmentationDisplayName;
-		this.alreadyFilledSegmentationId = alreadyFilledSegmentationId;
+        this.businessSystemId = businessSystemId;
+		this.businessSystemVersion = businessSystemVersion;
+		this.updatePointsStartDate = updatePointsStartDate;
+		this.updatePointsInterval = updatePointsInterval;
     }
 }
 
 
-export class PartnerUserSegmentationSaveBody extends BaseEntity
+export class ExternalDiscountProductGroup extends BaseEntity
 {
-    partnerUserSegmentationDTO?: PartnerUserSegmentation;
+    name?: string;
+	code?: string;
 
     constructor(
     {
-        partnerUserSegmentationDTO
+        name,
+		code
     }:{
-        partnerUserSegmentationDTO?: PartnerUserSegmentation;     
+        name?: string;
+		code?: string;     
     } = {}
     ) {
-        super('PartnerUserSegmentationSaveBody'); 
+        super('ExternalDiscountProductGroup'); 
 
-        this.partnerUserSegmentationDTO = partnerUserSegmentationDTO;
+        this.name = name;
+		this.code = code;
+    }
+}
+
+
+export class ExternalTransaction extends BaseEntity
+{
+    userEmail?: string;
+	code?: string;
+	productName?: string;
+	productImageUrl?: string;
+	productCategoryName?: string;
+	productCategoryImageUrl?: string;
+	price?: number;
+	boughtAt?: Date;
+
+    constructor(
+    {
+        userEmail,
+		code,
+		productName,
+		productImageUrl,
+		productCategoryName,
+		productCategoryImageUrl,
+		price,
+		boughtAt
+    }:{
+        userEmail?: string;
+		code?: string;
+		productName?: string;
+		productImageUrl?: string;
+		productCategoryName?: string;
+		productCategoryImageUrl?: string;
+		price?: number;
+		boughtAt?: Date;     
+    } = {}
+    ) {
+        super('ExternalTransaction'); 
+
+        this.userEmail = userEmail;
+		this.code = code;
+		this.productName = productName;
+		this.productImageUrl = productImageUrl;
+		this.productCategoryName = productCategoryName;
+		this.productCategoryImageUrl = productCategoryImageUrl;
+		this.price = price;
+		this.boughtAt = boughtAt;
+    }
+}
+
+
+export class MergedPartnerUser extends BaseEntity
+{
+    
+
+    constructor(
+    {
+        
+    }:{
+             
+    } = {}
+    ) {
+        super('MergedPartnerUser'); 
+
+        
     }
 }
 
@@ -272,6 +394,194 @@ export class NotificationSaveBody extends BaseEntity
 }
 
 
+export class PartnerNotificationSaveBody extends BaseEntity
+{
+    isMarkedAsRead?: boolean;
+	tableFilter?: TableFilter;
+	selectedIds?: number[];
+	unselectedIds?: number[];
+	isAllSelected?: boolean;
+	partnerNotificationDTO?: PartnerNotification;
+
+    constructor(
+    {
+        isMarkedAsRead,
+		tableFilter,
+		selectedIds,
+		unselectedIds,
+		isAllSelected,
+		partnerNotificationDTO
+    }:{
+        isMarkedAsRead?: boolean;
+		tableFilter?: TableFilter;
+		selectedIds?: number[];
+		unselectedIds?: number[];
+		isAllSelected?: boolean;
+		partnerNotificationDTO?: PartnerNotification;     
+    } = {}
+    ) {
+        super('PartnerNotificationSaveBody'); 
+
+        this.isMarkedAsRead = isMarkedAsRead;
+		this.tableFilter = tableFilter;
+		this.selectedIds = selectedIds;
+		this.unselectedIds = unselectedIds;
+		this.isAllSelected = isAllSelected;
+		this.partnerNotificationDTO = partnerNotificationDTO;
+    }
+}
+
+
+export class PartnerRoleSaveBody extends BaseEntity
+{
+    selectedPermissionIds?: number[];
+	selectedPartnerUserIds?: number[];
+	partnerRoleDTO?: PartnerRole;
+
+    constructor(
+    {
+        selectedPermissionIds,
+		selectedPartnerUserIds,
+		partnerRoleDTO
+    }:{
+        selectedPermissionIds?: number[];
+		selectedPartnerUserIds?: number[];
+		partnerRoleDTO?: PartnerRole;     
+    } = {}
+    ) {
+        super('PartnerRoleSaveBody'); 
+
+        this.selectedPermissionIds = selectedPermissionIds;
+		this.selectedPartnerUserIds = selectedPartnerUserIds;
+		this.partnerRoleDTO = partnerRoleDTO;
+    }
+}
+
+
+export class PartnerUserSaveBody extends BaseEntity
+{
+    selectedPartnerRoleIds?: number[];
+	selectedSegmentationItemIds?: number[];
+	userExtendedDTO?: UserExtended;
+	selectedRoleIds?: number[];
+	partnerUserDTO?: PartnerUser;
+
+    constructor(
+    {
+        selectedPartnerRoleIds,
+		selectedSegmentationItemIds,
+		userExtendedDTO,
+		selectedRoleIds,
+		partnerUserDTO
+    }:{
+        selectedPartnerRoleIds?: number[];
+		selectedSegmentationItemIds?: number[];
+		userExtendedDTO?: UserExtended;
+		selectedRoleIds?: number[];
+		partnerUserDTO?: PartnerUser;     
+    } = {}
+    ) {
+        super('PartnerUserSaveBody'); 
+
+        this.selectedPartnerRoleIds = selectedPartnerRoleIds;
+		this.selectedSegmentationItemIds = selectedSegmentationItemIds;
+		this.userExtendedDTO = userExtendedDTO;
+		this.selectedRoleIds = selectedRoleIds;
+		this.partnerUserDTO = partnerUserDTO;
+    }
+}
+
+
+export class Product extends BaseEntity
+{
+    id?: number;
+	name?: string;
+	description?: string;
+	code?: string;
+	price?: number;
+	category?: string;
+	linkToWebsite?: string;
+
+    constructor(
+    {
+        id,
+		name,
+		description,
+		code,
+		price,
+		category,
+		linkToWebsite
+    }:{
+        id?: number;
+		name?: string;
+		description?: string;
+		code?: string;
+		price?: number;
+		category?: string;
+		linkToWebsite?: string;     
+    } = {}
+    ) {
+        super('Product'); 
+
+        this.id = id;
+		this.name = name;
+		this.description = description;
+		this.code = code;
+		this.price = price;
+		this.category = category;
+		this.linkToWebsite = linkToWebsite;
+    }
+}
+
+
+export class QrCode extends BaseEntity
+{
+    email?: string;
+	transactionCode?: any;
+	discount?: number;
+
+    constructor(
+    {
+        email,
+		transactionCode,
+		discount
+    }:{
+        email?: string;
+		transactionCode?: any;
+		discount?: number;     
+    } = {}
+    ) {
+        super('QrCode'); 
+
+        this.email = email;
+		this.transactionCode = transactionCode;
+		this.discount = discount;
+    }
+}
+
+
+export class SegmentationSaveBody extends BaseEntity
+{
+    segmentationItemsDTO?: SegmentationItem[];
+	segmentationDTO?: Segmentation;
+
+    constructor(
+    {
+        segmentationItemsDTO,
+		segmentationDTO
+    }:{
+        segmentationItemsDTO?: SegmentationItem[];
+		segmentationDTO?: Segmentation;     
+    } = {}
+    ) {
+        super('SegmentationSaveBody'); 
+
+        this.segmentationItemsDTO = segmentationItemsDTO;
+		this.segmentationDTO = segmentationDTO;
+    }
+}
+
+
 export class TierSaveBody extends BaseEntity
 {
     tierDTOList?: Tier[];
@@ -302,54 +612,246 @@ export class TierSaveBody extends BaseEntity
 }
 
 
-export class PartnerUserPartnerNotification extends BaseEntity
+export class UpdatePoints extends BaseEntity
 {
-    partnerNotificationDisplayName?: string;
-	partnerNotificationId?: number;
-	partnerUserDisplayName?: string;
-	partnerUserId?: number;
-	isMarkedAsRead?: boolean;
+    businessSystemId?: number;
+	businessSystemVersion?: number;
+	fromDate?: Date;
+	toDate?: Date;
 
     constructor(
     {
-        partnerNotificationDisplayName,
-		partnerNotificationId,
-		partnerUserDisplayName,
-		partnerUserId,
-		isMarkedAsRead
+        businessSystemId,
+		businessSystemVersion,
+		fromDate,
+		toDate
     }:{
-        partnerNotificationDisplayName?: string;
-		partnerNotificationId?: number;
-		partnerUserDisplayName?: string;
-		partnerUserId?: number;
-		isMarkedAsRead?: boolean;     
+        businessSystemId?: number;
+		businessSystemVersion?: number;
+		fromDate?: Date;
+		toDate?: Date;     
     } = {}
     ) {
-        super('PartnerUserPartnerNotification'); 
+        super('UpdatePoints'); 
 
-        this.partnerNotificationDisplayName = partnerNotificationDisplayName;
-		this.partnerNotificationId = partnerNotificationId;
-		this.partnerUserDisplayName = partnerUserDisplayName;
-		this.partnerUserId = partnerUserId;
-		this.isMarkedAsRead = isMarkedAsRead;
+        this.businessSystemId = businessSystemId;
+		this.businessSystemVersion = businessSystemVersion;
+		this.fromDate = fromDate;
+		this.toDate = toDate;
     }
 }
 
 
-export class PartnerUserPartnerNotificationSaveBody extends BaseEntity
+export class UserExtendedSaveBody extends BaseEntity
 {
-    partnerUserPartnerNotificationDTO?: PartnerUserPartnerNotification;
+    selectedRoleIds?: number[];
+	userExtendedDTO?: UserExtended;
 
     constructor(
     {
-        partnerUserPartnerNotificationDTO
+        selectedRoleIds,
+		userExtendedDTO
     }:{
-        partnerUserPartnerNotificationDTO?: PartnerUserPartnerNotification;     
+        selectedRoleIds?: number[];
+		userExtendedDTO?: UserExtended;     
     } = {}
     ) {
-        super('PartnerUserPartnerNotificationSaveBody'); 
+        super('UserExtendedSaveBody'); 
 
-        this.partnerUserPartnerNotificationDTO = partnerUserPartnerNotificationDTO;
+        this.selectedRoleIds = selectedRoleIds;
+		this.userExtendedDTO = userExtendedDTO;
+    }
+}
+
+
+export class BusinessSystem extends BaseEntity
+{
+    name?: string;
+	updatePointsInterval?: number;
+	updatePointsStartDate?: Date;
+	getTransactionsEndpoint?: string;
+	getDiscountCategoriesEndpoint?: string;
+	createUserEndpoint?: string;
+	updateUserGroupEndpoint?: string;
+	updatePointsScheduledTaskIsPaused?: boolean;
+	partnerDisplayName?: string;
+	partnerId?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        name,
+		updatePointsInterval,
+		updatePointsStartDate,
+		getTransactionsEndpoint,
+		getDiscountCategoriesEndpoint,
+		createUserEndpoint,
+		updateUserGroupEndpoint,
+		updatePointsScheduledTaskIsPaused,
+		partnerDisplayName,
+		partnerId,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        name?: string;
+		updatePointsInterval?: number;
+		updatePointsStartDate?: Date;
+		getTransactionsEndpoint?: string;
+		getDiscountCategoriesEndpoint?: string;
+		createUserEndpoint?: string;
+		updateUserGroupEndpoint?: string;
+		updatePointsScheduledTaskIsPaused?: boolean;
+		partnerDisplayName?: string;
+		partnerId?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('BusinessSystem'); 
+
+        this.name = name;
+		this.updatePointsInterval = updatePointsInterval;
+		this.updatePointsStartDate = updatePointsStartDate;
+		this.getTransactionsEndpoint = getTransactionsEndpoint;
+		this.getDiscountCategoriesEndpoint = getDiscountCategoriesEndpoint;
+		this.createUserEndpoint = createUserEndpoint;
+		this.updateUserGroupEndpoint = updateUserGroupEndpoint;
+		this.updatePointsScheduledTaskIsPaused = updatePointsScheduledTaskIsPaused;
+		this.partnerDisplayName = partnerDisplayName;
+		this.partnerId = partnerId;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
+export class BusinessSystemSaveBody extends BaseEntity
+{
+    businessSystemDTO?: BusinessSystem;
+
+    constructor(
+    {
+        businessSystemDTO
+    }:{
+        businessSystemDTO?: BusinessSystem;     
+    } = {}
+    ) {
+        super('BusinessSystemSaveBody'); 
+
+        this.businessSystemDTO = businessSystemDTO;
+    }
+}
+
+
+export class BusinessSystemTierSaveBody extends BaseEntity
+{
+    businessSystemTierDTO?: BusinessSystemTier;
+
+    constructor(
+    {
+        businessSystemTierDTO
+    }:{
+        businessSystemTierDTO?: BusinessSystemTier;     
+    } = {}
+    ) {
+        super('BusinessSystemTierSaveBody'); 
+
+        this.businessSystemTierDTO = businessSystemTierDTO;
+    }
+}
+
+
+export class BusinessSystemTierDiscountProductGroupSaveBody extends BaseEntity
+{
+    businessSystemTierDiscountProductGroupDTO?: BusinessSystemTierDiscountProductGroup;
+
+    constructor(
+    {
+        businessSystemTierDiscountProductGroupDTO
+    }:{
+        businessSystemTierDiscountProductGroupDTO?: BusinessSystemTierDiscountProductGroup;     
+    } = {}
+    ) {
+        super('BusinessSystemTierDiscountProductGroupSaveBody'); 
+
+        this.businessSystemTierDiscountProductGroupDTO = businessSystemTierDiscountProductGroupDTO;
+    }
+}
+
+
+export class BusinessSystemUpdatePointsScheduledTask extends BaseEntity
+{
+    transactionsFrom?: Date;
+	transactionsTo?: Date;
+	isManual?: boolean;
+	businessSystemDisplayName?: string;
+	businessSystemId?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        transactionsFrom,
+		transactionsTo,
+		isManual,
+		businessSystemDisplayName,
+		businessSystemId,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        transactionsFrom?: Date;
+		transactionsTo?: Date;
+		isManual?: boolean;
+		businessSystemDisplayName?: string;
+		businessSystemId?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('BusinessSystemUpdatePointsScheduledTask'); 
+
+        this.transactionsFrom = transactionsFrom;
+		this.transactionsTo = transactionsTo;
+		this.isManual = isManual;
+		this.businessSystemDisplayName = businessSystemDisplayName;
+		this.businessSystemId = businessSystemId;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
+export class BusinessSystemUpdatePointsScheduledTaskSaveBody extends BaseEntity
+{
+    businessSystemUpdatePointsScheduledTaskDTO?: BusinessSystemUpdatePointsScheduledTask;
+
+    constructor(
+    {
+        businessSystemUpdatePointsScheduledTaskDTO
+    }:{
+        businessSystemUpdatePointsScheduledTaskDTO?: BusinessSystemUpdatePointsScheduledTask;     
+    } = {}
+    ) {
+        super('BusinessSystemUpdatePointsScheduledTaskSaveBody'); 
+
+        this.businessSystemUpdatePointsScheduledTaskDTO = businessSystemUpdatePointsScheduledTaskDTO;
     }
 }
 
@@ -418,62 +920,56 @@ export class DiscountProductGroupSaveBody extends BaseEntity
 }
 
 
-export class ExternalDiscountProductGroup extends BaseEntity
+export class Gender extends BaseEntity
 {
     name?: string;
-	code?: string;
+	id?: number;
 
     constructor(
     {
         name,
-		code
+		id
     }:{
         name?: string;
-		code?: string;     
+		id?: number;     
     } = {}
     ) {
-        super('ExternalDiscountProductGroup'); 
+        super('Gender'); 
 
         this.name = name;
-		this.code = code;
+		this.id = id;
     }
 }
 
 
-export class PartnerRoleSaveBody extends BaseEntity
+export class GenderSaveBody extends BaseEntity
 {
-    selectedPermissionIds?: number[];
-	selectedPartnerUserIds?: number[];
-	partnerRoleDTO?: PartnerRole;
+    genderDTO?: Gender;
 
     constructor(
     {
-        selectedPermissionIds,
-		selectedPartnerUserIds,
-		partnerRoleDTO
+        genderDTO
     }:{
-        selectedPermissionIds?: number[];
-		selectedPartnerUserIds?: number[];
-		partnerRoleDTO?: PartnerRole;     
+        genderDTO?: Gender;     
     } = {}
     ) {
-        super('PartnerRoleSaveBody'); 
+        super('GenderSaveBody'); 
 
-        this.selectedPermissionIds = selectedPermissionIds;
-		this.selectedPartnerUserIds = selectedPartnerUserIds;
-		this.partnerRoleDTO = partnerRoleDTO;
+        this.genderDTO = genderDTO;
     }
 }
 
 
-export class UserExtended extends BaseEntity
+export class Partner extends BaseEntity
 {
-    email?: string;
-	hasLoggedInWithExternalProvider?: boolean;
-	isDisabled?: boolean;
-	birthDate?: Date;
-	genderDisplayName?: string;
-	genderId?: number;
+    name?: string;
+	email?: string;
+	slug?: string;
+	logoImageData?: string;
+	logoImage?: string;
+	primaryColor?: string;
+	productsRecommendationEndpoint?: string;
+	pointsMultiplier?: number;
 	version?: number;
 	id?: number;
 	createdAt?: Date;
@@ -481,37 +977,43 @@ export class UserExtended extends BaseEntity
 
     constructor(
     {
-        email,
-		hasLoggedInWithExternalProvider,
-		isDisabled,
-		birthDate,
-		genderDisplayName,
-		genderId,
+        name,
+		email,
+		slug,
+		logoImageData,
+		logoImage,
+		primaryColor,
+		productsRecommendationEndpoint,
+		pointsMultiplier,
 		version,
 		id,
 		createdAt,
 		modifiedAt
     }:{
-        email?: string;
-		hasLoggedInWithExternalProvider?: boolean;
-		isDisabled?: boolean;
-		birthDate?: Date;
-		genderDisplayName?: string;
-		genderId?: number;
+        name?: string;
+		email?: string;
+		slug?: string;
+		logoImageData?: string;
+		logoImage?: string;
+		primaryColor?: string;
+		productsRecommendationEndpoint?: string;
+		pointsMultiplier?: number;
 		version?: number;
 		id?: number;
 		createdAt?: Date;
 		modifiedAt?: Date;     
     } = {}
     ) {
-        super('UserExtended'); 
+        super('Partner'); 
 
-        this.email = email;
-		this.hasLoggedInWithExternalProvider = hasLoggedInWithExternalProvider;
-		this.isDisabled = isDisabled;
-		this.birthDate = birthDate;
-		this.genderDisplayName = genderDisplayName;
-		this.genderId = genderId;
+        this.name = name;
+		this.email = email;
+		this.slug = slug;
+		this.logoImageData = logoImageData;
+		this.logoImage = logoImage;
+		this.primaryColor = primaryColor;
+		this.productsRecommendationEndpoint = productsRecommendationEndpoint;
+		this.pointsMultiplier = pointsMultiplier;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;
@@ -520,172 +1022,592 @@ export class UserExtended extends BaseEntity
 }
 
 
-export class UserExtendedSaveBody extends BaseEntity
+export class PartnerSaveBody extends BaseEntity
 {
-    userExtendedDTO?: UserExtended;
-	selectedRoleIds?: number[];
+    partnerDTO?: Partner;
 
     constructor(
     {
-        userExtendedDTO,
-		selectedRoleIds
+        partnerDTO
     }:{
-        userExtendedDTO?: UserExtended;
-		selectedRoleIds?: number[];     
+        partnerDTO?: Partner;     
     } = {}
     ) {
-        super('UserExtendedSaveBody'); 
+        super('PartnerSaveBody'); 
 
-        this.userExtendedDTO = userExtendedDTO;
-		this.selectedRoleIds = selectedRoleIds;
+        this.partnerDTO = partnerDTO;
     }
 }
 
 
-export class BusinessSystemTierDiscountProductGroup extends BaseEntity
+export class PartnerNotification extends BaseEntity
 {
-    id?: number;
-	businessSystemId?: number;
-	selectedForBusinessSystem?: boolean;
-	businessSystemTierClientIndex?: number;
-	tierClientIndex?: number;
-	businessSystemTierDisplayName?: string;
-	businessSystemTierId?: number;
-	discountProductGroupDisplayName?: string;
-	discountProductGroupId?: number;
-	discount?: number;
+    partnerDisplayName?: string;
+	partnerId?: number;
+	title?: string;
+	description?: string;
+	emailBody?: string;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
 
     constructor(
     {
-        id,
-		businessSystemId,
-		selectedForBusinessSystem,
-		businessSystemTierClientIndex,
-		tierClientIndex,
-		businessSystemTierDisplayName,
-		businessSystemTierId,
-		discountProductGroupDisplayName,
-		discountProductGroupId,
-		discount
+        partnerDisplayName,
+		partnerId,
+		title,
+		description,
+		emailBody,
+		version,
+		id,
+		createdAt,
+		modifiedAt
     }:{
-        id?: number;
-		businessSystemId?: number;
-		selectedForBusinessSystem?: boolean;
-		businessSystemTierClientIndex?: number;
-		tierClientIndex?: number;
-		businessSystemTierDisplayName?: string;
-		businessSystemTierId?: number;
-		discountProductGroupDisplayName?: string;
-		discountProductGroupId?: number;
-		discount?: number;     
+        partnerDisplayName?: string;
+		partnerId?: number;
+		title?: string;
+		description?: string;
+		emailBody?: string;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
     } = {}
     ) {
-        super('BusinessSystemTierDiscountProductGroup'); 
+        super('PartnerNotification'); 
 
-        this.id = id;
-		this.businessSystemId = businessSystemId;
-		this.selectedForBusinessSystem = selectedForBusinessSystem;
-		this.businessSystemTierClientIndex = businessSystemTierClientIndex;
-		this.tierClientIndex = tierClientIndex;
-		this.businessSystemTierDisplayName = businessSystemTierDisplayName;
-		this.businessSystemTierId = businessSystemTierId;
-		this.discountProductGroupDisplayName = discountProductGroupDisplayName;
-		this.discountProductGroupId = discountProductGroupId;
-		this.discount = discount;
+        this.partnerDisplayName = partnerDisplayName;
+		this.partnerId = partnerId;
+		this.title = title;
+		this.description = description;
+		this.emailBody = emailBody;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
     }
 }
 
 
-export class UserNotification extends BaseEntity
+export class PartnerPermission extends BaseEntity
 {
-    notificationDisplayName?: string;
-	notificationId?: number;
+    name?: string;
+	description?: string;
+	code?: string;
+	id?: number;
+
+    constructor(
+    {
+        name,
+		description,
+		code,
+		id
+    }:{
+        name?: string;
+		description?: string;
+		code?: string;
+		id?: number;     
+    } = {}
+    ) {
+        super('PartnerPermission'); 
+
+        this.name = name;
+		this.description = description;
+		this.code = code;
+		this.id = id;
+    }
+}
+
+
+export class PartnerPermissionSaveBody extends BaseEntity
+{
+    partnerPermissionDTO?: PartnerPermission;
+
+    constructor(
+    {
+        partnerPermissionDTO
+    }:{
+        partnerPermissionDTO?: PartnerPermission;     
+    } = {}
+    ) {
+        super('PartnerPermissionSaveBody'); 
+
+        this.partnerPermissionDTO = partnerPermissionDTO;
+    }
+}
+
+
+export class PartnerRole extends BaseEntity
+{
+    name?: string;
+	description?: string;
+	partnerDisplayName?: string;
+	partnerId?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        name,
+		description,
+		partnerDisplayName,
+		partnerId,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        name?: string;
+		description?: string;
+		partnerDisplayName?: string;
+		partnerId?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('PartnerRole'); 
+
+        this.name = name;
+		this.description = description;
+		this.partnerDisplayName = partnerDisplayName;
+		this.partnerId = partnerId;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
+export class PartnerRolePartnerPermission extends BaseEntity
+{
+    partnerRoleDisplayName?: string;
+	partnerRoleId?: number;
+	partnerPermissionDisplayName?: string;
+	partnerPermissionId?: number;
+
+    constructor(
+    {
+        partnerRoleDisplayName,
+		partnerRoleId,
+		partnerPermissionDisplayName,
+		partnerPermissionId
+    }:{
+        partnerRoleDisplayName?: string;
+		partnerRoleId?: number;
+		partnerPermissionDisplayName?: string;
+		partnerPermissionId?: number;     
+    } = {}
+    ) {
+        super('PartnerRolePartnerPermission'); 
+
+        this.partnerRoleDisplayName = partnerRoleDisplayName;
+		this.partnerRoleId = partnerRoleId;
+		this.partnerPermissionDisplayName = partnerPermissionDisplayName;
+		this.partnerPermissionId = partnerPermissionId;
+    }
+}
+
+
+export class PartnerRolePartnerPermissionSaveBody extends BaseEntity
+{
+    partnerRolePartnerPermissionDTO?: PartnerRolePartnerPermission;
+
+    constructor(
+    {
+        partnerRolePartnerPermissionDTO
+    }:{
+        partnerRolePartnerPermissionDTO?: PartnerRolePartnerPermission;     
+    } = {}
+    ) {
+        super('PartnerRolePartnerPermissionSaveBody'); 
+
+        this.partnerRolePartnerPermissionDTO = partnerRolePartnerPermissionDTO;
+    }
+}
+
+
+export class PartnerUser extends BaseEntity
+{
+    points?: number;
+	partnerDisplayName?: string;
+	partnerId?: number;
 	userDisplayName?: string;
 	userId?: number;
+	tierDisplayName?: string;
+	tierId?: number;
+	checkedSegmentationItemsCommaSeparated?: string;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        points,
+		partnerDisplayName,
+		partnerId,
+		userDisplayName,
+		userId,
+		tierDisplayName,
+		tierId,
+		checkedSegmentationItemsCommaSeparated,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        points?: number;
+		partnerDisplayName?: string;
+		partnerId?: number;
+		userDisplayName?: string;
+		userId?: number;
+		tierDisplayName?: string;
+		tierId?: number;
+		checkedSegmentationItemsCommaSeparated?: string;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('PartnerUser'); 
+
+        this.points = points;
+		this.partnerDisplayName = partnerDisplayName;
+		this.partnerId = partnerId;
+		this.userDisplayName = userDisplayName;
+		this.userId = userId;
+		this.tierDisplayName = tierDisplayName;
+		this.tierId = tierId;
+		this.checkedSegmentationItemsCommaSeparated = checkedSegmentationItemsCommaSeparated;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
+export class PartnerUserPartnerNotification extends BaseEntity
+{
+    partnerNotificationDisplayName?: string;
+	partnerNotificationId?: number;
+	partnerUserDisplayName?: string;
+	partnerUserId?: number;
 	isMarkedAsRead?: boolean;
 
     constructor(
     {
-        notificationDisplayName,
-		notificationId,
-		userDisplayName,
-		userId,
+        partnerNotificationDisplayName,
+		partnerNotificationId,
+		partnerUserDisplayName,
+		partnerUserId,
 		isMarkedAsRead
     }:{
-        notificationDisplayName?: string;
-		notificationId?: number;
-		userDisplayName?: string;
-		userId?: number;
+        partnerNotificationDisplayName?: string;
+		partnerNotificationId?: number;
+		partnerUserDisplayName?: string;
+		partnerUserId?: number;
 		isMarkedAsRead?: boolean;     
     } = {}
     ) {
-        super('UserNotification'); 
+        super('PartnerUserPartnerNotification'); 
 
-        this.notificationDisplayName = notificationDisplayName;
-		this.notificationId = notificationId;
-		this.userDisplayName = userDisplayName;
-		this.userId = userId;
+        this.partnerNotificationDisplayName = partnerNotificationDisplayName;
+		this.partnerNotificationId = partnerNotificationId;
+		this.partnerUserDisplayName = partnerUserDisplayName;
+		this.partnerUserId = partnerUserId;
 		this.isMarkedAsRead = isMarkedAsRead;
     }
 }
 
 
-export class UserNotificationSaveBody extends BaseEntity
+export class PartnerUserPartnerNotificationSaveBody extends BaseEntity
 {
-    userNotificationDTO?: UserNotification;
+    partnerUserPartnerNotificationDTO?: PartnerUserPartnerNotification;
 
     constructor(
     {
-        userNotificationDTO
+        partnerUserPartnerNotificationDTO
     }:{
-        userNotificationDTO?: UserNotification;     
+        partnerUserPartnerNotificationDTO?: PartnerUserPartnerNotification;     
     } = {}
     ) {
-        super('UserNotificationSaveBody'); 
+        super('PartnerUserPartnerNotificationSaveBody'); 
 
-        this.userNotificationDTO = userNotificationDTO;
+        this.partnerUserPartnerNotificationDTO = partnerUserPartnerNotificationDTO;
     }
 }
 
 
-export class Product extends BaseEntity
+export class PartnerUserPartnerRole extends BaseEntity
 {
-    id?: number;
-	name?: string;
-	description?: string;
-	code?: string;
-	price?: number;
-	category?: string;
-	linkToWebsite?: string;
+    partnerRoleDisplayName?: string;
+	partnerRoleId?: number;
+	partnerUserDisplayName?: string;
+	partnerUserId?: number;
 
     constructor(
     {
-        id,
-		name,
-		description,
-		code,
-		price,
-		category,
-		linkToWebsite
+        partnerRoleDisplayName,
+		partnerRoleId,
+		partnerUserDisplayName,
+		partnerUserId
     }:{
-        id?: number;
-		name?: string;
-		description?: string;
-		code?: string;
-		price?: number;
-		category?: string;
-		linkToWebsite?: string;     
+        partnerRoleDisplayName?: string;
+		partnerRoleId?: number;
+		partnerUserDisplayName?: string;
+		partnerUserId?: number;     
     } = {}
     ) {
-        super('Product'); 
+        super('PartnerUserPartnerRole'); 
 
-        this.id = id;
-		this.name = name;
+        this.partnerRoleDisplayName = partnerRoleDisplayName;
+		this.partnerRoleId = partnerRoleId;
+		this.partnerUserDisplayName = partnerUserDisplayName;
+		this.partnerUserId = partnerUserId;
+    }
+}
+
+
+export class PartnerUserPartnerRoleSaveBody extends BaseEntity
+{
+    partnerUserPartnerRoleDTO?: PartnerUserPartnerRole;
+
+    constructor(
+    {
+        partnerUserPartnerRoleDTO
+    }:{
+        partnerUserPartnerRoleDTO?: PartnerUserPartnerRole;     
+    } = {}
+    ) {
+        super('PartnerUserPartnerRoleSaveBody'); 
+
+        this.partnerUserPartnerRoleDTO = partnerUserPartnerRoleDTO;
+    }
+}
+
+
+export class PartnerUserSegmentation extends BaseEntity
+{
+    partnerUserThatHasFilledSegmentationDisplayName?: string;
+	partnerUserThatHasFilledSegmentationId?: number;
+	alreadyFilledSegmentationDisplayName?: string;
+	alreadyFilledSegmentationId?: number;
+
+    constructor(
+    {
+        partnerUserThatHasFilledSegmentationDisplayName,
+		partnerUserThatHasFilledSegmentationId,
+		alreadyFilledSegmentationDisplayName,
+		alreadyFilledSegmentationId
+    }:{
+        partnerUserThatHasFilledSegmentationDisplayName?: string;
+		partnerUserThatHasFilledSegmentationId?: number;
+		alreadyFilledSegmentationDisplayName?: string;
+		alreadyFilledSegmentationId?: number;     
+    } = {}
+    ) {
+        super('PartnerUserSegmentation'); 
+
+        this.partnerUserThatHasFilledSegmentationDisplayName = partnerUserThatHasFilledSegmentationDisplayName;
+		this.partnerUserThatHasFilledSegmentationId = partnerUserThatHasFilledSegmentationId;
+		this.alreadyFilledSegmentationDisplayName = alreadyFilledSegmentationDisplayName;
+		this.alreadyFilledSegmentationId = alreadyFilledSegmentationId;
+    }
+}
+
+
+export class PartnerUserSegmentationSaveBody extends BaseEntity
+{
+    partnerUserSegmentationDTO?: PartnerUserSegmentation;
+
+    constructor(
+    {
+        partnerUserSegmentationDTO
+    }:{
+        partnerUserSegmentationDTO?: PartnerUserSegmentation;     
+    } = {}
+    ) {
+        super('PartnerUserSegmentationSaveBody'); 
+
+        this.partnerUserSegmentationDTO = partnerUserSegmentationDTO;
+    }
+}
+
+
+export class PartnerUserSegmentationItem extends BaseEntity
+{
+    partnerUserDisplayName?: string;
+	partnerUserId?: number;
+	checkedSegmentationItemDisplayName?: string;
+	checkedSegmentationItemId?: number;
+
+    constructor(
+    {
+        partnerUserDisplayName,
+		partnerUserId,
+		checkedSegmentationItemDisplayName,
+		checkedSegmentationItemId
+    }:{
+        partnerUserDisplayName?: string;
+		partnerUserId?: number;
+		checkedSegmentationItemDisplayName?: string;
+		checkedSegmentationItemId?: number;     
+    } = {}
+    ) {
+        super('PartnerUserSegmentationItem'); 
+
+        this.partnerUserDisplayName = partnerUserDisplayName;
+		this.partnerUserId = partnerUserId;
+		this.checkedSegmentationItemDisplayName = checkedSegmentationItemDisplayName;
+		this.checkedSegmentationItemId = checkedSegmentationItemId;
+    }
+}
+
+
+export class PartnerUserSegmentationItemSaveBody extends BaseEntity
+{
+    partnerUserSegmentationItemDTO?: PartnerUserSegmentationItem;
+
+    constructor(
+    {
+        partnerUserSegmentationItemDTO
+    }:{
+        partnerUserSegmentationItemDTO?: PartnerUserSegmentationItem;     
+    } = {}
+    ) {
+        super('PartnerUserSegmentationItemSaveBody'); 
+
+        this.partnerUserSegmentationItemDTO = partnerUserSegmentationItemDTO;
+    }
+}
+
+
+export class Segmentation extends BaseEntity
+{
+    name?: string;
+	description?: string;
+	pointsForTheFirstTimeFill?: number;
+	partnerDisplayName?: string;
+	partnerId?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        name,
+		description,
+		pointsForTheFirstTimeFill,
+		partnerDisplayName,
+		partnerId,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        name?: string;
+		description?: string;
+		pointsForTheFirstTimeFill?: number;
+		partnerDisplayName?: string;
+		partnerId?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('Segmentation'); 
+
+        this.name = name;
 		this.description = description;
-		this.code = code;
-		this.price = price;
-		this.category = category;
-		this.linkToWebsite = linkToWebsite;
+		this.pointsForTheFirstTimeFill = pointsForTheFirstTimeFill;
+		this.partnerDisplayName = partnerDisplayName;
+		this.partnerId = partnerId;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
+export class SegmentationItemSaveBody extends BaseEntity
+{
+    segmentationItemDTO?: SegmentationItem;
+
+    constructor(
+    {
+        segmentationItemDTO
+    }:{
+        segmentationItemDTO?: SegmentationItem;     
+    } = {}
+    ) {
+        super('SegmentationItemSaveBody'); 
+
+        this.segmentationItemDTO = segmentationItemDTO;
+    }
+}
+
+
+export class Tier extends BaseEntity
+{
+    name?: string;
+	description?: string;
+	validFrom?: number;
+	validTo?: number;
+	partnerDisplayName?: string;
+	partnerId?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        name,
+		description,
+		validFrom,
+		validTo,
+		partnerDisplayName,
+		partnerId,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        name?: string;
+		description?: string;
+		validFrom?: number;
+		validTo?: number;
+		partnerDisplayName?: string;
+		partnerId?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('Tier'); 
+
+        this.name = name;
+		this.description = description;
+		this.validFrom = validFrom;
+		this.validTo = validTo;
+		this.partnerDisplayName = partnerDisplayName;
+		this.partnerId = partnerId;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
     }
 }
 
@@ -786,976 +1708,52 @@ export class TransactionSaveBody extends BaseEntity
 }
 
 
-export class MergedPartnerUser extends BaseEntity
-{
-    
-
-    constructor(
-    {
-        
-    }:{
-             
-    } = {}
-    ) {
-        super('MergedPartnerUser'); 
-
-        
-    }
-}
-
-
-export class PartnerRole extends BaseEntity
-{
-    name?: string;
-	description?: string;
-	partnerDisplayName?: string;
-	partnerId?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        name,
-		description,
-		partnerDisplayName,
-		partnerId,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        name?: string;
-		description?: string;
-		partnerDisplayName?: string;
-		partnerId?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('PartnerRole'); 
-
-        this.name = name;
-		this.description = description;
-		this.partnerDisplayName = partnerDisplayName;
-		this.partnerId = partnerId;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class Brand extends BaseEntity
-{
-    name?: string;
-	nameLatin?: string;
-	code?: string;
-	pointsMultiplier?: number;
-
-    constructor(
-    {
-        name,
-		nameLatin,
-		code,
-		pointsMultiplier
-    }:{
-        name?: string;
-		nameLatin?: string;
-		code?: string;
-		pointsMultiplier?: number;     
-    } = {}
-    ) {
-        super('Brand'); 
-
-        this.name = name;
-		this.nameLatin = nameLatin;
-		this.code = code;
-		this.pointsMultiplier = pointsMultiplier;
-    }
-}
-
-
-export class PartnerRolePartnerPermission extends BaseEntity
-{
-    partnerRoleDisplayName?: string;
-	partnerRoleId?: number;
-	partnerPermissionDisplayName?: string;
-	partnerPermissionId?: number;
-
-    constructor(
-    {
-        partnerRoleDisplayName,
-		partnerRoleId,
-		partnerPermissionDisplayName,
-		partnerPermissionId
-    }:{
-        partnerRoleDisplayName?: string;
-		partnerRoleId?: number;
-		partnerPermissionDisplayName?: string;
-		partnerPermissionId?: number;     
-    } = {}
-    ) {
-        super('PartnerRolePartnerPermission'); 
-
-        this.partnerRoleDisplayName = partnerRoleDisplayName;
-		this.partnerRoleId = partnerRoleId;
-		this.partnerPermissionDisplayName = partnerPermissionDisplayName;
-		this.partnerPermissionId = partnerPermissionId;
-    }
-}
-
-
-export class PartnerRolePartnerPermissionSaveBody extends BaseEntity
-{
-    partnerRolePartnerPermissionDTO?: PartnerRolePartnerPermission;
-
-    constructor(
-    {
-        partnerRolePartnerPermissionDTO
-    }:{
-        partnerRolePartnerPermissionDTO?: PartnerRolePartnerPermission;     
-    } = {}
-    ) {
-        super('PartnerRolePartnerPermissionSaveBody'); 
-
-        this.partnerRolePartnerPermissionDTO = partnerRolePartnerPermissionDTO;
-    }
-}
-
-
-export class Notification extends BaseEntity
-{
-    isMarkedAsRead?: boolean;
-	title?: string;
-	description?: string;
-	emailBody?: string;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        isMarkedAsRead,
-		title,
-		description,
-		emailBody,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        isMarkedAsRead?: boolean;
-		title?: string;
-		description?: string;
-		emailBody?: string;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('Notification'); 
-
-        this.isMarkedAsRead = isMarkedAsRead;
-		this.title = title;
-		this.description = description;
-		this.emailBody = emailBody;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class PartnerUserSaveBody extends BaseEntity
-{
-    selectedPartnerRoleIds?: number[];
-	selectedSegmentationItemIds?: number[];
-	userExtendedDTO?: UserExtended;
-	selectedRoleIds?: number[];
-	partnerUserDTO?: PartnerUser;
-
-    constructor(
-    {
-        selectedPartnerRoleIds,
-		selectedSegmentationItemIds,
-		userExtendedDTO,
-		selectedRoleIds,
-		partnerUserDTO
-    }:{
-        selectedPartnerRoleIds?: number[];
-		selectedSegmentationItemIds?: number[];
-		userExtendedDTO?: UserExtended;
-		selectedRoleIds?: number[];
-		partnerUserDTO?: PartnerUser;     
-    } = {}
-    ) {
-        super('PartnerUserSaveBody'); 
-
-        this.selectedPartnerRoleIds = selectedPartnerRoleIds;
-		this.selectedSegmentationItemIds = selectedSegmentationItemIds;
-		this.userExtendedDTO = userExtendedDTO;
-		this.selectedRoleIds = selectedRoleIds;
-		this.partnerUserDTO = partnerUserDTO;
-    }
-}
-
-
-export class PartnerUser extends BaseEntity
-{
-    points?: number;
-	partnerDisplayName?: string;
-	partnerId?: number;
-	userDisplayName?: string;
-	userId?: number;
-	tierDisplayName?: string;
-	tierId?: number;
-	checkedSegmentationItemsCommaSeparated?: string;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        points,
-		partnerDisplayName,
-		partnerId,
-		userDisplayName,
-		userId,
-		tierDisplayName,
-		tierId,
-		checkedSegmentationItemsCommaSeparated,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        points?: number;
-		partnerDisplayName?: string;
-		partnerId?: number;
-		userDisplayName?: string;
-		userId?: number;
-		tierDisplayName?: string;
-		tierId?: number;
-		checkedSegmentationItemsCommaSeparated?: string;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('PartnerUser'); 
-
-        this.points = points;
-		this.partnerDisplayName = partnerDisplayName;
-		this.partnerId = partnerId;
-		this.userDisplayName = userDisplayName;
-		this.userId = userId;
-		this.tierDisplayName = tierDisplayName;
-		this.tierId = tierId;
-		this.checkedSegmentationItemsCommaSeparated = checkedSegmentationItemsCommaSeparated;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class BusinessSystemTierDiscountProductGroupSaveBody extends BaseEntity
-{
-    businessSystemTierDiscountProductGroupDTO?: BusinessSystemTierDiscountProductGroup;
-
-    constructor(
-    {
-        businessSystemTierDiscountProductGroupDTO
-    }:{
-        businessSystemTierDiscountProductGroupDTO?: BusinessSystemTierDiscountProductGroup;     
-    } = {}
-    ) {
-        super('BusinessSystemTierDiscountProductGroupSaveBody'); 
-
-        this.businessSystemTierDiscountProductGroupDTO = businessSystemTierDiscountProductGroupDTO;
-    }
-}
-
-
-export class ExternalTransaction extends BaseEntity
-{
-    userEmail?: string;
-	code?: string;
-	productName?: string;
-	productImageUrl?: string;
-	productCategoryName?: string;
-	productCategoryImageUrl?: string;
-	price?: number;
-	boughtAt?: Date;
-
-    constructor(
-    {
-        userEmail,
-		code,
-		productName,
-		productImageUrl,
-		productCategoryName,
-		productCategoryImageUrl,
-		price,
-		boughtAt
-    }:{
-        userEmail?: string;
-		code?: string;
-		productName?: string;
-		productImageUrl?: string;
-		productCategoryName?: string;
-		productCategoryImageUrl?: string;
-		price?: number;
-		boughtAt?: Date;     
-    } = {}
-    ) {
-        super('ExternalTransaction'); 
-
-        this.userEmail = userEmail;
-		this.code = code;
-		this.productName = productName;
-		this.productImageUrl = productImageUrl;
-		this.productCategoryName = productCategoryName;
-		this.productCategoryImageUrl = productCategoryImageUrl;
-		this.price = price;
-		this.boughtAt = boughtAt;
-    }
-}
-
-
-export class UpdatePoints extends BaseEntity
-{
-    businessSystemId?: number;
-	businessSystemVersion?: number;
-	fromDate?: Date;
-	toDate?: Date;
-
-    constructor(
-    {
-        businessSystemId,
-		businessSystemVersion,
-		fromDate,
-		toDate
-    }:{
-        businessSystemId?: number;
-		businessSystemVersion?: number;
-		fromDate?: Date;
-		toDate?: Date;     
-    } = {}
-    ) {
-        super('UpdatePoints'); 
-
-        this.businessSystemId = businessSystemId;
-		this.businessSystemVersion = businessSystemVersion;
-		this.fromDate = fromDate;
-		this.toDate = toDate;
-    }
-}
-
-
-export class BusinessSystem extends BaseEntity
-{
-    name?: string;
-	updatePointsInterval?: number;
-	updatePointsStartDate?: Date;
-	getTransactionsEndpoint?: string;
-	getDiscountCategoriesEndpoint?: string;
-	createUserEndpoint?: string;
-	updateUserGroupEndpoint?: string;
-	updatePointsScheduledTaskIsPaused?: boolean;
-	partnerDisplayName?: string;
-	partnerId?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        name,
-		updatePointsInterval,
-		updatePointsStartDate,
-		getTransactionsEndpoint,
-		getDiscountCategoriesEndpoint,
-		createUserEndpoint,
-		updateUserGroupEndpoint,
-		updatePointsScheduledTaskIsPaused,
-		partnerDisplayName,
-		partnerId,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        name?: string;
-		updatePointsInterval?: number;
-		updatePointsStartDate?: Date;
-		getTransactionsEndpoint?: string;
-		getDiscountCategoriesEndpoint?: string;
-		createUserEndpoint?: string;
-		updateUserGroupEndpoint?: string;
-		updatePointsScheduledTaskIsPaused?: boolean;
-		partnerDisplayName?: string;
-		partnerId?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('BusinessSystem'); 
-
-        this.name = name;
-		this.updatePointsInterval = updatePointsInterval;
-		this.updatePointsStartDate = updatePointsStartDate;
-		this.getTransactionsEndpoint = getTransactionsEndpoint;
-		this.getDiscountCategoriesEndpoint = getDiscountCategoriesEndpoint;
-		this.createUserEndpoint = createUserEndpoint;
-		this.updateUserGroupEndpoint = updateUserGroupEndpoint;
-		this.updatePointsScheduledTaskIsPaused = updatePointsScheduledTaskIsPaused;
-		this.partnerDisplayName = partnerDisplayName;
-		this.partnerId = partnerId;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class BusinessSystemSaveBody extends BaseEntity
-{
-    businessSystemDTO?: BusinessSystem;
-
-    constructor(
-    {
-        businessSystemDTO
-    }:{
-        businessSystemDTO?: BusinessSystem;     
-    } = {}
-    ) {
-        super('BusinessSystemSaveBody'); 
-
-        this.businessSystemDTO = businessSystemDTO;
-    }
-}
-
-
-export class PartnerUserPartnerRole extends BaseEntity
-{
-    partnerRoleDisplayName?: string;
-	partnerRoleId?: number;
-	partnerUserDisplayName?: string;
-	partnerUserId?: number;
-
-    constructor(
-    {
-        partnerRoleDisplayName,
-		partnerRoleId,
-		partnerUserDisplayName,
-		partnerUserId
-    }:{
-        partnerRoleDisplayName?: string;
-		partnerRoleId?: number;
-		partnerUserDisplayName?: string;
-		partnerUserId?: number;     
-    } = {}
-    ) {
-        super('PartnerUserPartnerRole'); 
-
-        this.partnerRoleDisplayName = partnerRoleDisplayName;
-		this.partnerRoleId = partnerRoleId;
-		this.partnerUserDisplayName = partnerUserDisplayName;
-		this.partnerUserId = partnerUserId;
-    }
-}
-
-
-export class PartnerUserPartnerRoleSaveBody extends BaseEntity
-{
-    partnerUserPartnerRoleDTO?: PartnerUserPartnerRole;
-
-    constructor(
-    {
-        partnerUserPartnerRoleDTO
-    }:{
-        partnerUserPartnerRoleDTO?: PartnerUserPartnerRole;     
-    } = {}
-    ) {
-        super('PartnerUserPartnerRoleSaveBody'); 
-
-        this.partnerUserPartnerRoleDTO = partnerUserPartnerRoleDTO;
-    }
-}
-
-
-export class PartnerNotification extends BaseEntity
-{
-    partnerDisplayName?: string;
-	partnerId?: number;
-	title?: string;
-	description?: string;
-	emailBody?: string;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        partnerDisplayName,
-		partnerId,
-		title,
-		description,
-		emailBody,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        partnerDisplayName?: string;
-		partnerId?: number;
-		title?: string;
-		description?: string;
-		emailBody?: string;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('PartnerNotification'); 
-
-        this.partnerDisplayName = partnerDisplayName;
-		this.partnerId = partnerId;
-		this.title = title;
-		this.description = description;
-		this.emailBody = emailBody;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class PartnerNotificationSaveBody extends BaseEntity
-{
-    partnerNotificationDTO?: PartnerNotification;
-	isMarkedAsRead?: boolean;
-	tableFilter?: TableFilter;
-	selectedIds?: number[];
-	unselectedIds?: number[];
-	isAllSelected?: boolean;
-
-    constructor(
-    {
-        partnerNotificationDTO,
-		isMarkedAsRead,
-		tableFilter,
-		selectedIds,
-		unselectedIds,
-		isAllSelected
-    }:{
-        partnerNotificationDTO?: PartnerNotification;
-		isMarkedAsRead?: boolean;
-		tableFilter?: TableFilter;
-		selectedIds?: number[];
-		unselectedIds?: number[];
-		isAllSelected?: boolean;     
-    } = {}
-    ) {
-        super('PartnerNotificationSaveBody'); 
-
-        this.partnerNotificationDTO = partnerNotificationDTO;
-		this.isMarkedAsRead = isMarkedAsRead;
-		this.tableFilter = tableFilter;
-		this.selectedIds = selectedIds;
-		this.unselectedIds = unselectedIds;
-		this.isAllSelected = isAllSelected;
-    }
-}
-
-
-export class BusinessSystemUpdatePointsScheduledTask extends BaseEntity
-{
-    transactionsFrom?: Date;
-	transactionsTo?: Date;
-	isManual?: boolean;
-	businessSystemDisplayName?: string;
-	businessSystemId?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        transactionsFrom,
-		transactionsTo,
-		isManual,
-		businessSystemDisplayName,
-		businessSystemId,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        transactionsFrom?: Date;
-		transactionsTo?: Date;
-		isManual?: boolean;
-		businessSystemDisplayName?: string;
-		businessSystemId?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('BusinessSystemUpdatePointsScheduledTask'); 
-
-        this.transactionsFrom = transactionsFrom;
-		this.transactionsTo = transactionsTo;
-		this.isManual = isManual;
-		this.businessSystemDisplayName = businessSystemDisplayName;
-		this.businessSystemId = businessSystemId;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class BusinessSystemUpdatePointsScheduledTaskSaveBody extends BaseEntity
-{
-    businessSystemUpdatePointsScheduledTaskDTO?: BusinessSystemUpdatePointsScheduledTask;
-
-    constructor(
-    {
-        businessSystemUpdatePointsScheduledTaskDTO
-    }:{
-        businessSystemUpdatePointsScheduledTaskDTO?: BusinessSystemUpdatePointsScheduledTask;     
-    } = {}
-    ) {
-        super('BusinessSystemUpdatePointsScheduledTaskSaveBody'); 
-
-        this.businessSystemUpdatePointsScheduledTaskDTO = businessSystemUpdatePointsScheduledTaskDTO;
-    }
-}
-
-
-export class BusinessSystemUpdatePointsDataBody extends BaseEntity
-{
-    businessSystemId?: number;
-	businessSystemVersion?: number;
-	updatePointsStartDate?: Date;
-	updatePointsInterval?: number;
-
-    constructor(
-    {
-        businessSystemId,
-		businessSystemVersion,
-		updatePointsStartDate,
-		updatePointsInterval
-    }:{
-        businessSystemId?: number;
-		businessSystemVersion?: number;
-		updatePointsStartDate?: Date;
-		updatePointsInterval?: number;     
-    } = {}
-    ) {
-        super('BusinessSystemUpdatePointsDataBody'); 
-
-        this.businessSystemId = businessSystemId;
-		this.businessSystemVersion = businessSystemVersion;
-		this.updatePointsStartDate = updatePointsStartDate;
-		this.updatePointsInterval = updatePointsInterval;
-    }
-}
-
-
-export class SegmentationSaveBody extends BaseEntity
-{
-    segmentationItemsDTO?: SegmentationItem[];
-	segmentationDTO?: Segmentation;
-
-    constructor(
-    {
-        segmentationItemsDTO,
-		segmentationDTO
-    }:{
-        segmentationItemsDTO?: SegmentationItem[];
-		segmentationDTO?: Segmentation;     
-    } = {}
-    ) {
-        super('SegmentationSaveBody'); 
-
-        this.segmentationItemsDTO = segmentationItemsDTO;
-		this.segmentationDTO = segmentationDTO;
-    }
-}
-
-
-export class Partner extends BaseEntity
-{
-    name?: string;
-	email?: string;
-	slug?: string;
-	logoImageData?: string;
-	logoImage?: string;
-	primaryColor?: string;
-	productsRecommendationEndpoint?: string;
-	pointsMultiplier?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        name,
-		email,
-		slug,
-		logoImageData,
-		logoImage,
-		primaryColor,
-		productsRecommendationEndpoint,
-		pointsMultiplier,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        name?: string;
-		email?: string;
-		slug?: string;
-		logoImageData?: string;
-		logoImage?: string;
-		primaryColor?: string;
-		productsRecommendationEndpoint?: string;
-		pointsMultiplier?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('Partner'); 
-
-        this.name = name;
-		this.email = email;
-		this.slug = slug;
-		this.logoImageData = logoImageData;
-		this.logoImage = logoImage;
-		this.primaryColor = primaryColor;
-		this.productsRecommendationEndpoint = productsRecommendationEndpoint;
-		this.pointsMultiplier = pointsMultiplier;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
-    }
-}
-
-
-export class PartnerSaveBody extends BaseEntity
-{
-    partnerDTO?: Partner;
-
-    constructor(
-    {
-        partnerDTO
-    }:{
-        partnerDTO?: Partner;     
-    } = {}
-    ) {
-        super('PartnerSaveBody'); 
-
-        this.partnerDTO = partnerDTO;
-    }
-}
-
-
-export class PartnerUserSegmentationItem extends BaseEntity
-{
-    partnerUserDisplayName?: string;
-	partnerUserId?: number;
-	checkedSegmentationItemDisplayName?: string;
-	checkedSegmentationItemId?: number;
-
-    constructor(
-    {
-        partnerUserDisplayName,
-		partnerUserId,
-		checkedSegmentationItemDisplayName,
-		checkedSegmentationItemId
-    }:{
-        partnerUserDisplayName?: string;
-		partnerUserId?: number;
-		checkedSegmentationItemDisplayName?: string;
-		checkedSegmentationItemId?: number;     
-    } = {}
-    ) {
-        super('PartnerUserSegmentationItem'); 
-
-        this.partnerUserDisplayName = partnerUserDisplayName;
-		this.partnerUserId = partnerUserId;
-		this.checkedSegmentationItemDisplayName = checkedSegmentationItemDisplayName;
-		this.checkedSegmentationItemId = checkedSegmentationItemId;
-    }
-}
-
-
-export class PartnerUserSegmentationItemSaveBody extends BaseEntity
-{
-    partnerUserSegmentationItemDTO?: PartnerUserSegmentationItem;
-
-    constructor(
-    {
-        partnerUserSegmentationItemDTO
-    }:{
-        partnerUserSegmentationItemDTO?: PartnerUserSegmentationItem;     
-    } = {}
-    ) {
-        super('PartnerUserSegmentationItemSaveBody'); 
-
-        this.partnerUserSegmentationItemDTO = partnerUserSegmentationItemDTO;
-    }
-}
-
-
-export class PartnerPermission extends BaseEntity
-{
-    name?: string;
-	description?: string;
-	code?: string;
-	id?: number;
-
-    constructor(
-    {
-        name,
-		description,
-		code,
-		id
-    }:{
-        name?: string;
-		description?: string;
-		code?: string;
-		id?: number;     
-    } = {}
-    ) {
-        super('PartnerPermission'); 
-
-        this.name = name;
-		this.description = description;
-		this.code = code;
-		this.id = id;
-    }
-}
-
-
-export class PartnerPermissionSaveBody extends BaseEntity
-{
-    partnerPermissionDTO?: PartnerPermission;
-
-    constructor(
-    {
-        partnerPermissionDTO
-    }:{
-        partnerPermissionDTO?: PartnerPermission;     
-    } = {}
-    ) {
-        super('PartnerPermissionSaveBody'); 
-
-        this.partnerPermissionDTO = partnerPermissionDTO;
-    }
-}
-
-
-export class QrCode extends BaseEntity
+export class UserExtended extends BaseEntity
 {
     email?: string;
-	transactionCode?: any;
-	discount?: number;
+	hasLoggedInWithExternalProvider?: boolean;
+	isDisabled?: boolean;
+	birthDate?: Date;
+	genderDisplayName?: string;
+	genderId?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
 
     constructor(
     {
         email,
-		transactionCode,
-		discount
+		hasLoggedInWithExternalProvider,
+		isDisabled,
+		birthDate,
+		genderDisplayName,
+		genderId,
+		version,
+		id,
+		createdAt,
+		modifiedAt
     }:{
         email?: string;
-		transactionCode?: any;
-		discount?: number;     
+		hasLoggedInWithExternalProvider?: boolean;
+		isDisabled?: boolean;
+		birthDate?: Date;
+		genderDisplayName?: string;
+		genderId?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
     } = {}
     ) {
-        super('QrCode'); 
+        super('UserExtended'); 
 
         this.email = email;
-		this.transactionCode = transactionCode;
-		this.discount = discount;
-    }
-}
-
-
-export class Tier extends BaseEntity
-{
-    name?: string;
-	description?: string;
-	validFrom?: number;
-	validTo?: number;
-	partnerDisplayName?: string;
-	partnerId?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
-
-    constructor(
-    {
-        name,
-		description,
-		validFrom,
-		validTo,
-		partnerDisplayName,
-		partnerId,
-		version,
-		id,
-		createdAt,
-		modifiedAt
-    }:{
-        name?: string;
-		description?: string;
-		validFrom?: number;
-		validTo?: number;
-		partnerDisplayName?: string;
-		partnerId?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
-    } = {}
-    ) {
-        super('Tier'); 
-
-        this.name = name;
-		this.description = description;
-		this.validFrom = validFrom;
-		this.validTo = validTo;
-		this.partnerDisplayName = partnerDisplayName;
-		this.partnerId = partnerId;
+		this.hasLoggedInWithExternalProvider = hasLoggedInWithExternalProvider;
+		this.isDisabled = isDisabled;
+		this.birthDate = birthDate;
+		this.genderDisplayName = genderDisplayName;
+		this.genderId = genderId;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;
@@ -1764,52 +1762,54 @@ export class Tier extends BaseEntity
 }
 
 
-export class Segmentation extends BaseEntity
+export class UserNotification extends BaseEntity
 {
-    name?: string;
-	description?: string;
-	pointsForTheFirstTimeFill?: number;
-	partnerDisplayName?: string;
-	partnerId?: number;
-	version?: number;
-	id?: number;
-	createdAt?: Date;
-	modifiedAt?: Date;
+    notificationDisplayName?: string;
+	notificationId?: number;
+	userDisplayName?: string;
+	userId?: number;
+	isMarkedAsRead?: boolean;
 
     constructor(
     {
-        name,
-		description,
-		pointsForTheFirstTimeFill,
-		partnerDisplayName,
-		partnerId,
-		version,
-		id,
-		createdAt,
-		modifiedAt
+        notificationDisplayName,
+		notificationId,
+		userDisplayName,
+		userId,
+		isMarkedAsRead
     }:{
-        name?: string;
-		description?: string;
-		pointsForTheFirstTimeFill?: number;
-		partnerDisplayName?: string;
-		partnerId?: number;
-		version?: number;
-		id?: number;
-		createdAt?: Date;
-		modifiedAt?: Date;     
+        notificationDisplayName?: string;
+		notificationId?: number;
+		userDisplayName?: string;
+		userId?: number;
+		isMarkedAsRead?: boolean;     
     } = {}
     ) {
-        super('Segmentation'); 
+        super('UserNotification'); 
 
-        this.name = name;
-		this.description = description;
-		this.pointsForTheFirstTimeFill = pointsForTheFirstTimeFill;
-		this.partnerDisplayName = partnerDisplayName;
-		this.partnerId = partnerId;
-		this.version = version;
-		this.id = id;
-		this.createdAt = createdAt;
-		this.modifiedAt = modifiedAt;
+        this.notificationDisplayName = notificationDisplayName;
+		this.notificationId = notificationId;
+		this.userDisplayName = userDisplayName;
+		this.userId = userId;
+		this.isMarkedAsRead = isMarkedAsRead;
+    }
+}
+
+
+export class UserNotificationSaveBody extends BaseEntity
+{
+    userNotificationDTO?: UserNotification;
+
+    constructor(
+    {
+        userNotificationDTO
+    }:{
+        userNotificationDTO?: UserNotification;     
+    } = {}
+    ) {
+        super('UserNotificationSaveBody'); 
+
+        this.userNotificationDTO = userNotificationDTO;
     }
 }
 

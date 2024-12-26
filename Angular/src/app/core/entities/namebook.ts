@@ -1,6 +1,5 @@
 import { BaseEntity } from "src/app/core/entities/base-entity";
 
-// FT HACK: Fake class, because of api imports
 export class Namebook extends BaseEntity
 {
     id?: number;

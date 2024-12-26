@@ -67,9 +67,11 @@ namespace Playerty.Loyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserForPartnerNotificationTableData(TableFilterDTO tableFilterDTO)
+        public async Task<LazyLoadSelectedIdsResultDTO<long>> LazyLoadSelectedPartnerUserIdsForPartnerNotification(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadPartnerUserForPartnerNotificationTableData(tableFilterDTO);
+            return await _loyalsBusinessService.LazyLoadSelectedPartnerUserIdsForPartnerNotification(tableFilterDTO, _context.DbSet<PartnerUser>()
+                .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
+                .OrderBy(x => x.Id));
         }
 
         [HttpPut]

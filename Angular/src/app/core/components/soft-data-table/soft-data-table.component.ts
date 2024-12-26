@@ -16,6 +16,7 @@ import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { SoftControlsModule } from '../../controls/soft-controls.module';
 import { SoftFormControl } from '../soft-form-control/soft-form-control';
 import { TableResponse } from '../../entities/table-response';
+import { LazyLoadSelectedIdsResult } from '../../entities/lazy-load-selected-ids-result';
 
 @Component({
   selector: 'soft-data-table',
@@ -71,7 +72,7 @@ export class SoftDataTableComponent implements OnInit {
   fakeIsAllSelected: boolean = false; // FT: Only for showing checkboxes, we will not send this to the backend
   isFirstTimeLazyLoad: boolean = true;
   @Output() onIsAllSelectedChange: EventEmitter<AllClickEvent> = new EventEmitter();
-  @Input() selectedLazyLoadObservableMethod: (tableFilter: TableFilter) => Observable<SelectedRowsMethodResult>;
+  @Input() selectedLazyLoadObservableMethod: (tableFilter: TableFilter) => Observable<LazyLoadSelectedIdsResult>;
   @Input() additionalFilterIdLong: number;
   
   matchModeDateOptions: SelectItem[] = [];
@@ -138,12 +139,12 @@ export class SoftDataTableComponent implements OnInit {
         this.onTotalRecordsChange.next(res.totalRecords);
         
         if (this.selectedLazyLoadObservableMethod != null) {
-          let selectedRowsMethodResult: SelectedRowsMethodResult = await firstValueFrom(this.selectedLazyLoadObservableMethod(tableFilter));
+          let selectedRowsMethodResult: LazyLoadSelectedIdsResult = await firstValueFrom(this.selectedLazyLoadObservableMethod(tableFilter));
   
-          this.currentPageSelectedItemsFromDb = [...selectedRowsMethodResult.fakeSelectedItems];
+          this.currentPageSelectedItemsFromDb = [...selectedRowsMethodResult.selectedIds];
 
           if (this.isFirstTimeLazyLoad == true) {
-            this.rowsSelectedNumber = selectedRowsMethodResult.selectedTotalRecords;
+            this.rowsSelectedNumber = selectedRowsMethodResult.totalRecordsSelected;
             this.setFakeIsAllSelected();
             this.isFirstTimeLazyLoad = false;
           }
@@ -157,7 +158,7 @@ export class SoftDataTableComponent implements OnInit {
             this.fakeSelectedItems = [...this.newlySelectedItems]; // FT: Only for showing checkboxes, we will not send this to the backend
           }
           else if (this.isAllSelected == null) {
-            let idsToInsert = [...selectedRowsMethodResult.fakeSelectedItems, ...this.newlySelectedItems];
+            let idsToInsert = [...selectedRowsMethodResult.selectedIds, ...this.newlySelectedItems];
             idsToInsert = idsToInsert.filter(x => this.unselectedItems.includes(x) == false);
             this.fakeSelectedItems = [...idsToInsert];
           }
@@ -514,11 +515,6 @@ export class Column<T = any> {
   actions?: Action[];
   editable?: boolean;
   showTime?: boolean;
-}
-
-export class SelectedRowsMethodResult {
-  fakeSelectedItems: number[] = [];
-  selectedTotalRecords: number = 0;
 }
 
 export class RowClickEvent {
