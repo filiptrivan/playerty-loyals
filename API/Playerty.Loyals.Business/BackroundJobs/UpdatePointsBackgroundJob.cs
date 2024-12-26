@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Playerty.Loyals.Business.Entities;
 using Playerty.Loyals.Business.DTO;
-using Playerty.Loyals.Services;
+using Playerty.Loyals.Business.Services;
 using Quartz;
 using Soft.Generator.Shared.Extensions;
 using Soft.Generator.Shared.Interfaces;

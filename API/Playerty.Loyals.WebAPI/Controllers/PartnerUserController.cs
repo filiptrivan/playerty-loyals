@@ -6,7 +6,7 @@ using Soft.Generator.Security.SecurityControllers;
 using Soft.Generator.Shared.Interfaces;
 using Playerty.Loyals.Business.Entities;
 using Soft.Generator.Shared.Attributes;
-using Playerty.Loyals.Services;
+using Playerty.Loyals.Business.Services;
 using Playerty.Loyals.Business.DTO;
 using Soft.Generator.Shared.DTO;
 using Playerty.Loyals.Business.Enums;

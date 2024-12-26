@@ -2,7 +2,7 @@
 using Playerty.Loyals.Business.DTO;
 using Playerty.Loyals.Business.Entities;
 using Playerty.Loyals.Business.Services;
-using Playerty.Loyals.Services;
+using Playerty.Loyals.Business.Services;
 using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.DTO;
 using Soft.Generator.Shared.Helpers;

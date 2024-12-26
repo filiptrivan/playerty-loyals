@@ -1,5 +1,4 @@
-﻿using Playerty.Loyals.Business.Services;
-using Soft.Generator.Shared.DTO;
+﻿using Soft.Generator.Shared.DTO;
 using Soft.Generator.Shared.Excel;
 using Soft.Generator.Shared.Interfaces;
 using Soft.Generator.Shared.Extensions;
@@ -15,17 +14,12 @@ using Playerty.Loyals.Business.DataMappers;
 using FluentValidation;
 using Soft.Generator.Shared.Emailing;
 using Azure.Storage.Blobs;
-using Playerty.Loyals.Business.ValidationRules;
-using System.Collections.Generic;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Database;
-using System.Linq;
 using Playerty.Loyals.Business.BackroundJobs;
 using Soft.Generator.Shared.Helpers;
-using System.Diagnostics;
 
-namespace Playerty.Loyals.Services
+namespace Playerty.Loyals.Business.Services
 {
-    public class LoyalsBusinessService : BusinessServiceGenerated
+    public class LoyalsBusinessService : Playerty.Loyals.Business.Services.BusinessServiceGenerated
     {
         private readonly IApplicationDbContext _context;
         private readonly Playerty.Loyals.Business.Services.AuthorizationBusinessService _authorizationService;

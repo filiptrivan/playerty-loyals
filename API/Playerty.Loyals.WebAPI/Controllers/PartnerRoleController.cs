@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Playerty.Loyals.Business.Entities;
 using Playerty.Loyals.Business.Services;
-using Playerty.Loyals.Services;
+using Playerty.Loyals.Business.Services;
 using Soft.Generator.Security.DTO;
 using Soft.Generator.Security.Entities;
 using Soft.Generator.Security.Services;

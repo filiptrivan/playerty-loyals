@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using Playerty.Loyals.Business.Entities;
-using Playerty.Loyals.Services;
+using Playerty.Loyals.Business.Services;
 using Quartz;
 using Soft.Generator.Shared.Interfaces;
 using Soft.Generator.Shared.Extensions;

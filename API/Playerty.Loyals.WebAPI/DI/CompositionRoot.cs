@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
 using Soft.Generator.Shared.SoftFluentValidation;
 using Soft.Generator.Shared.Emailing;
-using Playerty.Loyals.Services;
+using Playerty.Loyals.Business.Services;
 using Playerty.Loyals.Business.Services;
 using Playerty.Loyals.Business.Entities;
 using Playerty.Loyals.Business.BackroundJobs;
