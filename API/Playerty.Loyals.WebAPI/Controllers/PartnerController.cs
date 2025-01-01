@@ -5,7 +5,6 @@ using Soft.Generator.Shared.Attributes;
 using Playerty.Loyals.Business.Services;
 using Playerty.Loyals.Business.DTO;
 using Soft.Generator.Shared.DTO;
-using Playerty.Loyals.Business.Services;
 using Soft.Generator.Shared.Helpers;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;

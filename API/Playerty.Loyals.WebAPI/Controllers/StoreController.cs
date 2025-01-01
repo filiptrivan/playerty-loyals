@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Playerty.Loyals.Business.DTO;
 using Playerty.Loyals.Business.Entities;
 using Playerty.Loyals.Business.Services;
-using Playerty.Loyals.Business.Services;
-using Playerty.Loyals.Shared.Terms;
 using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.DTO;
 using Soft.Generator.Shared.Helpers;
