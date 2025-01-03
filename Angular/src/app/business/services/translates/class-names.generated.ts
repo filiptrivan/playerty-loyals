@@ -15,22 +15,70 @@ export class TranslateClassNamesGeneratedService {
     {
         switch(name) 
         {
-            case 'ExternalDiscountProductGroup':
-                return this.translocoService.translate('ExternalDiscountProductGroup');
-            case 'Product':
-                return this.translocoService.translate('Product');
-            case 'MergedPartnerUser':
-                return this.translocoService.translate('MergedPartnerUser');
-            case 'Brand':
-                return this.translocoService.translate('Brand');
-            case 'ExternalTransaction':
-                return this.translocoService.translate('ExternalTransaction');
-            case 'UpdatePoints':
-                return this.translocoService.translate('UpdatePoints');
-            case 'BusinessSystemUpdatePointsDataBody':
-                return this.translocoService.translate('BusinessSystemUpdatePointsDataBody');
-            case 'QrCode':
-                return this.translocoService.translate('QrCode');
+            case 'TableFilter':
+                return this.translocoService.translate('TableFilter');
+            case 'LazyLoadSelectedIdsResult':
+                return this.translocoService.translate('LazyLoadSelectedIdsResult');
+            case 'BusinessObject':
+                return this.translocoService.translate('BusinessObject');
+            case 'LazyTableSelection':
+                return this.translocoService.translate('LazyTableSelection');
+            case 'SimpleSaveResult':
+                return this.translocoService.translate('SimpleSaveResult');
+            case 'TableResponse':
+                return this.translocoService.translate('TableResponse');
+            case 'ReadonlyObject':
+                return this.translocoService.translate('ReadonlyObject');
+            case 'Namebook':
+                return this.translocoService.translate('Namebook');
+            case 'TableFilterSortMeta':
+                return this.translocoService.translate('TableFilterSortMeta');
+            case 'PaginationResult':
+                return this.translocoService.translate('PaginationResult');
+            case 'TableFilterContext':
+                return this.translocoService.translate('TableFilterContext');
+            case 'Codebook':
+                return this.translocoService.translate('Codebook');
+            case 'ExcelReportOptions':
+                return this.translocoService.translate('ExcelReportOptions');
+            case 'JwtAuthResult':
+                return this.translocoService.translate('JwtAuthResult');
+            case 'AuthResult':
+                return this.translocoService.translate('AuthResult');
+            case 'VerificationTokenRequest':
+                return this.translocoService.translate('VerificationTokenRequest');
+            case 'RegistrationVerificationResult':
+                return this.translocoService.translate('RegistrationVerificationResult');
+            case 'RegistrationVerificationToken':
+                return this.translocoService.translate('RegistrationVerificationToken');
+            case 'ExternalProvider':
+                return this.translocoService.translate('ExternalProvider');
+            case 'LoginVerificationToken':
+                return this.translocoService.translate('LoginVerificationToken');
+            case 'Login':
+                return this.translocoService.translate('Login');
+            case 'RefreshTokenRequest':
+                return this.translocoService.translate('RefreshTokenRequest');
+            case 'Registration':
+                return this.translocoService.translate('Registration');
+            case 'RefreshToken':
+                return this.translocoService.translate('RefreshToken');
+            case 'RoleSaveBody':
+                return this.translocoService.translate('RoleSaveBody');
+            case 'RolePermission':
+                return this.translocoService.translate('RolePermission');
+            case 'RolePermissionSaveBody':
+                return this.translocoService.translate('RolePermissionSaveBody');
+            case 'UserRole':
+                return this.translocoService.translate('UserRole');
+            case 'UserRoleSaveBody':
+                return this.translocoService.translate('UserRoleSaveBody');
+            case 'Role':
+                return this.translocoService.translate('Role');
+            case 'Permission':
+                return this.translocoService.translate('Permission');
+            case 'PermissionSaveBody':
+                return this.translocoService.translate('PermissionSaveBody');
             case 'PartnerUserSaveBody':
                 return this.translocoService.translate('PartnerUserSaveBody');
             case 'NotificationSaveBody':
@@ -39,8 +87,18 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('TierSaveBody');
             case 'BusinessSystemTier':
                 return this.translocoService.translate('BusinessSystemTier');
+            case 'ExternalDiscountProductGroup':
+                return this.translocoService.translate('ExternalDiscountProductGroup');
+            case 'Product':
+                return this.translocoService.translate('Product');
+            case 'MergedPartnerUser':
+                return this.translocoService.translate('MergedPartnerUser');
+            case 'Brand':
+                return this.translocoService.translate('Brand');
             case 'UserExtendedSaveBody':
                 return this.translocoService.translate('UserExtendedSaveBody');
+            case 'ExternalTransaction':
+                return this.translocoService.translate('ExternalTransaction');
             case 'SegmentationSaveBody':
                 return this.translocoService.translate('SegmentationSaveBody');
             case 'SegmentationItem':
@@ -49,10 +107,16 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('PartnerRoleSaveBody');
             case 'PartnerNotificationSaveBody':
                 return this.translocoService.translate('PartnerNotificationSaveBody');
+            case 'UpdatePoints':
+                return this.translocoService.translate('UpdatePoints');
             case 'BusinessSystemTierDiscountProductGroup':
                 return this.translocoService.translate('BusinessSystemTierDiscountProductGroup');
             case 'Notification':
                 return this.translocoService.translate('Notification');
+            case 'BusinessSystemUpdatePointsDataBody':
+                return this.translocoService.translate('BusinessSystemUpdatePointsDataBody');
+            case 'QrCode':
+                return this.translocoService.translate('QrCode');
             case 'BusinessSystemTierSaveBody':
                 return this.translocoService.translate('BusinessSystemTierSaveBody');
             case 'Gender':
@@ -123,70 +187,6 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('Tier');
             case 'Segmentation':
                 return this.translocoService.translate('Segmentation');
-            case 'TableFilter':
-                return this.translocoService.translate('TableFilter');
-            case 'LazyLoadSelectedIdsResult':
-                return this.translocoService.translate('LazyLoadSelectedIdsResult');
-            case 'BusinessObject':
-                return this.translocoService.translate('BusinessObject');
-            case 'LazyTableSelection':
-                return this.translocoService.translate('LazyTableSelection');
-            case 'SimpleSaveResult':
-                return this.translocoService.translate('SimpleSaveResult');
-            case 'TableResponse':
-                return this.translocoService.translate('TableResponse');
-            case 'ReadonlyObject':
-                return this.translocoService.translate('ReadonlyObject');
-            case 'Namebook':
-                return this.translocoService.translate('Namebook');
-            case 'TableFilterSortMeta':
-                return this.translocoService.translate('TableFilterSortMeta');
-            case 'PaginationResult':
-                return this.translocoService.translate('PaginationResult');
-            case 'TableFilterContext':
-                return this.translocoService.translate('TableFilterContext');
-            case 'Codebook':
-                return this.translocoService.translate('Codebook');
-            case 'ExcelReportOptions':
-                return this.translocoService.translate('ExcelReportOptions');
-            case 'JwtAuthResult':
-                return this.translocoService.translate('JwtAuthResult');
-            case 'AuthResult':
-                return this.translocoService.translate('AuthResult');
-            case 'VerificationTokenRequest':
-                return this.translocoService.translate('VerificationTokenRequest');
-            case 'RegistrationVerificationResult':
-                return this.translocoService.translate('RegistrationVerificationResult');
-            case 'RegistrationVerificationToken':
-                return this.translocoService.translate('RegistrationVerificationToken');
-            case 'ExternalProvider':
-                return this.translocoService.translate('ExternalProvider');
-            case 'LoginVerificationToken':
-                return this.translocoService.translate('LoginVerificationToken');
-            case 'Login':
-                return this.translocoService.translate('Login');
-            case 'RefreshTokenRequest':
-                return this.translocoService.translate('RefreshTokenRequest');
-            case 'Registration':
-                return this.translocoService.translate('Registration');
-            case 'RefreshToken':
-                return this.translocoService.translate('RefreshToken');
-            case 'RoleSaveBody':
-                return this.translocoService.translate('RoleSaveBody');
-            case 'RolePermission':
-                return this.translocoService.translate('RolePermission');
-            case 'RolePermissionSaveBody':
-                return this.translocoService.translate('RolePermissionSaveBody');
-            case 'UserRole':
-                return this.translocoService.translate('UserRole');
-            case 'UserRoleSaveBody':
-                return this.translocoService.translate('UserRoleSaveBody');
-            case 'Role':
-                return this.translocoService.translate('Role');
-            case 'Permission':
-                return this.translocoService.translate('Permission');
-            case 'PermissionSaveBody':
-                return this.translocoService.translate('PermissionSaveBody');
             default:
                 return null;
         }

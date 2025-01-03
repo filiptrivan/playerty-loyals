@@ -16,10 +16,87 @@ export class ValidatorServiceGenerated {
 
     getValidator(formControl: SoftFormControl, className: string): SoftValidatorFn {
         switch(formControl.label + className){
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        case 'verificationCodeVerificationTokenRequest':
+            return this.verificationCodeVerificationTokenRequestValidator(formControl);
+        case 'emailVerificationTokenRequest':
+            return this.emailVerificationTokenRequestValidator(formControl);
+
+
+
+
+
+        case 'emailLogin':
+            return this.emailLoginValidator(formControl);
+
+
+        case 'emailRegistration':
+            return this.emailRegistrationValidator(formControl);
+
+
+
+
+
+
+
+        case 'nameRole':
+            return this.nameRoleValidator(formControl);
+        case 'descriptionRole':
+            return this.descriptionRoleValidator(formControl);
+        case 'versionRole':
+            return this.versionRoleValidator(formControl);
+        case 'createdAtRole':
+            return this.createdAtRoleValidator(formControl);
+        case 'modifiedAtRole':
+            return this.modifiedAtRoleValidator(formControl);
+
+        case 'namePermission':
+            return this.namePermissionValidator(formControl);
+        case 'nameLatinPermission':
+            return this.nameLatinPermissionValidator(formControl);
+        case 'descriptionPermission':
+            return this.descriptionPermissionValidator(formControl);
+        case 'descriptionLatinPermission':
+            return this.descriptionLatinPermissionValidator(formControl);
+        case 'codePermission':
+            return this.codePermissionValidator(formControl);
+
+
+
+
+
+        case 'orderNumberBusinessSystemTier':
+            return this.orderNumberBusinessSystemTierValidator(formControl);
+        case 'businessSystemIdBusinessSystemTier':
+            return this.businessSystemIdBusinessSystemTierValidator(formControl);
+        case 'tierIdBusinessSystemTier':
+            return this.tierIdBusinessSystemTierValidator(formControl);
+        case 'versionBusinessSystemTier':
+            return this.versionBusinessSystemTierValidator(formControl);
+        case 'createdAtBusinessSystemTier':
+            return this.createdAtBusinessSystemTierValidator(formControl);
+        case 'modifiedAtBusinessSystemTier':
+            return this.modifiedAtBusinessSystemTierValidator(formControl);
+
         case 'nameExternalDiscountProductGroup':
             return this.nameExternalDiscountProductGroupValidator(formControl);
         case 'codeExternalDiscountProductGroup':
             return this.codeExternalDiscountProductGroupValidator(formControl);
+
 
 
 
@@ -42,28 +119,6 @@ export class ValidatorServiceGenerated {
             return this.boughtAtExternalTransactionValidator(formControl);
 
 
-        case 'updatePointsIntervalBusinessSystemUpdatePointsDataBody':
-            return this.updatePointsIntervalBusinessSystemUpdatePointsDataBodyValidator(formControl);
-
-
-
-
-
-        case 'orderNumberBusinessSystemTier':
-            return this.orderNumberBusinessSystemTierValidator(formControl);
-        case 'businessSystemIdBusinessSystemTier':
-            return this.businessSystemIdBusinessSystemTierValidator(formControl);
-        case 'tierIdBusinessSystemTier':
-            return this.tierIdBusinessSystemTierValidator(formControl);
-        case 'versionBusinessSystemTier':
-            return this.versionBusinessSystemTierValidator(formControl);
-        case 'createdAtBusinessSystemTier':
-            return this.createdAtBusinessSystemTierValidator(formControl);
-        case 'modifiedAtBusinessSystemTier':
-            return this.modifiedAtBusinessSystemTierValidator(formControl);
-
-
-
         case 'nameSegmentationItem':
             return this.nameSegmentationItemValidator(formControl);
         case 'orderNumberSegmentationItem':
@@ -76,6 +131,7 @@ export class ValidatorServiceGenerated {
             return this.createdAtSegmentationItemValidator(formControl);
         case 'modifiedAtSegmentationItem':
             return this.modifiedAtSegmentationItemValidator(formControl);
+
 
 
 
@@ -94,6 +150,10 @@ export class ValidatorServiceGenerated {
             return this.createdAtNotificationValidator(formControl);
         case 'modifiedAtNotification':
             return this.modifiedAtNotificationValidator(formControl);
+
+        case 'updatePointsIntervalBusinessSystemUpdatePointsDataBody':
+            return this.updatePointsIntervalBusinessSystemUpdatePointsDataBodyValidator(formControl);
+
 
 
         case 'nameGender':
@@ -306,69 +366,357 @@ export class ValidatorServiceGenerated {
         case 'modifiedAtSegmentation':
             return this.modifiedAtSegmentationValidator(formControl);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        case 'verificationCodeVerificationTokenRequest':
-            return this.verificationCodeVerificationTokenRequestValidator(formControl);
-        case 'emailVerificationTokenRequest':
-            return this.emailVerificationTokenRequestValidator(formControl);
-
-
-
-
-
-        case 'emailLogin':
-            return this.emailLoginValidator(formControl);
-
-
-        case 'emailRegistration':
-            return this.emailRegistrationValidator(formControl);
-
-
-
-
-
-
-
-        case 'nameRole':
-            return this.nameRoleValidator(formControl);
-        case 'descriptionRole':
-            return this.descriptionRoleValidator(formControl);
-        case 'versionRole':
-            return this.versionRoleValidator(formControl);
-        case 'createdAtRole':
-            return this.createdAtRoleValidator(formControl);
-        case 'modifiedAtRole':
-            return this.modifiedAtRoleValidator(formControl);
-
-        case 'namePermission':
-            return this.namePermissionValidator(formControl);
-        case 'nameLatinPermission':
-            return this.nameLatinPermissionValidator(formControl);
-        case 'descriptionPermission':
-            return this.descriptionPermissionValidator(formControl);
-        case 'descriptionLatinPermission':
-            return this.descriptionLatinPermissionValidator(formControl);
-        case 'codePermission':
-            return this.codePermissionValidator(formControl);
-
-
             default:
                 return null;
         }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    verificationCodeVerificationTokenRequestValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const length = 6;
+        const stringSingleLengthRule = (value?.length == length) || (typeof value === 'undefined' || value === null || value === '');
+
+            const verificationCodeValid = notEmptyRule && stringSingleLengthRule;
+
+            return verificationCodeValid ? null : { _ : this.translocoService.translate('NotEmptySingleLength', {length}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    emailVerificationTokenRequestValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 5;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+            const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
+
+            return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+
+
+
+
+
+    emailLoginValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 5;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+            const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
+
+            return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+
+
+    emailRegistrationValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 5;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+            const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
+
+            return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+
+
+
+
+
+
+
+    nameRoleValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 255;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const nameValid = notEmptyRule && stringLengthRule;
+
+            return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    descriptionRoleValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const max = 400;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const descriptionValid = stringLengthRule;
+
+            return descriptionValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+    }
+
+    versionRoleValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const versionValid = notEmptyRule;
+
+            return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    createdAtRoleValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const createdAtValid = notEmptyRule;
+
+            return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    modifiedAtRoleValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const modifiedAtValid = notEmptyRule;
+
+            return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+
+    namePermissionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const nameValid = notEmptyRule && stringLengthRule;
+
+            return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    nameLatinPermissionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const nameLatinValid = notEmptyRule && stringLengthRule;
+
+            return nameLatinValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    descriptionPermissionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const max = 400;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const descriptionValid = stringLengthRule;
+
+            return descriptionValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+    }
+
+    descriptionLatinPermissionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const max = 400;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const descriptionLatinValid = stringLengthRule;
+
+            return descriptionLatinValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+        
+        return validator;
+    }
+
+    codePermissionValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
+        const max = 100;
+        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
+
+            const codeValid = notEmptyRule && stringLengthRule;
+
+            return codeValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+
+
+
+
+
+    orderNumberBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const orderNumberValid = notEmptyRule;
+
+            return orderNumberValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    businessSystemIdBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const businessSystemIdValid = notEmptyRule;
+
+            return businessSystemIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    tierIdBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const tierIdValid = notEmptyRule;
+
+            return tierIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    versionBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const versionValid = notEmptyRule;
+
+            return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    createdAtBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const createdAtValid = notEmptyRule;
+
+            return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
+    }
+
+    modifiedAtBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const modifiedAtValid = notEmptyRule;
+
+            return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        return validator;
     }
 
 
@@ -405,6 +753,7 @@ export class ValidatorServiceGenerated {
         validator.hasNotEmptyRule = true;
         return validator;
     }
+
 
 
 
@@ -545,113 +894,6 @@ export class ValidatorServiceGenerated {
 
 
 
-    updatePointsIntervalBusinessSystemUpdatePointsDataBodyValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const min = 1;
-        const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
-
-            const updatePointsIntervalValid = numberMinRangeRule;
-
-            return updatePointsIntervalValid ? null : { _ : this.translocoService.translate('NumberRangeMin', {min}) };
-        };
-        
-        return validator;
-    }
-
-
-
-
-
-
-    orderNumberBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const orderNumberValid = notEmptyRule;
-
-            return orderNumberValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    businessSystemIdBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const businessSystemIdValid = notEmptyRule;
-
-            return businessSystemIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    tierIdBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const tierIdValid = notEmptyRule;
-
-            return tierIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    versionBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const versionValid = notEmptyRule;
-
-            return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    createdAtBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const createdAtValid = notEmptyRule;
-
-            return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    modifiedAtBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const modifiedAtValid = notEmptyRule;
-
-            return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-
-
-
     nameSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
@@ -738,6 +980,7 @@ export class ValidatorServiceGenerated {
         validator.hasNotEmptyRule = true;
         return validator;
     }
+
 
 
 
@@ -852,6 +1095,23 @@ export class ValidatorServiceGenerated {
         validator.hasNotEmptyRule = true;
         return validator;
     }
+
+
+    updatePointsIntervalBusinessSystemUpdatePointsDataBodyValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const min = 1;
+        const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
+
+            const updatePointsIntervalValid = numberMinRangeRule;
+
+            return updatePointsIntervalValid ? null : { _ : this.translocoService.translate('NumberRangeMin', {min}) };
+        };
+        
+        return validator;
+    }
+
 
 
 
@@ -2217,266 +2477,6 @@ export class ValidatorServiceGenerated {
         validator.hasNotEmptyRule = true;
         return validator;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    verificationCodeVerificationTokenRequestValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const length = 6;
-        const stringSingleLengthRule = (value?.length == length) || (typeof value === 'undefined' || value === null || value === '');
-
-            const verificationCodeValid = notEmptyRule && stringSingleLengthRule;
-
-            return verificationCodeValid ? null : { _ : this.translocoService.translate('NotEmptySingleLength', {length}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    emailVerificationTokenRequestValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 5;
-        const max = 100;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
-            const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
-
-            return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-
-
-
-
-
-    emailLoginValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 5;
-        const max = 100;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
-            const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
-
-            return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-
-
-    emailRegistrationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 5;
-        const max = 100;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-        const emailAddressRule = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-
-            const emailValid = notEmptyRule && stringLengthRule && emailAddressRule;
-
-            return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-
-
-
-
-
-
-
-    nameRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
-        const max = 255;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const nameValid = notEmptyRule && stringLengthRule;
-
-            return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    descriptionRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const min = 1;
-        const max = 400;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const descriptionValid = stringLengthRule;
-
-            return descriptionValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
-        };
-        
-        return validator;
-    }
-
-    versionRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const versionValid = notEmptyRule;
-
-            return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    createdAtRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const createdAtValid = notEmptyRule;
-
-            return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    modifiedAtRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const modifiedAtValid = notEmptyRule;
-
-            return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-
-    namePermissionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
-        const max = 100;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const nameValid = notEmptyRule && stringLengthRule;
-
-            return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    nameLatinPermissionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
-        const max = 100;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const nameLatinValid = notEmptyRule && stringLengthRule;
-
-            return nameLatinValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
-    descriptionPermissionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const min = 1;
-        const max = 400;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const descriptionValid = stringLengthRule;
-
-            return descriptionValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
-        };
-        
-        return validator;
-    }
-
-    descriptionLatinPermissionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const min = 1;
-        const max = 400;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const descriptionLatinValid = stringLengthRule;
-
-            return descriptionLatinValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
-        };
-        
-        return validator;
-    }
-
-    codePermissionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-        const min = 1;
-        const max = 100;
-        const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const codeValid = notEmptyRule && stringLengthRule;
-
-            return codeValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        return validator;
-    }
-
 
 
 }

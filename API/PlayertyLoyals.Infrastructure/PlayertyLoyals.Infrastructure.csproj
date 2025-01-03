@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Soft.Generator\Source\Soft.Generator.Infrastructure\Soft.Generator.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\..\Soft.Generator\Source\Soft.Generator.Security\Soft.Generator.Security.csproj" />
+		<ProjectReference Include="..\..\..\Soft.Generator\Source\Soft.Generator.Shared\Soft.Generator.Shared.csproj" />
+		<ProjectReference Include="..\..\..\Soft.Generator\Source\Soft.SourceGenerator.NgTable\Soft.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\PlayertyLoyals.Shared\PlayertyLoyals.Shared.csproj" />
+		<ProjectReference Include="..\PlayertyLoyals.Business\PlayertyLoyals.Business.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.IO.FileSystem.Primitives" Version="4.3.0" />
+		<PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
+		<PackageReference Include="System.Runtime.Handles" Version="4.3.0" />
+		<PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
+		<PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
+		<PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
+		<PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />
+		<PackageReference Include="System.Net.Primitives" Version="4.3.0" />
+	</ItemGroup>
+
+</Project>

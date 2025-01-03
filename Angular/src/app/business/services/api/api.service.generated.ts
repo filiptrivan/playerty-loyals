@@ -9,25 +9,43 @@ import { SimpleSaveResult } from 'src/app/core/entities/simple-save-result';
 import { TableFilter } from 'src/app/core/entities/table-filter';
 import { TableResponse } from 'src/app/core/entities/table-response';
 import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
-import { ExternalDiscountProductGroup } from '../../entities/business-entities.generated';
-import { Product } from '../../entities/business-entities.generated';
-import { MergedPartnerUser } from '../../entities/business-entities.generated';
-import { Brand } from '../../entities/business-entities.generated';
-import { ExternalTransaction } from '../../entities/business-entities.generated';
-import { UpdatePoints } from '../../entities/business-entities.generated';
-import { BusinessSystemUpdatePointsDataBody } from '../../entities/business-entities.generated';
-import { QrCode } from '../../entities/business-entities.generated';
+import { JwtAuthResult } from '../../entities/security-entities.generated';
+import { AuthResult } from '../../entities/security-entities.generated';
+import { VerificationTokenRequest } from '../../entities/security-entities.generated';
+import { RegistrationVerificationResult } from '../../entities/security-entities.generated';
+import { RegistrationVerificationToken } from '../../entities/security-entities.generated';
+import { ExternalProvider } from '../../entities/security-entities.generated';
+import { LoginVerificationToken } from '../../entities/security-entities.generated';
+import { Login } from '../../entities/security-entities.generated';
+import { RefreshTokenRequest } from '../../entities/security-entities.generated';
+import { Registration } from '../../entities/security-entities.generated';
+import { RefreshToken } from '../../entities/security-entities.generated';
+import { RoleSaveBody } from '../../entities/security-entities.generated';
+import { RolePermission } from '../../entities/security-entities.generated';
+import { RolePermissionSaveBody } from '../../entities/security-entities.generated';
+import { UserRoleSaveBody } from '../../entities/security-entities.generated';
+import { Role } from '../../entities/security-entities.generated';
+import { Permission } from '../../entities/security-entities.generated';
+import { PermissionSaveBody } from '../../entities/security-entities.generated';
 import { PartnerUserSaveBody } from '../../entities/business-entities.generated';
 import { NotificationSaveBody } from '../../entities/business-entities.generated';
 import { TierSaveBody } from '../../entities/business-entities.generated';
 import { BusinessSystemTier } from '../../entities/business-entities.generated';
+import { ExternalDiscountProductGroup } from '../../entities/business-entities.generated';
+import { Product } from '../../entities/business-entities.generated';
+import { MergedPartnerUser } from '../../entities/business-entities.generated';
+import { Brand } from '../../entities/business-entities.generated';
 import { UserExtendedSaveBody } from '../../entities/business-entities.generated';
+import { ExternalTransaction } from '../../entities/business-entities.generated';
 import { SegmentationSaveBody } from '../../entities/business-entities.generated';
 import { SegmentationItem } from '../../entities/business-entities.generated';
 import { PartnerRoleSaveBody } from '../../entities/business-entities.generated';
 import { PartnerNotificationSaveBody } from '../../entities/business-entities.generated';
+import { UpdatePoints } from '../../entities/business-entities.generated';
 import { BusinessSystemTierDiscountProductGroup } from '../../entities/business-entities.generated';
 import { Notification } from '../../entities/business-entities.generated';
+import { BusinessSystemUpdatePointsDataBody } from '../../entities/business-entities.generated';
+import { QrCode } from '../../entities/business-entities.generated';
 import { BusinessSystemTierSaveBody } from '../../entities/business-entities.generated';
 import { Gender } from '../../entities/business-entities.generated';
 import { GenderSaveBody } from '../../entities/business-entities.generated';
@@ -63,24 +81,6 @@ import { PartnerPermission } from '../../entities/business-entities.generated';
 import { PartnerPermissionSaveBody } from '../../entities/business-entities.generated';
 import { Tier } from '../../entities/business-entities.generated';
 import { Segmentation } from '../../entities/business-entities.generated';
-import { JwtAuthResult } from '../../entities/security-entities.generated';
-import { AuthResult } from '../../entities/security-entities.generated';
-import { VerificationTokenRequest } from '../../entities/security-entities.generated';
-import { RegistrationVerificationResult } from '../../entities/security-entities.generated';
-import { RegistrationVerificationToken } from '../../entities/security-entities.generated';
-import { ExternalProvider } from '../../entities/security-entities.generated';
-import { LoginVerificationToken } from '../../entities/security-entities.generated';
-import { Login } from '../../entities/security-entities.generated';
-import { RefreshTokenRequest } from '../../entities/security-entities.generated';
-import { Registration } from '../../entities/security-entities.generated';
-import { RefreshToken } from '../../entities/security-entities.generated';
-import { RoleSaveBody } from '../../entities/security-entities.generated';
-import { RolePermission } from '../../entities/security-entities.generated';
-import { RolePermissionSaveBody } from '../../entities/security-entities.generated';
-import { UserRoleSaveBody } from '../../entities/security-entities.generated';
-import { Role } from '../../entities/security-entities.generated';
-import { Permission } from '../../entities/security-entities.generated';
-import { PermissionSaveBody } from '../../entities/security-entities.generated';
 
 @Injectable()
 export class ApiGeneratedService extends ApiSecurityService {
@@ -202,8 +202,8 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.put<Notification>(`${environment.apiUrl}/Auth/SaveNotification`, notificationSaveBodyDTO, environment.httpOptions);
     }
 
-    lazyLoadSelectedUserExtendedIdsForNotification = (tableFilterDTO: TableFilter): Observable<LazyLoadSelectedIdsResult<number>> => { 
-        return this.http.post<LazyLoadSelectedIdsResult<number>>(`${environment.apiUrl}/Auth/LazyLoadSelectedUserExtendedIdsForNotification`, tableFilterDTO, environment.httpOptions);
+    lazyLoadSelectedUserExtendedIdsForNotification = (tableFilterDTO: TableFilter): Observable<LazyLoadSelectedIdsResult> => { 
+        return this.http.post<LazyLoadSelectedIdsResult>(`${environment.apiUrl}/Auth/LazyLoadSelectedUserExtendedIdsForNotification`, tableFilterDTO, environment.httpSkipSpinnerOptions);
     }
 
     loadUserExtendedNamebookListForNotification = (notificationId: number): Observable<Namebook[]> => {
@@ -318,8 +318,8 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerNotification/LoadPartnerUserNamebookListForPartnerNotification?partnerNotificationId=${partnerNotificationId}`, environment.httpSkipSpinnerOptions);
     }
 
-    lazyLoadSelectedPartnerUserIdsForPartnerNotification = (tableFilterDTO: TableFilter): Observable<LazyLoadSelectedIdsResult<number>> => { 
-        return this.http.post<LazyLoadSelectedIdsResult<number>>(`${environment.apiUrl}/PartnerNotification/LazyLoadSelectedPartnerUserIdsForPartnerNotification`, tableFilterDTO, environment.httpOptions);
+    lazyLoadSelectedPartnerUserIdsForPartnerNotification = (tableFilterDTO: TableFilter): Observable<LazyLoadSelectedIdsResult> => { 
+        return this.http.post<LazyLoadSelectedIdsResult>(`${environment.apiUrl}/PartnerNotification/LazyLoadSelectedPartnerUserIdsForPartnerNotification`, tableFilterDTO, environment.httpSkipSpinnerOptions);
     }
 
     savePartnerNotification = (partnerNotificationSaveBodyDTO: PartnerNotificationSaveBody): Observable<PartnerNotification> => { 
