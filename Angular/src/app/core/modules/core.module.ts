@@ -21,11 +21,13 @@ import { PartnerCodeInterceptor } from '../../business/interceptors/partner-code
       multi: true,
       deps: [AuthService],
     },
-    { provide: HTTP_INTERCEPTORS,
+    { 
+      provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
       multi: true 
     },
-    { provide: HTTP_INTERCEPTORS,
+    { 
+      provide: HTTP_INTERCEPTORS,
       useClass: PartnerCodeInterceptor,
       multi: true 
     },
@@ -43,7 +45,7 @@ import { PartnerCodeInterceptor } from '../../business/interceptors/partner-code
       provide: HTTP_INTERCEPTORS,
       useClass: JsonHttpInterceptor,
       multi: true
-    },
+    }
   ],
 })
 export class CoreModule {

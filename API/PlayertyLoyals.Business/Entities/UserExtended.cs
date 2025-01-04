@@ -9,8 +9,10 @@ using System.ComponentModel.DataAnnotations;
 namespace PlayertyLoyals.Business.Entities
 {
     [Index(nameof(Email), IsUnique = true)]
+    [Translate("Korisnik", "User")]
     public class UserExtended : BusinessObject<long>, IUser
     {
+        [Translate("Email", "Email")]
         [SoftDisplayName]
         [CustomValidator("EmailAddress()")]
         [StringLength(70, MinimumLength = 5)]
@@ -19,8 +21,10 @@ namespace PlayertyLoyals.Business.Entities
 
         public bool? HasLoggedInWithExternalProvider { get; set; }
 
+        [Translate("Obrisano")]
         public bool? IsDisabled { get; set; }
 
+        [Translate("Datum rođenja")]
         public DateTime? BirthDate { get; set; }
 
         /// <summary>

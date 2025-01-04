@@ -13,10 +13,10 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         this.primengConfig.ripple = true;
-        
+
         this.translocoService.selectTranslateObject('Primeng').subscribe((primengTranslations) => {
             this.primengConfig.setTranslation(primengTranslations);
-          });
+        });
 
         this.partnerService.startListening();
     }

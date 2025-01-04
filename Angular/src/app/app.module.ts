@@ -17,8 +17,11 @@ import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { environment } from 'src/environments/environment';
-import { TranslocoRootModule } from './transloco-root.module';
 import { BusinessModule } from './business/business.module';
+import { SoftTranslocoModule } from './core/modules/soft-transloco.module';
+import { provideTranslocoFallbackStrategy, TRANSLOCO_FALLBACK_STRATEGY } from '@jsverse/transloco';
+import { SoftTranslocoFallbackStrategy } from './core/handlers/soft-transloco-fallback-strategy';
+// import { SoftTranslocoFallbackStrategy } from './core/handlers/soft-transloco-fallback-strategy';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,7 @@ import { BusinessModule } from './business/business.module';
     MessagesModule,
     ToastModule,
     SocialLoginModule,
-    TranslocoRootModule,
+    SoftTranslocoModule.forRoot(),
     NgxSpinnerModule.forRoot({ type: 'ball-clip-rotate-multiple' }),
     BusinessModule,
     CoreModule,

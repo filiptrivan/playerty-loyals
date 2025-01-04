@@ -1,3 +1,4 @@
+import { TranslocoService } from '@jsverse/transloco';
 import { PartnerUser, Tier } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from '../../../business/services/api/api.service';
 import { LayoutService } from '../../services/app.layout.service';
@@ -24,6 +25,7 @@ export class DashboardComponent implements OnInit {
     private messageService: SoftMessageService,
     private authService: AuthService,
     private partnerService: PartnerService,
+    private translocoService: TranslocoService
   ) {}
 
   ngOnInit() {
@@ -63,4 +65,5 @@ export class DashboardComponent implements OnInit {
       this.permissionsSubscription.unsubscribe();
     }
   }
+
 }
