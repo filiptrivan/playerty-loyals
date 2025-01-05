@@ -31,9 +31,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<PartnerRoleDTO>> LoadPartnerRoleTableData(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<PartnerRoleDTO>> GetPartnerRoleTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadPartnerRoleTableData(tableFilterDTO, _context.DbSet<PartnerRole>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetPartnerRoleTableData(tableFilterDTO, _context.DbSet<PartnerRole>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpPost]
@@ -67,30 +67,30 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> LoadPartnerUserNamebookListForPartnerRole(int partnerRoleId)
+        public async Task<List<NamebookDTO<long>>> GetPartnerUserNamebookListForPartnerRole(int partnerRoleId)
         {
-            return await _loyalsBusinessService.LoadPartnerUserNamebookListForPartnerRole(partnerRoleId, false);
+            return await _loyalsBusinessService.GetPartnerUserNamebookListForPartnerRole(partnerRoleId, false);
         }
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<int>>> LoadPartnerPermissionNamebookListForPartnerRole(int partnerRoleId)
+        public async Task<List<NamebookDTO<int>>> GetPartnerPermissionNamebookListForPartnerRole(int partnerRoleId)
         {
-            return await _loyalsBusinessService.LoadPartnerPermissionNamebookListForPartnerRole(partnerRoleId, false);
+            return await _loyalsBusinessService.GetPartnerPermissionNamebookListForPartnerRole(partnerRoleId, false);
         }
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<int>>> LoadPartnerPermissionListForDropdown()
+        public async Task<List<NamebookDTO<int>>> GetPartnerPermissionListForDropdown()
         {
-            return await _loyalsBusinessService.LoadPartnerPermissionListForDropdown(_context.DbSet<PartnerPermission>(), false);
+            return await _loyalsBusinessService.GetPartnerPermissionListForDropdown(_context.DbSet<PartnerPermission>(), false);
         }
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<int>>> LoadPartnerRoleListForDropdown()
+        public async Task<List<NamebookDTO<int>>> GetPartnerRoleListForDropdown()
         {
-            return await _loyalsBusinessService.LoadPartnerRoleListForDropdown(_context.DbSet<PartnerRole>(), false);
+            return await _loyalsBusinessService.GetPartnerRoleListForDropdown(_context.DbSet<PartnerRole>(), false);
         }
 
     }

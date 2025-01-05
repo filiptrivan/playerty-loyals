@@ -26,7 +26,7 @@ namespace PlayertyLoyals.Business.Services
             // TODO FT: We need to validate if the current user is authorized to get the data
             await _context.WithTransactionAsync(async () =>
             {
-                BusinessSystem businessSystem = await LoadInstanceAsync<BusinessSystem, long>(businessSystemId, null);
+                BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(businessSystemId, null);
                 List<ExternalDiscountProductGroupDTO> externalDiscountProductGroupDTOList = await _wingsApiService.GetExternalDiscountProductGroupDTOList(businessSystem);
 
                 DbSet<DiscountProductGroup> dbSet = _context.DbSet<DiscountProductGroup>();
@@ -58,7 +58,7 @@ namespace PlayertyLoyals.Business.Services
                         discountCategoryList.Remove(discountCategory);
                     }
 
-                    discountCategory.BusinessSystem = await LoadInstanceAsync<BusinessSystem, long>(businessSystemId, null);
+                    discountCategory.BusinessSystem = await GetInstanceAsync<BusinessSystem, long>(businessSystemId, null);
                 }
 
                 _context.DbSet<DiscountProductGroup>().RemoveRange(discountCategoryList);

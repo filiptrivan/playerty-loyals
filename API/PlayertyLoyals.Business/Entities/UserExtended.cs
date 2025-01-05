@@ -3,16 +3,17 @@ using Soft.Generator.Security.Entities;
 using Soft.Generator.Security.Interface;
 using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.Attributes.EF;
+using Soft.Generator.Shared.Attributes.EF.Translation;
 using Soft.Generator.Shared.BaseEntities;
 using System.ComponentModel.DataAnnotations;
 
 namespace PlayertyLoyals.Business.Entities
 {
+    [TranslateSingularSrLatnRS("Korisnik")]
     [Index(nameof(Email), IsUnique = true)]
-    [Translate("Korisnik", "User")]
     public class UserExtended : BusinessObject<long>, IUser
     {
-        [Translate("Email", "Email")]
+        [TranslateSingularSrLatnRS("Email")]
         [SoftDisplayName]
         [CustomValidator("EmailAddress()")]
         [StringLength(70, MinimumLength = 5)]
@@ -21,10 +22,10 @@ namespace PlayertyLoyals.Business.Entities
 
         public bool? HasLoggedInWithExternalProvider { get; set; }
 
-        [Translate("Obrisano")]
+        [TranslateSingularSrLatnRS("Obrisano")]
         public bool? IsDisabled { get; set; }
 
-        [Translate("Datum rođenja")]
+        [TranslateSingularSrLatnRS("Datum rođenja")]
         public DateTime? BirthDate { get; set; }
 
         /// <summary>

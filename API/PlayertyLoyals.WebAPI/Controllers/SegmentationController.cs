@@ -28,9 +28,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<SegmentationDTO>> LoadSegmentationTableData(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<SegmentationDTO>> GetSegmentationTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadSegmentationTableData(tableFilterDTO, _context.DbSet<Segmentation>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetSegmentationTableData(tableFilterDTO, _context.DbSet<Segmentation>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpPost]
@@ -85,9 +85,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> LoadSegmentationItemListForDropdown()
+        public async Task<List<NamebookDTO<long>>> GetSegmentationItemListForDropdown()
         {
-            return await _loyalsBusinessService.LoadSegmentationItemListForDropdown(_context.DbSet<SegmentationItem>().Where(x => x.Segmentation.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetSegmentationItemListForDropdown(_context.DbSet<SegmentationItem>().Where(x => x.Segmentation.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
     }

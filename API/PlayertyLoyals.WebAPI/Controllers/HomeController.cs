@@ -3,7 +3,6 @@ using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Enums;
 using PlayertyLoyals.Business.Services;
-using PlayertyLoyals.Business.Services;
 using Soft.Generator.Security.Interface;
 using Soft.Generator.Security.Services;
 using Soft.Generator.Shared.Attributes;

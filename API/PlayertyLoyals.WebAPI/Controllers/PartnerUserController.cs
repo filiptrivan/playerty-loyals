@@ -80,16 +80,16 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> LoadPartnerUserListForAutocomplete(int limit, string query)
+        public async Task<List<NamebookDTO<long>>> GetPartnerUserListForAutocomplete(int limit, string query)
         {
-            return await _loyalsBusinessService.LoadPartnerUserListForAutocomplete(limit, query, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetPartnerUserListForAutocomplete(limit, query, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> LoadPartnerUserListForDropdown()
+        public async Task<List<NamebookDTO<long>>> GetPartnerUserListForDropdown()
         {
-            return await _loyalsBusinessService.LoadPartnerUserListForDropdown(_context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetPartnerUserListForDropdown(_context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpGet]
@@ -101,9 +101,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<int>>> LoadPartnerRoleNamebookListForPartnerUser(long partnerUserId)
+        public async Task<List<NamebookDTO<int>>> GetPartnerRoleNamebookListForPartnerUser(long partnerUserId)
         {
-            return await _loyalsBusinessService.LoadPartnerRoleNamebookListForPartnerUser(partnerUserId, false);
+            return await _loyalsBusinessService.GetPartnerRoleNamebookListForPartnerUser(partnerUserId, false);
         }
 
         [HttpGet]
@@ -136,9 +136,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<TransactionDTO>> LoadTransactionListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<TransactionDTO>> GetTransactionListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadTransactionListForTheCurrentPartnerUser(tableFilterDTO);
+            return await _loyalsBusinessService.GetTransactionListForTheCurrentPartnerUser(tableFilterDTO);
         }
 
     }

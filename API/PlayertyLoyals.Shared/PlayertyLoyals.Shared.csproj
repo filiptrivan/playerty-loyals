@@ -16,12 +16,24 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Terms.resx</DependentUpon>
     </Compile>
+    <Compile Update="Terms\TermsGenerated.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TermsGenerated.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Terms\Terms.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Terms.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Terms\TermsGenerated.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>TermsGenerated.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Terms\TermsGenerated.sr-Latn-RS.resx">
+      <Generator></Generator>
     </EmbeddedResource>
   </ItemGroup>
 

@@ -32,9 +32,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<PartnerNotificationDTO>> LoadPartnerNotificationTableData(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<PartnerNotificationDTO>> GetPartnerNotificationTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadPartnerNotificationTableData(tableFilterDTO, _context.DbSet<PartnerNotification>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetPartnerNotificationTableData(tableFilterDTO, _context.DbSet<PartnerNotification>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpPost]
@@ -61,9 +61,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> LoadPartnerUserNamebookListForPartnerNotification(long partnerNotificationId)
+        public async Task<List<NamebookDTO<long>>> GetPartnerUserNamebookListForPartnerNotification(long partnerNotificationId)
         {
-            return await _loyalsBusinessService.LoadPartnerUserNamebookListForPartnerNotification(partnerNotificationId, false);
+            return await _loyalsBusinessService.GetPartnerUserNamebookListForPartnerNotification(partnerNotificationId, false);
         }
 
         [HttpPost]
@@ -91,9 +91,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<NotificationDTO>> LoadNotificationListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<NotificationDTO>> GetNotificationListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadNotificationListForTheCurrentPartnerUser(tableFilterDTO);
+            return await _loyalsBusinessService.GetNotificationListForTheCurrentPartnerUser(tableFilterDTO);
         }
 
         [HttpGet]

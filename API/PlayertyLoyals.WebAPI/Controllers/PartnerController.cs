@@ -5,17 +5,17 @@ using Soft.Generator.Shared.Attributes;
 using PlayertyLoyals.Business.Services;
 using PlayertyLoyals.Business.DTO;
 using Soft.Generator.Shared.DTO;
-using PlayertyLoyals.Business.Services;
 using Soft.Generator.Shared.Helpers;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-
+using PlayertyLoyals.Shared.Terms;
+using Soft.Generator.Security.Services;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
-    public class PartnerController : SoftControllerBase
+    public class PartnerController : PartnerBaseController
     {
         private readonly IApplicationDbContext _context;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
@@ -23,6 +23,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         private readonly BlobContainerClient _blobContainerClient;
 
         public PartnerController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService, BlobContainerClient blobContainerClient)
+            : base(context, loyalsBusinessService, blobContainerClient)
         {
             _context = context;
             _loyalsBusinessService = loyalsBusinessService;
@@ -30,48 +31,48 @@ namespace PlayertyLoyals.WebAPI.Controllers
             _blobContainerClient = blobContainerClient;
         }
 
-        [HttpPost]
-        [AuthGuard]
-        public async Task<TableResponseDTO<PartnerDTO>> LoadPartnerTableData(TableFilterDTO tableFilterDTO)
-        {
-            return await _loyalsBusinessService.LoadPartnerTableData(tableFilterDTO, _context.DbSet<Partner>(), false);
-        }
+        //[HttpPost]
+        //[AuthGuard]
+        //public override async Task<TableResponseDTO<PartnerDTO>> LoadPartnerTableData(TableFilterDTO tableFilterDTO)
+        //{
+        //    return await _loyalsBusinessService.LoadPartnerTableData(tableFilterDTO, _context.DbSet<Partner>(), false);
+        //}
 
-        [HttpPost]
-        [AuthGuard]
-        public async Task<IActionResult> ExportPartnerTableDataToExcel(TableFilterDTO tableFilterDTO)
-        {
-            byte[] fileContent = await _loyalsBusinessService.ExportPartnerTableDataToExcel(tableFilterDTO, _context.DbSet<Partner>(), false);
-            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Partneri.xlsx"));
-        }
+        //[HttpPost]
+        //[AuthGuard]
+        //public async Task<IActionResult> ExportPartnerTableDataToExcel(TableFilterDTO tableFilterDTO)
+        //{
+        //    byte[] fileContent = await _loyalsBusinessService.ExportPartnerTableDataToExcel(tableFilterDTO, _context.DbSet<Partner>(), false);
+        //    return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Partneri.xlsx"));
+        //}
 
-        [HttpDelete]
-        [AuthGuard]
-        public async Task DeletePartner(int id)
-        {
-            await _loyalsBusinessService.DeletePartnerAsync(id, false);
-        }
+        //[HttpDelete]
+        //[AuthGuard]
+        //public async Task DeletePartner(int id)
+        //{
+        //    await _loyalsBusinessService.DeletePartnerAsync(id, false);
+        //}
+
+        //[HttpGet]
+        //[AuthGuard]
+        //public async Task<PartnerDTO> GetPartner(int id)
+        //{
+        //    return await _loyalsBusinessService.GetPartnerDTOAsync(id, false);
+        //}
 
         [HttpGet]
         [AuthGuard]
-        public async Task<PartnerDTO> GetPartner(int id)
+        public async Task<List<PartnerDTO>> GetPartnerList()
         {
-            return await _loyalsBusinessService.GetPartnerDTOAsync(id, false);
+            return await _loyalsBusinessService.GetPartnerDTOList(_context.DbSet<Partner>(), false);
         }
 
-        [HttpGet]
-        [AuthGuard]
-        public async Task<List<PartnerDTO>> GetPartners()
-        {
-            return await _loyalsBusinessService.LoadPartnerDTOList(_context.DbSet<Partner>(), false);
-        }
-
-        [HttpPut]
-        [AuthGuard]
-        public async Task<PartnerDTO> SavePartner(PartnerDTO partnerDTO)
-        {
-            return await _loyalsBusinessService.SavePartnerAndReturnDTOAsync(partnerDTO, false, false);
-        }
+        //[HttpPut]
+        //[AuthGuard]
+        //public async Task<PartnerDTO> SavePartner(PartnerDTO partnerDTO)
+        //{
+        //    return await _loyalsBusinessService.SavePartnerAndReturnDTOAsync(partnerDTO, false, false);
+        //}
         
         [HttpGet]
         //[AuthGuard] // FT: We should show login page of the partner to the user which is not logged in also.
@@ -82,17 +83,17 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<CodebookDTO>> LoadPartnerWithSlugListForAutocomplete(int limit, string query)
+        public async Task<List<CodebookDTO>> GetPartnerWithSlugListForAutocomplete(int limit, string query)
         {
-            return await _loyalsBusinessService.LoadPartnerWithSlugListForAutocomplete(limit, query, _context.DbSet<Partner>(), false);
+            return await _loyalsBusinessService.GetPartnerWithSlugListForAutocomplete(limit, query, _context.DbSet<Partner>(), false);
         }
 
-        // FT: You can't upload and delete on every request because you can delete the old image for the user when he refreshes
+        // FT: You can't upload and delete on every request because you can delete the old image for the user when he refreshes the page
         [HttpPost]
         [AuthGuard]
         public async Task<string> UploadLogoImage([FromForm] IFormFile file) // FT: It doesn't work without interface
         {
-            return await _loyalsBusinessService.UploadPartnerLogoImageAsync(file); // TODO FT: Make authorization in loyals business servie with override
+            return await _loyalsBusinessService.UploadPartnerLogoImageAsync(file); // TODO: Make authorization in business service with override
         }
 
         [HttpGet]

@@ -34,9 +34,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<TierDTO>> LoadTierTableData(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<TierDTO>> GetTierTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadTierTableData(tableFilterDTO, _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
+            return await _loyalsBusinessService.GetTierTableData(tableFilterDTO, _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
         }
 
         [HttpPost]
@@ -70,30 +70,30 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<int>>> LoadTierListForDropdown()
+        public async Task<List<NamebookDTO<int>>> GetTierListForDropdown()
         {
-            return await _loyalsBusinessService.LoadTierListForDropdown(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
+            return await _loyalsBusinessService.GetTierListForDropdown(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
         }
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<TierDTO>> LoadTierDTOList()
+        public async Task<List<TierDTO>> GetTierDTOList()
         {
-            return await _loyalsBusinessService.LoadTierDTOList(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
+            return await _loyalsBusinessService.GetTierDTOList(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
         }
 
         [HttpGet]
         [AuthGuard]
-        public async Task<TierSaveBodyDTO> LoadTierSaveBodyDTO()
+        public async Task<TierSaveBodyDTO> GetTierSaveBodyDTO()
         {
-            return await _loyalsBusinessService.LoadTierSaveBodyDTO();
+            return await _loyalsBusinessService.GetTierSaveBodyDTO();
         }
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<TierDTO>> LoadTierListForDisplay()
+        public async Task<List<TierDTO>> GetTierListForDisplay()
         {
-            return await _loyalsBusinessService.LoadTierListForDisplay();
+            return await _loyalsBusinessService.GetTierListForDisplay();
         }
 
         [HttpGet]
@@ -105,23 +105,23 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         //[HttpPost]
         //[AuthGuard]
-        //public async Task<List<BusinessSystemTierDTO>> LoadBusinessSystemTierDTOListForTierList(List<long> tierIds)
+        //public async Task<List<BusinessSystemTierDTO>> GetBusinessSystemTierDTOListForTierList(List<long> tierIds)
         //{
-        //    return await _loyalsBusinessService.LoadBusinessSystemTierDTOListForTierList(tierIds);
+        //    return await _loyalsBusinessService.GetBusinessSystemTierDTOListForTierList(tierIds);
         //}
 
         //[HttpPost]
         //[AuthGuard]
-        //public async Task<List<DiscountProductGroupDTO>> LoadDiscountProductGroupDTOListForCurrentPartner(List<long> businessSystemTierIds)
+        //public async Task<List<DiscountProductGroupDTO>> GetDiscountProductGroupDTOListForCurrentPartner(List<long> businessSystemTierIds)
         //{
-        //    return await _loyalsBusinessService.LoadDiscountProductGroupDTOListForCurrentPartner(businessSystemTierIds);
+        //    return await _loyalsBusinessService.GetDiscountProductGroupDTOListForCurrentPartner(businessSystemTierIds);
         //}
 
         //[HttpGet]
         //[AuthGuard]
-        //public async Task<List<NamebookDTO<long>>> LoadUserListForTier(int roleId)
+        //public async Task<List<NamebookDTO<long>>> GetUserListForTier(int roleId)
         //{
-        //    return await _loyalsBusinessService.LoadUserExtendedNamebookListForTier<TUser>(roleId);
+        //    return await _loyalsBusinessService.GetUserExtendedNamebookListForTier<TUser>(roleId);
         //}
     }
 }

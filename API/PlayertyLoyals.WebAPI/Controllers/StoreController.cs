@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Services;
-using PlayertyLoyals.Business.Services;
 using PlayertyLoyals.Shared.Terms;
 using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.DTO;
@@ -34,9 +33,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<BusinessSystemDTO>> LoadBusinessSystemTableData(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<BusinessSystemDTO>> GetBusinessSystemTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadBusinessSystemTableData(tableFilterDTO, _context.DbSet<BusinessSystem>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetBusinessSystemTableData(tableFilterDTO, _context.DbSet<BusinessSystem>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpPost]
@@ -70,16 +69,16 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         //[HttpGet]
         //[AuthGuard]
-        //public async Task<List<long>> LoadSelectedDiscountProductGroupIdsForBusinessSystem(long businessSystemId)
+        //public async Task<List<long>> GetSelectedDiscountProductGroupIdsForBusinessSystem(long businessSystemId)
         //{
-        //    return await _loyalsBusinessService.LoadSelectedDiscountProductGroupIdsForBusinessSystem(_context.DbSet<DiscountProductGroup>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), businessSystemId);
+        //    return await _loyalsBusinessService.GetSelectedDiscountProductGroupIdsForBusinessSystem(_context.DbSet<DiscountProductGroup>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), businessSystemId);
         //}
 
         //[HttpGet]
         //[AuthGuard]
-        //public async Task<List<DiscountProductGroupDTO>> LoadSelectedDiscountProductGroupListForBusinessSystem(long businessSystemId)
+        //public async Task<List<DiscountProductGroupDTO>> GetSelectedDiscountProductGroupListForBusinessSystem(long businessSystemId)
         //{
-        //    return await _loyalsBusinessService.LoadSelectedDiscountProductGroupListForBusinessSystem(_context.DbSet<DiscountProductGroup>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), businessSystemId);
+        //    return await _loyalsBusinessService.GetSelectedDiscountProductGroupListForBusinessSystem(_context.DbSet<DiscountProductGroup>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), businessSystemId);
         //}
 
         //[HttpGet]
@@ -133,16 +132,16 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> LoadBusinessSystemListForDropdown()
+        public async Task<List<NamebookDTO<long>>> GetBusinessSystemListForDropdown()
         {
-            return await _loyalsBusinessService.LoadBusinessSystemListForDropdown(_context.DbSet<BusinessSystem>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetBusinessSystemListForDropdown(_context.DbSet<BusinessSystem>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<BusinessSystemUpdatePointsScheduledTaskDTO>> LoadBusinessSystemUpdatePointsScheduledTaskTableData(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<BusinessSystemUpdatePointsScheduledTaskDTO>> GetBusinessSystemUpdatePointsScheduledTaskTableData(TableFilterDTO tableFilterDTO)
         {   
-            return await _loyalsBusinessService.LoadBusinessSystemUpdatePointsScheduledTaskTableData(tableFilterDTO, _context.DbSet<BusinessSystemUpdatePointsScheduledTask>().Where(x => x.BusinessSystem.Id == tableFilterDTO.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo), false);
+            return await _loyalsBusinessService.GetBusinessSystemUpdatePointsScheduledTaskTableData(tableFilterDTO, _context.DbSet<BusinessSystemUpdatePointsScheduledTask>().Where(x => x.BusinessSystem.Id == tableFilterDTO.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo), false);
         }
 
         [HttpPost]

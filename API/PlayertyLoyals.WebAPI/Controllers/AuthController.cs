@@ -8,7 +8,6 @@ using Soft.Generator.Shared.Attributes;
 using PlayertyLoyals.Business.Services;
 using PlayertyLoyals.Business.DTO;
 using Soft.Generator.Shared.DTO;
-using PlayertyLoyals.Business.Services;
 using Microsoft.EntityFrameworkCore;
 using Soft.Generator.Shared.Terms;
 using Soft.Generator.Security.DTO;
@@ -129,16 +128,16 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> LoadUserListForAutocomplete(int limit, string query)
+        public async Task<List<NamebookDTO<long>>> GetUserListForAutocomplete(int limit, string query)
         {
-            return await _loyalsBusinessService.LoadUserExtendedListForAutocomplete(limit, query, _context.DbSet<UserExtended>());
+            return await _loyalsBusinessService.GetUserExtendedListForAutocomplete(limit, query, _context.DbSet<UserExtended>());
         }
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> LoadUserListForDropdown()
+        public async Task<List<NamebookDTO<long>>> GetUserListForDropdown()
         {
-            return await _loyalsBusinessService.LoadUserExtendedListForDropdown(_context.DbSet<UserExtended>());
+            return await _loyalsBusinessService.GetUserExtendedListForDropdown(_context.DbSet<UserExtended>());
         }
 
         [HttpGet]
@@ -151,9 +150,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<int>>> LoadGenderNamebookListForDropdown()
+        public async Task<List<NamebookDTO<int>>> GetGenderNamebookListForDropdown()
         {
-            return await _loyalsBusinessService.LoadGenderListForDropdown(_context.DbSet<Gender>(), false);
+            return await _loyalsBusinessService.GetGenderListForDropdown(_context.DbSet<Gender>(), false);
         }
 
         [HttpGet]
@@ -167,9 +166,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<NotificationDTO>> LoadNotificationTableData(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<NotificationDTO>> GetNotificationTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadNotificationTableData(tableFilterDTO, _context.DbSet<Notification>().Where(a => EF.Property<string>(a, "Discriminator") == nameof(Notification))); // TODO FT: Make one more table, don't do this
+            return await _loyalsBusinessService.GetNotificationTableData(tableFilterDTO, _context.DbSet<Notification>().Where(a => EF.Property<string>(a, "Discriminator") == nameof(Notification))); // TODO FT: Make one more table, don't do this
         }
 
         [HttpPost]
@@ -211,16 +210,16 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> LoadUserExtendedNamebookListForNotification(long notificationId)
+        public async Task<List<NamebookDTO<long>>> GetUserExtendedNamebookListForNotification(long notificationId)
         {
-            return await _loyalsBusinessService.LoadUserExtendedNamebookListForNotification(notificationId);
+            return await _loyalsBusinessService.GetUserExtendedNamebookListForNotification(notificationId);
         }
 
         //[HttpPost]
         //[AuthGuard]
-        //public async Task<TableResponseDTO<NotificationDTO>> LoadNotificationListForTheCurrentUser(TableFilterDTO tableFilterDTO)
+        //public async Task<TableResponseDTO<NotificationDTO>> GetNotificationListForTheCurrentUser(TableFilterDTO tableFilterDTO)
         //{
-        //    return await _loyalsBusinessService.LoadNotificationListForTheCurrentUser(tableFilterDTO);
+        //    return await _loyalsBusinessService.GetNotificationListForTheCurrentUser(tableFilterDTO);
         //}
 
         // TODO FT: This should exist in other systems

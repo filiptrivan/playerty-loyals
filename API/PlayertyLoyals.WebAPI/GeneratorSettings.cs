@@ -13,7 +13,10 @@ namespace PlayertyLoyals.WebAPI.GeneratorSettings
         [Output(@"E:\Projects\PlayertyLoyals\Angular\src\app\business\services\validators")]
         public string NgValidatorsGenerator { get; set; }
 
-        [Output("truee")]
+        [Output("true")]
         public string ControllerGenerator { get; set; }
+
+        [Output("true")]
+        public string TranslationsGenerator { get; set; }
     }
 }

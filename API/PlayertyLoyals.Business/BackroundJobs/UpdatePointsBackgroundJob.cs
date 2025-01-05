@@ -62,7 +62,7 @@ namespace PlayertyLoyals.Business.BackroundJobs
                 {
                     DbSet<BusinessSystemUpdatePointsScheduledTask> dbSet = _context.DbSet<BusinessSystemUpdatePointsScheduledTask>();
 
-                    businessSystem = await _loyalsBusinessService.LoadInstanceAsync<BusinessSystem, long>(businessSystemId, null);
+                    businessSystem = await _loyalsBusinessService.GetInstanceAsync<BusinessSystem, long>(businessSystemId, null);
 
                     if (businessSystem.GetTransactionsEndpoint == null)
                         throw new BusinessException($"Na stranici prodavnice '{businessSystem.Name}' morate da sačuvate popunjeno polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");

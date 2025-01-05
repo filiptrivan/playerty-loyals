@@ -45,7 +45,7 @@ namespace PlayertyLoyals.Business.Services
             _wingsApiService = wingsApiService;
             _updatePointsScheduler = updatePointsScheduler;
         }
-
+        
         #region User
 
         public async Task<UserExtendedDTO> SaveUserExtendedAndReturnDTOExtendedAsync(UserExtendedSaveBodyDTO userExtendedSaveBodyDTO)
@@ -55,7 +55,7 @@ namespace PlayertyLoyals.Business.Services
                 if (userExtendedSaveBodyDTO.UserExtendedDTO.Id == 0)
                     throw new HackerException("You can't add new user.");
 
-                UserExtended user = await LoadInstanceAsync<UserExtended, long>(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.UserExtendedDTO.Version);
+                UserExtended user = await GetInstanceAsync<UserExtended, long>(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.UserExtendedDTO.Version);
 
                 if (userExtendedSaveBodyDTO.UserExtendedDTO.Email != user.Email)
                     throw new HackerException("You can't change email from here.");
@@ -94,7 +94,7 @@ namespace PlayertyLoyals.Business.Services
             {
                 NotificationDTO savedNotificationDTO = await SaveNotificationAndReturnDTOAsync(notificationSaveBodyDTO.NotificationDTO, true, true);
 
-                PaginationResult<UserExtended> paginationResult = await LoadUserExtendedListForPagination(notificationSaveBodyDTO.TableFilter, _context.DbSet<UserExtended>());
+                PaginationResult<UserExtended> paginationResult = await GetUserExtendedListForPagination(notificationSaveBodyDTO.TableFilter, _context.DbSet<UserExtended>());
 
                 await UpdateUserExtendedListForNotificationWithLazyTableSelection(paginationResult.Query, savedNotificationDTO.Id, notificationSaveBodyDTO);
 
@@ -108,7 +108,7 @@ namespace PlayertyLoyals.Business.Services
             {
                 await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.EditNotification);
 
-                Notification notification = await LoadInstanceAsync<Notification, long>(notificationId, notificationVersion); // FT: Checking version because if the user didn't save and some other user changed the version, he will send emails to wrong users
+                Notification notification = await GetInstanceAsync<Notification, long>(notificationId, notificationVersion); // FT: Checking version because if the user didn't save and some other user changed the version, he will send emails to wrong users
 
                 List<string> recipients = notification.Users.Select(x => x.Email).ToList();
 
@@ -264,19 +264,19 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task<TierSaveBodyDTO> LoadTierSaveBodyDTO()
+        public async Task<TierSaveBodyDTO> GetTierSaveBodyDTO()
         {
             TierSaveBodyDTO tierSaveBodyDTO = new TierSaveBodyDTO();
 
             await _context.WithTransactionAsync(async () =>
             {
-                List<TierDTO> tierDTOList = await LoadTierDTOList(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
+                List<TierDTO> tierDTOList = await GetTierDTOList(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
                 List<int> tierIds = tierDTOList.Select(x => x.Id).ToList();
 
-                List<BusinessSystemTierDTO> businessSystemTierDTOList = await LoadBusinessSystemTierDTOList(_context.DbSet<BusinessSystemTier>().Where(x => tierIds.Contains(x.Tier.Id)).OrderBy(x => x.OrderNumber), false);
+                List<BusinessSystemTierDTO> businessSystemTierDTOList = await GetBusinessSystemTierDTOList(_context.DbSet<BusinessSystemTier>().Where(x => tierIds.Contains(x.Tier.Id)).OrderBy(x => x.OrderNumber), false);
                 List<long> businessSystemTierIds = businessSystemTierDTOList.Select(x => x.Id).ToList();
 
-                List<DiscountProductGroupDTO> discountCategoryDTOList = await LoadDiscountProductGroupDTOList(_context.DbSet<DiscountProductGroup>().Where(x => x.BusinessSystem.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false); // 14
+                List<DiscountProductGroupDTO> discountCategoryDTOList = await GetDiscountProductGroupDTOList(_context.DbSet<DiscountProductGroup>().Where(x => x.BusinessSystem.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false); // 14
                 List<BusinessSystemTierDiscountProductGroupDTO> businessSystemTierDiscountProductGroupResultDTOList = discountCategoryDTOList
                     .Select(x => new BusinessSystemTierDiscountProductGroupDTO
                     {
@@ -338,13 +338,13 @@ namespace PlayertyLoyals.Business.Services
             return tierSaveBodyDTO;
         }
 
-        public async Task<List<TierDTO>> LoadTierListForDisplay()
+        public async Task<List<TierDTO>> GetTierListForDisplay()
         {
             return await _context.WithTransactionAsync(async () =>
             {
                 List<TierDTO> tierDTOList = new List<TierDTO>();
 
-                List<Tier> tierList = await LoadTierList(_context.DbSet<Tier>()
+                List<Tier> tierList = await GetTierList(_context.DbSet<Tier>()
                     .AsNoTracking()
                     .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
                     .Include(x => x.BusinessSystemTiers)
@@ -388,7 +388,7 @@ namespace PlayertyLoyals.Business.Services
         /// <summary>
         /// TODO FT: Add this to generator (you will need to add one more custom attribute [Code])
         /// </summary>
-        public async Task<List<CodebookDTO>> LoadPartnerWithSlugListForAutocomplete(int limit, string query, IQueryable<Partner> partnerQuery, bool authorize = true)
+        public async Task<List<CodebookDTO>> GetPartnerWithSlugListForAutocomplete(int limit, string query, IQueryable<Partner> partnerQuery, bool authorize = true)
         {
             long currentUserId = _authenticationService.GetCurrentUserId();
 
@@ -453,7 +453,7 @@ namespace PlayertyLoyals.Business.Services
 
                 if (currentPartner != null)
                 {
-                    UserExtended user = await LoadInstanceAsync<UserExtended, long>(authResultDTO.UserId, null);
+                    UserExtended user = await GetInstanceAsync<UserExtended, long>(authResultDTO.UserId, null);
 
                     PartnerUser partnerUser = await _context.DbSet<PartnerUser>().Where(x => x.User.Id == user.Id && x.Partner.Id == currentPartner.Id).SingleOrDefaultAsync();
 
@@ -466,7 +466,7 @@ namespace PlayertyLoyals.Business.Services
         {
             await _context.WithTransactionAsync(async () =>
             {
-                Partner partner = await LoadInstanceAsync<Partner, int>(partnerId, null);
+                Partner partner = await GetInstanceAsync<Partner, int>(partnerId, null);
 
                 UserExtended user = await _authenticationService.GetCurrentUser<UserExtended>();
 
@@ -593,7 +593,7 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async override Task<List<NamebookDTO<long>>> LoadPartnerUserNamebookListForPartnerRole(int partnerRoleId, bool authorize = true)
+        public async override Task<List<NamebookDTO<long>>> GetPartnerUserNamebookListForPartnerRole(int partnerRoleId, bool authorize = true)
         {
             return await _context.WithTransactionAsync(async () =>
             {
@@ -614,7 +614,7 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async override Task<List<NamebookDTO<long>>> LoadPartnerUserNamebookListForPartnerNotification(long partnerNotificationId, bool authorize = true)
+        public async override Task<List<NamebookDTO<long>>> GetPartnerUserNamebookListForPartnerNotification(long partnerNotificationId, bool authorize = true)
         {
             return await _context.WithTransactionAsync(async () =>
             {
@@ -635,7 +635,7 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async override Task<List<NamebookDTO<long>>> LoadPartnerUserListForAutocomplete(int limit, string query, IQueryable<PartnerUser> partnerUserQuery, bool authorize = true)
+        public async override Task<List<NamebookDTO<long>>> GetPartnerUserListForAutocomplete(int limit, string query, IQueryable<PartnerUser> partnerUserQuery, bool authorize = true)
         {
             return await _context.WithTransactionAsync(async () =>
             {
@@ -684,13 +684,13 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task<TableResponseDTO<TransactionDTO>> LoadTransactionListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<TransactionDTO>> GetTransactionListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
         {
             return await _context.WithTransactionAsync(async () =>
             {
                 long partnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
 
-                TableResponseDTO<TransactionDTO> transactionTableResponse = await LoadTransactionTableData(tableFilterDTO, _context.DbSet<Transaction>().Where(x => x.PartnerUser.Id == partnerUserId).OrderByDescending(x => x.Id), false);
+                TableResponseDTO<TransactionDTO> transactionTableResponse = await GetTransactionTableData(tableFilterDTO, _context.DbSet<Transaction>().Where(x => x.PartnerUser.Id == partnerUserId).OrderByDescending(x => x.Id), false);
 
                 return transactionTableResponse;
             });
@@ -737,7 +737,7 @@ namespace PlayertyLoyals.Business.Services
                 IQueryable<PartnerUser> allPartnerUsersQuery = _context.DbSet<PartnerUser>()
                     .Where(x => x.Partner.Id == currentPartnerId);
 
-                PaginationResult<PartnerUser> paginationResult = await LoadPartnerUserListForPagination(partnerNotificationSaveBodyDTO.TableFilter, allPartnerUsersQuery);
+                PaginationResult<PartnerUser> paginationResult = await GetPartnerUserListForPagination(partnerNotificationSaveBodyDTO.TableFilter, allPartnerUsersQuery);
 
                 await UpdatePartnerUserListForPartnerNotificationWithLazyTableSelection(paginationResult.Query, savedPartnerNotificationDTO.Id, partnerNotificationSaveBodyDTO);
 
@@ -749,7 +749,7 @@ namespace PlayertyLoyals.Business.Services
         {
             await _context.WithTransactionAsync(async () =>
             {
-                PartnerNotification partnerNotification = await LoadInstanceAsync<PartnerNotification, long>(partnerNotificationId, partnerNotificationVersion); // FT: Checking version because if the user didn't save and some other user changed the version, he will send emails to wrong users
+                PartnerNotification partnerNotification = await GetInstanceAsync<PartnerNotification, long>(partnerNotificationId, partnerNotificationVersion); // FT: Checking version because if the user didn't save and some other user changed the version, he will send emails to wrong users
 
                 List<string> recipients = partnerNotification.PartnerUsers.Select(x => x.User.Email).ToList();
 
@@ -757,7 +757,7 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task<TableResponseDTO<NotificationDTO>> LoadNotificationListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<NotificationDTO>> GetNotificationListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
         {
             TableResponseDTO<NotificationDTO> result = new TableResponseDTO<NotificationDTO>();
             long currentUserId = _authenticationService.GetCurrentUserId(); // FT: Not doing user.Notifications, because he could have a lot of them.
@@ -803,7 +803,7 @@ namespace PlayertyLoyals.Business.Services
 
                     if (item.Discriminator == nameof(UserNotification))
                     {
-                        Notification notification = await LoadInstanceAsync<Notification, long>(item.NotificationId, null);
+                        Notification notification = await GetInstanceAsync<Notification, long>(item.NotificationId, null);
                         notificationDTO.Id = notification.Id;
                         notificationDTO.Title = notification.Title;
                         notificationDTO.Description = notification.Description;
@@ -812,7 +812,7 @@ namespace PlayertyLoyals.Business.Services
                     }
                     else if (item.Discriminator == nameof(PartnerUserPartnerNotification))
                     {
-                        PartnerNotification partnerNotification = await LoadInstanceAsync<PartnerNotification, long>(item.NotificationId, null);
+                        PartnerNotification partnerNotification = await GetInstanceAsync<PartnerNotification, long>(item.NotificationId, null);
                         notificationDTO.Id = partnerNotification.Id;
                         notificationDTO.Title = partnerNotification.Title;
                         notificationDTO.Description = partnerNotification.Description;
@@ -949,7 +949,7 @@ namespace PlayertyLoyals.Business.Services
 
                 if (businessSystemSaveBodyDTO.BusinessSystemDTO.Id > 0)
                 {
-                    BusinessSystem businessSystemBeforeSave = await LoadInstanceAsync<BusinessSystem, long>(businessSystemSaveBodyDTO.BusinessSystemDTO.Id, businessSystemSaveBodyDTO.BusinessSystemDTO.Version);
+                    BusinessSystem businessSystemBeforeSave = await GetInstanceAsync<BusinessSystem, long>(businessSystemSaveBodyDTO.BusinessSystemDTO.Id, businessSystemSaveBodyDTO.BusinessSystemDTO.Version);
 
                     if ((businessSystemBeforeSave.UpdatePointsInterval != businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsInterval) ||
                         (!Helper.AreDatesEqualToSeconds(businessSystemBeforeSave.UpdatePointsStartDate, businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsStartDate)))
@@ -982,7 +982,7 @@ namespace PlayertyLoyals.Business.Services
 
                 return await _context.WithTransactionAsync(async () =>
                 {
-                    BusinessSystem businessSystem = await LoadInstanceAsync<BusinessSystem, long>(businessSystemUpdatePointsDataBodyDTO.BusinessSystemId, businessSystemUpdatePointsDataBodyDTO.BusinessSystemVersion);
+                    BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(businessSystemUpdatePointsDataBodyDTO.BusinessSystemId, businessSystemUpdatePointsDataBodyDTO.BusinessSystemVersion);
 
                     if (businessSystem.GetTransactionsEndpoint == null)
                         throw new BusinessException("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
@@ -1031,7 +1031,7 @@ namespace PlayertyLoyals.Business.Services
             {
                 return await _context.WithTransactionAsync(async () =>
                 {
-                    BusinessSystem businessSystem = await LoadInstanceAsync<BusinessSystem, long>(businessSystemId, businessSystemVersion);
+                    BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(businessSystemId, businessSystemVersion);
 
                     List<string> exceptions = new List<string>();
 
@@ -1097,7 +1097,7 @@ namespace PlayertyLoyals.Business.Services
 
             await _context.WithTransactionAsync(async () =>
             {
-                BusinessSystem businessSystem = await LoadInstanceAsync<BusinessSystem, long>(businessSystemId, businessSystemVersion);
+                BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(businessSystemId, businessSystemVersion);
 
                 if (businessSystem.GetTransactionsEndpoint == null)
                     throw new BusinessException("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
