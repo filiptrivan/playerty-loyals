@@ -2,7 +2,6 @@
 using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Services;
-using PlayertyLoyals.Business.Services;
 using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.DTO;
 using Soft.Generator.Shared.Helpers;
@@ -12,7 +11,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
-    public class SegmentationController : SoftControllerBase
+    public class SegmentationController : SoftBaseController
     {
         private readonly IApplicationDbContext _context;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
@@ -66,7 +65,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<SegmentationSaveBodyDTO> SaveSegmentation(SegmentationSaveBodyDTO segmentationSaveBodyDTO)
         {
-            return await _loyalsBusinessService.SaveSegmentationExtendedAsync(segmentationSaveBodyDTO);
+            return await _loyalsBusinessService.SaveSegmentationAndReturnSaveBodyDTOAsync(segmentationSaveBodyDTO);
         }
 
         [HttpGet]

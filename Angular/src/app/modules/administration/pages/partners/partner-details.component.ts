@@ -3,12 +3,15 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { firstValueFrom, forkJoin } from 'rxjs';
-import { Partner } from 'src/app/business/entities/business-entities.generated';
+import { Partner, PartnerSaveBody } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerService } from 'src/app/business/services/helpers/partner.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
+import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
+import { SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
 @Component({
@@ -16,7 +19,10 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     templateUrl: './partner-details.component.html',
     styles: [],
 })
-export class PartnerDetailsComponent extends BaseForm<Partner> implements OnInit {
+export class PartnerDetailsComponent extends BaseFormCopy implements OnInit {
+    override saveObservableMethod = this.apiService.savePartner;
+    partnerFormGroup: SoftFormGroup<Partner>;
+    partnerSaveBodyName: string = nameof<PartnerSaveBody>('partnerDTO');
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -37,27 +43,36 @@ export class PartnerDetailsComponent extends BaseForm<Partner> implements OnInit
     override ngOnInit() {
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
+
             if(this.modelId > 0){
                 forkJoin({
                     partner: this.apiService.getPartner(this.modelId),
                 })
                 .subscribe(({ partner }) => {
-                    this.init(new Partner(partner));
+                    this.initPartnerFormGroup(new Partner(partner));
                 });
             }
             else{
-                this.init(new Partner({id:0}));
+                this.initPartnerFormGroup(new Partner({id: 0}));
             }
         });
     }
 
-    init(model: Partner){
-        this.initFormGroup(model);
+    initPartnerFormGroup(partner: Partner) {
+        this.partnerFormGroup = this.initFormGroup<Partner>(partner, this.partnerSaveBodyName, ['primaryColor']);
     }
 
-    override async onAfterSave(savedPartner: Partner): Promise<void> {
-        if ((await firstValueFrom(this.partnerService.partner$))?.id == savedPartner.id) {
-            this.partnerService.setCurrentPartner(savedPartner); // FT: Not doing this because maybe the administrator is saving it.
+    override onBeforeSave(): void {
+        let saveBody: PartnerSaveBody = new PartnerSaveBody();
+
+        saveBody.partnerDTO = this.partnerFormGroup.getRawValue();
+
+        this.saveBody = saveBody;
+    }
+
+    override async onAfterSave(): Promise<void> {
+        if ((await firstValueFrom(this.partnerService.partner$))?.id == this.partnerFormGroup.controls.id.getRawValue()) {
+            this.partnerService.setCurrentPartner(this.partnerFormGroup.getRawValue()); // FT: Not doing this because maybe the administrator is saving it.
         }
     }
 }

@@ -16,71 +16,71 @@ export class ApiSecurityService {
 
     
     sendLoginVerificationEmail = (loginDTO: Login): Observable<any> => { 
-        return this.http.post<any>(`${environment.apiUrl}/Auth/SendLoginVerificationEmail`, loginDTO, environment.httpOptions);
+        return this.http.post<any>(`${environment.apiUrl}/Security/SendLoginVerificationEmail`, loginDTO, environment.httpOptions);
     }
 
     sendRegistrationVerificationEmail = (registrationDTO: Registration): Observable<RegistrationVerificationResult> => { 
-        return this.http.post<RegistrationVerificationResult>(`${environment.apiUrl}/Auth/SendRegistrationVerificationEmail`, registrationDTO, environment.httpOptions);
+        return this.http.post<RegistrationVerificationResult>(`${environment.apiUrl}/Security/SendRegistrationVerificationEmail`, registrationDTO, environment.httpOptions);
     }
 
     logout = (browserId: string): Observable<any> => { 
-        return this.http.get<any>(`${environment.apiUrl}/Auth/Logout?browserId=${browserId}`);
+        return this.http.get<any>(`${environment.apiUrl}/Security/Logout?browserId=${browserId}`);
     }
 
     refreshToken = (request: RefreshTokenRequest): Observable<AuthResult> => { 
-        return this.http.post<AuthResult>(`${environment.apiUrl}/Auth/RefreshToken`, request, environment.httpOptions);
+        return this.http.post<AuthResult>(`${environment.apiUrl}/Security/RefreshToken`, request, environment.httpOptions);
     }
 
-    loadRoleListForAutocomplete(limit: number, query: string): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadRoleListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
+    getRoleListForAutocomplete(limit: number, query: string): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Security/GetRoleListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
     }
 
-    loadRoleListForDropdown(): Observable<Namebook[]> {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadRoleListForDropdown`, environment.httpSkipSpinnerOptions);
+    getRoleListForDropdown(): Observable<Namebook[]> {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Security/GetRoleListForDropdown`, environment.httpSkipSpinnerOptions);
     }
 
-    loadRoleTableData = (dto: TableFilter): Observable<TableResponse> => { 
-        return this.http.post<TableResponse>(`${environment.apiUrl}/Auth/LoadRoleTableData`, dto, environment.httpSkipSpinnerOptions);
+    getRoleTableData = (dto: TableFilter): Observable<TableResponse> => { 
+        return this.http.post<TableResponse>(`${environment.apiUrl}/Security/GetRoleTableData`, dto, environment.httpSkipSpinnerOptions);
     }
 
     exportRoleTableDataToExcel = (dto: TableFilter): Observable<any> => { 
-        return this.http.post<any>(`${environment.apiUrl}/Auth/ExportRoleTableDataToExcel`, dto, environment.httpOptions);
+        return this.http.post<any>(`${environment.apiUrl}/Security/ExportRoleTableDataToExcel`, dto, environment.httpOptions);
     }
 
     deleteRole = (id: number): Observable<any> => { 
-        return this.http.delete<any>(`${environment.apiUrl}/Auth/DeleteRole?id=${id}`);
+        return this.http.delete<any>(`${environment.apiUrl}/Security/DeleteRole?id=${id}`);
     }
 
     getRole(id: number): Observable<Role> {
-        return this.http.get<Role>(`${environment.apiUrl}/Auth/GetRole?id=${id}`);
+        return this.http.get<Role>(`${environment.apiUrl}/Security/GetRole?id=${id}`);
     }
 
     saveRole = (dto: Role): Observable<Role> => { 
-        return this.http.put<Role>(`${environment.apiUrl}/Auth/SaveRole`, dto, environment.httpOptions);
+        return this.http.put<Role>(`${environment.apiUrl}/Security/SaveRole`, dto, environment.httpOptions);
     }
 
-    loadPermissionListForDropdown = (): Observable<Namebook[]> => {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadPermissionListForDropdown`, environment.httpSkipSpinnerOptions);
+    getPermissionListForDropdown = (): Observable<Namebook[]> => {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Security/GetPermissionListForDropdown`, environment.httpSkipSpinnerOptions);
     }
 
-    loadPermissionListForRole = (roleId: number): Observable<Namebook[]> => {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadPermissionListForRole?roleId=${roleId}`, environment.httpSkipSpinnerOptions);
+    getPermissionListForRole = (roleId: number): Observable<Namebook[]> => {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Security/GetPermissionListForRole?roleId=${roleId}`, environment.httpSkipSpinnerOptions);
     }
 
-    loadUserListForRole = (roleId: number): Observable<Namebook[]> => {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadUserListForRole?roleId=${roleId}`, environment.httpSkipSpinnerOptions);
+    getUserListForRole = (roleId: number): Observable<Namebook[]> => {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Security/GetUserListForRole?roleId=${roleId}`, environment.httpSkipSpinnerOptions);
     }
 
-    loadRoleNamebookListForUserExtended = (userId: number): Observable<Namebook[]> => {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadRoleNamebookListForUserExtended?userId=${userId}`, environment.httpSkipSpinnerOptions);
+    getRoleNamebookListForUserExtended = (userId: number): Observable<Namebook[]> => {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Security/GetRoleNamebookListForUserExtended?userId=${userId}`, environment.httpSkipSpinnerOptions);
     }
 
-    loadNotificationNamebookListForUserExtended = (userId: number): Observable<Namebook[]> => {
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Auth/LoadNotificationNamebookListForUserExtended?userId=${userId}`, environment.httpSkipSpinnerOptions);
+    getNotificationNamebookListForUserExtended = (userId: number): Observable<Namebook[]> => {
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Security/GetNotificationNamebookListForUserExtended?userId=${userId}`, environment.httpSkipSpinnerOptions);
     }
 
     getUnreadNotificationCountForTheCurrentUser = (): Observable<number> => {
-        return this.http.get<number>(`${environment.apiUrl}/Auth/GetUnreadNotificationCountForTheCurrentUser`, environment.httpSkipSpinnerOptions);
+        return this.http.get<number>(`${environment.apiUrl}/Security/GetUnreadNotificationCountForTheCurrentUser`, environment.httpSkipSpinnerOptions);
     }
 
 }

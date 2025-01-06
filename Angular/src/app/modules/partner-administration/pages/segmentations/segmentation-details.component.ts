@@ -20,16 +20,16 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit {
+    override saveObservableMethod = this.apiService.saveSegmentation;
+    segmentationFormGroup: SoftFormGroup<Segmentation>;
+    segmentationSaveBodyName: string = nameof<SegmentationSaveBody>('segmentationDTO');
+
     segmentationItemModel: SegmentationItem = new SegmentationItem();
     segmentationItemsSaveBodyName: string = nameof<SegmentationSaveBody>('segmentationItemsDTO');
     segmentationItemsTranslationKey: string = new SegmentationItem().typeName;
     segmentationItemsFormArray: SoftFormArray<SegmentationItem[]>;
     segmentationItemLastIndexClicked: LastMenuIconIndexClicked = new LastMenuIconIndexClicked();
-    
-    segmentationFormGroup: SoftFormGroup<Segmentation>;
-    segmentationSaveBodyName: string = nameof<SegmentationSaveBody>('segmentationDTO');
-
-    crudMenu: MenuItem[] = [];
+    segmentationItemsCrudMenu: MenuItem[] = [];
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -47,8 +47,6 @@ export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit
     }
          
     override ngOnInit() {
-        this.saveObservableMethod = this.apiService.saveSegmentation;
-
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
 
@@ -72,7 +70,7 @@ export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit
 
     initSegmentationItemsFormArray(segmentationItems: SegmentationItem[]){
         this.segmentationItemsFormArray = this.initFormArray(segmentationItems, this.segmentationItemModel, this.segmentationItemsSaveBodyName, this.segmentationItemsTranslationKey, true);
-        this.crudMenu = this.getCrudMenuForOrderedData(this.segmentationItemsFormArray, new SegmentationItem({id: 0}), this.segmentationItemLastIndexClicked);
+        this.segmentationItemsCrudMenu = this.getCrudMenuForOrderedData(this.segmentationItemsFormArray, new SegmentationItem({id: 0}), this.segmentationItemLastIndexClicked);
         this.segmentationItemsFormArray.validator = this.validatorService.isFormArrayEmpty(this.segmentationItemsFormArray);
     }
 

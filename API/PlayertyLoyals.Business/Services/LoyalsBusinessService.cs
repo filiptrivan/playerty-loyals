@@ -45,10 +45,10 @@ namespace PlayertyLoyals.Business.Services
             _wingsApiService = wingsApiService;
             _updatePointsScheduler = updatePointsScheduler;
         }
-        
+
         #region User
 
-        public async Task<UserExtendedDTO> SaveUserExtendedAndReturnDTOExtendedAsync(UserExtendedSaveBodyDTO userExtendedSaveBodyDTO)
+        public async Task<UserExtendedDTO> SaveUserExtendedAndReturnSaveBodyDTOAsync(UserExtendedSaveBodyDTO userExtendedSaveBodyDTO)
         {
             return await _context.WithTransactionAsync(async () =>
             {
@@ -88,7 +88,7 @@ namespace PlayertyLoyals.Business.Services
 
         #region Notification
 
-        public async Task<NotificationDTO> SaveNotificationAndReturnDTOExtendedAsync(NotificationSaveBodyDTO notificationSaveBodyDTO)
+        public async Task<NotificationSaveBodyDTO> SaveNotificationAndReturnSaveBodyDTOAsync(NotificationSaveBodyDTO notificationSaveBodyDTO)
         {
             return await _context.WithTransactionAsync(async () =>
             {
@@ -98,7 +98,40 @@ namespace PlayertyLoyals.Business.Services
 
                 await UpdateUserExtendedListForNotificationWithLazyTableSelection(paginationResult.Query, savedNotificationDTO.Id, notificationSaveBodyDTO);
 
-                return savedNotificationDTO;
+                return new NotificationSaveBodyDTO
+                {
+                    NotificationDTO = savedNotificationDTO
+                };
+            });
+        }
+
+        public async Task UpdateUserExtendedListForNotificationWithLazyTableSelection(IQueryable<UserExtended> userExtendedQuery, long notificationId, ILazyTableSelectionDTO<long> lazyTableSelectionDTO)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                List<long> userExtendedListToInsert = null;
+
+                if (lazyTableSelectionDTO.IsAllSelected == true)
+                {
+                    userExtendedListToInsert = await userExtendedQuery.Where(x => lazyTableSelectionDTO.UnselectedIds.Contains(x.Id) == false).Select(x => x.Id).ToListAsync();
+                }
+                else if (lazyTableSelectionDTO.IsAllSelected == false)
+                {
+                    userExtendedListToInsert = await userExtendedQuery.Where(x => lazyTableSelectionDTO.SelectedIds.Contains(x.Id) == true).Select(x => x.Id).ToListAsync();
+                }
+                else if (lazyTableSelectionDTO.IsAllSelected == null)
+                {
+                    Notification notification = await GetInstanceAsync<Notification, long>(notificationId, null); // FT: Version will always be checked before or after this method
+
+                    List<long> alreadySelected = notification.Users == null ? new List<long>() : notification.Users.Select(x => x.Id).ToList();
+
+                    userExtendedListToInsert = alreadySelected
+                        .Union(lazyTableSelectionDTO.SelectedIds)
+                        .Except(lazyTableSelectionDTO.UnselectedIds)
+                        .ToList();
+                }
+
+                await UpdateUserExtendedListForNotification(notificationId, userExtendedListToInsert);
             });
         }
 
@@ -496,7 +529,7 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task<PartnerUserSaveBodyDTO> SavePartnerUserAndReturnDTOExtendedAsync(PartnerUserSaveBodyDTO partnerUserSaveBodyDTO)
+        public async Task<PartnerUserSaveBodyDTO> SavePartnerUserAndReturnSaveBodyDTOAsync(PartnerUserSaveBodyDTO partnerUserSaveBodyDTO)
         {
             UserExtendedSaveBodyDTO userExtendedSaveBodyDTO = new UserExtendedSaveBodyDTO
             {
@@ -506,7 +539,7 @@ namespace PlayertyLoyals.Business.Services
 
             return await _context.WithTransactionAsync(async () =>
             {
-                UserExtendedDTO savedUserExtendedDTO = await SaveUserExtendedAndReturnDTOExtendedAsync(userExtendedSaveBodyDTO);
+                UserExtendedDTO savedUserExtendedDTO = await SaveUserExtendedAndReturnSaveBodyDTOAsync(userExtendedSaveBodyDTO);
 
                 if (partnerUserSaveBodyDTO.PartnerUserDTO.Id == 0)
                     throw new HackerException("You can't add new partner user.");
@@ -705,7 +738,7 @@ namespace PlayertyLoyals.Business.Services
 
         #region PartnerRole
 
-        public async Task<PartnerRoleDTO> SavePartnerRoleAndReturnDTOExtendedAsync(PartnerRoleSaveBodyDTO partnerRoleSaveBodyDTO)
+        public async Task<PartnerRoleDTO> SavePartnerRoleAndReturnSaveBodyDTOAsync(PartnerRoleSaveBodyDTO partnerRoleSaveBodyDTO)
         {
 
             return await _context.WithTransactionAsync(async () =>
@@ -725,7 +758,7 @@ namespace PlayertyLoyals.Business.Services
 
         #region PartnerNotification
 
-        public async Task<PartnerNotificationDTO> SavePartnerNotificationAndReturnDTOExtendedAsync(PartnerNotificationSaveBodyDTO partnerNotificationSaveBodyDTO)
+        public async Task<PartnerNotificationDTO> SavePartnerNotificationAndReturnSaveBodyDTOAsync(PartnerNotificationSaveBodyDTO partnerNotificationSaveBodyDTO)
         {
             return await _context.WithTransactionAsync(async () =>
             {
@@ -856,7 +889,7 @@ namespace PlayertyLoyals.Business.Services
 
         #region Segmentation
 
-        public async Task<SegmentationSaveBodyDTO> SaveSegmentationExtendedAsync(SegmentationSaveBodyDTO segmentationSaveBodyDTO)
+        public async Task<SegmentationSaveBodyDTO> SaveSegmentationAndReturnSaveBodyDTOAsync(SegmentationSaveBodyDTO segmentationSaveBodyDTO)
         {
             return await _context.WithTransactionAsync(async () =>
             {
@@ -937,7 +970,7 @@ namespace PlayertyLoyals.Business.Services
 
         #region BusinessSystem
 
-        public async Task<BusinessSystemDTO> SaveBusinessSystemExtendedAsync(BusinessSystemSaveBodyDTO businessSystemSaveBodyDTO)
+        public async Task<BusinessSystemDTO> SaveBusinessSystemAndReturnSaveBodyDTOAsync(BusinessSystemSaveBodyDTO businessSystemSaveBodyDTO)
         {
             if (businessSystemSaveBodyDTO.BusinessSystemDTO.Id == 0 && (businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsInterval != null || businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsStartDate != null))
                 throw new HackerException("Can't save UpdatePointsInterval nor UpdatePointsStartDate from here.");

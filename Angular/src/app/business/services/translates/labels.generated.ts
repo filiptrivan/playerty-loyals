@@ -43,12 +43,6 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('CreatedAt');
             case 'modifiedAt':
                 return this.translocoService.translate('ModifiedAt');
-            case 'tableFilter':
-                return this.translocoService.translate('TableFilter');
-            case 'unselectedIds':
-                return this.translocoService.translate('UnselectedIds');
-            case 'isAllSelected':
-                return this.translocoService.translate('IsAllSelected');
             case 'data':
                 return this.translocoService.translate('Data');
             case 'totalRecords':
@@ -147,6 +141,12 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('PartnerUserDTO');
             case 'isMarkedAsRead':
                 return this.translocoService.translate('IsMarkedAsRead');
+            case 'tableFilter':
+                return this.translocoService.translate('TableFilter');
+            case 'unselectedIds':
+                return this.translocoService.translate('UnselectedIds');
+            case 'isAllSelected':
+                return this.translocoService.translate('IsAllSelected');
             case 'notificationDTO':
                 return this.translocoService.translate('NotificationDTO');
             case 'tierDTOList':

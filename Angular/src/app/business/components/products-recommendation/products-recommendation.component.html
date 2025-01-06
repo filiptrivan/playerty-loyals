@@ -5,7 +5,7 @@
         <div class="bold-header-separator"></div>
         </div>
 
-        <p-dataView #dv [value]="products" [rows]="9" filterBy="name" layout="grid">
+        <p-dataView #dv [value]="productList" [rows]="9" filterBy="name" layout="grid">
             <ng-template let-products pTemplate="gridItem">
                 <div class="grid" style="position: relative; z-index: 2;">
                     <div class="col-12 md:col-4" *ngFor="let product of products">

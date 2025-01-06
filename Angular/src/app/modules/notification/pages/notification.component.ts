@@ -36,17 +36,17 @@ export class NotificationComponent implements OnInit {
       {label: this.translocoService.translate('MarkAsUnread'), icon: 'pi pi-eye-slash'},
     ]
 
-    this.loadNotifications();
+    this.getNotificationList();
   }
 
   onLazyLoad(event: PaginatorState){
     this.tableFilter.first = event.first;
     this.tableFilter.rows = event.rows;
-    this.loadNotifications();
+    this.getNotificationList();
   }
   
-  loadNotifications(){
-    this.apiService.loadNotificationListForTheCurrentPartnerUser(this.tableFilter).subscribe((res) => {
+  getNotificationList(){
+    this.apiService.getNotificationListForTheCurrentPartnerUser(this.tableFilter).subscribe((res) => {
       this.currentUserNotifications = res;
     });
   }

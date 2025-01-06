@@ -72,13 +72,13 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
             this.modelId = params['id'];
  
             forkJoin({
-                rolesForThePartnerUser: this.apiService.loadPartnerRoleNamebookListForPartnerUser(this.modelId),
-                roleOptions: this.apiService.loadRoleListForDropdown(),
-                genderOptions: this.apiService.loadGenderNamebookListForDropdown(),                  
-                partnerRoleOptions: this.apiService.loadPartnerRoleListForDropdown(),
-                segmentations: this.apiService.getSegmentationListForTheCurrentPartner(),
+                roleListForPartnerUser: this.apiService.getPartnerRoleNamebookListForPartnerUser(this.modelId),
+                roleOptionList: this.apiService.getRoleListForDropdown(),
+                genderOptionList: this.apiService.getGenderNamebookListForDropdown(),                  
+                partnerRoleOptionList: this.apiService.getPartnerRoleListForDropdown(),
+                segmentationList: this.apiService.getSegmentationListForTheCurrentPartner(),
             })
-            .subscribe(({ rolesForThePartnerUser, roleOptions, genderOptions, partnerRoleOptions, segmentations }) => {
+            .subscribe(({ roleListForPartnerUser: rolesForThePartnerUser, roleOptionList: roleOptions, genderOptionList: genderOptions, partnerRoleOptionList: partnerRoleOptions, segmentationList: segmentations }) => {
                 this.selectedPartnerRoles.setValue(
                     rolesForThePartnerUser.map(role => { return role.id })
                 );
@@ -112,7 +112,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
                 this.apiService.getUser(partnerUser.userId).subscribe(user => {
                     this.userExtendedFormGroup = this.initFormGroup(new UserExtended(user), nameof<PartnerUserSaveBody>('userExtendedDTO'));
 
-                    this.apiService.loadRoleNamebookListForUserExtended(user.id).subscribe(rolesForTheUser => {
+                    this.apiService.getRoleNamebookListForUserExtended(user.id).subscribe(rolesForTheUser => {
                         this.selectedRoles.setValue(
                             rolesForTheUser.map(role => { return role.id })
                         );
@@ -156,7 +156,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         this.getAlreadyFilledSegmentationIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue());
         
         if ((await firstValueFrom(this.partnerService.currentPartnerUser$)).id == this.partnerUserFormGroup.getRawValue().id) {
-            await firstValueFrom(this.partnerService.loadCurrentPartnerUser());
+            await firstValueFrom(this.partnerService.getCurrentPartnerUser());
         }
 
         if (this.partnerUserFormGroup.getRawValue()?.tierId) {

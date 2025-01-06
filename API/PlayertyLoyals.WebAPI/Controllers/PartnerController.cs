@@ -31,42 +31,6 @@ namespace PlayertyLoyals.WebAPI.Controllers
             _blobContainerClient = blobContainerClient;
         }
 
-        //[HttpPost]
-        //[AuthGuard]
-        //public override async Task<TableResponseDTO<PartnerDTO>> LoadPartnerTableData(TableFilterDTO tableFilterDTO)
-        //{
-        //    return await _loyalsBusinessService.LoadPartnerTableData(tableFilterDTO, _context.DbSet<Partner>(), false);
-        //}
-
-        //[HttpPost]
-        //[AuthGuard]
-        //public async Task<IActionResult> ExportPartnerTableDataToExcel(TableFilterDTO tableFilterDTO)
-        //{
-        //    byte[] fileContent = await _loyalsBusinessService.ExportPartnerTableDataToExcel(tableFilterDTO, _context.DbSet<Partner>(), false);
-        //    return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Partneri.xlsx"));
-        //}
-
-        //[HttpDelete]
-        //[AuthGuard]
-        //public async Task DeletePartner(int id)
-        //{
-        //    await _loyalsBusinessService.DeletePartnerAsync(id, false);
-        //}
-
-        //[HttpGet]
-        //[AuthGuard]
-        //public async Task<PartnerDTO> GetPartner(int id)
-        //{
-        //    return await _loyalsBusinessService.GetPartnerDTOAsync(id, false);
-        //}
-
-        [HttpGet]
-        [AuthGuard]
-        public async Task<List<PartnerDTO>> GetPartnerList()
-        {
-            return await _loyalsBusinessService.GetPartnerDTOList(_context.DbSet<Partner>(), false);
-        }
-
         //[HttpPut]
         //[AuthGuard]
         //public async Task<PartnerDTO> SavePartner(PartnerDTO partnerDTO)
@@ -86,14 +50,6 @@ namespace PlayertyLoyals.WebAPI.Controllers
         public async Task<List<CodebookDTO>> GetPartnerWithSlugListForAutocomplete(int limit, string query)
         {
             return await _loyalsBusinessService.GetPartnerWithSlugListForAutocomplete(limit, query, _context.DbSet<Partner>(), false);
-        }
-
-        // FT: You can't upload and delete on every request because you can delete the old image for the user when he refreshes the page
-        [HttpPost]
-        [AuthGuard]
-        public async Task<string> UploadLogoImage([FromForm] IFormFile file) // FT: It doesn't work without interface
-        {
-            return await _loyalsBusinessService.UploadPartnerLogoImageAsync(file); // TODO: Make authorization in business service with override
         }
 
         [HttpGet]

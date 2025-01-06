@@ -65,7 +65,7 @@ export class AuthService implements OnDestroy {
               id: user.id,
               email: user.email
             });
-            await firstValueFrom(this.loadCurrentPartnerUserPermissions()); // FT: Needs to be after setting local storage
+            await firstValueFrom(this.getCurrentPartnerUserPermissions()); // FT: Needs to be after setting local storage
           });
       }
     }
@@ -80,14 +80,14 @@ export class AuthService implements OnDestroy {
   login(body: VerificationTokenRequest): Observable<Promise<AuthResult>> {
     const browserId = this.getBrowserId();
     body.browserId = browserId;
-    const loginResultObservable = this.http.post<AuthResult>(`${this.apiUrl}/Auth/Login`, body);
+    const loginResultObservable = this.http.post<AuthResult>(`${this.apiUrl}/Security/Login`, body);
     return this.handleLoginResult(loginResultObservable);
   }
 
   loginExternal(body: ExternalProvider): Observable<Promise<AuthResult>> {
     const browserId = this.getBrowserId();
     body.browserId = browserId;
-    const loginResultObservable = this.http.post<AuthResult>(`${this.apiUrl}/Auth/LoginExternal`, body);
+    const loginResultObservable = this.http.post<AuthResult>(`${this.apiUrl}/Security/LoginExternal`, body);
     return this.handleLoginResult(loginResultObservable);
   }
 
@@ -113,7 +113,7 @@ export class AuthService implements OnDestroy {
         });
         this.setLocalStorage(loginResult);
         this.startTokenTimer();
-        await firstValueFrom(this.loadCurrentPartnerUserPermissions()); // FT: Needs to be after setting local storage
+        await firstValueFrom(this.getCurrentPartnerUserPermissions()); // FT: Needs to be after setting local storage
         return loginResult;
       })
     );
@@ -122,7 +122,7 @@ export class AuthService implements OnDestroy {
   logout() {
     const browserId = this.getBrowserId();
     this.http
-      .get(`${this.apiUrl}/Auth/Logout?browserId=${browserId}`)
+      .get(`${this.apiUrl}/Security/Logout?browserId=${browserId}`)
       .pipe(
         finalize(() => {
           this.clearLocalStorage();
@@ -148,7 +148,7 @@ export class AuthService implements OnDestroy {
     body.browserId = browserId;
     body.refreshToken = refreshToken;
     return this.http
-    .post<AuthResult>(`${this.apiUrl}/Auth/RefreshToken`, body, environment.httpSkipSpinnerOptions)
+    .post<AuthResult>(`${this.apiUrl}/Security/RefreshToken`, body, environment.httpSkipSpinnerOptions)
     .pipe(
       map(async (loginResult) => {
         this._user.next({
@@ -157,7 +157,7 @@ export class AuthService implements OnDestroy {
         });
         this.setLocalStorage(loginResult);
         this.startTokenTimer();
-        await firstValueFrom(this.loadCurrentPartnerUserPermissions()); // FT: Needs to be after setting local storage
+        await firstValueFrom(this.getCurrentPartnerUserPermissions()); // FT: Needs to be after setting local storage
         return loginResult;
       })
     );
@@ -242,7 +242,7 @@ export class AuthService implements OnDestroy {
     this.externalAuthService.signOut();
   }
 
-  loadCurrentPartnerUserPermissions(): Observable<string[]> {
+  getCurrentPartnerUserPermissions(): Observable<string[]> {
     return this.apiService.getCurrentPartnerUserPermissionCodes().pipe(
       map(permissionCodes => {
         this._currentPartnerUserPermissions.next(permissionCodes);

@@ -11,7 +11,7 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
 export class PartnerRoleListComponent implements OnInit {
     cols: Column[];
 
-    loadPartnerRoleTableDataObservableMethod = this.apiService.loadPartnerRoleTableData;
+    getPartnerRoleTableDataObservableMethod = this.apiService.getPartnerRoleTableData;
     exportPartnerRoleTableDataToExcelObservableMethod = this.apiService.exportPartnerRoleTableDataToExcel;
     deletePartnerRoleObservableMethod = this.apiService.deletePartnerRole;
 

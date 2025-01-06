@@ -16,6 +16,10 @@ export class SoftFormControl<T = any> extends FormControl<T> {
         this.required = required;
      }
 
+    override getRawValue(): T { // FT: Doing this because .value gets only not disabled values
+        return super.getRawValue() as T;
+    }
+
     public override get validator(): SoftValidatorFn | null {
         return this._softValidator;
     }
@@ -27,9 +31,9 @@ export class SoftFormControl<T = any> extends FormControl<T> {
 }
 
 export class SoftFormGroup<TValue = any> extends FormGroup {
-    declare controls: { [P in keyof TValue]: AbstractControl };
+    declare controls: { [P in keyof TValue]: SoftFormControl<TValue[P]> };
 
-    constructor(controls: { [P in keyof TValue]: AbstractControl }) {
+    constructor(controls: { [P in keyof TValue]: SoftFormControl<TValue[P]> }) {
         super(controls);
     }
 

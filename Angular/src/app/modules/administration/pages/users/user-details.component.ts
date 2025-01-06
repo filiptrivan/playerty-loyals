@@ -38,16 +38,16 @@ export class UserDetailsComponent extends BaseForm<UserExtended> implements OnIn
         }
          
     override ngOnInit() {
-        this.controllerName = 'Auth';
+        this.controllerName = 'Security';
 
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
 
             forkJoin({
                 userExtended: this.apiService.getUser(this.modelId),
-                rolesForTheUser: this.apiService.loadRoleNamebookListForUserExtended(this.modelId),
-                roleOptions: this.apiService.loadRoleListForDropdown(),
-                genderOptions: this.apiService.loadGenderNamebookListForDropdown(),                  
+                rolesForTheUser: this.apiService.getRoleNamebookListForUserExtended(this.modelId),
+                roleOptions: this.apiService.getRoleListForDropdown(),
+                genderOptions: this.apiService.getGenderNamebookListForDropdown(),                  
             })
             .subscribe(({ userExtended, rolesForTheUser, roleOptions, genderOptions}) => {
                 this.init(new UserExtended(userExtended));

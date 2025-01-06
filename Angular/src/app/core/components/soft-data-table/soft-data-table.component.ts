@@ -54,7 +54,7 @@ export class SoftDataTableComponent implements OnInit {
   totalRecords: number;
   @Output() onTotalRecordsChange: EventEmitter<number> = new EventEmitter();;
   
-  @Input() loadTableDataObservableMethod: (tableFilter: TableFilter) => Observable<TableResponse>;
+  @Input() getTableDataObservableMethod: (tableFilter: TableFilter) => Observable<TableResponse>;
   @Input() exportTableDataToExcelObservableMethod: (tableFilter: TableFilter) => Observable<any>;
   @Input() deleteItemFromTableObservableMethod: (rowId: number) => Observable<any>;
 
@@ -132,7 +132,7 @@ export class SoftDataTableComponent implements OnInit {
 
     this.onLazyLoad.next(tableFilter);
     
-    this.loadTableDataObservableMethod(tableFilter).subscribe({
+    this.getTableDataObservableMethod(tableFilter).subscribe({
       next: async (res) => { 
         this.items = res.data;
         this.totalRecords = res.totalRecords;

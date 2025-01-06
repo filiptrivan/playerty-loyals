@@ -30,7 +30,6 @@ export class ValidatorServiceGenerated {
 
 
 
-
         case 'verificationCodeVerificationTokenRequest':
             return this.verificationCodeVerificationTokenRequestValidator(formControl);
         case 'emailVerificationTokenRequest':
@@ -370,7 +369,6 @@ export class ValidatorServiceGenerated {
                 return null;
         }
     }
-
 
 
 

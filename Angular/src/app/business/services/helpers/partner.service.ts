@@ -32,11 +32,11 @@ export class PartnerService {
       const partnerSlug = params[environment.partnerParamKey] ?? '';
         if(partnerSlug != null && partnerSlug != ''){
           localStorage.setItem(environment.partnerSlugKey, partnerSlug);
-          await firstValueFrom(this.loadCurrentPartner()); // TODO FT: When you have the time fix this, but in most basic case it will be called only once
+          await firstValueFrom(this.getCurrentPartner()); // TODO FT: When you have the time fix this, but in most basic case it will be called only once
         }
     });
 
-    await firstValueFrom(this.loadCurrentPartner()); // TODO FT: When you have the time fix this, but in most basic case it will be called only once
+    await firstValueFrom(this.getCurrentPartner()); // TODO FT: When you have the time fix this, but in most basic case it will be called only once
 
     this.userSubscription = this.authService.user$.subscribe(async user => {
       const currentPartner = await firstValueFrom(this.partner$);
@@ -48,13 +48,13 @@ export class PartnerService {
           this._currentPartnerUser.next(null);
         }
         else{
-          await firstValueFrom(this.loadCurrentPartnerUser());
+          await firstValueFrom(this.getCurrentPartnerUser());
         }
       }
     });
   }
 
-  loadCurrentPartner(): Observable<Promise<Partner>> {
+  getCurrentPartner(): Observable<Promise<Partner>> {
     return this.apiService.getCurrentPartner().pipe(
       map(async partner => {
         this._partner.next(partner);
@@ -102,7 +102,7 @@ export class PartnerService {
     this.adjustPartnerColor(partner);
   }
 
-  loadCurrentPartnerUser(): Observable<PartnerUser> {  
+  getCurrentPartnerUser(): Observable<PartnerUser> {  
     return this.apiService.getCurrentPartnerUser().pipe(
       map(currentPartnerUser => {
         this._currentPartnerUser.next(currentPartnerUser);

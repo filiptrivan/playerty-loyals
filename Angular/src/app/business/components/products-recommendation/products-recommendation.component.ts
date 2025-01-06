@@ -16,7 +16,7 @@ import { Product } from '../../entities/business-entities.generated';
 ]
 })
 export class ProductsRecommendationComponent {
-    products: Product[] = [];
+    productList: Product[] = [];
 
     constructor(
         private apiService: ApiService
@@ -25,8 +25,8 @@ export class ProductsRecommendationComponent {
         }
 
     ngOnInit(){
-        this.apiService.getProductsForTheRecommendation().subscribe((products) => {
-            this.products = products;
+        this.apiService.getProductListForRecommendation().subscribe((productList) => {
+            this.productList = productList;
         })
     }
 

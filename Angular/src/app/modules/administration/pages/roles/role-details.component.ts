@@ -41,19 +41,19 @@ export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
         }
          
     override ngOnInit() {
-        this.controllerName = "Auth";
+        this.controllerName = 'Security';
         // this.selectedUsers.validator = isArrayEmpty(this.selectedUsers);
 
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
-            this.apiService.loadPermissionListForDropdown().subscribe(nl => {
+            this.apiService.getPermissionListForDropdown().subscribe(nl => {
                 this.permissionOptions = nl.map(n => { return { label: n.displayName, value: n.id } });
             });
             if(this.modelId > 0){
                 forkJoin({
                     role: this.apiService.getRole(this.modelId),
-                    users: this.apiService.loadUserListForRole(this.modelId),
-                    permissions: this.apiService.loadPermissionListForRole(this.modelId),
+                    users: this.apiService.getUserListForRole(this.modelId),
+                    permissions: this.apiService.getPermissionListForRole(this.modelId),
                   }).subscribe(({ role, users, permissions }) => {
                     this.init(new Role(role));
                     this.selectedUsers.setValue(
@@ -75,7 +75,7 @@ export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
     }
 
     searchUsers(event: AutoCompleteCompleteEvent){ 
-        this.apiService.loadUserListForAutocomplete(50, event?.query).subscribe(nl => {
+        this.apiService.getUserListForAutocomplete(50, event?.query).subscribe(nl => {
             this.userOptions = nl.map(n => { return { label: n.displayName, value: n.id }});
         })
     }

@@ -10,7 +10,6 @@ using PlayertyLoyals.Business.Services;
 using PlayertyLoyals.Business.DTO;
 using Soft.Generator.Shared.DTO;
 using PlayertyLoyals.Business.Enums;
-using PlayertyLoyals.Business.Services;
 using Soft.Generator.Shared.Helpers;
 using Soft.Generator.Shared.Extensions;
 
@@ -18,7 +17,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
-    public class PartnerUserController : SoftControllerBase
+    public class PartnerUserController : SoftBaseController
     {
         private readonly IApplicationDbContext _context;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
@@ -43,10 +42,10 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<PartnerUserDTO>> LoadPartnerUserTableData(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<PartnerUserDTO>> GetPartnerUserTableData(TableFilterDTO tableFilterDTO)
         {
             // FT: Ordering by because of notifications
-            return await _loyalsBusinessService.LoadPartnerUserTableData(tableFilterDTO, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.Id), false);
+            return await _loyalsBusinessService.GetPartnerUserTableData(tableFilterDTO, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.Id), false);
         }
 
         [HttpPost]
@@ -73,9 +72,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPut]
         [AuthGuard]
-        public async Task<PartnerUserSaveBodyDTO> SavePartnerUser(PartnerUserSaveBodyDTO dto)
+        public async Task<PartnerUserSaveBodyDTO> SavePartnerUser(PartnerUserSaveBodyDTO saveBodyDTO)
         {
-            return await _loyalsBusinessService.SavePartnerUserAndReturnDTOExtendedAsync(dto);
+            return await _loyalsBusinessService.SavePartnerUserAndReturnSaveBodyDTOAsync(saveBodyDTO);
         }
 
         [HttpGet]

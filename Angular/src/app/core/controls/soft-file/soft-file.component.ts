@@ -55,7 +55,7 @@ export class SoftFileComponent extends BaseControl implements OnInit {
         const formData: FormData = new FormData();
         formData.append('file', file, `${this.objectId}-${file.name}`);
         
-        this.apiService.uploadLogoImage(formData).subscribe((completeFileName: string) => {
+        this.apiService.uploadLogoImageForPartner(formData).subscribe((completeFileName: string) => {
             this.control.setValue(completeFileName);
         });
     }

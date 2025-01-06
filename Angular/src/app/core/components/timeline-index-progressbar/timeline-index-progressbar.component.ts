@@ -21,7 +21,7 @@ export class TimelineIndexProgressbarComponent {
     // @Input() header: string;
     // @Input() description: string;
     
-    @Input() tiers: Tier[];
+    @Input() tierList: Tier[];
     @Input() currentTier: Tier;
     @Input() currentUserPoints: number;
     @Input() connectorMethod: (connector: Element, index: number) => void;

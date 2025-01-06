@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Services;
-using PlayertyLoyals.Business.Services;
 using Soft.Generator.Security.DTO;
 using Soft.Generator.Security.Entities;
 using Soft.Generator.Security.Services;
@@ -15,7 +14,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
-    public class PartnerRoleController : SoftControllerBase
+    public class PartnerRoleController : SoftBaseController
     {
         private readonly IApplicationDbContext _context;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
@@ -62,7 +61,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<PartnerRoleDTO> SavePartnerRole(PartnerRoleSaveBodyDTO partnerRoleSaveBodyDTO)
         {
-            return await _loyalsBusinessService.SavePartnerRoleAndReturnDTOExtendedAsync(partnerRoleSaveBodyDTO);
+            return await _loyalsBusinessService.SavePartnerRoleAndReturnSaveBodyDTOAsync(partnerRoleSaveBodyDTO);
         }
 
         [HttpGet]

@@ -1,4 +1,4 @@
-<p-timeline [value]="tiers" align="left" styleClass="customized-timeline">
+<p-timeline [value]="tierList" align="left" styleClass="customized-timeline">
 	<ng-template pTemplate="marker" let-tier>
 	  <span [class]="(isCurrentTier(tier) ? 'current-item ' : ' ') + (isPassed(tier) ? 'passed-item ' : ' ') + 'circle'">
 		<ng-container *ngIf="isPassed(tier) == false">

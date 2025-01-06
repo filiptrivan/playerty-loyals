@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">
-    @defer (when model != null) {
+    @defer (when partnerFormGroup != null) {
         <soft-card [title]="detailsTitle" icon="pi pi-at">
             <soft-panel>
                 <panel-header></panel-header>
@@ -7,25 +7,25 @@
                 <panel-body>
                     <form [formGroup]="formGroup" class="grid">
                         <div class="col-12">
-                            <soft-file [control]="control('logoImage')" [fileData]="model.logoImageData" [objectId]="model.id"></soft-file>
+                            <soft-file [control]="control('logoImage', partnerFormGroup)" [fileData]="partnerFormGroup.controls.logoImageData.getRawValue()" [objectId]="partnerFormGroup.controls.id.getRawValue()"></soft-file>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-textbox [control]="control('name')"></soft-textbox>
+                            <soft-textbox [control]="control('name', partnerFormGroup)"></soft-textbox>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-textbox [control]="control('slug')"></soft-textbox>
+                            <soft-textbox [control]="control('slug', partnerFormGroup)"></soft-textbox>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-textbox [control]="control('email')"></soft-textbox>
+                            <soft-textbox [control]="control('email', partnerFormGroup)"></soft-textbox>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-colorpick [control]="control('primaryColor', true)"></soft-colorpick>
+                            <soft-colorpick [control]="control('primaryColor', partnerFormGroup)"></soft-colorpick>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-number [control]="control('pointsMultiplier')" [decimal]="true" [maxFractionDigits]="2"></soft-number>
+                            <soft-number [control]="control('pointsMultiplier', partnerFormGroup)" [decimal]="true" [maxFractionDigits]="2"></soft-number>
                         </div>
                         <div class="col-12 md:col-6">
-                            <soft-textbox [control]="control('productsRecommendationEndpoint')"></soft-textbox>
+                            <soft-textbox [control]="control('productsRecommendationEndpoint', partnerFormGroup)"></soft-textbox>
                         </div>
                     </form>
                 </panel-body>

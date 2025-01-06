@@ -2,7 +2,6 @@
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Services;
-using PlayertyLoyals.Business.Services;
 using Soft.Generator.Security.DTO;
 using Soft.Generator.Security.Entities;
 using Soft.Generator.Security.Services;
@@ -17,7 +16,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
-    public class PartnerNotificationController : SoftControllerBase
+    public class PartnerNotificationController : SoftBaseController
     {
         private readonly IApplicationDbContext _context;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
@@ -79,7 +78,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<PartnerNotificationDTO> SavePartnerNotification(PartnerNotificationSaveBodyDTO partnerNotificationSaveBodyDTO)
         {
-            return await _loyalsBusinessService.SavePartnerNotificationAndReturnDTOExtendedAsync(partnerNotificationSaveBodyDTO);
+            return await _loyalsBusinessService.SavePartnerNotificationAndReturnSaveBodyDTOAsync(partnerNotificationSaveBodyDTO);
         }
 
         [HttpGet]

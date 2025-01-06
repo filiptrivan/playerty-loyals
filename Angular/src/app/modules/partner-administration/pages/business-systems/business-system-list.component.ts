@@ -12,7 +12,7 @@ import { BusinessSystem } from 'src/app/business/entities/business-entities.gene
 export class BusinessSystemTableComponent implements OnInit {
     cols: Column<BusinessSystem>[];
     
-    loadBusinessSystemTableDataObservableMethod = this.apiService.loadBusinessSystemTableData;
+    getBusinessSystemTableDataObservableMethod = this.apiService.getBusinessSystemTableData;
     exportBusinessSystemTableDataToExcelObservableMethod = this.apiService.exportBusinessSystemTableDataToExcel;
     deleteBusinessSystemObservableMethod = this.apiService.deleteBusinessSystem;
 

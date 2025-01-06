@@ -18,7 +18,7 @@
                         </div>
                         <div class="col-12">
                             <soft-data-table [tableTitle]="t('Recipients')" [cols]="partnerUserTableCols" 
-                            [loadTableDataObservableMethod]="loadPartnerUserTableDataObservableMethod" 
+                            [getTableDataObservableMethod]="getPartnerUserTableDataObservableMethod" 
                             [exportTableDataToExcelObservableMethod]="exportPartnerUserTableDataToExcelObservableMethod"
                             [deleteItemFromTableObservableMethod]="deletePartnerUserObservableMethod"
                             [showAddButton]="false" selectionMode="multiple"

@@ -1,7 +1,7 @@
 <ng-container *transloco="let t">
     <soft-data-table [tableTitle]="t('PartnerList')" 
     [cols]="cols" 
-    [loadTableDataObservableMethod]="loadPartnerTableDataObservableMethod" 
+    [getTableDataObservableMethod]="getPartnerTableDataObservableMethod" 
     [exportTableDataToExcelObservableMethod]="exportPartnerTableDataToExcelObservableMethod"
     [deleteItemFromTableObservableMethod]="deletePartnerObservableMethod"
     >

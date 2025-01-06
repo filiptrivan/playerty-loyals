@@ -21,8 +21,6 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('LazyLoadSelectedIdsResult');
             case 'BusinessObject':
                 return this.translocoService.translate('BusinessObject');
-            case 'LazyTableSelection':
-                return this.translocoService.translate('LazyTableSelection');
             case 'SimpleSaveResult':
                 return this.translocoService.translate('SimpleSaveResult');
             case 'TableResponse':

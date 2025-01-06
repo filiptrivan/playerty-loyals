@@ -99,6 +99,33 @@ namespace PlayertyLoyals.Shared.Terms {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string BusinessObject {
+            get {
+                return ResourceManager.GetString("BusinessObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string BusinessObjectExcelExportName {
+            get {
+                return ResourceManager.GetString("BusinessObjectExcelExportName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string BusinessObjectList {
+            get {
+                return ResourceManager.GetString("BusinessObjectList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string BusinessSystem {
             get {
                 return ResourceManager.GetString("BusinessSystem", resourceCulture);
@@ -984,6 +1011,33 @@ namespace PlayertyLoyals.Shared.Terms {
         public static string ProductsRecommendationEndpoint {
             get {
                 return ResourceManager.GetString("ProductsRecommendationEndpoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string ReadonlyObject {
+            get {
+                return ResourceManager.GetString("ReadonlyObject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string ReadonlyObjectExcelExportName {
+            get {
+                return ResourceManager.GetString("ReadonlyObjectExcelExportName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string ReadonlyObjectList {
+            get {
+                return ResourceManager.GetString("ReadonlyObjectList", resourceCulture);
             }
         }
         

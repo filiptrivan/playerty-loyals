@@ -11,7 +11,7 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
 export class RoleListComponent implements OnInit {
     cols: Column[];
 
-    loadRoleTableDataObservableMethod = this.apiService.loadRoleTableData;
+    getRoleTableDataObservableMethod = this.apiService.getRoleTableData;
     exportRoleTableDataToExcelObservableMethod = this.apiService.exportRoleTableDataToExcel;
     deleteRoleObservableMethod = this.apiService.deleteRole;
 

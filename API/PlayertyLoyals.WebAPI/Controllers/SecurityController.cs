@@ -12,15 +12,14 @@ using Microsoft.EntityFrameworkCore;
 using Soft.Generator.Shared.Terms;
 using Soft.Generator.Security.DTO;
 using Soft.Generator.Shared.Extensions;
-using Azure.Core;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
-    public class AuthController : BaseSecurityController<UserExtended>
+    public class SecurityController : SecurityBaseController<UserExtended>
     {
-        private readonly ILogger<AuthController> _logger;
+        private readonly ILogger<SecurityController> _logger;
         private readonly SecurityBusinessService<UserExtended> _securityBusinessService;
         private readonly IJwtAuthManager _jwtAuthManagerService;
         private readonly IApplicationDbContext _context;
@@ -29,7 +28,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         private readonly LoyalsBusinessService _loyalsBusinessService;
 
 
-        public AuthController(ILogger<AuthController> logger, SecurityBusinessService<UserExtended> securityBusinessService, IJwtAuthManager jwtAuthManagerService, IApplicationDbContext context, AuthenticationService authenticationService,
+        public SecurityController(ILogger<SecurityController> logger, SecurityBusinessService<UserExtended> securityBusinessService, IJwtAuthManager jwtAuthManagerService, IApplicationDbContext context, AuthenticationService authenticationService,
             LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService)
             : base(securityBusinessService, jwtAuthManagerService, context, authenticationService)
         {
@@ -92,9 +91,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<UserExtendedDTO>> LoadUserTableData(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<UserExtendedDTO>> GetUserTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LoadUserExtendedTableData(tableFilterDTO, _context.DbSet<UserExtended>().OrderBy(x => x.Id)); // FT: Ordering by because of notifications
+            return await _loyalsBusinessService.GetUserExtendedTableData(tableFilterDTO, _context.DbSet<UserExtended>().OrderBy(x => x.Id)); // FT: Ordering by because of notifications
         }
 
         [HttpPost]
@@ -123,7 +122,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<UserExtendedDTO> SaveUserExtended(UserExtendedSaveBodyDTO dto)
         {
-            return await _loyalsBusinessService.SaveUserExtendedAndReturnDTOExtendedAsync(dto); // FT: Not authorizing more than basic because when user wants to save his profile he will go to the PartnerUser details
+            return await _loyalsBusinessService.SaveUserExtendedAndReturnSaveBodyDTOAsync(dto); // FT: Not authorizing more than basic because when user wants to save his profile he will go to the PartnerUser details
         }
 
         [HttpGet]
@@ -195,9 +194,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPut]
         [AuthGuard]
-        public async Task<NotificationDTO> SaveNotification(NotificationSaveBodyDTO notificationSaveBodyDTO)
+        public async Task<NotificationSaveBodyDTO> SaveNotification(NotificationSaveBodyDTO notificationSaveBodyDTO)
         {
-            return await _loyalsBusinessService.SaveNotificationAndReturnDTOExtendedAsync(notificationSaveBodyDTO);
+            return await _loyalsBusinessService.SaveNotificationAndReturnSaveBodyDTOAsync(notificationSaveBodyDTO);
         }
 
         [HttpPost]

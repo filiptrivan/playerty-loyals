@@ -12,7 +12,7 @@ import { Segmentation } from 'src/app/business/entities/business-entities.genera
 export class SegmentationListComponent implements OnInit {
     cols: Column<Segmentation>[];
 
-    loadSegmentationTableDataObservableMethod = this.apiService.loadSegmentationTableData;
+    getSegmentationTableDataObservableMethod = this.apiService.getSegmentationTableData;
     exportSegmentationTableDataToExcelObservableMethod = this.apiService.exportSegmentationTableDataToExcel;
     deleteSegmentationObservableMethod = this.apiService.deleteSegmentation;
 

@@ -28,7 +28,7 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     
     businessSystemUpdatePointsScheduledTaskTableCols: Column[];
     businessSystemUpdatePointsScheduledTaskTableObjectNameForTheRequest: string = 'BusinessSystemUpdatePointsScheduledTask';
-    loadBusinessSystemUpdatePointsScheduledTaskTableDataObservableMethod = this.apiService.loadBusinessSystemUpdatePointsScheduledTaskTableData;
+    getBusinessSystemUpdatePointsScheduledTaskTableDataObservableMethod = this.apiService.getBusinessSystemUpdatePointsScheduledTaskTableData;
     exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelObservableMethod = this.apiService.exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcel;
     businessSystemUpdatePointsScheduledTaskTableTotalRecords: number;
     

@@ -13,7 +13,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
-    public class TierController : SoftControllerBase
+    public class TierController : SoftBaseController
     {
         private readonly IJwtAuthManager _jwtAuthManagerService;
         private readonly IApplicationDbContext _context;

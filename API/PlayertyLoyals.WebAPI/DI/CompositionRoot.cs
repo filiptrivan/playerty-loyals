@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Soft.Generator.Shared.SoftFluentValidation;
 using Soft.Generator.Shared.Emailing;
 using PlayertyLoyals.Business.Services;
-using PlayertyLoyals.Business.Services;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.BackroundJobs;
 

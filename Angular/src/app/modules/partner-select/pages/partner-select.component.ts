@@ -9,7 +9,7 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
   templateUrl: './partner-select.component.html',
 })
 export class PartnerSelectComponent implements OnInit {
-  partners: Partner[] = [];
+  partnerList: Partner[] = [];
   partnerIdsForTheCurrentUser: number[] = []
 
   partnerOptions: PrimengOption[];
@@ -21,9 +21,9 @@ export class PartnerSelectComponent implements OnInit {
 }
 
   ngOnInit(){
-    this.apiService.getPartners().subscribe(partners => {
-      this.partners = partners;
-      this.loadPartnerIdsForTheCurrentUser();
+    this.apiService.getPartnerList().subscribe(partnerList => {
+      this.partnerList = partnerList;
+      this.getPartnerIdsForCurrentUser();
     });
   }
   
@@ -34,11 +34,11 @@ export class PartnerSelectComponent implements OnInit {
   addNewPartnerUser(partnerId: number){
     this.apiService.addPartnerUserForTheCurrentUser(partnerId).subscribe(() => {
       this.messageService.successMessage('Uspešno ste napravili profil.'); // TODO FT: Translate
-      this.loadPartnerIdsForTheCurrentUser();
+      this.getPartnerIdsForCurrentUser();
     });
   }
 
-  loadPartnerIdsForTheCurrentUser(){
+  getPartnerIdsForCurrentUser(){
     this.apiService.getPartnerIdsForTheCurrentUser().subscribe(partnerIdsForTheCurrentUser => {
       this.partnerIdsForTheCurrentUser = partnerIdsForTheCurrentUser;
     });

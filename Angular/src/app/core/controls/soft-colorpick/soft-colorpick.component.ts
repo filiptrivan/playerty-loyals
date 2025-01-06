@@ -6,6 +6,7 @@ import { RequiredComponent } from '../../components/required/required.component'
 import { CommonModule } from '@angular/common';
 import { TranslocoService } from '@jsverse/transloco';
 import { TranslateLabelsService } from 'src/app/business/services/translates/merge-labels';
+import { ColorPickerChangeEvent } from 'primeng/colorpicker';
 
 @Component({
     selector: 'soft-colorpick',
@@ -30,10 +31,14 @@ export class SoftColorpickComponent extends BaseControl implements OnInit {
     }
 
     override ngOnInit(){
+        this.control.valueChanges.subscribe((value) => {
+            this.control.setValue(value, { emitEvent: false }); // FT: Preventing infinite loop
+        });
+
         if (this.control.value == null)
             this.placeholder = this.translocoService.translate('SelectAColor');
 
         super.ngOnInit();
     }
-    
+
 }

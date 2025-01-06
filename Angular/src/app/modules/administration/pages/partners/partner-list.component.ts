@@ -11,7 +11,7 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
 export class PartnerListComponent implements OnInit {
     cols: Column[];
     
-    loadPartnerTableDataObservableMethod = this.apiService.loadPartnerTableData;
+    getPartnerTableDataObservableMethod = this.apiService.getPartnerTableData;
     exportPartnerTableDataToExcelObservableMethod = this.apiService.exportPartnerTableDataToExcel;
     deletePartnerObservableMethod = this.apiService.deletePartner;
 

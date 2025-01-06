@@ -14,7 +14,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
-    public class HomeController : SoftControllerBase
+    public class HomeController : SoftBaseController
     {
         private readonly IJwtAuthManager _jwtAuthManagerService;
         private readonly IApplicationDbContext _context;
@@ -126,9 +126,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<ProductDTO>> GetProductsForTheRecommendation()
+        public async Task<List<ProductDTO>> GetProductListForRecommendation()
         {
-            return _wingsApiService.GetProductsForTheRecommendationAsync();
+            return _wingsApiService.GetProductListForRecommendationAsync();
         }
 
     }

@@ -43,14 +43,14 @@ export class PartnerRoleDetailsComponent extends BaseForm<PartnerRole> implement
     override ngOnInit() {
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
-            this.apiService.loadPartnerPermissionListForDropdown().subscribe(nl => {
+            this.apiService.getPartnerPermissionListForDropdown().subscribe(nl => {
                 this.partnerPermissionOptions = nl.map(n => { return { label: n.displayName, value: n.id } });
             });
             if(this.modelId > 0){
                 forkJoin({
                     partnerRole: this.apiService.getPartnerRole(this.modelId),
-                    partnerUsers: this.apiService.loadPartnerUserNamebookListForPartnerRole(this.modelId),
-                    partnerPermissions: this.apiService.loadPartnerPermissionNamebookListForPartnerRole(this.modelId),
+                    partnerUsers: this.apiService.getPartnerUserNamebookListForPartnerRole(this.modelId),
+                    partnerPermissions: this.apiService.getPartnerPermissionNamebookListForPartnerRole(this.modelId),
                   }).subscribe(({ partnerRole, partnerUsers, partnerPermissions }) => {
                     this.init(new PartnerRole(partnerRole));
                     this.selectedPartnerUsers.setValue(
@@ -72,7 +72,7 @@ export class PartnerRoleDetailsComponent extends BaseForm<PartnerRole> implement
     }
 
     searchPartnerUsers(event: AutoCompleteCompleteEvent){ 
-        this.apiService.loadPartnerUserListForAutocomplete(50, event?.query).subscribe(nl => {
+        this.apiService.getPartnerUserListForAutocomplete(50, event?.query).subscribe(nl => {
             this.partnerUserOptions = nl.map(n => { return { label: n.displayName, value: n.id }});
         })
     }

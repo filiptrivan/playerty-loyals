@@ -56,11 +56,11 @@ export class BaseFormCopy implements OnInit {
 
   //#region Model
 
-  initFormGroup(modelConstructor: any, propertyNameInSaveBody: string) {
+  initFormGroup<T = any>(modelConstructor: any, propertyNameInSaveBody: string, updateOnChangeControls?: (keyof T)[]) {
     if (modelConstructor == null)
       return null;
 
-    const formGroupToInsert: FormGroup = this.createFormGroup(modelConstructor);
+    const formGroupToInsert: FormGroup = this.createFormGroup(modelConstructor, null, updateOnChangeControls);
     this.formGroup.addControl(propertyNameInSaveBody, formGroupToInsert);
     
     return formGroupToInsert;
@@ -270,7 +270,7 @@ export class BaseFormCopy implements OnInit {
     return formArray;
   }
 
-  createFormGroup(modelConstructor: any, disableLambda?: (formControlName: string, model: any) => boolean): FormGroup {
+  createFormGroup(modelConstructor: any, disableLambda?: (formControlName: string, model: any) => boolean, updateOnChangeControls?: (keyof any)[]): FormGroup {
     let formGroup: SoftFormGroup<any> = new SoftFormGroup({});
 
     Object.keys(modelConstructor).forEach((formControlName) => {
@@ -280,7 +280,8 @@ export class BaseFormCopy implements OnInit {
 
       const propertyType = typeof formControlValue;
 
-      if (propertyType == typeof Date || 
+      if (propertyType == typeof Date ||
+        updateOnChangeControls?.includes(formControlName) ||
         (formControlName.endsWith('Id') && formControlName.length > 2)
       )
         formControl = new SoftFormControl(formControlValue, { updateOn: 'change' });

@@ -22,8 +22,8 @@ export class ApiService extends ApiGeneratedService {
         });
     }
 
-    loadPrimengListForDropdown(loadListForDropdownObservable: () => Observable<Namebook[]>): Observable<PrimengOption[]>{
-        return loadListForDropdownObservable().pipe(
+    getPrimengListForDropdown(getListForDropdownObservable: () => Observable<Namebook[]>): Observable<PrimengOption[]>{
+        return getListForDropdownObservable().pipe(
             map(res => {
                 return res.map(x => ({ label: x.displayName, value: x.id }));
             })

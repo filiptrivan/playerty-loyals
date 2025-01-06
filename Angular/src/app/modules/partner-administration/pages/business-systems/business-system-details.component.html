@@ -83,7 +83,7 @@
                     <form [formGroup]="formGroup" class="grid">
                         <div class="col-12">
                             <soft-data-table [tableTitle]="t('SuccessfullyDoneBusinessSystemUpdatePointsScheduledTaskList')" [cols]="businessSystemUpdatePointsScheduledTaskTableCols" 
-                            [loadTableDataObservableMethod]="loadBusinessSystemUpdatePointsScheduledTaskTableDataObservableMethod" 
+                            [getTableDataObservableMethod]="getBusinessSystemUpdatePointsScheduledTaskTableDataObservableMethod" 
                             [exportTableDataToExcelObservableMethod]="exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelObservableMethod"
                             [additionalFilterIdLong]="modelId" [showAddButton]="false" [rows]="5"
                             (onTotalRecordsChange)="businessSystemUpdatePointsScheduledTaskTableTotalRecords = $event" [showReloadTableButton]="true">

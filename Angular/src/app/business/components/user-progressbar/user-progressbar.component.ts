@@ -30,10 +30,10 @@ export class UserProgressbarComponent {
         return this.partnerUser?.points;
     }
     
-    getLevelPercentForTheCurrentUser(){
-        const levelPercentForTheCurrentUserHelper = Number((this.partnerUser?.points / this.tier?.validTo * 100).toFixed(2));
-        if (levelPercentForTheCurrentUserHelper) {
-            return Math.min(levelPercentForTheCurrentUserHelper, 100);
+    getLevelPercentForCurrentUser(){
+        const levelPercentForCurrentUserHelper = Number((this.partnerUser?.points / this.tier?.validTo * 100).toFixed(2));
+        if (levelPercentForCurrentUserHelper) {
+            return Math.min(levelPercentForCurrentUserHelper, 100);
         }
         
         return 0;

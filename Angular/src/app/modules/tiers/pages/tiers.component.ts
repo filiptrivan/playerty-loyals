@@ -20,7 +20,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
   ]
 })
 export class TiersComponent implements OnInit {
-  tiers: TierWithIndex[];
+  tierList: TierWithIndex[];
   tierForTheCurrentPartnerUser: Tier;
   currentPartnerUser: PartnerUser;
   @ViewChild('timeline') timelineIndexProgressbarComponent!: TimelineIndexProgressbarComponent;
@@ -33,31 +33,31 @@ export class TiersComponent implements OnInit {
 
   async ngOnInit() {
     forkJoin({
-      tiers: this.apiService.loadTierListForDisplay(),
-      tierForTheCurrentPartnerUser: this.apiService.getTierForTheCurrentPartnerUser(),
+      tierList: this.apiService.getTierListForDisplay(),
+      tierForCurrentPartnerUser: this.apiService.getTierForTheCurrentPartnerUser(),
       currentPartnerUser: this.apiService.getCurrentPartnerUser(),
-    }).subscribe(({ tiers, tierForTheCurrentPartnerUser, currentPartnerUser }) => {
+    }).subscribe(({ tierList: tierList, tierForCurrentPartnerUser: tierForTheCurrentPartnerUser, currentPartnerUser }) => {
       this.currentPartnerUser = currentPartnerUser;
-      this.tiers = tiers;
-      this.assignIndexesToTiers(tiers);
+      this.tierList = tierList;
+      this.assignIndexesToTiers(tierList);
       this.tierForTheCurrentPartnerUser = tierForTheCurrentPartnerUser;
     });
 
   }
 
-  assignIndexesToTiers(tiers: TierWithIndex[]){
+  assignIndexesToTiers(tierList: TierWithIndex[]){
     let reverseIndex = 0;
 
-    for (let i = tiers.length - 1; i >= 0; i--) {
-      tiers[i].index = i;
+    for (let i = tierList.length - 1; i >= 0; i--) {
+      tierList[i].index = i;
 
-      tiers[reverseIndex].displayName = i + 1;
+      tierList[reverseIndex].displayName = i + 1;
       reverseIndex++;
     }
   }
 
   connectorMethod = (connector: Element, index: number) => {
-    const fromTier = this.tiers.find(x => x.index === index + 1);
+    const fromTier = this.tierList.find(x => x.index === index + 1);
 
     let levelPercentForTheCurrentUserHelper: number = 0;
     

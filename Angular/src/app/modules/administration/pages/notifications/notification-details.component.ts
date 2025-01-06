@@ -30,7 +30,7 @@ export class NotificationDetailsComponent extends BaseFormCopy implements OnInit
     text: string;
 
     userTableCols: Column[];
-    loadUserTableDataObservableMethod = this.apiService.loadUserTableData;
+    getUserTableDataObservableMethod = this.apiService.getUserTableData;
     exportUserTableDataToExcelObservableMethod = this.apiService.exportUserTableDataToExcel;
     deleteUserObservableMethod = this.apiService.deleteUser;
     

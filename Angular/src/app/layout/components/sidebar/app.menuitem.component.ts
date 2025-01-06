@@ -139,7 +139,7 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
     }
 
     searchPartners(event: AutoCompleteCompleteEvent) {
-        this.apiService.loadPartnerWithSlugListForAutocomplete(50, event?.query).subscribe(cl => {
+        this.apiService.getPartnerWithSlugListForAutocomplete(50, event?.query).subscribe(cl => {
             this.partnerOptions = cl.map(c => { return { label: c.displayName, value: c.code }});
         });
     }
@@ -147,8 +147,8 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
     async moreOptionsClick(){
         if (this.selectedPartner.value) {
             localStorage.setItem(environment.partnerSlugKey, this.selectedPartner.value);
-            await firstValueFrom(this.partnerService.loadCurrentPartner());
-            await firstValueFrom(this.partnerService.loadCurrentPartnerUser());
+            await firstValueFrom(this.partnerService.getCurrentPartner());
+            await firstValueFrom(this.partnerService.getCurrentPartnerUser());
             this.router.navigate(['/'], { queryParams: { [environment.partnerParamKey]: this.selectedPartner.value } });
         }
     }

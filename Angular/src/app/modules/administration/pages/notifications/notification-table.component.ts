@@ -11,7 +11,7 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
 export class NotificationTableComponent implements OnInit {
     cols: Column[];
 
-    loadNotificationTableDataObservableMethod = this.apiService.loadNotificationTableData;
+    getNotificationTableDataObservableMethod = this.apiService.getNotificationTableData;
     exportNotificationTableDataToExcelObservableMethod = this.apiService.exportNotificationTableDataToExcel;
     deleteNotificationObservableMethod = this.apiService.deleteNotification;
 

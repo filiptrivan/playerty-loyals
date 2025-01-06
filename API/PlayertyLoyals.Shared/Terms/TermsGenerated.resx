@@ -73,6 +73,33 @@
   <data name="Id" xml:space="preserve">
     <value />
   </data>
+  <data name="ReadonlyObject" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ReadonlyObjectList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ReadonlyObjectExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BusinessObject" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BusinessObjectList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BusinessObjectExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ModifiedAt" xml:space="preserve">
+    <value />
+  </data>
   <data name="RolePermission" xml:space="preserve">
     <value />
   </data>
@@ -116,15 +143,6 @@
     <value />
   </data>
   <data name="Permissions" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Version" xml:space="preserve">
-    <value />
-  </data>
-  <data name="CreatedAt" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ModifiedAt" xml:space="preserve">
     <value />
   </data>
   <data name="PermissionList" xml:space="preserve">

@@ -13,7 +13,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
-    public class BusinessSystemController : SoftControllerBase
+    public class BusinessSystemController : SoftBaseController
     {
         private readonly IApplicationDbContext _context;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
@@ -92,7 +92,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<BusinessSystemDTO> SaveBusinessSystem(BusinessSystemSaveBodyDTO businessSystemSaveBodyDTO)
         {
-            return await _loyalsBusinessService.SaveBusinessSystemExtendedAsync(businessSystemSaveBodyDTO);
+            return await _loyalsBusinessService.SaveBusinessSystemAndReturnSaveBodyDTOAsync(businessSystemSaveBodyDTO);
         }
 
         [HttpPut]

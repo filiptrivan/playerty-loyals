@@ -11,7 +11,7 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
 export class UserListComponent implements OnInit {
     cols: Column[];
     
-    loadUserTableDataObservableMethod = this.apiService.loadUserTableData;
+    getUserTableDataObservableMethod = this.apiService.getUserTableData;
     exportUserTableDataToExcelObservableMethod = this.apiService.exportUserTableDataToExcel;
     deleteUserObservableMethod = this.apiService.deleteUser;
 

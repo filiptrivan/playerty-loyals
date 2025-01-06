@@ -34,17 +34,17 @@ export class TransactionsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadTransactions();
+    this.getTransactionList();
   }
 
   onLazyLoad(event: PaginatorState){
     this.tableFilter.first = event.first;
     this.tableFilter.rows = event.rows;
-    this.loadTransactions();
+    this.getTransactionList();
   }
   
-  loadTransactions(){
-    this.apiService.loadTransactionListForTheCurrentPartnerUser(this.tableFilter).subscribe((res) => {
+  getTransactionList(){
+    this.apiService.getTransactionListForTheCurrentPartnerUser(this.tableFilter).subscribe((res) => {
       this.currentPartnerUserTransactions = res;
     });
   }

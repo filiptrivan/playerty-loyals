@@ -23,7 +23,7 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class TierListComponent extends BaseFormCopy implements OnInit {
-    override saveObservableMethod = this.apiService.saveTier; 
+    override saveObservableMethod = this.apiService.saveTier;
 
     // Tier
     tierModel: Tier = new Tier();
@@ -74,8 +74,8 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         ];
 
         forkJoin({
-            tierSaveBody: this.apiService.loadTierSaveBodyDTO(),
-            businessSystemNamebookList: this.apiService.loadBusinessSystemListForDropdown(),
+            tierSaveBody: this.apiService.getTierSaveBodyDTO(),
+            businessSystemNamebookList: this.apiService.getBusinessSystemListForDropdown(),
         }).subscribe(({ tierSaveBody, businessSystemNamebookList }) => {
             this.initTierFormArray(tierSaveBody.tierDTOList);
             this.initBusinessSystemTierFormArray(tierSaveBody.businessSystemTierDTOList);

@@ -141,7 +141,7 @@ namespace PlayertyLoyals.Business.Services
             }
         }
 
-        public async Task<List<ProductDTO>> GetRecommendedProductsForTheCurrentPartnerUserAsync()
+        public async Task<List<ProductDTO>> GetRecommendedProductListForCurrentPartnerUserAsync()
         {
             //HttpClient client = new HttpClient();
             //client.BaseAddress =
@@ -158,7 +158,7 @@ namespace PlayertyLoyals.Business.Services
             return null;
         }
 
-        public List<ProductDTO> GetProductsForTheRecommendationAsync()
+        public List<ProductDTO> GetProductListForRecommendationAsync()
         {
             List<ProductDTO> products = new List<ProductDTO>
             {
