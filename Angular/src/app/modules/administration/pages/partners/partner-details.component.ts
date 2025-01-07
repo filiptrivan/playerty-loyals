@@ -8,7 +8,6 @@ import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerService } from 'src/app/business/services/helpers/partner.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
-import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { nameof } from 'src/app/core/services/helper-functions';
@@ -23,6 +22,7 @@ export class PartnerDetailsComponent extends BaseFormCopy implements OnInit {
     override saveObservableMethod = this.apiService.savePartner;
     partnerFormGroup: SoftFormGroup<Partner>;
     partnerSaveBodyName: string = nameof<PartnerSaveBody>('partnerDTO');
+    override mainDTOName: string = this.partnerSaveBodyName;
 
     constructor(
         protected override differs: KeyValueDiffers,

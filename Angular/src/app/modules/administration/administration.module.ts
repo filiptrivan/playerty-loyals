@@ -15,6 +15,7 @@ import { PartnerListComponent } from './pages/partners/partner-list.component';
 import { PartnerDetailsComponent } from './pages/partners/partner-details.component';
 import { SoftColorpickComponent } from "../../core/controls/soft-colorpick/soft-colorpick.component";
 import { TranslocoDirective } from '@jsverse/transloco';
+import { ProductsRecommendationComponent } from "../../business/components/base-details/base-details";
 
 const routes: Routes = [
     {
@@ -53,14 +54,15 @@ const routes: Routes = [
 
 @NgModule({
     imports: [
-        RouterModule.forChild(routes),
-        PrimengModule,
-        SoftDataTableComponent,
-        SoftControlsModule,
-        CardSkeletonComponent,
-        SegmentationSelectComponent,
-        TranslocoDirective,
-    ],
+    RouterModule.forChild(routes),
+    PrimengModule,
+    SoftDataTableComponent,
+    SoftControlsModule,
+    CardSkeletonComponent,
+    SegmentationSelectComponent,
+    TranslocoDirective,
+    ProductsRecommendationComponent
+],
     declarations: [
         UserListComponent,
         UserDetailsComponent, 

@@ -31,6 +31,7 @@ export class BaseFormCopy implements OnInit {
   formGroup: FormGroup = new FormGroup({});
   formArrayControlNamesFromHtml: string[] = [];
   saveBody: any;
+  mainDTOName: string;
   modelId: number;
   detailsTitle: string;
   invalidForm: boolean = false; // FT: We are using this only if we manualy add some form field on the UI, like multiautocomplete, autocomplete etc...
@@ -110,7 +111,7 @@ export class BaseFormCopy implements OnInit {
 
     let formControl: SoftFormControl = formGroup.controls[formControlName] as SoftFormControl;
 
-    if (formControl == null){
+    if (formControl == null) {
       console.error(`The property ${formControlName} in the model ${formGroup.getRawValue().typeName} doesn't exist`);
       return null;
     }
@@ -163,8 +164,10 @@ export class BaseFormCopy implements OnInit {
           }
         });
 
-        if (reroute)
-          this.rerouteOnTheNewEntity((res as any).rerouteId); // You always need to have id, because of id == 0 and version change
+        if (reroute) {
+          const savedObjectId = (res as any)[this.mainDTOName]?.id;
+          this.rerouteToSavedObject(savedObjectId); // You always need to have id, because of id == 0 and version change
+        }
         
         this.onAfterSave();
       });
@@ -175,7 +178,7 @@ export class BaseFormCopy implements OnInit {
     }
   }
 
-  rerouteOnTheNewEntity(rerouteId: number | string): void {
+  rerouteToSavedObject(rerouteId: number | string): void {
     if(rerouteId == null){
       // console.error('You do not have rerouteId in your DTO.')
       const currentUrl = this.router.url;
