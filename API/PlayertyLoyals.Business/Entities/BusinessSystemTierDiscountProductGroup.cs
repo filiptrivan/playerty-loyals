@@ -1,4 +1,5 @@
 ﻿using Soft.Generator.Shared.Attributes.EF;
+using Soft.Generator.Shared.Attributes.EF.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.Entities
 {
+    [UIDoNotGenerate]
     public class BusinessSystemTierDiscountProductGroup
     {
         [M2MMaintanceEntity(nameof(BusinessSystemTier.BusinessSystemTierDiscountProductGroups))]

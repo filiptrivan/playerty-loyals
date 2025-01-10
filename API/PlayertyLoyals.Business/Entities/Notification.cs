@@ -1,9 +1,11 @@
 ﻿using Soft.Generator.Shared.Attributes.EF;
+using Soft.Generator.Shared.Attributes.EF.UI;
 using Soft.Generator.Shared.BaseEntities;
 using System.ComponentModel.DataAnnotations;
 
 namespace PlayertyLoyals.Business.Entities
 {
+    [UIDoNotGenerate]
     public class Notification : BusinessObject<long>
     {
         [SoftDisplayName]

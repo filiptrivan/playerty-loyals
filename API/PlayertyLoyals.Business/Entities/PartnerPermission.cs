@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Soft.Generator.Security.Interface;
 using Soft.Generator.Shared.Attributes.EF;
+using Soft.Generator.Shared.Attributes.EF.UI;
 using Soft.Generator.Shared.BaseEntities;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.Entities
 {
+    [UIDoNotGenerate]
     [Index(nameof(Code), IsUnique = true)]
     public class PartnerPermission : ReadonlyObject<int>
     {

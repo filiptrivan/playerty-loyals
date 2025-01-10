@@ -1,4 +1,5 @@
 ﻿using Soft.Generator.Shared.Attributes.EF;
+using Soft.Generator.Shared.Attributes.EF.UI;
 using Soft.Generator.Shared.BaseEntities;
 using Soft.Generator.Shared.Entities;
 using Soft.Generator.Shared.Interfaces;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.Entities
 {
+    [UIDoNotGenerate]
     public class BusinessSystemUpdatePointsScheduledTask : BusinessObject<long>
     {
         [Required]

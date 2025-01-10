@@ -1,5 +1,6 @@
 ﻿using PlayertyLoyals.Business.Entities;
 using Soft.Generator.Shared.Attributes.EF;
+using Soft.Generator.Shared.Attributes.EF.UI;
 using Soft.Generator.Shared.BaseEntities;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,7 @@ namespace PlayertyLoyals.Business.Entities
         [Required]
         public int ValidTo { get; set; }
 
+        [UIDoNotGenerate]
         [ManyToOneRequired(nameof(Partner.Tiers))]
         public virtual Partner Partner { get; set; }
 

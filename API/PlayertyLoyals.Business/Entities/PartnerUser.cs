@@ -1,5 +1,6 @@
 ﻿using Soft.Generator.Security.Entities;
 using Soft.Generator.Shared.Attributes.EF;
+using Soft.Generator.Shared.Attributes.EF.UI;
 using Soft.Generator.Shared.BaseEntities;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.Entities
 {
+    [UIDoNotGenerate]
     public class PartnerUser : BusinessObject<long> // https://learn.microsoft.com/en-us/ef/core/modeling/inheritance
     {
         [Required]

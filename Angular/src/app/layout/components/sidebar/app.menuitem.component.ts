@@ -12,6 +12,7 @@ import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { SoftFormControl } from '../../../core/components/soft-form-control/soft-form-control';
 import { environment } from 'src/environments/environment';
 import { PartnerService } from '../../../business/services/helpers/partner.service';
+import { PrimengOption } from 'src/app/core/entities/primeng-option';
 
 @Component({
     // eslint-disable-next-line @angular-eslint/component-selector
@@ -51,7 +52,7 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
 
     selectedPartner: SoftFormControl = new SoftFormControl<string>(null, { updateOn: 'change' });
 
-    partnerOptions: any[];
+    partnerOptions: PrimengOption[];
 
     constructor(
         public layoutService: LayoutService, 
@@ -139,8 +140,8 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
     }
 
     searchPartners(event: AutoCompleteCompleteEvent) {
-        this.apiService.getPartnerWithSlugListForAutocomplete(50, event?.query).subscribe(cl => {
-            this.partnerOptions = cl.map(c => { return { label: c.displayName, value: c.code }});
+        this.apiService.getPrimengCodebookListForAutocomplete(this.apiService.getPartnerWithSlugListForAutocomplete, 50, event.query).subscribe(po => {
+            this.partnerOptions = po;
         });
     }
 

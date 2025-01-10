@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
+using Soft.Generator.Shared.Attributes.EF.UI;
+using Soft.Generator.Shared.Enums;
 
 namespace PlayertyLoyals.Business.Entities
 {
@@ -26,6 +28,7 @@ namespace PlayertyLoyals.Business.Entities
         [Required]
         public string Email { get; set; }
 
+        [UIControlType(nameof(UIControlTypeCodes.TextArea))]
         [StringLength(100, MinimumLength = 1)]
         [Required]
         public string Slug { get; set; } // FT: The user will input the slug, and the slug will be the code in the same time
@@ -38,6 +41,7 @@ namespace PlayertyLoyals.Business.Entities
         [BlobName]
         public string LogoImage { get; set; }
 
+        [UIControlType(nameof(UIControlTypeCodes.ColorPick))]
         [StringLength(7)]
         public string PrimaryColor { get; set; }
 

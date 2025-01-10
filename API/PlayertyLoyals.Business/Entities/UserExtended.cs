@@ -4,11 +4,13 @@ using Soft.Generator.Security.Interface;
 using Soft.Generator.Shared.Attributes;
 using Soft.Generator.Shared.Attributes.EF;
 using Soft.Generator.Shared.Attributes.EF.Translation;
+using Soft.Generator.Shared.Attributes.EF.UI;
 using Soft.Generator.Shared.BaseEntities;
 using System.ComponentModel.DataAnnotations;
 
 namespace PlayertyLoyals.Business.Entities
 {
+    [UIDoNotGenerate]
     [TranslateSingularSrLatnRS("Korisnik")]
     [Index(nameof(Email), IsUnique = true)]
     public class UserExtended : BusinessObject<long>, IUser

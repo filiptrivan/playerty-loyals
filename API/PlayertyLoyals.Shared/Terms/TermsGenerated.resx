@@ -58,108 +58,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ScheduledTaskType" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ScheduledTaskTypeList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ScheduledTaskTypeExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Code" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Id" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ReadonlyObject" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ReadonlyObjectList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ReadonlyObjectExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="BusinessObject" xml:space="preserve">
-    <value />
-  </data>
-  <data name="BusinessObjectList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="BusinessObjectExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Version" xml:space="preserve">
-    <value />
-  </data>
-  <data name="CreatedAt" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ModifiedAt" xml:space="preserve">
-    <value />
-  </data>
-  <data name="RolePermission" xml:space="preserve">
-    <value />
-  </data>
-  <data name="RolePermissionList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="RolePermissionExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Role" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Permission" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UserRole" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UserRoleList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UserRoleExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="RoleId" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UserId" xml:space="preserve">
-    <value />
-  </data>
-  <data name="RoleList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="RoleExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Description" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Permissions" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PermissionList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PermissionExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="NameLatin" xml:space="preserve">
-    <value />
-  </data>
-  <data name="DescriptionLatin" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Roles" xml:space="preserve">
-    <value />
-  </data>
   <data name="BusinessSystemTier" xml:space="preserve">
     <value />
   </data>
@@ -181,6 +79,18 @@
   <data name="BusinessSystemTierDiscountProductGroups" xml:space="preserve">
     <value />
   </data>
+  <data name="Id" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ModifiedAt" xml:space="preserve">
+    <value />
+  </data>
   <data name="Gender" xml:space="preserve">
     <value />
   </data>
@@ -188,6 +98,9 @@
     <value />
   </data>
   <data name="GenderExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Name" xml:space="preserve">
     <value />
   </data>
   <data name="Users" xml:space="preserve">
@@ -250,6 +163,9 @@
   <data name="DiscountProductGroupExcelExportName" xml:space="preserve">
     <value />
   </data>
+  <data name="Code" xml:space="preserve">
+    <value />
+  </data>
   <data name="UserExtended" xml:space="preserve">
     <value />
   </data>
@@ -269,6 +185,9 @@
     <value />
   </data>
   <data name="BirthDate" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Roles" xml:space="preserve">
     <value />
   </data>
   <data name="Notifications" xml:space="preserve">
@@ -326,6 +245,9 @@
     <value />
   </data>
   <data name="PartnerRoleExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Description" xml:space="preserve">
     <value />
   </data>
   <data name="Partner" xml:space="preserve">
@@ -533,6 +455,66 @@
     <value />
   </data>
   <data name="PartnerUsersThatHasFilledSegmentation" xml:space="preserve">
+    <value />
+  </data>
+  <data name="RolePermission" xml:space="preserve">
+    <value />
+  </data>
+  <data name="RolePermissionList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="RolePermissionExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Permission" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UserRole" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UserRoleList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UserRoleExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="RoleId" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UserId" xml:space="preserve">
+    <value />
+  </data>
+  <data name="RoleList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="RoleExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PermissionList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PermissionExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="NameLatin" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DescriptionLatin" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ScheduledTaskType" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ScheduledTaskTypeList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ScheduledTaskTypeExcelExportName" xml:space="preserve">
     <value />
   </data>
 </root>

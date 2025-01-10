@@ -7,6 +7,7 @@ import { TableFilter } from '../../../core/entities/table-filter';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { Namebook } from '../../../core/entities/namebook';
 import { getFileNameFromContentDisposition } from 'src/app/core/services/helper-functions';
+import { Codebook } from 'src/app/core/entities/codebook';
 
 @Injectable()
 export class ApiService extends ApiGeneratedService {
@@ -22,10 +23,34 @@ export class ApiService extends ApiGeneratedService {
         });
     }
 
-    getPrimengListForDropdown(getListForDropdownObservable: () => Observable<Namebook[]>): Observable<PrimengOption[]>{
+    getPrimengNamebookListForDropdown(getListForDropdownObservable: () => Observable<Namebook[]>): Observable<PrimengOption[]>{
         return getListForDropdownObservable().pipe(
             map(res => {
                 return res.map(x => ({ label: x.displayName, value: x.id }));
+            })
+        );
+    }
+
+    getPrimengCodebookListForDropdown(getListForDropdownObservable: () => Observable<Codebook[]>): Observable<PrimengOption[]>{
+        return getListForDropdownObservable().pipe(
+            map(res => {
+                return res.map(x => ({ label: x.displayName, value: x.code }));
+            })
+        );
+    }
+
+    getPrimengNamebookListForAutocomplete(getListForAutocompleteObservable: (limit: number, query: string) => Observable<Namebook[]>, limit: number, query: string): Observable<PrimengOption[]>{
+        return getListForAutocompleteObservable(limit, query).pipe(
+            map(res => {
+                return res.map(x => ({ label: x.displayName, value: x.id }));
+            })
+        );
+    }
+
+    getPrimengCodebookListForAutocomplete(getListForAutocompleteObservable: (limit: number, query: string) => Observable<Codebook[]>, limit: number, query: string): Observable<PrimengOption[]>{
+        return getListForAutocompleteObservable(limit, query).pipe(
+            map(res => {
+                return res.map(x => ({ label: x.displayName, value: x.code }));
             })
         );
     }

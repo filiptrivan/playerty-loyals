@@ -15,6 +15,7 @@ import { SoftEditorComponent } from './soft-editor/soft-editor.component';
 import { SoftColorpickComponent } from './soft-colorpick/soft-colorpick.component';
 import { SoftFileComponent } from './soft-file/soft-file.component';
 import { SoftCalendarComponent } from './soft-calendar/soft-calendar.component';
+import { SoftAutocompleteComponent } from './soft-autocomplete/soft-autocomplete.component';
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { SoftCalendarComponent } from './soft-calendar/soft-calendar.component';
     SoftReturnButtonComponent,
     SoftPanelsModule,
     SoftPasswordComponent,
+    SoftAutocompleteComponent,
     SoftMultiAutocompleteComponent,
     SoftMultiselectComponent,
     SoftNumberComponent,
@@ -47,6 +49,7 @@ import { SoftCalendarComponent } from './soft-calendar/soft-calendar.component';
     SoftReturnButtonComponent,
     SoftPanelsModule,
     SoftPasswordComponent,
+    SoftAutocompleteComponent,
     SoftMultiAutocompleteComponent,
     SoftMultiselectComponent,
     SoftNumberComponent,

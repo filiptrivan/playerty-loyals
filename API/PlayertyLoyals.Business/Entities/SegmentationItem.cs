@@ -1,4 +1,5 @@
 ﻿using Soft.Generator.Shared.Attributes.EF;
+using Soft.Generator.Shared.Attributes.EF.UI;
 using Soft.Generator.Shared.BaseEntities;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.Entities
 {
+    [UIDoNotGenerate]
     public class SegmentationItem : BusinessObject<long>
     {
         // FT: Check in the code that for the same segmentation there is no same segmentation item names, or should we do it? Maybe let the user do what he wants.

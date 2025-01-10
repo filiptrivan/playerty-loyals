@@ -10,7 +10,7 @@ import { SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-fo
 import { FormGroup } from '@angular/forms';
 
 @Component({
-    selector: 'partner-base-details',
+    selector: 'partner-base-detailse',
     template:`
 <ng-container *transloco="let t">
     <soft-panel>

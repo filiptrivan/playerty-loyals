@@ -6,10 +6,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\Soft.Generator\Source\Soft.Generator.Infrastructure\Soft.Generator.Infrastructure.csproj" />
-		<ProjectReference Include="..\..\..\Soft.Generator\Source\Soft.Generator.Security\Soft.Generator.Security.csproj" />
-		<ProjectReference Include="..\..\..\Soft.Generator\Source\Soft.Generator.Shared\Soft.Generator.Shared.csproj" />
-		<ProjectReference Include="..\..\..\Soft.Generator\Source\Soft.SourceGenerator.NgTable\Soft.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\..\..\..\SoftGenerator\soft-generator\Soft.Generator.Infrastructure\Soft.Generator.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\..\..\SoftGenerator\soft-generator\Soft.Generator.Security\Soft.Generator.Security.csproj" />
+		<ProjectReference Include="..\..\..\..\SoftGenerator\soft-generator\Soft.Generator.Shared\Soft.Generator.Shared.csproj" />
+		<ProjectReference Include="..\..\..\..\SoftGenerator\soft-generator\Soft.SourceGenerator.NgTable\Soft.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
 		<ProjectReference Include="..\PlayertyLoyals.Shared\PlayertyLoyals.Shared.csproj" />
 		<ProjectReference Include="..\PlayertyLoyals.Business\PlayertyLoyals.Business.csproj" />
 	</ItemGroup>
