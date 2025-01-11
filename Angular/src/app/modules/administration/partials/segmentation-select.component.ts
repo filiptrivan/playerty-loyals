@@ -10,7 +10,8 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
-import { SoftFormArray } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { SoftFormArray, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { BaseFormService } from 'src/app/core/services/base-form.service';
 
 @Component({
     selector: 'segmentation-select',
@@ -27,7 +28,7 @@ export class SegmentationSelectComponent extends BaseFormCopy implements OnInit 
     @Input() segmentation: Segmentation;
     @Input() allSegmentationItems: SegmentationItem[]; // All, we need to filter, it's better then making multiple requests
     @Input() partnerUserId: number;
-    @Input() override formGroup: FormGroup;
+    @Input() override formGroup: SoftFormGroup;
     @Input() segmentationItemsFormArray: SoftFormArray<SegmentationItem[]>;
     @Input() checkedSegmentationItemIdsForThePartnerUser: number[]; // FT: Because we are not changing it, we are not using nameof
     
@@ -43,9 +44,10 @@ export class SegmentationSelectComponent extends BaseFormCopy implements OnInit 
         protected override translocoService: TranslocoService,
         protected override translateClassNamesService: TranslateClassNamesService,
         protected override validatorService: ValidatorService,
+        protected override baseFormService: BaseFormService,
     ) 
     {
-        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService, baseFormService);
     }
          
     override ngOnInit() {

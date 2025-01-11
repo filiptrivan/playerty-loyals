@@ -1,11 +1,13 @@
 <ng-container *transloco="let t">
-    @defer (when partnerFormGroup != null) {
         <soft-card [title]="t('Partner')" icon="pi pi-at">
 
-            <partner-base-details [partnerFormGroup]="partnerFormGroup" [onSave]="onSave"></partner-base-details>
+            <partner-base-details 
+            [formGroup]="formGroup" 
+            [partnerFormGroup]="partnerFormGroup" 
+            [onSave]="onSave" 
+            [initSaveBody]="initSaveBody" 
+            [saveObservableMethod]="saveObservableMethod"
+            ></partner-base-details>
 
         </soft-card>
-    } @placeholder {
-        <card-skeleton [height]="502"></card-skeleton>
-    }
 </ng-container>

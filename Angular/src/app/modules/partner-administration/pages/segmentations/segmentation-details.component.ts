@@ -11,6 +11,7 @@ import { TranslateClassNamesService } from 'src/app/business/services/translates
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { LastMenuIconIndexClicked } from 'src/app/core/entities/last-menu-icon-index-clicked';
+import { BaseFormService } from 'src/app/core/services/base-form.service';
 import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
@@ -41,9 +42,10 @@ export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit
         protected override translocoService: TranslocoService,
         protected override translateClassNamesService: TranslateClassNamesService,
         protected override validatorService: ValidatorService,
+        protected override baseFormService: BaseFormService,
         private apiService: ApiService,
     ) {
-        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService, baseFormService);
     }
          
     override ngOnInit() {
@@ -58,12 +60,12 @@ export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit
                 .subscribe(({ segmentation, segmentationItems }) => {
                     this.initSegmentationItemsFormArray(segmentationItems);
 
-                    this.segmentationFormGroup = this.initFormGroup(new Segmentation(segmentation), this.segmentationSaveBodyName);
+                    this.segmentationFormGroup = this.baseFormService.initFormGroup(this.formGroup, new Segmentation(segmentation), this.segmentationSaveBodyName);
                 });
             }else{
                 this.initSegmentationItemsFormArray([]);
                 
-                this.segmentationFormGroup = this.initFormGroup(new Segmentation({id: 0}), this.segmentationSaveBodyName);
+                this.segmentationFormGroup = this.baseFormService.initFormGroup(this.formGroup, new Segmentation({id: 0}), this.segmentationSaveBodyName);
             }
         });
     }
@@ -78,7 +80,7 @@ export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit
         this.addNewFormControlToTheFormArray(this.segmentationItemsFormArray, new SegmentationItem({id: 0}), index);
     }
 
-    override onBeforeSave(): void {
+    override onBeforeSave = (): void => {
         let saveBody: SegmentationSaveBody = new SegmentationSaveBody();
 
         saveBody.segmentationDTO = this.segmentationFormGroup.getRawValue();

@@ -14,6 +14,7 @@ import { AllClickEvent, Column, RowClickEvent, SoftDataTableComponent } from 'sr
 import { SoftFormArray, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { LastMenuIconIndexClicked } from 'src/app/core/entities/last-menu-icon-index-clicked';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
+import { BaseFormService } from 'src/app/core/services/base-form.service';
 import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
@@ -62,9 +63,10 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         protected override translocoService: TranslocoService,
         protected override translateClassNamesService: TranslateClassNamesService,
         protected override validatorService: ValidatorService,
+        protected override baseFormService: BaseFormService,
         private apiService: ApiService) 
         {
-        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService, baseFormService);
         }
          
     override ngOnInit() {
@@ -484,7 +486,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         }
     }
 
-    override onBeforeSave(): void {
+    override onBeforeSave = (): void => {
         let saveBody: TierSaveBody = new TierSaveBody();
 
         saveBody.tierDTOList = this.tierFormArray.getRawValue();
@@ -495,7 +497,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         this.saveBody = saveBody;
     }
 
-    override onAfterSave(): void {
+    override onAfterSave = (): void => {
         const selectedFormControls = this.getFormArrayControls<BusinessSystemTierDiscountProductGroup>('selectedForBusinessSystem', this.businessSystemTierDiscountProductGroupSaveBodyName);
         
         selectedFormControls.forEach((selectedFormControl, index) => {

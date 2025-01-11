@@ -13,6 +13,7 @@ import { ValidatorService } from 'src/app/business/services/validators/validatio
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { SoftFormArray, SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
+import { BaseFormService } from 'src/app/core/services/base-form.service';
 import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
@@ -58,10 +59,11 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         protected override translocoService: TranslocoService,
         protected override translateClassNamesService: TranslateClassNamesService,
         protected override validatorService: ValidatorService,
+        protected override baseFormService: BaseFormService,
         private apiService: ApiService,
         private partnerService: PartnerService,
     ) {
-        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService, baseFormService);
     }
 
 
@@ -89,7 +91,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
             });
 
             this.apiService.getPartnerUser(this.modelId).subscribe(partnerUser => {
-                this.partnerUserFormGroup = this.initFormGroup(new PartnerUser(partnerUser), nameof<PartnerUserSaveBody>('partnerUserDTO'));
+                this.partnerUserFormGroup = this.baseFormService.initFormGroup(this.formGroup, new PartnerUser(partnerUser), nameof<PartnerUserSaveBody>('partnerUserDTO'));
                 
                 if (partnerUser?.tierId) {
                     this.apiService.getTier(partnerUser.tierId).subscribe(partnerUserTier => {
@@ -110,7 +112,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
                 this.getAlreadyFilledSegmentationIdsForThePartnerUser(partnerUser);     
 
                 this.apiService.getUser(partnerUser.userId).subscribe(user => {
-                    this.userExtendedFormGroup = this.initFormGroup(new UserExtended(user), nameof<PartnerUserSaveBody>('userExtendedDTO'));
+                    this.userExtendedFormGroup = this.baseFormService.initFormGroup(this.formGroup, new UserExtended(user), nameof<PartnerUserSaveBody>('userExtendedDTO'));
 
                     this.apiService.getRoleNamebookListForUserExtended(user.id).subscribe(rolesForTheUser => {
                         this.selectedRoles.setValue(
@@ -137,7 +139,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         return true;
     }
 
-    override onBeforeSave(): void {
+    override onBeforeSave = (): void => {
         let saveBody: PartnerUserSaveBody = new PartnerUserSaveBody();
 
         saveBody.userExtendedDTO = this.userExtendedFormGroup.getRawValue();
@@ -152,7 +154,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         return;
     }
 
-    override async onAfterSave(): Promise<void> {
+    override onAfterSave = async () => {
         this.getAlreadyFilledSegmentationIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue());
         
         if ((await firstValueFrom(this.partnerService.currentPartnerUser$)).id == this.partnerUserFormGroup.getRawValue().id) {

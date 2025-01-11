@@ -64,7 +64,7 @@ export class UserDetailsComponent extends BaseForm<UserExtended> implements OnIn
         this.initFormGroup(model);
     }
 
-    override onBeforeSave(): void {
+    override onBeforeSave = (): void => {
         let saveBody: UserExtendedSaveBody = new UserExtendedSaveBody();
 
         saveBody.userExtendedDTO = this.model;

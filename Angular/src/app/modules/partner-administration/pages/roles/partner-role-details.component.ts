@@ -77,7 +77,7 @@ export class PartnerRoleDetailsComponent extends BaseForm<PartnerRole> implement
         })
     }
     
-    override onBeforeSave(): void {
+    override onBeforeSave = (): void => {
         let saveBody: PartnerRoleSaveBody = new PartnerRoleSaveBody();
 
         saveBody.selectedPartnerUserIds = this.selectedPartnerUsers.value?.map(x => x.value);

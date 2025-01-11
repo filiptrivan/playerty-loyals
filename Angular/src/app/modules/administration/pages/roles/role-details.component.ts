@@ -80,7 +80,7 @@ export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
         })
     }
     
-    override onBeforeSave(): void {
+    override onBeforeSave = (): void => {
         this.saveBody = new RoleSaveBody();
         this.saveBody.selectedUserIds = this.selectedUsers.value?.map(x => x.value);
         this.saveBody.selectedPermissionIds = this.selectedPermissions.value;

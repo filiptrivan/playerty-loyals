@@ -42,6 +42,7 @@ export class SoftFormGroup<TValue = any> extends FormGroup {
     }
 
     public name?: string; // FT: Using for nested form groups
+    public mainDTOName?: string;
     public controlNamesFromHtml?: string[] = [];
 }
 

@@ -1,3 +1,4 @@
+import { BaseFormService } from './../../../core/services/base-form.service';
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
@@ -7,8 +8,12 @@ import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
 import { SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
-import { getControl } from 'src/app/core/services/helper-functions';
-import { PartnerUserSaveBody, NotificationSaveBody, TierSaveBody, BusinessSystemTier, ExternalDiscountProductGroup, Product, MergedPartnerUser, Brand, UserExtendedSaveBody, ExternalTransaction, SegmentationSaveBody, SegmentationItem, PartnerRoleSaveBody, PartnerNotificationSaveBody, UpdatePoints, BusinessSystemTierDiscountProductGroup, Notification, BusinessSystemUpdatePointsDataBody, QrCode, Gender, PartnerUserSegmentation, PartnerUserPartnerNotification, DiscountProductGroup, UserExtended, UserNotification, Transaction, PartnerRole, PartnerRolePartnerPermission, PartnerUser, BusinessSystem, PartnerUserPartnerRole, PartnerNotification, BusinessSystemUpdatePointsScheduledTask, Partner, PartnerUserSegmentationItem, PartnerPermission, Tier, Segmentation } from '../../entities/business-entities.generated';
+import { getControl, nameof } from 'src/app/core/services/helper-functions';
+import { PartnerUserSaveBody, NotificationSaveBody, TierSaveBody, BusinessSystemTier, ExternalDiscountProductGroup, Product, MergedPartnerUser, Brand, UserExtendedSaveBody, ExternalTransaction, SegmentationSaveBody, SegmentationItem, PartnerRoleSaveBody, PartnerNotificationSaveBody, UpdatePoints, BusinessSystemTierDiscountProductGroup, Notification, BusinessSystemUpdatePointsDataBody, QrCode, Gender, PartnerUserSegmentation, PartnerUserPartnerNotification, DiscountProductGroup, UserExtended, UserNotification, Transaction, PartnerRole, PartnerRolePartnerPermission, PartnerUser, BusinessSystem, PartnerUserPartnerRole, PartnerNotification, BusinessSystemUpdatePointsScheduledTask, Partner, PartnerUserSegmentationItem, PartnerPermission, Tier, Segmentation, PartnerSaveBody } from '../../entities/business-entities.generated';
+import { ActivatedRoute } from '@angular/router';
+import { forkJoin, Observable } from 'rxjs';
+import { BaseEntity } from 'src/app/core/entities/base-entity';
+import { CardSkeletonComponent } from "../../../core/components/card-skeleton/card-skeleton.component";
 
 @Component({
     selector: 'partner-role-base-details',
@@ -82,59 +87,63 @@ export class PartnerRoleBaseComponent {
         <panel-header></panel-header>
 
         <panel-body>
-            <form class="grid">
-                <div class="col-12">
-                    <soft-file [control]="control('logoImage', partnerFormGroup)" [fileData]="partnerFormGroup.controls.logoImageData.getRawValue()" [objectId]="partnerFormGroup.controls.id.getRawValue()"></soft-file>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="control('name', partnerFormGroup)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="control('email', partnerFormGroup)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="control('slug', partnerFormGroup)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-colorpick [control]="control('primaryColor', partnerFormGroup)" ></soft-colorpick>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="control('productsRecommendationEndpoint', partnerFormGroup)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-number [control]="control('pointsMultiplier', partnerFormGroup)" [decimal]="true" [maxFractionDigits]=" 2"></soft-number>
-                </div>
-                 <div class="col-12">
-                    <soft-panel>
-                        <panel-header [title]="t('Tiers')" icon="pi pi-list"></panel-header>
-                        <panel-body [normalBottomPadding]="true">
-                            @for (formGroup of getFormArrayGroups(tiersFormArray); track formGroup; let index = $index; let last = $last) {
-                                <index-card [index]="index" [last]="false" [crudMenu]="tiersCrudMenu" (onMenuIconClick)="tiersLastIndexClicked.index = $event">
-                                    <form [formGroup]="formGroup" class="grid">
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="getFormArrayControlByIndex('name', tiersFormArray, index)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="getFormArrayControlByIndex('description', tiersFormArray, index)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-number [control]="getFormArrayControlByIndex('validFrom', tiersFormArray, index)" ></soft-number>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-number [control]="getFormArrayControlByIndex('validTo', tiersFormArray, index)" ></soft-number>
-                </div>
-                                    </form>
-                                </index-card>
-                            }
+            @defer (when partnerFormGroup != null) {
+                <form class="grid">
+                    <div class="col-12">
+                        <soft-file [control]="control('logoImage', partnerFormGroup)" [fileData]="partnerFormGroup.controls.logoImageData.getRawValue()" [objectId]="partnerFormGroup.controls.id.getRawValue()"></soft-file>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('name', partnerFormGroup)" ></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('email', partnerFormGroup)" ></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('slug', partnerFormGroup)" ></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-colorpick [control]="control('primaryColor', partnerFormGroup)" ></soft-colorpick>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('productsRecommendationEndpoint', partnerFormGroup)" ></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-number [control]="control('pointsMultiplier', partnerFormGroup)" [decimal]="true" [maxFractionDigits]=" 2"></soft-number>
+                    </div>
+                    <!-- <div class="col-12">
+                        <soft-panel>
+                            <panel-header [title]="t('Tiers')" icon="pi pi-list"></panel-header>
+                            <panel-body [normalBottomPadding]="true">
+                                @for (formGroup of getFormArrayGroups(tiersFormArray); track formGroup; let index = $index; let last = $last) {
+                                    <index-card [index]="index" [last]="false" [crudMenu]="tiersCrudMenu" (onMenuIconClick)="tiersLastIndexClicked.index = $event">
+                                        <form [formGroup]="formGroup" class="grid">
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="getFormArrayControlByIndex('name', tiersFormArray, index)" ></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="getFormArrayControlByIndex('description', tiersFormArray, index)" ></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-number [control]="getFormArrayControlByIndex('validFrom', tiersFormArray, index)" ></soft-number>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-number [control]="getFormArrayControlByIndex('validTo', tiersFormArray, index)" ></soft-number>
+                    </div>
+                                        </form>
+                                    </index-card>
+                                }
 
-                            <div class="panel-add-button">
-                                <p-button (onClick)="addNewToTiers(null)" [label]="t('AddNewTier')" icon="pi pi-plus"></p-button>
-                            </div>
+                                <div class="panel-add-button">
+                                    <p-button (onClick)="addNewToTiers(null)" [label]="t('AddNewTier')" icon="pi pi-plus"></p-button>
+                                </div>
 
-                        </panel-body>
-                    </soft-panel>
-                </div>       
-            </form>
+                            </panel-body>
+                        </soft-panel>
+                    </div>        -->
+                </form>
+            } @placeholder {
+                <card-skeleton [height]="502"></card-skeleton>
+            }
         </panel-body>
 
         <panel-footer>
@@ -146,28 +155,65 @@ export class PartnerRoleBaseComponent {
     `,
     standalone: true,
     imports: [
-        CommonModule,
-        PrimengModule,
-        SoftControlsModule,
-        TranslocoDirective,
-    ]
+    CommonModule,
+    PrimengModule,
+    SoftControlsModule,
+    TranslocoDirective,
+    CardSkeletonComponent
+]
 })
 export class PartnerBaseComponent {
-    @Input() partnerFormGroup: SoftFormGroup<Partner>;
+    @Input() saveObservableMethod: (saveBodyDTO: PartnerSaveBody) => Observable<PartnerSaveBody>;
     @Input() onSave: (reroute?: boolean) => void; 
+    @Input() initSaveBody: () => BaseEntity; 
+    @Input() formGroup: SoftFormGroup;
+    @Input() partnerFormGroup: SoftFormGroup<Partner>;
+    modelId: number;
+    partnerSaveBodyName: string = nameof<PartnerSaveBody>('partnerDTO');
 
 
 
     constructor(
-        private apiService: ApiService
+        private apiService: ApiService,
+        private route: ActivatedRoute,
+        private baseFormService: BaseFormService
     ) {
 
     }
 
     ngOnInit(){
+        this.initSaveBody = () => { 
+            let saveBody: PartnerSaveBody = new PartnerSaveBody();
+            saveBody.partnerDTO = this.partnerFormGroup.getRawValue();
+            return saveBody;
+        }
 
+        this.saveObservableMethod = this.apiService.savePartner;
+
+        this.formGroup.mainDTOName = this.partnerSaveBodyName;
+
+        this.route.params.subscribe((params) => {
+            this.modelId = params['id'];
+
+            if(this.modelId > 0){
+                forkJoin({
+                    partner: this.apiService.getPartner(this.modelId),
+                })
+                .subscribe(({ partner }) => {
+                    this.initPartnerFormGroup(new Partner(partner));
+                });
+            }
+            else{
+                this.initPartnerFormGroup(new Partner({id: 0}));
+            }
+        });
     }
 
+    initPartnerFormGroup(partner: Partner) {
+        console.log(partner);
+        this.partnerFormGroup = this.baseFormService.initFormGroup<Partner>(this.formGroup, partner, this.partnerSaveBodyName, ['primaryColor']);
+        this.partnerFormGroup.mainDTOName = this.partnerSaveBodyName;
+    }
 
 
     control(formControlName: keyof Partner, formGroup: SoftFormGroup){

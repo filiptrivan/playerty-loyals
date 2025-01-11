@@ -1,3 +1,4 @@
+import { BaseFormService } from './../../../../core/services/base-form.service';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -49,9 +50,10 @@ export class NotificationDetailsComponent extends BaseFormCopy implements OnInit
         protected override translocoService: TranslocoService,
         protected override translateClassNamesService: TranslateClassNamesService,
         protected override validatorService: ValidatorService,
+        protected override baseFormService: BaseFormService,
         private apiService: ApiService,
     ) {
-        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService, baseFormService);
     }
          
     override ngOnInit() {
@@ -73,7 +75,7 @@ export class NotificationDetailsComponent extends BaseFormCopy implements OnInit
     }
 
     initNotificationFormGroup(notification: Notification){
-        this.notificationFormGroup = this.initFormGroup(notification, nameof<NotificationSaveBody>('notificationDTO'));
+        this.notificationFormGroup = this.baseFormService.initFormGroup(this.formGroup, notification, nameof<NotificationSaveBody>('notificationDTO'));
     }
 
     sendEmailNotification(){
@@ -105,7 +107,7 @@ export class NotificationDetailsComponent extends BaseFormCopy implements OnInit
         this.lastLazyLoadTableFilter = event;
     }
 
-    override onBeforeSave(): void {
+    override onBeforeSave = (): void => {
         let saveBody = new NotificationSaveBody();
 
         saveBody.selectedIds = this.newlySelectedUserList;

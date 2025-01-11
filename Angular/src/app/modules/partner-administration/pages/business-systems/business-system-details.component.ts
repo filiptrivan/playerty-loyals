@@ -14,6 +14,7 @@ import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.
 import { SoftTab } from 'src/app/core/components/soft-panels/panel-header/panel-header.component';
 import { PrimeIcons } from 'primeng/api';
 import { SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { BaseFormService } from 'src/app/core/services/base-form.service';
 
 @Component({
     selector: 'business-system-details',
@@ -55,9 +56,10 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
         protected override translocoService: TranslocoService,
         protected override translateClassNamesService: TranslateClassNamesService,
         protected override validatorService: ValidatorService,
+        protected override baseFormService: BaseFormService,
         private apiService: ApiService,
     ) {
-        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService, baseFormService);
     }
          
     override ngOnInit() {
@@ -92,11 +94,11 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
 
     initBusinessSystemFormGroup(businessSystem: BusinessSystem){
-        this.businessSystemFormGroup = this.initFormGroup(businessSystem, this.businessSystemSaveBodyName);
+        this.businessSystemFormGroup = this.baseFormService.initFormGroup(this.formGroup, businessSystem, this.businessSystemSaveBodyName);
     }
 
     initBusinessSystemUpdatePointsDataFormGroup(businessSystem: BusinessSystem){
-        this.businessSystemUpdatePointsDataFormGroup = this.createFormGroup(new BusinessSystemUpdatePointsDataBody({businessSystemId: this.modelId, updatePointsStartDate: businessSystem.updatePointsStartDate, updatePointsInterval: businessSystem.updatePointsInterval}))
+        this.businessSystemUpdatePointsDataFormGroup = this.baseFormService.createFormGroup(new BusinessSystemUpdatePointsDataBody({businessSystemId: this.modelId, updatePointsStartDate: businessSystem.updatePointsStartDate, updatePointsInterval: businessSystem.updatePointsInterval}))
     }
     
     onSaveBusinessSystemUpdatePointsData(){
@@ -131,7 +133,7 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
         })
     }
     
-    override onBeforeSave(): void {
+    override onBeforeSave = (): void => {
         let saveBody: BusinessSystemSaveBody = new BusinessSystemSaveBody();
         
         saveBody.businessSystemDTO = this.businessSystemFormGroup.getRawValue();
@@ -139,7 +141,7 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
         this.saveBody = saveBody;
     }
 
-    override onAfterSave(): void {
+    override onAfterSave = (): void => {
         this.savedBusinessSystemUpdatePointsScheduledTaskIsPaused = this.businessSystemFormGroup.controls.updatePointsScheduledTaskIsPaused.getRawValue();
     }
 }

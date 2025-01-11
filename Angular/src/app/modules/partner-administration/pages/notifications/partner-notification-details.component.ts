@@ -15,6 +15,7 @@ import { PartnerNotification, PartnerNotificationSaveBody } from 'src/app/busine
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { nameof } from 'src/app/core/services/helper-functions';
 import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
+import { BaseFormService } from 'src/app/core/services/base-form.service';
 
 @Component({
     selector: 'partner-notification-details',
@@ -50,9 +51,10 @@ export class PartnerNotificationDetailsComponent extends BaseFormCopy implements
         protected override translocoService: TranslocoService,
         protected override translateClassNamesService: TranslateClassNamesService,
         protected override validatorService: ValidatorService,
+        protected override baseFormService: BaseFormService,
         private apiService: ApiService,
     ) {
-        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService, baseFormService);
     }
          
     override ngOnInit() {
@@ -74,7 +76,7 @@ export class PartnerNotificationDetailsComponent extends BaseFormCopy implements
     }
 
     initPartnerNotificationFormGroup(partnerNotification: PartnerNotification){
-        this.partnerNotificationFormGroup = this.initFormGroup(partnerNotification, nameof<PartnerNotificationSaveBody>('partnerNotificationDTO'));
+        this.partnerNotificationFormGroup = this.baseFormService.initFormGroup(this.formGroup, partnerNotification, nameof<PartnerNotificationSaveBody>('partnerNotificationDTO'));
     }
 
     sendEmailNotification(){
@@ -109,7 +111,7 @@ export class PartnerNotificationDetailsComponent extends BaseFormCopy implements
         this.lastLazyLoadTableFilter = event;
     }
     
-    override onBeforeSave(): void {
+    override onBeforeSave = (): void => {
         let saveBody: PartnerNotificationSaveBody = new PartnerNotificationSaveBody();
 
         saveBody.selectedIds = this.newlySelectedPartnerUserList;
