@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
+import { Button } from 'primeng/button';
 import { firstValueFrom, forkJoin } from 'rxjs';
 import { Partner, PartnerSaveBody } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
@@ -11,6 +12,7 @@ import { TranslateClassNamesService } from 'src/app/business/services/translates
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { SoftButton } from 'src/app/core/entities/soft-button';
 import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
@@ -21,6 +23,10 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 })
 export class PartnerDetailsComponent extends BaseFormCopy implements OnInit {
     partnerFormGroup: SoftFormGroup<Partner>;
+    additionalButtons: SoftButton[] = [
+        { label: this.translocoService.translate('Klikni'), onClick: () => {} },
+        { label: 'Klikni2', onClick: () => {} }
+    ]
 
     constructor(
         protected override differs: KeyValueDiffers,

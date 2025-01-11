@@ -214,24 +214,24 @@ export class BaseFormCopy implements OnInit {
   //#region Model List
 
   // FT HACK: Using modelConstructor because generics can't instantiate in TS (because JS)
-  initFormArray(modelList: any[], modelConstructor: any, formArraySaveBodyName: string, formArrayTranslationKey: string, required: boolean = false, disableLambda?: (formControlName: string, model: any) => boolean){
-    if (modelList == null)
-      return null;
+  // initFormArray(parentFormGroup: SoftFormGroup, modelList: any[], modelConstructor: any, formArraySaveBodyName: string, formArrayTranslationKey: string, required: boolean = false, disableLambda?: (formControlName: string, model: any) => boolean){
+  //   if (modelList == null)
+  //     return null;
 
-    let formArray: SoftFormArray = new SoftFormArray([]);
-    formArray.required = required;
-    formArray.modelConstructor = modelConstructor;
-    formArray.translationKey = formArrayTranslationKey;
+  //   let formArray: SoftFormArray = new SoftFormArray([]);
+  //   formArray.required = required;
+  //   formArray.modelConstructor = modelConstructor;
+  //   formArray.translationKey = formArrayTranslationKey;
 
-    modelList.forEach(model => {
-      Object.assign(modelConstructor, model);
-      formArray.push(this.baseFormService.createFormGroup(modelConstructor, disableLambda));
-    });
+  //   modelList.forEach(model => {
+  //     Object.assign(modelConstructor, model);
+  //     formArray.push(this.baseFormService.createFormGroup(modelConstructor, disableLambda));
+  //   });
 
-    this.formGroup.addControl(formArraySaveBodyName, formArray);
+  //   parentFormGroup.addControl(formArraySaveBodyName, formArray);
 
-    return formArray;
-  }
+  //   return formArray;
+  // }
   
   // FT: Need to use this from html because can't do "as SoftFormControl" there
   getFormArrayControlByIndex<T>(formControlName: keyof T & string, formArray: SoftFormArray<T[]>, index: number, filter?: (formGroups: SoftFormGroup<T>[]) => SoftFormGroup<T>[]): SoftFormControl {
@@ -282,15 +282,7 @@ export class BaseFormCopy implements OnInit {
   // }
 
   getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
-    return formArray.controls as SoftFormGroup<T>[]
-  }
-
-  addNewFormControlToTheFormArray(formArray: SoftFormArray, modelConstructor: any, index: number, disableLambda?: (formControlName: string, model: any) => boolean) {
-    if (index == null) {
-      formArray.push(this.baseFormService.createFormGroup(modelConstructor, disableLambda));
-    }else{
-      formArray.insert(index, this.baseFormService.createFormGroup(modelConstructor, disableLambda));
-    }
+    return this.baseFormService.getFormArrayGroups(formArray);
   }
 
   removeFormControlFromTheFormArray(formArray: SoftFormArray, index: number) {
@@ -350,7 +342,7 @@ export class BaseFormCopy implements OnInit {
   onAfterSaveListRequest(){}
 
   // FT: Sending LastMenuIconIndexClicked class because of reference type
-  getCrudMenuForOrderedData(formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean = false){
+  getCrudMenuForOrderedData = (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean = false): MenuItem[] => {
     let crudMenuForOrderedData: MenuItem[] = [
         {label: this.translocoService.translate('Remove'), icon: 'pi pi-minus', command: () => {
           this.onBeforeRemove(formArray, modelConstructor, lastMenuIconIndexClicked.index);
@@ -361,13 +353,13 @@ export class BaseFormCopy implements OnInit {
         {label: this.translocoService.translate('AddAbove'), icon: 'pi pi-arrow-up', command: () => {
           this.onBeforeAddAbove(formArray, modelConstructor, lastMenuIconIndexClicked.index);
           if (adjustFormArrayManually === false) {
-            this.addNewFormControlToTheFormArray(formArray, modelConstructor, lastMenuIconIndexClicked.index);
+            this.baseFormService.addNewFormGroupToFormArray(formArray, modelConstructor, lastMenuIconIndexClicked.index);
           }
         }},
         {label: this.translocoService.translate('AddBelow'), icon: 'pi pi-arrow-down', command: () => {
           this.onBeforeAddBelow(formArray, modelConstructor, lastMenuIconIndexClicked.index);
           if (adjustFormArrayManually === false) {
-            this.addNewFormControlToTheFormArray(formArray, modelConstructor, lastMenuIconIndexClicked.index + 1);
+            this.baseFormService.addNewFormGroupToFormArray(formArray, modelConstructor, lastMenuIconIndexClicked.index + 1);
           }
         }},
     ];
@@ -375,11 +367,11 @@ export class BaseFormCopy implements OnInit {
     return crudMenuForOrderedData;
   }
 
-  onBeforeRemove(formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number) {}
+  onBeforeRemove = (formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number) => {}
 
-  onBeforeAddAbove(formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number) {}
+  onBeforeAddAbove = (formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number) => {}
 
-  onBeforeAddBelow(formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number) {}
+  onBeforeAddBelow = (formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number) => {}
 
   //#endregion
 

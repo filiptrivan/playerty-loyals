@@ -90,13 +90,13 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     //#region Tier
 
     initTierFormArray(tierList: Tier[]){
-        this.tierFormArray = this.initFormArray(tierList, this.tierModel, this.tierDTOListSaveBodyName, this.tierTranslationKey, false);
+        this.tierFormArray = this.baseFormService.initFormArray(this.formGroup, tierList, this.tierModel, this.tierDTOListSaveBodyName, this.tierTranslationKey, false);
         this.tierCrudMenu = this.getCrudMenuForOrderedData(this.tierFormArray, new Tier({id: 0}), this.tierLastIndexClicked);
         // this.tierFormArray.validator = this.validatorService.isFormArrayEmpty(this.tierFormArray); // FT: When deleting every tier, we should let it be empty
     }
 
     addNewTier(index: number){
-        this.addNewFormControlToTheFormArray(this.tierFormArray, new Tier({id: 0}), index);
+        this.baseFormService.addNewFormGroupToFormArray(this.tierFormArray, new Tier({id: 0}), index);
     }
 
     //#endregion
@@ -105,13 +105,13 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
 
     initBusinessSystemTierFormArray(businessSystemTierList: BusinessSystemTier[]){
         // this.assignBusinessSystemTierListIndexes(businessSystemTierList);
-        this.businessSystemTierFormArray = this.initFormArray(businessSystemTierList, this.businessSystemTierModel, this.businessSystemTierDTOListSaveBodyName, this.businessSystemTierTranslationKey);
+        this.businessSystemTierFormArray = this.baseFormService.initFormArray(this.formGroup, businessSystemTierList, this.businessSystemTierModel, this.businessSystemTierDTOListSaveBodyName, this.businessSystemTierTranslationKey);
         this.businessSystemTierCrudMenu = this.getCrudMenuForOrderedData(this.businessSystemTierFormArray, new BusinessSystemTier({id: 0}), this.businessSystemTierLastIndexClicked, true);
     }
 
     addNewBusinessSystemTier(tierIndex: number, formArrayIndex: number = null){
         // FT: For the Tier we are not assigning index because we are sending the ordered list from the UI and we will get the index in foreach on the backend, but here we need orderNumber so we can filter 
-        this.addNewFormControlToTheFormArray(this.businessSystemTierFormArray, new BusinessSystemTier({id: 0, tierClientIndex: tierIndex}), formArrayIndex);
+        this.baseFormService.addNewFormGroupToFormArray(this.businessSystemTierFormArray, new BusinessSystemTier({id: 0, tierClientIndex: tierIndex}), formArrayIndex);
     }
 
     // FT: Adding new table of businessSystemTierDiscountProductGroup for the selected businessSystem
@@ -141,7 +141,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         this.removeFormControlsFromTheFormArray(this.businessSystemTierDiscountProductGroupFormArray, businessSystemTierDiscountProductGroupIndexesForRemove);
 
         businessSystemTierDiscountProductGroupArrayForInsert.forEach(newDiscountProductGroup => {
-            this.addNewFormControlToTheFormArray(this.businessSystemTierDiscountProductGroupFormArray, newDiscountProductGroup, null, this.discountDisableLambda)
+            this.baseFormService.addNewFormGroupToFormArray(this.businessSystemTierDiscountProductGroupFormArray, newDiscountProductGroup, null, this.discountDisableLambda)
         });
 
         const businessSystemTierDiscountProductGroupTable: SoftDataTableComponent = this.findBusinessSystemTierDiscountProductGroupTable(tierIndex, businessSystemTierIndex);
@@ -185,7 +185,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     //#region DiscountProductGroup M2M
 
     initBusinessSystemTierDiscountCategoriesFormArray(businessSystemTierDiscountCategories: BusinessSystemTierDiscountProductGroup[]){
-        this.businessSystemTierDiscountProductGroupFormArray = this.initFormArray(businessSystemTierDiscountCategories, this.businessSystemTierDiscountProductGroupModel, this.businessSystemTierDiscountProductGroupSaveBodyName, this.businessSystemTierDiscountProductGroupTranslationKey, false, 
+        this.businessSystemTierDiscountProductGroupFormArray = this.baseFormService.initFormArray(this.formGroup, businessSystemTierDiscountCategories, this.businessSystemTierDiscountProductGroupModel, this.businessSystemTierDiscountProductGroupSaveBodyName, this.businessSystemTierDiscountProductGroupTranslationKey, false, 
             this.discountDisableLambda
         );
         
@@ -297,7 +297,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
 
     //#endregion
 
-    override onBeforeRemove(formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number): void {
+    override onBeforeRemove = (formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number): void => {
         if (modelConstructor.typeName === this.tierModel.typeName) {
             let businessSystemTierIndexesForRemove: number[] = [];
             let businessSystemTierDiscountProductGroupIndexesForRemove: number[] = [];
@@ -369,7 +369,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         }
     }
 
-    override onBeforeAddBelow(formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number): void {
+    override onBeforeAddBelow = (formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number): void => {
         if (modelConstructor.typeName === this.tierModel.typeName) {
             // FT: Adjusting indexes for businessSystemTierFormArray
             this.businessSystemTierFormArray.value.forEach((businessSystemTier, index) => {
@@ -426,7 +426,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         }
     }
 
-    override onBeforeAddAbove(formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number): void {
+    override onBeforeAddAbove = (formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number): void => {
         if (modelConstructor.typeName === this.tierModel.typeName) {
             // FT: Adjusting indexes for businessSystemTierFormArray
             this.businessSystemTierFormArray.value.forEach((businessSystemTier, index) => { // FT: Adjusting businessSystemTier indexes

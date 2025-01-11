@@ -928,11 +928,11 @@ namespace PlayertyLoyals.Business.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                return await _context.DbSet<SegmentationItem>()
+                IQueryable<SegmentationItem> query = _context.DbSet<SegmentationItem>()
                     .Where(x => x.Segmentation.Id == segmentationId)
-                    .OrderBy(x => x.OrderNumber)
-                    .ProjectToType<SegmentationItemDTO>(Mapper.SegmentationItemToDTOConfig())
-                    .ToListAsync();
+                    .OrderBy(x => x.OrderNumber);
+
+                return await GetSegmentationItemDTOList(query, false);
             });
         }
 

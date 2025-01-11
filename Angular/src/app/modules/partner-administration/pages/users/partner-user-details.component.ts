@@ -100,7 +100,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
                 }
                 
                 this.apiService.getSegmentationItemListForTheCurrentPartner().subscribe(segmentationItems => {
-                    this.segmentationItemsFormArray = this.initFormArray(segmentationItems, this.segmentationItemModel, this.segmentationItemsFormArrayIdentifier, this.segmentationItemsTranslationKey);
+                    this.segmentationItemsFormArray = this.baseFormService.initFormArray(this.formGroup, segmentationItems, this.segmentationItemModel, this.segmentationItemsFormArrayIdentifier, this.segmentationItemsTranslationKey);
 
                     this.apiService.getCheckedSegmentationItemIdsForThePartnerUser(partnerUser.id).subscribe(ids => {
                         this.segmentationItemsFormArray.controls.forEach((formGroup: FormGroup) => {

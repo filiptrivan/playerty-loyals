@@ -9,24 +9,6 @@ import { SimpleSaveResult } from 'src/app/core/entities/simple-save-result';
 import { TableFilter } from 'src/app/core/entities/table-filter';
 import { TableResponse } from 'src/app/core/entities/table-response';
 import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
-import { JwtAuthResult } from '../../entities/security-entities.generated';
-import { AuthResult } from '../../entities/security-entities.generated';
-import { VerificationTokenRequest } from '../../entities/security-entities.generated';
-import { RegistrationVerificationResult } from '../../entities/security-entities.generated';
-import { RegistrationVerificationToken } from '../../entities/security-entities.generated';
-import { ExternalProvider } from '../../entities/security-entities.generated';
-import { LoginVerificationToken } from '../../entities/security-entities.generated';
-import { Login } from '../../entities/security-entities.generated';
-import { RefreshTokenRequest } from '../../entities/security-entities.generated';
-import { Registration } from '../../entities/security-entities.generated';
-import { RefreshToken } from '../../entities/security-entities.generated';
-import { RoleSaveBody } from '../../entities/security-entities.generated';
-import { RolePermission } from '../../entities/security-entities.generated';
-import { RolePermissionSaveBody } from '../../entities/security-entities.generated';
-import { UserRoleSaveBody } from '../../entities/security-entities.generated';
-import { Role } from '../../entities/security-entities.generated';
-import { Permission } from '../../entities/security-entities.generated';
-import { PermissionSaveBody } from '../../entities/security-entities.generated';
 import { PartnerUserSaveBody } from '../../entities/business-entities.generated';
 import { NotificationSaveBody } from '../../entities/business-entities.generated';
 import { TierSaveBody } from '../../entities/business-entities.generated';
@@ -81,6 +63,24 @@ import { PartnerPermission } from '../../entities/business-entities.generated';
 import { PartnerPermissionSaveBody } from '../../entities/business-entities.generated';
 import { Tier } from '../../entities/business-entities.generated';
 import { Segmentation } from '../../entities/business-entities.generated';
+import { JwtAuthResult } from '../../entities/security-entities.generated';
+import { AuthResult } from '../../entities/security-entities.generated';
+import { VerificationTokenRequest } from '../../entities/security-entities.generated';
+import { RegistrationVerificationResult } from '../../entities/security-entities.generated';
+import { RegistrationVerificationToken } from '../../entities/security-entities.generated';
+import { ExternalProvider } from '../../entities/security-entities.generated';
+import { LoginVerificationToken } from '../../entities/security-entities.generated';
+import { Login } from '../../entities/security-entities.generated';
+import { RefreshTokenRequest } from '../../entities/security-entities.generated';
+import { Registration } from '../../entities/security-entities.generated';
+import { RefreshToken } from '../../entities/security-entities.generated';
+import { RoleSaveBody } from '../../entities/security-entities.generated';
+import { RolePermission } from '../../entities/security-entities.generated';
+import { RolePermissionSaveBody } from '../../entities/security-entities.generated';
+import { UserRoleSaveBody } from '../../entities/security-entities.generated';
+import { Role } from '../../entities/security-entities.generated';
+import { Permission } from '../../entities/security-entities.generated';
+import { PermissionSaveBody } from '../../entities/security-entities.generated';
 
 @Injectable()
 export class ApiGeneratedService extends ApiSecurityService {
@@ -471,6 +471,10 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     getPartnerListForDropdown = (): Observable<Namebook[]> => { 
         return this.http.get<Namebook[]>(`${environment.apiUrl}/Partner/GetPartnerListForDropdown`, environment.httpSkipSpinnerOptions);
+    }
+
+    getOrderedTiersForPartner = (id: number): Observable<Tier[]> => { 
+        return this.http.get<Tier[]>(`${environment.apiUrl}/Partner/GetOrderedTiersForPartner?id=${id}`, environment.httpOptions);
     }
 
     savePartner = (saveBodyDTO: PartnerSaveBody): Observable<PartnerSaveBody> => { 

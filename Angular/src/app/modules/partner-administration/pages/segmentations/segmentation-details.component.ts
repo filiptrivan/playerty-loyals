@@ -71,13 +71,13 @@ export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit
     }
 
     initSegmentationItemsFormArray(segmentationItems: SegmentationItem[]){
-        this.segmentationItemsFormArray = this.initFormArray(segmentationItems, this.segmentationItemModel, this.segmentationItemsSaveBodyName, this.segmentationItemsTranslationKey, true);
+        this.segmentationItemsFormArray = this.baseFormService.initFormArray(this.formGroup, segmentationItems, this.segmentationItemModel, this.segmentationItemsSaveBodyName, this.segmentationItemsTranslationKey, true);
         this.segmentationItemsCrudMenu = this.getCrudMenuForOrderedData(this.segmentationItemsFormArray, new SegmentationItem({id: 0}), this.segmentationItemLastIndexClicked);
         this.segmentationItemsFormArray.validator = this.validatorService.isFormArrayEmpty(this.segmentationItemsFormArray);
     }
 
-    addNewToSegmentationItems(index: number){
-        this.addNewFormControlToTheFormArray(this.segmentationItemsFormArray, new SegmentationItem({id: 0}), index);
+    addNewItemToSegmentationItems(index: number){
+        this.baseFormService.addNewFormGroupToFormArray(this.segmentationItemsFormArray, new SegmentationItem({id: 0}), index);
     }
 
     override onBeforeSave = (): void => {

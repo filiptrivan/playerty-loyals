@@ -2,7 +2,7 @@ import { ValidatorService } from 'src/app/business/services/validators/validatio
 import { TranslocoService } from '@jsverse/transloco';
 import { Injectable, NgZone } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { SoftFormControl, SoftFormGroup } from '../components/soft-form-control/soft-form-control';
+import { SoftFormArray, SoftFormControl, SoftFormGroup } from '../components/soft-form-control/soft-form-control';
 import { FormGroup } from '@angular/forms';
 
 @Injectable({
@@ -69,6 +69,38 @@ export class BaseFormService {
 
     if (formControl?.validator?.hasNotEmptyRule)
       formControl.required = true;
+  }
+
+  getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+    return formArray.controls as SoftFormGroup<T>[]
+  }
+
+  addNewFormGroupToFormArray(formArray: SoftFormArray, modelConstructor: any, index: number, disableLambda?: (formControlName: string, model: any) => boolean) {
+    if (index == null) {
+      formArray.push(this.createFormGroup(modelConstructor, disableLambda));
+    }else{
+      formArray.insert(index, this.createFormGroup(modelConstructor, disableLambda));
+    }
+  }
+
+  // FT HACK: Using modelConstructor because generics can't instantiate in TS (because JS)
+  initFormArray(parentFormGroup: SoftFormGroup, modelList: any[], modelConstructor: any, formArraySaveBodyName: string, formArrayTranslationKey: string, required: boolean = false, disableLambda?: (formControlName: string, model: any) => boolean){
+    if (modelList == null)
+      return null;
+
+    let formArray: SoftFormArray = new SoftFormArray([]);
+    formArray.required = required;
+    formArray.modelConstructor = modelConstructor;
+    formArray.translationKey = formArrayTranslationKey;
+
+    modelList.forEach(model => {
+      Object.assign(modelConstructor, model);
+      formArray.push(this.createFormGroup(modelConstructor, disableLambda));
+    });
+
+    parentFormGroup.addControl(formArraySaveBodyName, formArray);
+
+    return formArray;
   }
 
 }

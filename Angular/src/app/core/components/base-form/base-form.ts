@@ -299,14 +299,6 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     return this.formArray.controls as FormGroup[]
   }
 
-  addNewFormControlToTheFormArray(model:T, index: number) {
-    if (index == null) {
-      this.formArray.push(this.createFormGroup(model));
-    }else{
-      this.formArray.insert(index, this.createFormGroup(model));
-    }
-  }
-
   removeFormControlFromTheFormArray(index: number) {
     this.formArray.removeAt(index);
   }
@@ -388,22 +380,6 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   onAfterSaveListRequest(){}
 
   lastMenuIconIndexClicked: number;
-
-  getCrudMenuForOrderedData(instantiatedModel: T){
-    let crudMenuForOrderedData: MenuItem[] = [
-        {label: this.translocoService.translate('Remove'), icon: 'pi pi-minus', command: () => {
-            this.removeFormControlFromTheFormArray(this.lastMenuIconIndexClicked);
-        }},
-        {label: this.translocoService.translate('AddAbove'), icon: 'pi pi-arrow-up', command: () => {
-            this.addNewFormControlToTheFormArray(instantiatedModel, this.lastMenuIconIndexClicked);
-        }},
-        {label: this.translocoService.translate('AddBelow'), icon: 'pi pi-arrow-down', command: () => {
-            this.addNewFormControlToTheFormArray(instantiatedModel, this.lastMenuIconIndexClicked + 1);
-        }},
-    ];
-
-    return crudMenuForOrderedData;
-  }
   
   //#endregion
 
