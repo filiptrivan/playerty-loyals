@@ -36,7 +36,8 @@ namespace PlayertyLoyals.Business.Entities
         public int ValidTo { get; set; }
 
         [UIDoNotGenerate]
-        [ManyToOneRequired(nameof(Partner.Tiers))]
+        [ManyToOneRequired]
+        [WithMany(nameof(Partner.Tiers))]
         public virtual Partner Partner { get; set; }
 
         public virtual List<PartnerUser> PartnerUsers { get; } = new();

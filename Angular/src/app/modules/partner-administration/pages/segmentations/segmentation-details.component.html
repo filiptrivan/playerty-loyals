@@ -24,14 +24,14 @@
                                         <index-card [index]="index" [last]="false" [crudMenu]="segmentationItemsCrudMenu" (onMenuIconClick)="segmentationItemLastIndexClicked.index = $event">
                                             <form [formGroup]="formGroup" class="grid">
                                                 <div class="col-12">
-                                                    <soft-textbox [control]="getSegmentationItemFormArrayControlByIndex(index)"></soft-textbox>
+                                                    <soft-textbox [control]="getFormArrayControlByIndex('name', segmentationItemsFormArray, index)"></soft-textbox>
                                                 </div>
                                             </form>
                                         </index-card>
                                     }
 
                                     <div class="panel-add-button">
-                                        <p-button (onClick)="addNewSegmentationItem(null)" [label]="t('AddNewSegmentationItem')" icon="pi pi-plus"></p-button>
+                                        <p-button (onClick)="addNewToSegmentationItems(null)" [label]="t('AddNewSegmentationItem')" icon="pi pi-plus"></p-button>
                                     </div>
 
                                 </panel-body>

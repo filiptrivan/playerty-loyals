@@ -9,16 +9,16 @@
                     <index-card [index]="tierIndex" [last]="false" [crudMenu]="tierCrudMenu" (onMenuIconClick)="tierLastIndexClicked.index = $event">
                         <form [formGroup]="tierFormGroup" class="grid">
                             <div class="col-12 md:col-4">
-                                <soft-textbox [control]="getTierFormArrayControlByIndex('name', tierIndex)"></soft-textbox>
+                                <soft-textbox [control]="getFormArrayControlByIndex('name', tierFormArray, tierIndex)"></soft-textbox>
                             </div>
                             <div class="col-12 md:col-4">
-                                <soft-number [control]="getTierFormArrayControlByIndex('validFrom', tierIndex)"></soft-number>
+                                <soft-number [control]="getFormArrayControlByIndex('validFrom', tierFormArray, tierIndex)"></soft-number>
                             </div>
                             <div class="col-12 md:col-4">
-                                <soft-number [control]="getTierFormArrayControlByIndex('validTo', tierIndex)"></soft-number>
+                                <soft-number [control]="getFormArrayControlByIndex('validTo', tierFormArray, tierIndex)"></soft-number>
                             </div>
                             <div class="col-12">
-                                <soft-textarea [control]="getTierFormArrayControlByIndex('description', tierIndex)"></soft-textarea>
+                                <soft-textarea [control]="getFormArrayControlByIndex('description', tierFormArray, tierIndex)"></soft-textarea>
                             </div>
 
                             <div class="col-12">

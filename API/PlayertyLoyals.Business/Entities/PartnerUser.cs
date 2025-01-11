@@ -17,16 +17,19 @@ namespace PlayertyLoyals.Business.Entities
         [Required]
         public int Points { get; set; }
 
-        [ManyToOneRequired(nameof(Partner.PartnerUsers))] // TODO FT: Add partner and user to the primary key
+        [ManyToOneRequired] // TODO FT: Add partner and user to the primary key
+        [WithMany(nameof(Partner.PartnerUsers))]
         public virtual Partner Partner { get; set; }
 
-        [ManyToOneRequired(nameof(User.PartnerUsers))] // TODO FT: Add partner and user to the primary key
+        [ManyToOneRequired] // TODO FT: Add partner and user to the primary key
+        [WithMany(nameof(User.PartnerUsers))]
         public virtual UserExtended User { get; set; }
 
         /// <summary>
         /// [SET NULL] https://www.learnentityframeworkcore.com/conventions/one-to-many-relationship
         /// </summary>
-        [SetNull(nameof(Tier.PartnerUsers))]
+        [SetNull]
+        [WithMany(nameof(Tier.PartnerUsers))]
         public virtual Tier Tier { get; set; } // FT: It's not required because when the user just made the account and the administrator didn't make any tiers, he can't be any
 
         public virtual List<PartnerRole> PartnerRoles { get; } = new();

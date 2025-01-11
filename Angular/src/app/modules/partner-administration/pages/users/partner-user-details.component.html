@@ -32,7 +32,7 @@
                                         {{segmentation.name}} <i *ngIf="showSegmentationFirstTimeFillIcon(segmentation)" class="pi pi-info-circle" style="margin-left: 5px; cursor: pointer;" [pTooltip]="firstTimeFillText" tabindex="-1" tooltipEvent="focus"></i>
                                     </div>
                                     <segmentation-select [formGroup]="formGroup" [partnerUserId]="partnerUserFormGroup.getRawValue().id" [segmentation]="segmentation" 
-                                    [allSegmentationItems]="segmentationItemsFormArray.getRawValue()" [segmentationItemsFormArrayIdentifier]="segmentationItemsFormArrayIdentifier"
+                                    [allSegmentationItems]="segmentationItemsFormArray.getRawValue()" [segmentationItemsFormArray]="segmentationItemsFormArray"
                                     ></segmentation-select>
                                 </div>
                             </div>

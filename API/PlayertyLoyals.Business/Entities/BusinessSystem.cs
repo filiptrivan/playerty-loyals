@@ -40,7 +40,8 @@ namespace PlayertyLoyals.Business.Entities
 
         public bool? UpdatePointsScheduledTaskIsPaused { get; set; }
 
-        [ManyToOneRequired(nameof(Partner.BusinessSystems))]
+        [ManyToOneRequired]
+        [WithMany(nameof(Partner.BusinessSystems))]
         public virtual Partner Partner { get; set; }
 
         public virtual List<BusinessSystemTier> BusinessSystemTiers { get; } = new();

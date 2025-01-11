@@ -24,7 +24,8 @@ namespace PlayertyLoyals.Business.Entities
         [Required]
         public bool IsManual { get; set; }
 
-        [ManyToOneRequired(nameof(BusinessSystem.BusinessSystemUpdatePointsScheduledTasks))]
+        [ManyToOneRequired]
+        [WithMany(nameof(BusinessSystem.BusinessSystemUpdatePointsScheduledTasks))]
         public virtual BusinessSystem BusinessSystem { get; set; }
     }
 }

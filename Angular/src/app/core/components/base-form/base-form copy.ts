@@ -312,11 +312,9 @@ export class BaseFormCopy implements OnInit {
   }
   
   // FT: Need to use this from html because can't do "as SoftFormControl" there
-  getFormArrayControlByIndex<T>(formControlName: keyof T & string, formArraySaveBodyName: string, index: number, filter?: (formGroups: SoftFormGroup<T>[]) => SoftFormGroup<T>[]): SoftFormControl {
+  getFormArrayControlByIndex<T>(formControlName: keyof T & string, formArray: SoftFormArray<T[]>, index: number, filter?: (formGroups: SoftFormGroup<T>[]) => SoftFormGroup<T>[]): SoftFormControl {
     if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
       this.formArrayControlNamesFromHtml.push(formControlName);
-
-    let formArray: SoftFormArray<T[]> = this.formGroup.controls[formArraySaveBodyName] as SoftFormArray;
 
     let filteredFormGroups: SoftFormGroup<T>[];
 

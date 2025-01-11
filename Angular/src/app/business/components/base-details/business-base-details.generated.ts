@@ -93,6 +93,9 @@ export class PartnerRoleBaseComponent {
                     <soft-textbox [control]="control('email', partnerFormGroup)" ></soft-textbox>
                 </div>
                 <div class="col-12 md:col-6">
+                    <soft-textbox [control]="control('slug', partnerFormGroup)" ></soft-textbox>
+                </div>
+                <div class="col-12 md:col-6">
                     <soft-colorpick [control]="control('primaryColor', partnerFormGroup)" ></soft-colorpick>
                 </div>
                 <div class="col-12 md:col-6">
@@ -101,9 +104,36 @@ export class PartnerRoleBaseComponent {
                 <div class="col-12 md:col-6">
                     <soft-number [control]="control('pointsMultiplier', partnerFormGroup)" [decimal]="true" [maxFractionDigits]=" 2"></soft-number>
                 </div>
-                <div class="col-12">
-                    <soft-textarea [control]="control('slug', partnerFormGroup)" ></soft-textarea>
+                 <div class="col-12">
+                    <soft-panel>
+                        <panel-header [title]="t('Tiers')" icon="pi pi-list"></panel-header>
+                        <panel-body [normalBottomPadding]="true">
+                            @for (formGroup of getFormArrayGroups(tiersFormArray); track formGroup; let index = $index; let last = $last) {
+                                <index-card [index]="index" [last]="false" [crudMenu]="tiersCrudMenu" (onMenuIconClick)="tiersLastIndexClicked.index = $event">
+                                    <form [formGroup]="formGroup" class="grid">
+                <div class="col-12 md:col-6">
+                    <soft-textbox [control]="getFormArrayControlByIndex('name', tiersFormArray, index)" ></soft-textbox>
                 </div>
+                <div class="col-12 md:col-6">
+                    <soft-textbox [control]="getFormArrayControlByIndex('description', tiersFormArray, index)" ></soft-textbox>
+                </div>
+                <div class="col-12 md:col-6">
+                    <soft-number [control]="getFormArrayControlByIndex('validFrom', tiersFormArray, index)" ></soft-number>
+                </div>
+                <div class="col-12 md:col-6">
+                    <soft-number [control]="getFormArrayControlByIndex('validTo', tiersFormArray, index)" ></soft-number>
+                </div>
+                                    </form>
+                                </index-card>
+                            }
+
+                            <div class="panel-add-button">
+                                <p-button (onClick)="addNewToTiers(null)" [label]="t('AddNewTier')" icon="pi pi-plus"></p-button>
+                            </div>
+
+                        </panel-body>
+                    </soft-panel>
+                </div>       
             </form>
         </panel-body>
 

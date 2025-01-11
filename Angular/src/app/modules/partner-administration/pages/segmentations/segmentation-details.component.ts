@@ -74,12 +74,8 @@ export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit
         this.segmentationItemsFormArray.validator = this.validatorService.isFormArrayEmpty(this.segmentationItemsFormArray);
     }
 
-    addNewSegmentationItem(index: number){
+    addNewToSegmentationItems(index: number){
         this.addNewFormControlToTheFormArray(this.segmentationItemsFormArray, new SegmentationItem({id: 0}), index);
-    }
-
-    getSegmentationItemFormArrayControlByIndex(index: number){
-        return this.getFormArrayControlByIndex<SegmentationItem>('name', this.segmentationItemsSaveBodyName, index);
     }
 
     override onBeforeSave(): void {

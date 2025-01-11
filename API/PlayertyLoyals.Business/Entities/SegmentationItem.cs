@@ -22,7 +22,8 @@ namespace PlayertyLoyals.Business.Entities
         [Required]
         public int OrderNumber { get; set; }
 
-        [ManyToOneRequired(nameof(Segmentation.SegmentationItems))] // FT: The segmentation item can't exist without segmentation
+        [ManyToOneRequired] // FT: The segmentation item can't exist without segmentation
+        [WithMany(nameof(Segmentation.SegmentationItems))]
         public virtual Segmentation Segmentation { get; set; }
 
         public virtual List<PartnerUser> PartnerUsers { get; } = new();

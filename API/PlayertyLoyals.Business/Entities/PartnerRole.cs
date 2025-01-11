@@ -20,7 +20,8 @@ namespace PlayertyLoyals.Business.Entities
         [StringLength(400, MinimumLength = 1)]
         public string Description { get; set; }
 
-        [ManyToOneRequired(nameof(Partner.PartnerRoles))]
+        [ManyToOneRequired]
+        [WithMany(nameof(Partner.PartnerRoles))]
         public virtual Partner Partner { get; set; }
 
         public virtual List<PartnerUser> PartnerUsers { get; } = new();

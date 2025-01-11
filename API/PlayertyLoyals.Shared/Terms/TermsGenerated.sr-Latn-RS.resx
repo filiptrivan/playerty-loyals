@@ -58,25 +58,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BusinessSystemTier" xml:space="preserve">
+  <data name="Notification" xml:space="preserve">
     <value />
   </data>
-  <data name="BusinessSystemTierList" xml:space="preserve">
+  <data name="NotificationList" xml:space="preserve">
     <value />
   </data>
-  <data name="BusinessSystemTierExcelExportName" xml:space="preserve">
+  <data name="NotificationExcelExportName" xml:space="preserve">
     <value />
   </data>
-  <data name="OrderNumber" xml:space="preserve">
+  <data name="Title" xml:space="preserve">
     <value />
   </data>
-  <data name="BusinessSystem" xml:space="preserve">
+  <data name="Description" xml:space="preserve">
     <value />
   </data>
-  <data name="Tier" xml:space="preserve">
+  <data name="EmailBody" xml:space="preserve">
     <value />
   </data>
-  <data name="BusinessSystemTierDiscountProductGroups" xml:space="preserve">
+  <data name="Users" xml:space="preserve">
     <value />
   </data>
   <data name="Id" xml:space="preserve">
@@ -89,36 +89,6 @@
     <value />
   </data>
   <data name="ModifiedAt" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Gender" xml:space="preserve">
-    <value />
-  </data>
-  <data name="GenderList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="GenderExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Users" xml:space="preserve">
-    <value />
-  </data>
-  <data name="SegmentationItem" xml:space="preserve">
-    <value />
-  </data>
-  <data name="SegmentationItemList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="SegmentationItemExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Segmentation" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PartnerUsers" xml:space="preserve">
     <value />
   </data>
   <data name="PartnerUserSegmentation" xml:space="preserve">
@@ -136,126 +106,6 @@
   <data name="AlreadyFilledSegmentation" xml:space="preserve">
     <value />
   </data>
-  <data name="PartnerUserPartnerNotification" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PartnerUserPartnerNotificationList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PartnerUserPartnerNotificationExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PartnerNotification" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PartnerUser" xml:space="preserve">
-    <value />
-  </data>
-  <data name="IsMarkedAsRead" xml:space="preserve">
-    <value />
-  </data>
-  <data name="DiscountProductGroup" xml:space="preserve">
-    <value />
-  </data>
-  <data name="DiscountProductGroupList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="DiscountProductGroupExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Code" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UserExtended" xml:space="preserve">
-    <value>Korisnik</value>
-  </data>
-  <data name="UserExtendedList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UserExtendedExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="HasLoggedInWithExternalProvider" xml:space="preserve">
-    <value />
-  </data>
-  <data name="IsDisabled" xml:space="preserve">
-    <value>Obrisano</value>
-  </data>
-  <data name="BirthDate" xml:space="preserve">
-    <value>Datum rođenja</value>
-  </data>
-  <data name="Roles" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Notifications" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UserNotification" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UserNotificationList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UserNotificationExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Notification" xml:space="preserve">
-    <value />
-  </data>
-  <data name="User" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Transaction" xml:space="preserve">
-    <value />
-  </data>
-  <data name="TransactionList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="TransactionExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ProductName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ProductImageUrl" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ProductCategoryName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ProductCategoryImageUrl" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Price" xml:space="preserve">
-    <value />
-  </data>
-  <data name="BoughtAt" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Points" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PartnerRole" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PartnerRoleList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PartnerRoleExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Description" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Partner" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PartnerPermissions" xml:space="preserve">
-    <value />
-  </data>
   <data name="PartnerRolePartnerPermission" xml:space="preserve">
     <value />
   </data>
@@ -265,40 +115,97 @@
   <data name="PartnerRolePartnerPermissionExcelExportName" xml:space="preserve">
     <value />
   </data>
+  <data name="PartnerRole" xml:space="preserve">
+    <value />
+  </data>
   <data name="PartnerPermission" xml:space="preserve">
     <value />
   </data>
-  <data name="PartnerUserList" xml:space="preserve">
+  <data name="Partner" xml:space="preserve">
     <value />
   </data>
-  <data name="PartnerUserExcelExportName" xml:space="preserve">
+  <data name="PartnerList" xml:space="preserve">
     <value />
   </data>
-  <data name="PartnerRoles" xml:space="preserve">
+  <data name="PartnerExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Slug" xml:space="preserve">
+    <value />
+  </data>
+  <data name="LogoImage" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PrimaryColor" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ProductsRecommendationEndpoint" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PointsMultiplier" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PartnerUsers" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Tiers" xml:space="preserve">
     <value />
   </data>
   <data name="PartnerNotifications" xml:space="preserve">
     <value />
   </data>
-  <data name="AlreadyFilledSegmentations" xml:space="preserve">
+  <data name="PartnerRoles" xml:space="preserve">
     <value />
   </data>
-  <data name="CheckedSegmentationItems" xml:space="preserve">
+  <data name="BusinessSystems" xml:space="preserve">
     <value />
   </data>
-  <data name="Transactions" xml:space="preserve">
+  <data name="Segmentations" xml:space="preserve">
     <value />
   </data>
-  <data name="BusinessSystemTierDiscountProductGroup" xml:space="preserve">
+  <data name="PartnerRoleList" xml:space="preserve">
     <value />
   </data>
-  <data name="BusinessSystemTierDiscountProductGroupList" xml:space="preserve">
+  <data name="PartnerRoleExcelExportName" xml:space="preserve">
     <value />
   </data>
-  <data name="BusinessSystemTierDiscountProductGroupExcelExportName" xml:space="preserve">
+  <data name="PartnerPermissions" xml:space="preserve">
     <value />
   </data>
-  <data name="Discount" xml:space="preserve">
+  <data name="Tier" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TierList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TierExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ValidFrom" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ValidTo" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BusinessSystemTiers" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value />
+  </data>
+  <data name="GenderList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="GenderExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BusinessSystem" xml:space="preserve">
     <value />
   </data>
   <data name="BusinessSystemList" xml:space="preserve">
@@ -328,13 +235,52 @@
   <data name="UpdatePointsScheduledTaskIsPaused" xml:space="preserve">
     <value />
   </data>
-  <data name="BusinessSystemTiers" xml:space="preserve">
-    <value />
-  </data>
   <data name="BusinessSystemUpdatePointsScheduledTasks" xml:space="preserve">
     <value />
   </data>
   <data name="DiscountProductGroups" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Transactions" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DiscountProductGroup" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DiscountProductGroupList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DiscountProductGroupExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BusinessSystemTierDiscountProductGroups" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UserExtended" xml:space="preserve">
+    <value>Korisnik</value>
+  </data>
+  <data name="UserExtendedList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UserExtendedExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="HasLoggedInWithExternalProvider" xml:space="preserve">
+    <value />
+  </data>
+  <data name="IsDisabled" xml:space="preserve">
+    <value>Obrisano</value>
+  </data>
+  <data name="BirthDate" xml:space="preserve">
+    <value>Datum rođenja</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Notifications" xml:space="preserve">
     <value />
   </data>
   <data name="PartnerUserPartnerRole" xml:space="preserve">
@@ -346,16 +292,103 @@
   <data name="PartnerUserPartnerRoleExcelExportName" xml:space="preserve">
     <value />
   </data>
+  <data name="PartnerUser" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PartnerUserList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PartnerUserExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Points" xml:space="preserve">
+    <value />
+  </data>
+  <data name="User" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AlreadyFilledSegmentations" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CheckedSegmentationItems" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BusinessSystemTierDiscountProductGroup" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BusinessSystemTierDiscountProductGroupList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BusinessSystemTierDiscountProductGroupExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BusinessSystemTier" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Discount" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UserNotification" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UserNotificationList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UserNotificationExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="IsMarkedAsRead" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Transaction" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TransactionList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TransactionExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ProductName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ProductImageUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ProductCategoryName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ProductCategoryImageUrl" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BoughtAt" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PartnerNotification" xml:space="preserve">
+    <value />
+  </data>
   <data name="PartnerNotificationList" xml:space="preserve">
     <value />
   </data>
   <data name="PartnerNotificationExcelExportName" xml:space="preserve">
     <value />
   </data>
-  <data name="Title" xml:space="preserve">
+  <data name="SegmentationItem" xml:space="preserve">
     <value />
   </data>
-  <data name="EmailBody" xml:space="preserve">
+  <data name="SegmentationItemList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="SegmentationItemExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="OrderNumber" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Segmentation" xml:space="preserve">
     <value />
   </data>
   <data name="BusinessSystemUpdatePointsScheduledTask" xml:space="preserve">
@@ -376,70 +409,25 @@
   <data name="IsManual" xml:space="preserve">
     <value />
   </data>
-  <data name="NotificationList" xml:space="preserve">
+  <data name="BusinessSystemTierList" xml:space="preserve">
     <value />
   </data>
-  <data name="NotificationExcelExportName" xml:space="preserve">
+  <data name="BusinessSystemTierExcelExportName" xml:space="preserve">
     <value />
   </data>
-  <data name="PartnerList" xml:space="preserve">
+  <data name="PartnerUserPartnerNotification" xml:space="preserve">
     <value />
   </data>
-  <data name="PartnerExcelExportName" xml:space="preserve">
+  <data name="PartnerUserPartnerNotificationList" xml:space="preserve">
     <value />
   </data>
-  <data name="Slug" xml:space="preserve">
-    <value />
-  </data>
-  <data name="LogoImage" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PrimaryColor" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ProductsRecommendationEndpoint" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PointsMultiplier" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Tiers" xml:space="preserve">
-    <value />
-  </data>
-  <data name="BusinessSystems" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Segmentations" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PartnerUserSegmentationItem" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PartnerUserSegmentationItemList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PartnerUserSegmentationItemExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="CheckedSegmentationItem" xml:space="preserve">
+  <data name="PartnerUserPartnerNotificationExcelExportName" xml:space="preserve">
     <value />
   </data>
   <data name="PartnerPermissionList" xml:space="preserve">
     <value />
   </data>
   <data name="PartnerPermissionExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="TierList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="TierExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ValidFrom" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ValidTo" xml:space="preserve">
     <value />
   </data>
   <data name="SegmentationList" xml:space="preserve">
@@ -457,6 +445,30 @@
   <data name="PartnerUsersThatHasFilledSegmentation" xml:space="preserve">
     <value />
   </data>
+  <data name="PartnerUserSegmentationItem" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PartnerUserSegmentationItemList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PartnerUserSegmentationItemExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CheckedSegmentationItem" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value />
+  </data>
+  <data name="RoleList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="RoleExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Permissions" xml:space="preserve">
+    <value />
+  </data>
   <data name="RolePermission" xml:space="preserve">
     <value />
   </data>
@@ -466,10 +478,19 @@
   <data name="RolePermissionExcelExportName" xml:space="preserve">
     <value />
   </data>
-  <data name="Role" xml:space="preserve">
+  <data name="Permission" xml:space="preserve">
     <value />
   </data>
-  <data name="Permission" xml:space="preserve">
+  <data name="PermissionList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PermissionExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="NameLatin" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DescriptionLatin" xml:space="preserve">
     <value />
   </data>
   <data name="UserRole" xml:space="preserve">
@@ -485,27 +506,6 @@
     <value />
   </data>
   <data name="UserId" xml:space="preserve">
-    <value />
-  </data>
-  <data name="RoleList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="RoleExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Permissions" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PermissionList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="PermissionExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="NameLatin" xml:space="preserve">
-    <value />
-  </data>
-  <data name="DescriptionLatin" xml:space="preserve">
     <value />
   </data>
   <data name="ScheduledTaskType" xml:space="preserve">

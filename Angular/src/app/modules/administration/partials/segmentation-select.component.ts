@@ -10,6 +10,7 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
+import { SoftFormArray } from 'src/app/core/components/soft-form-control/soft-form-control';
 
 @Component({
     selector: 'segmentation-select',
@@ -27,7 +28,7 @@ export class SegmentationSelectComponent extends BaseFormCopy implements OnInit 
     @Input() allSegmentationItems: SegmentationItem[]; // All, we need to filter, it's better then making multiple requests
     @Input() partnerUserId: number;
     @Input() override formGroup: FormGroup;
-    @Input() segmentationItemsFormArrayIdentifier: string; // FT: Because we are not changing it, we are not using nameof
+    @Input() segmentationItemsFormArray: SoftFormArray<SegmentationItem[]>;
     @Input() checkedSegmentationItemIdsForThePartnerUser: number[]; // FT: Because we are not changing it, we are not using nameof
     
     segmentationItemsForTheCurrentSegmentation: SegmentationItemIndex[] = []; // for the current segmentation
@@ -53,10 +54,6 @@ export class SegmentationSelectComponent extends BaseFormCopy implements OnInit 
                 this.segmentationItemsForTheCurrentSegmentation.push({...segmentationItem, index: index})
             }
         });
-    }
-
-    getSegmentationItemFormArrayControlByIndex(index: number){
-        return this.getFormArrayControlByIndex<SegmentationItem>('checked', this.segmentationItemsFormArrayIdentifier, index);
     }
 
 }

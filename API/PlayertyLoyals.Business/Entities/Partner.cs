@@ -28,7 +28,7 @@ namespace PlayertyLoyals.Business.Entities
         [Required]
         public string Email { get; set; }
 
-        [UIControlType(nameof(UIControlTypeCodes.TextArea))]
+        //[UIControlType(nameof(UIControlTypeCodes.TextArea))]
         [StringLength(100, MinimumLength = 1)]
         [Required]
         public string Slug { get; set; } // FT: The user will input the slug, and the slug will be the code in the same time
@@ -55,6 +55,7 @@ namespace PlayertyLoyals.Business.Entities
 
         public virtual List<PartnerUser> PartnerUsers { get; } = new();
 
+        [UIOrderedOneToMany]
         public virtual List<Tier> Tiers { get; } = new();
 
         public virtual List<PartnerNotification> PartnerNotifications { get; } = new();

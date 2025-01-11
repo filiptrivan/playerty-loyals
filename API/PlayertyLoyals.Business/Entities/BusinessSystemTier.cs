@@ -16,10 +16,12 @@ namespace PlayertyLoyals.Business.Entities
         [Required]
         public int OrderNumber { get; set; }
 
-        [ManyToOneRequired(nameof(BusinessSystem.BusinessSystemTiers))]
+        [ManyToOneRequired]
+        [WithMany(nameof(BusinessSystem.BusinessSystemTiers))]
         public virtual BusinessSystem BusinessSystem { get; set; }
 
-        [ManyToOneRequired(nameof(Tier.BusinessSystemTiers))]
+        [ManyToOneRequired]
+        [WithMany(nameof(Tier.BusinessSystemTiers))]
         public virtual Tier Tier { get; set; }
 
         [Map]

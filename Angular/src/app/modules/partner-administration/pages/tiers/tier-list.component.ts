@@ -45,8 +45,8 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     // BusinessSystemTierDiscountProductGroup M2M
     businessSystemTierDiscountProductGroupCols: Column<BusinessSystemTierDiscountProductGroup>[];
     businessSystemTierDiscountProductGroupModel: BusinessSystemTierDiscountProductGroup = new BusinessSystemTierDiscountProductGroup();
-    businessSystemTierDiscountCategoriesSaveBodyName: string = nameof<TierSaveBody>('businessSystemTierDiscountProductGroupDTOList');
-    businessSystemTierDiscountCategoriesTranslationKey: string = new BusinessSystemTierDiscountProductGroup().typeName;
+    businessSystemTierDiscountProductGroupSaveBodyName: string = nameof<TierSaveBody>('businessSystemTierDiscountProductGroupDTOList');
+    businessSystemTierDiscountProductGroupTranslationKey: string = new BusinessSystemTierDiscountProductGroup().typeName;
     businessSystemTierDiscountProductGroupFormArray: SoftFormArray<BusinessSystemTierDiscountProductGroup[]>;
     alreadySelectedDiscountProductGroupListForBusinessSystem: BusinessSystemTierDiscountProductGroup[] = [];
     alreadySelectedBusinessSystemTierDiscountProductGroupIdsForBusinessSystem: number[] = [];
@@ -95,10 +95,6 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
 
     addNewTier(index: number){
         this.addNewFormControlToTheFormArray(this.tierFormArray, new Tier({id: 0}), index);
-    }
-
-    getTierFormArrayControlByIndex(formControlName: keyof Tier & string, index: number){
-        return this.getFormArrayControlByIndex<Tier>(formControlName, this.tierDTOListSaveBodyName, index);
     }
 
     //#endregion
@@ -152,7 +148,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     }
 
     getBusinessSystemTierFormArrayControl(formControlName: keyof BusinessSystemTier & string, index: number, tierIndex: number){
-        return this.getFormArrayControlByIndex<BusinessSystemTier>(formControlName, this.businessSystemTierDTOListSaveBodyName, index, 
+        return this.getFormArrayControlByIndex(formControlName, this.businessSystemTierFormArray, index, 
             (formGroups: SoftFormGroup<BusinessSystemTier>[]): SoftFormGroup[] => {
                 return formGroups.filter(x => x.controls.tierClientIndex.value === tierIndex);
             });
@@ -187,7 +183,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     //#region DiscountProductGroup M2M
 
     initBusinessSystemTierDiscountCategoriesFormArray(businessSystemTierDiscountCategories: BusinessSystemTierDiscountProductGroup[]){
-        this.businessSystemTierDiscountProductGroupFormArray = this.initFormArray(businessSystemTierDiscountCategories, this.businessSystemTierDiscountProductGroupModel, this.businessSystemTierDiscountCategoriesSaveBodyName, this.businessSystemTierDiscountCategoriesTranslationKey, false, 
+        this.businessSystemTierDiscountProductGroupFormArray = this.initFormArray(businessSystemTierDiscountCategories, this.businessSystemTierDiscountProductGroupModel, this.businessSystemTierDiscountProductGroupSaveBodyName, this.businessSystemTierDiscountProductGroupTranslationKey, false, 
             this.discountDisableLambda
         );
         
@@ -217,11 +213,11 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     allSelected(event: AllClickEvent){
         const additionalIndexes = event.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes;
 
-        const discountFormControls = this.getFormArrayControls<BusinessSystemTierDiscountProductGroup>('discount', this.businessSystemTierDiscountCategoriesSaveBodyName, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
+        const discountFormControls = this.getFormArrayControls<BusinessSystemTierDiscountProductGroup>('discount', this.businessSystemTierDiscountProductGroupSaveBodyName, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
             return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
-        const selectedFormControls = this.getFormArrayControls<BusinessSystemTierDiscountProductGroup>('selectedForBusinessSystem', this.businessSystemTierDiscountCategoriesSaveBodyName, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
+        const selectedFormControls = this.getFormArrayControls<BusinessSystemTierDiscountProductGroup>('selectedForBusinessSystem', this.businessSystemTierDiscountProductGroupSaveBodyName, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
             return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
@@ -248,11 +244,11 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     rowSelect(event: RowClickEvent){
         const additionalIndexes = event.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes;
 
-        const discountFormControl = this.getFormArrayControlByIndex<BusinessSystemTierDiscountProductGroup>('discount', this.businessSystemTierDiscountCategoriesSaveBodyName, event.index, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
+        const discountFormControl = this.getFormArrayControlByIndex('discount', this.businessSystemTierDiscountProductGroupFormArray, event.index, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
             return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
-        const selectedFormControl = this.getFormArrayControlByIndex<BusinessSystemTierDiscountProductGroup>('selectedForBusinessSystem', this.businessSystemTierDiscountCategoriesSaveBodyName, event.index, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
+        const selectedFormControl = this.getFormArrayControlByIndex('selectedForBusinessSystem', this.businessSystemTierDiscountProductGroupFormArray, event.index, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
             return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
@@ -263,11 +259,11 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     rowUnselect(event: RowClickEvent){
         const additionalIndexes = event.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes;
 
-        const discountFormControl = this.getFormArrayControlByIndex<BusinessSystemTierDiscountProductGroup>('discount', this.businessSystemTierDiscountCategoriesSaveBodyName, event.index, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
+        const discountFormControl = this.getFormArrayControlByIndex('discount', this.businessSystemTierDiscountProductGroupFormArray, event.index, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
             return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
-        const selectedFormControl = this.getFormArrayControlByIndex<BusinessSystemTierDiscountProductGroup>('selectedForBusinessSystem', this.businessSystemTierDiscountCategoriesSaveBodyName, event.index, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
+        const selectedFormControl = this.getFormArrayControlByIndex('selectedForBusinessSystem', this.businessSystemTierDiscountProductGroupFormArray, event.index, (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
             return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
@@ -276,7 +272,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     }
 
     getDiscountProductGroupFormArrayControl = (formControlName: keyof BusinessSystemTierDiscountProductGroup & string, index: number, additionalIndexes: BusinessSystemTierDiscountProductGroupAdditionalIndexes) => {
-        return this.getFormArrayControlByIndex<BusinessSystemTierDiscountProductGroup>(formControlName, this.businessSystemTierDiscountCategoriesSaveBodyName, index, 
+        return this.getFormArrayControlByIndex(formControlName, this.businessSystemTierDiscountProductGroupFormArray, index, 
             (formGroups: SoftFormGroup<BusinessSystemTierDiscountProductGroup>[]): SoftFormGroup[] => {
                 return formGroups.filter(x => x.controls.tierClientIndex.value === additionalIndexes.tierIndex && x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex);
             });
@@ -500,10 +496,10 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     }
 
     override onAfterSave(): void {
-        const selectedFormControls = this.getFormArrayControls<BusinessSystemTierDiscountProductGroup>('selectedForBusinessSystem', this.businessSystemTierDiscountCategoriesSaveBodyName);
+        const selectedFormControls = this.getFormArrayControls<BusinessSystemTierDiscountProductGroup>('selectedForBusinessSystem', this.businessSystemTierDiscountProductGroupSaveBodyName);
         
         selectedFormControls.forEach((selectedFormControl, index) => {
-            const discountFormControl = this.getFormArrayControlByIndex<BusinessSystemTierDiscountProductGroup>('discount', this.businessSystemTierDiscountCategoriesSaveBodyName, index)
+            const discountFormControl = this.getFormArrayControlByIndex('discount', this.businessSystemTierDiscountProductGroupFormArray, index)
 
             if (selectedFormControl.value === false){
                 discountFormControl.disable();

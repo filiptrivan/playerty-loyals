@@ -24,7 +24,8 @@ namespace PlayertyLoyals.Business.Entities
         [Required]
         public int PointsForTheFirstTimeFill { get; set; }
 
-        [ManyToOneRequired(nameof(Partner.Segmentations))]
+        [ManyToOneRequired]
+        [WithMany(nameof(Partner.Segmentations))]
         public virtual Partner Partner { get; set; }
 
         public virtual List<SegmentationItem> SegmentationItems { get; } = new();
