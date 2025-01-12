@@ -35,7 +35,7 @@ export class BaseFormCopy implements OnInit {
   modelId: number;
   detailsTitle: string;
   invalidForm: boolean = false; // FT: We are using this only if we manualy add some form field on the UI, like multiautocomplete, autocomplete etc...
-  saveObservableMethod: (saveBody: any) => Observable<any>;
+  // saveObservableMethod: (saveBody: any) => Observable<any>;
 
   private modelDiffer: KeyValueDiffer<string, any>;
 
@@ -75,8 +75,8 @@ export class BaseFormCopy implements OnInit {
     return getControl(formControlName, formGroup);
   }
 
-  onSave(reroute: boolean = true){
-    this.saveBody = this.initSaveBody();
+  onSave = (reroute: boolean = true) => {
+    this.saveBody = this.formGroup.initSaveBody();
     this.onBeforeSave(this.saveBody);
 
     this.saveBody = this.saveBody ?? this.formGroup.getRawValue();
@@ -86,7 +86,7 @@ export class BaseFormCopy implements OnInit {
 
     if(isValid && isFormArrayValid){
       
-      this.saveObservableMethod(this.saveBody).subscribe(res => {
+      this.formGroup.saveObservableMethod(this.saveBody).subscribe(res => {
         this.messageService.successMessage(this.translocoService.translate('SuccessfulSaveToastDescription'));
 
         Object.keys(res).forEach((key) => {
@@ -151,9 +151,6 @@ export class BaseFormCopy implements OnInit {
     this.router.navigateByUrl(newUrl);
   }
 
-  initSaveBody(): BaseEntity {
-    return null; 
-  }
   onBeforeSave = (saveBody?: any) => {}
   onAfterSave = () => {}
   onAfterSaveRequest = () => {}

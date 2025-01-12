@@ -23,10 +23,6 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 })
 export class PartnerDetailsComponent extends BaseFormCopy implements OnInit {
     partnerFormGroup: SoftFormGroup<Partner>;
-    additionalButtons: SoftButton[] = [
-        { label: this.translocoService.translate('Klikni'), onClick: () => {} },
-        { label: 'Klikni2', onClick: () => {} }
-    ]
 
     constructor(
         protected override differs: KeyValueDiffers,

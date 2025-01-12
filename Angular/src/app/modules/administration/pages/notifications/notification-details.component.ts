@@ -22,8 +22,6 @@ import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selec
     styles: [],
 })
 export class NotificationDetailsComponent extends BaseFormCopy implements OnInit {
-    override saveObservableMethod: (saveBody: any) => Observable<any> = this.apiService.saveNotification;
-
     notificationFormGroup: SoftFormGroup<Notification>;
 
     isMarkedAsRead = new SoftFormControl<boolean>(true, {updateOn: 'change'})
@@ -57,6 +55,8 @@ export class NotificationDetailsComponent extends BaseFormCopy implements OnInit
     }
          
     override ngOnInit() {
+        this.formGroup.saveObservableMethod = this.apiService.saveNotification;
+
         this.populateUserTableCols();
         
         this.route.params.subscribe((params) => {

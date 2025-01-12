@@ -55,7 +55,6 @@ namespace PlayertyLoyals.Business.Entities
 
         public virtual List<PartnerUser> PartnerUsers { get; } = new();
 
-        [UIOrderedOneToMany]
         public virtual List<Tier> Tiers { get; } = new();
 
         public virtual List<PartnerNotification> PartnerNotifications { get; } = new();

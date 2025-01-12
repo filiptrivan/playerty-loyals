@@ -19,7 +19,6 @@ import { MergedPartnerUser } from '../../entities/business-entities.generated';
 import { Brand } from '../../entities/business-entities.generated';
 import { UserExtendedSaveBody } from '../../entities/business-entities.generated';
 import { ExternalTransaction } from '../../entities/business-entities.generated';
-import { SegmentationSaveBody } from '../../entities/business-entities.generated';
 import { SegmentationItem } from '../../entities/business-entities.generated';
 import { PartnerRoleSaveBody } from '../../entities/business-entities.generated';
 import { PartnerNotificationSaveBody } from '../../entities/business-entities.generated';
@@ -63,6 +62,7 @@ import { PartnerPermission } from '../../entities/business-entities.generated';
 import { PartnerPermissionSaveBody } from '../../entities/business-entities.generated';
 import { Tier } from '../../entities/business-entities.generated';
 import { Segmentation } from '../../entities/business-entities.generated';
+import { SegmentationSaveBody } from '../../entities/business-entities.generated';
 import { JwtAuthResult } from '../../entities/security-entities.generated';
 import { AuthResult } from '../../entities/security-entities.generated';
 import { VerificationTokenRequest } from '../../entities/security-entities.generated';
@@ -181,20 +181,8 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.post<any>(`${environment.apiUrl}/Segmentation/ExportSegmentationTableDataToExcel`, tableFilterDTO, environment.httpOptions);
     }
 
-    deleteSegmentation = (id: number): Observable<any> => { 
-        return this.http.delete<any>(`${environment.apiUrl}/Segmentation/DeleteSegmentation?id=${id}`, environment.httpOptions);
-    }
-
-    getSegmentation = (id: number): Observable<Segmentation> => { 
-        return this.http.get<Segmentation>(`${environment.apiUrl}/Segmentation/GetSegmentation?id=${id}`, environment.httpOptions);
-    }
-
     getSegmentationItemsForTheSegmentation = (segmentationId: number): Observable<SegmentationItem[]> => { 
         return this.http.get<SegmentationItem[]>(`${environment.apiUrl}/Segmentation/GetSegmentationItemsForTheSegmentation?segmentationId=${segmentationId}`, environment.httpOptions);
-    }
-
-    saveSegmentation = (segmentationSaveBodyDTO: SegmentationSaveBody): Observable<SegmentationSaveBody> => { 
-        return this.http.put<SegmentationSaveBody>(`${environment.apiUrl}/Segmentation/SaveSegmentation`, segmentationSaveBodyDTO, environment.httpOptions);
     }
 
     getSegmentationListForTheCurrentPartner = (): Observable<Segmentation[]> => { 
@@ -473,9 +461,7 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.get<Namebook[]>(`${environment.apiUrl}/Partner/GetPartnerListForDropdown`, environment.httpSkipSpinnerOptions);
     }
 
-    getOrderedTiersForPartner = (id: number): Observable<Tier[]> => { 
-        return this.http.get<Tier[]>(`${environment.apiUrl}/Partner/GetOrderedTiersForPartner?id=${id}`, environment.httpOptions);
-    }
+
 
     savePartner = (saveBodyDTO: PartnerSaveBody): Observable<PartnerSaveBody> => { 
         return this.http.put<PartnerSaveBody>(`${environment.apiUrl}/Partner/SavePartner`, saveBodyDTO, environment.httpOptions);
@@ -487,6 +473,41 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     deletePartner = (id: number): Observable<any> => { 
         return this.http.delete<any>(`${environment.apiUrl}/Partner/DeletePartner?id=${id}`, environment.httpOptions);
+    }
+
+
+
+
+
+
+    getSegmentationList = (): Observable<Segmentation[]> => { 
+        return this.http.get<Segmentation[]>(`${environment.apiUrl}/Segmentation/GetSegmentationList`, environment.httpOptions);
+    }
+
+    getSegmentation = (id: number): Observable<Segmentation> => { 
+        return this.http.get<Segmentation>(`${environment.apiUrl}/Segmentation/GetSegmentation?id=${id}`, environment.httpOptions);
+    }
+
+    getSegmentationListForAutocomplete = (limit: number, query: string): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Segmentation/GetSegmentationListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
+    }
+
+    getSegmentationListForDropdown = (): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Segmentation/GetSegmentationListForDropdown`, environment.httpSkipSpinnerOptions);
+    }
+
+    getOrderedSegmentationItemsForSegmentation = (id: number): Observable<SegmentationItem[]> => { 
+        return this.http.get<SegmentationItem[]>(`${environment.apiUrl}/Segmentation/GetOrderedSegmentationItemsForSegmentation?id=${id}`, environment.httpOptions);
+    }
+
+    saveSegmentation = (saveBodyDTO: SegmentationSaveBody): Observable<SegmentationSaveBody> => { 
+        return this.http.put<SegmentationSaveBody>(`${environment.apiUrl}/Segmentation/SaveSegmentation`, saveBodyDTO, environment.httpOptions);
+    }
+
+
+
+    deleteSegmentation = (id: number): Observable<any> => { 
+        return this.http.delete<any>(`${environment.apiUrl}/Segmentation/DeleteSegmentation?id=${id}`, environment.httpOptions);
     }
 
 

@@ -4,6 +4,7 @@
       <label>{{getTranslatedLabel()}}</label>
       <required *ngIf="control?.required"></required>
     </div>
+  
     <div class="p-inputgroup p-fluid">
       <p-autoComplete
       *ngIf="control"
@@ -26,7 +27,7 @@
       [inputStyle]="{'width':'100%'}"
       [appendTo]="appendTo"
       [emptyMessage]="emptyMessage"
-      [delay]="750"
+      [lazy]="true"
       />
       <span *ngIf="showMoreOptions" (click)="moreOptionsClick()" class="p-inputgroup-addon" style="cursor: pointer; background-color: var(--primary-color); border-color: var(--primary-color);">
         <i class="pi {{moreOptionsIcon}}" style="color: #fff;"></i>

@@ -27,6 +27,7 @@ export class SoftAutocompleteComponent extends BaseAutocompleteControl implement
     @Input() appendTo: any = 'body';
     @Input() showClear: boolean = true;
     @Input() emptyMessage: string;
+    @Input() displayName: string; // FT: Added because when we initialize the object options are null
 
     constructor(
         protected override translocoService: TranslocoService,
@@ -37,6 +38,12 @@ export class SoftAutocompleteComponent extends BaseAutocompleteControl implement
 
     override ngOnInit(){
         super.ngOnInit();
+
+        if (this.options == null && this.control.value != null) {
+            this.options = [
+                { label: this.displayName, value: this.control.value }
+            ];
+        }
 
         if (this.emptyMessage == null) {
             this.emptyMessage = this.translocoService.translate('EmptyMessage');

@@ -24,8 +24,6 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class TierListComponent extends BaseFormCopy implements OnInit {
-    override saveObservableMethod = this.apiService.saveTier;
-
     // Tier
     tierModel: Tier = new Tier();
     tierDTOListSaveBodyName: string = nameof<TierSaveBody>('tierDTOList');
@@ -70,6 +68,8 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         }
          
     override ngOnInit() {
+        this.formGroup.saveObservableMethod = this.apiService.saveTier;
+
         this.businessSystemTierDiscountProductGroupCols = [
             {name: this.translocoService.translate('Name'), filterType: 'text', field: 'discountProductGroupDisplayName'},
             {name: this.translocoService.translate('Discount'), filterType: 'numeric', field: 'discount', showMatchModes: true, editable: true},

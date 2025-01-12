@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Storage.Blobs;
+using Microsoft.AspNetCore.Mvc;
 using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Services;
@@ -11,14 +12,15 @@ namespace PlayertyLoyals.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
-    public class SegmentationController : SoftBaseController
+    public class SegmentationController : SegmentationBaseController
     {
         private readonly IApplicationDbContext _context;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
         private readonly LoyalsBusinessService _loyalsBusinessService;
+        private readonly BlobContainerClient _blobContainerClient;
 
-
-        public SegmentationController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService)
+        public SegmentationController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService, BlobContainerClient blobContainerClient)
+            : base (context, loyalsBusinessService, blobContainerClient)
         {
             _context = context;
             _loyalsBusinessService = loyalsBusinessService;
@@ -27,45 +29,24 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<SegmentationDTO>> GetSegmentationTableData(TableFilterDTO tableFilterDTO)
+        public async override Task<TableResponseDTO<SegmentationDTO>> GetSegmentationTableData(TableFilterDTO tableFilterDTO)
         {
             return await _loyalsBusinessService.GetSegmentationTableData(tableFilterDTO, _context.DbSet<Segmentation>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task<IActionResult> ExportSegmentationTableDataToExcel(TableFilterDTO tableFilterDTO)
+        public async override Task<IActionResult> ExportSegmentationTableDataToExcel(TableFilterDTO tableFilterDTO)
         {
             byte[] fileContent = await _loyalsBusinessService.ExportSegmentationTableDataToExcel(tableFilterDTO, _context.DbSet<Segmentation>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Segmentacije.xlsx"));
-        }
-
-        [HttpDelete]
-        [AuthGuard]
-        public async Task DeleteSegmentation(int id)
-        {
-            await _loyalsBusinessService.DeleteSegmentationAsync(id, false);
-        }
-
-        [HttpGet]
-        [AuthGuard]
-        public async Task<SegmentationDTO> GetSegmentation(int id)
-        {
-            return await _loyalsBusinessService.GetSegmentationDTOAsync(id, false);
         }
 
         [HttpGet]
         [AuthGuard]
         public async Task<List<SegmentationItemDTO>> GetSegmentationItemsForTheSegmentation(int segmentationId)
         {
-            return await _loyalsBusinessService.GetSegmentationItemsForTheSegmentation(segmentationId);
-        }
-
-        [HttpPut]
-        [AuthGuard]
-        public async Task<SegmentationSaveBodyDTO> SaveSegmentation(SegmentationSaveBodyDTO segmentationSaveBodyDTO)
-        {
-            return await _loyalsBusinessService.SaveSegmentationAndReturnSaveBodyDTOAsync(segmentationSaveBodyDTO);
+            return await _loyalsBusinessService.GetOrderedSegmentationItemsForSegmentation(segmentationId);
         }
 
         [HttpGet]

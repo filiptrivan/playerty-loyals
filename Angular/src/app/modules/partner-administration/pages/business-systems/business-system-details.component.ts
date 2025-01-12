@@ -22,8 +22,6 @@ import { BaseFormService } from 'src/app/core/services/base-form.service';
     styles: [],
 })
 export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnInit {
-    override saveObservableMethod = this.apiService.saveBusinessSystem;
-
     businessSystemFormGroup: SoftFormGroup<BusinessSystem>;
     businessSystemSaveBodyName: string = nameof<BusinessSystemSaveBody>('businessSystemDTO');
     
@@ -63,6 +61,8 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
          
     override ngOnInit() {
+        this.formGroup.saveObservableMethod = this.apiService.saveBusinessSystem;
+
         this.initializeBusinessSystemUpdatePointsScheduledTaskTableCols();
 
         this.route.params.subscribe((params) => {

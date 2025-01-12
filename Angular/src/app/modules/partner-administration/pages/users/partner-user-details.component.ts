@@ -23,8 +23,6 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit {
-    override saveObservableMethod = this.apiService.savePartnerUser;
-
     roleOptions: PrimengOption[];
     partnerRoleOptions: PrimengOption[];
     genderOptions: PrimengOption[];
@@ -68,7 +66,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
 
 
     override ngOnInit() {
-        this.formGroup = new FormGroup({});
+        this.formGroup.saveObservableMethod = this.apiService.savePartnerUser;
 
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];

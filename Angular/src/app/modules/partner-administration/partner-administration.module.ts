@@ -20,6 +20,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { BusinessSystemTableComponent } from './pages/business-systems/business-system-list.component';
 import { BusinessSystemDetailsComponent } from './pages/business-systems/business-system-details.component';
 import { CommonModule } from '@angular/common';
+import { SegmentationBaseComponent } from 'src/app/business/components/base-details/business-base-details.generated';
 
 const routes: Routes = [
     {
@@ -80,6 +81,7 @@ const routes: Routes = [
         IndexCardComponent,
         SegmentationSelectComponent,
         UserProgressbarComponent,
+        SegmentationBaseComponent,
     ],
     declarations: [
         PartnerUserListComponent,

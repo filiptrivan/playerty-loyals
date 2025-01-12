@@ -1,14 +1,24 @@
+import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
+import { BaseFormService } from './../../../core/services/base-form.service';
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { ApiService } from '../../services/api/api.service';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
-import { SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { SoftFormArray, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
-import { getControl } from 'src/app/core/services/helper-functions';
-import { PartnerUserSaveBody, NotificationSaveBody, TierSaveBody, BusinessSystemTier, ExternalDiscountProductGroup, Product, MergedPartnerUser, Brand, UserExtendedSaveBody, ExternalTransaction, SegmentationSaveBody, SegmentationItem, PartnerRoleSaveBody, PartnerNotificationSaveBody, UpdatePoints, BusinessSystemTierDiscountProductGroup, Notification, BusinessSystemUpdatePointsDataBody, QrCode, Gender, PartnerUserSegmentation, PartnerUserPartnerNotification, DiscountProductGroup, UserExtended, UserNotification, Transaction, PartnerRole, PartnerRolePartnerPermission, PartnerUser, BusinessSystem, PartnerUserPartnerRole, PartnerNotification, BusinessSystemUpdatePointsScheduledTask, Partner, PartnerUserSegmentationItem, PartnerPermission, Tier, Segmentation } from '../../entities/business-entities.generated';
+import { getControl, nameof } from 'src/app/core/services/helper-functions';
+import { ActivatedRoute } from '@angular/router';
+import { forkJoin, Observable } from 'rxjs';
+import { BaseEntity } from 'src/app/core/entities/base-entity';
+import { CardSkeletonComponent } from "../../../core/components/card-skeleton/card-skeleton.component";
+import { SoftButton } from 'src/app/core/entities/soft-button';
+import { IndexCardComponent } from 'src/app/core/components/index-card/index-card.component';
+import { LastMenuIconIndexClicked } from 'src/app/core/entities/last-menu-icon-index-clicked';
+import { MenuItem } from 'primeng/api';
+import { PartnerUserSaveBody, NotificationSaveBody, TierSaveBody, BusinessSystemTier, ExternalDiscountProductGroup, Product, MergedPartnerUser, Brand, UserExtendedSaveBody, ExternalTransaction, SegmentationItem, PartnerRoleSaveBody, PartnerNotificationSaveBody, UpdatePoints, BusinessSystemTierDiscountProductGroup, Notification, BusinessSystemUpdatePointsDataBody, QrCode, Gender, PartnerUserSegmentation, PartnerUserPartnerNotification, DiscountProductGroup, UserExtended, UserNotification, Transaction, PartnerRole, PartnerRolePartnerPermission, PartnerUser, BusinessSystem, PartnerUserPartnerRole, PartnerNotification, BusinessSystemUpdatePointsScheduledTask, Partner, PartnerUserSegmentationItem, PartnerPermission, Tier, Segmentation, BusinessSystemTierSaveBody, GenderSaveBody, SegmentationItemSaveBody, PartnerUserSegmentationSaveBody, PartnerUserPartnerNotificationSaveBody, DiscountProductGroupSaveBody, UserNotificationSaveBody, TransactionSaveBody, PartnerRolePartnerPermissionSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemSaveBody, PartnerUserPartnerRoleSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, PartnerSaveBody, PartnerUserSegmentationItemSaveBody, PartnerPermissionSaveBody, SegmentationSaveBody } from '../../entities/business-entities.generated';
 
 @Component({
     selector: 'partner-role-base-details',
@@ -18,17 +28,21 @@ import { PartnerUserSaveBody, NotificationSaveBody, TierSaveBody, BusinessSystem
         <panel-header></panel-header>
 
         <panel-body>
-            <form class="grid">
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="control('name', partnerRoleFormGroup)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="control('description', partnerRoleFormGroup)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-autocomplete [control]="control('partnerId', partnerRoleFormGroup)" [options]="partnerOptions" (onTextInput)="searchPartner($event)"></soft-autocomplete>
-                </div>
-            </form>
+            @defer (when partnerRoleFormGroup != null) {
+                <form class="grid">
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('name', partnerRoleFormGroup)" ></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('description', partnerRoleFormGroup)" ></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-autocomplete [control]="control('partnerId', partnerRoleFormGroup)" [options]="partnerForPartnerRoleOptions" [displayName]="partnerRoleFormGroup.controls.partnerDisplayName.getRawValue()" (onTextInput)="searchPartnerForPartnerRole($event)"></soft-autocomplete>
+                    </div>
+                </form>
+            } @placeholder {
+                <card-skeleton [height]="502"></card-skeleton>
+            }
         </panel-body>
 
         <panel-footer>
@@ -40,36 +54,91 @@ import { PartnerUserSaveBody, NotificationSaveBody, TierSaveBody, BusinessSystem
     `,
     standalone: true,
     imports: [
-        CommonModule,
+        CommonModule, 
         PrimengModule,
         SoftControlsModule,
         TranslocoDirective,
+        CardSkeletonComponent,
+        IndexCardComponent
     ]
 })
 export class PartnerRoleBaseComponent {
+    @Input() saveObservableMethod: (saveBodyDTO: PartnerRoleSaveBody) => Observable<PartnerRoleSaveBody>;
+    @Input() onSave: (reroute?: boolean) => void;
+    @Input() initSaveBody: () => BaseEntity;
+    @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SoftFormGroup;
     @Input() partnerRoleFormGroup: SoftFormGroup<PartnerRole>;
-    @Input() onSave: (reroute?: boolean) => void; 
+    @Input() additionalButtons: SoftButton[] = [];
+    modelId: number;
 
-    partnerOptions: PrimengOption[];
+    partnerRoleSaveBodyName: string = nameof<PartnerRoleSaveBody>('partnerRoleDTO');
+
+
+
+    partnerForPartnerRoleOptions: PrimengOption[];
 
     constructor(
-        private apiService: ApiService
-    ) {
-
-    }
+        private apiService: ApiService,
+        private route: ActivatedRoute,
+        private baseFormService: BaseFormService,
+        private validatorService: ValidatorService,
+    ) {}
 
     ngOnInit(){
+        this.initSaveBody = () => { 
+            let saveBody = new PartnerRoleSaveBody();
+            saveBody.partnerRoleDTO = this.partnerRoleFormGroup.getRawValue();
 
-    }
+            return saveBody;
+        }
 
-    searchPartner(event: AutoCompleteCompleteEvent) {
-        this.apiService.getPrimengNamebookListForAutocomplete(this.apiService.getPartnerListForAutocomplete, 50, event.query).subscribe(po => {
-            this.partnerOptions = po;
+        this.saveObservableMethod = this.apiService.savePartnerRole;
+        this.formGroup.mainDTOName = this.partnerRoleSaveBodyName;
+
+        this.route.params.subscribe((params) => {
+            this.modelId = params['id'];
+
+            if(this.modelId > 0){
+                forkJoin({
+                    partnerRole: this.apiService.getPartnerRole(this.modelId),
+
+                })
+                .subscribe(({ partnerRole  }) => {
+                    this.initPartnerRoleFormGroup(new PartnerRole(partnerRole));
+
+                });
+            }
+            else{
+                this.initPartnerRoleFormGroup(new PartnerRole({id: 0}));
+
+            }
         });
     }
 
-    control(formControlName: keyof PartnerRole, formGroup: SoftFormGroup){
-        return getControl<PartnerRole>(formControlName, formGroup);
+    initPartnerRoleFormGroup(partnerRole: PartnerRole) {
+        this.partnerRoleFormGroup = this.baseFormService.initFormGroup<PartnerRole>(
+            this.formGroup, partnerRole, this.partnerRoleSaveBodyName, []
+        );
+        this.partnerRoleFormGroup.mainDTOName = this.partnerRoleSaveBodyName;
+    }
+
+
+
+
+
+    searchPartnerForPartnerRole(event: AutoCompleteCompleteEvent) {
+        this.apiService.getPrimengNamebookListForAutocomplete(this.apiService.getPartnerListForAutocomplete, 50, event.query).subscribe(po => {
+            this.partnerForPartnerRoleOptions = po;
+        });
+    }
+
+    control(formControlName: string, formGroup: SoftFormGroup){
+        return getControl(formControlName, formGroup);
+    }
+
+    getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+        return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
 }
@@ -82,59 +151,33 @@ export class PartnerRoleBaseComponent {
         <panel-header></panel-header>
 
         <panel-body>
-            <form class="grid">
-                <div class="col-12">
-                    <soft-file [control]="control('logoImage', partnerFormGroup)" [fileData]="partnerFormGroup.controls.logoImageData.getRawValue()" [objectId]="partnerFormGroup.controls.id.getRawValue()"></soft-file>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="control('name', partnerFormGroup)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="control('email', partnerFormGroup)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="control('slug', partnerFormGroup)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-colorpick [control]="control('primaryColor', partnerFormGroup)" ></soft-colorpick>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="control('productsRecommendationEndpoint', partnerFormGroup)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-number [control]="control('pointsMultiplier', partnerFormGroup)" [decimal]="true" [maxFractionDigits]=" 2"></soft-number>
-                </div>
-                 <div class="col-12">
-                    <soft-panel>
-                        <panel-header [title]="t('Tiers')" icon="pi pi-list"></panel-header>
-                        <panel-body [normalBottomPadding]="true">
-                            @for (formGroup of getFormArrayGroups(tiersFormArray); track formGroup; let index = $index; let last = $last) {
-                                <index-card [index]="index" [last]="false" [crudMenu]="tiersCrudMenu" (onMenuIconClick)="tiersLastIndexClicked.index = $event">
-                                    <form [formGroup]="formGroup" class="grid">
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="getFormArrayControlByIndex('name', tiersFormArray, index)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="getFormArrayControlByIndex('description', tiersFormArray, index)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-number [control]="getFormArrayControlByIndex('validFrom', tiersFormArray, index)" ></soft-number>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-number [control]="getFormArrayControlByIndex('validTo', tiersFormArray, index)" ></soft-number>
-                </div>
-                                    </form>
-                                </index-card>
-                            }
-
-                            <div class="panel-add-button">
-                                <p-button (onClick)="addNewToTiers(null)" [label]="t('AddNewTier')" icon="pi pi-plus"></p-button>
-                            </div>
-
-                        </panel-body>
-                    </soft-panel>
-                </div>       
-            </form>
+            @defer (when partnerFormGroup != null) {
+                <form class="grid">
+                    <div class="col-12">
+                        <soft-file [control]="control('logoImage', partnerFormGroup)" [fileData]="partnerFormGroup.controls.logoImageData.getRawValue()" [objectId]="partnerFormGroup.controls.id.getRawValue()"></soft-file>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('name', partnerFormGroup)" ></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('email', partnerFormGroup)" ></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('slug', partnerFormGroup)" ></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-colorpick [control]="control('primaryColor', partnerFormGroup)" ></soft-colorpick>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('productsRecommendationEndpoint', partnerFormGroup)" ></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-number [control]="control('pointsMultiplier', partnerFormGroup)" [decimal]="true" [maxFractionDigits]=" 2"></soft-number>
+                    </div>
+                </form>
+            } @placeholder {
+                <card-skeleton [height]="502"></card-skeleton>
+            }
         </panel-body>
 
         <panel-footer>
@@ -146,32 +189,87 @@ export class PartnerRoleBaseComponent {
     `,
     standalone: true,
     imports: [
-        CommonModule,
+        CommonModule, 
         PrimengModule,
         SoftControlsModule,
         TranslocoDirective,
+        CardSkeletonComponent,
+        IndexCardComponent
     ]
 })
 export class PartnerBaseComponent {
+    @Input() saveObservableMethod: (saveBodyDTO: PartnerSaveBody) => Observable<PartnerSaveBody>;
+    @Input() onSave: (reroute?: boolean) => void;
+    @Input() initSaveBody: () => BaseEntity;
+    @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SoftFormGroup;
     @Input() partnerFormGroup: SoftFormGroup<Partner>;
-    @Input() onSave: (reroute?: boolean) => void; 
+    @Input() additionalButtons: SoftButton[] = [];
+    modelId: number;
+
+    partnerSaveBodyName: string = nameof<PartnerSaveBody>('partnerDTO');
+
+
 
 
 
     constructor(
-        private apiService: ApiService
-    ) {
-
-    }
+        private apiService: ApiService,
+        private route: ActivatedRoute,
+        private baseFormService: BaseFormService,
+        private validatorService: ValidatorService,
+    ) {}
 
     ngOnInit(){
+        this.initSaveBody = () => { 
+            let saveBody = new PartnerSaveBody();
+            saveBody.partnerDTO = this.partnerFormGroup.getRawValue();
 
+            return saveBody;
+        }
+
+        this.saveObservableMethod = this.apiService.savePartner;
+        this.formGroup.mainDTOName = this.partnerSaveBodyName;
+
+        this.route.params.subscribe((params) => {
+            this.modelId = params['id'];
+
+            if(this.modelId > 0){
+                forkJoin({
+                    partner: this.apiService.getPartner(this.modelId),
+
+                })
+                .subscribe(({ partner  }) => {
+                    this.initPartnerFormGroup(new Partner(partner));
+
+                });
+            }
+            else{
+                this.initPartnerFormGroup(new Partner({id: 0}));
+
+            }
+        });
+    }
+
+    initPartnerFormGroup(partner: Partner) {
+        this.partnerFormGroup = this.baseFormService.initFormGroup<Partner>(
+            this.formGroup, partner, this.partnerSaveBodyName, ['primaryColor']
+        );
+        this.partnerFormGroup.mainDTOName = this.partnerSaveBodyName;
     }
 
 
 
-    control(formControlName: keyof Partner, formGroup: SoftFormGroup){
-        return getControl<Partner>(formControlName, formGroup);
+
+
+
+
+    control(formControlName: string, formGroup: SoftFormGroup){
+        return getControl(formControlName, formGroup);
+    }
+
+    getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+        return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
 }
@@ -184,20 +282,24 @@ export class PartnerBaseComponent {
         <panel-header></panel-header>
 
         <panel-body>
-            <form class="grid">
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="control('name', tierFormGroup)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="control('description', tierFormGroup)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-number [control]="control('validFrom', tierFormGroup)" ></soft-number>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-number [control]="control('validTo', tierFormGroup)" ></soft-number>
-                </div>
-            </form>
+            @defer (when tierFormGroup != null) {
+                <form class="grid">
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('name', tierFormGroup)" ></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('description', tierFormGroup)" ></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-number [control]="control('validFrom', tierFormGroup)" ></soft-number>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-number [control]="control('validTo', tierFormGroup)" ></soft-number>
+                    </div>
+                </form>
+            } @placeholder {
+                <card-skeleton [height]="502"></card-skeleton>
+            }
         </panel-body>
 
         <panel-footer>
@@ -209,32 +311,87 @@ export class PartnerBaseComponent {
     `,
     standalone: true,
     imports: [
-        CommonModule,
+        CommonModule, 
         PrimengModule,
         SoftControlsModule,
         TranslocoDirective,
+        CardSkeletonComponent,
+        IndexCardComponent
     ]
 })
 export class TierBaseComponent {
+    @Input() saveObservableMethod: (saveBodyDTO: TierSaveBody) => Observable<TierSaveBody>;
+    @Input() onSave: (reroute?: boolean) => void;
+    @Input() initSaveBody: () => BaseEntity;
+    @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SoftFormGroup;
     @Input() tierFormGroup: SoftFormGroup<Tier>;
-    @Input() onSave: (reroute?: boolean) => void; 
+    @Input() additionalButtons: SoftButton[] = [];
+    modelId: number;
+
+    tierSaveBodyName: string = nameof<TierSaveBody>('tierDTO');
+
+
 
 
 
     constructor(
-        private apiService: ApiService
-    ) {
-
-    }
+        private apiService: ApiService,
+        private route: ActivatedRoute,
+        private baseFormService: BaseFormService,
+        private validatorService: ValidatorService,
+    ) {}
 
     ngOnInit(){
+        this.initSaveBody = () => { 
+            let saveBody = new TierSaveBody();
+            saveBody.tierDTO = this.tierFormGroup.getRawValue();
 
+            return saveBody;
+        }
+
+        this.saveObservableMethod = this.apiService.saveTier;
+        this.formGroup.mainDTOName = this.tierSaveBodyName;
+
+        this.route.params.subscribe((params) => {
+            this.modelId = params['id'];
+
+            if(this.modelId > 0){
+                forkJoin({
+                    tier: this.apiService.getTier(this.modelId),
+
+                })
+                .subscribe(({ tier  }) => {
+                    this.initTierFormGroup(new Tier(tier));
+
+                });
+            }
+            else{
+                this.initTierFormGroup(new Tier({id: 0}));
+
+            }
+        });
+    }
+
+    initTierFormGroup(tier: Tier) {
+        this.tierFormGroup = this.baseFormService.initFormGroup<Tier>(
+            this.formGroup, tier, this.tierSaveBodyName, []
+        );
+        this.tierFormGroup.mainDTOName = this.tierSaveBodyName;
     }
 
 
 
-    control(formControlName: keyof Tier, formGroup: SoftFormGroup){
-        return getControl<Tier>(formControlName, formGroup);
+
+
+
+
+    control(formControlName: string, formGroup: SoftFormGroup){
+        return getControl(formControlName, formGroup);
+    }
+
+    getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+        return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
 }
@@ -247,20 +404,42 @@ export class TierBaseComponent {
         <panel-header></panel-header>
 
         <panel-body>
-            <form class="grid">
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="control('name', segmentationFormGroup)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-textbox [control]="control('description', segmentationFormGroup)" ></soft-textbox>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-number [control]="control('pointsForTheFirstTimeFill', segmentationFormGroup)" ></soft-number>
-                </div>
-                <div class="col-12 md:col-6">
-                    <soft-autocomplete [control]="control('partnerId', segmentationFormGroup)" [options]="partnerOptions" (onTextInput)="searchPartner($event)"></soft-autocomplete>
-                </div>
-            </form>
+            @defer (when segmentationFormGroup != null) {
+                <form class="grid">
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('name', segmentationFormGroup)" ></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-number [control]="control('pointsForTheFirstTimeFill', segmentationFormGroup)" ></soft-number>
+                    </div>
+                    <div class="col-12">
+                        <soft-textarea [control]="control('description', segmentationFormGroup)" ></soft-textarea>
+                    </div>
+                 <div class="col-12">
+                    <soft-panel>
+                        <panel-header [title]="t('SegmentationItems')" icon="pi pi-list"></panel-header>
+                        <panel-body [normalBottomPadding]="true">
+                            @for (segmentationItemFormGroup of getFormArrayGroups(segmentationItemsFormArray); track segmentationItemFormGroup; let index = $index; let last = $last) {
+                                <index-card [index]="index" [last]="false" [crudMenu]="segmentationItemsCrudMenu" (onMenuIconClick)="segmentationItemsLastIndexClicked.index = $event">
+                                    <form [formGroup]="segmentationItemFormGroup" class="grid">
+                    <div class="col-12">
+                        <soft-textbox [control]="control('name', segmentationItemFormGroup)" ></soft-textbox>
+                    </div>
+                                    </form>
+                                </index-card>
+                            }
+
+                            <div class="panel-add-button">
+                                <p-button (onClick)="addNewItemToSegmentationItems(null)" [label]="t('AddNewSegmentationItem')" icon="pi pi-plus"></p-button>
+                            </div>
+
+                        </panel-body>
+                    </soft-panel>
+                </div>       
+                </form>
+            } @placeholder {
+                <card-skeleton [height]="502"></card-skeleton>
+            }
         </panel-body>
 
         <panel-footer>
@@ -272,36 +451,100 @@ export class TierBaseComponent {
     `,
     standalone: true,
     imports: [
-        CommonModule,
+        CommonModule, 
         PrimengModule,
         SoftControlsModule,
         TranslocoDirective,
+        CardSkeletonComponent,
+        IndexCardComponent
     ]
 })
 export class SegmentationBaseComponent {
+    @Input() saveObservableMethod: (saveBodyDTO: SegmentationSaveBody) => Observable<SegmentationSaveBody>;
+    @Input() onSave: (reroute?: boolean) => void;
+    @Input() initSaveBody: () => BaseEntity;
+    @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SoftFormGroup;
     @Input() segmentationFormGroup: SoftFormGroup<Segmentation>;
-    @Input() onSave: (reroute?: boolean) => void; 
+    @Input() additionalButtons: SoftButton[] = [];
+    modelId: number;
 
-    partnerOptions: PrimengOption[];
+    segmentationSaveBodyName: string = nameof<SegmentationSaveBody>('segmentationDTO');
+
+    segmentationItemsModel: SegmentationItem = new SegmentationItem();
+    segmentationItemsSaveBodyName: string = nameof<SegmentationItemSaveBody>('segmentationItemDTO');
+    segmentationItemsTranslationKey: string = new SegmentationItem().typeName;
+    segmentationItemsFormArray: SoftFormArray<SegmentationItem[]>;
+    segmentationItemsLastIndexClicked: LastMenuIconIndexClicked = new LastMenuIconIndexClicked();
+    segmentationItemsCrudMenu: MenuItem[] = [];
+
+
 
     constructor(
-        private apiService: ApiService
-    ) {
-
-    }
+        private apiService: ApiService,
+        private route: ActivatedRoute,
+        private baseFormService: BaseFormService,
+        private validatorService: ValidatorService,
+    ) {}
 
     ngOnInit(){
+        this.initSaveBody = () => { 
+            let saveBody = new SegmentationSaveBody();
+            saveBody.segmentationDTO = this.segmentationFormGroup.getRawValue();
+            saveBody.segmentationItemsDTO = this.segmentationItemsFormArray.getRawValue();
+            return saveBody;
+        }
 
-    }
+        this.saveObservableMethod = this.apiService.saveSegmentation;
+        this.formGroup.mainDTOName = this.segmentationSaveBodyName;
 
-    searchPartner(event: AutoCompleteCompleteEvent) {
-        this.apiService.getPrimengNamebookListForAutocomplete(this.apiService.getPartnerListForAutocomplete, 50, event.query).subscribe(po => {
-            this.partnerOptions = po;
+        this.route.params.subscribe((params) => {
+            this.modelId = params['id'];
+
+            if(this.modelId > 0){
+                forkJoin({
+                    segmentation: this.apiService.getSegmentation(this.modelId),
+                    segmentationItems: this.apiService.getOrderedSegmentationItemsForSegmentation(this.modelId),
+                })
+                .subscribe(({ segmentation , segmentationItems }) => {
+                    this.initSegmentationFormGroup(new Segmentation(segmentation));
+                    this.initSegmentationItemsFormArray(segmentationItems);
+                });
+            }
+            else{
+                this.initSegmentationFormGroup(new Segmentation({id: 0}));
+                this.initSegmentationItemsFormArray([]);
+            }
         });
     }
 
-    control(formControlName: keyof Segmentation, formGroup: SoftFormGroup){
-        return getControl<Segmentation>(formControlName, formGroup);
+    initSegmentationFormGroup(segmentation: Segmentation) {
+        this.segmentationFormGroup = this.baseFormService.initFormGroup<Segmentation>(
+            this.formGroup, segmentation, this.segmentationSaveBodyName, []
+        );
+        this.segmentationFormGroup.mainDTOName = this.segmentationSaveBodyName;
+    }
+
+    initSegmentationItemsFormArray(segmentationItems: SegmentationItem[]){
+        this.segmentationItemsFormArray = this.baseFormService.initFormArray(
+            this.formGroup, segmentationItems, this.segmentationItemsModel, this.segmentationItemsSaveBodyName, this.segmentationItemsTranslationKey, true
+        );
+        this.segmentationItemsCrudMenu = this.getCrudMenuForOrderedData(this.segmentationItemsFormArray, new SegmentationItem({id: 0}), this.segmentationItemsLastIndexClicked, false);
+        this.segmentationItemsFormArray.validator = this.validatorService.isFormArrayEmpty(this.segmentationItemsFormArray);
+    }
+
+    addNewItemToSegmentationItems(index: number){ 
+        this.baseFormService.addNewFormGroupToFormArray(this.segmentationItemsFormArray, new SegmentationItem({id: 0}), index);
+    }
+
+
+
+    control(formControlName: string, formGroup: SoftFormGroup){
+        return getControl(formControlName, formGroup);
+    }
+
+    getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+        return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
 }

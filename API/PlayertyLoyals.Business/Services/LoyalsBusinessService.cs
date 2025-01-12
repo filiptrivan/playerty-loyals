@@ -889,50 +889,11 @@ namespace PlayertyLoyals.Business.Services
 
         #region Segmentation
 
-        public async Task<SegmentationSaveBodyDTO> SaveSegmentationAndReturnSaveBodyDTOAsync(SegmentationSaveBodyDTO segmentationSaveBodyDTO)
+        protected override async Task OnBeforeSaveSegmentationAndReturnSaveBodyDTO(SegmentationSaveBodyDTO segmentationSaveBodyDTO)
         {
-            return await _context.WithTransactionAsync(async () =>
+            await _context.WithTransactionAsync(async () =>
             {
                 segmentationSaveBodyDTO.SegmentationDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
-                SegmentationDTO savedSegmentationDTO = await SaveSegmentationAndReturnDTOAsync(segmentationSaveBodyDTO.SegmentationDTO, false, false);
-
-                List<long> segmentationItemIdsDTO = segmentationSaveBodyDTO.SegmentationItemsDTO.Select(x => x.Id).ToList();
-
-                if (segmentationItemIdsDTO.Count == 0)
-                    throw new HackerException("The segmentation item list can't be empty.");
-
-                List<SegmentationItem> segmentationItemsForDelete = await _context.DbSet<SegmentationItem>()
-                    .Where(x => x.Segmentation.Id == savedSegmentationDTO.Id && segmentationItemIdsDTO.Contains(x.Id) == false)
-                    .ToListAsync();
-
-                await _context.DbSet<SegmentationItem>().Where(x => x.Segmentation.Id == savedSegmentationDTO.Id && segmentationItemIdsDTO.Contains(x.Id) == false).ExecuteDeleteAsync();
-
-                List<SegmentationItemDTO> savedSegmentationItemsDTO = new List<SegmentationItemDTO>();
-
-                for (int i = 0; i < segmentationSaveBodyDTO.SegmentationItemsDTO.Count; i++)
-                {
-                    segmentationSaveBodyDTO.SegmentationItemsDTO[i].SegmentationId = savedSegmentationDTO.Id;
-                    segmentationSaveBodyDTO.SegmentationItemsDTO[i].OrderNumber = i + 1;
-                    savedSegmentationItemsDTO.Add(await SaveSegmentationItemAndReturnDTOAsync(segmentationSaveBodyDTO.SegmentationItemsDTO[i], false, false));
-                }
-
-                return new SegmentationSaveBodyDTO
-                {
-                    SegmentationDTO = savedSegmentationDTO,
-                    SegmentationItemsDTO = savedSegmentationItemsDTO,
-                };
-            });
-        }
-
-        public async Task<List<SegmentationItemDTO>> GetSegmentationItemsForTheSegmentation(int segmentationId)
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                IQueryable<SegmentationItem> query = _context.DbSet<SegmentationItem>()
-                    .Where(x => x.Segmentation.Id == segmentationId)
-                    .OrderBy(x => x.OrderNumber);
-
-                return await GetSegmentationItemDTOList(query, false);
             });
         }
 
@@ -955,16 +916,6 @@ namespace PlayertyLoyals.Business.Services
                     .ToListAsync();
             });
         }
-
-        //public async Task DeleteSegmentation(int segmentationId)
-        //{
-        //    await _context.WithTransactionAsync(async () =>
-        //    {
-        //        // TODO FT: Add authorization
-
-        //        await DeleteEntityAsync<Segmentation, int>(segmentationId);
-        //    });
-        //}
 
         #endregion
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Soft.Generator.Shared.Attributes.EF.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace PlayertyLoyals.Business.DTO
 {
     public partial class SegmentationItemDTO
     {
+        [UIDoNotGenerate]
         /// <summary>
         /// FT: Using only on the client
         /// </summary>

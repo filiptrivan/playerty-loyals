@@ -1,4 +1,6 @@
 import { AbstractControl, FormArray, FormControl, FormControlOptions, FormGroup, ValidatorFn } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { BaseEntity } from '../../entities/base-entity';
 
 export interface SoftValidatorFn extends ValidatorFn {
     hasNotEmptyRule?: boolean;
@@ -43,6 +45,8 @@ export class SoftFormGroup<TValue = any> extends FormGroup {
 
     public name?: string; // FT: Using for nested form groups
     public mainDTOName?: string;
+    public saveObservableMethod?: (saveBody: any) => Observable<any>;
+    public initSaveBody?: () => BaseEntity = () => null;
     public controlNamesFromHtml?: string[] = [];
 }
 

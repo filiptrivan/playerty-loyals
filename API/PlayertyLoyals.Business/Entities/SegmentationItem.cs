@@ -14,11 +14,13 @@ namespace PlayertyLoyals.Business.Entities
     public class SegmentationItem : BusinessObject<long>
     {
         // FT: Check in the code that for the same segmentation there is no same segmentation item names, or should we do it? Maybe let the user do what he wants.
+        [UIColWidth("col-12")]
         [SoftDisplayName]
         [StringLength(100, MinimumLength = 1)]
         [Required]
         public string Name { get; set; }
 
+        [UIDoNotGenerate]
         [Required]
         public int OrderNumber { get; set; }
 

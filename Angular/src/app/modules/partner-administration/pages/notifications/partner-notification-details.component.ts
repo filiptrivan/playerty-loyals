@@ -23,8 +23,6 @@ import { BaseFormService } from 'src/app/core/services/base-form.service';
     styles: [],
 })
 export class PartnerNotificationDetailsComponent extends BaseFormCopy implements OnInit {
-    override saveObservableMethod: (saveBody: any) => Observable<any> = this.apiService.savePartnerNotification;
-
     partnerNotificationFormGroup: SoftFormGroup<PartnerNotification>;
 
     isMarkedAsRead = new SoftFormControl<boolean>(true, {updateOn: 'change'})
@@ -58,6 +56,8 @@ export class PartnerNotificationDetailsComponent extends BaseFormCopy implements
     }
          
     override ngOnInit() {
+        this.formGroup.saveObservableMethod = this.apiService.savePartnerNotification;
+
         this.populatePartnerUserTableCols();
         
         this.route.params.subscribe((params) => {
