@@ -28,6 +28,6 @@ namespace PlayertyLoyals.Business.Entities
         [WithMany(nameof(Segmentation.SegmentationItems))]
         public virtual Segmentation Segmentation { get; set; }
 
-        public virtual List<PartnerUser> PartnerUsers { get; } = new();
+        public virtual List<PartnerUser> PartnerUsers { get; } = new(); // M2M
     }
 }

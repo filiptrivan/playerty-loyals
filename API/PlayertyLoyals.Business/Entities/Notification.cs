@@ -20,6 +20,6 @@ namespace PlayertyLoyals.Business.Entities
         [StringLength(1000, MinimumLength = 1)]
         public string EmailBody { get; set; }
 
-        public virtual List<UserExtended> Users { get; } = new();
+        public virtual List<UserExtended> Users { get; } = new(); // M2M
     }
 }

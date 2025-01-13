@@ -203,7 +203,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<LazyLoadSelectedIdsResultDTO<long>> LazyLoadSelectedUserExtendedIdsForNotification(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LazyLoadSelectedUserExtendedIdsForNotification(tableFilterDTO, _context.DbSet<UserExtended>()
+            return await _loyalsBusinessService.LazyLoadSelectedUsersIdsForNotification(tableFilterDTO, _context.DbSet<UserExtended>()
                 .OrderBy(x => x.Id));
         }
 
@@ -211,7 +211,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<List<NamebookDTO<long>>> GetUserExtendedNamebookListForNotification(long notificationId)
         {
-            return await _loyalsBusinessService.GetUserExtendedNamebookListForNotification(notificationId);
+            return await _loyalsBusinessService.GetUsersNamebookListForNotification(notificationId);
         }
 
         //[HttpPost]

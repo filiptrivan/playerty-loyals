@@ -62,14 +62,14 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<List<NamebookDTO<long>>> GetPartnerUserNamebookListForPartnerNotification(long partnerNotificationId)
         {
-            return await _loyalsBusinessService.GetPartnerUserNamebookListForPartnerNotification(partnerNotificationId, false);
+            return await _loyalsBusinessService.GetPartnerUsersNamebookListForPartnerNotification(partnerNotificationId, false);
         }
 
         [HttpPost]
         [AuthGuard]
         public async Task<LazyLoadSelectedIdsResultDTO<long>> LazyLoadSelectedPartnerUserIdsForPartnerNotification(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LazyLoadSelectedPartnerUserIdsForPartnerNotification(tableFilterDTO, _context.DbSet<PartnerUser>()
+            return await _loyalsBusinessService.LazyLoadSelectedPartnerUsersIdsForPartnerNotification(tableFilterDTO, _context.DbSet<PartnerUser>()
                 .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
                 .OrderBy(x => x.Id));
         }

@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 namespace PlayertyLoyals.Business.Entities
 {
     [UIDoNotGenerate]
+    [SoftDisplayName("User.Email")]
     public class PartnerUser : BusinessObject<long> // https://learn.microsoft.com/en-us/ef/core/modeling/inheritance
     {
         [Required]
@@ -32,15 +33,15 @@ namespace PlayertyLoyals.Business.Entities
         [WithMany(nameof(Tier.PartnerUsers))]
         public virtual Tier Tier { get; set; } // FT: It's not required because when the user just made the account and the administrator didn't make any tiers, he can't be any
 
-        public virtual List<PartnerRole> PartnerRoles { get; } = new();
-
-        public virtual List<PartnerNotification> PartnerNotifications { get; } = new();
-
-        public virtual List<Segmentation> AlreadyFilledSegmentations { get; } = new();
+        public virtual List<Transaction> Transactions { get; } = new();
 
         [GenerateCommaSeparatedDisplayName]
-        public virtual List<SegmentationItem> CheckedSegmentationItems { get; } = new();
+        public virtual List<SegmentationItem> CheckedSegmentationItems { get; } = new(); // M2M
 
-        public virtual List<Transaction> Transactions { get; } = new();
+        public virtual List<Segmentation> AlreadyFilledSegmentations { get; } = new(); // M2M
+
+        public virtual List<PartnerRole> PartnerRoles { get; } = new(); // M2M
+
+        public virtual List<PartnerNotification> PartnerNotifications { get; } = new(); // M2M
     }
 }

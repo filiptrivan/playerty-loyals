@@ -35,6 +35,6 @@ namespace PlayertyLoyals.Business.Entities
         [NonEmpty]
         public virtual List<SegmentationItem> SegmentationItems { get; } = new();
 
-        public virtual List<PartnerUser> PartnerUsersThatHasFilledSegmentation { get; } = new();
+        public virtual List<PartnerUser> PartnerUsersThatHasFilledSegmentation { get; } = new(); // M2M
     }
 }

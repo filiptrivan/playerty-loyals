@@ -39,8 +39,8 @@ namespace PlayertyLoyals.Business.Entities
 
         public virtual List<Role> Roles { get; } = new();
 
-        public virtual List<Notification> Notifications { get; } = new();
-
         public virtual List<PartnerUser> PartnerUsers { get; } = new();
+
+        public virtual List<Notification> Notifications { get; } = new(); // M2M
     }
 }

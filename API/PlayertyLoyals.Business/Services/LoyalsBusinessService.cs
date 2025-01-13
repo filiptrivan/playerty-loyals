@@ -131,7 +131,7 @@ namespace PlayertyLoyals.Business.Services
                         .ToList();
                 }
 
-                await UpdateUserExtendedListForNotification(notificationId, userExtendedListToInsert);
+                await UpdateUsersForNotification(notificationId, userExtendedListToInsert);
             });
         }
 
@@ -544,9 +544,9 @@ namespace PlayertyLoyals.Business.Services
                 if (partnerUserSaveBodyDTO.PartnerUserDTO.Id == 0)
                     throw new HackerException("You can't add new partner user.");
 
-                await UpdatePartnerRoleListForPartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO.Id, partnerUserSaveBodyDTO.SelectedPartnerRoleIds);
+                await UpdatePartnerRolesForPartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO.Id, partnerUserSaveBodyDTO.SelectedPartnerRoleIds);
 
-                await UpdateSegmentationItemListForPartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO.Id, partnerUserSaveBodyDTO.SelectedSegmentationItemIds);
+                await UpdateCheckedSegmentationItemsForPartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO.Id, partnerUserSaveBodyDTO.SelectedSegmentationItemIds);
 
                 int pointsBeforeSave = await _context.DbSet<PartnerUser>().Where(x => x.Id == partnerUserSaveBodyDTO.PartnerUserDTO.Id).Select(x => x.Points).SingleAsync();
 
@@ -626,71 +626,6 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async override Task<List<NamebookDTO<long>>> GetPartnerUserNamebookListForPartnerRole(int partnerRoleId, bool authorize = true)
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                if (authorize)
-                {
-                    await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.ReadPartnerRole);
-                }
-
-                return await _context.DbSet<PartnerUser>()
-                    .AsNoTracking()
-                    .Where(x => x.PartnerRoles.Any(x => x.Id == partnerRoleId))
-                    .Select(x => new NamebookDTO<long>
-                    {
-                        Id = x.Id,
-                        DisplayName = x.User.Email,
-                    })
-                    .ToListAsync();
-            });
-        }
-
-        public async override Task<List<NamebookDTO<long>>> GetPartnerUserNamebookListForPartnerNotification(long partnerNotificationId, bool authorize = true)
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                if (authorize)
-                {
-                    await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.ReadPartnerNotification);
-                }
-
-                return await _context.DbSet<PartnerUser>()
-                    .AsNoTracking()
-                    .Where(x => x.PartnerNotifications.Any(x => x.Id == partnerNotificationId))
-                    .Select(x => new NamebookDTO<long>
-                    {
-                        Id = x.Id,
-                        DisplayName = x.User.Email,
-                    })
-                    .ToListAsync();
-            });
-        }
-
-        public async override Task<List<NamebookDTO<long>>> GetPartnerUserListForAutocomplete(int limit, string query, IQueryable<PartnerUser> partnerUserQuery, bool authorize = true)
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                if (authorize)
-                {
-                    await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.ReadPartnerUser);
-                }
-
-                if (!string.IsNullOrEmpty(query))
-                    partnerUserQuery = partnerUserQuery.Where(x => x.Id.ToString().Contains(query));
-
-                return await partnerUserQuery
-                    .Take(limit)
-                    .Select(x => new NamebookDTO<long>
-                    {
-                        Id = x.Id,
-                        DisplayName = x.User.Email,
-                    })
-                    .ToListAsync();
-            });
-        }
-
         public async Task<List<long>> GetCheckedSegmentationItemIdsForThePartnerUser(long partnerUserId)
         {
             return await _context.WithTransactionAsync(async () =>
@@ -738,19 +673,11 @@ namespace PlayertyLoyals.Business.Services
 
         #region PartnerRole
 
-        public async Task<PartnerRoleDTO> SavePartnerRoleAndReturnSaveBodyDTOAsync(PartnerRoleSaveBodyDTO partnerRoleSaveBodyDTO)
+        protected override async Task OnBeforeSavePartnerRoleAndReturnSaveBodyDTO(PartnerRoleSaveBodyDTO partnerRoleSaveBodyDTO)
         {
-
-            return await _context.WithTransactionAsync(async () =>
+            await _context.WithTransactionAsync(async () =>
             {
                 partnerRoleSaveBodyDTO.PartnerRoleDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
-
-                PartnerRoleDTO savedPartnerRoleDTO = await SavePartnerRoleAndReturnDTOAsync(partnerRoleSaveBodyDTO.PartnerRoleDTO, false, false);
-
-                await UpdatePartnerUserListForPartnerRole(savedPartnerRoleDTO.Id, partnerRoleSaveBodyDTO.SelectedPartnerUserIds);
-                await UpdatePartnerPermissionListForPartnerRole(savedPartnerRoleDTO.Id, partnerRoleSaveBodyDTO.SelectedPermissionIds);
-
-                return savedPartnerRoleDTO;
             });
         }
 
@@ -772,7 +699,7 @@ namespace PlayertyLoyals.Business.Services
 
                 PaginationResult<PartnerUser> paginationResult = await GetPartnerUserListForPagination(partnerNotificationSaveBodyDTO.TableFilter, allPartnerUsersQuery);
 
-                await UpdatePartnerUserListForPartnerNotificationWithLazyTableSelection(paginationResult.Query, savedPartnerNotificationDTO.Id, partnerNotificationSaveBodyDTO);
+                await UpdatePartnerUsersForPartnerNotificationWithLazyTableSelection(paginationResult.Query, savedPartnerNotificationDTO.Id, partnerNotificationSaveBodyDTO);
 
                 return savedPartnerNotificationDTO;
             });

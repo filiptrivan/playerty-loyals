@@ -85,7 +85,7 @@ export class BaseFormCopy implements OnInit {
     let isFormArrayValid: boolean = this.areFormArraysValid();
 
     if(isValid && isFormArrayValid){
-      
+      console.log(this.saveBody)
       this.formGroup.saveObservableMethod(this.saveBody).subscribe(res => {
         this.messageService.successMessage(this.translocoService.translate('SuccessfulSaveToastDescription'));
 

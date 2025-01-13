@@ -1,42 +1,12 @@
 <ng-container *transloco="let t">
-    @defer (when model != null) {
-        <soft-card [title]="detailsTitle" icon="pi pi-id-card">
-            <soft-panel>
-                <panel-header></panel-header>
+    <soft-card [title]="t('PartnerRole')" icon="pi pi-id-card">
         
-                <panel-body>
-                    <form [formGroup]="formGroup" class="grid">
-                        <div class="col-12">
-                            <soft-textbox [control]="control('name')"></soft-textbox>
-                        </div>
-                        <div class="col-12">
-                            <soft-textarea [control]="control('description')"></soft-textarea>
-                        </div>
-                        <div class="col-12">
-                            <soft-multiautocomplete 
-                                [control]="selectedPartnerUsers"
-                                (onTextInput)="searchPartnerUsers($event)" 
-                                [label]="t('UserList')"
-                                [options]="partnerUserOptions"
-                                ></soft-multiautocomplete>
-                        </div>
-                        <div class="col-12">
-                            <soft-multiselect
-                                [control]="selectedPartnerPermissions"
-                                [label]="t('PermissionList')"
-                                [options]="partnerPermissionOptions"></soft-multiselect>
-                        </div>
-                    </form>
-                </panel-body>
-        
-               <panel-footer>
-                    <p-button (onClick)="onSave()" [label]="t('Save')" icon="pi pi-save"></p-button>
-                    <soft-return-button></soft-return-button>
-               </panel-footer>
-        
-            </soft-panel>
-        </soft-card>
-    } @placeholder {
-        <card-skeleton [height]="502"></card-skeleton>
-    }
+        <partner-role-base-details
+        [formGroup]="formGroup" 
+        [partnerRoleFormGroup]="partnerRoleFormGroup" 
+        [onSave]="onSave" 
+        [getCrudMenuForOrderedData]="getCrudMenuForOrderedData"
+        ></partner-role-base-details>
+
+    </soft-card>
 </ng-container>

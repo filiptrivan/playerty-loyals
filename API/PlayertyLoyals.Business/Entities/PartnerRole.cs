@@ -1,6 +1,8 @@
 ﻿using Soft.Generator.Security.Entities;
 using Soft.Generator.Shared.Attributes.EF;
+using Soft.Generator.Shared.Attributes.EF.UI;
 using Soft.Generator.Shared.BaseEntities;
+using Soft.Generator.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -20,12 +22,15 @@ namespace PlayertyLoyals.Business.Entities
         [StringLength(400, MinimumLength = 1)]
         public string Description { get; set; }
 
+        [UIDoNotGenerate]
         [ManyToOneRequired]
         [WithMany(nameof(Partner.PartnerRoles))]
         public virtual Partner Partner { get; set; }
 
-        public virtual List<PartnerUser> PartnerUsers { get; } = new();
+        [UIControlType(nameof(UIControlTypeCodes.MultiAutocomplete))]
+        public virtual List<PartnerUser> PartnerUsers { get; } = new(); // M2M
 
-        public virtual List<PartnerPermission> PartnerPermissions { get; } = new();
+        [UIControlType(nameof(UIControlTypeCodes.MultiSelect))]
+        public virtual List<PartnerPermission> PartnerPermissions { get; } = new(); // M2M
     }
 }

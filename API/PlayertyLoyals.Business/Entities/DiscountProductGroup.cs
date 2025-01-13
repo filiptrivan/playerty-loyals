@@ -27,6 +27,6 @@ namespace PlayertyLoyals.Business.Entities
         [WithMany(nameof(BusinessSystem.DiscountProductGroups))]
         public virtual BusinessSystem BusinessSystem { get; set; }
 
-        public virtual List<BusinessSystemTierDiscountProductGroup> BusinessSystemTierDiscountProductGroups { get; } = new();
+        public virtual List<BusinessSystemTierDiscountProductGroup> BusinessSystemTierDiscountProductGroups { get; } = new(); // M2M
     }
 }

@@ -30,6 +30,6 @@ namespace PlayertyLoyals.Business.Entities
         [StringLength(100, MinimumLength = 1)]
         public string Code { get; set; }
 
-        public virtual List<PartnerRole> PartnerRoles { get; } = new();
+        public virtual List<PartnerRole> PartnerRoles { get; } = new(); // M2M
     }
 }

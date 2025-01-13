@@ -102,7 +102,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<List<NamebookDTO<int>>> GetPartnerRoleNamebookListForPartnerUser(long partnerUserId)
         {
-            return await _loyalsBusinessService.GetPartnerRoleNamebookListForPartnerUser(partnerUserId, false);
+            return await _loyalsBusinessService.GetPartnerRolesNamebookListForPartnerUser(partnerUserId, false);
         }
 
         [HttpGet]

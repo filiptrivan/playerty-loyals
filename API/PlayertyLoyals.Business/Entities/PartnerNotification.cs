@@ -14,6 +14,6 @@ namespace PlayertyLoyals.Business.Entities
         [ManyToOneRequired]
         [WithMany(nameof(Partner.PartnerNotifications))]
         public virtual Partner Partner { get; set; }
-        public virtual List<PartnerUser> PartnerUsers { get; } = new();
+        public virtual List<PartnerUser> PartnerUsers { get; } = new(); // M2M
     }
 }

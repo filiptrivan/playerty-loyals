@@ -25,6 +25,6 @@ namespace PlayertyLoyals.Business.Entities
         public virtual Tier Tier { get; set; }
 
         [Map]
-        public virtual List<BusinessSystemTierDiscountProductGroup> BusinessSystemTierDiscountProductGroups { get; } = new();
+        public virtual List<BusinessSystemTierDiscountProductGroup> BusinessSystemTierDiscountProductGroups { get; } = new(); // M2M
     }
 }
