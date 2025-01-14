@@ -15,6 +15,7 @@ export class SoftPanelComponent implements OnInit {
   @Input() crudMenu: MenuItem[];
   @Input() showRemoveIcon: boolean = false;
   @Input() index: number;
+  @Input() showPanelHeader: boolean = true;
 
   @Output() onMenuIconClick: EventEmitter<number> = new EventEmitter();
   @Output() onRemoveIconClick: EventEmitter<null> = new EventEmitter();

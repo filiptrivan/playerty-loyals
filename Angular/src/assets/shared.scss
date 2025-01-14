@@ -412,6 +412,9 @@
 	.p-panel .p-panel-content {
 		border-bottom-left-radius: 0px;
 		border-bottom-right-radius: 0px;
+		border-top: 1px solid var(--surface-border);
+		border-top-left-radius: 12px;
+		border-top-right-radius: 12px;
 		border-bottom: none;
 	}
 }

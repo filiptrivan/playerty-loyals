@@ -1,4 +1,3 @@
-import { PartnerService } from './../../../../business/services/helpers/partner.service';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,7 +10,7 @@ import { ValidatorService } from 'src/app/business/services/validators/validatio
 import { AllClickEvent, Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
-import { PartnerNotification, PartnerNotificationSaveBody } from 'src/app/business/entities/business-entities.generated';
+import { PartnerNotification, PartnerNotificationSaveBody, PartnerUser } from 'src/app/business/entities/business-entities.generated';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { nameof } from 'src/app/core/services/helper-functions';
 import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
@@ -27,9 +26,7 @@ export class PartnerNotificationDetailsComponent extends BaseFormCopy implements
 
     isMarkedAsRead = new SoftFormControl<boolean>(true, {updateOn: 'change'})
 
-    text: string;
-
-    partnerUserTableCols: Column[];
+    partnerUserTableCols: Column<PartnerUser>[];
     getPartnerUserTableDataObservableMethod = this.apiService.getPartnerUserTableData;
     exportPartnerUserTableDataToExcelObservableMethod = this.apiService.exportPartnerUserTableDataToExcel;
     deletePartnerUserObservableMethod = this.apiService.deletePartnerUser;

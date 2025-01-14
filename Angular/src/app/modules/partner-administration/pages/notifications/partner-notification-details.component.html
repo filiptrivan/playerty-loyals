@@ -1,15 +1,20 @@
 <ng-container *transloco="let t">
     @defer (when partnerNotificationFormGroup != null) {
-        <soft-card [title]="detailsTitle" icon="pi pi-bell">
-    
-            <soft-panel>
+        <soft-card [title]="t('PartnerNotification')" icon="pi pi-bell">
+            <soft-panel [isFirstMultiplePanel]="true" [showPanelHeader]="false">
+                <panel-body>
+                    <div class="grid">
+                        <div class="col-12">
+                            <soft-checkbox [control]="isMarkedAsRead" [label]="t('NotifyUsers')" [initializeToFalse]="false" [fakeLabel]="false"></soft-checkbox>
+                        </div>
+                    </div>
+                </panel-body>
+            </soft-panel>
+            <soft-panel [isLastMultiplePanel]="true">
                 <panel-header></panel-header>
         
                 <panel-body>
                     <form [formGroup]="formGroup" class="grid">
-                        <div class="col-12">
-                            <soft-checkbox [control]="isMarkedAsRead" [label]="t('NotifyUsers')" [initializeToFalse]="false" [fakeLabel]="false"></soft-checkbox>
-                        </div>
                         <div class="col-12">
                             <soft-textbox [control]="control('title', partnerNotificationFormGroup)"></soft-textbox>
                         </div>
@@ -17,13 +22,20 @@
                             <soft-textarea [control]="control('description', partnerNotificationFormGroup)"></soft-textarea>
                         </div>
                         <div class="col-12">
-                            <soft-data-table [tableTitle]="t('Recipients')" [cols]="partnerUserTableCols" 
+                            <soft-data-table [tableTitle]="t('Recipients')" 
+                            [cols]="partnerUserTableCols" 
                             [getTableDataObservableMethod]="getPartnerUserTableDataObservableMethod" 
                             [exportTableDataToExcelObservableMethod]="exportPartnerUserTableDataToExcelObservableMethod"
                             [deleteItemFromTableObservableMethod]="deletePartnerUserObservableMethod"
-                            [showAddButton]="false" selectionMode="multiple"
-                            [newlySelectedItems]="newlySelectedPartnerUserList" [unselectedItems]="unselectedPartnerUserList" [rows]="5" (onLazyLoad)="onLazyLoad($event)"
-                            [selectedLazyLoadObservableMethod]="selectedPartnerUserLazyLoad" (onIsAllSelectedChange)="isAllSelectedChange($event)"></soft-data-table>
+                            [showAddButton]="false" 
+                            selectionMode="multiple"
+                            [newlySelectedItems]="newlySelectedPartnerUserList" 
+                            [unselectedItems]="unselectedPartnerUserList" 
+                            [rows]="5" 
+                            (onLazyLoad)="onLazyLoad($event)"
+                            [selectedLazyLoadObservableMethod]="selectedPartnerUserLazyLoad" 
+                            (onIsAllSelectedChange)="isAllSelectedChange($event)"
+                            ></soft-data-table>
                         </div>
                         <div class="col-12">
                             <soft-editor [control]="control('emailBody', partnerNotificationFormGroup)"></soft-editor>

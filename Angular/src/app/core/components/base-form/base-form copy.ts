@@ -33,7 +33,6 @@ export class BaseFormCopy implements OnInit {
   formArrayControlNamesFromHtml: string[] = [];
   saveBody: any;
   modelId: number;
-  detailsTitle: string;
   invalidForm: boolean = false; // FT: We are using this only if we manualy add some form field on the UI, like multiautocomplete, autocomplete etc...
   // saveObservableMethod: (saveBody: any) => Observable<any>;
 
