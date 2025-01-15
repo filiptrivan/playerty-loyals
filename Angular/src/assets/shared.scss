@@ -408,13 +408,21 @@
 	color: $shade600;
 }
 
-.multiple-panel-first{
+.multiple-panel-first-without-header{
 	.p-panel .p-panel-content {
 		border-bottom-left-radius: 0px;
 		border-bottom-right-radius: 0px;
 		border-top: 1px solid var(--surface-border);
 		border-top-left-radius: 12px;
 		border-top-right-radius: 12px;
+		border-bottom: none;
+	}
+}
+
+.multiple-panel-first{
+	.p-panel .p-panel-content {
+		border-bottom-left-radius: 0px;
+		border-bottom-right-radius: 0px;
 		border-bottom: none;
 	}
 }

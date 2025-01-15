@@ -87,10 +87,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   setValidator(formControl: SoftFormControl, model: T = null) {
     if (formControl == null) return null;
 
-    formControl.validator = this.validatorService.getValidator(formControl, model ? model.typeName : this.model.typeName);
-  
-    if (formControl?.validator?.hasNotEmptyRule)
-      formControl.required = true;
+    this.validatorService.setValidator(formControl, model ? model.typeName : this.model.typeName);
   }
 
   ngAfterViewChecked(): void {

@@ -58,19 +58,6 @@ export class BaseFormCopy implements OnInit {
 
   //#region Model
 
-  // setValidator(formControl: SoftFormControl, modelConstructor: any) {
-  //   if (formControl == null) return null;
-    
-  //   formControl.validator = this.validatorService.getValidator(formControl, modelConstructor.typeName);
-
-  //   if (formControl?.validator?.hasNotEmptyRule)
-  //     formControl.required = true;
-  // }
-
-  // ngAfterViewChecked(): void {
-  //   this.changeDetectorRef.detectChanges();
-  // }
-
   control<T extends BaseEntity>(formControlName: string & keyof T, formGroup: SoftFormGroup<T>) {
     return getControl(formControlName, formGroup);
   }
@@ -81,7 +68,7 @@ export class BaseFormCopy implements OnInit {
 
     this.saveBody = this.saveBody ?? this.formGroup.getRawValue();
 
-    let isValid: boolean = this.isFormGroupValid();
+    let isValid: boolean = this.areFormGroupsValid();
     let isFormArrayValid: boolean = this.areFormArraysValid();
 
     if(isValid && isFormArrayValid){
@@ -156,26 +143,52 @@ export class BaseFormCopy implements OnInit {
   onAfterSave = () => {}
   onAfterSaveRequest = () => {}
 
-  isFormGroupValid(): boolean {
+  areFormGroupsValid(): boolean {
     if(this.formGroup.controls == null)
       return true;
 
     let invalid: boolean = false;
 
     Object.keys(this.formGroup.controls).forEach(key => {
-      const formGroup = this.formGroup.controls[key] as unknown as FormGroup;
+      const formGroupOrControl = this.formGroup.controls[key];
 
-      if (formGroup instanceof SoftFormGroup){
-        Object.keys(formGroup.controls).forEach(key => {
-          const formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
+      if (formGroupOrControl instanceof SoftFormGroup){
+        Object.keys(formGroupOrControl.controls).forEach(key => {
+          const formControl = formGroupOrControl.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
 
-          if (formGroup.controlNamesFromHtml.includes(formControl.label) && formControl.invalid) {
+          if (formGroupOrControl.controlNamesFromHtml.includes(formControl.label) && formControl.invalid) {
             formControl.markAsDirty();
             invalid = true;
           }
         });
       }
+      else if (formGroupOrControl instanceof SoftFormControl){
+        if (formGroupOrControl.invalid) {
+          formGroupOrControl.markAsDirty();
+          invalid = true;
+        }
+      }
 
+    });
+
+    if (invalid) {
+      return false;
+    }
+
+    return true;
+  }
+
+  areFormControlsValid(formControls: SoftFormControl[]): boolean {
+    if(formControls == null)
+      return true;
+
+    let invalid: boolean = false;
+
+    formControls.forEach(formControl => {
+      if (formControl.invalid) {
+        formControl.markAsDirty();
+        invalid = true;
+      }
     });
 
     if (invalid) {
@@ -279,7 +292,7 @@ export class BaseFormCopy implements OnInit {
   //   return this.formArray.controls[index] as FormGroup
   // }
 
-  getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+  getFormArrayGroups<T>(formArray: SoftFormArray<T[]>): SoftFormGroup<T>[]{
     return this.baseFormService.getFormArrayGroups(formArray);
   }
 

@@ -14,7 +14,7 @@ export class ValidatorServiceGenerated {
     ) {
     }
 
-    getValidator(formControl: SoftFormControl, className: string): SoftValidatorFn {
+    setValidator(formControl: SoftFormControl, className: string): SoftValidatorFn {
         switch(formControl.label + className){
 
 
@@ -59,6 +59,8 @@ export class ValidatorServiceGenerated {
             return this.modifiedAtBusinessSystemTierValidator(formControl);
 
 
+        case 'updatePointsStartDateBusinessSystemUpdatePointsDataBody':
+            return this.updatePointsStartDateBusinessSystemUpdatePointsDataBodyValidator(formControl);
         case 'updatePointsIntervalBusinessSystemUpdatePointsDataBody':
             return this.updatePointsIntervalBusinessSystemUpdatePointsDataBodyValidator(formControl);
 
@@ -345,6 +347,14 @@ export class ValidatorServiceGenerated {
             return this.modifiedAtTransactionValidator(formControl);
 
 
+        case 'businessSystemIdUpdatePoints':
+            return this.businessSystemIdUpdatePointsValidator(formControl);
+        case 'businessSystemVersionUpdatePoints':
+            return this.businessSystemVersionUpdatePointsValidator(formControl);
+        case 'fromDateUpdatePoints':
+            return this.fromDateUpdatePointsValidator(formControl);
+        case 'toDateUpdatePoints':
+            return this.toDateUpdatePointsValidator(formControl);
 
         case 'emailUserExtended':
             return this.emailUserExtendedValidator(formControl);
@@ -373,12 +383,11 @@ export class ValidatorServiceGenerated {
 
 
 
-
     nameBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 255;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -388,29 +397,34 @@ export class ValidatorServiceGenerated {
             return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     updatePointsIntervalBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
 
             const updatePointsIntervalValid = numberMinRangeRule;
 
             return updatePointsIntervalValid ? null : { _ : this.translocoService.translate('NumberRangeMin', {min}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     getTransactionsEndpointBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 1000;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -418,15 +432,17 @@ export class ValidatorServiceGenerated {
 
             return getTransactionsEndpointValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     getDiscountCategoriesEndpointBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 1000;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -434,15 +450,17 @@ export class ValidatorServiceGenerated {
 
             return getDiscountCategoriesEndpointValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     createUserEndpointBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 1000;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -450,15 +468,17 @@ export class ValidatorServiceGenerated {
 
             return createUserEndpointValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     updateUserGroupEndpointBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 1000;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -466,73 +486,87 @@ export class ValidatorServiceGenerated {
 
             return updateUserGroupEndpointValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     partnerIdBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const partnerIdValid = notEmptyRule;
 
             return partnerIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     versionBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const versionValid = notEmptyRule;
 
             return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     createdAtBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const createdAtValid = notEmptyRule;
 
             return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     modifiedAtBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const modifiedAtValid = notEmptyRule;
 
             return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
     discountBusinessSystemTierDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const max = 100;
         const numberMaxRangeRule = (value <= max) || (typeof value === 'undefined' || value === null || value === '');
         const min = 0;
@@ -543,211 +577,274 @@ export class ValidatorServiceGenerated {
             return discountValid ? null : { _ : this.translocoService.translate('NotEmptyNumberRangeMaxNumberRangeMin', {max, min}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
     orderNumberBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const orderNumberValid = notEmptyRule;
 
             return orderNumberValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     businessSystemIdBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const businessSystemIdValid = notEmptyRule;
 
             return businessSystemIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     tierIdBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const tierIdValid = notEmptyRule;
 
             return tierIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     versionBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const versionValid = notEmptyRule;
 
             return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     createdAtBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const createdAtValid = notEmptyRule;
 
             return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     modifiedAtBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const modifiedAtValid = notEmptyRule;
 
             return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
 
 
+    updatePointsStartDateBusinessSystemUpdatePointsDataBodyValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const updatePointsStartDateValid = notEmptyRule;
+
+            return updatePointsStartDateValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
+        return validator;
+    }
     updatePointsIntervalBusinessSystemUpdatePointsDataBodyValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const min = 1;
         const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
 
-            const updatePointsIntervalValid = numberMinRangeRule;
+            const updatePointsIntervalValid = notEmptyRule && numberMinRangeRule;
 
-            return updatePointsIntervalValid ? null : { _ : this.translocoService.translate('NumberRangeMin', {min}) };
+            return updatePointsIntervalValid ? null : { _ : this.translocoService.translate('NotEmptyNumberRangeMin', {min}) };
         };
-        
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
     transactionsFromBusinessSystemUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const transactionsFromValid = notEmptyRule;
 
             return transactionsFromValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     transactionsToBusinessSystemUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const transactionsToValid = notEmptyRule;
 
             return transactionsToValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     isManualBusinessSystemUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const isManualValid = notEmptyRule;
 
             return isManualValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     businessSystemIdBusinessSystemUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const businessSystemIdValid = notEmptyRule;
 
             return businessSystemIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     versionBusinessSystemUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const versionValid = notEmptyRule;
 
             return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     createdAtBusinessSystemUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const createdAtValid = notEmptyRule;
 
             return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     modifiedAtBusinessSystemUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const modifiedAtValid = notEmptyRule;
 
             return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
 
@@ -755,7 +852,7 @@ export class ValidatorServiceGenerated {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 255;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -765,14 +862,17 @@ export class ValidatorServiceGenerated {
             return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     codeDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -782,65 +882,80 @@ export class ValidatorServiceGenerated {
             return codeValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     businessSystemIdDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const businessSystemIdValid = notEmptyRule;
 
             return businessSystemIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     versionDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const versionValid = notEmptyRule;
 
             return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     createdAtDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const createdAtValid = notEmptyRule;
 
             return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     modifiedAtDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const modifiedAtValid = notEmptyRule;
 
             return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
 
@@ -848,7 +963,7 @@ export class ValidatorServiceGenerated {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 255;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -858,14 +973,17 @@ export class ValidatorServiceGenerated {
             return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     codeExternalDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -875,16 +993,19 @@ export class ValidatorServiceGenerated {
             return codeValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
     userEmailExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 5;
         const max = 70;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -895,14 +1016,17 @@ export class ValidatorServiceGenerated {
             return userEmailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     codeExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 20;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -912,14 +1036,17 @@ export class ValidatorServiceGenerated {
             return codeValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     productNameExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 500;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -929,14 +1056,17 @@ export class ValidatorServiceGenerated {
             return productNameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     productImageUrlExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 1000;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -944,15 +1074,17 @@ export class ValidatorServiceGenerated {
 
             return productImageUrlValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     productCategoryNameExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 500;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -962,14 +1094,17 @@ export class ValidatorServiceGenerated {
             return productCategoryNameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     productCategoryImageUrlExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 1000;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -977,15 +1112,17 @@ export class ValidatorServiceGenerated {
 
             return productCategoryImageUrlValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     priceExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const precision = 16;
         const scale = 2;
         const ignoreTrailingZeros = false;
@@ -996,29 +1133,35 @@ export class ValidatorServiceGenerated {
             return priceValid ? null : { _ : this.translocoService.translate('NotEmptyPrecisionScale', {precision, scale}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     boughtAtExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const boughtAtValid = notEmptyRule;
 
             return boughtAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
     nameGenderValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 70;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1028,9 +1171,12 @@ export class ValidatorServiceGenerated {
             return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
 
@@ -1039,7 +1185,7 @@ export class ValidatorServiceGenerated {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 5;
         const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1050,9 +1196,12 @@ export class ValidatorServiceGenerated {
             return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
 
@@ -1061,7 +1210,7 @@ export class ValidatorServiceGenerated {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1071,14 +1220,17 @@ export class ValidatorServiceGenerated {
             return titleValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     descriptionNotificationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 400;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1088,14 +1240,17 @@ export class ValidatorServiceGenerated {
             return descriptionValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     emailBodyNotificationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 1000;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -1103,52 +1258,63 @@ export class ValidatorServiceGenerated {
 
             return emailBodyValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     versionNotificationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const versionValid = notEmptyRule;
 
             return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     createdAtNotificationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const createdAtValid = notEmptyRule;
 
             return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     modifiedAtNotificationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const modifiedAtValid = notEmptyRule;
 
             return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
 
@@ -1156,7 +1322,7 @@ export class ValidatorServiceGenerated {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 255;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1166,14 +1332,17 @@ export class ValidatorServiceGenerated {
             return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     emailPartnerValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 5;
         const max = 70;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1184,14 +1353,17 @@ export class ValidatorServiceGenerated {
             return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     slugPartnerValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1201,14 +1373,17 @@ export class ValidatorServiceGenerated {
             return slugValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     logoImagePartnerValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 1024;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -1216,30 +1391,34 @@ export class ValidatorServiceGenerated {
 
             return logoImageValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     primaryColorPartnerValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const length = 7;
+        const length = 7;
         const stringSingleLengthRule = (value?.length == length) || (typeof value === 'undefined' || value === null || value === '');
 
             const primaryColorValid = stringSingleLengthRule;
 
             return primaryColorValid ? null : { _ : this.translocoService.translate('SingleLength', {length}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     productsRecommendationEndpointPartnerValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 1000;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -1247,15 +1426,17 @@ export class ValidatorServiceGenerated {
 
             return productsRecommendationEndpointValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     pointsMultiplierPartnerValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const precision = 10;
         const scale = 2;
         const ignoreTrailingZeros = false;
@@ -1266,71 +1447,86 @@ export class ValidatorServiceGenerated {
             return pointsMultiplierValid ? null : { _ : this.translocoService.translate('NotEmptyPrecisionScale', {precision, scale}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     versionPartnerValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const versionValid = notEmptyRule;
 
             return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     createdAtPartnerValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const createdAtValid = notEmptyRule;
 
             return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     modifiedAtPartnerValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const modifiedAtValid = notEmptyRule;
 
             return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
     partnerIdPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const partnerIdValid = notEmptyRule;
 
             return partnerIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     titlePartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1340,14 +1536,17 @@ export class ValidatorServiceGenerated {
             return titleValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     descriptionPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 400;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1357,14 +1556,17 @@ export class ValidatorServiceGenerated {
             return descriptionValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     emailBodyPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 1000;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -1372,59 +1574,70 @@ export class ValidatorServiceGenerated {
 
             return emailBodyValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     versionPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const versionValid = notEmptyRule;
 
             return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     createdAtPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const createdAtValid = notEmptyRule;
 
             return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     modifiedAtPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const modifiedAtValid = notEmptyRule;
 
             return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
     namePartnerPermissionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1434,14 +1647,17 @@ export class ValidatorServiceGenerated {
             return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     descriptionPartnerPermissionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 400;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -1449,15 +1665,17 @@ export class ValidatorServiceGenerated {
 
             return descriptionValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     codePartnerPermissionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1467,16 +1685,19 @@ export class ValidatorServiceGenerated {
             return codeValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
     namePartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 255;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1486,14 +1707,17 @@ export class ValidatorServiceGenerated {
             return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     descriptionPartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 400;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -1501,66 +1725,80 @@ export class ValidatorServiceGenerated {
 
             return descriptionValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     partnerIdPartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const partnerIdValid = notEmptyRule;
 
             return partnerIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     versionPartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const versionValid = notEmptyRule;
 
             return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     createdAtPartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const createdAtValid = notEmptyRule;
 
             return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     modifiedAtPartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const modifiedAtValid = notEmptyRule;
 
             return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
 
@@ -1570,86 +1808,104 @@ export class ValidatorServiceGenerated {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const pointsValid = notEmptyRule;
 
             return pointsValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     partnerIdPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const partnerIdValid = notEmptyRule;
 
             return partnerIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     userIdPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const userIdValid = notEmptyRule;
 
             return userIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     versionPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const versionValid = notEmptyRule;
 
             return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     createdAtPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const createdAtValid = notEmptyRule;
 
             return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     modifiedAtPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const modifiedAtValid = notEmptyRule;
 
             return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
 
@@ -1664,7 +1920,7 @@ export class ValidatorServiceGenerated {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1674,14 +1930,17 @@ export class ValidatorServiceGenerated {
             return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     nameLatinPermissionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1691,14 +1950,17 @@ export class ValidatorServiceGenerated {
             return nameLatinValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     descriptionPermissionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 400;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -1706,15 +1968,17 @@ export class ValidatorServiceGenerated {
 
             return descriptionValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     descriptionLatinPermissionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 400;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -1722,15 +1986,17 @@ export class ValidatorServiceGenerated {
 
             return descriptionLatinValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     codePermissionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1740,9 +2006,12 @@ export class ValidatorServiceGenerated {
             return codeValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
 
@@ -1754,7 +2023,7 @@ export class ValidatorServiceGenerated {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 5;
         const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1765,9 +2034,12 @@ export class ValidatorServiceGenerated {
             return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
 
@@ -1775,7 +2047,7 @@ export class ValidatorServiceGenerated {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 255;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1785,14 +2057,17 @@ export class ValidatorServiceGenerated {
             return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     descriptionRoleValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 400;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -1800,52 +2075,63 @@ export class ValidatorServiceGenerated {
 
             return descriptionValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     versionRoleValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const versionValid = notEmptyRule;
 
             return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     createdAtRoleValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const createdAtValid = notEmptyRule;
 
             return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     modifiedAtRoleValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const modifiedAtValid = notEmptyRule;
 
             return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
 
@@ -1854,7 +2140,7 @@ export class ValidatorServiceGenerated {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1864,14 +2150,17 @@ export class ValidatorServiceGenerated {
             return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     descriptionSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 400;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -1879,15 +2168,17 @@ export class ValidatorServiceGenerated {
 
             return descriptionValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     pointsForTheFirstTimeFillSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 0;
         const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -1896,71 +2187,86 @@ export class ValidatorServiceGenerated {
             return pointsForTheFirstTimeFillValid ? null : { _ : this.translocoService.translate('NotEmptyNumberRangeMin', {min}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     partnerIdSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const partnerIdValid = notEmptyRule;
 
             return partnerIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     versionSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const versionValid = notEmptyRule;
 
             return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     createdAtSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const createdAtValid = notEmptyRule;
 
             return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     modifiedAtSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const modifiedAtValid = notEmptyRule;
 
             return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
     nameSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -1970,79 +2276,97 @@ export class ValidatorServiceGenerated {
             return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     orderNumberSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const orderNumberValid = notEmptyRule;
 
             return orderNumberValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     segmentationIdSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const segmentationIdValid = notEmptyRule;
 
             return segmentationIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     versionSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const versionValid = notEmptyRule;
 
             return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     createdAtSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const createdAtValid = notEmptyRule;
 
             return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     modifiedAtSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const modifiedAtValid = notEmptyRule;
 
             return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
 
@@ -2055,7 +2379,7 @@ export class ValidatorServiceGenerated {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 255;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -2065,14 +2389,17 @@ export class ValidatorServiceGenerated {
             return nameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     descriptionTierValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 400;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -2080,15 +2407,17 @@ export class ValidatorServiceGenerated {
 
             return descriptionValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     validFromTierValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 0;
         const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -2097,14 +2426,17 @@ export class ValidatorServiceGenerated {
             return validFromValid ? null : { _ : this.translocoService.translate('NotEmptyNumberRangeMin', {min}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     validToTierValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 0;
         const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -2113,72 +2445,87 @@ export class ValidatorServiceGenerated {
             return validToValid ? null : { _ : this.translocoService.translate('NotEmptyNumberRangeMin', {min}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     partnerIdTierValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const partnerIdValid = notEmptyRule;
 
             return partnerIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     versionTierValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const versionValid = notEmptyRule;
 
             return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     createdAtTierValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const createdAtValid = notEmptyRule;
 
             return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     modifiedAtTierValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const modifiedAtValid = notEmptyRule;
 
             return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
     productNameTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 500;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -2188,14 +2535,17 @@ export class ValidatorServiceGenerated {
             return productNameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     codeTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 20;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -2205,14 +2555,17 @@ export class ValidatorServiceGenerated {
             return codeValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     productImageUrlTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 1000;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -2220,15 +2573,17 @@ export class ValidatorServiceGenerated {
 
             return productImageUrlValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     productCategoryNameTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 1;
         const max = 500;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -2238,14 +2593,17 @@ export class ValidatorServiceGenerated {
             return productCategoryNameValid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     productCategoryImageUrlTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const min = 1;
+        const min = 1;
         const max = 1000;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -2253,15 +2611,17 @@ export class ValidatorServiceGenerated {
 
             return productCategoryImageUrlValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     priceTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const precision = 16;
         const scale = 2;
         const ignoreTrailingZeros = false;
@@ -2272,115 +2632,207 @@ export class ValidatorServiceGenerated {
             return priceValid ? null : { _ : this.translocoService.translate('NotEmptyPrecisionScale', {precision, scale}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     boughtAtTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const boughtAtValid = notEmptyRule;
 
             return boughtAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     pointsTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const pointsValid = notEmptyRule;
 
             return pointsValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     partnerUserIdTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const partnerUserIdValid = notEmptyRule;
 
             return partnerUserIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     businessSystemIdTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const businessSystemIdValid = notEmptyRule;
 
             return businessSystemIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     versionTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const versionValid = notEmptyRule;
 
             return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     createdAtTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const createdAtValid = notEmptyRule;
 
             return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     modifiedAtTransactionValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const modifiedAtValid = notEmptyRule;
 
             return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
 
 
+    businessSystemIdUpdatePointsValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const businessSystemIdValid = notEmptyRule;
+
+            return businessSystemIdValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
+        return validator;
+    }
+    businessSystemVersionUpdatePointsValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const businessSystemVersionValid = notEmptyRule;
+
+            return businessSystemVersionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
+        return validator;
+    }
+    fromDateUpdatePointsValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const fromDateValid = notEmptyRule;
+
+            return fromDateValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
+        return validator;
+    }
+    toDateUpdatePointsValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const toDateValid = notEmptyRule;
+
+            return toDateValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
+        return validator;
+    }
 
     emailUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 5;
         const max = 70;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -2391,51 +2843,63 @@ export class ValidatorServiceGenerated {
             return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     versionUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const versionValid = notEmptyRule;
 
             return versionValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     createdAtUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const createdAtValid = notEmptyRule;
 
             return createdAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     modifiedAtUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
 
             const modifiedAtValid = notEmptyRule;
 
             return modifiedAtValid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
 
@@ -2446,7 +2910,7 @@ export class ValidatorServiceGenerated {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const length = 6;
         const stringSingleLengthRule = (value?.length == length) || (typeof value === 'undefined' || value === null || value === '');
 
@@ -2455,14 +2919,17 @@ export class ValidatorServiceGenerated {
             return verificationCodeValid ? null : { _ : this.translocoService.translate('NotEmptySingleLength', {length}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
     emailVerificationTokenRequestValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+        const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
         const min = 5;
         const max = 100;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
@@ -2473,6 +2940,10 @@ export class ValidatorServiceGenerated {
             return emailValid ? null : { _ : this.translocoService.translate('NotEmptyLengthEmailAddress', {min, max}) };
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
 

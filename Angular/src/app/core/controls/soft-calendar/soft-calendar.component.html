@@ -10,6 +10,7 @@
     [style]="{'width':'100%'}"
     [pTooltip]="getValidationErrrorMessages()" [tooltipEvent]="errorMessageTooltipEvent" tooltipPosition="bottom" [tooltipDisabled]="control?.valid" tooltipStyleClass="soft-tooltip-invalid"
     [formControl]="control"
+    (onBlur)="control?.markAsDirty()"
     dateFormat="dd.mm.yy."
     iconDisplay="input" 
     [showIcon]="true" 

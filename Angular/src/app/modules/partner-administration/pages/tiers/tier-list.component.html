@@ -9,16 +9,16 @@
                     <index-card [index]="tierIndex" [last]="false" [crudMenu]="tierCrudMenu" (onMenuIconClick)="tierLastIndexClicked.index = $event">
                         <form [formGroup]="tierFormGroup" class="grid">
                             <div class="col-12 md:col-4">
-                                <soft-textbox [control]="getFormArrayControlByIndex('name', tierFormArray, tierIndex)"></soft-textbox>
+                                <soft-textbox [control]="control('name', tierFormGroup)"></soft-textbox>
                             </div>
                             <div class="col-12 md:col-4">
-                                <soft-number [control]="getFormArrayControlByIndex('validFrom', tierFormArray, tierIndex)"></soft-number>
+                                <soft-number [control]="control('validFrom', tierFormGroup)"></soft-number>
                             </div>
                             <div class="col-12 md:col-4">
-                                <soft-number [control]="getFormArrayControlByIndex('validTo', tierFormArray, tierIndex)"></soft-number>
+                                <soft-number [control]="control('validTo', tierFormGroup)"></soft-number>
                             </div>
                             <div class="col-12">
-                                <soft-textarea [control]="getFormArrayControlByIndex('description', tierFormArray, tierIndex)"></soft-textarea>
+                                <soft-textarea [control]="control('description', tierFormGroup)"></soft-textarea>
                             </div>
 
                             <div class="col-12">
@@ -26,7 +26,7 @@
                                     <index-card [index]="businessSystemTierIndex" [crudMenu]="businessSystemTierCrudMenu" (onMenuIconClick)="businessSystemTierLastIndexClicked.index = $event; tierLastIndexClicked.index = tierIndex" [last]="false">
                                         <form [formGroup]="businessSystemTierFormGroup" class="grid">
                                             <div class="col-12">
-                                                <soft-dropdown [control]="getBusinessSystemTierFormArrayControl('businessSystemId', businessSystemTierIndex, tierIndex)" (onChange)="businessSystemChange($event, tierIndex, businessSystemTierIndex)" [options]="businessSystemOptions"></soft-dropdown>
+                                                <soft-dropdown [control]="control('businessSystemId', businessSystemTierFormGroup)" (onChange)="businessSystemChange($event, tierIndex, businessSystemTierIndex)" [options]="businessSystemOptions"></soft-dropdown>
                                             </div>
                                             <div class="col-12">
                                                 <soft-data-table 

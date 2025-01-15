@@ -7,7 +7,6 @@ export class SoftTranslocoLoader implements TranslocoLoader {
   constructor(private http: HttpClient) {}
 
   getTranslation(lang: string) {
-    // console.log(lang)
     return this.http.get(`./assets/i18n/${lang}.json`);
   }
 

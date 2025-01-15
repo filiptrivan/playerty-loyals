@@ -4,6 +4,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { SoftFormArray, SoftFormControl, SoftFormGroup } from '../components/soft-form-control/soft-form-control';
 import { FormGroup } from '@angular/forms';
+import { BaseEntity } from '../entities/base-entity';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +25,7 @@ export class BaseFormService {
     parentFormGroup.addControl(propertyNameInSaveBody, formGroup);
   }
 
-  createFormGroup<T>(formGroup: SoftFormGroup<T>, modelConstructor: any, disableLambda?: (formControlName: string, model: any) => boolean, updateOnChangeControls?: (keyof any)[]): void {
+  createFormGroup<T>(formGroup: SoftFormGroup<T>, modelConstructor: T & BaseEntity, disableLambda?: (formControlName: string, model: any) => boolean, updateOnChangeControls?: (keyof any)[]): void {
     if (formGroup == null)
       console.error('FT: You need to instantiate the form group.')
 
@@ -32,11 +33,8 @@ export class BaseFormService {
       let formControl: SoftFormControl;
 
       const formControlValue = modelConstructor[formControlName];
-
-      const propertyType = typeof formControlValue;
-
-      if (propertyType == typeof Date ||
-        updateOnChangeControls?.includes(formControlName) ||
+      
+      if (updateOnChangeControls?.includes(formControlName) ||
         (formControlName.endsWith('Id') && formControlName.length > 2)
       )
         formControl = new SoftFormControl(formControlValue, { updateOn: 'change' });
@@ -55,13 +53,10 @@ export class BaseFormService {
     });
   }
 
-  setValidator(formControl: SoftFormControl, modelConstructor: any) {
+  setValidator<T>(formControl: SoftFormControl, modelConstructor: T & BaseEntity) {
     if (formControl == null) return null;
-    
-    formControl.validator = this.validatorService.getValidator(formControl, modelConstructor.typeName);
 
-    if (formControl?.validator?.hasNotEmptyRule)
-      formControl.required = true;
+    this.validatorService.setValidator(formControl, modelConstructor.typeName);
   }
 
   getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
@@ -88,7 +83,9 @@ export class BaseFormService {
 
     modelList.forEach(model => {
       Object.assign(modelConstructor, model);
-      formArray.push(this.createFormGroup(modelConstructor, disableLambda));
+      let helperFormGroup: SoftFormGroup = new SoftFormGroup({});
+      this.createFormGroup(helperFormGroup, formArray.modelConstructor, disableLambda)
+      formArray.push(helperFormGroup);
     });
 
     parentFormGroup.addControl(formArraySaveBodyName, formArray);

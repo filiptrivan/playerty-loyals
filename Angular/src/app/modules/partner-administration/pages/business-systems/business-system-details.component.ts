@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { BusinessSystem, BusinessSystemSaveBody, BusinessSystemUpdatePointsDataBody, UpdatePoints } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
@@ -11,8 +11,6 @@ import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
-import { SoftTab } from 'src/app/core/components/soft-panels/panel-header/panel-header.component';
-import { PrimeIcons } from 'primeng/api';
 import { SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { BaseFormService } from 'src/app/core/services/base-form.service';
 
@@ -31,10 +29,10 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelObservableMethod = this.apiService.exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcel;
     businessSystemUpdatePointsScheduledTaskTableTotalRecords: number;
     
-    manualUpdatePointsFromDate = new SoftFormControl<Date>(null, {updateOn: 'change'})
-    manualUpdatePointsToDate = new SoftFormControl<Date>(null, {updateOn: 'change'})
+    manualUpdatePointsFromDate = new SoftFormControl<Date>(null, {updateOn: 'change'});
+    manualUpdatePointsToDate = new SoftFormControl<Date>(null, {updateOn: 'change'});
 
-    businessSystemUpdatePointsDataFormGroup: SoftFormGroup<BusinessSystemUpdatePointsDataBody>;
+    businessSystemUpdatePointsDataFormGroup = new SoftFormGroup<BusinessSystemUpdatePointsDataBody>({});
 
     savedBusinessSystemUpdatePointsScheduledTaskIsPaused: boolean = null;
 
@@ -61,12 +59,15 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
          
     override ngOnInit() {
-        this.formGroup.saveObservableMethod = this.apiService.saveBusinessSystem;
+        this.validatorService.notEmpty(this.manualUpdatePointsFromDate);
+        this.validatorService.notEmpty(this.manualUpdatePointsToDate);
 
         this.initializeBusinessSystemUpdatePointsScheduledTaskTableCols();
 
+        this.formGroup.saveObservableMethod = this.apiService.saveBusinessSystem;
+
         this.route.params.subscribe((params) => {
-            this.modelId = params['id'];
+            this.modelId = +params['id'];
 
             if (this.modelId > 0) {
                 forkJoin({
@@ -99,10 +100,23 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
 
     initBusinessSystemUpdatePointsDataFormGroup(businessSystem: BusinessSystem){
-        this.baseFormService.createFormGroup(this.businessSystemUpdatePointsDataFormGroup, new BusinessSystemUpdatePointsDataBody({businessSystemId: this.modelId, updatePointsStartDate: businessSystem.updatePointsStartDate, updatePointsInterval: businessSystem.updatePointsInterval}))
+        this.baseFormService.createFormGroup(
+            this.businessSystemUpdatePointsDataFormGroup, 
+            new BusinessSystemUpdatePointsDataBody({
+                businessSystemId: this.businessSystemFormGroup.controls.id.getRawValue(), 
+                businessSystemVersion: this.businessSystemFormGroup.controls.version.getRawValue(), 
+                updatePointsStartDate: businessSystem.updatePointsStartDate, 
+                updatePointsInterval: businessSystem.updatePointsInterval
+            })
+        )
     }
     
     onSaveBusinessSystemUpdatePointsData(){
+        if (!this.areFormControlsValid([this.businessSystemUpdatePointsDataFormGroup.controls.updatePointsStartDate, this.businessSystemUpdatePointsDataFormGroup.controls.updatePointsInterval])) {
+            this.showInvalidFieldsMessage();
+            return;
+        }
+
         this.apiService.saveBusinessSystemUpdatePointsData(this.businessSystemUpdatePointsDataFormGroup.getRawValue()).subscribe((version) => {
             this.messageService.successMessage(this.translocoService.translate('SuccessfulSaveToastDescription'));
 
@@ -113,8 +127,13 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
     
     scheduleJobManually(){
+        if (!this.areFormControlsValid([this.manualUpdatePointsFromDate, this.manualUpdatePointsToDate])) {
+            this.showInvalidFieldsMessage();
+            return;
+        }
+
         const updatePointsDTO: UpdatePoints = {
-            businessSystemId: this.modelId, 
+            businessSystemId: this.businessSystemFormGroup.getRawValue().id, 
             businessSystemVersion: this.businessSystemFormGroup.getRawValue().version, 
             fromDate: this.manualUpdatePointsFromDate.getRawValue(),
             toDate: this.manualUpdatePointsToDate.getRawValue(),
@@ -129,7 +148,7 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
 
     onSyncDiscountCategories(){
-        this.apiService.syncDiscountCategories(this.modelId).subscribe(() => {
+        this.apiService.syncDiscountCategories(this.businessSystemFormGroup.getRawValue().id).subscribe(() => {
             this.messageService.successMessage(this.translocoService.translate('SuccessfulSyncToastDescription'));
         })
     }
@@ -146,3 +165,4 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
         this.savedBusinessSystemUpdatePointsScheduledTaskIsPaused = this.businessSystemFormGroup.controls.updatePointsScheduledTaskIsPaused.getRawValue();
     }
 }
+

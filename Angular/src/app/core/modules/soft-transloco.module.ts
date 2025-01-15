@@ -26,6 +26,7 @@ export class SoftTranslocoModule {
               ],
               missingHandler: {
                 useFallbackTranslation: true,
+                logMissingKey: false,
               },
               reRenderOnLangChange: true,
               prodMode: environment.production,

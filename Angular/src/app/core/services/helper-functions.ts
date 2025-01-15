@@ -191,10 +191,9 @@ export function capitalizeFirstLetter(inputString: string): string {
       if(formGroup.controlNamesFromHtml.findIndex(x => x === formControlName) === -1)
         formGroup.controlNamesFromHtml.push(formControlName);
   
-      let formControl: SoftFormControl = formGroup.controls[formControlName] as SoftFormControl;
-  
+      let formControl = formGroup.controls[formControlName];
       if (formControl == null) {
-        console.error(`The property ${formControlName} in the model ${formGroup.getRawValue().typeName} doesn't exist`);
+        console.error(`FT: The property ${formControlName} in the model ${formGroup.getRawValue().typeName} doesn't exist`);
         return null;
       }
     

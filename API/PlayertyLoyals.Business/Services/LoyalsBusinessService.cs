@@ -16,6 +16,7 @@ using Soft.Generator.Shared.Emailing;
 using Azure.Storage.Blobs;
 using PlayertyLoyals.Business.BackroundJobs;
 using Soft.Generator.Shared.Helpers;
+using PlayertyLoyals.Business.ValidationRules;
 
 namespace PlayertyLoyals.Business.Services
 {
@@ -873,21 +874,21 @@ namespace PlayertyLoyals.Business.Services
         {
             DateTimeOffset? scheduledJobResult = null;
 
+            if ((businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval == null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate != null) ||
+                (businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval != null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate == null))
+                throw new BusinessException("Ako želite da ažurirate poene na određenom intervalu, morate da popunite polje interval i polje početak ažuriranja.");
+
+            if (businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval != null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval <= 0)
+                throw new HackerException($"The negative or zero interval can't be saved (BusinessSystemId: {businessSystemUpdatePointsDataBodyDTO.BusinessSystemId}).");
+
+            DateTime now = DateTime.Now;
+
+            // FT: We redundantly check both here and inside the ScheduleJob method, in the method due to the programming principle, and here so that they do not enter the transaction and block other threads from executing
+            if (businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate != null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate.Value <= now)
+                throw new BusinessException("Vreme početka ažuriranja poena mora biti veće od sadašnjeg trenutka.");
+
             try
             {
-                if ((businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval == null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate != null) ||
-                    (businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval != null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate == null))
-                    throw new BusinessException("Ako želite da ažurirate poene na određenom intervalu, morate da popunite polje interval i polje početak ažuriranja.");
-
-                if (businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval != null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval <= 0)
-                    throw new HackerException($"The negative or zero interval can't be saved (BusinessSystemId: {businessSystemUpdatePointsDataBodyDTO.BusinessSystemId}).");
-
-                DateTime now = DateTime.Now;
-
-                // FT: We redundantly check both here and inside the ScheduleJob method, in the method due to the programming principle, and here so that they do not enter the transaction and block other threads from executing
-                if (businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate != null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate.Value <= now)
-                    throw new BusinessException("Vreme početka ažuriranja poena mora biti veće od sadašnjeg trenutka.");
-
                 return await _context.WithTransactionAsync(async () =>
                 {
                     BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(businessSystemUpdatePointsDataBodyDTO.BusinessSystemId, businessSystemUpdatePointsDataBodyDTO.BusinessSystemVersion);
@@ -993,24 +994,27 @@ namespace PlayertyLoyals.Business.Services
         /// <summary>
         /// Pass fromDate only if it is the first time
         /// </summary>
-        public async Task UpdatePointsAsync(long businessSystemId, int businessSystemVersion, DateTime manualDateFrom, DateTime manualDateTo)
+        public async Task UpdatePointsAsync(UpdatePointsDTO updatePointsDTO)
         {
+            UpdatePointsDTOValidationRules validationRules = new UpdatePointsDTOValidationRules();
+            validationRules.ValidateAndThrow(updatePointsDTO);
+
             DateTime now = DateTime.Now;
 
-            if (manualDateTo >= now)
+            if (updatePointsDTO.ToDate >= now)
                 throw new BusinessException("Datum do kog želite da ažurirate poene ne sme biti veći od sadašnjeg trenutka.");
 
-            if (manualDateTo <= manualDateFrom)
-                throw new HackerException($"BusinessSystem: {businessSystemId}. Can not pass greater {nameof(manualDateTo)} then {nameof(manualDateFrom)} in manually started points update.");
+            if (updatePointsDTO.ToDate <= updatePointsDTO.FromDate)
+                throw new HackerException($"BusinessSystem: {updatePointsDTO.BusinessSystemId}. Can not pass greater {nameof(updatePointsDTO.ToDate)} then {nameof(updatePointsDTO.FromDate)} in manually started points update.");
 
             await _context.WithTransactionAsync(async () =>
             {
-                BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(businessSystemId, businessSystemVersion);
+                BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(updatePointsDTO.BusinessSystemId.Value, updatePointsDTO.BusinessSystemVersion);
 
                 if (businessSystem.GetTransactionsEndpoint == null)
                     throw new BusinessException("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
 
-                await _updatePointsScheduler.ScheduleJobManually(businessSystemId, manualDateFrom, manualDateTo);
+                await _updatePointsScheduler.ScheduleJobManually(updatePointsDTO.BusinessSystemId.Value, updatePointsDTO.FromDate.Value, updatePointsDTO.ToDate.Value);
             });
         }
 

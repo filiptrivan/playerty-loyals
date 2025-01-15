@@ -26,7 +26,24 @@ export class ValidatorService extends ValidatorServiceGenerated {
             return arrayValid ? null : { _ : this.translocoService.translate('NotEmpty')};
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
         return validator;
+    }
+
+    notEmpty(control: SoftFormControl): void {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+    
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+    
+            const arrayValid = notEmptyRule;
+    
+            return arrayValid ? null : { _ : this.translocoService.translate('NotEmpty')};
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity();
     }
     
     isFormArrayEmpty(control: SoftFormArray): SoftValidatorFn {
@@ -40,6 +57,7 @@ export class ValidatorService extends ValidatorServiceGenerated {
             return arrayValid ? null : { _ : this.translocoService.translate('NotEmpty')};
         };
         validator.hasNotEmptyRule = true;
+        control.required = true;
         return validator;
     }
 

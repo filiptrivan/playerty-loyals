@@ -17,7 +17,7 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit {
-    segmentationFormGroup: SoftFormGroup<Segmentation>;
+    segmentationFormGroup = new SoftFormGroup<Segmentation>({});
 
     constructor(
         protected override differs: KeyValueDiffers,

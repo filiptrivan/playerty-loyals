@@ -22,7 +22,7 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class PartnerDetailsComponent extends BaseFormCopy implements OnInit {
-    partnerFormGroup: SoftFormGroup<Partner>;
+    partnerFormGroup = new SoftFormGroup<Partner>({});
 
     constructor(
         protected override differs: KeyValueDiffers,

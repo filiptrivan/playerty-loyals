@@ -113,7 +113,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public async Task UpdatePoints(UpdatePointsDTO updatePointsDTO)
         {
-            await _loyalsBusinessService.UpdatePointsAsync(updatePointsDTO.BusinessSystemId, updatePointsDTO.BusinessSystemVersion, updatePointsDTO.FromDate, updatePointsDTO.ToDate);
+            await _loyalsBusinessService.UpdatePointsAsync(updatePointsDTO);
         }
 
         //[HttpGet]

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { MenuItem } from 'primeng/api';
 import { DropdownChangeEvent } from 'primeng/dropdown';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { DiscountProductGroup, BusinessSystemTier, BusinessSystemTierDiscountProductGroup, Tier, TierSaveBody } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
@@ -147,13 +147,6 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         const businessSystemTierDiscountProductGroupTable: SoftDataTableComponent = this.findBusinessSystemTierDiscountProductGroupTable(tierIndex, businessSystemTierIndex);
 
         businessSystemTierDiscountProductGroupTable.clientLoad();
-    }
-
-    getBusinessSystemTierFormArrayControl(formControlName: keyof BusinessSystemTier & string, index: number, tierIndex: number){
-        return this.getFormArrayControlByIndex(formControlName, this.businessSystemTierFormArray, index, 
-            (formGroups: SoftFormGroup<BusinessSystemTier>[]): SoftFormGroup[] => {
-                return formGroups.filter(x => x.controls.tierClientIndex.value === tierIndex);
-            });
     }
 
     getBusinessSystemTierFormArrayGroups(tierIndex: number){
