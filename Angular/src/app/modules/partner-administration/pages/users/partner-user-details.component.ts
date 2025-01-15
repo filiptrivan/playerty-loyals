@@ -29,8 +29,8 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     selectedRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
     selectedPartnerRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
 
-    userExtendedFormGroup: SoftFormGroup<UserExtended>;
-    partnerUserFormGroup: SoftFormGroup<PartnerUser>;
+    userExtendedFormGroup = new SoftFormGroup<UserExtended>({});
+    partnerUserFormGroup = new SoftFormGroup<PartnerUser>({});
     partnerUserTier: Tier;
 
     segmentations: Segmentation[] = [];
@@ -89,7 +89,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
             });
 
             this.apiService.getPartnerUser(this.modelId).subscribe(partnerUser => {
-                this.partnerUserFormGroup = this.baseFormService.initFormGroup(this.formGroup, new PartnerUser(partnerUser), nameof<PartnerUserSaveBody>('partnerUserDTO'));
+                this.baseFormService.initFormGroup(this.partnerUserFormGroup, this.formGroup, new PartnerUser(partnerUser), nameof<PartnerUserSaveBody>('partnerUserDTO'));
                 
                 if (partnerUser?.tierId) {
                     this.apiService.getTier(partnerUser.tierId).subscribe(partnerUserTier => {
@@ -110,12 +110,13 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
                 this.getAlreadyFilledSegmentationIdsForThePartnerUser(partnerUser);     
 
                 this.apiService.getUser(partnerUser.userId).subscribe(user => {
-                    this.userExtendedFormGroup = this.baseFormService.initFormGroup(this.formGroup, new UserExtended(user), nameof<PartnerUserSaveBody>('userExtendedDTO'));
+                    this.baseFormService.initFormGroup(this.userExtendedFormGroup, this.formGroup, new UserExtended(user), nameof<PartnerUserSaveBody>('userExtendedDTO'));
 
                     this.apiService.getRoleNamebookListForUserExtended(user.id).subscribe(rolesForTheUser => {
                         this.selectedRoles.setValue(
                             rolesForTheUser.map(role => { return role.id })
                         );
+                        this.loading = false;
                     });
                 });
             })

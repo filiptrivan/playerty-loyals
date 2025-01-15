@@ -13,19 +13,20 @@ export class BaseFormService {
     private validatorService: ValidatorService
   ) {}
 
-  initFormGroup<T = any>(parentFormGroup: SoftFormGroup, modelConstructor: any, propertyNameInSaveBody: string, updateOnChangeControls?: (keyof T)[]) {
+  initFormGroup<T>(formGroup: SoftFormGroup<T>, parentFormGroup: SoftFormGroup, modelConstructor: any, propertyNameInSaveBody: string, updateOnChangeControls?: (keyof T)[]): void {
     if (modelConstructor == null)
       return null;
 
-    const formGroupToInsert: SoftFormGroup = this.createFormGroup(modelConstructor, null, updateOnChangeControls);
-    parentFormGroup.addControl(propertyNameInSaveBody, formGroupToInsert);
-    
-    return formGroupToInsert;
-    // this.modelDiffer = this.differs.find(this.model).create();
+    if (formGroup == null)
+      console.error('FT: You need to instantiate the form group.')
+
+    this.createFormGroup(formGroup, modelConstructor, null, updateOnChangeControls);
+    parentFormGroup.addControl(propertyNameInSaveBody, formGroup);
   }
 
-  createFormGroup(modelConstructor: any, disableLambda?: (formControlName: string, model: any) => boolean, updateOnChangeControls?: (keyof any)[]): SoftFormGroup {
-    let formGroup: SoftFormGroup<any> = new SoftFormGroup({});
+  createFormGroup<T>(formGroup: SoftFormGroup<T>, modelConstructor: any, disableLambda?: (formControlName: string, model: any) => boolean, updateOnChangeControls?: (keyof any)[]): void {
+    if (formGroup == null)
+      console.error('FT: You need to instantiate the form group.')
 
     Object.keys(modelConstructor).forEach((formControlName) => {
       let formControl: SoftFormControl;
@@ -51,15 +52,7 @@ export class BaseFormService {
       if(disableLambda && disableLambda(formControlName, modelConstructor)){
         formControl.disable();
       }
-      
-      // formGroup.controls[formControlName].valueChanges.subscribe(value => {
-      //   modelConstructor[formControlName] = value;
-      // })
     });
-    
-    // this.onAfterArrayControlInitialization(formControlName);
-
-    return formGroup;
   }
 
   setValidator(formControl: SoftFormControl, modelConstructor: any) {

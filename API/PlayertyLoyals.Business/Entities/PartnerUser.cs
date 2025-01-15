@@ -2,6 +2,7 @@
 using Soft.Generator.Shared.Attributes.EF;
 using Soft.Generator.Shared.Attributes.EF.UI;
 using Soft.Generator.Shared.BaseEntities;
+using Soft.Generator.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -29,6 +30,7 @@ namespace PlayertyLoyals.Business.Entities
         /// <summary>
         /// [SET NULL] https://www.learnentityframeworkcore.com/conventions/one-to-many-relationship
         /// </summary>
+        [UIControlType(nameof(UIControlTypeCodes.Dropdown))]
         [SetNull]
         [WithMany(nameof(Tier.PartnerUsers))]
         public virtual Tier Tier { get; set; } // FT: It's not required because when the user just made the account and the administrator didn't make any tiers, he can't be any

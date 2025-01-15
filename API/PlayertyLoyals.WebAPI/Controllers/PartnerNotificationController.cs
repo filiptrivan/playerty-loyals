@@ -11,18 +11,20 @@ using Soft.Generator.Shared.Helpers;
 using Soft.Generator.Shared.Interfaces;
 using Soft.Generator.Shared.Emailing;
 using PlayertyLoyals.Shared.Terms;
+using Azure.Storage.Blobs;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
-    public class PartnerNotificationController : SoftBaseController
+    public class PartnerNotificationController : PartnerNotificationBaseController
     {
         private readonly IApplicationDbContext _context;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
         private readonly LoyalsBusinessService _loyalsBusinessService;
 
-        public PartnerNotificationController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService)
+        public PartnerNotificationController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, BlobContainerClient blobContainerClient, PartnerUserAuthenticationService partnerUserAuthenticationService)
+            : base (context, loyalsBusinessService, blobContainerClient)
         {
             _context = context;
             _loyalsBusinessService = loyalsBusinessService;
@@ -31,31 +33,32 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<PartnerNotificationDTO>> GetPartnerNotificationTableData(TableFilterDTO tableFilterDTO)
+        public override async Task<TableResponseDTO<PartnerNotificationDTO>> GetPartnerNotificationTableData(TableFilterDTO tableFilterDTO)
         {
             return await _loyalsBusinessService.GetPartnerNotificationTableData(tableFilterDTO, _context.DbSet<PartnerNotification>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task<IActionResult> ExportPartnerNotificationTableDataToExcel(TableFilterDTO tableFilterDTO)
+        public override async Task<IActionResult> ExportPartnerNotificationTableDataToExcel(TableFilterDTO tableFilterDTO)
         {
             byte[] fileContent = await _loyalsBusinessService.ExportPartnerNotificationTableDataToExcel(tableFilterDTO, _context.DbSet<PartnerNotification>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Notifikacije.xlsx"));
         }
 
-        [HttpDelete]
+        [HttpPost]
         [AuthGuard]
-        public async Task DeletePartnerNotification(long id)
+        public override async Task<TableResponseDTO<PartnerUserDTO>> GetPartnerUsersTableDataForPartnerNotification(TableFilterDTO tableFilterDTO)
         {
-            await _loyalsBusinessService.DeletePartnerNotificationAsync(id, false);
+            return await _loyalsBusinessService.GetPartnerUserTableData(tableFilterDTO, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.Id), false);
         }
 
-        [HttpGet]
+        [HttpPost]
         [AuthGuard]
-        public async Task<PartnerNotificationDTO> GetPartnerNotification(long id)
+        public override async Task<IActionResult> ExportPartnerUsersTableDataToExcelForPartnerNotification(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.GetPartnerNotificationDTOAsync(id, false);
+            byte[] fileContent = await _loyalsBusinessService.ExportPartnerUserTableDataToExcel(tableFilterDTO, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Korisnici.xlsx"));
         }
 
         [HttpGet]
@@ -72,13 +75,6 @@ namespace PlayertyLoyals.WebAPI.Controllers
             return await _loyalsBusinessService.LazyLoadSelectedPartnerUsersIdsForPartnerNotification(tableFilterDTO, _context.DbSet<PartnerUser>()
                 .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
                 .OrderBy(x => x.Id));
-        }
-
-        [HttpPut]
-        [AuthGuard]
-        public async Task<PartnerNotificationDTO> SavePartnerNotification(PartnerNotificationSaveBodyDTO partnerNotificationSaveBodyDTO)
-        {
-            return await _loyalsBusinessService.SavePartnerNotificationAndReturnSaveBodyDTOAsync(partnerNotificationSaveBodyDTO);
         }
 
         [HttpGet]

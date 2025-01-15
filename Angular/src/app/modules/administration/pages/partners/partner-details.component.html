@@ -4,7 +4,7 @@
             <partner-base-details 
             [formGroup]="formGroup" 
             [partnerFormGroup]="partnerFormGroup" 
-            [onSave]="onSave" 
+            (onSave)="onSave()" 
             [getCrudMenuForOrderedData]="getCrudMenuForOrderedData"
             ></partner-base-details>
 

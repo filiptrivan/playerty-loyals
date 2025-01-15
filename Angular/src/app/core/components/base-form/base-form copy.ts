@@ -34,6 +34,7 @@ export class BaseFormCopy implements OnInit {
   saveBody: any;
   modelId: number;
   invalidForm: boolean = false; // FT: We are using this only if we manualy add some form field on the UI, like multiautocomplete, autocomplete etc...
+  loading: boolean = true;
   // saveObservableMethod: (saveBody: any) => Observable<any>;
 
   private modelDiffer: KeyValueDiffer<string, any>;
@@ -84,7 +85,6 @@ export class BaseFormCopy implements OnInit {
     let isFormArrayValid: boolean = this.areFormArraysValid();
 
     if(isValid && isFormArrayValid){
-      console.log(this.saveBody)
       this.formGroup.saveObservableMethod(this.saveBody).subscribe(res => {
         this.messageService.successMessage(this.translocoService.translate('SuccessfulSaveToastDescription'));
 
@@ -105,7 +105,9 @@ export class BaseFormCopy implements OnInit {
               res[key].forEach((model: any) => {
                 if (typeof model === 'object' && model !== null) {
                   Object.assign(formArray.modelConstructor, model);
-                  formArray.push(this.baseFormService.createFormGroup(formArray.modelConstructor));
+                  let helperFormGroup: SoftFormGroup = new SoftFormGroup({});
+                  this.baseFormService.createFormGroup(helperFormGroup, formArray.modelConstructor)
+                  formArray.push(helperFormGroup);
                 } else {
                   console.error('Can not add primitive form control inside form array.');
                 }

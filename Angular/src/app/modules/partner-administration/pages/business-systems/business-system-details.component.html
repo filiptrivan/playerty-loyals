@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">
-    @defer (when businessSystemFormGroup != null) {
+    @defer (when loading === false) {
         <soft-card [title]="t('BusinessSystem')" icon="pi pi-hashtag">
             <soft-panel [isFirstMultiplePanel]="this.modelId > 0">
                 <panel-header></panel-header>
@@ -54,27 +54,6 @@
                 </panel-footer>
 
             </soft-panel>
-
-            <!-- <soft-panel *ngIf="this.modelId > 0" [isMiddleMultiplePanel]="true">
-                <panel-header [title]="t('BusinessSystemUpdatePointsData')" icon="pi pi-calendar-clock" [tabs]="tabs"></panel-header>
-    
-                <panel-body *ngIf="selectedTab(tabs) === 1">
-                    HELLO 1
-                </panel-body>
-
-                <panel-footer *ngIf="selectedTab(tabs) === 1">
-                    FOOTER 1
-                </panel-footer>
-
-                <panel-body *ngIf="selectedTab(tabs) === 2">
-                    HELLO 2
-                </panel-body>
-
-                <panel-footer *ngIf="selectedTab(tabs) === 2">
-                    FOOTER 2
-                </panel-footer>
-
-            </soft-panel> -->
 
             <soft-panel *ngIf="this.modelId > 0" [isLastMultiplePanel]="true">
                 <panel-header [title]="t('SuccessfullyDoneBusinessSystemUpdatePointsScheduledTaskList')" icon="pi pi-clock"></panel-header>

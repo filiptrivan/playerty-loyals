@@ -8,13 +8,8 @@ using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.DTO
 {
-    public partial class PartnerNotificationSaveBodyDTO : ILazyTableSelectionDTO<long>
+    public partial class PartnerNotificationSaveBodyDTO
     {
         public bool IsMarkedAsRead { get; set; }
-
-        public TableFilterDTO TableFilter { get; set; }
-        public List<long> SelectedIds { get; set; }
-        public List<long> UnselectedIds { get; set; }
-        public bool? IsAllSelected { get; set; }
     }
 }

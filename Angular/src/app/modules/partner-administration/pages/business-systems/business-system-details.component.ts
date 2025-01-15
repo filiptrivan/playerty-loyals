@@ -22,7 +22,7 @@ import { BaseFormService } from 'src/app/core/services/base-form.service';
     styles: [],
 })
 export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnInit {
-    businessSystemFormGroup: SoftFormGroup<BusinessSystem>;
+    businessSystemFormGroup = new SoftFormGroup<BusinessSystem>({});
     businessSystemSaveBodyName: string = nameof<BusinessSystemSaveBody>('businessSystemDTO');
     
     businessSystemUpdatePointsScheduledTaskTableCols: Column[];
@@ -94,11 +94,12 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
 
     initBusinessSystemFormGroup(businessSystem: BusinessSystem){
-        this.businessSystemFormGroup = this.baseFormService.initFormGroup(this.formGroup, businessSystem, this.businessSystemSaveBodyName);
+        this.baseFormService.initFormGroup(this.businessSystemFormGroup, this.formGroup, businessSystem, this.businessSystemSaveBodyName);
+        this.loading = false;
     }
 
     initBusinessSystemUpdatePointsDataFormGroup(businessSystem: BusinessSystem){
-        this.businessSystemUpdatePointsDataFormGroup = this.baseFormService.createFormGroup(new BusinessSystemUpdatePointsDataBody({businessSystemId: this.modelId, updatePointsStartDate: businessSystem.updatePointsStartDate, updatePointsInterval: businessSystem.updatePointsInterval}))
+        this.baseFormService.createFormGroup(this.businessSystemUpdatePointsDataFormGroup, new BusinessSystemUpdatePointsDataBody({businessSystemId: this.modelId, updatePointsStartDate: businessSystem.updatePointsStartDate, updatePointsInterval: businessSystem.updatePointsInterval}))
     }
     
     onSaveBusinessSystemUpdatePointsData(){

@@ -8,7 +8,6 @@ import { HashMap, TranslocoMissingHandler, TranslocoMissingHandlerData } from "@
 })
 export class SoftTranslocoFallbackStrategy implements TranslocoFallbackStrategy {
   getNextLangs(failedLang: string): string[] {
-    console.log(failedLang)
     return ['sr-Latn-RS.generated'];
   }
 

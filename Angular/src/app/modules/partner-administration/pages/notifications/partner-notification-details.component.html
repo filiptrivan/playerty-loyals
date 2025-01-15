@@ -1,57 +1,22 @@
 <ng-container *transloco="let t">
-    @defer (when partnerNotificationFormGroup != null) {
-        <soft-card [title]="t('PartnerNotification')" icon="pi pi-bell">
-            <soft-panel [isFirstMultiplePanel]="true" [showPanelHeader]="false">
-                <panel-body>
-                    <div class="grid">
-                        <div class="col-12">
-                            <soft-checkbox [control]="isMarkedAsRead" [label]="t('NotifyUsers')" [initializeToFalse]="false" [fakeLabel]="false"></soft-checkbox>
-                        </div>
+    <soft-card [title]="t('PartnerNotification')" icon="pi pi-bell">
+        <soft-panel [isFirstMultiplePanel]="true" [showPanelHeader]="false">
+            <panel-body>
+                <div class="grid">
+                    <div class="col-12">
+                        <soft-checkbox [control]="isMarkedAsRead" [label]="t('NotifyUsers')" [initializeToFalse]="false" [fakeLabel]="false"></soft-checkbox>
                     </div>
-                </panel-body>
-            </soft-panel>
-            <soft-panel [isLastMultiplePanel]="true">
-                <panel-header></panel-header>
+                </div>
+            </panel-body>
+        </soft-panel>
         
-                <panel-body>
-                    <form [formGroup]="formGroup" class="grid">
-                        <div class="col-12">
-                            <soft-textbox [control]="control('title', partnerNotificationFormGroup)"></soft-textbox>
-                        </div>
-                        <div class="col-12">
-                            <soft-textarea [control]="control('description', partnerNotificationFormGroup)"></soft-textarea>
-                        </div>
-                        <div class="col-12">
-                            <soft-data-table [tableTitle]="t('Recipients')" 
-                            [cols]="partnerUserTableCols" 
-                            [getTableDataObservableMethod]="getPartnerUserTableDataObservableMethod" 
-                            [exportTableDataToExcelObservableMethod]="exportPartnerUserTableDataToExcelObservableMethod"
-                            [deleteItemFromTableObservableMethod]="deletePartnerUserObservableMethod"
-                            [showAddButton]="false" 
-                            selectionMode="multiple"
-                            [newlySelectedItems]="newlySelectedPartnerUserList" 
-                            [unselectedItems]="unselectedPartnerUserList" 
-                            [rows]="5" 
-                            (onLazyLoad)="onLazyLoad($event)"
-                            [selectedLazyLoadObservableMethod]="selectedPartnerUserLazyLoad" 
-                            (onIsAllSelectedChange)="isAllSelectedChange($event)"
-                            ></soft-data-table>
-                        </div>
-                        <div class="col-12">
-                            <soft-editor [control]="control('emailBody', partnerNotificationFormGroup)"></soft-editor>
-                        </div>
-                    </form>
-                </panel-body>
-        
-               <panel-footer>
-                    <p-button (onClick)="onSave()" [label]="t('Save')" icon="pi pi-save"></p-button>
-                    <p-button (onClick)="sendEmailNotification()" [label]="t('SendEmailNotification')" icon="pi pi-send"></p-button>
-                    <soft-return-button></soft-return-button>
-               </panel-footer>
-        
-            </soft-panel>
-        </soft-card>
-    } @placeholder {
-        <card-skeleton [height]="502"></card-skeleton>
-    }
+        <partner-notification-base-details
+        [formGroup]="formGroup" 
+        [partnerNotificationFormGroup]="partnerNotificationFormGroup" 
+        (onSave)="onSave()"
+        [isLastMultiplePanel]="true"
+        [additionalButtons]="additionalButtons"
+        />
+
+    </soft-card>
 </ng-container>

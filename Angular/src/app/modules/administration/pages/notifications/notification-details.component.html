@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">
-    @defer (when notificationFormGroup != null) {
+    @defer (when loading === false) {
         <soft-card [title]="t('Notification')" icon="pi pi-bell">
     
             <soft-panel>

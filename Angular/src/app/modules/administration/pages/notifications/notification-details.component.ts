@@ -22,7 +22,7 @@ import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selec
     styles: [],
 })
 export class NotificationDetailsComponent extends BaseFormCopy implements OnInit {
-    notificationFormGroup: SoftFormGroup<Notification>;
+    notificationFormGroup = new SoftFormGroup<Notification>({});
 
     isMarkedAsRead = new SoftFormControl<boolean>(true, {updateOn: 'change'})
 
@@ -75,7 +75,8 @@ export class NotificationDetailsComponent extends BaseFormCopy implements OnInit
     }
 
     initNotificationFormGroup(notification: Notification){
-        this.notificationFormGroup = this.baseFormService.initFormGroup(this.formGroup, notification, nameof<NotificationSaveBody>('notificationDTO'));
+        this.baseFormService.initFormGroup(this.notificationFormGroup, this.formGroup, notification, nameof<NotificationSaveBody>('notificationDTO'));
+        this.loading = false;
     }
 
     sendEmailNotification(){

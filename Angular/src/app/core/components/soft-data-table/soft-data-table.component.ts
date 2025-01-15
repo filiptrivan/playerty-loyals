@@ -354,6 +354,17 @@ export class SoftDataTableComponent implements OnInit {
     return `${index}${item.field}`
   }
 
+  exportListToExcel() {
+    let tableFilter: TableFilter = this.lastLazyLoadEvent as unknown as TableFilter;
+    tableFilter.additionalFilterIdLong = this.additionalFilterIdLong;
+
+    this.apiService.exportListToExcel(this.exportTableDataToExcelObservableMethod, tableFilter);
+  }
+
+  clear(table: Table) {
+    table.clear();
+  }
+
   //#region Selection
 
   setFakeIsAllSelected(){
@@ -451,17 +462,6 @@ export class SoftDataTableComponent implements OnInit {
   }
   //#endregion
 
-  exportListToExcel() {
-    let tableFilter: TableFilter = event as unknown as TableFilter;
-    tableFilter.additionalFilterIdLong = this.additionalFilterIdLong;
-
-    this.apiService.exportListToExcel(this.exportTableDataToExcelObservableMethod, tableFilter);
-  }
-
-  clear(table: Table) {
-    table.clear();
-  }
-
   //#region Client side table
 
   // FT: Can do it with Id also, because we are never adding the new record in the table at the same page.
@@ -506,8 +506,8 @@ export class Action {
 export class Column<T = any> {
   name: string;
   field?: string & keyof T;
-  filterField?: string; // FT: Made specificaly for multiautocomplete, maybe for something more in the future
-  filterType?: 'text' | 'date' | 'multiselect' | 'boolean' | 'numeric' | 'dropdown';
+  filterField?: string & keyof T; // FT: Made specificaly for multiautocomplete, maybe for something more in the future
+  filterType?: 'text' | 'date' | 'multiselect' | 'boolean' | 'numeric';
   filterPlaceholder?: string;
   showMatchModes?: boolean;
   showAddButton?: boolean;
@@ -515,6 +515,46 @@ export class Column<T = any> {
   actions?: Action[];
   editable?: boolean;
   showTime?: boolean;
+
+  constructor(
+    {
+      name,
+      field,
+      filterField,
+      filterType,
+      filterPlaceholder,
+      showMatchModes,
+      showAddButton,
+      dropdownOrMultiselectValues,
+      actions,
+      editable,
+      showTime,
+    }:{
+      name?: string;
+      field?: string & keyof T;
+      filterField?: string & keyof T; // FT: Made specificaly for multiautocomplete, maybe for something more in the future;
+      filterType?: 'text' | 'date' | 'multiselect' | 'boolean' | 'numeric';
+      filterPlaceholder?: string;
+      showMatchModes?: boolean;
+      showAddButton?: boolean;
+      dropdownOrMultiselectValues?: PrimengOption[];
+      actions?: Action[];
+      editable?: boolean;
+      showTime?: boolean;
+    } = {}
+    ) {
+      this.name = name;
+      this.field = field;
+      this.filterField = filterField;
+      this.filterType = filterType;
+      this.filterPlaceholder = filterPlaceholder;
+      this.showMatchModes = showMatchModes;
+      this.showAddButton = showAddButton;
+      this.dropdownOrMultiselectValues = dropdownOrMultiselectValues;
+      this.actions = actions;
+      this.editable = editable;
+      this.showTime = showTime;
+  }
 }
 
 export class RowClickEvent {

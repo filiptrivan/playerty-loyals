@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">    
-    @defer (when userExtendedFormGroup != null && partnerUserFormGroup != null && segmentationItemsFormArray != null) {
+    @defer (when loading === false) {
             <soft-panel>
                 <panel-header [title]="userExtendedFormGroup.get('email').getRawValue()" icon="pi pi-user"></panel-header>
         

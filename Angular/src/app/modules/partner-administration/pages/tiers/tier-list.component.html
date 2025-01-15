@@ -29,16 +29,23 @@
                                                 <soft-dropdown [control]="getBusinessSystemTierFormArrayControl('businessSystemId', businessSystemTierIndex, tierIndex)" (onChange)="businessSystemChange($event, tierIndex, businessSystemTierIndex)" [options]="businessSystemOptions"></soft-dropdown>
                                             </div>
                                             <div class="col-12">
-                                                <soft-data-table #businessSystemTierDiscountProductGroupTable
+                                                <soft-data-table 
+                                                [tableTitle]="t('DiscountProductGroupList')" 
+                                                #businessSystemTierDiscountProductGroupTable
+                                                (onIsAllSelectedChange)="allSelected($event)"
+                                                (onRowSelect)="rowSelect($event)" 
+                                                (onRowUnselect)="rowUnselect($event)" 
+                                                selectionMode="multiple" 
+                                                [showAddButton]="false" 
+                                                [hasLazyLoad]="false" 
+                                                [showPaginator]="false"
+                                                [showExportToExcelButton]="false" 
+                                                [formArrayControlNamesFromHtml]="formArrayControlNamesFromHtml" 
+                                                [cols]="businessSystemTierDiscountProductGroupCols" 
                                                 [getFormArrayItems]="getDiscountProductGroupFormArrayItems" 
                                                 [getSoftFormControl]="getDiscountProductGroupFormArrayControl" 
                                                 [getAlreadySelectedItemIds]="getAlreadySelectedBusinessSystemTierDiscountProductGroupIdsForBusinessSystem" 
                                                 [getAlreadySelectedItems]="getAlreadySelectedDiscountProductGroupListForBusinessSystem"
-                                                (onIsAllSelectedChange)="allSelected($event)"
-                                                (onRowSelect)="rowSelect($event)" (onRowUnselect)="rowUnselect($event)" 
-                                                selectionMode="multiple" [showAddButton]="false" [tableTitle]="t('DiscountProductGroupList')" [cols]="businessSystemTierDiscountProductGroupCols" 
-                                                [hasLazyLoad]="false" [showPaginator]="false"
-                                                [showExportToExcelButton]="false" [formArrayControlNamesFromHtml]="formArrayControlNamesFromHtml" 
                                                 [additionalIndexes]="getBusinessSystemTierDiscountProductGroupAdditionalIndexes(tierIndex, businessSystemTierIndex)"
                                                 ></soft-data-table>
                                             </div>

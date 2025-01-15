@@ -685,23 +685,20 @@ namespace PlayertyLoyals.Business.Services
 
         #region PartnerNotification
 
-        public async Task<PartnerNotificationDTO> SavePartnerNotificationAndReturnSaveBodyDTOAsync(PartnerNotificationSaveBodyDTO partnerNotificationSaveBodyDTO)
+        protected override async Task OnBeforeSavePartnerNotificationAndReturnSaveBodyDTO(PartnerNotificationSaveBodyDTO partnerNotificationSaveBodyDTO)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                partnerNotificationSaveBodyDTO.PartnerNotificationDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
+            });
+        }
+
+        protected override async Task<IQueryable<PartnerUser>> GetAllPartnerUsersQueryForPartnerNotification(IQueryable<PartnerUser> query)
         {
             return await _context.WithTransactionAsync(async () =>
             {
                 int currentPartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
-                partnerNotificationSaveBodyDTO.PartnerNotificationDTO.PartnerId = currentPartnerId;
-
-                PartnerNotificationDTO savedPartnerNotificationDTO = await SavePartnerNotificationAndReturnDTOAsync(partnerNotificationSaveBodyDTO.PartnerNotificationDTO, false, false);
-
-                IQueryable<PartnerUser> allPartnerUsersQuery = _context.DbSet<PartnerUser>()
-                    .Where(x => x.Partner.Id == currentPartnerId);
-
-                PaginationResult<PartnerUser> paginationResult = await GetPartnerUserListForPagination(partnerNotificationSaveBodyDTO.TableFilter, allPartnerUsersQuery);
-
-                await UpdatePartnerUsersForPartnerNotificationWithLazyTableSelection(paginationResult.Query, savedPartnerNotificationDTO.Id, partnerNotificationSaveBodyDTO);
-
-                return savedPartnerNotificationDTO;
+                return query.Where(x => x.Partner.Id == currentPartnerId);
             });
         }
 
