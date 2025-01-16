@@ -39,18 +39,18 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('CreatedAt');
             case 'modifiedAt':
                 return this.translocoService.translate('ModifiedAt');
-            case 'updatePointsInterval':
-                return this.translocoService.translate('UpdatePointsInterval');
-            case 'updatePointsStartDate':
-                return this.translocoService.translate('UpdatePointsStartDate');
             case 'getTransactionsEndpoint':
                 return this.translocoService.translate('GetTransactionsEndpoint');
-            case 'getDiscountCategoriesEndpoint':
-                return this.translocoService.translate('GetDiscountCategoriesEndpoint');
+            case 'getDiscountProductGroupsEndpoint':
+                return this.translocoService.translate('GetDiscountProductGroupsEndpoint');
             case 'createUserEndpoint':
                 return this.translocoService.translate('CreateUserEndpoint');
             case 'updateUserGroupEndpoint':
                 return this.translocoService.translate('UpdateUserGroupEndpoint');
+            case 'updatePointsInterval':
+                return this.translocoService.translate('UpdatePointsInterval');
+            case 'updatePointsStartDate':
+                return this.translocoService.translate('UpdatePointsStartDate');
             case 'updatePointsScheduledTaskIsPaused':
                 return this.translocoService.translate('UpdatePointsScheduledTaskIsPaused');
             case 'partner':

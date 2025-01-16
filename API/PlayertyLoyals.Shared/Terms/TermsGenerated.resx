@@ -70,22 +70,22 @@
   <data name="Name" xml:space="preserve">
     <value />
   </data>
-  <data name="UpdatePointsInterval" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UpdatePointsStartDate" xml:space="preserve">
-    <value />
-  </data>
   <data name="GetTransactionsEndpoint" xml:space="preserve">
     <value />
   </data>
-  <data name="GetDiscountCategoriesEndpoint" xml:space="preserve">
+  <data name="GetDiscountProductGroupsEndpoint" xml:space="preserve">
     <value />
   </data>
   <data name="CreateUserEndpoint" xml:space="preserve">
     <value />
   </data>
   <data name="UpdateUserGroupEndpoint" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UpdatePointsInterval" xml:space="preserve">
+    <value />
+  </data>
+  <data name="UpdatePointsStartDate" xml:space="preserve">
     <value />
   </data>
   <data name="UpdatePointsScheduledTaskIsPaused" xml:space="preserve">

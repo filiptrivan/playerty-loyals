@@ -2,17 +2,16 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { forkJoin } from 'rxjs';
-import { BusinessSystem, BusinessSystemSaveBody, BusinessSystemUpdatePointsDataBody, UpdatePoints } from 'src/app/business/entities/business-entities.generated';
+import { BusinessSystem, BusinessSystemUpdatePointsDataBody, UpdatePoints } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { nameof } from 'src/app/core/services/helper-functions';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
-import { SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { BaseFormService } from 'src/app/core/services/base-form.service';
+import { SoftButton } from 'src/app/core/entities/soft-button';
 
 @Component({
     selector: 'business-system-details',
@@ -21,26 +20,22 @@ import { BaseFormService } from 'src/app/core/services/base-form.service';
 })
 export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnInit {
     businessSystemFormGroup = new SoftFormGroup<BusinessSystem>({});
-    businessSystemSaveBodyName: string = nameof<BusinessSystemSaveBody>('businessSystemDTO');
     
+    additionalButtons: SoftButton[] = [
+        {label: this.translocoService.translate('SyncDiscountCategories'), onClick: this.onSyncDiscountCategories, icon: 'pi pi-sync'}
+    ]
+
     businessSystemUpdatePointsScheduledTaskTableCols: Column[];
-    businessSystemUpdatePointsScheduledTaskTableObjectNameForTheRequest: string = 'BusinessSystemUpdatePointsScheduledTask';
     getBusinessSystemUpdatePointsScheduledTaskTableDataObservableMethod = this.apiService.getBusinessSystemUpdatePointsScheduledTaskTableData;
     exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelObservableMethod = this.apiService.exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcel;
     businessSystemUpdatePointsScheduledTaskTableTotalRecords: number;
     
-    manualUpdatePointsFromDate = new SoftFormControl<Date>(null, {updateOn: 'change'});
-    manualUpdatePointsToDate = new SoftFormControl<Date>(null, {updateOn: 'change'});
-
+    
     businessSystemUpdatePointsDataFormGroup = new SoftFormGroup<BusinessSystemUpdatePointsDataBody>({});
-
+    
     savedBusinessSystemUpdatePointsScheduledTaskIsPaused: boolean = null;
 
-    // FT: Tab example
-    // tabs: SoftTab[] = [
-    //     {label: 'Hello', icon: PrimeIcons.ANDROID, value: 1, isSelected: true},
-    //     {label: 'World is better place now', icon: PrimeIcons.AMAZON, value: 2}
-    // ];
+    manualUpdatePointsFormGroup = new SoftFormGroup<UpdatePoints>({});
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -59,33 +54,21 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
          
     override ngOnInit() {
-        this.validatorService.notEmpty(this.manualUpdatePointsFromDate);
-        this.validatorService.notEmpty(this.manualUpdatePointsToDate);
-
-        this.initializeBusinessSystemUpdatePointsScheduledTaskTableCols();
-
-        this.formGroup.saveObservableMethod = this.apiService.saveBusinessSystem;
-
-        this.route.params.subscribe((params) => {
-            this.modelId = +params['id'];
-
-            if (this.modelId > 0) {
-                forkJoin({
-                    businessSystem: this.apiService.getBusinessSystem(this.modelId),
-                })
-                .subscribe(({ businessSystem }) => {
-                    this.savedBusinessSystemUpdatePointsScheduledTaskIsPaused = businessSystem.updatePointsScheduledTaskIsPaused;
-                    this.initBusinessSystemFormGroup(new BusinessSystem(businessSystem));
-
-                    this.initBusinessSystemUpdatePointsDataFormGroup(businessSystem);
-                });
-            }else{
-                this.initBusinessSystemFormGroup(new BusinessSystem({id: 0}));
-            }
-        });
+        this.initBusinessSystemUpdatePointsScheduledTaskTableCols();
     }
     
-    initializeBusinessSystemUpdatePointsScheduledTaskTableCols(){
+    businessSystemFormGroupInitFinish(){
+        this.initBusinessSystemUpdatePointsDataFormGroup();
+        this.initManualUpdatePointsFormGroup();
+    }
+
+    onSyncDiscountCategories(){
+        this.apiService.syncDiscountCategories(this.businessSystemFormGroup.getRawValue().id).subscribe(() => {
+            this.messageService.successMessage(this.translocoService.translate('SuccessfulSyncToastDescription'));
+        })
+    }
+
+    initBusinessSystemUpdatePointsScheduledTaskTableCols(){
         this.businessSystemUpdatePointsScheduledTaskTableCols = [
             {name: this.translocoService.translate('TransactionsFrom'), filterType: 'date', field: 'transactionsFrom', showMatchModes: true, showTime: true},
             {name: this.translocoService.translate('TransactionsTo'), filterType: 'date', field: 'transactionsTo', showMatchModes: true, showTime: true},
@@ -94,21 +77,16 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
         ]
     }
 
-    initBusinessSystemFormGroup(businessSystem: BusinessSystem){
-        this.baseFormService.initFormGroup(this.businessSystemFormGroup, this.formGroup, businessSystem, this.businessSystemSaveBodyName);
-        this.loading = false;
-    }
-
-    initBusinessSystemUpdatePointsDataFormGroup(businessSystem: BusinessSystem){
+    initBusinessSystemUpdatePointsDataFormGroup = () => {
         this.baseFormService.createFormGroup(
             this.businessSystemUpdatePointsDataFormGroup, 
             new BusinessSystemUpdatePointsDataBody({
                 businessSystemId: this.businessSystemFormGroup.controls.id.getRawValue(), 
                 businessSystemVersion: this.businessSystemFormGroup.controls.version.getRawValue(), 
-                updatePointsStartDate: businessSystem.updatePointsStartDate, 
-                updatePointsInterval: businessSystem.updatePointsInterval
+                updatePointsStartDate: this.businessSystemFormGroup.controls.updatePointsStartDate.getRawValue(), 
+                updatePointsInterval: this.businessSystemFormGroup.controls.updatePointsInterval.getRawValue(),
             })
-        )
+        );
     }
     
     onSaveBusinessSystemUpdatePointsData(){
@@ -126,39 +104,32 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
         });
     }
     
+    initManualUpdatePointsFormGroup = () => {
+        this.baseFormService.createFormGroup(
+            this.manualUpdatePointsFormGroup, 
+            new UpdatePoints({
+                businessSystemId: this.businessSystemFormGroup.controls.id.getRawValue(), 
+                businessSystemVersion: this.businessSystemFormGroup.controls.version.getRawValue(), 
+            })
+        );
+    }
+
     scheduleJobManually(){
-        if (!this.areFormControlsValid([this.manualUpdatePointsFromDate, this.manualUpdatePointsToDate])) {
+        if (!this.areFormControlsValid([this.manualUpdatePointsFormGroup.controls.fromDate, this.manualUpdatePointsFormGroup.controls.toDate])) {
             this.showInvalidFieldsMessage();
             return;
         }
-
-        const updatePointsDTO: UpdatePoints = {
-            businessSystemId: this.businessSystemFormGroup.getRawValue().id, 
-            businessSystemVersion: this.businessSystemFormGroup.getRawValue().version, 
-            fromDate: this.manualUpdatePointsFromDate.getRawValue(),
-            toDate: this.manualUpdatePointsToDate.getRawValue(),
-        }
         
-        this.apiService.updatePoints(updatePointsDTO).subscribe(() => {
+        this.apiService.updatePoints(this.manualUpdatePointsFormGroup.getRawValue()).subscribe(() => {
             this.messageService.successMessage(this.translocoService.translate('SuccessfulAttempt'));
 
-            this.manualUpdatePointsFromDate.setValue(null);
-            this.manualUpdatePointsToDate.setValue(null);
+            this.manualUpdatePointsFormGroup.controls.fromDate.setValue(null);
+            this.manualUpdatePointsFormGroup.controls.toDate.setValue(null);
         });
-    }
-
-    onSyncDiscountCategories(){
-        this.apiService.syncDiscountCategories(this.businessSystemFormGroup.getRawValue().id).subscribe(() => {
-            this.messageService.successMessage(this.translocoService.translate('SuccessfulSyncToastDescription'));
-        })
     }
     
     override onBeforeSave = (): void => {
-        let saveBody: BusinessSystemSaveBody = new BusinessSystemSaveBody();
         
-        saveBody.businessSystemDTO = this.businessSystemFormGroup.getRawValue();
-        
-        this.saveBody = saveBody;
     }
 
     override onAfterSave = (): void => {

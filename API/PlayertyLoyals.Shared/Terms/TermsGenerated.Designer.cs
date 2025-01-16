@@ -396,9 +396,9 @@ namespace PlayertyLoyals.Shared.Terms {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
-        public static string GetDiscountCategoriesEndpoint {
+        public static string GetDiscountProductGroupsEndpoint {
             get {
-                return ResourceManager.GetString("GetDiscountCategoriesEndpoint", resourceCulture);
+                return ResourceManager.GetString("GetDiscountProductGroupsEndpoint", resourceCulture);
             }
         }
         

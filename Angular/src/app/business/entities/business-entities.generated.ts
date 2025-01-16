@@ -39,12 +39,12 @@ export class Brand extends BaseEntity
 export class BusinessSystem extends BaseEntity
 {
     name?: string;
-	updatePointsInterval?: number;
-	updatePointsStartDate?: Date;
 	getTransactionsEndpoint?: string;
-	getDiscountCategoriesEndpoint?: string;
+	getDiscountProductGroupsEndpoint?: string;
 	createUserEndpoint?: string;
 	updateUserGroupEndpoint?: string;
+	updatePointsInterval?: number;
+	updatePointsStartDate?: Date;
 	updatePointsScheduledTaskIsPaused?: boolean;
 	partnerDisplayName?: string;
 	partnerId?: number;
@@ -56,12 +56,12 @@ export class BusinessSystem extends BaseEntity
     constructor(
     {
         name,
-		updatePointsInterval,
-		updatePointsStartDate,
 		getTransactionsEndpoint,
-		getDiscountCategoriesEndpoint,
+		getDiscountProductGroupsEndpoint,
 		createUserEndpoint,
 		updateUserGroupEndpoint,
+		updatePointsInterval,
+		updatePointsStartDate,
 		updatePointsScheduledTaskIsPaused,
 		partnerDisplayName,
 		partnerId,
@@ -71,12 +71,12 @@ export class BusinessSystem extends BaseEntity
 		modifiedAt
     }:{
         name?: string;
-		updatePointsInterval?: number;
-		updatePointsStartDate?: Date;
 		getTransactionsEndpoint?: string;
-		getDiscountCategoriesEndpoint?: string;
+		getDiscountProductGroupsEndpoint?: string;
 		createUserEndpoint?: string;
 		updateUserGroupEndpoint?: string;
+		updatePointsInterval?: number;
+		updatePointsStartDate?: Date;
 		updatePointsScheduledTaskIsPaused?: boolean;
 		partnerDisplayName?: string;
 		partnerId?: number;
@@ -89,12 +89,12 @@ export class BusinessSystem extends BaseEntity
         super('BusinessSystem'); 
 
         this.name = name;
-		this.updatePointsInterval = updatePointsInterval;
-		this.updatePointsStartDate = updatePointsStartDate;
 		this.getTransactionsEndpoint = getTransactionsEndpoint;
-		this.getDiscountCategoriesEndpoint = getDiscountCategoriesEndpoint;
+		this.getDiscountProductGroupsEndpoint = getDiscountProductGroupsEndpoint;
 		this.createUserEndpoint = createUserEndpoint;
 		this.updateUserGroupEndpoint = updateUserGroupEndpoint;
+		this.updatePointsInterval = updatePointsInterval;
+		this.updatePointsStartDate = updatePointsStartDate;
 		this.updatePointsScheduledTaskIsPaused = updatePointsScheduledTaskIsPaused;
 		this.partnerDisplayName = partnerDisplayName;
 		this.partnerId = partnerId;

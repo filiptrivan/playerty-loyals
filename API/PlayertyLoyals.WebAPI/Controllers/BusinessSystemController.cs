@@ -90,7 +90,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPut]
         [AuthGuard]
-        public async Task<BusinessSystemDTO> SaveBusinessSystem(BusinessSystemSaveBodyDTO businessSystemSaveBodyDTO)
+        public async Task<BusinessSystemSaveBodyDTO> SaveBusinessSystem(BusinessSystemSaveBodyDTO businessSystemSaveBodyDTO)
         {
             return await _loyalsBusinessService.SaveBusinessSystemAndReturnSaveBodyDTOAsync(businessSystemSaveBodyDTO);
         }

@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.Entities
 {
-    [UIDoNotGenerate]
     public class BusinessSystem : BusinessObject<long>
     {
         [SoftDisplayName]
@@ -18,19 +17,11 @@ namespace PlayertyLoyals.Business.Entities
         [Required]
         public string Name { get; set; }
 
-        /// <summary>
-        /// In hours, look if user can pass start time in DTO, so we can initialize scheduler in Azure, it would be nice if we don't have that field in the database.
-        /// </summary>
-        [GreaterThanOrEqualTo(1)]
-        public int? UpdatePointsInterval { get; set; }
-
-        public DateTime? UpdatePointsStartDate { get; set; }
-
         [StringLength(1000, MinimumLength = 1)]
         public string GetTransactionsEndpoint { get; set; }
 
         [StringLength(1000, MinimumLength = 1)]
-        public string GetDiscountCategoriesEndpoint { get; set; }
+        public string GetDiscountProductGroupsEndpoint { get; set; }
 
         [StringLength(1000, MinimumLength = 1)]
         public string CreateUserEndpoint { get; set; }
@@ -38,8 +29,20 @@ namespace PlayertyLoyals.Business.Entities
         [StringLength(1000, MinimumLength = 1)]
         public string UpdateUserGroupEndpoint { get; set; }
 
+        /// <summary>
+        /// In hours, look if user can pass start time in DTO, so we can initialize scheduler in Azure, it would be nice if we don't have that field in the database.
+        /// </summary>
+        [UIDoNotGenerate]
+        [GreaterThanOrEqualTo(1)]
+        public int? UpdatePointsInterval { get; set; }
+
+        [UIDoNotGenerate]
+        public DateTime? UpdatePointsStartDate { get; set; }
+
+        [UIDoNotGenerate]
         public bool? UpdatePointsScheduledTaskIsPaused { get; set; }
 
+        [UIDoNotGenerate]
         [ManyToOneRequired]
         [WithMany(nameof(Partner.BusinessSystems))]
         public virtual Partner Partner { get; set; }

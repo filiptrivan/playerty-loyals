@@ -21,16 +21,16 @@ export class ValidatorServiceGenerated {
 
         case 'nameBusinessSystem':
             return this.nameBusinessSystemValidator(formControl);
-        case 'updatePointsIntervalBusinessSystem':
-            return this.updatePointsIntervalBusinessSystemValidator(formControl);
         case 'getTransactionsEndpointBusinessSystem':
             return this.getTransactionsEndpointBusinessSystemValidator(formControl);
-        case 'getDiscountCategoriesEndpointBusinessSystem':
-            return this.getDiscountCategoriesEndpointBusinessSystemValidator(formControl);
+        case 'getDiscountProductGroupsEndpointBusinessSystem':
+            return this.getDiscountProductGroupsEndpointBusinessSystemValidator(formControl);
         case 'createUserEndpointBusinessSystem':
             return this.createUserEndpointBusinessSystemValidator(formControl);
         case 'updateUserGroupEndpointBusinessSystem':
             return this.updateUserGroupEndpointBusinessSystemValidator(formControl);
+        case 'updatePointsIntervalBusinessSystem':
+            return this.updatePointsIntervalBusinessSystemValidator(formControl);
         case 'partnerIdBusinessSystem':
             return this.partnerIdBusinessSystemValidator(formControl);
         case 'versionBusinessSystem':
@@ -403,23 +403,6 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    updatePointsIntervalBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-        const min = 1;
-        const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
-
-            const updatePointsIntervalValid = numberMinRangeRule;
-
-            return updatePointsIntervalValid ? null : { _ : this.translocoService.translate('NumberRangeMin', {min}) };
-        };
-
-        control.validator = validator;
-        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
-        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
-        return validator;
-    }
     getTransactionsEndpointBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
@@ -438,7 +421,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    getDiscountCategoriesEndpointBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
+    getDiscountProductGroupsEndpointBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -446,9 +429,9 @@ export class ValidatorServiceGenerated {
         const max = 1000;
         const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
-            const getDiscountCategoriesEndpointValid = stringLengthRule;
+            const getDiscountProductGroupsEndpointValid = stringLengthRule;
 
-            return getDiscountCategoriesEndpointValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+            return getDiscountProductGroupsEndpointValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
 
         control.validator = validator;
@@ -485,6 +468,23 @@ export class ValidatorServiceGenerated {
             const updateUserGroupEndpointValid = stringLengthRule;
 
             return updateUserGroupEndpointValid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
+        };
+
+        control.validator = validator;
+        // TODO FT: When you improve generated code, and could realize on the backend is this property of the Date type, generate this line only for Date form controls.
+        control.updateValueAndValidity(); // FT: It's necessary for Date angular type
+        return validator;
+    }
+    updatePointsIntervalBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
+        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+        const min = 1;
+        const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
+
+            const updatePointsIntervalValid = numberMinRangeRule;
+
+            return updatePointsIntervalValid ? null : { _ : this.translocoService.translate('NumberRangeMin', {min}) };
         };
 
         control.validator = validator;

@@ -846,7 +846,7 @@ namespace PlayertyLoyals.Business.Services
 
         #region BusinessSystem
 
-        public async Task<BusinessSystemDTO> SaveBusinessSystemAndReturnSaveBodyDTOAsync(BusinessSystemSaveBodyDTO businessSystemSaveBodyDTO)
+        public async Task<BusinessSystemSaveBodyDTO> SaveBusinessSystemAndReturnSaveBodyDTOAsync(BusinessSystemSaveBodyDTO businessSystemSaveBodyDTO)
         {
             if (businessSystemSaveBodyDTO.BusinessSystemDTO.Id == 0 && (businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsInterval != null || businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsStartDate != null))
                 throw new HackerException("Can't save UpdatePointsInterval nor UpdatePointsStartDate from here.");
@@ -865,8 +865,11 @@ namespace PlayertyLoyals.Business.Services
                         throw new HackerException("Can't save UpdatePointsInterval nor UpdatePointsStartDate from here.");
                 }
 
-
-                return await SaveBusinessSystemAndReturnDTOAsync(businessSystemSaveBodyDTO.BusinessSystemDTO, false, false);
+                BusinessSystemDTO savedBusinessSystemDTO = await SaveBusinessSystemAndReturnDTOAsync(businessSystemSaveBodyDTO.BusinessSystemDTO, false, false);
+                return new BusinessSystemSaveBodyDTO
+                {
+                    BusinessSystemDTO = savedBusinessSystemDTO
+                };
             });
         }
 

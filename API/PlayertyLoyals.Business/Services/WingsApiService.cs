@@ -74,7 +74,7 @@ namespace PlayertyLoyals.Business.Services
         /// </summary>
         public async Task<List<ExternalDiscountProductGroupDTO>> GetExternalDiscountProductGroupDTOList(BusinessSystem businessSystem)
         {
-            string url = businessSystem.GetDiscountCategoriesEndpoint;
+            string url = businessSystem.GetDiscountProductGroupsEndpoint;
 
             HttpResponseMessage response = null;
 

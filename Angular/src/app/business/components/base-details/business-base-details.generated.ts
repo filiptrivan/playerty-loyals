@@ -24,6 +24,160 @@ import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selec
 import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, BusinessSystemUpdatePointsDataBody, ExternalDiscountProductGroup, ExternalTransaction, MergedPartnerUser, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerRoleSaveBody, PartnerUserSaveBody, Product, QrCode, SegmentationItem, TierSaveBody, UpdatePoints, UserExtendedSaveBody, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUser, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
 
 @Component({
+    selector: 'business-system-base-details',
+    template:`
+<ng-container *transloco="let t">
+    <soft-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
+        <panel-header></panel-header>
+
+        <panel-body>
+            @defer (when loading === false) {
+                <form class="grid">
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('name', businessSystemFormGroup)"></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('getTransactionsEndpoint', businessSystemFormGroup)"></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('getDiscountProductGroupsEndpoint', businessSystemFormGroup)"></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('createUserEndpoint', businessSystemFormGroup)"></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-textbox [control]="control('updateUserGroupEndpoint', businessSystemFormGroup)"></soft-textbox>
+                    </div>
+                </form>
+            } @placeholder {
+                <card-skeleton [height]="502"></card-skeleton>
+            }
+        </panel-body>
+
+        <panel-footer>
+            <p-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></p-button>
+            @for (button of additionalButtons; track button.label) {
+                <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
+            }
+            <soft-return-button></soft-return-button>
+        </panel-footer>
+    </soft-panel>
+</ng-container>
+    `,
+    standalone: true,
+    imports: [
+        CommonModule, 
+        PrimengModule,
+        SoftControlsModule,
+        TranslocoDirective,
+        CardSkeletonComponent,
+        IndexCardComponent,
+        SoftDataTableComponent,
+    ]
+})
+export class BusinessSystemBaseComponent {
+    @Output() onSave = new EventEmitter<void>();
+    @Output() onBusinessSystemFormGroupInitFinish = new EventEmitter<void>();
+    @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SoftFormGroup;
+    @Input() businessSystemFormGroup: SoftFormGroup<BusinessSystem>;
+    @Input() additionalButtons: SoftButton[] = [];
+    @Input() isFirstMultiplePanel: boolean = false;
+    @Input() isMiddleMultiplePanel: boolean = false;
+    @Input() isLastMultiplePanel: boolean = false;
+    modelId: number;
+    loading: boolean = true;
+
+    businessSystemSaveBodyName: string = nameof<BusinessSystemSaveBody>('businessSystemDTO');
+
+
+
+
+
+
+
+
+
+    constructor(
+        private apiService: ApiService,
+        private route: ActivatedRoute,
+        private baseFormService: BaseFormService,
+        private validatorService: ValidatorService,
+        private translocoService: TranslocoService,
+    ) {}
+
+    ngOnInit(){
+        this.formGroup.initSaveBody = () => { 
+            let saveBody = new BusinessSystemSaveBody();
+            saveBody.businessSystemDTO = this.businessSystemFormGroup.getRawValue();
+
+
+
+
+            return saveBody;
+        }
+
+        this.formGroup.saveObservableMethod = this.apiService.saveBusinessSystem;
+        this.formGroup.mainDTOName = this.businessSystemSaveBodyName;
+
+        this.route.params.subscribe(async (params) => {
+            this.modelId = params['id'];
+
+
+
+
+            if(this.modelId > 0){
+                forkJoin({
+                    businessSystem: this.apiService.getBusinessSystem(this.modelId),
+
+
+                })
+                .subscribe(({ businessSystem }) => {
+                    this.initBusinessSystemFormGroup(new BusinessSystem(businessSystem));
+
+
+
+                });
+            }
+            else{
+                this.initBusinessSystemFormGroup(new BusinessSystem({id: 0}));
+
+            }
+        });
+    }
+
+    initBusinessSystemFormGroup(businessSystem: BusinessSystem) {
+        this.baseFormService.initFormGroup<BusinessSystem>(
+            this.businessSystemFormGroup, this.formGroup, businessSystem, this.businessSystemSaveBodyName, []
+        );
+        this.businessSystemFormGroup.mainDTOName = this.businessSystemSaveBodyName;
+        this.loading = false;
+        this.onBusinessSystemFormGroupInitFinish.next();
+    }
+
+
+
+
+
+
+
+
+
+    control(formControlName: string, formGroup: SoftFormGroup){
+        return getControl(formControlName, formGroup);
+    }
+
+    getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+        return this.baseFormService.getFormArrayGroups<T>(formArray);
+    }
+
+    save(){
+        this.onSave.next();
+    }
+
+}
+
+@Component({
     selector: 'notification-base-details',
     template:`
 <ng-container *transloco="let t">
@@ -74,6 +228,7 @@ import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, Busi
 })
 export class NotificationBaseComponent {
     @Output() onSave = new EventEmitter<void>();
+    @Output() onNotificationFormGroupInitFinish = new EventEmitter<void>();
     @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
     @Input() formGroup: SoftFormGroup;
     @Input() notificationFormGroup: SoftFormGroup<Notification>;
@@ -148,6 +303,7 @@ export class NotificationBaseComponent {
         );
         this.notificationFormGroup.mainDTOName = this.notificationSaveBodyName;
         this.loading = false;
+        this.onNotificationFormGroupInitFinish.next();
     }
 
 
@@ -232,6 +388,7 @@ export class NotificationBaseComponent {
 })
 export class PartnerBaseComponent {
     @Output() onSave = new EventEmitter<void>();
+    @Output() onPartnerFormGroupInitFinish = new EventEmitter<void>();
     @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
     @Input() formGroup: SoftFormGroup;
     @Input() partnerFormGroup: SoftFormGroup<Partner>;
@@ -306,6 +463,7 @@ export class PartnerBaseComponent {
         );
         this.partnerFormGroup.mainDTOName = this.partnerSaveBodyName;
         this.loading = false;
+        this.onPartnerFormGroupInitFinish.next();
     }
 
 
@@ -393,6 +551,7 @@ export class PartnerBaseComponent {
 })
 export class PartnerNotificationBaseComponent {
     @Output() onSave = new EventEmitter<void>();
+    @Output() onPartnerNotificationFormGroupInitFinish = new EventEmitter<void>();
     @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
     @Input() formGroup: SoftFormGroup;
     @Input() partnerNotificationFormGroup: SoftFormGroup<PartnerNotification>;
@@ -482,6 +641,7 @@ export class PartnerNotificationBaseComponent {
         );
         this.partnerNotificationFormGroup.mainDTOName = this.partnerNotificationSaveBodyName;
         this.loading = false;
+        this.onPartnerNotificationFormGroupInitFinish.next();
     }
 
 
@@ -568,6 +728,7 @@ export class PartnerNotificationBaseComponent {
 })
 export class PartnerRoleBaseComponent {
     @Output() onSave = new EventEmitter<void>();
+    @Output() onPartnerRoleFormGroupInitFinish = new EventEmitter<void>();
     @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
     @Input() formGroup: SoftFormGroup;
     @Input() partnerRoleFormGroup: SoftFormGroup<PartnerRole>;
@@ -651,6 +812,7 @@ export class PartnerRoleBaseComponent {
         );
         this.partnerRoleFormGroup.mainDTOName = this.partnerRoleSaveBodyName;
         this.loading = false;
+        this.onPartnerRoleFormGroupInitFinish.next();
     }
 
 
@@ -748,6 +910,7 @@ export class PartnerRoleBaseComponent {
 })
 export class SegmentationBaseComponent {
     @Output() onSave = new EventEmitter<void>();
+    @Output() onSegmentationFormGroupInitFinish = new EventEmitter<void>();
     @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
     @Input() formGroup: SoftFormGroup;
     @Input() segmentationFormGroup: SoftFormGroup<Segmentation>;
@@ -827,6 +990,7 @@ export class SegmentationBaseComponent {
         );
         this.segmentationFormGroup.mainDTOName = this.segmentationSaveBodyName;
         this.loading = false;
+        this.onSegmentationFormGroupInitFinish.next();
     }
 
     initSegmentationItemsFormArray(segmentationItems: SegmentationItem[]){
@@ -910,6 +1074,7 @@ export class SegmentationBaseComponent {
 })
 export class TierBaseComponent {
     @Output() onSave = new EventEmitter<void>();
+    @Output() onTierFormGroupInitFinish = new EventEmitter<void>();
     @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
     @Input() formGroup: SoftFormGroup;
     @Input() tierFormGroup: SoftFormGroup<Tier>;
@@ -984,6 +1149,7 @@ export class TierBaseComponent {
         );
         this.tierFormGroup.mainDTOName = this.tierSaveBodyName;
         this.loading = false;
+        this.onTierFormGroupInitFinish.next();
     }
 
 
