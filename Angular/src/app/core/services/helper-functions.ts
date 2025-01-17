@@ -199,3 +199,31 @@ export function capitalizeFirstLetter(inputString: string): string {
     
       return formControl;
   }
+
+  export function toCommaSeparatedString<T>(input: T[]): string {
+    const stringList = input.map(item => (item?.toString() ?? ''));
+
+    if (stringList.length > 1) {
+        return `${stringList.slice(0, -1).join(', ')} and ${stringList[stringList.length - 1]}`;
+    } else {
+        return stringList[0] ?? '';
+    }
+  }
+
+  export function isImageFileType(mimeType: string): boolean {
+    if (mimeType.startsWith('image/')) {
+        return true;
+    }
+
+    return false;
+  }
+
+  export function isExcelFileType(mimeType: string): boolean {
+      if (mimeType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+          mimeType === 'application/vnd.ms-excel'
+      ) {
+          return true;
+      }
+
+      return false;
+  }

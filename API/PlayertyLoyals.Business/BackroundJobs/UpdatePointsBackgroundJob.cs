@@ -12,10 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PlayertyLoyals.Business.Services;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Database;
-using Mapster;
 using Soft.Generator.Shared.Emailing;
+using PlayertyLoyals.Business.DTO.Helpers;
+using System.Diagnostics;
 
 namespace PlayertyLoyals.Business.BackroundJobs
 {
@@ -60,175 +59,45 @@ namespace PlayertyLoyals.Business.BackroundJobs
 
                 await _context.WithTransactionAsync(async () =>
                 {
-                    DbSet<BusinessSystemUpdatePointsScheduledTask> dbSet = _context.DbSet<BusinessSystemUpdatePointsScheduledTask>();
-
                     businessSystem = await _loyalsBusinessService.GetInstanceAsync<BusinessSystem, long>(businessSystemId, null);
 
                     if (businessSystem.GetTransactionsEndpoint == null)
                         throw new BusinessException($"Na stranici prodavnice '{businessSystem.Name}' morate da sačuvate popunjeno polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
 
-                    int? interval = businessSystem.UpdatePointsInterval;
+                    PeriodInWhichTransactionsShouldBeProcessed periodInWhichTransactionsShouldBeProcessed = 
+                        await _loyalsBusinessService.GetPeriodInWhichTransactionsShouldBeProcessed(businessSystem, manualDateFrom, manualDateTo, now);
 
-                    DateTime? lastShouldStartedAt = await _context.DbSet<BusinessSystemUpdatePointsScheduledTask>()
-                        .Where(x => x.BusinessSystem.Id == businessSystemId && x.IsManual != true)
-                        .OrderByDescending(x => x.TransactionsTo)
-                        .Select(x => (DateTime?)x.TransactionsTo)
-                        .FirstOrDefaultAsync();
-
-                    DateTime? lastWithManualsShouldStartedAt = await _context.DbSet<BusinessSystemUpdatePointsScheduledTask>()
-                        .Where(x => x.BusinessSystem.Id == businessSystemId)
-                        .OrderByDescending(x => x.TransactionsTo)
-                        .Select(x => (DateTime?)x.TransactionsTo)
-                        .FirstOrDefaultAsync();
-
-                    DateTime? startDateTime = businessSystem.UpdatePointsStartDate; // FT: When the startDateTime == null, the user is manually starting the update
-
-                    DateTime dateTo;
-
-                    if (manualDateFrom == null && manualDateTo == null) // FT: If it's not manual update
-                        dateTo = UpdatePointsBackgroundJobHelpers.GetShouldStartedAtForSave(interval.Value, startDateTime.Value, lastShouldStartedAt, now);
-                    else
-                        dateTo = manualDateTo.Value; // FT: When the user has not startDateTime, he is only manually starting the update
-
-                    DateTime dateFrom;
-
-                    if (lastWithManualsShouldStartedAt == null) // FT: If lastShouldStartedAt == null that means that this is the first update ever for this businessSystem
-                    {
-                        if (manualDateFrom == null && manualDateTo == null)
-                            //dateFrom = shouldStartedAtForSave.AddHours(-interval.Value);
-                            dateFrom = dateTo.AddMinutes(-interval.Value);
-                        else // FT: If the first update ever is manual
-                            dateFrom = manualDateFrom.Value;
-                    }
-                    else
-                    {
-                        if (manualDateFrom == null && manualDateTo == null)
-                            dateFrom = lastWithManualsShouldStartedAt.Value;
-                        else // FT: manual
-                            dateFrom = manualDateFrom.Value;
-                    }
-
-                    List<ExternalTransactionDTO> externalTransactionDTOList = await _wingsApiService.GetExternalTransactionDTOList(businessSystem.GetTransactionsEndpoint, dateFrom, dateTo);
-
-                    List<string> userEmailList = externalTransactionDTOList.Select(x => x.UserEmail).ToList();
-
-                    List<PartnerUser> partnerUserList = await _context.DbSet<PartnerUser>()
-                        .Include(x => x.User)
-                        .Where(x => x.Partner.Id == businessSystem.Partner.Id && userEmailList.Contains(x.User.Email))
-                        .ToListAsync();
+                    List<ExternalTransactionDTO> externalTransactionDTOList = await _wingsApiService.GetExternalTransactionDTOList(
+                        businessSystem.GetTransactionsEndpoint, periodInWhichTransactionsShouldBeProcessed.DateFrom.Value, periodInWhichTransactionsShouldBeProcessed.DateTo.Value
+                    );
 
                     // FT: when we make an agreement with the partners that they update the categories, we will just send them an email, the update of your points failed, due to mismatched categories, please harmonize the categories and stop the execution manually.
                     // await _loyalsBusinessService.SyncDiscountCategories(); // FT: You don't need to sync here, we will just use passed name as category
 
-                    List<string> partnerUserWhichDoesNotExistList = new List<string>();
-                    List<string> transactionWhichUpdateFailedList = new List<string>();
-                    List<string> transactionWhichUpdateSucceededList = new List<string>();
-                    List<string> transactionWhichWeAlreadyUpdatedForThisPeriodList = new List<string>();
+                    TransactionsProcessingResult transactionsProcessingResult = await _loyalsBusinessService.ProcessTransactions(businessSystem, externalTransactionDTOList);
 
-                    foreach (ExternalTransactionDTO externalTransactionDTO in externalTransactionDTOList)
+                    BusinessSystemUpdatePointsScheduledTask businessSystemUpdatePointsScheduledTaskForSave = new BusinessSystemUpdatePointsScheduledTask
                     {
-                        if (await _context.DbSet<Transaction>().AnyAsync(x => x.BusinessSystem.Id == businessSystemId && x.Code == externalTransactionDTO.Code))
-                        {
-                            transactionWhichWeAlreadyUpdatedForThisPeriodList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail})"); // TODO FT: This doesn't have sence, you should businessSystem transaction here, and put user email in the brackets, also then we should show the table of the transactions on the client.
-                            continue;
-                        }
-
-                        PartnerUser partnerUser = partnerUserList.Where(x => x.User.Email == externalTransactionDTO.UserEmail).SingleOrDefault();
-
-                        if (partnerUser == null && partnerUserWhichDoesNotExistList.Contains(externalTransactionDTO.UserEmail) == false)
-                        {
-                            partnerUserWhichDoesNotExistList.Add(externalTransactionDTO.UserEmail);
-                            continue;
-                        }
-
-                        int pointsFromTransaction = (int)Math.Floor((decimal)externalTransactionDTO.Price * businessSystem.Partner.PointsMultiplier); // FT: Test this for negative and positive price
-
-                        TransactionDTO transactionDTO = new TransactionDTO
-                        {
-                            ProductName = externalTransactionDTO.ProductName,
-                            ProductImageUrl = externalTransactionDTO.ProductImageUrl,
-                            ProductCategoryName = externalTransactionDTO.ProductCategoryName,
-                            ProductCategoryImageUrl = externalTransactionDTO.ProductCategoryImageUrl,
-                            Price = externalTransactionDTO.Price,
-                            Points = pointsFromTransaction,
-                            PartnerUserId = partnerUser.Id,
-                            BoughtAt = externalTransactionDTO.BoughtAt,
-                            BusinessSystemId = businessSystem.Id,
-                        };
-
-                        try
-                        {
-                            await _loyalsBusinessService.UpdatePointsForThePartnerUser(partnerUser, pointsFromTransaction);
-                            await _loyalsBusinessService.SaveTransactionAndReturnDomainAsync(transactionDTO, false, false);
-
-                            transactionWhichUpdateSucceededList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail})");
-                      }
-                        catch (Exception ex)
-                        {
-                            if (ex is BusinessException)
-                                transactionWhichUpdateFailedList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail}): {ex.Message}");
-                            else
-                                transactionWhichUpdateFailedList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail})");
-                        }
-                    }
-
-                    BusinessSystemUpdatePointsScheduledTask savedBusinessSystemUpdatePointsScheduledTask = new BusinessSystemUpdatePointsScheduledTask
-                    {
-                        TransactionsFrom = dateFrom,
-                        TransactionsTo = dateTo,
+                        TransactionsFrom = periodInWhichTransactionsShouldBeProcessed.DateFrom,
+                        TransactionsTo = periodInWhichTransactionsShouldBeProcessed.DateTo,
                         BusinessSystem = businessSystem,
                         IsManual = manualDateFrom != null && manualDateTo != null,
                     };
 
-                    await dbSet.AddAsync(savedBusinessSystemUpdatePointsScheduledTask);
-
+                    await _context.DbSet<BusinessSystemUpdatePointsScheduledTask>().AddAsync(businessSystemUpdatePointsScheduledTaskForSave);
                     await _context.SaveChangesAsync();
 
-                    await _emailingService.SendEmailAsync(
-                        businessSystem.Partner.Email,
-                        "Uspešno izvršeno ažuriranje poena",
-                        $$"""
-Interval u kom su obrađene transakcije: {{dateFrom.ToString("dd.MM.yyyy. HH:mm")}} - {{dateTo.ToString("dd.MM.yyyy. HH:mm")}}. <br/>
-<br/>
-Ukupan broj obrađenih transakcija: {{externalTransactionDTOList.Count}}. <br/>
-<br/>
-Uspešno obrađene transakcije ({{transactionWhichUpdateSucceededList.Count}}): <br/>
-    {{string.Join(",<br/>    ", transactionWhichUpdateSucceededList)}}
-<br/>
-Neuspešno obrađene transakcije ({{transactionWhichUpdateFailedList.Count}}): <br/>
-    {{string.Join(",<br/>    ", transactionWhichUpdateFailedList)}}
-<br/>
-Već obrađene transakcije u prosleđenom periodu ({{transactionWhichWeAlreadyUpdatedForThisPeriodList.Count}}): <br/>
-    {{string.Join(",<br/>    ", transactionWhichWeAlreadyUpdatedForThisPeriodList)}}
-<br/>
-Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty program' sistemu ({{partnerUserWhichDoesNotExistList.Count}}): <br/>
-    {{string.Join(",<br/>    ", partnerUserWhichDoesNotExistList)}}
-<br/>
-"""
+                    await _loyalsBusinessService.NotifyPartnerAboutSuccessfullyProcessedTransactions(
+                        businessSystem.Partner, transactionsProcessingResult, periodInWhichTransactionsShouldBeProcessed.DateFrom, periodInWhichTransactionsShouldBeProcessed.DateTo
                     );
                 });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.ToString());
+                //_logger.LogError(ex.ToString()); TODO FT: Make real logging
 
-                if (ex is BusinessException)
-                {
-                    await _emailingService.SendEmailAsync(businessSystem.Partner.Email,
-                        "Greška prilikom ažuriranja poena",
-                        $"Prodavnica: {businessSystem.Name}. {ex.Message}"
-                    );
-                }
-                else
-                {
-                    await _emailingService.SendEmailAsync(
-                        businessSystem.Partner.Email,
-                        "Greška prilikom ažuriranja poena",
-                        "Došlo je do greške prilikom ažuriranja poena. Molimo Vas da pokušate ponovo. Ako se problem ponovi, kontaktirajte podršku."
-                    );
-                }
+                await _loyalsBusinessService.NotifyPartnerAboutUnsuccessfullyProcessedTransactions(businessSystem, ex);
             }
         }
-
     }
 }

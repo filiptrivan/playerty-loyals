@@ -21,7 +21,8 @@ import { MenuItem } from 'primeng/api';
 import { AllClickEvent, Column, SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { TableFilter } from 'src/app/core/entities/table-filter';
 import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
-import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, BusinessSystemUpdatePointsDataBody, ExternalDiscountProductGroup, ExternalTransaction, MergedPartnerUser, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerRoleSaveBody, PartnerUserSaveBody, Product, QrCode, SegmentationItem, TierSaveBody, UpdatePoints, UserExtendedSaveBody, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUser, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
+import { SoftFileSelectEvent } from 'src/app/core/controls/soft-file/soft-file.component';
+import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, BusinessSystemUpdatePointsDataBody, ExcelManualUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, MergedPartnerUser, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerRoleSaveBody, PartnerUserSaveBody, Product, QrCode, SegmentationItem, TierSaveBody, UpdatePoints, UserExtendedSaveBody, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUser, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
 
 @Component({
     selector: 'business-system-base-details',
@@ -154,6 +155,8 @@ export class BusinessSystemBaseComponent {
         this.loading = false;
         this.onBusinessSystemFormGroupInitFinish.next();
     }
+
+
 
 
 
@@ -314,6 +317,8 @@ export class NotificationBaseComponent {
 
 
 
+
+
     control(formControlName: string, formGroup: SoftFormGroup){
         return getControl(formControlName, formGroup);
     }
@@ -339,7 +344,7 @@ export class NotificationBaseComponent {
             @defer (when loading === false) {
                 <form class="grid">
                     <div class="col-12">
-                        <soft-file [control]="control('logoImage', partnerFormGroup)" [fileData]="partnerFormGroup.controls.logoImageData.getRawValue()" [objectId]="partnerFormGroup.controls.id.getRawValue()"></soft-file>
+                        <soft-file [control]="control('logoImage', partnerFormGroup)" [fileData]="partnerFormGroup.controls.logoImageData.getRawValue()" [objectId]="partnerFormGroup.controls.id.getRawValue()" (onSelectedFile)="uploadLogoImageForPartner($event)"></soft-file>
                     </div>
                     <div class="col-12 md:col-6">
                         <soft-textbox [control]="control('name', partnerFormGroup)"></soft-textbox>
@@ -473,6 +478,12 @@ export class PartnerBaseComponent {
 
 
 
+
+    uploadLogoImageForPartner(softFileSelectEvent: SoftFileSelectEvent){
+        this.apiService.uploadLogoImageForPartner(softFileSelectEvent.formData).subscribe((completeFileName: string) => {
+            this.partnerFormGroup.controls.logoImage.setValue(completeFileName);
+        });
+    }
 
     control(formControlName: string, formGroup: SoftFormGroup){
         return getControl(formControlName, formGroup);
@@ -663,6 +674,8 @@ export class PartnerNotificationBaseComponent {
 
 
 
+
+
     control(formControlName: string, formGroup: SoftFormGroup){
         return getControl(formControlName, formGroup);
     }
@@ -826,6 +839,8 @@ export class PartnerRoleBaseComponent {
             this.partnerUsersForPartnerRoleOptions = po;
         });
     }
+
+
 
     control(formControlName: string, formGroup: SoftFormGroup){
         return getControl(formControlName, formGroup);
@@ -1009,6 +1024,8 @@ export class SegmentationBaseComponent {
 
 
 
+
+
     control(formControlName: string, formGroup: SoftFormGroup){
         return getControl(formControlName, formGroup);
     }
@@ -1151,6 +1168,8 @@ export class TierBaseComponent {
         this.loading = false;
         this.onTierFormGroupInitFinish.next();
     }
+
+
 
 
 

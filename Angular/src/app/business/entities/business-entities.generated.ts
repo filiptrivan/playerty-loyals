@@ -430,6 +430,32 @@ export class DiscountProductGroupSaveBody extends BaseEntity
 }
 
 
+export class ExcelManualUpdatePoints extends BaseEntity
+{
+    businessSystemId?: number;
+	businessSystemVersion?: number;
+	excel?: any;
+
+    constructor(
+    {
+        businessSystemId,
+		businessSystemVersion,
+		excel
+    }:{
+        businessSystemId?: number;
+		businessSystemVersion?: number;
+		excel?: any;     
+    } = {}
+    ) {
+        super('ExcelManualUpdatePoints'); 
+
+        this.businessSystemId = businessSystemId;
+		this.businessSystemVersion = businessSystemVersion;
+		this.excel = excel;
+    }
+}
+
+
 export class ExternalDiscountProductGroup extends BaseEntity
 {
     name?: string;
@@ -907,22 +933,16 @@ export class PartnerRoleSaveBody extends BaseEntity
     partnerRoleDTO?: PartnerRole;
 	selectedPartnerUsersIds?: number[];
 	selectedPartnerPermissionsIds?: number[];
-	selectedPermissionIds?: number[];
-	selectedPartnerUserIds?: number[];
 
     constructor(
     {
         partnerRoleDTO,
 		selectedPartnerUsersIds,
-		selectedPartnerPermissionsIds,
-		selectedPermissionIds,
-		selectedPartnerUserIds
+		selectedPartnerPermissionsIds
     }:{
         partnerRoleDTO?: PartnerRole;
 		selectedPartnerUsersIds?: number[];
-		selectedPartnerPermissionsIds?: number[];
-		selectedPermissionIds?: number[];
-		selectedPartnerUserIds?: number[];     
+		selectedPartnerPermissionsIds?: number[];     
     } = {}
     ) {
         super('PartnerRoleSaveBody'); 
@@ -930,8 +950,6 @@ export class PartnerRoleSaveBody extends BaseEntity
         this.partnerRoleDTO = partnerRoleDTO;
 		this.selectedPartnerUsersIds = selectedPartnerUsersIds;
 		this.selectedPartnerPermissionsIds = selectedPartnerPermissionsIds;
-		this.selectedPermissionIds = selectedPermissionIds;
-		this.selectedPartnerUserIds = selectedPartnerUserIds;
     }
 }
 

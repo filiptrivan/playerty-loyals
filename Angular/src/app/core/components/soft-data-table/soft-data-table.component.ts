@@ -51,6 +51,7 @@ export class SoftDataTableComponent implements OnInit {
   @Input() rows: number = 10;
   @Input() cols: Column[];
   @Input() showPaginator: boolean = true; // FT: Pass only when hasLazyLoad === false
+  @Input() showCardWrapper: boolean = true;
   totalRecords: number;
   @Output() onTotalRecordsChange: EventEmitter<number> = new EventEmitter();;
   

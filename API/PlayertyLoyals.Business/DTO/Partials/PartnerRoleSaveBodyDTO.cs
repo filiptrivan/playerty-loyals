@@ -8,7 +8,6 @@ namespace PlayertyLoyals.Business.DTO
 {
     public partial class PartnerRoleSaveBodyDTO
     {
-        public List<int> SelectedPermissionIds { get; set; }
-        public List<long> SelectedPartnerUserIds { get; set; }
+        
     }
 }

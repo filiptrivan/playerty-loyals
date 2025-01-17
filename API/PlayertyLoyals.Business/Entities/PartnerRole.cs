@@ -3,6 +3,7 @@ using Soft.Generator.Shared.Attributes.EF;
 using Soft.Generator.Shared.Attributes.EF.UI;
 using Soft.Generator.Shared.BaseEntities;
 using Soft.Generator.Shared.Enums;
+using PlayertyLoyals.Business.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

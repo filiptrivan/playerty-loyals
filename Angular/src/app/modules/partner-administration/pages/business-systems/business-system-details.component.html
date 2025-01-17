@@ -34,24 +34,11 @@
 
         </soft-panel>
 
-        <soft-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0 && manualUpdatePointsFormGroup != null" [isLastMultiplePanel]="true">
-            <panel-header [title]="t('SuccessfullyDoneBusinessSystemUpdatePointsScheduledTaskList')" icon="pi pi-clock"></panel-header>
+        <soft-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0 && manualUpdatePointsFormGroup != null" [isMiddleMultiplePanel]="true">
+            <panel-header [title]="t('ManualUpdatePoints')" icon="pi pi-hammer"></panel-header>
 
             <panel-body>
                 <form [formGroup]="manualUpdatePointsFormGroup" class="grid">
-                    <div class="col-12">
-                        <soft-data-table 
-                        [tableTitle]="t('SuccessfullyDoneBusinessSystemUpdatePointsScheduledTaskList')" 
-                        [cols]="businessSystemUpdatePointsScheduledTaskTableCols" 
-                        [rows]="5"
-                        [additionalFilterIdLong]="this.businessSystemFormGroup.controls.id.getRawValue()" 
-                        [showAddButton]="false" 
-                        [showReloadTableButton]="true"
-                        [getTableDataObservableMethod]="getBusinessSystemUpdatePointsScheduledTaskTableDataObservableMethod" 
-                        [exportTableDataToExcelObservableMethod]="exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelObservableMethod"
-                        (onTotalRecordsChange)="businessSystemUpdatePointsScheduledTaskTableTotalRecords = $event" 
-                        ></soft-data-table>
-                    </div>
                     <div class="col-12 md:col-6">
                         <soft-calendar [control]="control('fromDate', manualUpdatePointsFormGroup)" [showTime]="true" [label]="t('ManualUpdatePointsFromDate')"></soft-calendar>
                     </div>
@@ -64,6 +51,50 @@
             <panel-footer>
                 <p-button (onClick)="scheduleJobManually()" [label]="t('UpdatePoints')" icon="pi pi-history"></p-button>
             </panel-footer>
+        </soft-panel>
+
+        <soft-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0 && excelManualUpdatePointsFormGroup != null" [isMiddleMultiplePanel]="true">
+            <panel-header [title]="t('ExcelManualUpdatePoints')" icon="pi pi-file-excel"></panel-header>
+
+            <panel-body>
+                <form [formGroup]="excelManualUpdatePointsFormGroup" class="grid">
+                    <div class="col-12">
+                        <soft-file 
+                        [label]="t('File')"
+                        [required]="true"
+                        [acceptedFileTypes]="['.xlsx', '.xls']" 
+                        (onSelectedFile)="onSelectedExcelManualUpdateFile($event)"></soft-file>
+                    </div>
+                </form>
+            </panel-body>
+
+            <panel-footer>
+                <p-button (onClick)="excelManualUpdatePoints()" [label]="t('UpdatePoints')" icon="pi pi-history"></p-button>
+            </panel-footer>
+        </soft-panel>
+
+        <soft-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0" [isLastMultiplePanel]="true">
+            <panel-header [title]="t('SuccessfullyDoneBusinessSystemUpdatePointsScheduledTaskList')" icon="pi pi-clock"></panel-header>
+
+            <panel-body>
+                <form [formGroup]="manualUpdatePointsFormGroup" class="grid">
+                    <div class="col-12">
+                        <soft-data-table 
+                        [tableTitle]="t('SuccessfullyDoneBusinessSystemUpdatePointsScheduledTaskList')" 
+                        [cols]="businessSystemUpdatePointsScheduledTaskTableCols" 
+                        [rows]="5"
+                        [showAddButton]="false" 
+                        [showReloadTableButton]="true"
+                        [showCardWrapper]="false"
+                        [additionalFilterIdLong]="this.businessSystemFormGroup.controls.id.getRawValue()" 
+                        [getTableDataObservableMethod]="getBusinessSystemUpdatePointsScheduledTaskTableDataObservableMethod" 
+                        [exportTableDataToExcelObservableMethod]="exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelObservableMethod"
+                        (onTotalRecordsChange)="businessSystemUpdatePointsScheduledTaskTableTotalRecords = $event" 
+                        ></soft-data-table>
+                    </div>
+                </form>
+            </panel-body>
+
         </soft-panel>
     </soft-card>
 </ng-container>

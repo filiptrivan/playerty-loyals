@@ -15,11 +15,9 @@ namespace PlayertyLoyals.Business.Entities
     [UIDoNotGenerate]
     public class BusinessSystemUpdatePointsScheduledTask : BusinessObject<long>
     {
-        [Required]
-        public DateTime TransactionsFrom { get; set; }
+        public DateTime? TransactionsFrom { get; set; }
 
-        [Required]
-        public DateTime TransactionsTo { get; set; }
+        public DateTime? TransactionsTo { get; set; }
 
         [Required]
         public bool IsManual { get; set; }

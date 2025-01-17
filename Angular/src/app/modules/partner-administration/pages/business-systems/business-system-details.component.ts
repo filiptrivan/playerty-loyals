@@ -1,8 +1,9 @@
+import { SoftFileSelectEvent } from './../../../../core/controls/soft-file/soft-file.component';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { BusinessSystem, BusinessSystemUpdatePointsDataBody, UpdatePoints } from 'src/app/business/entities/business-entities.generated';
+import { BusinessSystem, BusinessSystemUpdatePointsDataBody, UpdatePoints, ExcelManualUpdatePoints } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
@@ -36,6 +37,10 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     savedBusinessSystemUpdatePointsScheduledTaskIsPaused: boolean = null;
 
     manualUpdatePointsFormGroup = new SoftFormGroup<UpdatePoints>({});
+    
+    excelManualUpdatePointsFormGroup = new SoftFormGroup<ExcelManualUpdatePoints>({});
+    excelManualUpdatePointsFormData: FormData;
+    excelManualUpdatePointsFile: File;
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -60,6 +65,7 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     businessSystemFormGroupInitFinish(){
         this.initBusinessSystemUpdatePointsDataFormGroup();
         this.initManualUpdatePointsFormGroup();
+        this.initExcelManualUpdatePointsFormGroup();
     }
 
     onSyncDiscountCategories(){
@@ -128,6 +134,25 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
         });
     }
     
+    initExcelManualUpdatePointsFormGroup = () => {
+        this.baseFormService.createFormGroup(this.excelManualUpdatePointsFormGroup, new ExcelManualUpdatePoints({}));
+    }
+
+    onSelectedExcelManualUpdateFile(event: SoftFileSelectEvent){
+        this.excelManualUpdatePointsFile = event.file;
+    }
+
+    excelManualUpdatePoints(){
+        let excelManualUpdatePoints = new ExcelManualUpdatePoints({
+            businessSystemId: this.businessSystemFormGroup.controls.id.getRawValue(),
+            businessSystemVersion: this.businessSystemFormGroup.controls.version.getRawValue(),
+            excel: this.excelManualUpdatePointsFile
+        });
+        this.apiService.excelManualUpdatePoints(excelManualUpdatePoints).subscribe(() => {
+            this.messageService.successMessage(this.translocoService.translate('SuccessfulAction'));
+        });
+    }
+
     override onBeforeSave = (): void => {
         
     }

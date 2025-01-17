@@ -116,6 +116,13 @@ namespace PlayertyLoyals.WebAPI.Controllers
             await _loyalsBusinessService.UpdatePointsAsync(updatePointsDTO);
         }
 
+        [HttpPost]
+        [AuthGuard]
+        public async Task ExcelManualUpdatePoints([FromForm] ExcelManualUpdatePointsDTO excelManualUpdatePointsDTO) // FT: It doesn't work without interface
+        {
+            await _loyalsBusinessService.ExcelManualUpdatePoints(excelManualUpdatePointsDTO); // TODO: Make authorization in business service
+        }
+
         //[HttpGet]
         //[AuthGuard]
         //public async Task<List<BusinessSystemDTO>> GetBusinessSystemListForTheCurrentPartner()

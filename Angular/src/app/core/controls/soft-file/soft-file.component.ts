@@ -1,15 +1,15 @@
 import { ApiService } from './../../../business/services/api/api.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BaseControl } from '../base-control';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { RequiredComponent } from '../../components/required/required.component';
 import { CommonModule } from '@angular/common';
 import { FileSelectEvent } from 'primeng/fileupload';
-import { Observable } from 'rxjs';
-import { getMimeTypeForFileName } from '../../services/helper-functions';
+import { getMimeTypeForFileName, isExcelFileType, isImageFileType } from '../../services/helper-functions';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { TranslateLabelsService } from 'src/app/business/services/translates/merge-labels';
+import { BaseEntity } from '../../entities/base-entity';
 
 @Component({
     selector: 'soft-file',
@@ -26,25 +26,28 @@ import { TranslateLabelsService } from 'src/app/business/services/translates/mer
     ]
 })
 export class SoftFileComponent extends BaseControl implements OnInit {
-    files: File[] = [];
+    @Output() onSelectedFile = new EventEmitter<SoftFileSelectEvent>();
     @Input() objectId: number;
     @Input() fileData: string;
-
-    uploadPhotoEndpoint: () => Observable<any>;
+    @Input() acceptedFileTypes: Array<'image/*' | 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' | 'application/vnd.ms-excel' | '.xlsx' | '.xls'> = ['image/*'];
+    @Input() required: boolean; // FT: It's okay for this control, because for the custom uploads where we are not initializing the control from the backend, there is no need for formControl.
+    acceptedFileTypesCommaSeparated: string;
+    files: File[] = [];
 
     constructor(
         protected override translocoService: TranslocoService,
         protected override translateLabelsService: TranslateLabelsService,
-        private apiService: ApiService,
     ) { 
         super(translocoService, translateLabelsService);
     }
 
     override ngOnInit(){
-        if (this.control.value != null && this.fileData != null) {
+        if (this.control?.value != null && this.fileData != null) {
             const file = this.base64ToFile(this.fileData);
             this.files.push(file);
         }
+
+        this.acceptedFileTypesCommaSeparated = this.acceptedFileTypes.join(',');
 
         super.ngOnInit();
     }
@@ -55,9 +58,7 @@ export class SoftFileComponent extends BaseControl implements OnInit {
         const formData: FormData = new FormData();
         formData.append('file', file, `${this.objectId}-${file.name}`);
         
-        this.apiService.uploadLogoImageForPartner(formData).subscribe((completeFileName: string) => {
-            this.control.setValue(completeFileName);
-        });
+        this.onSelectedFile.next(new SoftFileSelectEvent({file: file, formData: formData}));
     }
 
     choose(event, chooseCallback){
@@ -66,7 +67,7 @@ export class SoftFileComponent extends BaseControl implements OnInit {
     
     removeFile(removeFileCallback, index: number){
         removeFileCallback(index);
-        this.control.setValue(null);
+        this.control?.setValue(null);
     }
 
     // FT: Put inside global functions if you need it
@@ -88,4 +89,33 @@ export class SoftFileComponent extends BaseControl implements OnInit {
         return file;
     }
 
+    isImageFileType(mimeType: string): boolean {
+        return isImageFileType(mimeType);
+    }
+
+    isExcelFileType(mimeType: string): boolean {
+        return isExcelFileType(mimeType);
+    }
+
+}
+
+export class SoftFileSelectEvent extends BaseEntity
+{
+    file?: File;
+    formData?: FormData;
+
+    constructor(
+    {
+        file,
+        formData,
+    }:{
+        file?: File;
+        formData?: FormData;
+    } = {}
+    ) {
+        super('SoftFileSelectEvent'); 
+
+        this.file = file;
+        this.formData = formData;
+    }
 }

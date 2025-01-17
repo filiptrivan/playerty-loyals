@@ -9,24 +9,25 @@ import { SimpleSaveResult } from 'src/app/core/entities/simple-save-result';
 import { TableFilter } from 'src/app/core/entities/table-filter';
 import { TableResponse } from 'src/app/core/entities/table-response';
 import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
-import { ExternalTransaction } from '../../entities/business-entities.generated';
 import { Notification } from '../../entities/business-entities.generated';
-import { PartnerUserSaveBody } from '../../entities/business-entities.generated';
 import { MergedPartnerUser } from '../../entities/business-entities.generated';
-import { UserExtendedSaveBody } from '../../entities/business-entities.generated';
-import { PartnerNotificationSaveBody } from '../../entities/business-entities.generated';
-import { PartnerRoleSaveBody } from '../../entities/business-entities.generated';
-import { UpdatePoints } from '../../entities/business-entities.generated';
-import { BusinessSystemUpdatePointsDataBody } from '../../entities/business-entities.generated';
-import { QrCode } from '../../entities/business-entities.generated';
 import { Product } from '../../entities/business-entities.generated';
-import { SegmentationItem } from '../../entities/business-entities.generated';
-import { BusinessSystemTierDiscountProductGroup } from '../../entities/business-entities.generated';
+import { UserExtendedSaveBody } from '../../entities/business-entities.generated';
+import { BusinessSystemUpdatePointsDataBody } from '../../entities/business-entities.generated';
+import { UpdatePoints } from '../../entities/business-entities.generated';
+import { PartnerNotificationSaveBody } from '../../entities/business-entities.generated';
 import { Brand } from '../../entities/business-entities.generated';
-import { ExternalDiscountProductGroup } from '../../entities/business-entities.generated';
-import { TierSaveBody } from '../../entities/business-entities.generated';
 import { NotificationSaveBody } from '../../entities/business-entities.generated';
+import { QrCode } from '../../entities/business-entities.generated';
+import { SegmentationItem } from '../../entities/business-entities.generated';
+import { ExternalTransaction } from '../../entities/business-entities.generated';
+import { PartnerUserSaveBody } from '../../entities/business-entities.generated';
+import { ExternalDiscountProductGroup } from '../../entities/business-entities.generated';
 import { BusinessSystemTier } from '../../entities/business-entities.generated';
+import { ExcelManualUpdatePoints } from '../../entities/business-entities.generated';
+import { BusinessSystemTierDiscountProductGroup } from '../../entities/business-entities.generated';
+import { TierSaveBody } from '../../entities/business-entities.generated';
+import { PartnerRoleSaveBody } from '../../entities/business-entities.generated';
 import { BusinessSystem } from '../../entities/business-entities.generated';
 import { BusinessSystemSaveBody } from '../../entities/business-entities.generated';
 import { BusinessSystemTierSaveBody } from '../../entities/business-entities.generated';
@@ -63,18 +64,18 @@ import { TransactionSaveBody } from '../../entities/business-entities.generated'
 import { UserExtended } from '../../entities/business-entities.generated';
 import { UserNotification } from '../../entities/business-entities.generated';
 import { UserNotificationSaveBody } from '../../entities/business-entities.generated';
-import { LoginVerificationToken } from '../../entities/security-entities.generated';
 import { Registration } from '../../entities/security-entities.generated';
+import { VerificationTokenRequest } from '../../entities/security-entities.generated';
+import { AuthResult } from '../../entities/security-entities.generated';
+import { ExternalProvider } from '../../entities/security-entities.generated';
+import { Login } from '../../entities/security-entities.generated';
+import { RefreshTokenRequest } from '../../entities/security-entities.generated';
+import { RoleSaveBody } from '../../entities/security-entities.generated';
+import { RegistrationVerificationToken } from '../../entities/security-entities.generated';
 import { RegistrationVerificationResult } from '../../entities/security-entities.generated';
 import { RefreshToken } from '../../entities/security-entities.generated';
-import { RoleSaveBody } from '../../entities/security-entities.generated';
-import { ExternalProvider } from '../../entities/security-entities.generated';
-import { VerificationTokenRequest } from '../../entities/security-entities.generated';
-import { RegistrationVerificationToken } from '../../entities/security-entities.generated';
-import { Login } from '../../entities/security-entities.generated';
-import { AuthResult } from '../../entities/security-entities.generated';
+import { LoginVerificationToken } from '../../entities/security-entities.generated';
 import { JwtAuthResult } from '../../entities/security-entities.generated';
-import { RefreshTokenRequest } from '../../entities/security-entities.generated';
 import { Permission } from '../../entities/security-entities.generated';
 import { PermissionSaveBody } from '../../entities/security-entities.generated';
 import { Role } from '../../entities/security-entities.generated';
@@ -123,6 +124,14 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     updatePoints = (updatePointsDTO: UpdatePoints): Observable<any> => { 
         return this.http.post(`${environment.apiUrl}/BusinessSystem/UpdatePoints`, updatePointsDTO, environment.httpOptions);
+    }
+
+    excelManualUpdatePoints = (dto: ExcelManualUpdatePoints): Observable<any> => { 
+        let formData = new FormData();
+        formData.append('BusinessSystemId', dto.businessSystemId.toString());
+        formData.append('BusinessSystemVersion', dto.businessSystemVersion.toString());
+        formData.append('Excel', dto.excel);
+        return this.http.post(`${environment.apiUrl}/BusinessSystem/ExcelManualUpdatePoints`, formData, environment.httpOptions);
     }
 
     getBusinessSystemListForDropdown = (): Observable<Namebook[]> => { 
@@ -417,45 +426,6 @@ export class ApiGeneratedService extends ApiSecurityService {
 
 
 
-    getPartnerRoleList = (): Observable<PartnerRole[]> => { 
-        return this.http.get<PartnerRole[]>(`${environment.apiUrl}/PartnerRole/GetPartnerRoleList`, environment.httpOptions);
-    }
-
-    getPartnerRole = (id: number): Observable<PartnerRole> => { 
-        return this.http.get<PartnerRole>(`${environment.apiUrl}/PartnerRole/GetPartnerRole?id=${id}`, environment.httpOptions);
-    }
-
-    getPartnerRoleListForAutocomplete = (limit: number, query: string): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerRoleListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
-    }
-
-
-
-
-
-    getPartnerUsersNamebookListForPartnerRole = (id: number): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerUsersNamebookListForPartnerRole?id=${id}`, environment.httpSkipSpinnerOptions);
-    }
-
-    getPartnerPermissionsNamebookListForPartnerRole = (id: number): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerPermissionsNamebookListForPartnerRole?id=${id}`, environment.httpSkipSpinnerOptions);
-    }
-
-    savePartnerRole = (saveBodyDTO: PartnerRoleSaveBody): Observable<PartnerRoleSaveBody> => { 
-        return this.http.put<PartnerRoleSaveBody>(`${environment.apiUrl}/PartnerRole/SavePartnerRole`, saveBodyDTO, environment.httpOptions);
-    }
-
-
-
-    deletePartnerRole = (id: number): Observable<any> => { 
-        return this.http.delete(`${environment.apiUrl}/PartnerRole/DeletePartnerRole?id=${id}`, environment.httpOptions);
-    }
-
-
-
-
-
-
     getPartnerNotificationList = (): Observable<PartnerNotification[]> => { 
         return this.http.get<PartnerNotification[]>(`${environment.apiUrl}/PartnerNotification/GetPartnerNotificationList`, environment.httpOptions);
     }
@@ -568,6 +538,45 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     deleteSegmentation = (id: number): Observable<any> => { 
         return this.http.delete(`${environment.apiUrl}/Segmentation/DeleteSegmentation?id=${id}`, environment.httpOptions);
+    }
+
+
+
+
+
+
+    getPartnerRoleList = (): Observable<PartnerRole[]> => { 
+        return this.http.get<PartnerRole[]>(`${environment.apiUrl}/PartnerRole/GetPartnerRoleList`, environment.httpOptions);
+    }
+
+    getPartnerRole = (id: number): Observable<PartnerRole> => { 
+        return this.http.get<PartnerRole>(`${environment.apiUrl}/PartnerRole/GetPartnerRole?id=${id}`, environment.httpOptions);
+    }
+
+    getPartnerRoleListForAutocomplete = (limit: number, query: string): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerRoleListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
+    }
+
+
+
+
+
+    getPartnerUsersNamebookListForPartnerRole = (id: number): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerUsersNamebookListForPartnerRole?id=${id}`, environment.httpSkipSpinnerOptions);
+    }
+
+    getPartnerPermissionsNamebookListForPartnerRole = (id: number): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerPermissionsNamebookListForPartnerRole?id=${id}`, environment.httpSkipSpinnerOptions);
+    }
+
+    savePartnerRole = (saveBodyDTO: PartnerRoleSaveBody): Observable<PartnerRoleSaveBody> => { 
+        return this.http.put<PartnerRoleSaveBody>(`${environment.apiUrl}/PartnerRole/SavePartnerRole`, saveBodyDTO, environment.httpOptions);
+    }
+
+
+
+    deletePartnerRole = (id: number): Observable<any> => { 
+        return this.http.delete(`${environment.apiUrl}/PartnerRole/DeletePartnerRole?id=${id}`, environment.httpOptions);
     }
 
 
