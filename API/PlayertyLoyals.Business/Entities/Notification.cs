@@ -3,10 +3,12 @@ using Soft.Generator.Shared.Attributes.EF.UI;
 using Soft.Generator.Shared.BaseEntities;
 using Soft.Generator.Shared.Enums;
 using System.ComponentModel.DataAnnotations;
+using PlayertyLoyals.Business.DTO;
+using Soft.Generator.Shared.Interfaces;
 
 namespace PlayertyLoyals.Business.Entities
 {
-    public class Notification : BusinessObject<long>
+    public class Notification : BusinessObject<long>, INotification<UserExtended>
     {
         [UIColWidth("col-12")]
         [SoftDisplayName]
@@ -23,6 +25,11 @@ namespace PlayertyLoyals.Business.Entities
         [StringLength(1000, MinimumLength = 1)]
         public string EmailBody { get; set; }
 
-        public virtual List<UserExtended> Users { get; } = new(); // M2M
+        #region UIColumn
+        [UIColumn(nameof(UserExtendedDTO.Email))]
+        [UIColumn(nameof(UserExtendedDTO.CreatedAt))]
+        #endregion
+        [SimpleManyToManyTableLazyLoad]
+        public virtual List<UserExtended> Recipients { get; } = new(); // M2M
     }
 }

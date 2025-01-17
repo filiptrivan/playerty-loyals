@@ -46,6 +46,7 @@ export class PartnerNotificationDetailsComponent extends BaseFormCopy implements
         ];
     }
 
+    // FT: Needs to do it like arrow function
     sendEmailNotification = () => {
         this.apiService.sendPartnerNotificationEmail(this.partnerNotificationFormGroup.getRawValue().id, this.partnerNotificationFormGroup.getRawValue().version).subscribe(() => {
             this.messageService.successMessage(this.translocoService.translate('SuccessfulAttempt'));

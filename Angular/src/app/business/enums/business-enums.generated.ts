@@ -1,3 +1,10 @@
+export enum NotificationDiscriminatorCodes
+{
+    Notification,
+	PartnerNotification,
+    
+}
+
 export enum PartnerPermissionCodes
 {
     ReadPartnerRole = 1,

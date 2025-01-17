@@ -990,6 +990,15 @@ namespace PlayertyLoyals.Shared.Terms {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string Recipients {
+            get {
+                return ResourceManager.GetString("Recipients", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string Role {
             get {
                 return ResourceManager.GetString("Role", resourceCulture);

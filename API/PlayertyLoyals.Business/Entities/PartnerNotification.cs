@@ -1,19 +1,30 @@
-﻿using Soft.Generator.Security.Entities;
-using Soft.Generator.Shared.Attributes.EF;
+﻿using Soft.Generator.Shared.Attributes.EF;
 using Soft.Generator.Shared.Attributes.EF.UI;
 using PlayertyLoyals.Business.DTO;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations.Schema;
+using Soft.Generator.Shared.Interfaces;
+using Soft.Generator.Shared.Enums;
+using Soft.Generator.Shared.BaseEntities;
 
 namespace PlayertyLoyals.Business.Entities
 {
-    public class PartnerNotification : Notification
+    public class PartnerNotification : BusinessObject<long>, INotification<PartnerUser>
     {
+        [UIColWidth("col-12")]
+        [SoftDisplayName]
+        [StringLength(100, MinimumLength = 1)]
+        [Required]
+        public string Title { get; set; }
+
+        [UIControlType(nameof(UIControlTypeCodes.TextArea))]
+        [StringLength(400, MinimumLength = 1)]
+        [Required]
+        public string Description { get; set; }
+
+        [UIControlType(nameof(UIControlTypeCodes.Editor))]
+        [StringLength(1000, MinimumLength = 1)]
+        public string EmailBody { get; set; }
+
         [UIDoNotGenerate]
         [ManyToOneRequired]
         [WithMany(nameof(Partner.PartnerNotifications))]
@@ -27,6 +38,6 @@ namespace PlayertyLoyals.Business.Entities
         [UIColumn(nameof(PartnerUserDTO.CreatedAt))]
         #endregion
         [SimpleManyToManyTableLazyLoad]
-        public virtual List<PartnerUser> PartnerUsers { get; } = new(); // M2M
+        public virtual List<PartnerUser> Recipients { get; } = new(); // M2M
     }
 }

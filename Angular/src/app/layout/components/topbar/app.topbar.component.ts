@@ -97,7 +97,7 @@ export class AppTopBarComponent implements OnDestroy {
       this.companyName = currentPartner?.name ?? environment.companyName;
 
       if (currentPartner !== undefined) {
-        this.apiService.getUnreadNotificationCountForTheCurrentPartnerUser().subscribe(count => {
+        this.apiService.getUnreadNotificationCountForCurrentPartnerUser().subscribe(count => {
           this.currentUserNotificationsCount = count;
         });
       }

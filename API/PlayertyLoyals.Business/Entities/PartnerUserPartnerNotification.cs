@@ -12,7 +12,7 @@ namespace PlayertyLoyals.Business.Entities
 {
     public class PartnerUserPartnerNotification 
     {
-        [M2MMaintanceEntity(nameof(PartnerNotification.PartnerUsers))]
+        [M2MMaintanceEntity(nameof(PartnerNotification.Recipients))]
         public virtual PartnerNotification PartnerNotification { get; set; }
 
         [M2MExtendEntity(nameof(PartnerUser.PartnerNotifications))]

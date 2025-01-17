@@ -1,10 +1,17 @@
-﻿namespace PlayertyLoyals.Business.DTO
+﻿using PlayertyLoyals.Business.Enums;
+using Soft.Generator.Shared.Attributes.EF.UI;
+
+namespace PlayertyLoyals.Business.DTO
 {
     public partial class NotificationDTO
     {
         /// <summary>
         /// This property is only for currently logged in user
         /// </summary>
+        [UIDoNotGenerate]
         public bool? IsMarkedAsRead { get; set; }
+
+        [UIDoNotGenerate]
+        public NotificationDiscriminatorCodes Discriminator { get; set; }
     }
 }

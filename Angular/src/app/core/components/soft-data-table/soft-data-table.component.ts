@@ -329,12 +329,13 @@ export class SoftDataTableComponent implements OnInit {
         case 'text':
           return rowData[col.field];
         case 'date':
-          if (col.showTime) {
+          if (rowData[col.field] == null)
+            return null;
+          
+          if (col.showTime)
             return formatDate(rowData[col.field], 'dd.MM.yyyy. HH:mm', this.locale);
-          }
-          else{
+          else
             return formatDate(rowData[col.field], 'dd.MM.yyyy.', this.locale);
-          }
         case 'multiselect':
           return rowData[col.field];
         case 'boolean':

@@ -48,14 +48,14 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public override async Task<TableResponseDTO<PartnerUserDTO>> GetPartnerUsersTableDataForPartnerNotification(TableFilterDTO tableFilterDTO)
+        public override async Task<TableResponseDTO<PartnerUserDTO>> GetRecipientsTableDataForPartnerNotification(TableFilterDTO tableFilterDTO)
         {
             return await _loyalsBusinessService.GetPartnerUserTableData(tableFilterDTO, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.Id), false);
         }
 
         [HttpPost]
         [AuthGuard]
-        public override async Task<IActionResult> ExportPartnerUsersTableDataToExcelForPartnerNotification(TableFilterDTO tableFilterDTO)
+        public override async Task<IActionResult> ExportRecipientsTableDataToExcelForPartnerNotification(TableFilterDTO tableFilterDTO)
         {
             byte[] fileContent = await _loyalsBusinessService.ExportPartnerUserTableDataToExcel(tableFilterDTO, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Korisnici.xlsx"));
@@ -63,16 +63,16 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> GetPartnerUserNamebookListForPartnerNotification(long partnerNotificationId)
+        public async Task<List<NamebookDTO<long>>> GetRecipientsNamebookListForPartnerNotification(long partnerNotificationId)
         {
-            return await _loyalsBusinessService.GetPartnerUsersNamebookListForPartnerNotification(partnerNotificationId, false);
+            return await _loyalsBusinessService.GetRecipientsNamebookListForPartnerNotification(partnerNotificationId, false);
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task<LazyLoadSelectedIdsResultDTO<long>> LazyLoadSelectedPartnerUserIdsForPartnerNotification(TableFilterDTO tableFilterDTO)
+        public override async Task<LazyLoadSelectedIdsResultDTO<long>> LazyLoadSelectedRecipientsIdsForPartnerNotification(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LazyLoadSelectedPartnerUsersIdsForPartnerNotification(tableFilterDTO, _context.DbSet<PartnerUser>()
+            return await _loyalsBusinessService.LazyLoadSelectedRecipientsIdsForPartnerNotification(tableFilterDTO, _context.DbSet<PartnerUser>()
                 .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
                 .OrderBy(x => x.Id));
         }
@@ -86,16 +86,37 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<NotificationDTO>> GetNotificationListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<NotificationDTO>> GetNotificationsForCurrentPartnerUser(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.GetNotificationListForTheCurrentPartnerUser(tableFilterDTO);
+            return await _loyalsBusinessService.GetNotificationsForCurrentPartnerUser(tableFilterDTO);
         }
 
         [HttpGet]
         [AuthGuard]
-        public async Task<int> GetUnreadNotificationCountForTheCurrentPartnerUser()
+        public async Task<int> GetUnreadNotificationCountForCurrentPartnerUser()
         {
-            return await _loyalsBusinessService.GetUnreadNotificationCountForTheCurrentPartnerUser();
+            return await _loyalsBusinessService.GetUnreadNotificationCountForCurrentPartnerUser();
+        }
+
+        [HttpDelete]
+        [AuthGuard]
+        public async Task DeletePartnerNotificationForCurrentPartnerUser(long partnerNotificationId, int partnerNotificationVersion)
+        {
+            await _loyalsBusinessService.DeletePartnerNotificationForCurrentPartnerUser(partnerNotificationId, partnerNotificationVersion);
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task MarkPartnerNotificationAsReadForCurrentPartnerUser(long partnerNotificationId, int partnerNotificationVersion)
+        {
+            await _loyalsBusinessService.MarkPartnerNotificationAsReadForCurrentPartnerUser(partnerNotificationId, partnerNotificationVersion);
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task MarkPartnerNotificationAsUnreadForCurrentPartnerUser(long partnerNotificationId, int partnerNotificationVersion)
+        {
+            await _loyalsBusinessService.MarkPartnerNotificationAsUnreadForCurrentPartnerUser(partnerNotificationId, partnerNotificationVersion);
         }
 
     }

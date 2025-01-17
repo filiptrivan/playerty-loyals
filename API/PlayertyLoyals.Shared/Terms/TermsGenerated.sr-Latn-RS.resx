@@ -208,6 +208,9 @@
   <data name="EmailBody" xml:space="preserve">
     <value />
   </data>
+  <data name="Recipients" xml:space="preserve">
+    <value />
+  </data>
   <data name="PartnerList" xml:space="preserve">
     <value />
   </data>

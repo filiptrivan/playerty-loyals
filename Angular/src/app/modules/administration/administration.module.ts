@@ -16,7 +16,7 @@ import { PartnerDetailsComponent } from './pages/partners/partner-details.compon
 import { SoftColorpickComponent } from "../../core/controls/soft-colorpick/soft-colorpick.component";
 import { TranslocoDirective } from '@jsverse/transloco';
 import { ProductsRecommendationComponent } from "../../business/components/base-details/base-details";
-import { PartnerBaseComponent } from 'src/app/business/components/base-details/business-base-details.generated';
+import { NotificationBaseComponent, PartnerBaseComponent } from 'src/app/business/components/base-details/business-base-details.generated';
 
 const routes: Routes = [
     {
@@ -63,6 +63,7 @@ const routes: Routes = [
         SegmentationSelectComponent,
         TranslocoDirective,
         PartnerBaseComponent,
+        NotificationBaseComponent,
     ],
     declarations: [
         UserListComponent,

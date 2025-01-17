@@ -1,4 +1,4 @@
-<ng-container *transloco="let t">
+<!-- <ng-container *transloco="let t">
     @defer (when loading === false) {
         <soft-card [title]="t('Notification')" icon="pi pi-bell">
     
@@ -42,4 +42,27 @@
     } @placeholder {
         <card-skeleton [height]="502"></card-skeleton>
     }
+</ng-container> -->
+
+<ng-container *transloco="let t">
+    <soft-card [title]="t('PartnerNotification')" icon="pi pi-bell">
+        <soft-panel [isFirstMultiplePanel]="true" [showPanelHeader]="false">
+            <panel-body>
+                <div class="grid">
+                    <div class="col-12">
+                        <soft-checkbox [control]="isMarkedAsRead" [label]="t('NotifyUsers')" [initializeToFalse]="false" [fakeLabel]="false"></soft-checkbox>
+                    </div>
+                </div>
+            </panel-body>
+        </soft-panel>
+        
+        <notification-base-details
+        [formGroup]="formGroup" 
+        [notificationFormGroup]="notificationFormGroup" 
+        (onSave)="onSave()"
+        [isLastMultiplePanel]="true"
+        [additionalButtons]="additionalButtons"
+        />
+
+    </soft-card>
 </ng-container>

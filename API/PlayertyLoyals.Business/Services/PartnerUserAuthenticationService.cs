@@ -19,6 +19,7 @@ using PlayertyLoyals.Business.DataMappers;
 using Microsoft.Extensions.Caching.Memory;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Soft.Generator.Shared.SoftExceptions;
 
 namespace PlayertyLoyals.Business.Services
 {
@@ -145,7 +146,16 @@ namespace PlayertyLoyals.Business.Services
             {
                 string partnerCode = GetCurrentPartnerCode();
                 long userId = _authenticationService.GetCurrentUserId();
-                return await _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId).Select(x => x.Id).SingleOrDefaultAsync();
+
+                long partnerUserId = await _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId).Select(x => x.Id).SingleOrDefaultAsync();
+
+                if (partnerUserId == 0)
+                {
+                    // TODO FT: Log more explanatory message with ids
+                    throw new BusinessException("Profil za partnera traženog korisnika nije pronađen, možda je obrisan u međuvremenu.");
+                }
+
+                return partnerUserId;
             });
         }
 

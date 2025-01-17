@@ -9,25 +9,25 @@ import { SimpleSaveResult } from 'src/app/core/entities/simple-save-result';
 import { TableFilter } from 'src/app/core/entities/table-filter';
 import { TableResponse } from 'src/app/core/entities/table-response';
 import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
-import { Notification } from '../../entities/business-entities.generated';
-import { MergedPartnerUser } from '../../entities/business-entities.generated';
-import { Product } from '../../entities/business-entities.generated';
-import { UserExtendedSaveBody } from '../../entities/business-entities.generated';
-import { BusinessSystemUpdatePointsDataBody } from '../../entities/business-entities.generated';
-import { UpdatePoints } from '../../entities/business-entities.generated';
-import { PartnerNotificationSaveBody } from '../../entities/business-entities.generated';
-import { Brand } from '../../entities/business-entities.generated';
-import { NotificationSaveBody } from '../../entities/business-entities.generated';
-import { QrCode } from '../../entities/business-entities.generated';
-import { SegmentationItem } from '../../entities/business-entities.generated';
-import { ExternalTransaction } from '../../entities/business-entities.generated';
 import { PartnerUserSaveBody } from '../../entities/business-entities.generated';
-import { ExternalDiscountProductGroup } from '../../entities/business-entities.generated';
-import { BusinessSystemTier } from '../../entities/business-entities.generated';
-import { ExcelManualUpdatePoints } from '../../entities/business-entities.generated';
-import { BusinessSystemTierDiscountProductGroup } from '../../entities/business-entities.generated';
+import { NotificationSaveBody } from '../../entities/business-entities.generated';
 import { TierSaveBody } from '../../entities/business-entities.generated';
+import { BusinessSystemTier } from '../../entities/business-entities.generated';
+import { ExternalDiscountProductGroup } from '../../entities/business-entities.generated';
+import { Product } from '../../entities/business-entities.generated';
+import { MergedPartnerUser } from '../../entities/business-entities.generated';
+import { Brand } from '../../entities/business-entities.generated';
+import { UserExtendedSaveBody } from '../../entities/business-entities.generated';
+import { ExternalTransaction } from '../../entities/business-entities.generated';
+import { SegmentationItem } from '../../entities/business-entities.generated';
 import { PartnerRoleSaveBody } from '../../entities/business-entities.generated';
+import { PartnerNotificationSaveBody } from '../../entities/business-entities.generated';
+import { UpdatePoints } from '../../entities/business-entities.generated';
+import { BusinessSystemTierDiscountProductGroup } from '../../entities/business-entities.generated';
+import { Notification } from '../../entities/business-entities.generated';
+import { BusinessSystemUpdatePointsDataBody } from '../../entities/business-entities.generated';
+import { QrCode } from '../../entities/business-entities.generated';
+import { ExcelManualUpdatePoints } from '../../entities/business-entities.generated';
 import { BusinessSystem } from '../../entities/business-entities.generated';
 import { BusinessSystemSaveBody } from '../../entities/business-entities.generated';
 import { BusinessSystemTierSaveBody } from '../../entities/business-entities.generated';
@@ -64,18 +64,18 @@ import { TransactionSaveBody } from '../../entities/business-entities.generated'
 import { UserExtended } from '../../entities/business-entities.generated';
 import { UserNotification } from '../../entities/business-entities.generated';
 import { UserNotificationSaveBody } from '../../entities/business-entities.generated';
-import { Registration } from '../../entities/security-entities.generated';
-import { VerificationTokenRequest } from '../../entities/security-entities.generated';
+import { JwtAuthResult } from '../../entities/security-entities.generated';
 import { AuthResult } from '../../entities/security-entities.generated';
+import { VerificationTokenRequest } from '../../entities/security-entities.generated';
+import { RegistrationVerificationResult } from '../../entities/security-entities.generated';
+import { RegistrationVerificationToken } from '../../entities/security-entities.generated';
 import { ExternalProvider } from '../../entities/security-entities.generated';
+import { LoginVerificationToken } from '../../entities/security-entities.generated';
 import { Login } from '../../entities/security-entities.generated';
 import { RefreshTokenRequest } from '../../entities/security-entities.generated';
-import { RoleSaveBody } from '../../entities/security-entities.generated';
-import { RegistrationVerificationToken } from '../../entities/security-entities.generated';
-import { RegistrationVerificationResult } from '../../entities/security-entities.generated';
+import { Registration } from '../../entities/security-entities.generated';
 import { RefreshToken } from '../../entities/security-entities.generated';
-import { LoginVerificationToken } from '../../entities/security-entities.generated';
-import { JwtAuthResult } from '../../entities/security-entities.generated';
+import { RoleSaveBody } from '../../entities/security-entities.generated';
 import { Permission } from '../../entities/security-entities.generated';
 import { PermissionSaveBody } from '../../entities/security-entities.generated';
 import { Role } from '../../entities/security-entities.generated';
@@ -150,6 +150,22 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.get<Product[]>(`${environment.apiUrl}/Home/GetProductListForRecommendation`, environment.httpOptions);
     }
 
+    sendNotificationEmail = (notificationId: number, notificationVersion: number): Observable<any> => { 
+        return this.http.get(`${environment.apiUrl}/Notification/SendNotificationEmail?notificationId=${notificationId}&notificationVersion=${notificationVersion}`, environment.httpOptions);
+    }
+
+    deleteNotificationForCurrentUser = (notificationId: number, notificationVersion: number): Observable<any> => { 
+        return this.http.delete(`${environment.apiUrl}/Notification/DeleteNotificationForCurrentUser?notificationId=${notificationId}&notificationVersion=${notificationVersion}`, environment.httpOptions);
+    }
+
+    markNotificationAsReadForCurrentUser = (notificationId: number, notificationVersion: number): Observable<any> => { 
+        return this.http.get(`${environment.apiUrl}/Notification/MarkNotificationAsReadForCurrentUser?notificationId=${notificationId}&notificationVersion=${notificationVersion}`, environment.httpOptions);
+    }
+
+    markNotificationAsUnreadForCurrentUser = (notificationId: number, notificationVersion: number): Observable<any> => { 
+        return this.http.get(`${environment.apiUrl}/Notification/MarkNotificationAsUnreadForCurrentUser?notificationId=${notificationId}&notificationVersion=${notificationVersion}`, environment.httpOptions);
+    }
+
     getCurrentPartner = (): Observable<Partner> => { 
         return this.http.get<Partner>(`${environment.apiUrl}/Partner/GetCurrentPartner`, environment.httpOptions);
     }
@@ -170,32 +186,44 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.post(`${environment.apiUrl}/PartnerNotification/ExportPartnerNotificationTableDataToExcel`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
     }
 
-    getPartnerUsersTableDataForPartnerNotification = (tableFilterDTO: TableFilter): Observable<TableResponse<PartnerUser>> => { 
-        return this.http.post<TableResponse<PartnerUser>>(`${environment.apiUrl}/PartnerNotification/GetPartnerUsersTableDataForPartnerNotification`, tableFilterDTO, environment.httpSkipSpinnerOptions);
+    getRecipientsTableDataForPartnerNotification = (tableFilterDTO: TableFilter): Observable<TableResponse<PartnerUser>> => { 
+        return this.http.post<TableResponse<PartnerUser>>(`${environment.apiUrl}/PartnerNotification/GetRecipientsTableDataForPartnerNotification`, tableFilterDTO, environment.httpSkipSpinnerOptions);
     }
 
-    exportPartnerUsersTableDataToExcelForPartnerNotification = (tableFilterDTO: TableFilter): Observable<any> => { 
-        return this.http.post(`${environment.apiUrl}/PartnerNotification/ExportPartnerUsersTableDataToExcelForPartnerNotification`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
+    exportRecipientsTableDataToExcelForPartnerNotification = (tableFilterDTO: TableFilter): Observable<any> => { 
+        return this.http.post(`${environment.apiUrl}/PartnerNotification/ExportRecipientsTableDataToExcelForPartnerNotification`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
     }
 
-    getPartnerUserNamebookListForPartnerNotification = (partnerNotificationId: number): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerNotification/GetPartnerUserNamebookListForPartnerNotification?partnerNotificationId=${partnerNotificationId}`, environment.httpSkipSpinnerOptions);
+    getRecipientsNamebookListForPartnerNotification = (partnerNotificationId: number): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerNotification/GetRecipientsNamebookListForPartnerNotification?partnerNotificationId=${partnerNotificationId}`, environment.httpSkipSpinnerOptions);
     }
 
-    lazyLoadSelectedPartnerUserIdsForPartnerNotification = (tableFilterDTO: TableFilter): Observable<LazyLoadSelectedIdsResult> => { 
-        return this.http.post<LazyLoadSelectedIdsResult>(`${environment.apiUrl}/PartnerNotification/LazyLoadSelectedPartnerUserIdsForPartnerNotification`, tableFilterDTO, environment.httpSkipSpinnerOptions);
+    lazyLoadSelectedRecipientsIdsForPartnerNotification = (tableFilterDTO: TableFilter): Observable<LazyLoadSelectedIdsResult> => { 
+        return this.http.post<LazyLoadSelectedIdsResult>(`${environment.apiUrl}/PartnerNotification/LazyLoadSelectedRecipientsIdsForPartnerNotification`, tableFilterDTO, environment.httpSkipSpinnerOptions);
     }
 
     sendPartnerNotificationEmail = (partnerNotificationId: number, partnerNotificationVersion: number): Observable<any> => { 
         return this.http.get(`${environment.apiUrl}/PartnerNotification/SendPartnerNotificationEmail?partnerNotificationId=${partnerNotificationId}&partnerNotificationVersion=${partnerNotificationVersion}`, environment.httpOptions);
     }
 
-    getNotificationListForTheCurrentPartnerUser = (tableFilterDTO: TableFilter): Observable<TableResponse<Notification>> => { 
-        return this.http.post<TableResponse<Notification>>(`${environment.apiUrl}/PartnerNotification/GetNotificationListForTheCurrentPartnerUser`, tableFilterDTO, environment.httpSkipSpinnerOptions);
+    getNotificationsForCurrentPartnerUser = (tableFilterDTO: TableFilter): Observable<TableResponse<Notification>> => { 
+        return this.http.post<TableResponse<Notification>>(`${environment.apiUrl}/PartnerNotification/GetNotificationsForCurrentPartnerUser`, tableFilterDTO, environment.httpSkipSpinnerOptions);
     }
 
-    getUnreadNotificationCountForTheCurrentPartnerUser = (): Observable<number> => { 
-        return this.http.get<number>(`${environment.apiUrl}/PartnerNotification/GetUnreadNotificationCountForTheCurrentPartnerUser`, environment.httpOptions);
+    getUnreadNotificationCountForCurrentPartnerUser = (): Observable<number> => { 
+        return this.http.get<number>(`${environment.apiUrl}/PartnerNotification/GetUnreadNotificationCountForCurrentPartnerUser`, environment.httpOptions);
+    }
+
+    deletePartnerNotificationForCurrentPartnerUser = (partnerNotificationId: number, partnerNotificationVersion: number): Observable<any> => { 
+        return this.http.delete(`${environment.apiUrl}/PartnerNotification/DeletePartnerNotificationForCurrentPartnerUser?partnerNotificationId=${partnerNotificationId}&partnerNotificationVersion=${partnerNotificationVersion}`, environment.httpOptions);
+    }
+
+    markPartnerNotificationAsReadForCurrentPartnerUser = (partnerNotificationId: number, partnerNotificationVersion: number): Observable<any> => { 
+        return this.http.get(`${environment.apiUrl}/PartnerNotification/MarkPartnerNotificationAsReadForCurrentPartnerUser?partnerNotificationId=${partnerNotificationId}&partnerNotificationVersion=${partnerNotificationVersion}`, environment.httpOptions);
+    }
+
+    markPartnerNotificationAsUnreadForCurrentPartnerUser = (partnerNotificationId: number, partnerNotificationVersion: number): Observable<any> => { 
+        return this.http.get(`${environment.apiUrl}/PartnerNotification/MarkPartnerNotificationAsUnreadForCurrentPartnerUser?partnerNotificationId=${partnerNotificationId}&partnerNotificationVersion=${partnerNotificationVersion}`, environment.httpOptions);
     }
 
     getPartnerRoleTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<PartnerRole>> => { 
@@ -326,38 +354,6 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.get<Namebook[]>(`${environment.apiUrl}/Security/GetGenderNamebookListForDropdown`, environment.httpSkipSpinnerOptions);
     }
 
-    sendNotificationEmail = (notificationId: number, notificationVersion: number): Observable<any> => { 
-        return this.http.get(`${environment.apiUrl}/Security/SendNotificationEmail?notificationId=${notificationId}&notificationVersion=${notificationVersion}`, environment.httpOptions);
-    }
-
-    getNotificationTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<Notification>> => { 
-        return this.http.post<TableResponse<Notification>>(`${environment.apiUrl}/Security/GetNotificationTableData`, tableFilterDTO, environment.httpSkipSpinnerOptions);
-    }
-
-    exportNotificationTableDataToExcel = (tableFilterDTO: TableFilter): Observable<any> => { 
-        return this.http.post(`${environment.apiUrl}/Security/ExportNotificationTableDataToExcel`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
-    }
-
-    deleteNotification = (id: number): Observable<any> => { 
-        return this.http.delete(`${environment.apiUrl}/Security/DeleteNotification?id=${id}`, environment.httpOptions);
-    }
-
-    getNotification = (id: number): Observable<Notification> => { 
-        return this.http.get<Notification>(`${environment.apiUrl}/Security/GetNotification?id=${id}`, environment.httpOptions);
-    }
-
-    saveNotification = (notificationSaveBodyDTO: NotificationSaveBody): Observable<NotificationSaveBody> => { 
-        return this.http.put<NotificationSaveBody>(`${environment.apiUrl}/Security/SaveNotification`, notificationSaveBodyDTO, environment.httpOptions);
-    }
-
-    lazyLoadSelectedUserExtendedIdsForNotification = (tableFilterDTO: TableFilter): Observable<LazyLoadSelectedIdsResult> => { 
-        return this.http.post<LazyLoadSelectedIdsResult>(`${environment.apiUrl}/Security/LazyLoadSelectedUserExtendedIdsForNotification`, tableFilterDTO, environment.httpSkipSpinnerOptions);
-    }
-
-    getUserExtendedNamebookListForNotification = (notificationId: number): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Security/GetUserExtendedNamebookListForNotification?notificationId=${notificationId}`, environment.httpSkipSpinnerOptions);
-    }
-
     getSegmentationTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<Segmentation>> => { 
         return this.http.post<TableResponse<Segmentation>>(`${environment.apiUrl}/Segmentation/GetSegmentationTableData`, tableFilterDTO, environment.httpSkipSpinnerOptions);
     }
@@ -426,6 +422,45 @@ export class ApiGeneratedService extends ApiSecurityService {
 
 
 
+    getPartnerRoleList = (): Observable<PartnerRole[]> => { 
+        return this.http.get<PartnerRole[]>(`${environment.apiUrl}/PartnerRole/GetPartnerRoleList`, environment.httpOptions);
+    }
+
+    getPartnerRole = (id: number): Observable<PartnerRole> => { 
+        return this.http.get<PartnerRole>(`${environment.apiUrl}/PartnerRole/GetPartnerRole?id=${id}`, environment.httpOptions);
+    }
+
+    getPartnerRoleListForAutocomplete = (limit: number, query: string): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerRoleListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
+    }
+
+
+
+
+
+    getPartnerUsersNamebookListForPartnerRole = (id: number): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerUsersNamebookListForPartnerRole?id=${id}`, environment.httpSkipSpinnerOptions);
+    }
+
+    getPartnerPermissionsNamebookListForPartnerRole = (id: number): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerPermissionsNamebookListForPartnerRole?id=${id}`, environment.httpSkipSpinnerOptions);
+    }
+
+    savePartnerRole = (saveBodyDTO: PartnerRoleSaveBody): Observable<PartnerRoleSaveBody> => { 
+        return this.http.put<PartnerRoleSaveBody>(`${environment.apiUrl}/PartnerRole/SavePartnerRole`, saveBodyDTO, environment.httpOptions);
+    }
+
+
+
+    deletePartnerRole = (id: number): Observable<any> => { 
+        return this.http.delete(`${environment.apiUrl}/PartnerRole/DeletePartnerRole?id=${id}`, environment.httpOptions);
+    }
+
+
+
+
+
+
     getPartnerNotificationList = (): Observable<PartnerNotification[]> => { 
         return this.http.get<PartnerNotification[]>(`${environment.apiUrl}/PartnerNotification/GetPartnerNotificationList`, environment.httpOptions);
     }
@@ -448,9 +483,7 @@ export class ApiGeneratedService extends ApiSecurityService {
 
 
 
-    lazyLoadSelectedPartnerUsersIdsForPartnerNotification = (tableFilterDTO: TableFilter): Observable<LazyLoadSelectedIdsResult> => { 
-        return this.http.post<LazyLoadSelectedIdsResult>(`${environment.apiUrl}/PartnerNotification/LazyLoadSelectedPartnerUsersIdsForPartnerNotification`, tableFilterDTO, environment.httpSkipSpinnerOptions);
-    }
+
 
     savePartnerNotification = (saveBodyDTO: PartnerNotificationSaveBody): Observable<PartnerNotificationSaveBody> => { 
         return this.http.put<PartnerNotificationSaveBody>(`${environment.apiUrl}/PartnerNotification/SavePartnerNotification`, saveBodyDTO, environment.httpOptions);
@@ -460,6 +493,55 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     deletePartnerNotification = (id: number): Observable<any> => { 
         return this.http.delete(`${environment.apiUrl}/PartnerNotification/DeletePartnerNotification?id=${id}`, environment.httpOptions);
+    }
+
+
+    getNotificationTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<Notification>> => { 
+        return this.http.post<TableResponse<Notification>>(`${environment.apiUrl}/Notification/GetNotificationTableData`, tableFilterDTO, environment.httpSkipSpinnerOptions);
+    }
+
+    exportNotificationTableDataToExcel = (tableFilterDTO: TableFilter): Observable<any> => { 
+        return this.http.post(`${environment.apiUrl}/Notification/ExportNotificationTableDataToExcel`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
+    }
+
+    getNotificationList = (): Observable<Notification[]> => { 
+        return this.http.get<Notification[]>(`${environment.apiUrl}/Notification/GetNotificationList`, environment.httpOptions);
+    }
+
+    getNotification = (id: number): Observable<Notification> => { 
+        return this.http.get<Notification>(`${environment.apiUrl}/Notification/GetNotification?id=${id}`, environment.httpOptions);
+    }
+
+    getNotificationListForAutocomplete = (limit: number, query: string): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Notification/GetNotificationListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
+    }
+
+    getNotificationListForDropdown = (): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Notification/GetNotificationListForDropdown`, environment.httpSkipSpinnerOptions);
+    }
+
+
+
+    getRecipientsTableDataForNotification = (tableFilterDTO: TableFilter): Observable<TableResponse<UserExtended>> => { 
+        return this.http.post<TableResponse<UserExtended>>(`${environment.apiUrl}/Notification/GetRecipientsTableDataForNotification`, tableFilterDTO, environment.httpSkipSpinnerOptions);
+    }
+
+    exportRecipientsTableDataToExcelForNotification = (tableFilterDTO: TableFilter): Observable<any> => { 
+        return this.http.post(`${environment.apiUrl}/Notification/ExportRecipientsTableDataToExcelForNotification`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
+    }
+
+    lazyLoadSelectedRecipientsIdsForNotification = (tableFilterDTO: TableFilter): Observable<LazyLoadSelectedIdsResult> => { 
+        return this.http.post<LazyLoadSelectedIdsResult>(`${environment.apiUrl}/Notification/LazyLoadSelectedRecipientsIdsForNotification`, tableFilterDTO, environment.httpSkipSpinnerOptions);
+    }
+
+    saveNotification = (saveBodyDTO: NotificationSaveBody): Observable<NotificationSaveBody> => { 
+        return this.http.put<NotificationSaveBody>(`${environment.apiUrl}/Notification/SaveNotification`, saveBodyDTO, environment.httpOptions);
+    }
+
+
+
+    deleteNotification = (id: number): Observable<any> => { 
+        return this.http.delete(`${environment.apiUrl}/Notification/DeleteNotification?id=${id}`, environment.httpOptions);
     }
 
 
@@ -538,45 +620,6 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     deleteSegmentation = (id: number): Observable<any> => { 
         return this.http.delete(`${environment.apiUrl}/Segmentation/DeleteSegmentation?id=${id}`, environment.httpOptions);
-    }
-
-
-
-
-
-
-    getPartnerRoleList = (): Observable<PartnerRole[]> => { 
-        return this.http.get<PartnerRole[]>(`${environment.apiUrl}/PartnerRole/GetPartnerRoleList`, environment.httpOptions);
-    }
-
-    getPartnerRole = (id: number): Observable<PartnerRole> => { 
-        return this.http.get<PartnerRole>(`${environment.apiUrl}/PartnerRole/GetPartnerRole?id=${id}`, environment.httpOptions);
-    }
-
-    getPartnerRoleListForAutocomplete = (limit: number, query: string): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerRoleListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
-    }
-
-
-
-
-
-    getPartnerUsersNamebookListForPartnerRole = (id: number): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerUsersNamebookListForPartnerRole?id=${id}`, environment.httpSkipSpinnerOptions);
-    }
-
-    getPartnerPermissionsNamebookListForPartnerRole = (id: number): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerPermissionsNamebookListForPartnerRole?id=${id}`, environment.httpSkipSpinnerOptions);
-    }
-
-    savePartnerRole = (saveBodyDTO: PartnerRoleSaveBody): Observable<PartnerRoleSaveBody> => { 
-        return this.http.put<PartnerRoleSaveBody>(`${environment.apiUrl}/PartnerRole/SavePartnerRole`, saveBodyDTO, environment.httpOptions);
-    }
-
-
-
-    deletePartnerRole = (id: number): Observable<any> => { 
-        return this.http.delete(`${environment.apiUrl}/PartnerRole/DeletePartnerRole?id=${id}`, environment.httpOptions);
     }
 
 

@@ -3,18 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { forkJoin, map, Observable } from 'rxjs';
-import { Notification, NotificationSaveBody } from 'src/app/business/entities/business-entities.generated';
-import { TableFilter } from 'src/app/core/entities/table-filter';
+import { Notification } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
-import { AllClickEvent, Column  } from 'src/app/core/components/soft-data-table/soft-data-table.component';
 import { SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { nameof } from 'src/app/core/services/helper-functions';
-import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
+import { SoftButton } from 'src/app/core/entities/soft-button';
 
 @Component({
     selector: 'notification-details',
@@ -26,17 +22,7 @@ export class NotificationDetailsComponent extends BaseFormCopy implements OnInit
 
     isMarkedAsRead = new SoftFormControl<boolean>(true, {updateOn: 'change'})
 
-    text: string;
-
-    userTableCols: Column[];
-    getUserTableDataObservableMethod = this.apiService.getUserTableData;
-    exportUserTableDataToExcelObservableMethod = this.apiService.exportUserTableDataToExcel;
-    deleteUserObservableMethod = this.apiService.deleteUser;
-    
-    newlySelectedUserList: number[] = [];
-    unselectedUserList: number[] = [];
-    isAllSelected: boolean = null;
-    lastLazyLoadTableFilter: TableFilter;
+    additionalButtons: SoftButton[];
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -55,70 +41,19 @@ export class NotificationDetailsComponent extends BaseFormCopy implements OnInit
     }
          
     override ngOnInit() {
-        this.formGroup.saveObservableMethod = this.apiService.saveNotification;
-
-        this.populateUserTableCols();
-        
-        this.route.params.subscribe((params) => {
-            this.modelId = params['id'];
-            if(this.modelId > 0){
-                forkJoin({
-                    notification: this.apiService.getNotification(this.modelId),
-                  }).subscribe(({ notification }) => {
-                    this.initNotificationFormGroup(new Notification(notification));
-                  });
-            }
-            else{
-                 this.initNotificationFormGroup(new Notification({id:0}));
-            }
-        });
+        this.additionalButtons = [
+            {label: this.translocoService.translate('SendEmailNotification'), onClick: this.sendEmailNotification, icon: 'pi pi-send'}
+        ];
     }
 
-    initNotificationFormGroup(notification: Notification){
-        this.baseFormService.initFormGroup(this.notificationFormGroup, this.formGroup, notification, nameof<NotificationSaveBody>('notificationDTO'));
-        this.loading = false;
-    }
-
-    sendEmailNotification(){
-        this.apiService.sendNotificationEmail(this.modelId, this.notificationFormGroup.getRawValue().version).subscribe(() => {
+    // FT: Needs to do it like arrow function
+    sendEmailNotification = () => {
+        this.apiService.sendNotificationEmail(this.notificationFormGroup.controls.id.value, this.notificationFormGroup.controls.version.value).subscribe(() => {
             this.messageService.successMessage(this.translocoService.translate('SuccessfulAttempt'));
         });
     }
 
-    populateUserTableCols(){
-        this.userTableCols = [
-            {name: this.translocoService.translate('User'), filterType: 'text', field: 'email'},
-            {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true},
-        ]
-    }
-
-    // FT: Using arrow function solved the problem with undefined this.modelId
-    selectedUserLazyLoad = (event: TableFilter): Observable<LazyLoadSelectedIdsResult> => {
-        let tableFilter: TableFilter = event;
-        tableFilter.additionalFilterIdLong = this.modelId;
-        
-        return this.apiService.lazyLoadSelectedUserExtendedIdsForNotification(tableFilter);
-    }
-
-    isAllSelectedChange(event: AllClickEvent){
-        this.isAllSelected = event.checked;
-    }
-
-    onLazyLoad(event: TableFilter){
-        this.lastLazyLoadTableFilter = event;
-    }
-
     override onBeforeSave = (): void => {
-        let saveBody = new NotificationSaveBody();
-
-        saveBody.selectedIds = this.newlySelectedUserList;
-        saveBody.unselectedIds = this.unselectedUserList;
-        saveBody.isAllSelected = this.isAllSelected;
-        saveBody.tableFilter = this.lastLazyLoadTableFilter;
-
-        saveBody.isMarkedAsRead = this.isMarkedAsRead.value;
-        saveBody.notificationDTO = this.notificationFormGroup.getRawValue();
-
-        this.saveBody = saveBody;
+        this.saveBody.isMarkedAsRead = this.isMarkedAsRead.value;
     }
 }

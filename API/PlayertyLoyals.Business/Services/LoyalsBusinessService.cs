@@ -92,64 +92,66 @@ namespace PlayertyLoyals.Business.Services
 
         #region Notification
 
-        public async Task<NotificationSaveBodyDTO> SaveNotificationAndReturnSaveBodyDTOAsync(NotificationSaveBodyDTO notificationSaveBodyDTO)
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                NotificationDTO savedNotificationDTO = await SaveNotificationAndReturnDTOAsync(notificationSaveBodyDTO.NotificationDTO, true, true);
-
-                PaginationResult<UserExtended> paginationResult = await GetUserExtendedListForPagination(notificationSaveBodyDTO.TableFilter, _context.DbSet<UserExtended>());
-
-                await UpdateUserExtendedListForNotificationWithLazyTableSelection(paginationResult.Query, savedNotificationDTO.Id, notificationSaveBodyDTO);
-
-                return new NotificationSaveBodyDTO
-                {
-                    NotificationDTO = savedNotificationDTO
-                };
-            });
-        }
-
-        public async Task UpdateUserExtendedListForNotificationWithLazyTableSelection(IQueryable<UserExtended> userExtendedQuery, long notificationId, ILazyTableSelectionDTO<long> lazyTableSelectionDTO)
-        {
-            await _context.WithTransactionAsync(async () =>
-            {
-                List<long> userExtendedListToInsert = null;
-
-                if (lazyTableSelectionDTO.IsAllSelected == true)
-                {
-                    userExtendedListToInsert = await userExtendedQuery.Where(x => lazyTableSelectionDTO.UnselectedIds.Contains(x.Id) == false).Select(x => x.Id).ToListAsync();
-                }
-                else if (lazyTableSelectionDTO.IsAllSelected == false)
-                {
-                    userExtendedListToInsert = await userExtendedQuery.Where(x => lazyTableSelectionDTO.SelectedIds.Contains(x.Id) == true).Select(x => x.Id).ToListAsync();
-                }
-                else if (lazyTableSelectionDTO.IsAllSelected == null)
-                {
-                    Notification notification = await GetInstanceAsync<Notification, long>(notificationId, null); // FT: Version will always be checked before or after this method
-
-                    List<long> alreadySelected = notification.Users == null ? new List<long>() : notification.Users.Select(x => x.Id).ToList();
-
-                    userExtendedListToInsert = alreadySelected
-                        .Union(lazyTableSelectionDTO.SelectedIds)
-                        .Except(lazyTableSelectionDTO.UnselectedIds)
-                        .ToList();
-                }
-
-                await UpdateUsersForNotification(notificationId, userExtendedListToInsert);
-            });
-        }
-
         public async Task SendNotificationEmail(long notificationId, int notificationVersion)
         {
             await _context.WithTransactionAsync(async () =>
             {
                 await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.EditNotification);
 
-                Notification notification = await GetInstanceAsync<Notification, long>(notificationId, notificationVersion); // FT: Checking version because if the user didn't save and some other user changed the version, he will send emails to wrong users
+                // FT: Checking version because if the user didn't save and some other user changed the version, he will send emails to wrong users
+                Notification notification = await GetInstanceAsync<Notification, long>(notificationId, notificationVersion); 
 
-                List<string> recipients = notification.Users.Select(x => x.Email).ToList();
+                List<string> recipients = notification.Recipients.Select(x => x.Email).ToList();
 
                 await _emailingService.SendEmailAsync(recipients, notification.Title, notification.EmailBody);
+            });
+        }
+
+        public async Task DeleteNotificationForCurrentUser(long notificationId, int notificationVersion)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                long currentUserId = _authenticationService.GetCurrentUserId();
+
+                //await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.EditNotification);
+
+                Notification notification = await GetInstanceAsync<Notification, long>(notificationId, notificationVersion);
+
+                await _context.DbSet<UserNotification>()
+                    .Where(x => x.User.Id == currentUserId && x.Notification.Id == notification.Id)
+                    .ExecuteDeleteAsync();
+            });
+        }
+
+        public async Task MarkNotificationAsReadForCurrentUser(long notificationId, int notificationVersion)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                long currentUserId = _authenticationService.GetCurrentUserId();
+
+                //await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.EditNotification);
+
+                Notification notification = await GetInstanceAsync<Notification, long>(notificationId, notificationVersion);
+
+                await _context.DbSet<UserNotification>()
+                    .Where(x => x.User.Id == currentUserId && x.Notification.Id == notification.Id)
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.IsMarkedAsRead, true));
+            });
+        }
+
+        public async Task MarkNotificationAsUnreadForCurrentUser(long notificationId, int notificationVersion)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                long currentUserId = _authenticationService.GetCurrentUserId();
+
+                //await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.EditNotification);
+
+                Notification notification = await GetInstanceAsync<Notification, long>(notificationId, notificationVersion);
+
+                await _context.DbSet<UserNotification>()
+                    .Where(x => x.User.Id == currentUserId && x.Notification.Id == notification.Id)
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.IsMarkedAsRead, false));
             });
         }
 
@@ -697,7 +699,7 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        protected override async Task<IQueryable<PartnerUser>> GetAllPartnerUsersQueryForPartnerNotification(IQueryable<PartnerUser> query)
+        protected override async Task<IQueryable<PartnerUser>> GetAllRecipientsQueryForPartnerNotification(IQueryable<PartnerUser> query)
         {
             return await _context.WithTransactionAsync(async () =>
             {
@@ -712,13 +714,13 @@ namespace PlayertyLoyals.Business.Services
             {
                 PartnerNotification partnerNotification = await GetInstanceAsync<PartnerNotification, long>(partnerNotificationId, partnerNotificationVersion); // FT: Checking version because if the user didn't save and some other user changed the version, he will send emails to wrong users
 
-                List<string> recipients = partnerNotification.PartnerUsers.Select(x => x.User.Email).ToList();
+                List<string> recipients = partnerNotification.Recipients.Select(x => x.User.Email).ToList();
 
                 await _emailingService.SendEmailAsync(recipients, partnerNotification.Title, partnerNotification.EmailBody);
             });
         }
 
-        public async Task<TableResponseDTO<NotificationDTO>> GetNotificationListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<NotificationDTO>> GetNotificationsForCurrentPartnerUser(TableFilterDTO tableFilterDTO)
         {
             TableResponseDTO<NotificationDTO> result = new TableResponseDTO<NotificationDTO>();
             long currentUserId = _authenticationService.GetCurrentUserId(); // FT: Not doing user.Notifications, because he could have a lot of them.
@@ -734,7 +736,7 @@ namespace PlayertyLoyals.Business.Services
                         UserId = x.User.Id,
                         NotificationId = x.Notification.Id,
                         IsMarkedAsRead = x.IsMarkedAsRead,
-                        Discriminator = nameof(UserNotification),
+                        Discriminator = NotificationDiscriminatorCodes.Notification,
                     });
 
                 var partnerNotificationPartnerUsersQuery = _context.DbSet<PartnerUserPartnerNotification>()
@@ -744,7 +746,7 @@ namespace PlayertyLoyals.Business.Services
                         UserId = x.PartnerUser.Id,
                         NotificationId = x.PartnerNotification.Id,
                         IsMarkedAsRead = x.IsMarkedAsRead,
-                        Discriminator = nameof(PartnerUserPartnerNotification),
+                        Discriminator = NotificationDiscriminatorCodes.PartnerNotification,
                     });
 
                 var combinedQuery = notificationUsersQuery.Concat(partnerNotificationPartnerUsersQuery); // FT: Concat instead of union because it includes duplicates
@@ -762,24 +764,27 @@ namespace PlayertyLoyals.Business.Services
                 {
                     NotificationDTO notificationDTO = new NotificationDTO();
 
-                    if (item.Discriminator == nameof(UserNotification))
+                    if (item.Discriminator == NotificationDiscriminatorCodes.Notification)
                     {
                         Notification notification = await GetInstanceAsync<Notification, long>(item.NotificationId, null);
                         notificationDTO.Id = notification.Id;
+                        notificationDTO.Version = notification.Version;
                         notificationDTO.Title = notification.Title;
                         notificationDTO.Description = notification.Description;
                         notificationDTO.CreatedAt = notification.CreatedAt;
-                        notificationDTO.IsMarkedAsRead = item.IsMarkedAsRead;
                     }
-                    else if (item.Discriminator == nameof(PartnerUserPartnerNotification))
+                    else if (item.Discriminator == NotificationDiscriminatorCodes.PartnerNotification)
                     {
                         PartnerNotification partnerNotification = await GetInstanceAsync<PartnerNotification, long>(item.NotificationId, null);
                         notificationDTO.Id = partnerNotification.Id;
+                        notificationDTO.Version = partnerNotification.Version;
                         notificationDTO.Title = partnerNotification.Title;
                         notificationDTO.Description = partnerNotification.Description;
                         notificationDTO.CreatedAt = partnerNotification.CreatedAt;
-                        notificationDTO.IsMarkedAsRead = item.IsMarkedAsRead;
                     }
+
+                    notificationDTO.IsMarkedAsRead = item.IsMarkedAsRead;
+                    notificationDTO.Discriminator = item.Discriminator;
 
                     notificationsDTO.Add(notificationDTO);
                 }
@@ -793,7 +798,7 @@ namespace PlayertyLoyals.Business.Services
             return result;
         }
 
-        public async Task<int> GetUnreadNotificationCountForTheCurrentPartnerUser()
+        public async Task<int> GetUnreadNotificationCountForCurrentPartnerUser()
         {
             long currentUserId = _authenticationService.GetCurrentUserId();
 
@@ -810,6 +815,54 @@ namespace PlayertyLoyals.Business.Services
                 int count = await notificationUsersQuery.CountAsync() + await partnerNotificationPartnerUsersQuery.CountAsync();
 
                 return count;
+            });
+        }
+
+        public async Task DeletePartnerNotificationForCurrentPartnerUser(long partnerNotificationId, int partnerNotificationVersion)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
+
+                //await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.EditNotification);
+
+                PartnerNotification partnerNotification = await GetInstanceAsync<PartnerNotification, long>(partnerNotificationId, partnerNotificationVersion);
+
+                await _context.DbSet<PartnerUserPartnerNotification>()
+                    .Where(x => x.PartnerUser.Id == currentPartnerUserId && x.PartnerNotification.Id == partnerNotification.Id)
+                    .ExecuteDeleteAsync();
+            });
+        }
+
+        public async Task MarkPartnerNotificationAsReadForCurrentPartnerUser(long partnerNotificationId, int partnerNotificationVersion)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
+
+                //await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.EditPartnerNotification);
+
+                PartnerNotification partnerNotification = await GetInstanceAsync<PartnerNotification, long>(partnerNotificationId, partnerNotificationVersion);
+
+                await _context.DbSet<PartnerUserPartnerNotification>()
+                    .Where(x => x.PartnerUser.Id == currentPartnerUserId && x.PartnerNotification.Id == partnerNotification.Id)
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.IsMarkedAsRead, true));
+            });
+        }
+
+        public async Task MarkPartnerNotificationAsUnreadForCurrentPartnerUser(long partnerNotificationId, int partnerNotificationVersion)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
+
+                //await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.EditPartnerNotification);
+
+                PartnerNotification partnerNotification = await GetInstanceAsync<PartnerNotification, long>(partnerNotificationId, partnerNotificationVersion);
+
+                await _context.DbSet<PartnerUserPartnerNotification>()
+                    .Where(x => x.PartnerUser.Id == currentPartnerUserId && x.PartnerNotification.Id == partnerNotification.Id)
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.IsMarkedAsRead, false));
             });
         }
 

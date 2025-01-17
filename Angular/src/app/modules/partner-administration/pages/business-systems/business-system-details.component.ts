@@ -143,6 +143,11 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
 
     excelManualUpdatePoints(){
+        if (this.excelManualUpdatePointsFile == null) {
+            this.showInvalidFieldsMessage();
+            return;
+        }
+        
         let excelManualUpdatePoints = new ExcelManualUpdatePoints({
             businessSystemId: this.businessSystemFormGroup.controls.id.getRawValue(),
             businessSystemVersion: this.businessSystemFormGroup.controls.version.getRawValue(),

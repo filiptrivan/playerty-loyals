@@ -16,7 +16,7 @@
                 <div class="header-separator"></div>
               </div>
               <div>
-                <i class="pi pi-ellipsis-h icon-hover" (click)="menu.toggle($event)"></i>
+                <i class="pi pi-ellipsis-h icon-hover" (click)="menuToggle($event, notification)"></i>
                   <p-menu #menu [model]="crudMenu" [popup]="true" appendTo="body"></p-menu>
               </div>
             </div>

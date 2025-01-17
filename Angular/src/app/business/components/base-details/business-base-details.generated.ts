@@ -193,14 +193,26 @@ export class BusinessSystemBaseComponent {
                     <div class="col-12">
                         <soft-textbox [control]="control('title', notificationFormGroup)"></soft-textbox>
                     </div>
-                    <div class="col-12 md:col-6">
-                        <soft-checkbox [control]="control('isMarkedAsRead', notificationFormGroup)"></soft-checkbox>
-                    </div>
                     <div class="col-12">
                         <soft-textarea [control]="control('description', notificationFormGroup)"></soft-textarea>
                     </div>
                     <div class="col-12">
                         <soft-editor [control]="control('emailBody', notificationFormGroup)"></soft-editor>
+                    </div>
+                    <div class="col-12">
+                        <soft-data-table 
+                            [tableTitle]="t('RecipientsForNotification')" 
+                            [cols]="recipientsTableColsForNotification" 
+                            [getTableDataObservableMethod]="getRecipientsTableDataObservableMethodForNotification" 
+                            [exportTableDataToExcelObservableMethod]="exportRecipientsTableDataToExcelObservableMethodForNotification"
+                            [showAddButton]="false" 
+                            selectionMode="multiple"
+                            [newlySelectedItems]="newlySelectedRecipientsIdsForNotification" 
+                            [unselectedItems]="unselectedRecipientsIdsForNotification" 
+                            [rows]="5" 
+                            (onLazyLoad)="onRecipientsLazyLoadForNotification($event)"
+                            [selectedLazyLoadObservableMethod]="selectedRecipientsLazyLoadMethodForNotification" 
+                            (onIsAllSelectedChange)="areAllRecipientsSelectedChangeForNotification($event)"></soft-data-table>
                     </div>
                 </form>
             } @placeholder {
@@ -250,7 +262,13 @@ export class NotificationBaseComponent {
 
 
 
-
+    recipientsTableColsForNotification: Column<UserExtended>[];
+    getRecipientsTableDataObservableMethodForNotification = this.apiService.getRecipientsTableDataForNotification;
+    exportRecipientsTableDataToExcelObservableMethodForNotification = this.apiService.exportRecipientsTableDataToExcelForNotification;
+    newlySelectedRecipientsIdsForNotification: number[] = [];
+    unselectedRecipientsIdsForNotification: number[] = [];
+    areAllRecipientsSelectedForNotification: boolean = null;
+    lastRecipientsLazyLoadTableFilterForNotification: TableFilter;
 
     constructor(
         private apiService: ApiService,
@@ -267,7 +285,10 @@ export class NotificationBaseComponent {
 
 
 
-
+            saveBody.selectedRecipientsIds = this.newlySelectedRecipientsIdsForNotification;
+            saveBody.unselectedRecipientsIds = this.unselectedRecipientsIdsForNotification;
+            saveBody.areAllRecipientsSelected = this.areAllRecipientsSelectedForNotification;
+            saveBody.recipientsTableFilter = this.lastRecipientsLazyLoadTableFilterForNotification;
             return saveBody;
         }
 
@@ -278,7 +299,10 @@ export class NotificationBaseComponent {
             this.modelId = params['id'];
 
 
-
+            this.recipientsTableColsForNotification = [
+                {name: this.translocoService.translate('Email'), filterType: 'text', field: 'email'  },
+                {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt' , showMatchModes: true }
+            ];
 
             if(this.modelId > 0){
                 forkJoin({
@@ -313,7 +337,18 @@ export class NotificationBaseComponent {
 
 
 
+    selectedRecipientsLazyLoadMethodForNotification = (event: TableFilter): Observable<LazyLoadSelectedIdsResult> => {
+        let tableFilter: TableFilter = event;
+        tableFilter.additionalFilterIdLong = this.modelId;
 
+        return this.apiService.lazyLoadSelectedRecipientsIdsForNotification(tableFilter);
+    }
+    areAllRecipientsSelectedChangeForNotification(event: AllClickEvent){
+        this.areAllRecipientsSelectedForNotification = event.checked;
+    }
+    onRecipientsLazyLoadForNotification(event: TableFilter){
+        this.lastRecipientsLazyLoadTableFilterForNotification = event;
+    }
 
 
 
@@ -520,18 +555,18 @@ export class PartnerBaseComponent {
                     </div>
                     <div class="col-12">
                         <soft-data-table 
-                            [tableTitle]="t('PartnerUsersForPartnerNotification')" 
-                            [cols]="partnerUsersTableColsForPartnerNotification" 
-                            [getTableDataObservableMethod]="getPartnerUsersTableDataObservableMethodForPartnerNotification" 
-                            [exportTableDataToExcelObservableMethod]="exportPartnerUsersTableDataToExcelObservableMethodForPartnerNotification"
+                            [tableTitle]="t('RecipientsForPartnerNotification')" 
+                            [cols]="recipientsTableColsForPartnerNotification" 
+                            [getTableDataObservableMethod]="getRecipientsTableDataObservableMethodForPartnerNotification" 
+                            [exportTableDataToExcelObservableMethod]="exportRecipientsTableDataToExcelObservableMethodForPartnerNotification"
                             [showAddButton]="false" 
                             selectionMode="multiple"
-                            [newlySelectedItems]="newlySelectedPartnerUsersIdsForPartnerNotification" 
-                            [unselectedItems]="unselectedPartnerUsersIdsForPartnerNotification" 
+                            [newlySelectedItems]="newlySelectedRecipientsIdsForPartnerNotification" 
+                            [unselectedItems]="unselectedRecipientsIdsForPartnerNotification" 
                             [rows]="5" 
-                            (onLazyLoad)="onPartnerUsersLazyLoadForPartnerNotification($event)"
-                            [selectedLazyLoadObservableMethod]="selectedPartnerUsersLazyLoadMethodForPartnerNotification" 
-                            (onIsAllSelectedChange)="areAllPartnerUsersSelectedChangeForPartnerNotification($event)"></soft-data-table>
+                            (onLazyLoad)="onRecipientsLazyLoadForPartnerNotification($event)"
+                            [selectedLazyLoadObservableMethod]="selectedRecipientsLazyLoadMethodForPartnerNotification" 
+                            (onIsAllSelectedChange)="areAllRecipientsSelectedChangeForPartnerNotification($event)"></soft-data-table>
                     </div>
                 </form>
             } @placeholder {
@@ -581,13 +616,13 @@ export class PartnerNotificationBaseComponent {
 
 
 
-    partnerUsersTableColsForPartnerNotification: Column<PartnerUser>[];
-    getPartnerUsersTableDataObservableMethodForPartnerNotification = this.apiService.getPartnerUsersTableDataForPartnerNotification;
-    exportPartnerUsersTableDataToExcelObservableMethodForPartnerNotification = this.apiService.exportPartnerUsersTableDataToExcelForPartnerNotification;
-    newlySelectedPartnerUsersIdsForPartnerNotification: number[] = [];
-    unselectedPartnerUsersIdsForPartnerNotification: number[] = [];
-    areAllPartnerUsersSelectedForPartnerNotification: boolean = null;
-    lastPartnerUsersLazyLoadTableFilterForPartnerNotification: TableFilter;
+    recipientsTableColsForPartnerNotification: Column<PartnerUser>[];
+    getRecipientsTableDataObservableMethodForPartnerNotification = this.apiService.getRecipientsTableDataForPartnerNotification;
+    exportRecipientsTableDataToExcelObservableMethodForPartnerNotification = this.apiService.exportRecipientsTableDataToExcelForPartnerNotification;
+    newlySelectedRecipientsIdsForPartnerNotification: number[] = [];
+    unselectedRecipientsIdsForPartnerNotification: number[] = [];
+    areAllRecipientsSelectedForPartnerNotification: boolean = null;
+    lastRecipientsLazyLoadTableFilterForPartnerNotification: TableFilter;
 
     constructor(
         private apiService: ApiService,
@@ -604,10 +639,10 @@ export class PartnerNotificationBaseComponent {
 
 
 
-            saveBody.selectedPartnerUsersIds = this.newlySelectedPartnerUsersIdsForPartnerNotification;
-            saveBody.unselectedPartnerUsersIds = this.unselectedPartnerUsersIdsForPartnerNotification;
-            saveBody.areAllPartnerUsersSelected = this.areAllPartnerUsersSelectedForPartnerNotification;
-            saveBody.partnerUsersTableFilter = this.lastPartnerUsersLazyLoadTableFilterForPartnerNotification;
+            saveBody.selectedRecipientsIds = this.newlySelectedRecipientsIdsForPartnerNotification;
+            saveBody.unselectedRecipientsIds = this.unselectedRecipientsIdsForPartnerNotification;
+            saveBody.areAllRecipientsSelected = this.areAllRecipientsSelectedForPartnerNotification;
+            saveBody.recipientsTableFilter = this.lastRecipientsLazyLoadTableFilterForPartnerNotification;
             return saveBody;
         }
 
@@ -618,7 +653,7 @@ export class PartnerNotificationBaseComponent {
             this.modelId = params['id'];
 
 
-            this.partnerUsersTableColsForPartnerNotification = [
+            this.recipientsTableColsForPartnerNotification = [
                 {name: this.translocoService.translate('User'), filterType: 'text', field: 'userDisplayName'  },
                 {name: this.translocoService.translate('Points'), filterType: 'numeric', field: 'points' , showMatchModes: true },
                 {name: this.translocoService.translate('Tier'), filterType: 'multiselect', field: 'tierDisplayName' , filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(this.apiService.getPrimengNamebookListForDropdown(this.apiService.getTierListForDropdown)) },
@@ -659,17 +694,17 @@ export class PartnerNotificationBaseComponent {
 
 
 
-    selectedPartnerUsersLazyLoadMethodForPartnerNotification = (event: TableFilter): Observable<LazyLoadSelectedIdsResult> => {
+    selectedRecipientsLazyLoadMethodForPartnerNotification = (event: TableFilter): Observable<LazyLoadSelectedIdsResult> => {
         let tableFilter: TableFilter = event;
         tableFilter.additionalFilterIdLong = this.modelId;
 
-        return this.apiService.lazyLoadSelectedPartnerUsersIdsForPartnerNotification(tableFilter);
+        return this.apiService.lazyLoadSelectedRecipientsIdsForPartnerNotification(tableFilter);
     }
-    areAllPartnerUsersSelectedChangeForPartnerNotification(event: AllClickEvent){
-        this.areAllPartnerUsersSelectedForPartnerNotification = event.checked;
+    areAllRecipientsSelectedChangeForPartnerNotification(event: AllClickEvent){
+        this.areAllRecipientsSelectedForPartnerNotification = event.checked;
     }
-    onPartnerUsersLazyLoadForPartnerNotification(event: TableFilter){
-        this.lastPartnerUsersLazyLoadTableFilterForPartnerNotification = event;
+    onRecipientsLazyLoadForPartnerNotification(event: TableFilter){
+        this.lastRecipientsLazyLoadTableFilterForPartnerNotification = event;
     }
 
 

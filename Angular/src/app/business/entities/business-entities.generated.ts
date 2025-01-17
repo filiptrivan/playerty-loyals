@@ -3,7 +3,7 @@ import { TableFilter } from "src/app/core/entities/table-filter";
 import { TableFilterContext } from "src/app/core/entities/table-filter-context";
 import { TableFilterSortMeta } from "src/app/core/entities/table-filter-sort-meta";
 import { MimeTypes } from "src/app/core/entities/mime-type";
-
+import { NotificationDiscriminatorCodes } from "../enums/business-enums.generated";
 
 
 export class Brand extends BaseEntity
@@ -592,6 +592,7 @@ export class Notification extends BaseEntity
 	createdAt?: Date;
 	modifiedAt?: Date;
 	isMarkedAsRead?: boolean;
+	discriminator?: NotificationDiscriminatorCodes;
 
     constructor(
     {
@@ -602,7 +603,8 @@ export class Notification extends BaseEntity
 		id,
 		createdAt,
 		modifiedAt,
-		isMarkedAsRead
+		isMarkedAsRead,
+		discriminator
     }:{
         title?: string;
 		description?: string;
@@ -611,7 +613,8 @@ export class Notification extends BaseEntity
 		id?: number;
 		createdAt?: Date;
 		modifiedAt?: Date;
-		isMarkedAsRead?: boolean;     
+		isMarkedAsRead?: boolean;
+		discriminator?: NotificationDiscriminatorCodes;     
     } = {}
     ) {
         super('Notification'); 
@@ -624,6 +627,7 @@ export class Notification extends BaseEntity
 		this.createdAt = createdAt;
 		this.modifiedAt = modifiedAt;
 		this.isMarkedAsRead = isMarkedAsRead;
+		this.discriminator = discriminator;
     }
 }
 
@@ -631,6 +635,10 @@ export class Notification extends BaseEntity
 export class NotificationSaveBody extends BaseEntity
 {
     notificationDTO?: Notification;
+	selectedRecipientsIds?: number[];
+	unselectedRecipientsIds?: number[];
+	areAllRecipientsSelected?: boolean;
+	recipientsTableFilter?: TableFilter;
 	isMarkedAsRead?: boolean;
 	tableFilter?: TableFilter;
 	selectedIds?: number[];
@@ -640,6 +648,10 @@ export class NotificationSaveBody extends BaseEntity
     constructor(
     {
         notificationDTO,
+		selectedRecipientsIds,
+		unselectedRecipientsIds,
+		areAllRecipientsSelected,
+		recipientsTableFilter,
 		isMarkedAsRead,
 		tableFilter,
 		selectedIds,
@@ -647,6 +659,10 @@ export class NotificationSaveBody extends BaseEntity
 		isAllSelected
     }:{
         notificationDTO?: Notification;
+		selectedRecipientsIds?: number[];
+		unselectedRecipientsIds?: number[];
+		areAllRecipientsSelected?: boolean;
+		recipientsTableFilter?: TableFilter;
 		isMarkedAsRead?: boolean;
 		tableFilter?: TableFilter;
 		selectedIds?: number[];
@@ -657,6 +673,10 @@ export class NotificationSaveBody extends BaseEntity
         super('NotificationSaveBody'); 
 
         this.notificationDTO = notificationDTO;
+		this.selectedRecipientsIds = selectedRecipientsIds;
+		this.unselectedRecipientsIds = unselectedRecipientsIds;
+		this.areAllRecipientsSelected = areAllRecipientsSelected;
+		this.recipientsTableFilter = recipientsTableFilter;
 		this.isMarkedAsRead = isMarkedAsRead;
 		this.tableFilter = tableFilter;
 		this.selectedIds = selectedIds;
@@ -748,11 +768,11 @@ export class PartnerSaveBody extends BaseEntity
 
 export class PartnerNotification extends BaseEntity
 {
-    partnerDisplayName?: string;
-	partnerId?: number;
-	title?: string;
+    title?: string;
 	description?: string;
 	emailBody?: string;
+	partnerDisplayName?: string;
+	partnerId?: number;
 	version?: number;
 	id?: number;
 	createdAt?: Date;
@@ -760,21 +780,21 @@ export class PartnerNotification extends BaseEntity
 
     constructor(
     {
-        partnerDisplayName,
-		partnerId,
-		title,
+        title,
 		description,
 		emailBody,
+		partnerDisplayName,
+		partnerId,
 		version,
 		id,
 		createdAt,
 		modifiedAt
     }:{
-        partnerDisplayName?: string;
-		partnerId?: number;
-		title?: string;
+        title?: string;
 		description?: string;
 		emailBody?: string;
+		partnerDisplayName?: string;
+		partnerId?: number;
 		version?: number;
 		id?: number;
 		createdAt?: Date;
@@ -783,11 +803,11 @@ export class PartnerNotification extends BaseEntity
     ) {
         super('PartnerNotification'); 
 
-        this.partnerDisplayName = partnerDisplayName;
-		this.partnerId = partnerId;
-		this.title = title;
+        this.title = title;
 		this.description = description;
 		this.emailBody = emailBody;
+		this.partnerDisplayName = partnerDisplayName;
+		this.partnerId = partnerId;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;
@@ -799,36 +819,36 @@ export class PartnerNotification extends BaseEntity
 export class PartnerNotificationSaveBody extends BaseEntity
 {
     partnerNotificationDTO?: PartnerNotification;
-	selectedPartnerUsersIds?: number[];
-	unselectedPartnerUsersIds?: number[];
-	areAllPartnerUsersSelected?: boolean;
-	partnerUsersTableFilter?: TableFilter;
+	selectedRecipientsIds?: number[];
+	unselectedRecipientsIds?: number[];
+	areAllRecipientsSelected?: boolean;
+	recipientsTableFilter?: TableFilter;
 	isMarkedAsRead?: boolean;
 
     constructor(
     {
         partnerNotificationDTO,
-		selectedPartnerUsersIds,
-		unselectedPartnerUsersIds,
-		areAllPartnerUsersSelected,
-		partnerUsersTableFilter,
+		selectedRecipientsIds,
+		unselectedRecipientsIds,
+		areAllRecipientsSelected,
+		recipientsTableFilter,
 		isMarkedAsRead
     }:{
         partnerNotificationDTO?: PartnerNotification;
-		selectedPartnerUsersIds?: number[];
-		unselectedPartnerUsersIds?: number[];
-		areAllPartnerUsersSelected?: boolean;
-		partnerUsersTableFilter?: TableFilter;
+		selectedRecipientsIds?: number[];
+		unselectedRecipientsIds?: number[];
+		areAllRecipientsSelected?: boolean;
+		recipientsTableFilter?: TableFilter;
 		isMarkedAsRead?: boolean;     
     } = {}
     ) {
         super('PartnerNotificationSaveBody'); 
 
         this.partnerNotificationDTO = partnerNotificationDTO;
-		this.selectedPartnerUsersIds = selectedPartnerUsersIds;
-		this.unselectedPartnerUsersIds = unselectedPartnerUsersIds;
-		this.areAllPartnerUsersSelected = areAllPartnerUsersSelected;
-		this.partnerUsersTableFilter = partnerUsersTableFilter;
+		this.selectedRecipientsIds = selectedRecipientsIds;
+		this.unselectedRecipientsIds = unselectedRecipientsIds;
+		this.areAllRecipientsSelected = areAllRecipientsSelected;
+		this.recipientsTableFilter = recipientsTableFilter;
 		this.isMarkedAsRead = isMarkedAsRead;
     }
 }
