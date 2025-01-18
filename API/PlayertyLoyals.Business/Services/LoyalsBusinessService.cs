@@ -52,9 +52,9 @@ namespace PlayertyLoyals.Business.Services
 
         #region User
 
-        public async Task<UserExtendedDTO> SaveUserExtendedAndReturnSaveBodyDTOAsync(UserExtendedSaveBodyDTO userExtendedSaveBodyDTO)
+        protected override async Task OnBeforeSaveUserExtendedAndReturnSaveBodyDTO(UserExtendedSaveBodyDTO userExtendedSaveBodyDTO)
         {
-            return await _context.WithTransactionAsync(async () =>
+            await _context.WithTransactionAsync(async () =>
             {
                 if (userExtendedSaveBodyDTO.UserExtendedDTO.Id == 0)
                     throw new HackerException("You can't add new user.");
@@ -64,11 +64,13 @@ namespace PlayertyLoyals.Business.Services
                 if (userExtendedSaveBodyDTO.UserExtendedDTO.Email != user.Email)
                     throw new HackerException("You can't change email from here.");
 
-                if (userExtendedSaveBodyDTO.SelectedRoleIds != null)
-                    await _securityBusinessService.UpdateRoleListForUser(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.SelectedRoleIds);
-
-                return await SaveUserExtendedAndReturnDTOAsync(userExtendedSaveBodyDTO.UserExtendedDTO, false, false); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
+                await _securityBusinessService.UpdateRoleListForUser(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.SelectedRolesIds);
             });
+        }
+
+        public async Task<List<NamebookDTO<int>>> GetRolesNamebookListForUserExtended(long userExtendedId, bool authorize)
+        {
+            return await _securityBusinessService.GetRolesNamebookListForUserExtended(userExtendedId, authorize);
         }
 
         public async Task<List<string>> GetCurrentUserPermissionCodes()
@@ -540,12 +542,12 @@ namespace PlayertyLoyals.Business.Services
             UserExtendedSaveBodyDTO userExtendedSaveBodyDTO = new UserExtendedSaveBodyDTO
             {
                 UserExtendedDTO = partnerUserSaveBodyDTO.UserExtendedDTO,
-                SelectedRoleIds = partnerUserSaveBodyDTO.SelectedRoleIds,
+                SelectedRolesIds = partnerUserSaveBodyDTO.SelectedRoleIds,
             };
 
             return await _context.WithTransactionAsync(async () =>
             {
-                UserExtendedDTO savedUserExtendedDTO = await SaveUserExtendedAndReturnSaveBodyDTOAsync(userExtendedSaveBodyDTO);
+                UserExtendedSaveBodyDTO savedUserExtendedSaveBodyDTO = await SaveUserExtendedAndReturnSaveBodyDTOAsync(userExtendedSaveBodyDTO);
 
                 if (partnerUserSaveBodyDTO.PartnerUserDTO.Id == 0)
                     throw new HackerException("You can't add new partner user.");
@@ -565,7 +567,7 @@ namespace PlayertyLoyals.Business.Services
 
                 return new PartnerUserSaveBodyDTO
                 {
-                    UserExtendedDTO = savedUserExtendedDTO,
+                    UserExtendedDTO = savedUserExtendedSaveBodyDTO.UserExtendedDTO,
                     PartnerUserDTO = savedPartnerUser.Adapt<PartnerUserDTO>(Mapper.PartnerUserToDTOConfig()),
                 };
             });

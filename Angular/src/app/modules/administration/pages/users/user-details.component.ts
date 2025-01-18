@@ -2,14 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { forkJoin } from 'rxjs';
-import { UserExtended, UserExtendedSaveBody } from 'src/app/business/entities/business-entities.generated';
+import { UserExtended } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
-import { BaseForm } from 'src/app/core/components/base-form/base-form';
-import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
-import { PrimengOption } from 'src/app/core/entities/primeng-option';
+import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
+import { SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { BaseFormService } from 'src/app/core/services/base-form.service';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 
 @Component({
@@ -17,10 +16,8 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     templateUrl: './user-details.component.html',
     styles: [],
 })
-export class UserDetailsComponent extends BaseForm<UserExtended> implements OnInit {
-    roleOptions: PrimengOption[];
-    genderOptions: PrimengOption[];
-    selectedRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
+export class UserDetailsComponent extends BaseFormCopy implements OnInit {
+    userExtendedFormGroup = new SoftFormGroup<UserExtended>({});
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -32,45 +29,21 @@ export class UserDetailsComponent extends BaseForm<UserExtended> implements OnIn
         protected override translocoService: TranslocoService,
         protected override translateClassNamesService: TranslateClassNamesService,
         protected override validatorService: ValidatorService,
-        private apiService: ApiService) 
-        {
-        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
-        }
+        protected override baseFormService: BaseFormService,
+        private apiService: ApiService,
+    ) {
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService, baseFormService);
+    }
          
     override ngOnInit() {
-        this.controllerName = 'Security';
-
-        this.route.params.subscribe((params) => {
-            this.modelId = params['id'];
-
-            forkJoin({
-                userExtended: this.apiService.getUser(this.modelId),
-                rolesForTheUser: this.apiService.getRoleNamebookListForUserExtended(this.modelId),
-                roleOptions: this.apiService.getRoleListForDropdown(),
-                genderOptions: this.apiService.getGenderNamebookListForDropdown(),                  
-            })
-            .subscribe(({ userExtended, rolesForTheUser, roleOptions, genderOptions}) => {
-                this.init(new UserExtended(userExtended));
-                this.selectedRoles.setValue(
-                    rolesForTheUser.map(role => { return role.id })
-                );
-                this.roleOptions = roleOptions.map(n => { return { label: n.displayName, value: n.id } });
-                this.genderOptions = genderOptions.map(n => { return { label: n.displayName, value: n.id }});
-            });
-        });
+        
     }
 
-    init(model: UserExtended){
-        this.initFormGroup(model);
+    userExtendedFormGroupInitFinish(){
+        this.userExtendedFormGroup.controls.email.disable();
     }
 
     override onBeforeSave = (): void => {
-        let saveBody: UserExtendedSaveBody = new UserExtendedSaveBody();
 
-        saveBody.userExtendedDTO = this.model;
-        saveBody.selectedRoleIds = this.selectedRoles.value;
-
-        this.saveBody = saveBody;
-        return;
     }
 }

@@ -23,6 +23,7 @@ import { TableFilter } from 'src/app/core/entities/table-filter';
 import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
 import { SoftFileSelectEvent } from 'src/app/core/controls/soft-file/soft-file.component';
 import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, BusinessSystemUpdatePointsDataBody, ExcelManualUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, MergedPartnerUser, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerRoleSaveBody, PartnerUserSaveBody, Product, QrCode, SegmentationItem, TierSaveBody, UpdatePoints, UserExtendedSaveBody, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUser, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
+import { Permission, Role, RolePermission, UserRole, PermissionSaveBody, RoleSaveBody, RolePermissionSaveBody, UserRoleSaveBody } from '../../entities/security-entities.generated';
 
 @Component({
     selector: 'business-system-base-details',
@@ -76,7 +77,7 @@ import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, Busi
         SoftDataTableComponent,
     ]
 })
-export class BusinessSystemBaseComponent {
+export class BusinessSystemBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onBusinessSystemFormGroupInitFinish = new EventEmitter<void>();
     @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
@@ -241,7 +242,7 @@ export class BusinessSystemBaseComponent {
         SoftDataTableComponent,
     ]
 })
-export class NotificationBaseComponent {
+export class NotificationBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onNotificationFormGroupInitFinish = new EventEmitter<void>();
     @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
@@ -426,7 +427,7 @@ export class NotificationBaseComponent {
         SoftDataTableComponent,
     ]
 })
-export class PartnerBaseComponent {
+export class PartnerBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onPartnerFormGroupInitFinish = new EventEmitter<void>();
     @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
@@ -595,7 +596,7 @@ export class PartnerBaseComponent {
         SoftDataTableComponent,
     ]
 })
-export class PartnerNotificationBaseComponent {
+export class PartnerNotificationBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onPartnerNotificationFormGroupInitFinish = new EventEmitter<void>();
     @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
@@ -774,7 +775,7 @@ export class PartnerNotificationBaseComponent {
         SoftDataTableComponent,
     ]
 })
-export class PartnerRoleBaseComponent {
+export class PartnerRoleBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onPartnerRoleFormGroupInitFinish = new EventEmitter<void>();
     @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
@@ -958,7 +959,7 @@ export class PartnerRoleBaseComponent {
         SoftDataTableComponent,
     ]
 })
-export class SegmentationBaseComponent {
+export class SegmentationBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onSegmentationFormGroupInitFinish = new EventEmitter<void>();
     @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
@@ -1124,7 +1125,7 @@ export class SegmentationBaseComponent {
         SoftDataTableComponent,
     ]
 })
-export class TierBaseComponent {
+export class TierBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onTierFormGroupInitFinish = new EventEmitter<void>();
     @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
@@ -1202,6 +1203,167 @@ export class TierBaseComponent {
         this.tierFormGroup.mainDTOName = this.tierSaveBodyName;
         this.loading = false;
         this.onTierFormGroupInitFinish.next();
+    }
+
+
+
+
+
+
+
+
+
+
+
+    control(formControlName: string, formGroup: SoftFormGroup){
+        return getControl(formControlName, formGroup);
+    }
+
+    getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+        return this.baseFormService.getFormArrayGroups<T>(formArray);
+    }
+
+    save(){
+        this.onSave.next();
+    }
+
+}
+
+@Component({
+    selector: 'user-extended-base-details',
+    template:`
+<ng-container *transloco="let t">
+    <soft-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
+        <panel-header></panel-header>
+
+        <panel-body>
+            @defer (when loading === false) {
+                <form class="grid">
+                    <div class="col-12">
+                        <soft-textbox [control]="control('email', userExtendedFormGroup)"></soft-textbox>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-calendar [control]="control('birthDate', userExtendedFormGroup)"></soft-calendar>
+                    </div>
+                    <div class="col-12 md:col-6">
+                        <soft-dropdown [control]="control('genderId', userExtendedFormGroup)" [options]="genderForUserExtendedOptions"></soft-dropdown>
+                    </div>
+                    <div class="col-12">
+                        <soft-multiselect [control]="selectedRolesForUserExtended" [options]="rolesForUserExtendedOptions" [label]="t('Roles')"></soft-multiselect>
+                    </div>
+                </form>
+            } @placeholder {
+                <card-skeleton [height]="502"></card-skeleton>
+            }
+        </panel-body>
+
+        <panel-footer>
+            <p-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></p-button>
+            @for (button of additionalButtons; track button.label) {
+                <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
+            }
+            <soft-return-button></soft-return-button>
+        </panel-footer>
+    </soft-panel>
+</ng-container>
+    `,
+    standalone: true,
+    imports: [
+        CommonModule, 
+        PrimengModule,
+        SoftControlsModule,
+        TranslocoDirective,
+        CardSkeletonComponent,
+        IndexCardComponent,
+        SoftDataTableComponent,
+    ]
+})
+export class UserExtendedBaseDetailsComponent {
+    @Output() onSave = new EventEmitter<void>();
+    @Output() onUserExtendedFormGroupInitFinish = new EventEmitter<void>();
+    @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SoftFormGroup;
+    @Input() userExtendedFormGroup: SoftFormGroup<UserExtended>;
+    @Input() additionalButtons: SoftButton[] = [];
+    @Input() isFirstMultiplePanel: boolean = false;
+    @Input() isMiddleMultiplePanel: boolean = false;
+    @Input() isLastMultiplePanel: boolean = false;
+    modelId: number;
+    loading: boolean = true;
+
+    userExtendedSaveBodyName: string = nameof<UserExtendedSaveBody>('userExtendedDTO');
+
+
+
+    genderForUserExtendedOptions: PrimengOption[];
+    rolesForUserExtendedOptions: PrimengOption[];
+
+    selectedRolesForUserExtended = new SoftFormControl<number[]>(null, {updateOn: 'change'});
+
+
+
+    constructor(
+        private apiService: ApiService,
+        private route: ActivatedRoute,
+        private baseFormService: BaseFormService,
+        private validatorService: ValidatorService,
+        private translocoService: TranslocoService,
+    ) {}
+
+    ngOnInit(){
+        this.formGroup.initSaveBody = () => { 
+            let saveBody = new UserExtendedSaveBody();
+            saveBody.userExtendedDTO = this.userExtendedFormGroup.getRawValue();
+
+            saveBody.selectedRolesIds = this.selectedRolesForUserExtended.getRawValue();
+
+
+            return saveBody;
+        }
+
+        this.formGroup.saveObservableMethod = this.apiService.saveUserExtended;
+        this.formGroup.mainDTOName = this.userExtendedSaveBodyName;
+
+        this.route.params.subscribe(async (params) => {
+            this.modelId = params['id'];
+
+            this.apiService.getPrimengNamebookListForDropdown(this.apiService.getGenderListForDropdown).subscribe(po => {
+                this.genderForUserExtendedOptions = po;
+            });
+            this.apiService.getPrimengNamebookListForDropdown(this.apiService.getRoleListForDropdown).subscribe(po => {
+                this.rolesForUserExtendedOptions = po;
+            });
+
+
+            if(this.modelId > 0){
+                forkJoin({
+                    userExtended: this.apiService.getUserExtended(this.modelId),
+
+                    rolesForUserExtended: this.apiService.getRolesNamebookListForUserExtended(this.modelId),
+                })
+                .subscribe(({ userExtended, rolesForUserExtended }) => {
+                    this.initUserExtendedFormGroup(new UserExtended(userExtended));
+
+                    this.selectedRolesForUserExtended.setValue(
+                        rolesForUserExtended.map(n => { return n.id })
+                    );
+
+                });
+            }
+            else{
+                this.initUserExtendedFormGroup(new UserExtended({id: 0}));
+
+            }
+        });
+    }
+
+    initUserExtendedFormGroup(userExtended: UserExtended) {
+        this.baseFormService.initFormGroup<UserExtended>(
+            this.userExtendedFormGroup, this.formGroup, userExtended, this.userExtendedSaveBodyName, []
+        );
+        this.userExtendedFormGroup.mainDTOName = this.userExtendedSaveBodyName;
+        this.loading = false;
+        this.onUserExtendedFormGroupInitFinish.next();
     }
 
 

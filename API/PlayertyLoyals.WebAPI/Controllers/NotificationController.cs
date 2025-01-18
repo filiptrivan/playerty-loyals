@@ -1,20 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PlayertyLoyals.Business.Entities;
-using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Services;
-using Soft.Generator.Security.DTO;
-using Soft.Generator.Security.Entities;
-using Soft.Generator.Security.Services;
 using Soft.Generator.Shared.Attributes;
-using Soft.Generator.Shared.DTO;
-using Soft.Generator.Shared.Helpers;
 using Soft.Generator.Shared.Interfaces;
-using Soft.Generator.Shared.Emailing;
-using PlayertyLoyals.Shared.Terms;
 using Azure.Storage.Blobs;
-using Microsoft.EntityFrameworkCore;
-using Soft.Generator.Shared.Terms;
-using PlayertyLoyals.Business.Enums;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {
@@ -62,9 +50,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         //[HttpPost]
         //[AuthGuard]
-        //public async Task<TableResponseDTO<NotificationDTO>> GetNotificationListForTheCurrentUser(TableFilterDTO tableFilterDTO)
+        //public async Task<TableResponseDTO<NotificationDTO>> GetNotificationListForCurrentUser(TableFilterDTO tableFilterDTO)
         //{
-        //    return await _loyalsBusinessService.GetNotificationListForTheCurrentUser(tableFilterDTO);
+        //    return await _loyalsBusinessService.GetNotificationListForCurrentUser(tableFilterDTO);
         //}
 
         // TODO FT: This should exist in other systems

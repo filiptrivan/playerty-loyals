@@ -1,37 +1,12 @@
 <ng-container *transloco="let t">
-    @defer (when model != null) {
-        <soft-card [title]="detailsTitle" icon="pi pi-user">
-            <soft-panel>
-                <panel-header></panel-header>
-        
-                <panel-body>
-                    <form [formGroup]="formGroup" class="grid">
-                        <div class="col-12">
-                            <soft-textbox [control]="control('email', false, false, true)"></soft-textbox>
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <soft-calendar [control]="control('birthDate')"></soft-calendar>
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <soft-dropdown [control]="control('genderId')" [options]="genderOptions"></soft-dropdown>
-                        </div>
-                        <div class="col-12">
-                            <soft-multiselect
-                            [control]="selectedRoles"
-                            [label]="t('RoleList')"
-                            [options]="roleOptions"></soft-multiselect>
-                        </div>
-                    </form>
-                </panel-body>
-        
-                <panel-footer>
-                    <p-button (onClick)="onSave()" [label]="t('Save')" icon="pi pi-save"></p-button>
-                    <soft-return-button></soft-return-button>
-                </panel-footer>
-            </soft-panel>
-    
-        </soft-card>
-    } @placeholder {
-        <card-skeleton [height]="502"></card-skeleton>
-    }
+    <soft-card [title]="t('User')" icon="pi pi-user">
+
+        <user-extended-base-details
+        [formGroup]="formGroup" 
+        [userExtendedFormGroup]="userExtendedFormGroup" 
+        (onSave)="onSave()" 
+        (onUserExtendedFormGroupInitFinish)="userExtendedFormGroupInitFinish()"
+        ></user-extended-base-details>
+
+    </soft-card>
 </ng-container>

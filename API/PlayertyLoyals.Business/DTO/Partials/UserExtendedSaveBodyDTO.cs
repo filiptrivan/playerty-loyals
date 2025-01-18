@@ -2,6 +2,6 @@
 {
     public partial class UserExtendedSaveBodyDTO
     {
-        public List<int> SelectedRoleIds { get; set; }
+        //public List<int> SelectedRolesIds { get; set; }
     }
 }

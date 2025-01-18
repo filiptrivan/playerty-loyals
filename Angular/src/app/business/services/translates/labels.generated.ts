@@ -149,12 +149,6 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('Description');
             case 'emailBody':
                 return this.translocoService.translate('EmailBody');
-            case 'tableFilter':
-                return this.translocoService.translate('TableFilter');
-            case 'unselectedIds':
-                return this.translocoService.translate('UnselectedIds');
-            case 'isAllSelected':
-                return this.translocoService.translate('IsAllSelected');
             case 'notificationDTO':
                 return this.translocoService.translate('NotificationDTO');
             case 'selectedRecipientsIds':
@@ -327,6 +321,8 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('BirthDate');
             case 'gender':
                 return this.translocoService.translate('Gender');
+            case 'selectedRolesIds':
+                return this.translocoService.translate('SelectedRolesIds');
             case 'notification':
                 return this.translocoService.translate('Notification');
             case 'userNotificationDTO':

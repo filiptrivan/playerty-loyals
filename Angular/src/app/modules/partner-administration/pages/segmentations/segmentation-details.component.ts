@@ -3,13 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { Segmentation } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { BaseFormService } from 'src/app/core/services/base-form.service';
 import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { Segmentation } from 'src/app/business/entities/business-entities.generated';
 
 @Component({
     selector: 'segmentation-details',

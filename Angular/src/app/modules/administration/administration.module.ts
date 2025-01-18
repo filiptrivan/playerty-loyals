@@ -13,10 +13,8 @@ import { NotificationTableComponent } from './pages/notifications/notification-t
 import { SegmentationSelectComponent } from './partials/segmentation-select.component';
 import { PartnerListComponent } from './pages/partners/partner-list.component';
 import { PartnerDetailsComponent } from './pages/partners/partner-details.component';
-import { SoftColorpickComponent } from "../../core/controls/soft-colorpick/soft-colorpick.component";
 import { TranslocoDirective } from '@jsverse/transloco';
-import { ProductsRecommendationComponent } from "../../business/components/base-details/base-details";
-import { NotificationBaseComponent, PartnerBaseComponent } from 'src/app/business/components/base-details/business-base-details.generated';
+import { NotificationBaseDetailsComponent, PartnerBaseDetailsComponent, UserExtendedBaseDetailsComponent } from 'src/app/business/components/base-details/business-base-details.generated';
 
 const routes: Routes = [
     {
@@ -55,16 +53,17 @@ const routes: Routes = [
 
 @NgModule({
     imports: [
-        RouterModule.forChild(routes),
-        PrimengModule,
-        SoftDataTableComponent,
-        SoftControlsModule,
-        CardSkeletonComponent,
-        SegmentationSelectComponent,
-        TranslocoDirective,
-        PartnerBaseComponent,
-        NotificationBaseComponent,
-    ],
+    RouterModule.forChild(routes),
+    PrimengModule,
+    SoftDataTableComponent,
+    SoftControlsModule,
+    CardSkeletonComponent,
+    SegmentationSelectComponent,
+    TranslocoDirective,
+    PartnerBaseDetailsComponent,
+    NotificationBaseDetailsComponent,
+    UserExtendedBaseDetailsComponent
+],
     declarations: [
         UserListComponent,
         UserDetailsComponent, 

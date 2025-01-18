@@ -314,46 +314,6 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.post<AuthResult>(`${environment.apiUrl}/Security/LoginExternal`, externalProviderDTO, environment.httpOptions);
     }
 
-    getCurrentUser = (): Observable<UserExtended> => { 
-        return this.http.get<UserExtended>(`${environment.apiUrl}/Security/GetCurrentUser`, environment.httpSkipSpinnerOptions);
-    }
-
-    getUserTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<UserExtended>> => { 
-        return this.http.post<TableResponse<UserExtended>>(`${environment.apiUrl}/Security/GetUserTableData`, tableFilterDTO, environment.httpSkipSpinnerOptions);
-    }
-
-    exportUserTableDataToExcel = (tableFilterDTO: TableFilter): Observable<any> => { 
-        return this.http.post(`${environment.apiUrl}/Security/ExportUserTableDataToExcel`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
-    }
-
-    deleteUser = (id: number): Observable<any> => { 
-        return this.http.delete(`${environment.apiUrl}/Security/DeleteUser?id=${id}`, environment.httpOptions);
-    }
-
-    getUser = (id: number): Observable<UserExtended> => { 
-        return this.http.get<UserExtended>(`${environment.apiUrl}/Security/GetUser?id=${id}`, environment.httpOptions);
-    }
-
-    saveUserExtended = (dto: UserExtendedSaveBody): Observable<UserExtended> => { 
-        return this.http.put<UserExtended>(`${environment.apiUrl}/Security/SaveUserExtended`, dto, environment.httpOptions);
-    }
-
-    getUserListForAutocomplete = (limit: number, query: string): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Security/GetUserListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
-    }
-
-    getUserListForDropdown = (): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Security/GetUserListForDropdown`, environment.httpSkipSpinnerOptions);
-    }
-
-    getCurrentUserPermissionCodes = (): Observable<string[]> => { 
-        return this.http.get<string[]>(`${environment.apiUrl}/Security/GetCurrentUserPermissionCodes`, environment.httpSkipSpinnerOptions);
-    }
-
-    getGenderNamebookListForDropdown = (): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Security/GetGenderNamebookListForDropdown`, environment.httpSkipSpinnerOptions);
-    }
-
     getSegmentationTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<Segmentation>> => { 
         return this.http.post<TableResponse<Segmentation>>(`${environment.apiUrl}/Segmentation/GetSegmentationTableData`, tableFilterDTO, environment.httpSkipSpinnerOptions);
     }
@@ -417,6 +377,59 @@ export class ApiGeneratedService extends ApiSecurityService {
     getTierForTheCurrentPartnerUser = (): Observable<Tier> => { 
         return this.http.get<Tier>(`${environment.apiUrl}/Tier/GetTierForTheCurrentPartnerUser`, environment.httpOptions);
     }
+
+    getCurrentUser = (): Observable<UserExtended> => { 
+        return this.http.get<UserExtended>(`${environment.apiUrl}/UserExtended/GetCurrentUser`, environment.httpSkipSpinnerOptions);
+    }
+
+    getCurrentUserPermissionCodes = (): Observable<string[]> => { 
+        return this.http.get<string[]>(`${environment.apiUrl}/UserExtended/GetCurrentUserPermissionCodes`, environment.httpSkipSpinnerOptions);
+    }
+
+    getGenderListForDropdown = (): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/UserExtended/GetGenderListForDropdown`, environment.httpSkipSpinnerOptions);
+    }
+
+    getUserExtendedTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<UserExtended>> => { 
+        return this.http.post<TableResponse<UserExtended>>(`${environment.apiUrl}/UserExtended/GetUserExtendedTableData`, tableFilterDTO, environment.httpSkipSpinnerOptions);
+    }
+
+    exportUserExtendedTableDataToExcel = (tableFilterDTO: TableFilter): Observable<any> => { 
+        return this.http.post(`${environment.apiUrl}/UserExtended/ExportUserExtendedTableDataToExcel`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
+    }
+
+    getUserExtendedList = (): Observable<UserExtended[]> => { 
+        return this.http.get<UserExtended[]>(`${environment.apiUrl}/UserExtended/GetUserExtendedList`, environment.httpOptions);
+    }
+
+    getUserExtended = (id: number): Observable<UserExtended> => { 
+        return this.http.get<UserExtended>(`${environment.apiUrl}/UserExtended/GetUserExtended?id=${id}`, environment.httpOptions);
+    }
+
+    getUserExtendedListForAutocomplete = (limit: number, query: string): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/UserExtended/GetUserExtendedListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
+    }
+
+    getUserExtendedListForDropdown = (): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/UserExtended/GetUserExtendedListForDropdown`, environment.httpSkipSpinnerOptions);
+    }
+
+
+
+    getRolesNamebookListForUserExtended = (id: number): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/UserExtended/GetRolesNamebookListForUserExtended?id=${id}`, environment.httpSkipSpinnerOptions);
+    }
+
+    saveUserExtended = (saveBodyDTO: UserExtendedSaveBody): Observable<UserExtendedSaveBody> => { 
+        return this.http.put<UserExtendedSaveBody>(`${environment.apiUrl}/UserExtended/SaveUserExtended`, saveBodyDTO, environment.httpOptions);
+    }
+
+
+
+    deleteUserExtended = (id: number): Observable<any> => { 
+        return this.http.delete(`${environment.apiUrl}/UserExtended/DeleteUserExtended?id=${id}`, environment.httpOptions);
+    }
+
 
 
 

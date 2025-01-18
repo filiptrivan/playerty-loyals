@@ -640,10 +640,6 @@ export class NotificationSaveBody extends BaseEntity
 	areAllRecipientsSelected?: boolean;
 	recipientsTableFilter?: TableFilter;
 	isMarkedAsRead?: boolean;
-	tableFilter?: TableFilter;
-	selectedIds?: number[];
-	unselectedIds?: number[];
-	isAllSelected?: boolean;
 
     constructor(
     {
@@ -652,22 +648,14 @@ export class NotificationSaveBody extends BaseEntity
 		unselectedRecipientsIds,
 		areAllRecipientsSelected,
 		recipientsTableFilter,
-		isMarkedAsRead,
-		tableFilter,
-		selectedIds,
-		unselectedIds,
-		isAllSelected
+		isMarkedAsRead
     }:{
         notificationDTO?: Notification;
 		selectedRecipientsIds?: number[];
 		unselectedRecipientsIds?: number[];
 		areAllRecipientsSelected?: boolean;
 		recipientsTableFilter?: TableFilter;
-		isMarkedAsRead?: boolean;
-		tableFilter?: TableFilter;
-		selectedIds?: number[];
-		unselectedIds?: number[];
-		isAllSelected?: boolean;     
+		isMarkedAsRead?: boolean;     
     } = {}
     ) {
         super('NotificationSaveBody'); 
@@ -678,10 +666,6 @@ export class NotificationSaveBody extends BaseEntity
 		this.areAllRecipientsSelected = areAllRecipientsSelected;
 		this.recipientsTableFilter = recipientsTableFilter;
 		this.isMarkedAsRead = isMarkedAsRead;
-		this.tableFilter = tableFilter;
-		this.selectedIds = selectedIds;
-		this.unselectedIds = unselectedIds;
-		this.isAllSelected = isAllSelected;
     }
 }
 
@@ -1789,21 +1773,21 @@ export class UserExtended extends BaseEntity
 export class UserExtendedSaveBody extends BaseEntity
 {
     userExtendedDTO?: UserExtended;
-	selectedRoleIds?: number[];
+	selectedRolesIds?: number[];
 
     constructor(
     {
         userExtendedDTO,
-		selectedRoleIds
+		selectedRolesIds
     }:{
         userExtendedDTO?: UserExtended;
-		selectedRoleIds?: number[];     
+		selectedRolesIds?: number[];     
     } = {}
     ) {
         super('UserExtendedSaveBody'); 
 
         this.userExtendedDTO = userExtendedDTO;
-		this.selectedRoleIds = selectedRoleIds;
+		this.selectedRolesIds = selectedRolesIds;
     }
 }
 

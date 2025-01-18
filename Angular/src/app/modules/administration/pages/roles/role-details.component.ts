@@ -52,8 +52,8 @@ export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
             if(this.modelId > 0){
                 forkJoin({
                     role: this.apiService.getRole(this.modelId),
-                    users: this.apiService.getUserListForRole(this.modelId),
-                    permissions: this.apiService.getPermissionListForRole(this.modelId),
+                    users: this.apiService.getUsersNamebookListForRole(this.modelId),
+                    permissions: this.apiService.getPermissionsNamebookListForRole(this.modelId),
                   }).subscribe(({ role, users, permissions }) => {
                     this.init(new Role(role));
                     this.selectedUsers.setValue(
@@ -75,7 +75,7 @@ export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
     }
 
     searchUsers(event: AutoCompleteCompleteEvent){ 
-        this.apiService.getUserListForAutocomplete(50, event?.query).subscribe(nl => {
+        this.apiService.getUserExtendedListForAutocomplete(50, event?.query).subscribe(nl => {
             this.userOptions = nl.map(n => { return { label: n.displayName, value: n.id }});
         })
     }
