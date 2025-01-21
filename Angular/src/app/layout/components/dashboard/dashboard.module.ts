@@ -7,7 +7,6 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { StyleClassModule } from 'primeng/styleclass';
 import { PanelMenuModule } from 'primeng/panelmenu';
-import { DashboardsRoutingModule } from './dashboard-routing.module';
 import { ApiService } from '../../../business/services/api/api.service';
 import { PrimengModule } from '../../../core/modules/primeng.module';
 import { SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';
@@ -20,9 +19,18 @@ import { ProductsRecommendationComponent } from 'src/app/business/components/pro
 import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { InfoCardComponent } from "../../../core/components/info-card/info-card.component";
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [
+    {
+        path: '', 
+        component: DashboardComponent
+    }
+];
 
 @NgModule({
     imports: [
+    RouterModule.forChild(routes),
     CommonModule,
     FormsModule,
     MenuModule,
@@ -30,7 +38,6 @@ import { InfoCardComponent } from "../../../core/components/info-card/info-card.
     StyleClassModule,
     PanelMenuModule,
     ButtonModule,
-    DashboardsRoutingModule,
     PrimengModule,
     QRCodeModule,
     SoftDataTableComponent,

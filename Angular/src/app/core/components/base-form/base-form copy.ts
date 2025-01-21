@@ -2,14 +2,12 @@ import { BaseFormService } from './../../services/base-form.service';
 import {
   ChangeDetectorRef,
   Component,
-  KeyValueChanges,
   KeyValueDiffer,
   KeyValueDiffers,
   OnInit,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SoftFormArray, SoftFormControl, SoftFormGroup } from '../soft-form-control/soft-form-control';
-import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { SoftMessageService } from '../../services/soft-message.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +17,6 @@ import { TranslocoService } from '@jsverse/transloco';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseEntity } from '../../entities/base-entity';
-import { Observable } from 'rxjs';
 import { SoftTab } from '../soft-panels/panel-header/panel-header.component';
 import { LastMenuIconIndexClicked } from '../../entities/last-menu-icon-index-clicked';
 
@@ -32,10 +29,8 @@ export class BaseFormCopy implements OnInit {
   formGroup: SoftFormGroup = new SoftFormGroup({});
   formArrayControlNamesFromHtml: string[] = [];
   saveBody: any;
-  modelId: number;
   invalidForm: boolean = false; // FT: We are using this only if we manualy add some form field on the UI, like multiautocomplete, autocomplete etc...
   loading: boolean = true;
-  // saveObservableMethod: (saveBody: any) => Observable<any>;
 
   private modelDiffer: KeyValueDiffer<string, any>;
 

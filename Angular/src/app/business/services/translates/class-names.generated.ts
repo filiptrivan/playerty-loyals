@@ -19,8 +19,12 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('AuthResult');
             case 'Brand':
                 return this.translocoService.translate('Brand');
+            case 'BusinessObjectCodebook':
+                return this.translocoService.translate('BusinessObjectCodebook');
             case 'BusinessObject':
                 return this.translocoService.translate('BusinessObject');
+            case 'BusinessObjectNamebook':
+                return this.translocoService.translate('BusinessObjectNamebook');
             case 'BusinessSystem':
                 return this.translocoService.translate('BusinessSystem');
             case 'BusinessSystemSaveBody':

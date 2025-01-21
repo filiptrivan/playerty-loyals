@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { AuthService } from './auth.service';
+import { AuthService } from '../../business/services/auth/auth.service';
 
 export function appInitializer(
   authService: AuthService

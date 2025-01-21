@@ -5,7 +5,7 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MenuService } from './app.menu.service';
 import { LayoutService } from '../../services/app.layout.service';
-import { AuthService } from '../../../core/services/auth.service';
+import { AuthService } from '../../../business/services/auth/auth.service';
 import { SoftMenuItem } from './app.menu.component';
 import { ApiService } from '../../../business/services/api/api.service';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';

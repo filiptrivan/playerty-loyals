@@ -93,6 +93,8 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('BusinessSystemUpdatePointsScheduledTaskDTO');
             case 'displayName':
                 return this.translocoService.translate('DisplayName');
+            case 'isLeaf':
+                return this.translocoService.translate('IsLeaf');
             case 'discountProductGroupDTO':
                 return this.translocoService.translate('DiscountProductGroupDTO');
             case 'excel':

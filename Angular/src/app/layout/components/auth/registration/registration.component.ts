@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { SoftMessageService } from '../../../../core/services/soft-message.service';
-import { AuthService } from '../../../../core/services/auth.service';
+import { AuthService } from '../../../../business/services/auth/auth.service';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { LayoutService } from '../../../services/app.layout.service';
 import { BaseForm } from '../../../../core/components/base-form/base-form';

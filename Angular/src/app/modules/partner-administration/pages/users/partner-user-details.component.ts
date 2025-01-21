@@ -69,10 +69,10 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         this.formGroup.saveObservableMethod = this.apiService.savePartnerUser;
 
         this.route.params.subscribe((params) => {
-            this.modelId = params['id'];
+            let modelId = params['id'];
  
             forkJoin({
-                roleListForPartnerUser: this.apiService.getPartnerRoleNamebookListForPartnerUser(this.modelId),
+                roleListForPartnerUser: this.apiService.getPartnerRoleNamebookListForPartnerUser(modelId),
                 roleOptionList: this.apiService.getRoleListForDropdown(),
                 genderOptionList: this.apiService.getGenderListForDropdown(),                  
                 partnerRoleOptionList: this.apiService.getPartnerRoleListForDropdown(),
@@ -88,7 +88,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
                 this.segmentations = segmentations;
             });
 
-            this.apiService.getPartnerUser(this.modelId).subscribe(partnerUser => {
+            this.apiService.getPartnerUser(modelId).subscribe(partnerUser => {
                 this.baseFormService.initFormGroup(this.partnerUserFormGroup, this.formGroup, new PartnerUser(partnerUser), nameof<PartnerUserSaveBody>('partnerUserDTO'));
                 
                 if (partnerUser?.tierId) {

@@ -6,7 +6,7 @@ import { filter, Subscription, switchMap } from 'rxjs';
 import { ApiService } from '../../../business/services/api/api.service';
 import { PartnerService } from '../../../business/services/helpers/partner.service';
 import { LayoutService } from '../../services/app.layout.service';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { PartnerUser, UserExtended } from 'src/app/business/entities/business-entities.generated';
 
 interface SoftMenuItem {

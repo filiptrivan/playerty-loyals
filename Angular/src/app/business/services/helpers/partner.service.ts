@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { BehaviorSubject, firstValueFrom, map, Observable, Subscription } from 'rxjs';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { adjustColor } from 'src/app/core/services/helper-functions';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { Partner, PartnerUser } from '../../entities/business-entities.generated';
 
 @Injectable({

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { VerificationWrapperComponent } from './verification-wrapper.component';
 import { TranslocoService } from '@jsverse/transloco';
 import { LayoutService } from 'src/app/layout/services/app.layout.service';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../business/services/auth/auth.service';
 import { SoftMessageService } from '../../services/soft-message.service';
 
 @Component({

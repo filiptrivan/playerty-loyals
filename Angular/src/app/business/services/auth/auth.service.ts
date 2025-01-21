@@ -3,12 +3,11 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, firstValueFrom, Observable, of, Subject, Subscription } from 'rxjs';
 import { map, tap, delay, finalize } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { SocialUser, SocialAuthService } from '@abacritt/angularx-social-login';
 import { ExternalProvider, Login, VerificationTokenRequest, AuthResult, Registration, RegistrationVerificationResult, RefreshTokenRequest } from 'src/app/business/entities/security-entities.generated';
 import { UserExtended } from 'src/app/business/entities/business-entities.generated';
-
 
 @Injectable({
   providedIn: 'root',

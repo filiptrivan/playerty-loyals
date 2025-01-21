@@ -1,13 +1,12 @@
 import { NgModule, APP_INITIALIZER, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../business/services/auth/auth.service';
 import { appInitializer } from '../services/app-initializer';
 import { JwtInterceptor } from '../interceptors/jwt.interceptor';
 import { UnauthorizedInterceptor } from '../interceptors/unauthorized.interceptor';
 import { HttpLoadingInterceptor } from '../interceptors/http-loading.interceptor';
 import { JsonHttpInterceptor } from '../interceptors/json-parser.interceptor';
-import { PartnerCodeInterceptor } from '../../business/interceptors/partner-code.interceptor';
 
 @NgModule({
   declarations: [],
@@ -24,11 +23,6 @@ import { PartnerCodeInterceptor } from '../../business/interceptors/partner-code
     { 
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
-      multi: true 
-    },
-    { 
-      provide: HTTP_INTERCEPTORS,
-      useClass: PartnerCodeInterceptor,
       multi: true 
     },
     {

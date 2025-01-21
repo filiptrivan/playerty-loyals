@@ -19,6 +19,9 @@ export class ValidatorServiceGenerated {
 
 
 
+
+
+
         case 'nameBusinessSystem':
             return this.nameBusinessSystemValidator(formControl);
         case 'getTransactionsEndpointBusinessSystem':
@@ -77,6 +80,7 @@ export class ValidatorServiceGenerated {
 
 
 
+
         case 'nameDiscountProductGroup':
             return this.nameDiscountProductGroupValidator(formControl);
         case 'codeDiscountProductGroup':
@@ -128,6 +132,7 @@ export class ValidatorServiceGenerated {
 
         case 'emailLogin':
             return this.emailLoginValidator(formControl);
+
 
 
 
@@ -380,6 +385,9 @@ export class ValidatorServiceGenerated {
                 return null;
         }
     }
+
+
+
 
 
 
@@ -815,6 +823,7 @@ export class ValidatorServiceGenerated {
 
 
 
+
     nameDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
         const validator: SoftValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
@@ -1204,6 +1213,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
+
 
 
 

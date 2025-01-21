@@ -35,14 +35,13 @@ export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
         protected override translocoService: TranslocoService,
         protected override translateClassNamesService: TranslateClassNamesService,
         protected override validatorService: ValidatorService,
-        private apiService: ApiService) 
-        {
+        private apiService: ApiService
+    ) {
         super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
-        }
+    }
          
     override ngOnInit() {
         this.controllerName = 'Security';
-        // this.selectedUsers.validator = isArrayEmpty(this.selectedUsers);
 
         this.route.params.subscribe((params) => {
             this.modelId = params['id'];
