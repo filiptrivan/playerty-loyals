@@ -1,7 +1,7 @@
 ﻿using PlayertyLoyals.Business.Entities;
-using Soft.Generator.Shared.Interfaces;
-using Soft.Generator.Shared.Services;
-using Soft.Generator.Shared.Extensions;
+using Spider.Shared.Interfaces;
+using Spider.Shared.Services;
+using Spider.Shared.Extensions;
 using PlayertyLoyals.Business.DTO;
 using Microsoft.EntityFrameworkCore;
 

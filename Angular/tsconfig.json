@@ -18,16 +18,13 @@
     "downlevelIteration": true,
     "importHelpers": true,
     "module": "ES2022",
-    // "module": "es2020",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "target": "ES2022",
-    // "target": "es5",
     "resolveJsonModule": true,
     "useDefineForClassFields": false,
     "lib": [
       "ES2022",
-      // "es2021",
       "dom"
     ]
   },

@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
-import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
+import { SpiderControlsModule } from 'src/app/core/controls/spider-controls.module';
 import { CardSkeletonComponent } from "../../core/components/card-skeleton/card-skeleton.component";
-import { SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';
+import { SpiderDataTableComponent } from 'src/app/core/components/spider-data-table/spider-data-table.component';
 import { IndexCardComponent } from 'src/app/core/components/index-card/index-card.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { CommonModule } from '@angular/common';
@@ -75,8 +75,8 @@ const routes: Routes = [
     CommonModule,
     PrimengModule,
     TranslocoDirective,
-    SoftDataTableComponent,
-    SoftControlsModule,
+    SpiderDataTableComponent,
+    SpiderControlsModule,
     CardSkeletonComponent,
     IndexCardComponent,
     SegmentationSelectComponent,

@@ -1,4 +1,4 @@
-import { SoftFileSelectEvent } from './../../../../core/controls/soft-file/soft-file.component';
+import { SpiderFileSelectEvent } from './../../../../core/controls/spider-file/spider-file.component';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,11 +8,11 @@ import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { SoftMessageService } from 'src/app/core/services/soft-message.service';
-import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
-import { SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
+import { Column } from 'src/app/core/components/spider-data-table/spider-data-table.component';
+import { SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
 import { BaseFormService } from 'src/app/core/services/base-form.service';
-import { SoftButton } from 'src/app/core/entities/soft-button';
+import { SpiderButton } from 'src/app/core/entities/spider-button';
 
 @Component({
     selector: 'business-system-details',
@@ -20,9 +20,9 @@ import { SoftButton } from 'src/app/core/entities/soft-button';
     styles: [],
 })
 export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnInit {
-    businessSystemFormGroup = new SoftFormGroup<BusinessSystem>({});
+    businessSystemFormGroup = new SpiderFormGroup<BusinessSystem>({});
     
-    additionalButtons: SoftButton[] = [
+    additionalButtons: SpiderButton[] = [
         {label: this.translocoService.translate('SyncDiscountCategories'), onClick: this.onSyncDiscountCategories, icon: 'pi pi-sync'}
     ]
 
@@ -32,20 +32,20 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     businessSystemUpdatePointsScheduledTaskTableTotalRecords: number;
     
     
-    businessSystemUpdatePointsDataFormGroup = new SoftFormGroup<BusinessSystemUpdatePointsDataBody>({});
+    businessSystemUpdatePointsDataFormGroup = new SpiderFormGroup<BusinessSystemUpdatePointsDataBody>({});
     
     savedBusinessSystemUpdatePointsScheduledTaskIsPaused: boolean = null;
 
-    manualUpdatePointsFormGroup = new SoftFormGroup<UpdatePoints>({});
+    manualUpdatePointsFormGroup = new SpiderFormGroup<UpdatePoints>({});
     
-    excelManualUpdatePointsFormGroup = new SoftFormGroup<ExcelManualUpdatePoints>({});
+    excelManualUpdatePointsFormGroup = new SpiderFormGroup<ExcelManualUpdatePoints>({});
     excelManualUpdatePointsFormData: FormData;
     excelManualUpdatePointsFile: File;
 
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SoftMessageService, 
+        protected override messageService: SpiderMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 
@@ -138,7 +138,7 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
         this.baseFormService.createFormGroup(this.excelManualUpdatePointsFormGroup, new ExcelManualUpdatePoints({}));
     }
 
-    onSelectedExcelManualUpdateFile(event: SoftFileSelectEvent){
+    onSelectedExcelManualUpdateFile(event: SpiderFileSelectEvent){
         this.excelManualUpdatePointsFile = event.file;
     }
 

@@ -3,18 +3,18 @@ using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Enums;
 using PlayertyLoyals.Business.Services;
-using Soft.Generator.Security.Interface;
-using Soft.Generator.Security.Services;
-using Soft.Generator.Shared.Attributes;
-using Soft.Generator.Shared.DTO;
-using Soft.Generator.Shared.Helpers;
-using Soft.Generator.Shared.Interfaces;
+using Spider.Security.Interface;
+using Spider.Security.Services;
+using Spider.Shared.Attributes;
+using Spider.Shared.DTO;
+using Spider.Shared.Helpers;
+using Spider.Shared.Interfaces;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
-    public class HomeController : SoftBaseController
+    public class HomeController : SpiderBaseController
     {
         private readonly IJwtAuthManager _jwtAuthManagerService;
         private readonly IApplicationDbContext _context;
@@ -89,7 +89,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
             //                        Label = "Roles",
             //                        Icon = "pi pi-fw pi-id-card",
             //                        Url = "/administration/roles",
-            //                        Permissions = new List<Enum> { Soft.Generator.Security.Enums.PermissionCodes.ReadRole }
+            //                        Permissions = new List<Enum> { Spider.Security.Enums.PermissionCodes.ReadRole }
             //                    },
             //                    new MenuDTO
             //                    {
@@ -103,7 +103,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
             //                        Label = "Notifications",
             //                        Icon = "pi pi-fw pi-bell",
             //                        Url = "/administration/notifications",
-            //                        Permissions = new List<Enum> { Soft.Generator.Security.Enums.PermissionCodes.ReadNotification }
+            //                        Permissions = new List<Enum> { Spider.Security.Enums.PermissionCodes.ReadNotification }
             //                    },
             //                }
             //            },

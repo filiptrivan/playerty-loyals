@@ -11,10 +11,10 @@ import { PartnerService } from 'src/app/business/services/helpers/partner.servic
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
-import { SoftButton } from 'src/app/core/entities/soft-button';
+import { SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
+import { SpiderButton } from 'src/app/core/entities/spider-button';
 import { nameof } from 'src/app/core/services/helper-functions';
-import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 
 @Component({
     selector: 'partner-details',
@@ -22,12 +22,12 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class PartnerDetailsComponent extends BaseFormCopy implements OnInit {
-    partnerFormGroup = new SoftFormGroup<Partner>({});
+    partnerFormGroup = new SpiderFormGroup<Partner>({});
 
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SoftMessageService, 
+        protected override messageService: SpiderMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 

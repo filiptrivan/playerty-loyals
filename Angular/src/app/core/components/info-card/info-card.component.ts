@@ -3,7 +3,7 @@ import { Component, EventEmitter, Inject, Input, LOCALE_ID, Output } from '@angu
 import { FormBuilder } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
-import { SoftPanelsModule } from "../soft-panels/soft-panels.module";
+import { SpiderPanelsModule } from "../spider-panels/spider-panels.module";
 
 @Component({
     selector: 'info-card',
@@ -12,7 +12,7 @@ import { SoftPanelsModule } from "../soft-panels/soft-panels.module";
     imports: [
     CommonModule,
     PrimengModule,
-    SoftPanelsModule
+    SpiderPanelsModule
 ]
 })
 export class InfoCardComponent {

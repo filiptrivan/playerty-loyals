@@ -7,8 +7,8 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
 import { CoreModule } from './core/modules/core.module';
-import { SoftMessageService } from './core/services/soft-message.service';
-import { SoftErrorHandler } from './core/handlers/soft-error-handler';
+import { SpiderMessageService } from './core/services/spider-message.service';
+import { SpiderErrorHandler } from './core/handlers/spider-error-handler';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -18,7 +18,7 @@ import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-s
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { environment } from 'src/environments/environment';
 import { BusinessModule } from './business/business.module';
-import { SoftTranslocoModule } from './core/modules/soft-transloco.module';
+import { SpiderTranslocoModule } from './core/modules/spider-transloco.module';
 
 @NgModule({
   declarations: [
@@ -35,17 +35,17 @@ import { SoftTranslocoModule } from './core/modules/soft-transloco.module';
     MessagesModule,
     ToastModule,
     SocialLoginModule,
-    SoftTranslocoModule.forRoot(),
+    SpiderTranslocoModule.forRoot(),
     NgxSpinnerModule.forRoot({ type: 'ball-clip-rotate-multiple' }),
     BusinessModule,
     CoreModule,
   ],
   providers: [
-    SoftMessageService,
+    SpiderMessageService,
     MessageService,
     {
     provide: ErrorHandler,
-    useClass: SoftErrorHandler,
+    useClass: SpiderErrorHandler,
     },
     {
       provide: 'SocialAuthServiceConfig',

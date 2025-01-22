@@ -1,7 +1,7 @@
 <ng-container *transloco="let t">
     <div class="min-h-screen" style="display: flex; justify-content: center; align-items: center;">
         <div class="dialog" style="padding: 0px;">
-            <soft-panel>
+            <spider-panel>
                 <panel-header [title]="t('AccountVerificationHeader')" [bigTitle]="true" icon="pi pi-envelope"></panel-header>
                 
                 <panel-body>
@@ -13,7 +13,7 @@
                             {{t('AccountVerificationDescription', {email: email})}}
                         </div>
                         <div class="col-12">
-                            <soft-textbox [control]="control('verificationCode')"></soft-textbox>
+                            <spider-textbox [control]="control('verificationCode')"></spider-textbox>
                         </div>
                         <div class="col-12">
                             <p-button (onClick)="codeSubmit()" [label]="t('Submit')" icon="pi pi-verified"></p-button>
@@ -28,7 +28,7 @@
                 <panel-footer>
                     <div>{{t('ResendVerificationCodeFirstPart')}} <a class="link" (click)="resendVerificationToken()">{{t('ResendVerificationCodeLinkSecondPart')}}</a></div>
                 </panel-footer>
-            </soft-panel>
+            </spider-panel>
         </div>
     </div>
 </ng-container>

@@ -7,10 +7,10 @@ import { Notification } from 'src/app/business/entities/business-entities.genera
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
-import { SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
-import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { SpiderFormControl, SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
+import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { SoftButton } from 'src/app/core/entities/soft-button';
+import { SpiderButton } from 'src/app/core/entities/spider-button';
 
 @Component({
     selector: 'notification-details',
@@ -18,16 +18,16 @@ import { SoftButton } from 'src/app/core/entities/soft-button';
     styles: [],
 })
 export class NotificationDetailsComponent extends BaseFormCopy implements OnInit {
-    notificationFormGroup = new SoftFormGroup<Notification>({});
+    notificationFormGroup = new SpiderFormGroup<Notification>({});
 
-    isMarkedAsRead = new SoftFormControl<boolean>(true, {updateOn: 'change'})
+    isMarkedAsRead = new SpiderFormControl<boolean>(true, {updateOn: 'change'})
 
-    additionalButtons: SoftButton[];
+    additionalButtons: SpiderButton[];
 
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SoftMessageService, 
+        protected override messageService: SpiderMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute,

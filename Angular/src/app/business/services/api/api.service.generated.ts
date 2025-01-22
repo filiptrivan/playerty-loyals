@@ -9,25 +9,25 @@ import { SimpleSaveResult } from 'src/app/core/entities/simple-save-result';
 import { TableFilter } from 'src/app/core/entities/table-filter';
 import { TableResponse } from 'src/app/core/entities/table-response';
 import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
-import { PartnerUserSaveBody } from '../../entities/business-entities.generated';
-import { NotificationSaveBody } from '../../entities/business-entities.generated';
-import { TierSaveBody } from '../../entities/business-entities.generated';
-import { BusinessSystemTier } from '../../entities/business-entities.generated';
-import { ExternalDiscountProductGroup } from '../../entities/business-entities.generated';
-import { Product } from '../../entities/business-entities.generated';
-import { MergedPartnerUser } from '../../entities/business-entities.generated';
-import { Brand } from '../../entities/business-entities.generated';
-import { UserExtendedSaveBody } from '../../entities/business-entities.generated';
-import { ExternalTransaction } from '../../entities/business-entities.generated';
-import { SegmentationItem } from '../../entities/business-entities.generated';
-import { PartnerRoleSaveBody } from '../../entities/business-entities.generated';
-import { PartnerNotificationSaveBody } from '../../entities/business-entities.generated';
 import { UpdatePoints } from '../../entities/business-entities.generated';
+import { PartnerRoleSaveBody } from '../../entities/business-entities.generated';
 import { BusinessSystemTierDiscountProductGroup } from '../../entities/business-entities.generated';
-import { Notification } from '../../entities/business-entities.generated';
-import { BusinessSystemUpdatePointsDataBody } from '../../entities/business-entities.generated';
 import { QrCode } from '../../entities/business-entities.generated';
 import { ExcelManualUpdatePoints } from '../../entities/business-entities.generated';
+import { ExternalDiscountProductGroup } from '../../entities/business-entities.generated';
+import { ExternalTransaction } from '../../entities/business-entities.generated';
+import { TierSaveBody } from '../../entities/business-entities.generated';
+import { MergedPartnerUser } from '../../entities/business-entities.generated';
+import { PartnerNotificationSaveBody } from '../../entities/business-entities.generated';
+import { SegmentationItem } from '../../entities/business-entities.generated';
+import { BusinessSystemTier } from '../../entities/business-entities.generated';
+import { Brand } from '../../entities/business-entities.generated';
+import { PartnerUserSaveBody } from '../../entities/business-entities.generated';
+import { UserExtendedSaveBody } from '../../entities/business-entities.generated';
+import { Product } from '../../entities/business-entities.generated';
+import { NotificationSaveBody } from '../../entities/business-entities.generated';
+import { BusinessSystemUpdatePointsDataBody } from '../../entities/business-entities.generated';
+import { Notification } from '../../entities/business-entities.generated';
 import { BusinessSystem } from '../../entities/business-entities.generated';
 import { BusinessSystemSaveBody } from '../../entities/business-entities.generated';
 import { BusinessSystemTierSaveBody } from '../../entities/business-entities.generated';
@@ -64,18 +64,18 @@ import { TransactionSaveBody } from '../../entities/business-entities.generated'
 import { UserExtended } from '../../entities/business-entities.generated';
 import { UserNotification } from '../../entities/business-entities.generated';
 import { UserNotificationSaveBody } from '../../entities/business-entities.generated';
+import { RefreshTokenRequest } from '../../entities/security-entities.generated';
 import { JwtAuthResult } from '../../entities/security-entities.generated';
+import { RoleSaveBody } from '../../entities/security-entities.generated';
+import { ExternalProvider } from '../../entities/security-entities.generated';
+import { Login } from '../../entities/security-entities.generated';
 import { AuthResult } from '../../entities/security-entities.generated';
 import { VerificationTokenRequest } from '../../entities/security-entities.generated';
-import { RegistrationVerificationResult } from '../../entities/security-entities.generated';
-import { RegistrationVerificationToken } from '../../entities/security-entities.generated';
-import { ExternalProvider } from '../../entities/security-entities.generated';
-import { LoginVerificationToken } from '../../entities/security-entities.generated';
-import { Login } from '../../entities/security-entities.generated';
-import { RefreshTokenRequest } from '../../entities/security-entities.generated';
-import { Registration } from '../../entities/security-entities.generated';
 import { RefreshToken } from '../../entities/security-entities.generated';
-import { RoleSaveBody } from '../../entities/security-entities.generated';
+import { RegistrationVerificationToken } from '../../entities/security-entities.generated';
+import { RegistrationVerificationResult } from '../../entities/security-entities.generated';
+import { LoginVerificationToken } from '../../entities/security-entities.generated';
+import { Registration } from '../../entities/security-entities.generated';
 import { Permission } from '../../entities/security-entities.generated';
 import { PermissionSaveBody } from '../../entities/security-entities.generated';
 import { Role } from '../../entities/security-entities.generated';
@@ -431,42 +431,44 @@ export class ApiGeneratedService extends ApiSecurityService {
     }
 
 
-
-
-
-
-    getPartnerRoleList = (): Observable<PartnerRole[]> => { 
-        return this.http.get<PartnerRole[]>(`${environment.apiUrl}/PartnerRole/GetPartnerRoleList`, environment.httpOptions);
+    getPartnerTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<Partner>> => { 
+        return this.http.post<TableResponse<Partner>>(`${environment.apiUrl}/Partner/GetPartnerTableData`, tableFilterDTO, environment.httpSkipSpinnerOptions);
     }
 
-    getPartnerRole = (id: number): Observable<PartnerRole> => { 
-        return this.http.get<PartnerRole>(`${environment.apiUrl}/PartnerRole/GetPartnerRole?id=${id}`, environment.httpOptions);
+    exportPartnerTableDataToExcel = (tableFilterDTO: TableFilter): Observable<any> => { 
+        return this.http.post(`${environment.apiUrl}/Partner/ExportPartnerTableDataToExcel`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
     }
 
-    getPartnerRoleListForAutocomplete = (limit: number, query: string): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerRoleListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
+    getPartnerList = (): Observable<Partner[]> => { 
+        return this.http.get<Partner[]>(`${environment.apiUrl}/Partner/GetPartnerList`, environment.httpOptions);
     }
 
-
-
-
-
-    getPartnerUsersNamebookListForPartnerRole = (id: number): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerUsersNamebookListForPartnerRole?id=${id}`, environment.httpSkipSpinnerOptions);
+    getPartner = (id: number): Observable<Partner> => { 
+        return this.http.get<Partner>(`${environment.apiUrl}/Partner/GetPartner?id=${id}`, environment.httpOptions);
     }
 
-    getPartnerPermissionsNamebookListForPartnerRole = (id: number): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerPermissionsNamebookListForPartnerRole?id=${id}`, environment.httpSkipSpinnerOptions);
+    getPartnerListForAutocomplete = (limit: number, query: string): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Partner/GetPartnerListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
     }
 
-    savePartnerRole = (saveBodyDTO: PartnerRoleSaveBody): Observable<PartnerRoleSaveBody> => { 
-        return this.http.put<PartnerRoleSaveBody>(`${environment.apiUrl}/PartnerRole/SavePartnerRole`, saveBodyDTO, environment.httpOptions);
+    getPartnerListForDropdown = (): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Partner/GetPartnerListForDropdown`, environment.httpSkipSpinnerOptions);
     }
 
 
 
-    deletePartnerRole = (id: number): Observable<any> => { 
-        return this.http.delete(`${environment.apiUrl}/PartnerRole/DeletePartnerRole?id=${id}`, environment.httpOptions);
+
+
+    savePartner = (saveBodyDTO: PartnerSaveBody): Observable<PartnerSaveBody> => { 
+        return this.http.put<PartnerSaveBody>(`${environment.apiUrl}/Partner/SavePartner`, saveBodyDTO, environment.httpOptions);
+    }
+
+    uploadLogoImageForPartner = (file: any): Observable<string> => { 
+        return this.http.post(`${environment.apiUrl}/Partner/UploadLogoImageForPartner`, file, { ...environment.httpOptions, responseType: 'text' });
+    }
+
+    deletePartner = (id: number): Observable<any> => { 
+        return this.http.delete(`${environment.apiUrl}/Partner/DeletePartner?id=${id}`, environment.httpOptions);
     }
 
 
@@ -506,6 +508,45 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     deletePartnerNotification = (id: number): Observable<any> => { 
         return this.http.delete(`${environment.apiUrl}/PartnerNotification/DeletePartnerNotification?id=${id}`, environment.httpOptions);
+    }
+
+
+
+
+
+
+    getPartnerRoleList = (): Observable<PartnerRole[]> => { 
+        return this.http.get<PartnerRole[]>(`${environment.apiUrl}/PartnerRole/GetPartnerRoleList`, environment.httpOptions);
+    }
+
+    getPartnerRole = (id: number): Observable<PartnerRole> => { 
+        return this.http.get<PartnerRole>(`${environment.apiUrl}/PartnerRole/GetPartnerRole?id=${id}`, environment.httpOptions);
+    }
+
+    getPartnerRoleListForAutocomplete = (limit: number, query: string): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerRoleListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
+    }
+
+
+
+
+
+    getPartnerUsersNamebookListForPartnerRole = (id: number): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerUsersNamebookListForPartnerRole?id=${id}`, environment.httpSkipSpinnerOptions);
+    }
+
+    getPartnerPermissionsNamebookListForPartnerRole = (id: number): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/PartnerRole/GetPartnerPermissionsNamebookListForPartnerRole?id=${id}`, environment.httpSkipSpinnerOptions);
+    }
+
+    savePartnerRole = (saveBodyDTO: PartnerRoleSaveBody): Observable<PartnerRoleSaveBody> => { 
+        return this.http.put<PartnerRoleSaveBody>(`${environment.apiUrl}/PartnerRole/SavePartnerRole`, saveBodyDTO, environment.httpOptions);
+    }
+
+
+
+    deletePartnerRole = (id: number): Observable<any> => { 
+        return this.http.delete(`${environment.apiUrl}/PartnerRole/DeletePartnerRole?id=${id}`, environment.httpOptions);
     }
 
 
@@ -555,47 +596,6 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     deleteNotification = (id: number): Observable<any> => { 
         return this.http.delete(`${environment.apiUrl}/Notification/DeleteNotification?id=${id}`, environment.httpOptions);
-    }
-
-
-    getPartnerTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<Partner>> => { 
-        return this.http.post<TableResponse<Partner>>(`${environment.apiUrl}/Partner/GetPartnerTableData`, tableFilterDTO, environment.httpSkipSpinnerOptions);
-    }
-
-    exportPartnerTableDataToExcel = (tableFilterDTO: TableFilter): Observable<any> => { 
-        return this.http.post(`${environment.apiUrl}/Partner/ExportPartnerTableDataToExcel`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
-    }
-
-    getPartnerList = (): Observable<Partner[]> => { 
-        return this.http.get<Partner[]>(`${environment.apiUrl}/Partner/GetPartnerList`, environment.httpOptions);
-    }
-
-    getPartner = (id: number): Observable<Partner> => { 
-        return this.http.get<Partner>(`${environment.apiUrl}/Partner/GetPartner?id=${id}`, environment.httpOptions);
-    }
-
-    getPartnerListForAutocomplete = (limit: number, query: string): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Partner/GetPartnerListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
-    }
-
-    getPartnerListForDropdown = (): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Partner/GetPartnerListForDropdown`, environment.httpSkipSpinnerOptions);
-    }
-
-
-
-
-
-    savePartner = (saveBodyDTO: PartnerSaveBody): Observable<PartnerSaveBody> => { 
-        return this.http.put<PartnerSaveBody>(`${environment.apiUrl}/Partner/SavePartner`, saveBodyDTO, environment.httpOptions);
-    }
-
-    uploadLogoImageForPartner = (file: any): Observable<string> => { 
-        return this.http.post(`${environment.apiUrl}/Partner/UploadLogoImageForPartner`, file, { ...environment.httpOptions, responseType: 'text' });
-    }
-
-    deletePartner = (id: number): Observable<any> => { 
-        return this.http.delete(`${environment.apiUrl}/Partner/DeletePartner?id=${id}`, environment.httpOptions);
     }
 
 

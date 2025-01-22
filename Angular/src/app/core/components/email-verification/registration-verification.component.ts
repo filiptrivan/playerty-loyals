@@ -3,7 +3,7 @@ import { VerificationWrapperComponent } from './verification-wrapper.component';
 import { TranslocoService } from '@jsverse/transloco';
 import { LayoutService } from 'src/app/layout/services/app.layout.service';
 import { AuthService } from '../../../business/services/auth/auth.service';
-import { SoftMessageService } from '../../services/soft-message.service';
+import { SpiderMessageService } from '../../services/spider-message.service';
 
 @Component({
     selector: 'registration-verification',
@@ -19,7 +19,7 @@ export class RegistrationVerificationComponent implements OnInit {
     constructor(
       public layoutService: LayoutService, 
       private authService: AuthService, 
-      private messageService: SoftMessageService, 
+      private messageService: SpiderMessageService, 
       private translocoService: TranslocoService,
     ) { 
     }

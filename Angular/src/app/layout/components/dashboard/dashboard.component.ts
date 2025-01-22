@@ -3,7 +3,7 @@ import { PartnerUser, Tier } from 'src/app/business/entities/business-entities.g
 import { ApiService } from '../../../business/services/api/api.service';
 import { LayoutService } from '../../services/app.layout.service';
 import { Component, OnInit } from '@angular/core';
-import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { PartnerService } from 'src/app/business/services/helpers/partner.service';
@@ -22,7 +22,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     public layoutService: LayoutService,
     private apiService: ApiService,
-    private messageService: SoftMessageService,
+    private messageService: SpiderMessageService,
     private authService: AuthService,
     private partnerService: PartnerService,
     private translocoService: TranslocoService

@@ -3,7 +3,7 @@ import { TranslocoLoader } from '@jsverse/transloco';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
-export class SoftTranslocoLoader implements TranslocoLoader {
+export class SpiderTranslocoLoader implements TranslocoLoader {
   constructor(private http: HttpClient) {}
 
   getTranslation(lang: string) {

@@ -8,7 +8,7 @@ namespace PlayertyLoyals.Business.DTO
 {
     public class BrandDTO
     {
-        //[SoftDisplayName]
+        //[DisplayName]
         //[StringLength(255, MinimumLength = 1)]
         //[Required]
         public string Name { get; set; }

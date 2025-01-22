@@ -1,41 +1,41 @@
 <ng-container *transloco="let t">
     @defer (when model != null) {
-        <soft-card [title]="detailsTitle" icon="pi pi-id-card">
-            <soft-panel>
+        <spider-card [title]="detailsTitle" icon="pi pi-id-card">
+            <spider-panel>
                 <panel-header></panel-header>
         
                 <panel-body>
                     <form [formGroup]="formGroup" class="grid">
                         <div class="col-12">
-                            <soft-textbox [control]="control('name')"></soft-textbox>
+                            <spider-textbox [control]="control('name')"></spider-textbox>
                         </div>
                         <div class="col-12">
-                            <soft-textarea [control]="control('description')"></soft-textarea>
+                            <spider-textarea [control]="control('description')"></spider-textarea>
                         </div>
                         <div class="col-12">
-                            <soft-multiautocomplete 
+                            <spider-multiautocomplete 
                                 [control]="selectedUsers"
                                 (onTextInput)="searchUsers($event)" 
                                 [label]="t('UserList')"
                                 [options]="userOptions"
-                                ></soft-multiautocomplete>
+                                ></spider-multiautocomplete>
                         </div>
                         <div class="col-12">
-                            <soft-multiselect
+                            <spider-multiselect
                                 [control]="selectedPermissions"
                                 [label]="t('PermissionList')"
-                                [options]="permissionOptions"></soft-multiselect>
+                                [options]="permissionOptions"></spider-multiselect>
                         </div>
                     </form>
                 </panel-body>
         
             <panel-footer>
                 <p-button (onClick)="onSave()" [label]="t('Save')" icon="pi pi-save"></p-button>
-                <soft-return-button></soft-return-button>
+                <spider-return-button></spider-return-button>
             </panel-footer>
         
-            </soft-panel>
-        </soft-card>
+            </spider-panel>
+        </spider-card>
     } @placeholder {
         <card-skeleton [height]="502"></card-skeleton>
     }

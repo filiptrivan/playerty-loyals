@@ -3,9 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { UserListComponent } from './pages/users/user-list.component';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { UserDetailsComponent } from './pages/users/user-details.component';
-import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
+import { SpiderControlsModule } from 'src/app/core/controls/spider-controls.module';
 import { CardSkeletonComponent } from "../../core/components/card-skeleton/card-skeleton.component";
-import { SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';
+import { SpiderDataTableComponent } from 'src/app/core/components/spider-data-table/spider-data-table.component';
 import { RoleListComponent } from './pages/roles/role-list.component';
 import { RoleDetailsComponent } from './pages/roles/role-details.component';
 import { NotificationDetailsComponent } from './pages/notifications/notification-details.component';
@@ -55,8 +55,8 @@ const routes: Routes = [
     imports: [
     RouterModule.forChild(routes),
     PrimengModule,
-    SoftDataTableComponent,
-    SoftControlsModule,
+    SpiderDataTableComponent,
+    SpiderControlsModule,
     CardSkeletonComponent,
     SegmentationSelectComponent,
     TranslocoDirective,

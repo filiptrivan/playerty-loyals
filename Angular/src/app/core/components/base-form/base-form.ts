@@ -8,10 +8,10 @@ import {
 } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { BaseEntity } from '../../entities/base-entity';
-import { SoftFormControl } from '../soft-form-control/soft-form-control';
+import { SpiderFormControl } from '../spider-form-control/spider-form-control';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { SoftMessageService } from '../../services/soft-message.service';
+import { SpiderMessageService } from '../../services/spider-message.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { TranslocoService } from '@jsverse/transloco';
@@ -40,7 +40,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   constructor(
     protected differs: KeyValueDiffers, 
     protected http: HttpClient, 
-    protected messageService: SoftMessageService, 
+    protected messageService: SpiderMessageService, 
     protected changeDetectorRef: ChangeDetectorRef,
     protected router: Router, 
     protected route: ActivatedRoute,
@@ -84,7 +84,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     }
   }
 
-  setValidator(formControl: SoftFormControl, model: T = null) {
+  setValidator(formControl: SpiderFormControl, model: T = null) {
     if (formControl == null) return null;
 
     this.validatorService.setValidator(formControl, model ? model.typeName : this.model.typeName);
@@ -97,13 +97,13 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   // FT: If we put onChange to true, we are validating control on change not on blur.
   // FT: If we assign model, we are taking validators for the other class
   control(formControlName: keyof T & string, updateOnChange: boolean = false, customValidation: boolean = false, disable: boolean = false, model: T = null) {
-    let formControl: SoftFormControl = this.formGroup.controls[formControlName] as SoftFormControl;
+    let formControl: SpiderFormControl = this.formGroup.controls[formControlName] as SpiderFormControl;
 
     if (formControl == null) {
       if (updateOnChange)
-        formControl = new SoftFormControl(this.model[formControlName], { updateOn: 'change' });
+        formControl = new SpiderFormControl(this.model[formControlName], { updateOn: 'change' });
       else
-        formControl = new SoftFormControl(this.model[formControlName], { updateOn: 'blur' });
+        formControl = new SpiderFormControl(this.model[formControlName], { updateOn: 'blur' });
 
       if (formControl == null)
         return null;
@@ -244,13 +244,13 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   }
 
   arrayFormGroup(formControlName: string, formGroup: FormGroup, model: T, updateOnChange: boolean = false, customValidation: boolean = false, disable: boolean = false) {
-    let formControl: SoftFormControl = formGroup.controls[formControlName] as SoftFormControl;
+    let formControl: SpiderFormControl = formGroup.controls[formControlName] as SpiderFormControl;
 
     if (formControl == null) {
       if (updateOnChange)
-        formControl = new SoftFormControl(model[formControlName], { updateOn: 'change' });
+        formControl = new SpiderFormControl(model[formControlName], { updateOn: 'change' });
       else
-        formControl = new SoftFormControl(model[formControlName], { updateOn: 'blur' });
+        formControl = new SpiderFormControl(model[formControlName], { updateOn: 'blur' });
 
       if (formControl == null)
         return null;
@@ -281,11 +281,11 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     return formGroup;
   }
 
-  // FT: Need to use this from html because can't do "as SoftFormControl" there
-  getFormArrayControl(formControlName: keyof T & string, index: number): SoftFormControl{
+  // FT: Need to use this from html because can't do "as SpiderFormControl" there
+  getFormArrayControl(formControlName: keyof T & string, index: number): SpiderFormControl{
     if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
       this.formArrayControlNamesFromHtml.push(formControlName);
-    return (this.formArray.controls[index] as FormGroup).controls[formControlName] as SoftFormControl;
+    return (this.formArray.controls[index] as FormGroup).controls[formControlName] as SpiderFormControl;
   }
 
   getFormArrayGroup(index: number): FormGroup{
@@ -332,7 +332,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
     (this.formArray.controls as FormGroup[]).forEach(formGroup => {
       Object.keys(formGroup.controls).forEach(key => {
-        let formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
+        let formControl = formGroup.controls[key] as SpiderFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
         formControl.markAsDirty();
         if (formControl.invalid && this.formArrayControlNamesFromHtml.includes(formControl.label)) {
           invalid = true;
@@ -355,7 +355,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
     (this.formArray.controls as FormGroup[]).forEach(formGroup => {
       Object.keys(formGroup.controls).forEach(key => {
-        let formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
+        let formControl = formGroup.controls[key] as SpiderFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
         formControl.markAsDirty();
         if (formControl.invalid && this.formArrayControlNamesFromHtml.includes(formControl.label)) {
           invalid = true;

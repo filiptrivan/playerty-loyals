@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Soft.Generator.Security.Entities;
-using Soft.Generator.Security.Interface;
-using Soft.Generator.Shared.Attributes;
-using Soft.Generator.Shared.Attributes.EF;
-using Soft.Generator.Shared.Attributes.EF.Translation;
-using Soft.Generator.Shared.Attributes.EF.UI;
-using Soft.Generator.Shared.BaseEntities;
-using Soft.Generator.Shared.Enums;
+using Spider.Security.Entities;
+using Spider.Security.Interface;
+using Spider.Shared.Attributes;
+using Spider.Shared.Attributes.EF;
+using Spider.Shared.Attributes.EF.Translation;
+using Spider.Shared.Attributes.EF.UI;
+using Spider.Shared.BaseEntities;
+using Spider.Shared.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace PlayertyLoyals.Business.Entities
@@ -17,7 +17,7 @@ namespace PlayertyLoyals.Business.Entities
     {
         [UIColWidth("col-12")]
         [TranslateSingularSrLatnRS("Email")]
-        [SoftDisplayName]
+        [DisplayName]
         [CustomValidator("EmailAddress()")]
         [StringLength(70, MinimumLength = 5)]
         [Required]

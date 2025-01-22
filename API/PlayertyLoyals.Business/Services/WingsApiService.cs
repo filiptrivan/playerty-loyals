@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
-using Soft.Generator.Shared.Extensions;
-using Soft.Generator.Shared.Interfaces;
-using Soft.Generator.Shared.SoftExceptions;
+using Spider.Shared.Extensions;
+using Spider.Shared.Interfaces;
+using Spider.Shared.Exceptions;
 using PlayertyLoyals.Business.ValidationRules;
 using System;
 using System.Collections.Generic;

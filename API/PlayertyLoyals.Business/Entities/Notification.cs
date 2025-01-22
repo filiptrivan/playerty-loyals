@@ -1,17 +1,17 @@
-﻿using Soft.Generator.Shared.Attributes.EF;
-using Soft.Generator.Shared.Attributes.EF.UI;
-using Soft.Generator.Shared.BaseEntities;
-using Soft.Generator.Shared.Enums;
+﻿using Spider.Shared.Attributes.EF;
+using Spider.Shared.Attributes.EF.UI;
+using Spider.Shared.BaseEntities;
+using Spider.Shared.Enums;
 using System.ComponentModel.DataAnnotations;
 using PlayertyLoyals.Business.DTO;
-using Soft.Generator.Shared.Interfaces;
+using Spider.Shared.Interfaces;
 
 namespace PlayertyLoyals.Business.Entities
 {
     public class Notification : BusinessObject<long>, INotification<UserExtended>
     {
         [UIColWidth("col-12")]
-        [SoftDisplayName]
+        [DisplayName]
         [StringLength(100, MinimumLength = 1)]
         [Required]
         public string Title { get; set; }

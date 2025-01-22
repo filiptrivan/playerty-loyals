@@ -7,7 +7,7 @@ import { MenuItem } from 'primeng/api';
 import { PartnerService } from '../../../business/services/helpers/partner.service';
 import { environment } from 'src/environments/environment';
 
-export interface SoftMenuItem extends MenuItem{
+export interface SpiderMenuItem extends MenuItem{
     hasPermission?: (permissionCodes: string[]) => boolean;
     showPartnerDialog?: boolean; 
 }
@@ -19,7 +19,7 @@ export interface SoftMenuItem extends MenuItem{
 export class AppMenuComponent implements OnInit {
     private partnerSubscription: Subscription | null = null;
     
-    model: SoftMenuItem[] = [];
+    model: SpiderMenuItem[] = [];
 
     constructor(
         public layoutService: LayoutService, 

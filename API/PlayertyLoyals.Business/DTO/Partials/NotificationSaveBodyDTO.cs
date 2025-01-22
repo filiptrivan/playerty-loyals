@@ -1,5 +1,5 @@
-﻿using Soft.Generator.Shared.DTO;
-using Soft.Generator.Shared.Interfaces;
+﻿using Spider.Shared.DTO;
+using Spider.Shared.Interfaces;
 
 namespace PlayertyLoyals.Business.DTO
 {

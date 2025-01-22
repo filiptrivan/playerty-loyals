@@ -1,4 +1,4 @@
-import { SoftFormGroup } from './../../../../core/components/soft-form-control/soft-form-control';
+import { SpiderFormGroup } from './../../../../core/components/spider-form-control/spider-form-control';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,7 +8,7 @@ import { TranslateClassNamesService } from 'src/app/business/services/translates
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { BaseFormService } from 'src/app/core/services/base-form.service';
-import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 import { Segmentation } from 'src/app/business/entities/business-entities.generated';
 
 @Component({
@@ -17,12 +17,12 @@ import { Segmentation } from 'src/app/business/entities/business-entities.genera
     styles: [],
 })
 export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit {
-    segmentationFormGroup = new SoftFormGroup<Segmentation>({});
+    segmentationFormGroup = new SpiderFormGroup<Segmentation>({});
 
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SoftMessageService, 
+        protected override messageService: SpiderMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 

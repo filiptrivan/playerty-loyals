@@ -1,7 +1,7 @@
 ﻿using PlayertyLoyals.Business.Entities;
-using Soft.Generator.Shared.Attributes;
-using Soft.Generator.Shared.BaseEntities;
-using Soft.Generator.Shared.DTO;
+using Spider.Shared.Attributes;
+using Spider.Shared.BaseEntities;
+using Spider.Shared.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;

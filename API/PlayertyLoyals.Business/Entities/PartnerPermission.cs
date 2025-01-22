@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Soft.Generator.Security.Interface;
-using Soft.Generator.Shared.Attributes.EF;
-using Soft.Generator.Shared.Attributes.EF.UI;
-using Soft.Generator.Shared.BaseEntities;
+using Spider.Security.Interface;
+using Spider.Shared.Attributes.EF;
+using Spider.Shared.Attributes.EF.UI;
+using Spider.Shared.BaseEntities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,7 +18,7 @@ namespace PlayertyLoyals.Business.Entities
     [Index(nameof(Code), IsUnique = true)]
     public class PartnerPermission : ReadonlyObject<int>
     {
-        [SoftDisplayName]
+        [DisplayName]
         [Required]
         [StringLength(100, MinimumLength = 1)]
         public string Name { get; set; }

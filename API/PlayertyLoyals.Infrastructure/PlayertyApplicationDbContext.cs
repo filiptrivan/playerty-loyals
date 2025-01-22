@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PlayertyLoyals.Business.Entities;
-using Soft.Generator.Infrastructure;
+using Spider.Infrastructure;
 
 namespace PlayertyLoyals.Infrastructure
 {

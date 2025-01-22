@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Services;
-using Soft.Generator.Shared.Attributes;
-using Soft.Generator.Shared.DTO;
-using Soft.Generator.Shared.Helpers;
-using Soft.Generator.Shared.Interfaces;
+using Spider.Shared.Attributes;
+using Spider.Shared.DTO;
+using Spider.Shared.Helpers;
+using Spider.Shared.Interfaces;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {

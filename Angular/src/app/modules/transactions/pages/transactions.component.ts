@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { Transaction } from 'src/app/business/entities/business-entities.generated';
-import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
+import { SpiderControlsModule } from 'src/app/core/controls/spider-controls.module';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { PaginatorState } from 'primeng/paginator';
@@ -16,7 +16,7 @@ import { getMonth } from 'src/app/core/services/helper-functions';
   standalone: true,
   imports: [
     PrimengModule,
-    SoftControlsModule,
+    SpiderControlsModule,
     TranslocoDirective,
   ]
 })

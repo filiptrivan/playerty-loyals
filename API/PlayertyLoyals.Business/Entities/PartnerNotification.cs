@@ -1,17 +1,17 @@
-﻿using Soft.Generator.Shared.Attributes.EF;
-using Soft.Generator.Shared.Attributes.EF.UI;
+﻿using Spider.Shared.Attributes.EF;
+using Spider.Shared.Attributes.EF.UI;
 using PlayertyLoyals.Business.DTO;
 using System.ComponentModel.DataAnnotations;
-using Soft.Generator.Shared.Interfaces;
-using Soft.Generator.Shared.Enums;
-using Soft.Generator.Shared.BaseEntities;
+using Spider.Shared.Interfaces;
+using Spider.Shared.Enums;
+using Spider.Shared.BaseEntities;
 
 namespace PlayertyLoyals.Business.Entities
 {
     public class PartnerNotification : BusinessObject<long>, INotification<PartnerUser>
     {
         [UIColWidth("col-12")]
-        [SoftDisplayName]
+        [DisplayName]
         [StringLength(100, MinimumLength = 1)]
         [Required]
         public string Title { get; set; }

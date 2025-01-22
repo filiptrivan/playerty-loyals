@@ -9,7 +9,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { Notification } from 'src/app/business/entities/business-entities.generated';
 import { TableFilter } from 'src/app/core/entities/table-filter';
 import { Menu } from 'primeng/menu';
-import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 import { NotificationDiscriminatorCodes } from 'src/app/business/enums/business-enums.generated';
 
 @Component({
@@ -32,7 +32,7 @@ export class NotificationComponent implements OnInit {
     private apiService: ApiService,
     private authService: AuthService,
     private translocoService: TranslocoService,
-    private messageService: SoftMessageService,
+    private messageService: SpiderMessageService,
   ) {}
 
   ngOnInit() {

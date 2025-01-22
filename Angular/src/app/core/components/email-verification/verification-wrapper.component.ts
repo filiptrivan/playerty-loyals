@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, KeyValueDiffers, OnInit, Output } from '@angular/core';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
 import { HttpClient } from '@angular/common/http';
-import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
+import { SpiderControlsModule } from 'src/app/core/controls/spider-controls.module';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { VerificationTokenRequest } from 'src/app/business/entities/security-entities.generated';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -22,7 +22,7 @@ import { LayoutService } from 'src/app/layout/services/app.layout.service';
         PrimengModule,
         FormsModule,
         ReactiveFormsModule,
-        SoftControlsModule,
+        SpiderControlsModule,
         TranslocoDirective,
     ]
 })
@@ -34,7 +34,7 @@ export class VerificationWrapperComponent extends BaseForm<VerificationTokenRequ
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SoftMessageService, 
+        protected override messageService: SpiderMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router,
         protected override route: ActivatedRoute,

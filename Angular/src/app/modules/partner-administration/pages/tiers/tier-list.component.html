@@ -1,6 +1,6 @@
 <ng-container *transloco="let t">
     @defer (when tierFormArray != null && businessSystemTierFormArray != null && businessSystemTierDiscountProductGroupFormArray != null) {
-        <soft-panel>
+        <spider-panel>
             <panel-header [title]="t('TierList')" [bigTitle]="true" icon="pi pi-crown"></panel-header>
     
             <panel-body [normalBottomPadding]="true">
@@ -9,16 +9,16 @@
                     <index-card [index]="tierIndex" [last]="false" [crudMenu]="tierCrudMenu" (onMenuIconClick)="tierLastIndexClicked.index = $event">
                         <form [formGroup]="tierFormGroup" class="grid">
                             <div class="col-12 md:col-4">
-                                <soft-textbox [control]="control('name', tierFormGroup)"></soft-textbox>
+                                <spider-textbox [control]="control('name', tierFormGroup)"></spider-textbox>
                             </div>
                             <div class="col-12 md:col-4">
-                                <soft-number [control]="control('validFrom', tierFormGroup)"></soft-number>
+                                <spider-number [control]="control('validFrom', tierFormGroup)"></spider-number>
                             </div>
                             <div class="col-12 md:col-4">
-                                <soft-number [control]="control('validTo', tierFormGroup)"></soft-number>
+                                <spider-number [control]="control('validTo', tierFormGroup)"></spider-number>
                             </div>
                             <div class="col-12">
-                                <soft-textarea [control]="control('description', tierFormGroup)"></soft-textarea>
+                                <spider-textarea [control]="control('description', tierFormGroup)"></spider-textarea>
                             </div>
 
                             <div class="col-12">
@@ -26,10 +26,10 @@
                                     <index-card [index]="businessSystemTierIndex" [crudMenu]="businessSystemTierCrudMenu" (onMenuIconClick)="businessSystemTierLastIndexClicked.index = $event; tierLastIndexClicked.index = tierIndex" [last]="false">
                                         <form [formGroup]="businessSystemTierFormGroup" class="grid">
                                             <div class="col-12">
-                                                <soft-dropdown [control]="control('businessSystemId', businessSystemTierFormGroup)" (onChange)="businessSystemChange($event, tierIndex, businessSystemTierIndex)" [options]="businessSystemOptions"></soft-dropdown>
+                                                <spider-dropdown [control]="control('businessSystemId', businessSystemTierFormGroup)" (onChange)="businessSystemChange($event, tierIndex, businessSystemTierIndex)" [options]="businessSystemOptions"></spider-dropdown>
                                             </div>
                                             <div class="col-12">
-                                                <soft-data-table 
+                                                <spider-data-table 
                                                 [tableTitle]="t('DiscountProductGroupList')" 
                                                 #businessSystemTierDiscountProductGroupTable
                                                 (onIsAllSelectedChange)="allSelected($event)"
@@ -43,11 +43,11 @@
                                                 [formArrayControlNamesFromHtml]="formArrayControlNamesFromHtml" 
                                                 [cols]="businessSystemTierDiscountProductGroupCols" 
                                                 [getFormArrayItems]="getDiscountProductGroupFormArrayItems" 
-                                                [getSoftFormControl]="getDiscountProductGroupFormArrayControl" 
+                                                [getFormControl]="getDiscountProductGroupFormArrayControl" 
                                                 [getAlreadySelectedItemIds]="getAlreadySelectedBusinessSystemTierDiscountProductGroupIdsForBusinessSystem" 
                                                 [getAlreadySelectedItems]="getAlreadySelectedDiscountProductGroupListForBusinessSystem"
                                                 [additionalIndexes]="getBusinessSystemTierDiscountProductGroupAdditionalIndexes(tierIndex, businessSystemTierIndex)"
-                                                ></soft-data-table>
+                                                ></spider-data-table>
                                             </div>
                                         </form>
                                     </index-card>
@@ -72,7 +72,7 @@
                 <p-button (onClick)="onSave(false)" [label]="t('Save')" icon="pi pi-save"></p-button>
             </panel-footer>
     
-        </soft-panel>
+        </spider-panel>
     } @placeholder {
         <card-skeleton [height]="502"></card-skeleton>
     }

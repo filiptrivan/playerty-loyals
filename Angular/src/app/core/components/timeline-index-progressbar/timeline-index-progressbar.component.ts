@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
-import { SoftPanelsModule } from "../soft-panels/soft-panels.module";
+import { SpiderPanelsModule } from "../spider-panels/spider-panels.module";
 import { Tier } from 'src/app/business/entities/business-entities.generated';
 
 @Component({
@@ -12,7 +12,7 @@ import { Tier } from 'src/app/business/entities/business-entities.generated';
     imports: [
     CommonModule,
     PrimengModule,
-    SoftPanelsModule
+    SpiderPanelsModule
 ]
 })
 export class TimelineIndexProgressbarComponent {

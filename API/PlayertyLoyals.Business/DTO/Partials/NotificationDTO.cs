@@ -1,5 +1,5 @@
 ﻿using PlayertyLoyals.Business.Enums;
-using Soft.Generator.Shared.Attributes.EF.UI;
+using Spider.Shared.Attributes.EF.UI;
 
 namespace PlayertyLoyals.Business.DTO
 {

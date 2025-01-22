@@ -1,7 +1,7 @@
 ﻿using PlayertyLoyals.Business.Entities;
-using Soft.Generator.Security.Interface;
-using Soft.Generator.Shared.Extensions;
-using Soft.Generator.Shared.Interfaces;
+using Spider.Security.Interface;
+using Spider.Shared.Extensions;
+using Spider.Shared.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

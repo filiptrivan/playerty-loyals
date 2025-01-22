@@ -11,11 +11,11 @@ import { PartnerService } from 'src/app/business/services/helpers/partner.servic
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { SoftFormArray, SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { SpiderFormArray, SpiderFormControl, SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { BaseFormService } from 'src/app/core/services/base-form.service';
 import { nameof } from 'src/app/core/services/helper-functions';
-import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 
 @Component({
     selector: 'partner-user-details',
@@ -26,17 +26,17 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     roleOptions: PrimengOption[];
     partnerRoleOptions: PrimengOption[];
     genderOptions: PrimengOption[];
-    selectedRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
-    selectedPartnerRoles = new SoftFormControl<number[]>(null, {updateOn: 'change'});
+    selectedRoles = new SpiderFormControl<number[]>(null, {updateOn: 'change'});
+    selectedPartnerRoles = new SpiderFormControl<number[]>(null, {updateOn: 'change'});
 
-    userExtendedFormGroup = new SoftFormGroup<UserExtended>({});
-    partnerUserFormGroup = new SoftFormGroup<PartnerUser>({});
+    userExtendedFormGroup = new SpiderFormGroup<UserExtended>({});
+    partnerUserFormGroup = new SpiderFormGroup<PartnerUser>({});
     partnerUserTier: Tier;
 
     segmentations: Segmentation[] = [];
     segmentationItems: SegmentationItem[] = [];
 
-    segmentationItemsFormArray: SoftFormArray<SegmentationItem[]>;
+    segmentationItemsFormArray: SpiderFormArray<SegmentationItem[]>;
     segmentationItemsFormArrayIdentifier: string = crypto.randomUUID(); // FT: Because we are not changing it, we are not using nameof, it's important that it's not the same as property in save body
     segmentationItemsTranslationKey: string = new SegmentationItem().typeName;
     segmentationItemModel: SegmentationItem = new SegmentationItem();
@@ -50,7 +50,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SoftMessageService, 
+        protected override messageService: SpiderMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 

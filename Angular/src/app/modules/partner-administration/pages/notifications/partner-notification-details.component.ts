@@ -5,12 +5,12 @@ import { TranslocoService } from '@jsverse/transloco';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
-import { SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
-import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { SpiderFormControl, SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
+import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 import { PartnerNotification } from 'src/app/business/entities/business-entities.generated';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { BaseFormService } from 'src/app/core/services/base-form.service';
-import { SoftButton } from 'src/app/core/entities/soft-button';
+import { SpiderButton } from 'src/app/core/entities/spider-button';
 
 @Component({
     selector: 'partner-notification-details',
@@ -18,16 +18,16 @@ import { SoftButton } from 'src/app/core/entities/soft-button';
     styles: [],
 })
 export class PartnerNotificationDetailsComponent extends BaseFormCopy implements OnInit {
-    partnerNotificationFormGroup = new SoftFormGroup<PartnerNotification>({});
+    partnerNotificationFormGroup = new SpiderFormGroup<PartnerNotification>({});
 
-    isMarkedAsRead = new SoftFormControl<boolean>(true, {updateOn: 'change'})
+    isMarkedAsRead = new SpiderFormControl<boolean>(true, {updateOn: 'change'})
 
-    additionalButtons: SoftButton[];
+    additionalButtons: SpiderButton[];
 
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SoftMessageService, 
+        protected override messageService: SpiderMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute,

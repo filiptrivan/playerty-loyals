@@ -9,7 +9,7 @@ import { LayoutService } from '../../services/app.layout.service';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { PartnerUser, UserExtended } from 'src/app/business/entities/business-entities.generated';
 
-interface SoftMenuItem {
+interface SpiderMenuItem {
   label?: string;
   icon?: string;
   showSeparator?: boolean;
@@ -31,7 +31,7 @@ export class AppTopBarComponent implements OnDestroy {
     currentUser: UserExtended;
     currentPartnerUser: PartnerUser;
     currentUserNotificationsCount: number;
-    menuItems: SoftMenuItem[] = [];
+    menuItems: SpiderMenuItem[] = [];
     avatarLabel: string;
     companyName: string;
     showProfileIcon: boolean = false;

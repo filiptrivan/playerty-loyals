@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Services;
-using Soft.Generator.Security.DTO;
-using Soft.Generator.Security.Entities;
-using Soft.Generator.Security.Services;
-using Soft.Generator.Shared.Attributes;
-using Soft.Generator.Shared.DTO;
-using Soft.Generator.Shared.Helpers;
-using Soft.Generator.Shared.Interfaces;
+using Spider.Security.DTO;
+using Spider.Security.Entities;
+using Spider.Security.Services;
+using Spider.Shared.Attributes;
+using Spider.Shared.DTO;
+using Spider.Shared.Helpers;
+using Spider.Shared.Interfaces;
 using PlayertyLoyals.Business.DTO;
 using Azure.Storage.Blobs;
 

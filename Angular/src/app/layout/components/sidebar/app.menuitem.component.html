@@ -22,7 +22,7 @@
         </ng-template>
     </ul>
 
-    <soft-autocomplete
+    <spider-autocomplete
     *ngIf="item.showPartnerDialog"
     [control]="selectedPartner"
     [options]="partnerOptions"
@@ -34,6 +34,6 @@
     moreOptionsIcon="pi pi-check"
     [emptyMessage]="t('LeftCornerPartnersEmptyMessage')"
     class="mobile-stay-open"
-    ></soft-autocomplete>
+    ></spider-autocomplete>
      
 </ng-container>

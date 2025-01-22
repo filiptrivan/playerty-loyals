@@ -3,7 +3,7 @@ import { Partner } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { getHtmlImgDisplayString64 } from 'src/app/core/services/helper-functions';
-import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 
 @Component({
   templateUrl: './partner-select.component.html',
@@ -16,7 +16,7 @@ export class PartnerSelectComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private messageService: SoftMessageService,
+    private messageService: SpiderMessageService,
 ) { 
 }
 

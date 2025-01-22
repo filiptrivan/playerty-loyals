@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
+import { SpiderControlsModule } from 'src/app/core/controls/spider-controls.module';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { TranslocoDirective } from '@jsverse/transloco';
 
@@ -14,7 +14,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
         PrimengModule,
         FormsModule,
         ReactiveFormsModule,
-        SoftControlsModule,
+        SpiderControlsModule,
         TranslocoDirective
     ]
 })

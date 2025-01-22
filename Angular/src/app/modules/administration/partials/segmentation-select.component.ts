@@ -1,16 +1,16 @@
 import { ChangeDetectorRef, Component, Input, KeyValueDiffers, OnInit } from '@angular/core';
 import { Segmentation, SegmentationItem } from 'src/app/business/entities/business-entities.generated';
 import { CardSkeletonComponent } from "../../../core/components/card-skeleton/card-skeleton.component";
-import { SoftCheckboxComponent } from 'src/app/core/controls/soft-checkbox/soft-checkbox.component';
+import { SpiderCheckboxComponent } from 'src/app/core/controls/spider-checkbox/spider-checkbox.component';
 import { FormGroup } from '@angular/forms';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
-import { SoftFormArray, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { SpiderFormArray, SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
 import { BaseFormService } from 'src/app/core/services/base-form.service';
 
 @Component({
@@ -20,7 +20,7 @@ import { BaseFormService } from 'src/app/core/services/base-form.service';
     standalone: true,
     imports: [
         CardSkeletonComponent,
-        SoftCheckboxComponent,
+        SpiderCheckboxComponent,
     ]
 })
 // FT: Putting any because we are merging UserExtended and PartnerUser
@@ -28,8 +28,8 @@ export class SegmentationSelectComponent extends BaseFormCopy implements OnInit 
     @Input() segmentation: Segmentation;
     @Input() allSegmentationItems: SegmentationItem[]; // All, we need to filter, it's better then making multiple requests
     @Input() partnerUserId: number;
-    @Input() override formGroup: SoftFormGroup;
-    @Input() segmentationItemsFormArray: SoftFormArray<SegmentationItem[]>;
+    @Input() override formGroup: SpiderFormGroup;
+    @Input() segmentationItemsFormArray: SpiderFormArray<SegmentationItem[]>;
     @Input() checkedSegmentationItemIdsForThePartnerUser: number[]; // FT: Because we are not changing it, we are not using nameof
     
     segmentationItemsForTheCurrentSegmentation: SegmentationItemIndex[] = []; // for the current segmentation
@@ -37,7 +37,7 @@ export class SegmentationSelectComponent extends BaseFormCopy implements OnInit 
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SoftMessageService, 
+        protected override messageService: SpiderMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 

@@ -6,10 +6,10 @@ import { filter } from 'rxjs/operators';
 import { MenuService } from './app.menu.service';
 import { LayoutService } from '../../services/app.layout.service';
 import { AuthService } from '../../../business/services/auth/auth.service';
-import { SoftMenuItem } from './app.menu.component';
+import { SpiderMenuItem } from './app.menu.component';
 import { ApiService } from '../../../business/services/api/api.service';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
-import { SoftFormControl } from '../../../core/components/soft-form-control/soft-form-control';
+import { SpiderFormControl } from '../../../core/components/spider-form-control/spider-form-control';
 import { environment } from 'src/environments/environment';
 import { PartnerService } from '../../../business/services/helpers/partner.service';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
@@ -32,7 +32,7 @@ import { PrimengOption } from 'src/app/core/entities/primeng-option';
 })
 export class AppMenuitemComponent implements OnInit, OnDestroy {
 
-    @Input() item: SoftMenuItem;
+    @Input() item: SpiderMenuItem;
 
     @Input() index!: number;
 
@@ -50,7 +50,7 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
 
     key: string = "";
 
-    selectedPartner: SoftFormControl = new SoftFormControl<string>(null, { updateOn: 'change' });
+    selectedPartner: SpiderFormControl = new SpiderFormControl<string>(null, { updateOn: 'change' });
 
     partnerOptions: PrimengOption[];
 

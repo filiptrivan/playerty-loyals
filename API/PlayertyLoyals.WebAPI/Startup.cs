@@ -1,6 +1,6 @@
 using LightInject;
-using Soft.Generator.Shared.Helpers;
-using Soft.Generator.Shared.Extensions;
+using Spider.Shared.Helpers;
+using Spider.Shared.Extensions;
 using PlayertyLoyals.WebAPI.DI;
 using PlayertyLoyals.Infrastructure;
 using Quartz;
@@ -23,16 +23,16 @@ public class Startup
 
         PlayertyLoyals.WebAPI.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<PlayertyLoyals.WebAPI.Settings>(_jsonConfigurationFile);
         PlayertyLoyals.Business.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<PlayertyLoyals.Business.Settings>(_jsonConfigurationFile);
-        Soft.Generator.Infrastructure.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<Soft.Generator.Infrastructure.Settings>(_jsonConfigurationFile);
-        Soft.Generator.Security.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<Soft.Generator.Security.Settings>(_jsonConfigurationFile);
-        Soft.Generator.Shared.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<Soft.Generator.Shared.Settings>(_jsonConfigurationFile);
+        Spider.Infrastructure.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<Spider.Infrastructure.Settings>(_jsonConfigurationFile);
+        Spider.Security.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<Spider.Security.Settings>(_jsonConfigurationFile);
+        Spider.Shared.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<Spider.Shared.Settings>(_jsonConfigurationFile);
     }
 
     public IConfiguration Configuration { get; }
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.SoftConfigureServices<PlayertyApplicationDbContext>();
+        services.SpiderConfigureServices<PlayertyApplicationDbContext>();
 
         services.AddQuartz();
 
@@ -55,6 +55,6 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        app.SoftConfigure(env);
+        app.SpiderConfigure(env);
     }
 }

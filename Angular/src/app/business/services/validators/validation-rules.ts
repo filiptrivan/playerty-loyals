@@ -1,5 +1,5 @@
 import { ValidationErrors } from "@angular/forms";
-import { SoftFormArray, SoftFormControl, SoftValidatorFn } from "src/app/core/components/soft-form-control/soft-form-control";
+import { SpiderFormArray, SpiderFormControl, SpiderValidatorFn } from "src/app/core/components/spider-form-control/spider-form-control";
 import { TranslocoService } from '@jsverse/transloco';
 import { Injectable } from '@angular/core';
 import { ValidatorServiceGenerated } from "./validation-rules.generated";
@@ -15,8 +15,8 @@ export class ValidatorService extends ValidatorServiceGenerated {
         super(translocoService)
     }
 
-    isArrayEmpty(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    isArrayEmpty(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
     
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value.length !== 0;
@@ -30,8 +30,8 @@ export class ValidatorService extends ValidatorServiceGenerated {
         return validator;
     }
 
-    notEmpty(control: SoftFormControl): void {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    notEmpty(control: SpiderFormControl): void {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
     
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -46,8 +46,8 @@ export class ValidatorService extends ValidatorServiceGenerated {
         control.updateValueAndValidity();
     }
     
-    isFormArrayEmpty(control: SoftFormArray): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    isFormArrayEmpty(control: SpiderFormArray): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control;
     
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value.length !== 0;

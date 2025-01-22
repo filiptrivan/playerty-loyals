@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { SoftMessageService } from '../../../../core/services/soft-message.service';
+import { SpiderMessageService } from '../../../../core/services/spider-message.service';
 import { AuthService } from '../../../../business/services/auth/auth.service';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { LayoutService } from '../../../services/app.layout.service';
@@ -23,7 +23,7 @@ export class RegistrationComponent extends BaseForm<Registration> implements OnI
     constructor(
       protected override differs: KeyValueDiffers,
       protected override http: HttpClient,
-      protected override messageService: SoftMessageService, 
+      protected override messageService: SpiderMessageService, 
       protected override changeDetectorRef: ChangeDetectorRef,
       protected override router: Router,
       protected override route: ActivatedRoute,

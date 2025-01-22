@@ -2,18 +2,18 @@
 using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Services;
-using Soft.Generator.Security.Interface;
-using Soft.Generator.Security.Services;
-using Soft.Generator.Shared.Attributes;
-using Soft.Generator.Shared.DTO;
-using Soft.Generator.Shared.Helpers;
-using Soft.Generator.Shared.Interfaces;
+using Spider.Security.Interface;
+using Spider.Security.Services;
+using Spider.Shared.Attributes;
+using Spider.Shared.DTO;
+using Spider.Shared.Helpers;
+using Spider.Shared.Interfaces;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
-    public class TierController : SoftBaseController
+    public class TierController : SpiderBaseController
     {
         private readonly IJwtAuthManager _jwtAuthManagerService;
         private readonly IApplicationDbContext _context;

@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
-using Soft.Generator.Security.Interface;
-using Soft.Generator.Security.Services;
-using Soft.Generator.Security.SecurityControllers;
-using Soft.Generator.Shared.Interfaces;
+using Spider.Security.Interface;
+using Spider.Security.Services;
+using Spider.Security.SecurityControllers;
+using Spider.Shared.Interfaces;
 using PlayertyLoyals.Business.Entities;
-using Soft.Generator.Shared.Attributes;
+using Spider.Shared.Attributes;
 using PlayertyLoyals.Business.Services;
 using PlayertyLoyals.Business.DTO;
-using Soft.Generator.Shared.DTO;
+using Spider.Shared.DTO;
 using Microsoft.EntityFrameworkCore;
-using Soft.Generator.Shared.Terms;
-using Soft.Generator.Security.DTO;
-using Soft.Generator.Shared.Extensions;
+using Spider.Shared.Terms;
+using Spider.Security.DTO;
+using Spider.Shared.Extensions;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {

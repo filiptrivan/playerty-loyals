@@ -1,5 +1,5 @@
 import { ValidationErrors } from '@angular/forms';
-import { SoftFormControl, SoftValidatorFn } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { SpiderFormControl, SpiderValidatorFn } from 'src/app/core/components/spider-form-control/spider-form-control';
 import { validatePrecisionScale } from 'src/app/core/services/helper-functions';
 import { TranslocoService } from '@jsverse/transloco';
 import { Injectable } from '@angular/core';
@@ -14,7 +14,7 @@ export class ValidatorServiceGenerated {
     ) {
     }
 
-    setValidator(formControl: SoftFormControl, className: string): SoftValidatorFn {
+    setValidator(formControl: SpiderFormControl, className: string): SpiderValidatorFn {
         switch(formControl.label + className){
 
 
@@ -392,8 +392,8 @@ export class ValidatorServiceGenerated {
 
 
 
-    nameBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    nameBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -412,8 +412,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    getTransactionsEndpointBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    getTransactionsEndpointBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -430,8 +430,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    getDiscountProductGroupsEndpointBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    getDiscountProductGroupsEndpointBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -448,8 +448,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createUserEndpointBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    createUserEndpointBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -466,8 +466,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    updateUserGroupEndpointBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    updateUserGroupEndpointBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -484,8 +484,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    updatePointsIntervalBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    updatePointsIntervalBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -501,8 +501,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    partnerIdBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    partnerIdBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -518,8 +518,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    versionBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -535,8 +535,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    createdAtBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -552,8 +552,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtBusinessSystemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    modifiedAtBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -571,8 +571,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    discountBusinessSystemTierDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    discountBusinessSystemTierDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -594,8 +594,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    orderNumberBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    orderNumberBusinessSystemTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -611,8 +611,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    businessSystemIdBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    businessSystemIdBusinessSystemTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -628,8 +628,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    tierIdBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    tierIdBusinessSystemTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -645,8 +645,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    versionBusinessSystemTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -662,8 +662,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    createdAtBusinessSystemTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -679,8 +679,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtBusinessSystemTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    modifiedAtBusinessSystemTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -698,8 +698,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    updatePointsStartDateBusinessSystemUpdatePointsDataBodyValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    updatePointsStartDateBusinessSystemUpdatePointsDataBodyValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -715,8 +715,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    updatePointsIntervalBusinessSystemUpdatePointsDataBodyValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    updatePointsIntervalBusinessSystemUpdatePointsDataBodyValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -735,8 +735,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    isManualBusinessSystemUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    isManualBusinessSystemUpdatePointsScheduledTaskValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -752,8 +752,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    businessSystemIdBusinessSystemUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    businessSystemIdBusinessSystemUpdatePointsScheduledTaskValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -769,8 +769,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionBusinessSystemUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    versionBusinessSystemUpdatePointsScheduledTaskValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -786,8 +786,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtBusinessSystemUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    createdAtBusinessSystemUpdatePointsScheduledTaskValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -803,8 +803,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtBusinessSystemUpdatePointsScheduledTaskValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    modifiedAtBusinessSystemUpdatePointsScheduledTaskValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -824,8 +824,8 @@ export class ValidatorServiceGenerated {
 
 
 
-    nameDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    nameDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -844,8 +844,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    codeDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    codeDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -864,8 +864,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    businessSystemIdDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    businessSystemIdDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -881,8 +881,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    versionDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -898,8 +898,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    createdAtDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -915,8 +915,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    modifiedAtDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -934,8 +934,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    businessSystemIdExcelManualUpdatePointsValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    businessSystemIdExcelManualUpdatePointsValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -951,8 +951,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    businessSystemVersionExcelManualUpdatePointsValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    businessSystemVersionExcelManualUpdatePointsValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -970,8 +970,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    nameExternalDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    nameExternalDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -990,8 +990,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    codeExternalDiscountProductGroupValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    codeExternalDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1012,8 +1012,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    userEmailExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    userEmailExternalTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1033,8 +1033,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    codeExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    codeExternalTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1053,8 +1053,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    productNameExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    productNameExternalTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1073,8 +1073,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    productImageUrlExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    productImageUrlExternalTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -1091,8 +1091,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    productCategoryNameExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    productCategoryNameExternalTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1111,8 +1111,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    productCategoryImageUrlExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    productCategoryImageUrlExternalTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -1129,8 +1129,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    priceExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    priceExternalTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1150,8 +1150,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    boughtAtExternalTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    boughtAtExternalTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1168,8 +1168,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    nameGenderValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    nameGenderValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1192,8 +1192,8 @@ export class ValidatorServiceGenerated {
 
 
 
-    emailLoginValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    emailLoginValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1218,8 +1218,8 @@ export class ValidatorServiceGenerated {
 
 
 
-    titleNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    titleNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1238,8 +1238,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    descriptionNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1258,8 +1258,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    emailBodyNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    emailBodyNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -1276,8 +1276,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    versionNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1293,8 +1293,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    createdAtNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1310,8 +1310,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    modifiedAtNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1330,8 +1330,8 @@ export class ValidatorServiceGenerated {
 
 
 
-    namePartnerValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    namePartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1350,8 +1350,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    emailPartnerValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    emailPartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1371,8 +1371,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    slugPartnerValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    slugPartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1391,8 +1391,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    logoImagePartnerValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    logoImagePartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -1409,8 +1409,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    primaryColorPartnerValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    primaryColorPartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const length = 7;
@@ -1426,8 +1426,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    productsRecommendationEndpointPartnerValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    productsRecommendationEndpointPartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -1444,8 +1444,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    pointsMultiplierPartnerValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    pointsMultiplierPartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1465,8 +1465,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionPartnerValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    versionPartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1482,8 +1482,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtPartnerValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    createdAtPartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1499,8 +1499,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtPartnerValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    modifiedAtPartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1517,8 +1517,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    titlePartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    titlePartnerNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1537,8 +1537,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    descriptionPartnerNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1557,8 +1557,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    emailBodyPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    emailBodyPartnerNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -1575,8 +1575,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    partnerIdPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    partnerIdPartnerNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1592,8 +1592,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    versionPartnerNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1609,8 +1609,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    createdAtPartnerNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1626,8 +1626,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtPartnerNotificationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    modifiedAtPartnerNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1645,8 +1645,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    namePartnerPermissionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    namePartnerPermissionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1665,8 +1665,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionPartnerPermissionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    descriptionPartnerPermissionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -1683,8 +1683,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    codePartnerPermissionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    codePartnerPermissionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1705,8 +1705,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    namePartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    namePartnerRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1725,8 +1725,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionPartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    descriptionPartnerRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -1743,8 +1743,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    partnerIdPartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    partnerIdPartnerRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1760,8 +1760,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionPartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    versionPartnerRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1777,8 +1777,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtPartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    createdAtPartnerRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1794,8 +1794,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtPartnerRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    modifiedAtPartnerRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1816,8 +1816,8 @@ export class ValidatorServiceGenerated {
 
 
 
-    pointsPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    pointsPartnerUserValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1833,8 +1833,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    partnerIdPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    partnerIdPartnerUserValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1850,8 +1850,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    userIdPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    userIdPartnerUserValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1867,8 +1867,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    versionPartnerUserValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1884,8 +1884,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    createdAtPartnerUserValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1901,8 +1901,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtPartnerUserValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    modifiedAtPartnerUserValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1928,8 +1928,8 @@ export class ValidatorServiceGenerated {
 
 
 
-    namePermissionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    namePermissionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1948,8 +1948,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    nameLatinPermissionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    nameLatinPermissionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1968,8 +1968,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionPermissionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    descriptionPermissionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -1986,8 +1986,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionLatinPermissionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    descriptionLatinPermissionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -2004,8 +2004,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    codePermissionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    codePermissionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2031,8 +2031,8 @@ export class ValidatorServiceGenerated {
 
 
 
-    emailRegistrationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    emailRegistrationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2055,8 +2055,8 @@ export class ValidatorServiceGenerated {
 
 
 
-    nameRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    nameRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2075,8 +2075,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    descriptionRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -2093,8 +2093,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    versionRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2110,8 +2110,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    createdAtRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2127,8 +2127,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtRoleValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    modifiedAtRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2148,8 +2148,8 @@ export class ValidatorServiceGenerated {
 
 
 
-    nameSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    nameSegmentationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2168,8 +2168,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    descriptionSegmentationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -2186,8 +2186,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    pointsForTheFirstTimeFillSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    pointsForTheFirstTimeFillSegmentationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2205,8 +2205,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    partnerIdSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    partnerIdSegmentationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2222,8 +2222,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    versionSegmentationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2239,8 +2239,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    createdAtSegmentationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2256,8 +2256,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtSegmentationValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    modifiedAtSegmentationValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2274,8 +2274,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    nameSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    nameSegmentationItemValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2294,8 +2294,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    orderNumberSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    orderNumberSegmentationItemValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2311,8 +2311,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    segmentationIdSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    segmentationIdSegmentationItemValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2328,8 +2328,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    versionSegmentationItemValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2345,8 +2345,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    createdAtSegmentationItemValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2362,8 +2362,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtSegmentationItemValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    modifiedAtSegmentationItemValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2387,8 +2387,8 @@ export class ValidatorServiceGenerated {
 
 
 
-    nameTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    nameTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2407,8 +2407,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    descriptionTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -2425,8 +2425,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    validFromTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    validFromTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2444,8 +2444,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    validToTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    validToTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2463,8 +2463,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    partnerIdTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    partnerIdTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2480,8 +2480,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    versionTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2497,8 +2497,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    createdAtTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2514,8 +2514,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtTierValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    modifiedAtTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2533,8 +2533,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    productNameTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    productNameTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2553,8 +2553,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    codeTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    codeTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2573,8 +2573,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    productImageUrlTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    productImageUrlTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -2591,8 +2591,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    productCategoryNameTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    productCategoryNameTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2611,8 +2611,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    productCategoryImageUrlTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    productCategoryImageUrlTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const min = 1;
@@ -2629,8 +2629,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    priceTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    priceTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2650,8 +2650,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    boughtAtTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    boughtAtTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2667,8 +2667,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    pointsTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    pointsTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2684,8 +2684,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    partnerUserIdTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    partnerUserIdTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2701,8 +2701,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    businessSystemIdTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    businessSystemIdTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2718,8 +2718,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    versionTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2735,8 +2735,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    createdAtTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2752,8 +2752,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtTransactionValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    modifiedAtTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2771,8 +2771,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    businessSystemIdUpdatePointsValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    businessSystemIdUpdatePointsValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2788,8 +2788,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    businessSystemVersionUpdatePointsValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    businessSystemVersionUpdatePointsValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2805,8 +2805,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    fromDateUpdatePointsValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    fromDateUpdatePointsValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2822,8 +2822,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    toDateUpdatePointsValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    toDateUpdatePointsValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2840,8 +2840,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    emailUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    emailUserExtendedValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2861,8 +2861,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    versionUserExtendedValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2878,8 +2878,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    createdAtUserExtendedValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2895,8 +2895,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtUserExtendedValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    modifiedAtUserExtendedValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2918,8 +2918,8 @@ export class ValidatorServiceGenerated {
 
 
 
-    verificationCodeVerificationTokenRequestValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    verificationCodeVerificationTokenRequestValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2937,8 +2937,8 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    emailVerificationTokenRequestValidator(control: SoftFormControl): SoftValidatorFn {
-        const validator: SoftValidatorFn = (): ValidationErrors | null => {
+    emailVerificationTokenRequestValidator(control: SpiderFormControl): SpiderValidatorFn {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
         const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';

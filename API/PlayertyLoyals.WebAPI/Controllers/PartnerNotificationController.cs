@@ -2,14 +2,14 @@
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Services;
-using Soft.Generator.Security.DTO;
-using Soft.Generator.Security.Entities;
-using Soft.Generator.Security.Services;
-using Soft.Generator.Shared.Attributes;
-using Soft.Generator.Shared.DTO;
-using Soft.Generator.Shared.Helpers;
-using Soft.Generator.Shared.Interfaces;
-using Soft.Generator.Shared.Emailing;
+using Spider.Security.DTO;
+using Spider.Security.Entities;
+using Spider.Security.Services;
+using Spider.Shared.Attributes;
+using Spider.Shared.DTO;
+using Spider.Shared.Helpers;
+using Spider.Shared.Interfaces;
+using Spider.Shared.Emailing;
 using PlayertyLoyals.Shared.Terms;
 using Azure.Storage.Blobs;
 

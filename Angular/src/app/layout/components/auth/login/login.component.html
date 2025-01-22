@@ -3,7 +3,7 @@
         <auth (onCompanyNameChange)="companyNameChange($event)">
             <form [formGroup]="formGroup" style="margin-bottom: 16px;"> <!-- FT: We are not loading anything from the server here so we don't need defer block -->
                 <div class="col-12" style="padding-left: 0; padding-right: 0; margin-bottom: 32px;">
-                    <soft-textbox textbox [control]="control('email')"></soft-textbox>
+                    <spider-textbox textbox [control]="control('email')"></spider-textbox>
                 </div>
                 
                 <div style="display: flex; flex-direction: column; gap: 16px;">

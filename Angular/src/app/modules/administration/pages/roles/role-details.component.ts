@@ -9,9 +9,9 @@ import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseForm } from 'src/app/core/components/base-form/base-form';
-import { SoftFormControl } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { SpiderFormControl } from 'src/app/core/components/spider-form-control/spider-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
-import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 
 @Component({
     selector: 'role-details',
@@ -20,15 +20,15 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
 })
 export class RoleDetailsComponent extends BaseForm<Role> implements OnInit {
     userOptions: PrimengOption[];
-    selectedUsers = new SoftFormControl<PrimengOption[]>(null, {updateOn: 'change'})
+    selectedUsers = new SpiderFormControl<PrimengOption[]>(null, {updateOn: 'change'})
 
     permissionOptions: PrimengOption[];
-    selectedPermissions = new SoftFormControl<number[]>(null, {updateOn: 'change'})
+    selectedPermissions = new SpiderFormControl<number[]>(null, {updateOn: 'change'})
 
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SoftMessageService, 
+        protected override messageService: SpiderMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 

@@ -1,7 +1,7 @@
 import {
     Component, Input,
   } from '@angular/core';
-import { SoftFormControl } from '../components/soft-form-control/soft-form-control';
+import { SpiderFormControl } from '../components/spider-form-control/spider-form-control';
 import { TranslocoService } from '@jsverse/transloco';
 import { TranslateLabelsService } from 'src/app/business/services/translates/merge-labels';
   
@@ -11,7 +11,7 @@ import { TranslateLabelsService } from 'src/app/business/services/translates/mer
     styles: [],
   })
   export class BaseControl {
-    @Input() control: SoftFormControl; // FT: if you name it formControl: https://stackoverflow.com/a/54755671/21209982
+    @Input() control: SpiderFormControl; // FT: if you name it formControl: https://stackoverflow.com/a/54755671/21209982
     @Input() disabled: boolean = false;
     @Input() showLabel: boolean = true;
     @Input() label: string = null; // NgModel/Want custom translation

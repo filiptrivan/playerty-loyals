@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
-using Soft.Generator.Shared.Attributes.EF;
-using Soft.Generator.Shared.Attributes.EF.UI;
-using Soft.Generator.Shared.BaseEntities;
+using Spider.Shared.Attributes.EF;
+using Spider.Shared.Attributes.EF.UI;
+using Spider.Shared.BaseEntities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

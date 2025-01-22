@@ -1,5 +1,5 @@
-﻿using Soft.Generator.Security.Entities;
-using Soft.Generator.Shared.Attributes.EF;
+﻿using Spider.Security.Entities;
+using Spider.Shared.Attributes.EF;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

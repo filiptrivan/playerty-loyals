@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
+import { Column } from 'src/app/core/components/spider-data-table/spider-data-table.component';
 
 @Component({
     selector: 'partner-role-list',

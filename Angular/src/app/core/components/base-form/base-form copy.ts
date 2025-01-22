@@ -7,9 +7,9 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { SoftFormArray, SoftFormControl, SoftFormGroup } from '../soft-form-control/soft-form-control';
+import { SpiderFormArray, SpiderFormControl, SpiderFormGroup } from '../spider-form-control/spider-form-control';
 import { HttpClient } from '@angular/common/http';
-import { SoftMessageService } from '../../services/soft-message.service';
+import { SpiderMessageService } from '../../services/spider-message.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { getControl, getParentUrl, singleOrDefault } from '../../services/helper-functions';
@@ -17,7 +17,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseEntity } from '../../entities/base-entity';
-import { SoftTab } from '../soft-panels/panel-header/panel-header.component';
+import { SpiderTab } from '../spider-panels/panel-header/panel-header.component';
 import { LastMenuIconIndexClicked } from '../../entities/last-menu-icon-index-clicked';
 
 @Component({
@@ -26,7 +26,7 @@ import { LastMenuIconIndexClicked } from '../../entities/last-menu-icon-index-cl
   styles: [],
 })
 export class BaseFormCopy implements OnInit { 
-  formGroup: SoftFormGroup = new SoftFormGroup({});
+  formGroup: SpiderFormGroup = new SpiderFormGroup({});
   formArrayControlNamesFromHtml: string[] = [];
   saveBody: any;
   invalidForm: boolean = false; // FT: We are using this only if we manualy add some form field on the UI, like multiautocomplete, autocomplete etc...
@@ -37,7 +37,7 @@ export class BaseFormCopy implements OnInit {
   constructor(
     protected differs: KeyValueDiffers, 
     protected http: HttpClient, 
-    protected messageService: SoftMessageService, 
+    protected messageService: SpiderMessageService, 
     protected changeDetectorRef: ChangeDetectorRef,
     protected router: Router, 
     protected route: ActivatedRoute,
@@ -53,7 +53,7 @@ export class BaseFormCopy implements OnInit {
 
   //#region Model
 
-  control<T extends BaseEntity>(formControlName: string & keyof T, formGroup: SoftFormGroup<T>) {
+  control<T extends BaseEntity>(formControlName: string & keyof T, formGroup: SpiderFormGroup<T>) {
     return getControl(formControlName, formGroup);
   }
 
@@ -74,8 +74,8 @@ export class BaseFormCopy implements OnInit {
           const formControl = this.formGroup.get(key);
           
           if (formControl) {
-            if (formControl instanceof SoftFormArray) {
-              const formArray = formControl as SoftFormArray;
+            if (formControl instanceof SpiderFormArray) {
+              const formArray = formControl as SpiderFormArray;
               if (res[key].length !== 0) {
                 formArray.clear();
               }
@@ -87,7 +87,7 @@ export class BaseFormCopy implements OnInit {
               res[key].forEach((model: any) => {
                 if (typeof model === 'object' && model !== null) {
                   Object.assign(formArray.modelConstructor, model);
-                  let helperFormGroup: SoftFormGroup = new SoftFormGroup({});
+                  let helperFormGroup: SpiderFormGroup = new SpiderFormGroup({});
                   this.baseFormService.createFormGroup(helperFormGroup, formArray.modelConstructor)
                   formArray.push(helperFormGroup);
                 } else {
@@ -147,9 +147,9 @@ export class BaseFormCopy implements OnInit {
     Object.keys(this.formGroup.controls).forEach(key => {
       const formGroupOrControl = this.formGroup.controls[key];
 
-      if (formGroupOrControl instanceof SoftFormGroup){
+      if (formGroupOrControl instanceof SpiderFormGroup){
         Object.keys(formGroupOrControl.controls).forEach(key => {
-          const formControl = formGroupOrControl.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
+          const formControl = formGroupOrControl.controls[key] as SpiderFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
 
           if (formGroupOrControl.controlNamesFromHtml.includes(formControl.label) && formControl.invalid) {
             formControl.markAsDirty();
@@ -157,7 +157,7 @@ export class BaseFormCopy implements OnInit {
           }
         });
       }
-      else if (formGroupOrControl instanceof SoftFormControl){
+      else if (formGroupOrControl instanceof SpiderFormControl){
         if (formGroupOrControl.invalid) {
           formGroupOrControl.markAsDirty();
           invalid = true;
@@ -173,7 +173,7 @@ export class BaseFormCopy implements OnInit {
     return true;
   }
 
-  areFormControlsValid(formControls: SoftFormControl[]): boolean {
+  areFormControlsValid(formControls: SpiderFormControl[]): boolean {
     if(formControls == null)
       return true;
 
@@ -220,11 +220,11 @@ export class BaseFormCopy implements OnInit {
   //#region Model List
 
   // FT HACK: Using modelConstructor because generics can't instantiate in TS (because JS)
-  // initFormArray(parentFormGroup: SoftFormGroup, modelList: any[], modelConstructor: any, formArraySaveBodyName: string, formArrayTranslationKey: string, required: boolean = false, disableLambda?: (formControlName: string, model: any) => boolean){
+  // initFormArray(parentFormGroup: SpiderFormGroup, modelList: any[], modelConstructor: any, formArraySaveBodyName: string, formArrayTranslationKey: string, required: boolean = false, disableLambda?: (formControlName: string, model: any) => boolean){
   //   if (modelList == null)
   //     return null;
 
-  //   let formArray: SoftFormArray = new SoftFormArray([]);
+  //   let formArray: SpiderFormArray = new SpiderFormArray([]);
   //   formArray.required = required;
   //   formArray.modelConstructor = modelConstructor;
   //   formArray.translationKey = formArrayTranslationKey;
@@ -239,66 +239,66 @@ export class BaseFormCopy implements OnInit {
   //   return formArray;
   // }
   
-  // FT: Need to use this from html because can't do "as SoftFormControl" there
-  getFormArrayControlByIndex<T>(formControlName: keyof T & string, formArray: SoftFormArray<T[]>, index: number, filter?: (formGroups: SoftFormGroup<T>[]) => SoftFormGroup<T>[]): SoftFormControl {
+  // FT: Need to use this from html because can't do "as SpiderFormControl" there
+  getFormArrayControlByIndex<T>(formControlName: keyof T & string, formArray: SpiderFormArray<T[]>, index: number, filter?: (formGroups: SpiderFormGroup<T>[]) => SpiderFormGroup<T>[]): SpiderFormControl {
     if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
       this.formArrayControlNamesFromHtml.push(formControlName);
 
-    let filteredFormGroups: SoftFormGroup<T>[];
+    let filteredFormGroups: SpiderFormGroup<T>[];
 
     if (filter) {
-      filteredFormGroups = filter(formArray.controls as SoftFormGroup<T>[]);
+      filteredFormGroups = filter(formArray.controls as SpiderFormGroup<T>[]);
     }
     else{
-      return (formArray.controls[index] as SoftFormGroup<T>).controls[formControlName] as SoftFormControl;
+      return (formArray.controls[index] as SpiderFormGroup<T>).controls[formControlName] as SpiderFormControl;
     }
 
-    return filteredFormGroups[index]?.controls[formControlName] as SoftFormControl; // FT: Don't change this. It's always possible that change detection occurs before something.
+    return filteredFormGroups[index]?.controls[formControlName] as SpiderFormControl; // FT: Don't change this. It's always possible that change detection occurs before something.
   }
 
-  getFormArrayControls<T>(formControlName: keyof T & string, formArraySaveBodyName: string, filter?: (formGroups: SoftFormGroup<T>[]) => SoftFormGroup<T>[]): SoftFormControl[] {
+  getFormArrayControls<T>(formControlName: keyof T & string, formArraySaveBodyName: string, filter?: (formGroups: SpiderFormGroup<T>[]) => SpiderFormGroup<T>[]): SpiderFormControl[] {
     if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
       this.formArrayControlNamesFromHtml.push(formControlName);
 
-    let formArray: SoftFormArray<T[]> = this.formGroup.controls[formArraySaveBodyName] as unknown as SoftFormArray;
+    let formArray: SpiderFormArray<T[]> = this.formGroup.controls[formArraySaveBodyName] as unknown as SpiderFormArray;
 
-    let filteredFormGroups: SoftFormGroup<T>[];
+    let filteredFormGroups: SpiderFormGroup<T>[];
 
     if (filter) {
-      filteredFormGroups = filter(formArray.controls as SoftFormGroup<T>[]);
+      filteredFormGroups = filter(formArray.controls as SpiderFormGroup<T>[]);
     }
     else{
-      return (formArray.controls as SoftFormGroup<T>[]).map(x => x.controls[formControlName] as SoftFormControl);
+      return (formArray.controls as SpiderFormGroup<T>[]).map(x => x.controls[formControlName] as SpiderFormControl);
     }
 
-    return filteredFormGroups.map(x => x.controls[formControlName] as SoftFormControl);
+    return filteredFormGroups.map(x => x.controls[formControlName] as SpiderFormControl);
   }
 
-  // FT: Need to use this from html because can't do "as SoftFormControl" there
+  // FT: Need to use this from html because can't do "as SpiderFormControl" there
   // FT: Don't uncomment this, if you realy don't need.
-  // getFormArrayControlById(formControlName: string, formArraySaveBodyName: string, id: number): SoftFormControl{
+  // getFormArrayControlById(formControlName: string, formArraySaveBodyName: string, id: number): SpiderFormControl{
   //   if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
   //     this.formArrayControlNamesFromHtml.push(formControlName);
 
-  //   return ((this.formGroup.controls[formArraySaveBodyName] as SoftFormArray)?.controls?.filter(x => x.getRawValue().id == id)[0] as FormGroup)?.controls[formControlName] as SoftFormControl;
+  //   return ((this.formGroup.controls[formArraySaveBodyName] as SpiderFormArray)?.controls?.filter(x => x.getRawValue().id == id)[0] as FormGroup)?.controls[formControlName] as SpiderFormControl;
   // }
 
   // getFormArrayGroup(index: number): FormGroup{
   //   return this.formArray.controls[index] as FormGroup
   // }
 
-  getFormArrayGroups<T>(formArray: SoftFormArray<T[]>): SoftFormGroup<T>[]{
+  getFormArrayGroups<T>(formArray: SpiderFormArray<T[]>): SpiderFormGroup<T>[]{
     return this.baseFormService.getFormArrayGroups(formArray);
   }
 
-  removeFormControlFromTheFormArray(formArray: SoftFormArray, index: number) {
+  removeFormControlFromTheFormArray(formArray: SpiderFormArray, index: number) {
     if(index == null)
       throw new Error('Can not pass null index.');
 
     formArray.removeAt(index);
   }
 
-  removeFormControlsFromTheFormArray(formArray: SoftFormArray, indexes: number[]) {
+  removeFormControlsFromTheFormArray(formArray: SpiderFormArray, indexes: number[]) {
     // Sort indexes in descending order to avoid index shifts when removing controls
     const sortedIndexes = indexes.sort((a, b) => b - a);
 
@@ -316,11 +316,11 @@ export class BaseFormCopy implements OnInit {
     let invalid: boolean = false;
 
     Object.keys(this.formGroup.controls).forEach(key => {
-      const formArray = this.formGroup.controls[key] as unknown as SoftFormArray;
-      if (formArray instanceof SoftFormArray){
+      const formArray = this.formGroup.controls[key] as unknown as SpiderFormArray;
+      if (formArray instanceof SpiderFormArray){
         (formArray.controls as FormGroup[]).forEach(formGroup => {
           Object.keys(formGroup.controls).forEach(key => {
-            const formControl = formGroup.controls[key] as SoftFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesn't work
+            const formControl = formGroup.controls[key] as SpiderFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesn't work
 
             if (this.formArrayControlNamesFromHtml.includes(formControl.label) && formControl.invalid) {
               formControl.markAsDirty();
@@ -348,7 +348,7 @@ export class BaseFormCopy implements OnInit {
   onAfterSaveListRequest(){}
 
   // FT: Sending LastMenuIconIndexClicked class because of reference type
-  getCrudMenuForOrderedData = (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean = false): MenuItem[] => {
+  getCrudMenuForOrderedData = (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean = false): MenuItem[] => {
     let crudMenuForOrderedData: MenuItem[] = [
         {label: this.translocoService.translate('Remove'), icon: 'pi pi-minus', command: () => {
           this.onBeforeRemove(formArray, modelConstructor, lastMenuIconIndexClicked.index);
@@ -373,16 +373,16 @@ export class BaseFormCopy implements OnInit {
     return crudMenuForOrderedData;
   }
 
-  onBeforeRemove = (formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number) => {}
+  onBeforeRemove = (formArray: SpiderFormArray, modelConstructor: any, lastMenuIconIndexClicked: number) => {}
 
-  onBeforeAddAbove = (formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number) => {}
+  onBeforeAddAbove = (formArray: SpiderFormArray, modelConstructor: any, lastMenuIconIndexClicked: number) => {}
 
-  onBeforeAddBelow = (formArray: SoftFormArray, modelConstructor: any, lastMenuIconIndexClicked: number) => {}
+  onBeforeAddBelow = (formArray: SpiderFormArray, modelConstructor: any, lastMenuIconIndexClicked: number) => {}
 
   //#endregion
 
   //#region Helpers
-  selectedTab(tabs: SoftTab[]): number {
+  selectedTab(tabs: SpiderTab[]): number {
     const tab = singleOrDefault(tabs, x => x.isSelected);
 
     if (tab) {

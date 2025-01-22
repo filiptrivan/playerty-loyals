@@ -1,8 +1,8 @@
 import { AbstractControl } from "@angular/forms";
-import { Action, Column } from "../components/soft-data-table/soft-data-table.component";
+import { Action, Column } from "../components/spider-data-table/spider-data-table.component";
 import { HttpResponse } from "@angular/common/http";
 import { BaseEntity } from "../entities/base-entity";
-import { SoftFormControl, SoftFormGroup } from "../components/soft-form-control/soft-form-control";
+import { SpiderFormControl, SpiderFormGroup } from "../components/spider-form-control/spider-form-control";
 
 // Helper function for PrecisionScale validation (to be added in the TypeScript output):
 export function validatePrecisionScale(value: any, precision: number, scale: number, ignoreTrailingZeros: boolean): boolean {
@@ -184,7 +184,7 @@ export function capitalizeFirstLetter(inputString: string): string {
     return fileName ?? defaultName;
   }
 
-  export function getControl<T extends BaseEntity>(formControlName: string & keyof T, formGroup: SoftFormGroup<T>) {
+  export function getControl<T extends BaseEntity>(formControlName: string & keyof T, formGroup: SpiderFormGroup<T>) {
       if (formGroup == null)
         return null; // FT: When we initialized form group again this will happen
   

@@ -1,4 +1,4 @@
-using Soft.Generator.Shared.Attributes;
+using Spider.Shared.Attributes;
 
 namespace PlayertyLoyals.Business.GeneratorSettings
 {

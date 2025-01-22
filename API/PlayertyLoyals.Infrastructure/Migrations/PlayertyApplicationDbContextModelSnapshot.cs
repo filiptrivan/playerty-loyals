@@ -786,7 +786,7 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     b.ToTable("UserNotification");
                 });
 
-            modelBuilder.Entity("Soft.Generator.Security.Entities.Permission", b =>
+            modelBuilder.Entity("Spider.Security.Entities.Permission", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -816,7 +816,7 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     b.ToTable("Permission");
                 });
 
-            modelBuilder.Entity("Soft.Generator.Security.Entities.Role", b =>
+            modelBuilder.Entity("Spider.Security.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -847,7 +847,7 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     b.ToTable("Role");
                 });
 
-            modelBuilder.Entity("Soft.Generator.Security.Entities.RolePermission", b =>
+            modelBuilder.Entity("Spider.Security.Entities.RolePermission", b =>
                 {
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
@@ -862,7 +862,7 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     b.ToTable("RolePermission");
                 });
 
-            modelBuilder.Entity("Soft.Generator.Security.Entities.UserRole", b =>
+            modelBuilder.Entity("Spider.Security.Entities.UserRole", b =>
                 {
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
@@ -877,7 +877,7 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     b.ToTable("UserRole");
                 });
 
-            modelBuilder.Entity("Soft.Generator.Shared.Entities.ScheduledTaskType", b =>
+            modelBuilder.Entity("Spider.Shared.Entities.ScheduledTaskType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -1190,15 +1190,15 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Soft.Generator.Security.Entities.RolePermission", b =>
+            modelBuilder.Entity("Spider.Security.Entities.RolePermission", b =>
                 {
-                    b.HasOne("Soft.Generator.Security.Entities.Permission", "Permission")
+                    b.HasOne("Spider.Security.Entities.Permission", "Permission")
                         .WithMany()
                         .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Soft.Generator.Security.Entities.Role", "Role")
+                    b.HasOne("Spider.Security.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1209,9 +1209,9 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Soft.Generator.Security.Entities.UserRole", b =>
+            modelBuilder.Entity("Spider.Security.Entities.UserRole", b =>
                 {
-                    b.HasOne("Soft.Generator.Security.Entities.Role", null)
+                    b.HasOne("Spider.Security.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)

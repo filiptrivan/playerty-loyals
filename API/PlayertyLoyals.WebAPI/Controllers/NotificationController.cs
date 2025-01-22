@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlayertyLoyals.Business.Services;
-using Soft.Generator.Shared.Attributes;
-using Soft.Generator.Shared.Interfaces;
+using Spider.Shared.Attributes;
+using Spider.Shared.Interfaces;
 using Azure.Storage.Blobs;
 
 namespace PlayertyLoyals.WebAPI.Controllers

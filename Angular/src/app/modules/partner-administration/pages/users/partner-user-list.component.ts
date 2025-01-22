@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { PartnerUser } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerService } from 'src/app/business/services/helpers/partner.service';
-import { Column } from 'src/app/core/components/soft-data-table/soft-data-table.component';
+import { Column } from 'src/app/core/components/spider-data-table/spider-data-table.component';
 
 @Component({
     selector: 'partner-user-list', 

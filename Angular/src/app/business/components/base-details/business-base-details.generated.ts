@@ -5,8 +5,8 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { ApiService } from '../../services/api/api.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
-import { SoftFormArray, SoftFormControl, SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { SpiderControlsModule } from 'src/app/core/controls/spider-controls.module';
+import { SpiderFormArray, SpiderFormControl, SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { getControl, nameof } from 'src/app/core/services/helper-functions';
@@ -14,41 +14,42 @@ import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom, forkJoin, Observable } from 'rxjs';
 import { BaseEntity } from 'src/app/core/entities/base-entity';
 import { CardSkeletonComponent } from "../../../core/components/card-skeleton/card-skeleton.component";
-import { SoftButton } from 'src/app/core/entities/soft-button';
+import { SpiderButton } from 'src/app/core/entities/spider-button';
 import { IndexCardComponent } from 'src/app/core/components/index-card/index-card.component';
 import { LastMenuIconIndexClicked } from 'src/app/core/entities/last-menu-icon-index-clicked';
 import { MenuItem } from 'primeng/api';
-import { AllClickEvent, Column, SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';
+import { AllClickEvent, Column, SpiderDataTableComponent } from 'src/app/core/components/spider-data-table/spider-data-table.component';
 import { TableFilter } from 'src/app/core/entities/table-filter';
 import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
-import { SoftFileSelectEvent } from 'src/app/core/controls/soft-file/soft-file.component';
+import { SpiderFileSelectEvent } from 'src/app/core/controls/spider-file/spider-file.component';
 import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, BusinessSystemUpdatePointsDataBody, ExcelManualUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, MergedPartnerUser, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerRoleSaveBody, PartnerUserSaveBody, Product, QrCode, SegmentationItem, TierSaveBody, UpdatePoints, UserExtendedSaveBody, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUser, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
-import { RolePermission, UserRole, Role, Permission, RolePermissionSaveBody, UserRoleSaveBody, RoleSaveBody, PermissionSaveBody } from '../../entities/security-entities.generated';
+import { Role, UserRole, RolePermission, Permission, RoleSaveBody, UserRoleSaveBody, RolePermissionSaveBody, PermissionSaveBody } from '../../entities/security-entities.generated';
+
 
 @Component({
     selector: 'business-system-base-details',
     template:`
 <ng-container *transloco="let t">
-    <soft-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
+    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
         <panel-header></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('name', businessSystemFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('name', businessSystemFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('getTransactionsEndpoint', businessSystemFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('getTransactionsEndpoint', businessSystemFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('getDiscountProductGroupsEndpoint', businessSystemFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('getDiscountProductGroupsEndpoint', businessSystemFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('createUserEndpoint', businessSystemFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('createUserEndpoint', businessSystemFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('updateUserGroupEndpoint', businessSystemFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('updateUserGroupEndpoint', businessSystemFormGroup)"></spider-textbox>
                     </div>
                 </form>
             } @placeholder {
@@ -61,29 +62,29 @@ import { RolePermission, UserRole, Role, Permission, RolePermissionSaveBody, Use
             @for (button of additionalButtons; track button.label) {
                 <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
             }
-            <soft-return-button></soft-return-button>
+            <spider-return-button></spider-return-button>
         </panel-footer>
-    </soft-panel>
+    </spider-panel>
 </ng-container>
     `,
     standalone: true,
     imports: [
         CommonModule, 
         PrimengModule,
-        SoftControlsModule,
+        SpiderControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SoftDataTableComponent,
+        SpiderDataTableComponent,
     ]
 })
 export class BusinessSystemBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onBusinessSystemFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SoftFormGroup;
-    @Input() businessSystemFormGroup: SoftFormGroup<BusinessSystem>;
-    @Input() additionalButtons: SoftButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderFormGroup;
+    @Input() businessSystemFormGroup: SpiderFormGroup<BusinessSystem>;
+    @Input() additionalButtons: SpiderButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -167,11 +168,11 @@ export class BusinessSystemBaseDetailsComponent {
 
 
 
-    control(formControlName: string, formGroup: SoftFormGroup){
+    control(formControlName: string, formGroup: SpiderFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
@@ -185,23 +186,23 @@ export class BusinessSystemBaseDetailsComponent {
     selector: 'notification-base-details',
     template:`
 <ng-container *transloco="let t">
-    <soft-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
+    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
         <panel-header></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
                     <div class="col-12">
-                        <soft-textbox [control]="control('title', notificationFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('title', notificationFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12">
-                        <soft-textarea [control]="control('description', notificationFormGroup)"></soft-textarea>
+                        <spider-textarea [control]="control('description', notificationFormGroup)"></spider-textarea>
                     </div>
                     <div class="col-12">
-                        <soft-editor [control]="control('emailBody', notificationFormGroup)"></soft-editor>
+                        <spider-editor [control]="control('emailBody', notificationFormGroup)"></spider-editor>
                     </div>
                     <div class="col-12">
-                        <soft-data-table 
+                        <spider-data-table 
                             [tableTitle]="t('RecipientsForNotification')" 
                             [cols]="recipientsTableColsForNotification" 
                             [getTableDataObservableMethod]="getRecipientsTableDataObservableMethodForNotification" 
@@ -213,7 +214,7 @@ export class BusinessSystemBaseDetailsComponent {
                             [rows]="5" 
                             (onLazyLoad)="onRecipientsLazyLoadForNotification($event)"
                             [selectedLazyLoadObservableMethod]="selectedRecipientsLazyLoadMethodForNotification" 
-                            (onIsAllSelectedChange)="areAllRecipientsSelectedChangeForNotification($event)"></soft-data-table>
+                            (onIsAllSelectedChange)="areAllRecipientsSelectedChangeForNotification($event)"></spider-data-table>
                     </div>
                 </form>
             } @placeholder {
@@ -226,29 +227,29 @@ export class BusinessSystemBaseDetailsComponent {
             @for (button of additionalButtons; track button.label) {
                 <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
             }
-            <soft-return-button></soft-return-button>
+            <spider-return-button></spider-return-button>
         </panel-footer>
-    </soft-panel>
+    </spider-panel>
 </ng-container>
     `,
     standalone: true,
     imports: [
         CommonModule, 
         PrimengModule,
-        SoftControlsModule,
+        SpiderControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SoftDataTableComponent,
+        SpiderDataTableComponent,
     ]
 })
 export class NotificationBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onNotificationFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SoftFormGroup;
-    @Input() notificationFormGroup: SoftFormGroup<Notification>;
-    @Input() additionalButtons: SoftButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderFormGroup;
+    @Input() notificationFormGroup: SpiderFormGroup<Notification>;
+    @Input() additionalButtons: SpiderButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -355,11 +356,11 @@ export class NotificationBaseDetailsComponent {
 
 
 
-    control(formControlName: string, formGroup: SoftFormGroup){
+    control(formControlName: string, formGroup: SpiderFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
@@ -373,32 +374,32 @@ export class NotificationBaseDetailsComponent {
     selector: 'partner-base-details',
     template:`
 <ng-container *transloco="let t">
-    <soft-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
+    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
         <panel-header></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
                     <div class="col-12">
-                        <soft-file [control]="control('logoImage', partnerFormGroup)" [fileData]="partnerFormGroup.controls.logoImageData.getRawValue()" [objectId]="partnerFormGroup.controls.id.getRawValue()" (onSelectedFile)="uploadLogoImageForPartner($event)"></soft-file>
+                        <spider-file [control]="control('logoImage', partnerFormGroup)" [fileData]="partnerFormGroup.controls.logoImageData.getRawValue()" [objectId]="partnerFormGroup.controls.id.getRawValue()" (onSelectedFile)="uploadLogoImageForPartner($event)"></spider-file>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('name', partnerFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('name', partnerFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('email', partnerFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('email', partnerFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('slug', partnerFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('slug', partnerFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-colorpick [control]="control('primaryColor', partnerFormGroup)"></soft-colorpick>
+                        <spider-colorpick [control]="control('primaryColor', partnerFormGroup)"></spider-colorpick>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('productsRecommendationEndpoint', partnerFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('productsRecommendationEndpoint', partnerFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-number [control]="control('pointsMultiplier', partnerFormGroup)" [decimal]="true" [maxFractionDigits]=" 2"></soft-number>
+                        <spider-number [control]="control('pointsMultiplier', partnerFormGroup)" [decimal]="true" [maxFractionDigits]=" 2"></spider-number>
                     </div>
                 </form>
             } @placeholder {
@@ -411,29 +412,29 @@ export class NotificationBaseDetailsComponent {
             @for (button of additionalButtons; track button.label) {
                 <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
             }
-            <soft-return-button></soft-return-button>
+            <spider-return-button></spider-return-button>
         </panel-footer>
-    </soft-panel>
+    </spider-panel>
 </ng-container>
     `,
     standalone: true,
     imports: [
         CommonModule, 
         PrimengModule,
-        SoftControlsModule,
+        SpiderControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SoftDataTableComponent,
+        SpiderDataTableComponent,
     ]
 })
 export class PartnerBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onPartnerFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SoftFormGroup;
-    @Input() partnerFormGroup: SoftFormGroup<Partner>;
-    @Input() additionalButtons: SoftButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderFormGroup;
+    @Input() partnerFormGroup: SpiderFormGroup<Partner>;
+    @Input() additionalButtons: SpiderButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -515,17 +516,17 @@ export class PartnerBaseDetailsComponent {
 
 
 
-    uploadLogoImageForPartner(softFileSelectEvent: SoftFileSelectEvent){
-        this.apiService.uploadLogoImageForPartner(softFileSelectEvent.formData).subscribe((completeFileName: string) => {
+    uploadLogoImageForPartner(event: SpiderFileSelectEvent){
+        this.apiService.uploadLogoImageForPartner(event.formData).subscribe((completeFileName: string) => {
             this.partnerFormGroup.controls.logoImage.setValue(completeFileName);
         });
     }
 
-    control(formControlName: string, formGroup: SoftFormGroup){
+    control(formControlName: string, formGroup: SpiderFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
@@ -539,23 +540,23 @@ export class PartnerBaseDetailsComponent {
     selector: 'partner-notification-base-details',
     template:`
 <ng-container *transloco="let t">
-    <soft-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
+    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
         <panel-header></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
                     <div class="col-12">
-                        <soft-textbox [control]="control('title', partnerNotificationFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('title', partnerNotificationFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12">
-                        <soft-textarea [control]="control('description', partnerNotificationFormGroup)"></soft-textarea>
+                        <spider-textarea [control]="control('description', partnerNotificationFormGroup)"></spider-textarea>
                     </div>
                     <div class="col-12">
-                        <soft-editor [control]="control('emailBody', partnerNotificationFormGroup)"></soft-editor>
+                        <spider-editor [control]="control('emailBody', partnerNotificationFormGroup)"></spider-editor>
                     </div>
                     <div class="col-12">
-                        <soft-data-table 
+                        <spider-data-table 
                             [tableTitle]="t('RecipientsForPartnerNotification')" 
                             [cols]="recipientsTableColsForPartnerNotification" 
                             [getTableDataObservableMethod]="getRecipientsTableDataObservableMethodForPartnerNotification" 
@@ -567,7 +568,7 @@ export class PartnerBaseDetailsComponent {
                             [rows]="5" 
                             (onLazyLoad)="onRecipientsLazyLoadForPartnerNotification($event)"
                             [selectedLazyLoadObservableMethod]="selectedRecipientsLazyLoadMethodForPartnerNotification" 
-                            (onIsAllSelectedChange)="areAllRecipientsSelectedChangeForPartnerNotification($event)"></soft-data-table>
+                            (onIsAllSelectedChange)="areAllRecipientsSelectedChangeForPartnerNotification($event)"></spider-data-table>
                     </div>
                 </form>
             } @placeholder {
@@ -580,29 +581,29 @@ export class PartnerBaseDetailsComponent {
             @for (button of additionalButtons; track button.label) {
                 <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
             }
-            <soft-return-button></soft-return-button>
+            <spider-return-button></spider-return-button>
         </panel-footer>
-    </soft-panel>
+    </spider-panel>
 </ng-container>
     `,
     standalone: true,
     imports: [
         CommonModule, 
         PrimengModule,
-        SoftControlsModule,
+        SpiderControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SoftDataTableComponent,
+        SpiderDataTableComponent,
     ]
 })
 export class PartnerNotificationBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onPartnerNotificationFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SoftFormGroup;
-    @Input() partnerNotificationFormGroup: SoftFormGroup<PartnerNotification>;
-    @Input() additionalButtons: SoftButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderFormGroup;
+    @Input() partnerNotificationFormGroup: SpiderFormGroup<PartnerNotification>;
+    @Input() additionalButtons: SpiderButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -712,11 +713,11 @@ export class PartnerNotificationBaseDetailsComponent {
 
 
 
-    control(formControlName: string, formGroup: SoftFormGroup){
+    control(formControlName: string, formGroup: SpiderFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
@@ -730,23 +731,23 @@ export class PartnerNotificationBaseDetailsComponent {
     selector: 'partner-role-base-details',
     template:`
 <ng-container *transloco="let t">
-    <soft-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
+    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
         <panel-header></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('name', partnerRoleFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('name', partnerRoleFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('description', partnerRoleFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('description', partnerRoleFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12">
-                        <soft-multiautocomplete [control]="selectedPartnerUsersForPartnerRole" [options]="partnerUsersForPartnerRoleOptions" (onTextInput)="searchPartnerUsersForPartnerRole($event)" [label]="t('PartnerUsers')"></soft-multiautocomplete>
+                        <spider-multiautocomplete [control]="selectedPartnerUsersForPartnerRole" [options]="partnerUsersForPartnerRoleOptions" (onTextInput)="searchPartnerUsersForPartnerRole($event)" [label]="t('PartnerUsers')"></spider-multiautocomplete>
                     </div>
                     <div class="col-12">
-                        <soft-multiselect [control]="selectedPartnerPermissionsForPartnerRole" [options]="partnerPermissionsForPartnerRoleOptions" [label]="t('PartnerPermissions')"></soft-multiselect>
+                        <spider-multiselect [control]="selectedPartnerPermissionsForPartnerRole" [options]="partnerPermissionsForPartnerRoleOptions" [label]="t('PartnerPermissions')"></spider-multiselect>
                     </div>
                 </form>
             } @placeholder {
@@ -759,29 +760,29 @@ export class PartnerNotificationBaseDetailsComponent {
             @for (button of additionalButtons; track button.label) {
                 <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
             }
-            <soft-return-button></soft-return-button>
+            <spider-return-button></spider-return-button>
         </panel-footer>
-    </soft-panel>
+    </spider-panel>
 </ng-container>
     `,
     standalone: true,
     imports: [
         CommonModule, 
         PrimengModule,
-        SoftControlsModule,
+        SpiderControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SoftDataTableComponent,
+        SpiderDataTableComponent,
     ]
 })
 export class PartnerRoleBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onPartnerRoleFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SoftFormGroup;
-    @Input() partnerRoleFormGroup: SoftFormGroup<PartnerRole>;
-    @Input() additionalButtons: SoftButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderFormGroup;
+    @Input() partnerRoleFormGroup: SpiderFormGroup<PartnerRole>;
+    @Input() additionalButtons: SpiderButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -795,8 +796,8 @@ export class PartnerRoleBaseDetailsComponent {
     partnerUsersForPartnerRoleOptions: PrimengOption[];
     partnerPermissionsForPartnerRoleOptions: PrimengOption[];
 
-    selectedPartnerUsersForPartnerRole = new SoftFormControl<PrimengOption[]>(null, {updateOn: 'change'});
-    selectedPartnerPermissionsForPartnerRole = new SoftFormControl<number[]>(null, {updateOn: 'change'});
+    selectedPartnerUsersForPartnerRole = new SpiderFormControl<PrimengOption[]>(null, {updateOn: 'change'});
+    selectedPartnerPermissionsForPartnerRole = new SpiderFormControl<number[]>(null, {updateOn: 'change'});
 
 
 
@@ -878,11 +879,11 @@ export class PartnerRoleBaseDetailsComponent {
 
 
 
-    control(formControlName: string, formGroup: SoftFormGroup){
+    control(formControlName: string, formGroup: SpiderFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
@@ -896,30 +897,30 @@ export class PartnerRoleBaseDetailsComponent {
     selector: 'segmentation-base-details',
     template:`
 <ng-container *transloco="let t">
-    <soft-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
+    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
         <panel-header></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('name', segmentationFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('name', segmentationFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-number [control]="control('pointsForTheFirstTimeFill', segmentationFormGroup)"></soft-number>
+                        <spider-number [control]="control('pointsForTheFirstTimeFill', segmentationFormGroup)"></spider-number>
                     </div>
                     <div class="col-12">
-                        <soft-textarea [control]="control('description', segmentationFormGroup)"></soft-textarea>
+                        <spider-textarea [control]="control('description', segmentationFormGroup)"></spider-textarea>
                     </div>
                  <div class="col-12">
-                    <soft-panel>
+                    <spider-panel>
                         <panel-header [title]="t('SegmentationItems')" icon="pi pi-list"></panel-header>
                         <panel-body [normalBottomPadding]="true">
                             @for (segmentationItemFormGroup of getFormArrayGroups(segmentationItemsFormArray); track segmentationItemFormGroup; let index = $index; let last = $last) {
                                 <index-card [index]="index" [last]="false" [crudMenu]="segmentationItemsCrudMenu" (onMenuIconClick)="segmentationItemsLastIndexClicked.index = $event">
                                     <form [formGroup]="segmentationItemFormGroup" class="grid">
                     <div class="col-12">
-                        <soft-textbox [control]="control('name', segmentationItemFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('name', segmentationItemFormGroup)"></spider-textbox>
                     </div>
                                     </form>
                                 </index-card>
@@ -930,7 +931,7 @@ export class PartnerRoleBaseDetailsComponent {
                             </div>
 
                         </panel-body>
-                    </soft-panel>
+                    </spider-panel>
                 </div>       
                 </form>
             } @placeholder {
@@ -943,29 +944,29 @@ export class PartnerRoleBaseDetailsComponent {
             @for (button of additionalButtons; track button.label) {
                 <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
             }
-            <soft-return-button></soft-return-button>
+            <spider-return-button></spider-return-button>
         </panel-footer>
-    </soft-panel>
+    </spider-panel>
 </ng-container>
     `,
     standalone: true,
     imports: [
         CommonModule, 
         PrimengModule,
-        SoftControlsModule,
+        SpiderControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SoftDataTableComponent,
+        SpiderDataTableComponent,
     ]
 })
 export class SegmentationBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onSegmentationFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SoftFormGroup;
-    @Input() segmentationFormGroup: SoftFormGroup<Segmentation>;
-    @Input() additionalButtons: SoftButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderFormGroup;
+    @Input() segmentationFormGroup: SpiderFormGroup<Segmentation>;
+    @Input() additionalButtons: SpiderButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -977,7 +978,7 @@ export class SegmentationBaseDetailsComponent {
     segmentationItemsModel: SegmentationItem = new SegmentationItem();
     segmentationItemsSaveBodyName: string = nameof<SegmentationItemSaveBody>('segmentationItemDTO');
     segmentationItemsTranslationKey: string = new SegmentationItem().typeName;
-    segmentationItemsFormArray: SoftFormArray<SegmentationItem[]>;
+    segmentationItemsFormArray: SpiderFormArray<SegmentationItem>;
     segmentationItemsLastIndexClicked: LastMenuIconIndexClicked = new LastMenuIconIndexClicked();
     segmentationItemsCrudMenu: MenuItem[] = [];
 
@@ -1062,11 +1063,11 @@ export class SegmentationBaseDetailsComponent {
 
 
 
-    control(formControlName: string, formGroup: SoftFormGroup){
+    control(formControlName: string, formGroup: SpiderFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
@@ -1080,23 +1081,23 @@ export class SegmentationBaseDetailsComponent {
     selector: 'tier-base-details',
     template:`
 <ng-container *transloco="let t">
-    <soft-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
+    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
         <panel-header></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('name', tierFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('name', tierFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-textbox [control]="control('description', tierFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('description', tierFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-number [control]="control('validFrom', tierFormGroup)"></soft-number>
+                        <spider-number [control]="control('validFrom', tierFormGroup)"></spider-number>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-number [control]="control('validTo', tierFormGroup)"></soft-number>
+                        <spider-number [control]="control('validTo', tierFormGroup)"></spider-number>
                     </div>
                 </form>
             } @placeholder {
@@ -1109,29 +1110,29 @@ export class SegmentationBaseDetailsComponent {
             @for (button of additionalButtons; track button.label) {
                 <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
             }
-            <soft-return-button></soft-return-button>
+            <spider-return-button></spider-return-button>
         </panel-footer>
-    </soft-panel>
+    </spider-panel>
 </ng-container>
     `,
     standalone: true,
     imports: [
         CommonModule, 
         PrimengModule,
-        SoftControlsModule,
+        SpiderControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SoftDataTableComponent,
+        SpiderDataTableComponent,
     ]
 })
 export class TierBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onTierFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SoftFormGroup;
-    @Input() tierFormGroup: SoftFormGroup<Tier>;
-    @Input() additionalButtons: SoftButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderFormGroup;
+    @Input() tierFormGroup: SpiderFormGroup<Tier>;
+    @Input() additionalButtons: SpiderButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -1215,11 +1216,11 @@ export class TierBaseDetailsComponent {
 
 
 
-    control(formControlName: string, formGroup: SoftFormGroup){
+    control(formControlName: string, formGroup: SpiderFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
@@ -1233,23 +1234,23 @@ export class TierBaseDetailsComponent {
     selector: 'user-extended-base-details',
     template:`
 <ng-container *transloco="let t">
-    <soft-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
+    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel">
         <panel-header></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
                     <div class="col-12">
-                        <soft-textbox [control]="control('email', userExtendedFormGroup)"></soft-textbox>
+                        <spider-textbox [control]="control('email', userExtendedFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-calendar [control]="control('birthDate', userExtendedFormGroup)"></soft-calendar>
+                        <spider-calendar [control]="control('birthDate', userExtendedFormGroup)"></spider-calendar>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-dropdown [control]="control('genderId', userExtendedFormGroup)" [options]="genderForUserExtendedOptions"></soft-dropdown>
+                        <spider-dropdown [control]="control('genderId', userExtendedFormGroup)" [options]="genderForUserExtendedOptions"></spider-dropdown>
                     </div>
                     <div class="col-12">
-                        <soft-multiselect [control]="selectedRolesForUserExtended" [options]="rolesForUserExtendedOptions" [label]="t('Roles')"></soft-multiselect>
+                        <spider-multiselect [control]="selectedRolesForUserExtended" [options]="rolesForUserExtendedOptions" [label]="t('Roles')"></spider-multiselect>
                     </div>
                 </form>
             } @placeholder {
@@ -1262,29 +1263,29 @@ export class TierBaseDetailsComponent {
             @for (button of additionalButtons; track button.label) {
                 <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
             }
-            <soft-return-button></soft-return-button>
+            <spider-return-button></spider-return-button>
         </panel-footer>
-    </soft-panel>
+    </spider-panel>
 </ng-container>
     `,
     standalone: true,
     imports: [
         CommonModule, 
         PrimengModule,
-        SoftControlsModule,
+        SpiderControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SoftDataTableComponent,
+        SpiderDataTableComponent,
     ]
 })
 export class UserExtendedBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onUserExtendedFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SoftFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SoftFormGroup;
-    @Input() userExtendedFormGroup: SoftFormGroup<UserExtended>;
-    @Input() additionalButtons: SoftButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderFormGroup;
+    @Input() userExtendedFormGroup: SpiderFormGroup<UserExtended>;
+    @Input() additionalButtons: SpiderButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -1298,7 +1299,7 @@ export class UserExtendedBaseDetailsComponent {
     genderForUserExtendedOptions: PrimengOption[];
     rolesForUserExtendedOptions: PrimengOption[];
 
-    selectedRolesForUserExtended = new SoftFormControl<number[]>(null, {updateOn: 'change'});
+    selectedRolesForUserExtended = new SpiderFormControl<number[]>(null, {updateOn: 'change'});
 
 
 
@@ -1376,11 +1377,11 @@ export class UserExtendedBaseDetailsComponent {
 
 
 
-    control(formControlName: string, formGroup: SoftFormGroup){
+    control(formControlName: string, formGroup: SpiderFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SoftFormArray): SoftFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 

@@ -1,8 +1,8 @@
-﻿using Soft.Generator.Security.Entities;
-using Soft.Generator.Shared.Attributes.EF;
-using Soft.Generator.Shared.Attributes.EF.UI;
-using Soft.Generator.Shared.BaseEntities;
-using Soft.Generator.Shared.Enums;
+﻿using Spider.Security.Entities;
+using Spider.Shared.Attributes.EF;
+using Spider.Shared.Attributes.EF.UI;
+using Spider.Shared.BaseEntities;
+using Spider.Shared.Enums;
 using PlayertyLoyals.Business.DTO;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace PlayertyLoyals.Business.Entities
 {
     public class PartnerRole : BusinessObject<int>
     {
-        [SoftDisplayName]
+        [DisplayName]
         [Required]
         [StringLength(255, MinimumLength = 1)]
         public string Name { get; set; }

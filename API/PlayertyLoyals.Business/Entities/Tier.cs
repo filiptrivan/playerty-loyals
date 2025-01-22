@@ -1,7 +1,7 @@
 ﻿using PlayertyLoyals.Business.Entities;
-using Soft.Generator.Shared.Attributes.EF;
-using Soft.Generator.Shared.Attributes.EF.UI;
-using Soft.Generator.Shared.BaseEntities;
+using Spider.Shared.Attributes.EF;
+using Spider.Shared.Attributes.EF.UI;
+using Spider.Shared.BaseEntities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +13,7 @@ namespace PlayertyLoyals.Business.Entities
 {
     public class Tier : BusinessObject<int>
     {
-        [SoftDisplayName]
+        [DisplayName]
         [StringLength(255, MinimumLength = 1)]
         [Required]
         public string Name { get; set; }

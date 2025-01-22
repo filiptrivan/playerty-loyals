@@ -3,8 +3,8 @@ using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Services;
 using Quartz;
-using Soft.Generator.Shared.Interfaces;
-using Soft.Generator.Shared.Extensions;
+using Spider.Shared.Interfaces;
+using Spider.Shared.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PlayertyLoyals.Business.DTO;
-using Soft.Generator.Shared.SoftExceptions;
+using Spider.Shared.Exceptions;
 
 namespace PlayertyLoyals.Business.BackroundJobs
 {

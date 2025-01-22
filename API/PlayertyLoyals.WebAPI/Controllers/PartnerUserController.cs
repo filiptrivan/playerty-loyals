@@ -1,23 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Soft.Generator.Security.Interface;
-using Soft.Generator.Security.Services;
-using Soft.Generator.Infrastructure;
-using Soft.Generator.Security.SecurityControllers;
-using Soft.Generator.Shared.Interfaces;
+using Spider.Security.Interface;
+using Spider.Security.Services;
+using Spider.Infrastructure;
+using Spider.Security.SecurityControllers;
+using Spider.Shared.Interfaces;
 using PlayertyLoyals.Business.Entities;
-using Soft.Generator.Shared.Attributes;
+using Spider.Shared.Attributes;
 using PlayertyLoyals.Business.Services;
 using PlayertyLoyals.Business.DTO;
-using Soft.Generator.Shared.DTO;
+using Spider.Shared.DTO;
 using PlayertyLoyals.Business.Enums;
-using Soft.Generator.Shared.Helpers;
-using Soft.Generator.Shared.Extensions;
+using Spider.Shared.Helpers;
+using Spider.Shared.Extensions;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
-    public class PartnerUserController : SoftBaseController
+    public class PartnerUserController : SpiderBaseController
     {
         private readonly IApplicationDbContext _context;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;

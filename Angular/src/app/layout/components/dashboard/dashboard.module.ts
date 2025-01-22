@@ -9,8 +9,8 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { ApiService } from '../../../business/services/api/api.service';
 import { PrimengModule } from '../../../core/modules/primeng.module';
-import { SoftDataTableComponent } from 'src/app/core/components/soft-data-table/soft-data-table.component';
-import { SoftControlsModule } from 'src/app/core/controls/soft-controls.module';
+import { SpiderDataTableComponent } from 'src/app/core/components/spider-data-table/spider-data-table.component';
+import { SpiderControlsModule } from 'src/app/core/controls/spider-controls.module';
 import { CardSkeletonComponent } from 'src/app/core/components/card-skeleton/card-skeleton.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { TiersComponent } from "../../../modules/tiers/pages/tiers.component";
@@ -40,8 +40,8 @@ const routes: Routes = [
     ButtonModule,
     PrimengModule,
     QRCodeModule,
-    SoftDataTableComponent,
-    SoftControlsModule,
+    SpiderDataTableComponent,
+    SpiderControlsModule,
     CardSkeletonComponent,
     TiersComponent,
     TimelineIndexProgressbarComponent,

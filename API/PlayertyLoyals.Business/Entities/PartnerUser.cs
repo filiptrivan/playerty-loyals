@@ -1,8 +1,8 @@
-﻿using Soft.Generator.Security.Entities;
-using Soft.Generator.Shared.Attributes.EF;
-using Soft.Generator.Shared.Attributes.EF.UI;
-using Soft.Generator.Shared.BaseEntities;
-using Soft.Generator.Shared.Enums;
+﻿using Spider.Security.Entities;
+using Spider.Shared.Attributes.EF;
+using Spider.Shared.Attributes.EF.UI;
+using Spider.Shared.BaseEntities;
+using Spider.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace PlayertyLoyals.Business.Entities
 {
     [UIDoNotGenerate]
-    [SoftDisplayName("User.Email")]
+    [DisplayName("User.Email")]
     public class PartnerUser : BusinessObject<long> // https://learn.microsoft.com/en-us/ef/core/modeling/inheritance
     {
         [Required]

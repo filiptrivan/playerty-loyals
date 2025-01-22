@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
-using Soft.Generator.Shared.Attributes.EF;
-using Soft.Generator.Shared.Attributes;
-using Soft.Generator.Shared.BaseEntities;
+using Spider.Shared.Attributes.EF;
+using Spider.Shared.Attributes;
+using Spider.Shared.BaseEntities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,15 +10,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
-using Soft.Generator.Shared.Attributes.EF.UI;
-using Soft.Generator.Shared.Enums;
+using Spider.Shared.Attributes.EF.UI;
+using Spider.Shared.Enums;
 
 namespace PlayertyLoyals.Business.Entities
 {
     [Index(nameof(Slug), IsUnique = true)]
     public class Partner : BusinessObject<int>
     {
-        [SoftDisplayName]
+        [DisplayName]
         [StringLength(255, MinimumLength = 1)]
         [Required]
         public string Name { get; set; }

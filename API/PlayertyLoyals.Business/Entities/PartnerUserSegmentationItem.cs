@@ -1,4 +1,4 @@
-﻿using Soft.Generator.Shared.Attributes.EF;
+﻿using Spider.Shared.Attributes.EF;
 using System;
 using System.Collections.Generic;
 using System.Linq;

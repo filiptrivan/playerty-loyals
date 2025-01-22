@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Soft.Generator.Shared.Interfaces;
-using Soft.Generator.Shared.Services;
+using Spider.Shared.Interfaces;
+using Spider.Shared.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +9,8 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Soft.Generator.Security.Services;
-using Soft.Generator.Shared.Extensions;
+using Spider.Security.Services;
+using Spider.Shared.Extensions;
 using PlayertyLoyals.Business.Entities;
 using Microsoft.EntityFrameworkCore;
 using PlayertyLoyals.Business.DTO;
@@ -19,7 +19,7 @@ using PlayertyLoyals.Business.DataMappers;
 using Microsoft.Extensions.Caching.Memory;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Soft.Generator.Shared.SoftExceptions;
+using Spider.Shared.Exceptions;
 
 namespace PlayertyLoyals.Business.Services
 {

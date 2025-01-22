@@ -1,7 +1,7 @@
-﻿using Soft.Generator.Shared.Attributes.EF;
-using Soft.Generator.Shared.Attributes.EF.UI;
-using Soft.Generator.Shared.BaseEntities;
-using Soft.Generator.Shared.Enums;
+﻿using Spider.Shared.Attributes.EF;
+using Spider.Shared.Attributes.EF.UI;
+using Spider.Shared.BaseEntities;
+using Spider.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +13,7 @@ namespace PlayertyLoyals.Business.Entities
 {
     public class Segmentation : BusinessObject<int>
     {
-        [SoftDisplayName]
+        [DisplayName]
         [StringLength(100, MinimumLength = 1)]
         [Required]
         public string Name { get; set; }

@@ -7,9 +7,9 @@ import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { SoftFormGroup } from 'src/app/core/components/soft-form-control/soft-form-control';
+import { SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
 import { BaseFormService } from 'src/app/core/services/base-form.service';
-import { SoftMessageService } from 'src/app/core/services/soft-message.service';
+import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 
 @Component({
     selector: 'partner-role-details',
@@ -17,12 +17,12 @@ import { SoftMessageService } from 'src/app/core/services/soft-message.service';
     styles: [],
 })
 export class PartnerRoleDetailsComponent extends BaseFormCopy implements OnInit {
-    partnerRoleFormGroup = new SoftFormGroup<PartnerRole>({});
+    partnerRoleFormGroup = new SpiderFormGroup<PartnerRole>({});
 
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SoftMessageService, 
+        protected override messageService: SpiderMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 

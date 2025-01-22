@@ -9,7 +9,7 @@ import {
 import { Observable, of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { SoftMessageService } from '../services/soft-message.service';
+import { SpiderMessageService } from '../services/spider-message.service';
 import { TranslocoService } from '@jsverse/transloco';
 
 @Injectable({
@@ -17,7 +17,7 @@ import { TranslocoService } from '@jsverse/transloco';
 })
 export class UnauthorizedInterceptor implements HttpInterceptor {
   constructor(
-    private messageService: SoftMessageService,
+    private messageService: SpiderMessageService,
     private translocoService: TranslocoService
   ) {}
 

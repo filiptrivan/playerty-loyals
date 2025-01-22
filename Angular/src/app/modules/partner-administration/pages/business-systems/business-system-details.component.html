@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">
-    <soft-card [title]="t('BusinessSystem')" icon="pi pi-hashtag">
+    <spider-card [title]="t('BusinessSystem')" icon="pi pi-hashtag">
 
         <business-system-base-details
         [businessSystemFormGroup]="businessSystemFormGroup" 
@@ -10,16 +10,16 @@
         [additionalButtons]="additionalButtons"
         ></business-system-base-details>
 
-        <soft-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0 && businessSystemUpdatePointsDataFormGroup != null" [isMiddleMultiplePanel]="true">
+        <spider-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0 && businessSystemUpdatePointsDataFormGroup != null" [isMiddleMultiplePanel]="true">
             <panel-header [title]="t('BusinessSystemUpdatePointsData')" icon="pi pi-calendar-clock"></panel-header>
 
             <panel-body>
                 <form [formGroup]="businessSystemUpdatePointsDataFormGroup" class="grid">
                     <div class="col-12 md:col-6">
-                        <soft-calendar [control]="control('updatePointsStartDate', businessSystemUpdatePointsDataFormGroup)" [showTime]="true"></soft-calendar>
+                        <spider-calendar [control]="control('updatePointsStartDate', businessSystemUpdatePointsDataFormGroup)" [showTime]="true"></spider-calendar>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-number [control]="control('updatePointsInterval', businessSystemUpdatePointsDataFormGroup)"></soft-number>
+                        <spider-number [control]="control('updatePointsInterval', businessSystemUpdatePointsDataFormGroup)"></spider-number>
                     </div>
                 </form>
             </panel-body>
@@ -32,18 +32,18 @@
                 (onClick)="onSaveBusinessSystemUpdatePointsData()" [label]="t('StartUpdatePointsScheduledTask')" icon="pi pi-play" severity="success"></p-button>
             </panel-footer>
 
-        </soft-panel>
+        </spider-panel>
 
-        <soft-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0 && manualUpdatePointsFormGroup != null" [isMiddleMultiplePanel]="true">
+        <spider-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0 && manualUpdatePointsFormGroup != null" [isMiddleMultiplePanel]="true">
             <panel-header [title]="t('ManualUpdatePoints')" icon="pi pi-hammer"></panel-header>
 
             <panel-body>
                 <form [formGroup]="manualUpdatePointsFormGroup" class="grid">
                     <div class="col-12 md:col-6">
-                        <soft-calendar [control]="control('fromDate', manualUpdatePointsFormGroup)" [showTime]="true" [label]="t('ManualUpdatePointsFromDate')"></soft-calendar>
+                        <spider-calendar [control]="control('fromDate', manualUpdatePointsFormGroup)" [showTime]="true" [label]="t('ManualUpdatePointsFromDate')"></spider-calendar>
                     </div>
                     <div class="col-12 md:col-6">
-                        <soft-calendar [control]="control('toDate', manualUpdatePointsFormGroup)" [showTime]="true" [label]="t('ManualUpdatePointsToDate')"></soft-calendar>
+                        <spider-calendar [control]="control('toDate', manualUpdatePointsFormGroup)" [showTime]="true" [label]="t('ManualUpdatePointsToDate')"></spider-calendar>
                     </div>
                 </form>
             </panel-body>
@@ -51,19 +51,19 @@
             <panel-footer>
                 <p-button (onClick)="scheduleJobManually()" [label]="t('UpdatePoints')" icon="pi pi-history"></p-button>
             </panel-footer>
-        </soft-panel>
+        </spider-panel>
 
-        <soft-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0 && excelManualUpdatePointsFormGroup != null" [isMiddleMultiplePanel]="true">
+        <spider-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0 && excelManualUpdatePointsFormGroup != null" [isMiddleMultiplePanel]="true">
             <panel-header [title]="t('ExcelManualUpdatePoints')" icon="pi pi-file-excel"></panel-header>
 
             <panel-body>
                 <form [formGroup]="excelManualUpdatePointsFormGroup" class="grid">
                     <div class="col-12">
-                        <soft-file 
+                        <spider-file 
                         [label]="t('File')"
                         [required]="true"
                         [acceptedFileTypes]="['.xlsx', '.xls']" 
-                        (onSelectedFile)="onSelectedExcelManualUpdateFile($event)"></soft-file>
+                        (onSelectedFile)="onSelectedExcelManualUpdateFile($event)"></spider-file>
                     </div>
                 </form>
             </panel-body>
@@ -71,15 +71,15 @@
             <panel-footer>
                 <p-button (onClick)="excelManualUpdatePoints()" [label]="t('UpdatePoints')" icon="pi pi-history"></p-button>
             </panel-footer>
-        </soft-panel>
+        </spider-panel>
 
-        <soft-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0" [isLastMultiplePanel]="true">
+        <spider-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0" [isLastMultiplePanel]="true">
             <panel-header [title]="t('SuccessfullyDoneBusinessSystemUpdatePointsScheduledTaskList')" icon="pi pi-clock"></panel-header>
 
             <panel-body>
                 <form [formGroup]="manualUpdatePointsFormGroup" class="grid">
                     <div class="col-12">
-                        <soft-data-table 
+                        <spider-data-table 
                         [tableTitle]="t('SuccessfullyDoneBusinessSystemUpdatePointsScheduledTaskList')" 
                         [cols]="businessSystemUpdatePointsScheduledTaskTableCols" 
                         [rows]="5"
@@ -90,11 +90,11 @@
                         [getTableDataObservableMethod]="getBusinessSystemUpdatePointsScheduledTaskTableDataObservableMethod" 
                         [exportTableDataToExcelObservableMethod]="exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelObservableMethod"
                         (onTotalRecordsChange)="businessSystemUpdatePointsScheduledTaskTableTotalRecords = $event" 
-                        ></soft-data-table>
+                        ></spider-data-table>
                     </div>
                 </form>
             </panel-body>
 
-        </soft-panel>
-    </soft-card>
+        </spider-panel>
+    </spider-card>
 </ng-container>
