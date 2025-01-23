@@ -392,7 +392,7 @@ export class ValidatorServiceGenerated {
 
 
 
-    nameBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+    nameBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -412,7 +412,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    getTransactionsEndpointBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+    getTransactionsEndpointBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -430,7 +430,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    getDiscountProductGroupsEndpointBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+    getDiscountProductGroupsEndpointBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -448,7 +448,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createUserEndpointBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+    createUserEndpointBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -466,7 +466,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    updateUserGroupEndpointBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+    updateUserGroupEndpointBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -484,7 +484,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    updatePointsIntervalBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+    updatePointsIntervalBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -501,7 +501,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    partnerIdBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+    partnerIdBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -518,7 +518,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+    versionBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -535,7 +535,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+    createdAtBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -552,7 +552,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtBusinessSystemValidator(control: SpiderFormControl): SpiderValidatorFn {
+    modifiedAtBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -571,7 +571,7 @@ export class ValidatorServiceGenerated {
     }
 
 
-    discountBusinessSystemTierDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+    discountBusinessSystemTierDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -594,7 +594,7 @@ export class ValidatorServiceGenerated {
     }
 
 
-    orderNumberBusinessSystemTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+    orderNumberBusinessSystemTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -611,7 +611,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    businessSystemIdBusinessSystemTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+    businessSystemIdBusinessSystemTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -628,7 +628,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    tierIdBusinessSystemTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+    tierIdBusinessSystemTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -645,7 +645,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionBusinessSystemTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+    versionBusinessSystemTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -662,7 +662,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtBusinessSystemTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+    createdAtBusinessSystemTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -679,7 +679,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtBusinessSystemTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+    modifiedAtBusinessSystemTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -698,7 +698,7 @@ export class ValidatorServiceGenerated {
     }
 
 
-    updatePointsStartDateBusinessSystemUpdatePointsDataBodyValidator(control: SpiderFormControl): SpiderValidatorFn {
+    updatePointsStartDateBusinessSystemUpdatePointsDataBodyValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -715,7 +715,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    updatePointsIntervalBusinessSystemUpdatePointsDataBodyValidator(control: SpiderFormControl): SpiderValidatorFn {
+    updatePointsIntervalBusinessSystemUpdatePointsDataBodyValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -735,7 +735,7 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    isManualBusinessSystemUpdatePointsScheduledTaskValidator(control: SpiderFormControl): SpiderValidatorFn {
+    isManualBusinessSystemUpdatePointsScheduledTaskValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -752,7 +752,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    businessSystemIdBusinessSystemUpdatePointsScheduledTaskValidator(control: SpiderFormControl): SpiderValidatorFn {
+    businessSystemIdBusinessSystemUpdatePointsScheduledTaskValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -769,7 +769,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionBusinessSystemUpdatePointsScheduledTaskValidator(control: SpiderFormControl): SpiderValidatorFn {
+    versionBusinessSystemUpdatePointsScheduledTaskValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -786,7 +786,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtBusinessSystemUpdatePointsScheduledTaskValidator(control: SpiderFormControl): SpiderValidatorFn {
+    createdAtBusinessSystemUpdatePointsScheduledTaskValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -803,7 +803,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtBusinessSystemUpdatePointsScheduledTaskValidator(control: SpiderFormControl): SpiderValidatorFn {
+    modifiedAtBusinessSystemUpdatePointsScheduledTaskValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -824,7 +824,7 @@ export class ValidatorServiceGenerated {
 
 
 
-    nameDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+    nameDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -844,7 +844,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    codeDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+    codeDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -864,7 +864,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    businessSystemIdDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+    businessSystemIdDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -881,7 +881,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+    versionDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -898,7 +898,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+    createdAtDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -915,7 +915,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+    modifiedAtDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -934,7 +934,7 @@ export class ValidatorServiceGenerated {
     }
 
 
-    businessSystemIdExcelManualUpdatePointsValidator(control: SpiderFormControl): SpiderValidatorFn {
+    businessSystemIdExcelManualUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -951,7 +951,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    businessSystemVersionExcelManualUpdatePointsValidator(control: SpiderFormControl): SpiderValidatorFn {
+    businessSystemVersionExcelManualUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -970,7 +970,7 @@ export class ValidatorServiceGenerated {
     }
 
 
-    nameExternalDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+    nameExternalDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -990,7 +990,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    codeExternalDiscountProductGroupValidator(control: SpiderFormControl): SpiderValidatorFn {
+    codeExternalDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1012,7 +1012,7 @@ export class ValidatorServiceGenerated {
     }
 
 
-    userEmailExternalTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    userEmailExternalTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1033,7 +1033,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    codeExternalTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    codeExternalTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1053,7 +1053,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    productNameExternalTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    productNameExternalTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1073,7 +1073,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    productImageUrlExternalTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    productImageUrlExternalTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1091,7 +1091,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    productCategoryNameExternalTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    productCategoryNameExternalTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1111,7 +1111,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    productCategoryImageUrlExternalTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    productCategoryImageUrlExternalTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1129,7 +1129,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    priceExternalTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    priceExternalTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1150,7 +1150,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    boughtAtExternalTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    boughtAtExternalTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1168,7 +1168,7 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    nameGenderValidator(control: SpiderFormControl): SpiderValidatorFn {
+    nameGenderValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1192,7 +1192,7 @@ export class ValidatorServiceGenerated {
 
 
 
-    emailLoginValidator(control: SpiderFormControl): SpiderValidatorFn {
+    emailLoginValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1218,7 +1218,7 @@ export class ValidatorServiceGenerated {
 
 
 
-    titleNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    titleNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1238,7 +1238,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    descriptionNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1258,7 +1258,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    emailBodyNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    emailBodyNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1276,7 +1276,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    versionNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1293,7 +1293,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    createdAtNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1310,7 +1310,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    modifiedAtNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1330,7 +1330,7 @@ export class ValidatorServiceGenerated {
 
 
 
-    namePartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+    namePartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1350,7 +1350,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    emailPartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+    emailPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1371,7 +1371,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    slugPartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+    slugPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1391,7 +1391,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    logoImagePartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+    logoImagePartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1409,7 +1409,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    primaryColorPartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+    primaryColorPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1426,7 +1426,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    productsRecommendationEndpointPartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+    productsRecommendationEndpointPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1444,7 +1444,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    pointsMultiplierPartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+    pointsMultiplierPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1465,7 +1465,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionPartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+    versionPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1482,7 +1482,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtPartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+    createdAtPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1499,7 +1499,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtPartnerValidator(control: SpiderFormControl): SpiderValidatorFn {
+    modifiedAtPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1517,7 +1517,7 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    titlePartnerNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    titlePartnerNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1537,7 +1537,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionPartnerNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    descriptionPartnerNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1557,7 +1557,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    emailBodyPartnerNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    emailBodyPartnerNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1575,7 +1575,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    partnerIdPartnerNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    partnerIdPartnerNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1592,7 +1592,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionPartnerNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    versionPartnerNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1609,7 +1609,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtPartnerNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    createdAtPartnerNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1626,7 +1626,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtPartnerNotificationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    modifiedAtPartnerNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1645,7 +1645,7 @@ export class ValidatorServiceGenerated {
     }
 
 
-    namePartnerPermissionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    namePartnerPermissionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1665,7 +1665,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionPartnerPermissionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    descriptionPartnerPermissionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1683,7 +1683,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    codePartnerPermissionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    codePartnerPermissionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1705,7 +1705,7 @@ export class ValidatorServiceGenerated {
     }
 
 
-    namePartnerRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+    namePartnerRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1725,7 +1725,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionPartnerRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+    descriptionPartnerRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1743,7 +1743,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    partnerIdPartnerRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+    partnerIdPartnerRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1760,7 +1760,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionPartnerRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+    versionPartnerRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1777,7 +1777,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtPartnerRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+    createdAtPartnerRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1794,7 +1794,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtPartnerRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+    modifiedAtPartnerRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1816,7 +1816,7 @@ export class ValidatorServiceGenerated {
 
 
 
-    pointsPartnerUserValidator(control: SpiderFormControl): SpiderValidatorFn {
+    pointsPartnerUserValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1833,7 +1833,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    partnerIdPartnerUserValidator(control: SpiderFormControl): SpiderValidatorFn {
+    partnerIdPartnerUserValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1850,7 +1850,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    userIdPartnerUserValidator(control: SpiderFormControl): SpiderValidatorFn {
+    userIdPartnerUserValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1867,7 +1867,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionPartnerUserValidator(control: SpiderFormControl): SpiderValidatorFn {
+    versionPartnerUserValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1884,7 +1884,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtPartnerUserValidator(control: SpiderFormControl): SpiderValidatorFn {
+    createdAtPartnerUserValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1901,7 +1901,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtPartnerUserValidator(control: SpiderFormControl): SpiderValidatorFn {
+    modifiedAtPartnerUserValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1928,7 +1928,7 @@ export class ValidatorServiceGenerated {
 
 
 
-    namePermissionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    namePermissionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1948,7 +1948,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    nameLatinPermissionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    nameLatinPermissionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1968,7 +1968,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionPermissionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    descriptionPermissionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1986,7 +1986,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionLatinPermissionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    descriptionLatinPermissionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2004,7 +2004,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    codePermissionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    codePermissionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2031,7 +2031,7 @@ export class ValidatorServiceGenerated {
 
 
 
-    emailRegistrationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    emailRegistrationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2055,7 +2055,7 @@ export class ValidatorServiceGenerated {
 
 
 
-    nameRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+    nameRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2075,7 +2075,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+    descriptionRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2093,7 +2093,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+    versionRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2110,7 +2110,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+    createdAtRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2127,7 +2127,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtRoleValidator(control: SpiderFormControl): SpiderValidatorFn {
+    modifiedAtRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2148,7 +2148,7 @@ export class ValidatorServiceGenerated {
 
 
 
-    nameSegmentationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    nameSegmentationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2168,7 +2168,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionSegmentationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    descriptionSegmentationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2186,7 +2186,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    pointsForTheFirstTimeFillSegmentationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    pointsForTheFirstTimeFillSegmentationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2205,7 +2205,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    partnerIdSegmentationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    partnerIdSegmentationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2222,7 +2222,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionSegmentationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    versionSegmentationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2239,7 +2239,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtSegmentationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    createdAtSegmentationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2256,7 +2256,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtSegmentationValidator(control: SpiderFormControl): SpiderValidatorFn {
+    modifiedAtSegmentationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2274,7 +2274,7 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    nameSegmentationItemValidator(control: SpiderFormControl): SpiderValidatorFn {
+    nameSegmentationItemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2294,7 +2294,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    orderNumberSegmentationItemValidator(control: SpiderFormControl): SpiderValidatorFn {
+    orderNumberSegmentationItemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2311,7 +2311,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    segmentationIdSegmentationItemValidator(control: SpiderFormControl): SpiderValidatorFn {
+    segmentationIdSegmentationItemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2328,7 +2328,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionSegmentationItemValidator(control: SpiderFormControl): SpiderValidatorFn {
+    versionSegmentationItemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2345,7 +2345,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtSegmentationItemValidator(control: SpiderFormControl): SpiderValidatorFn {
+    createdAtSegmentationItemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2362,7 +2362,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtSegmentationItemValidator(control: SpiderFormControl): SpiderValidatorFn {
+    modifiedAtSegmentationItemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2387,7 +2387,7 @@ export class ValidatorServiceGenerated {
 
 
 
-    nameTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+    nameTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2407,7 +2407,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    descriptionTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+    descriptionTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2425,7 +2425,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    validFromTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+    validFromTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2444,7 +2444,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    validToTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+    validToTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2463,7 +2463,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    partnerIdTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+    partnerIdTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2480,7 +2480,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+    versionTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2497,7 +2497,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+    createdAtTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2514,7 +2514,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtTierValidator(control: SpiderFormControl): SpiderValidatorFn {
+    modifiedAtTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2533,7 +2533,7 @@ export class ValidatorServiceGenerated {
     }
 
 
-    productNameTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    productNameTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2553,7 +2553,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    codeTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    codeTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2573,7 +2573,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    productImageUrlTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    productImageUrlTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2591,7 +2591,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    productCategoryNameTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    productCategoryNameTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2611,7 +2611,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    productCategoryImageUrlTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    productCategoryImageUrlTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2629,7 +2629,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    priceTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    priceTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2650,7 +2650,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    boughtAtTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    boughtAtTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2667,7 +2667,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    pointsTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    pointsTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2684,7 +2684,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    partnerUserIdTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    partnerUserIdTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2701,7 +2701,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    businessSystemIdTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    businessSystemIdTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2718,7 +2718,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    versionTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2735,7 +2735,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    createdAtTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2752,7 +2752,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtTransactionValidator(control: SpiderFormControl): SpiderValidatorFn {
+    modifiedAtTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2771,7 +2771,7 @@ export class ValidatorServiceGenerated {
     }
 
 
-    businessSystemIdUpdatePointsValidator(control: SpiderFormControl): SpiderValidatorFn {
+    businessSystemIdUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2788,7 +2788,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    businessSystemVersionUpdatePointsValidator(control: SpiderFormControl): SpiderValidatorFn {
+    businessSystemVersionUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2805,7 +2805,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    fromDateUpdatePointsValidator(control: SpiderFormControl): SpiderValidatorFn {
+    fromDateUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2822,7 +2822,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    toDateUpdatePointsValidator(control: SpiderFormControl): SpiderValidatorFn {
+    toDateUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2840,7 +2840,7 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    emailUserExtendedValidator(control: SpiderFormControl): SpiderValidatorFn {
+    emailUserExtendedValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2861,7 +2861,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    versionUserExtendedValidator(control: SpiderFormControl): SpiderValidatorFn {
+    versionUserExtendedValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2878,7 +2878,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    createdAtUserExtendedValidator(control: SpiderFormControl): SpiderValidatorFn {
+    createdAtUserExtendedValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2895,7 +2895,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    modifiedAtUserExtendedValidator(control: SpiderFormControl): SpiderValidatorFn {
+    modifiedAtUserExtendedValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2918,7 +2918,7 @@ export class ValidatorServiceGenerated {
 
 
 
-    verificationCodeVerificationTokenRequestValidator(control: SpiderFormControl): SpiderValidatorFn {
+    verificationCodeVerificationTokenRequestValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -2937,7 +2937,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-    emailVerificationTokenRequestValidator(control: SpiderFormControl): SpiderValidatorFn {
+    emailVerificationTokenRequestValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 

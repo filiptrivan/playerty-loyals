@@ -1,3 +1,4 @@
+import { TranslateLabelsService } from 'src/app/business/services/translates/merge-labels';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,7 +8,6 @@ import { DropdownChangeEvent } from 'primeng/dropdown';
 import { forkJoin } from 'rxjs';
 import { DiscountProductGroup, BusinessSystemTier, BusinessSystemTierDiscountProductGroup, Tier, TierSaveBody } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { AllClickEvent, Column, RowClickEvent, SpiderDataTableComponent } from 'src/app/core/components/spider-data-table/spider-data-table.component';
@@ -28,7 +28,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     tierModel: Tier = new Tier();
     tierDTOListSaveBodyName: string = nameof<TierSaveBody>('tierDTOList');
     tierTranslationKey: string = new Tier().typeName;
-    tierFormArray: SpiderFormArray<Tier[]>;
+    tierFormArray: SpiderFormArray<Tier>;
     tierCrudMenu: MenuItem[];
     tierLastIndexClicked: LastMenuIconIndexClicked = new LastMenuIconIndexClicked();
 
@@ -36,7 +36,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     businessSystemTierModel: BusinessSystemTier = new BusinessSystemTier();
     businessSystemTierDTOListSaveBodyName: string = nameof<TierSaveBody>('businessSystemTierDTOList');
     businessSystemTierTranslationKey: string = new BusinessSystemTier().typeName;
-    businessSystemTierFormArray: SpiderFormArray<BusinessSystemTier[]>;
+    businessSystemTierFormArray: SpiderFormArray<BusinessSystemTier>;
     businessSystemTierCrudMenu: MenuItem[];
     businessSystemOptions: PrimengOption[];
     businessSystemTierLastIndexClicked: LastMenuIconIndexClicked = new LastMenuIconIndexClicked();
@@ -46,7 +46,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     businessSystemTierDiscountProductGroupModel: BusinessSystemTierDiscountProductGroup = new BusinessSystemTierDiscountProductGroup();
     businessSystemTierDiscountProductGroupSaveBodyName: string = nameof<TierSaveBody>('businessSystemTierDiscountProductGroupDTOList');
     businessSystemTierDiscountProductGroupTranslationKey: string = new BusinessSystemTierDiscountProductGroup().typeName;
-    businessSystemTierDiscountProductGroupFormArray: SpiderFormArray<BusinessSystemTierDiscountProductGroup[]>;
+    businessSystemTierDiscountProductGroupFormArray: SpiderFormArray<BusinessSystemTierDiscountProductGroup>;
     alreadySelectedDiscountProductGroupListForBusinessSystem: BusinessSystemTierDiscountProductGroup[] = [];
     alreadySelectedBusinessSystemTierDiscountProductGroupIdsForBusinessSystem: number[] = [];
     @ViewChildren('businessSystemTierDiscountProductGroupTable') businessSystemTierDiscountProductGroupTables: QueryList<SpiderDataTableComponent>; // FT: Made for refreshing table
@@ -59,17 +59,17 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         protected override router: Router, 
         protected override route: ActivatedRoute, 
         protected override translocoService: TranslocoService,
-        protected override translateClassNamesService: TranslateClassNamesService,
-        protected override validatorService: ValidatorService,
         protected override baseFormService: BaseFormService,
-        private apiService: ApiService) 
-        {
-        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService, baseFormService);
-        }
+        private validatorService: ValidatorService,
+        private translateLabelsService: TranslateLabelsService,
+        private apiService: ApiService
+    ) {
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, baseFormService);
+    }
          
     override ngOnInit() {
         this.formGroup.saveObservableMethod = this.apiService.saveTier;
-
+        
         this.businessSystemTierDiscountProductGroupCols = [
             {name: this.translocoService.translate('Name'), filterType: 'text', field: 'discountProductGroupDisplayName'},
             {name: this.translocoService.translate('Discount'), filterType: 'numeric', field: 'discount', showMatchModes: true, editable: true},
@@ -90,13 +90,13 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     //#region Tier
 
     initTierFormArray(tierList: Tier[]){
-        this.tierFormArray = this.baseFormService.initFormArray(this.formGroup, tierList, this.tierModel, this.tierDTOListSaveBodyName, this.tierTranslationKey, false);
+        this.tierFormArray = this.initFormArray(this.formGroup, tierList, this.tierModel, this.tierDTOListSaveBodyName, this.tierTranslationKey, false);
         this.tierCrudMenu = this.getCrudMenuForOrderedData(this.tierFormArray, new Tier({id: 0}), this.tierLastIndexClicked);
         // this.tierFormArray.validator = this.validatorService.isFormArrayEmpty(this.tierFormArray); // FT: When deleting every tier, we should let it be empty
     }
 
     addNewTier(index: number){
-        this.baseFormService.addNewFormGroupToFormArray(this.tierFormArray, new Tier({id: 0}), index);
+        this.addNewFormGroupToFormArray(this.tierFormArray, new Tier({id: 0}), index);
     }
 
     //#endregion
@@ -105,13 +105,15 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
 
     initBusinessSystemTierFormArray(businessSystemTierList: BusinessSystemTier[]){
         // this.assignBusinessSystemTierListIndexes(businessSystemTierList);
-        this.businessSystemTierFormArray = this.baseFormService.initFormArray(this.formGroup, businessSystemTierList, this.businessSystemTierModel, this.businessSystemTierDTOListSaveBodyName, this.businessSystemTierTranslationKey);
+        this.businessSystemTierFormArray = this.initFormArray(
+            this.formGroup, businessSystemTierList, this.businessSystemTierModel, this.businessSystemTierDTOListSaveBodyName, this.businessSystemTierTranslationKey
+        );
         this.businessSystemTierCrudMenu = this.getCrudMenuForOrderedData(this.businessSystemTierFormArray, new BusinessSystemTier({id: 0}), this.businessSystemTierLastIndexClicked, true);
     }
 
     addNewBusinessSystemTier(tierIndex: number, formArrayIndex: number = null){
         // FT: For the Tier we are not assigning index because we are sending the ordered list from the UI and we will get the index in foreach on the backend, but here we need orderNumber so we can filter 
-        this.baseFormService.addNewFormGroupToFormArray(this.businessSystemTierFormArray, new BusinessSystemTier({id: 0, tierClientIndex: tierIndex}), formArrayIndex);
+        this.addNewFormGroupToFormArray(this.businessSystemTierFormArray, new BusinessSystemTier({id: 0, tierClientIndex: tierIndex}), formArrayIndex);
     }
 
     // FT: Adding new table of businessSystemTierDiscountProductGroup for the selected businessSystem
@@ -141,7 +143,8 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         this.removeFormControlsFromTheFormArray(this.businessSystemTierDiscountProductGroupFormArray, businessSystemTierDiscountProductGroupIndexesForRemove);
 
         businessSystemTierDiscountProductGroupArrayForInsert.forEach(newDiscountProductGroup => {
-            this.baseFormService.addNewFormGroupToFormArray(this.businessSystemTierDiscountProductGroupFormArray, newDiscountProductGroup, null, this.discountDisableLambda)
+            let formGroup = this.addNewFormGroupToFormArray(this.businessSystemTierDiscountProductGroupFormArray, newDiscountProductGroup, null);
+            this.disableDiscount(formGroup);
         });
 
         const businessSystemTierDiscountProductGroupTable: SpiderDataTableComponent = this.findBusinessSystemTierDiscountProductGroupTable(tierIndex, businessSystemTierIndex);
@@ -178,9 +181,20 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     //#region DiscountProductGroup M2M
 
     initBusinessSystemTierDiscountCategoriesFormArray(businessSystemTierDiscountCategories: BusinessSystemTierDiscountProductGroup[]){
-        this.businessSystemTierDiscountProductGroupFormArray = this.baseFormService.initFormArray(this.formGroup, businessSystemTierDiscountCategories, this.businessSystemTierDiscountProductGroupModel, this.businessSystemTierDiscountProductGroupSaveBodyName, this.businessSystemTierDiscountProductGroupTranslationKey, false, 
-            this.discountDisableLambda
+        this.businessSystemTierDiscountProductGroupFormArray = this.initFormArray(
+            this.formGroup, 
+            businessSystemTierDiscountCategories, 
+            this.businessSystemTierDiscountProductGroupModel, 
+            this.businessSystemTierDiscountProductGroupSaveBodyName, 
+            this.businessSystemTierDiscountProductGroupTranslationKey,
+            false
         );
+
+        this.businessSystemTierDiscountProductGroupFormArray.controls.forEach(control => {
+            let formGroup = control as SpiderFormGroup<BusinessSystemTierDiscountProductGroup>;
+
+            this.disableDiscount(formGroup);
+        });
         
         this.alreadySelectedBusinessSystemTierDiscountProductGroupIdsForBusinessSystem = businessSystemTierDiscountCategories.filter(x => x.selectedForBusinessSystem).map(x => x.id);
     }
@@ -193,12 +207,10 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         return this.businessSystemTierDiscountProductGroupFormArray.value.filter(x => x.businessSystemTierClientIndex === additionalIndexes.businessSystemTierIndex && x.tierClientIndex === additionalIndexes.tierIndex && x.selectedForBusinessSystem);
     }
 
-    discountDisableLambda = (formControlName: string, model: BusinessSystemTierDiscountProductGroup): boolean => {
-        if(formControlName === nameof<BusinessSystemTierDiscountProductGroup>('discount') && model.selectedForBusinessSystem !== true){
-            return true;
+    disableDiscount = (formGroup: SpiderFormGroup<BusinessSystemTierDiscountProductGroup>) => {
+        if (formGroup.controls.selectedForBusinessSystem.getRawValue() !== true) {
+            formGroup.controls.discount.disable();
         }
-
-        return false;
     }
 
     getDiscountProductGroupFormArrayItems = (additionalIndexes: BusinessSystemTierDiscountProductGroupAdditionalIndexes) => {

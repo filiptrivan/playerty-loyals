@@ -3,17 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { Button } from 'primeng/button';
-import { firstValueFrom, forkJoin } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { Partner, PartnerSaveBody } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerService } from 'src/app/business/services/helpers/partner.service';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
-import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
-import { SpiderButton } from 'src/app/core/entities/spider-button';
-import { nameof } from 'src/app/core/services/helper-functions';
 import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 
 @Component({
@@ -32,13 +27,11 @@ export class PartnerDetailsComponent extends BaseFormCopy implements OnInit {
         protected override router: Router, 
         protected override route: ActivatedRoute, 
         protected override translocoService: TranslocoService,
-        protected override translateClassNamesService: TranslateClassNamesService,
-        protected override validatorService: ValidatorService,
         protected override baseFormService: BaseFormService,
         private apiService: ApiService,
         private partnerService: PartnerService,
     ) {
-        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService, baseFormService);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, baseFormService);
     }
          
     override ngOnInit() {

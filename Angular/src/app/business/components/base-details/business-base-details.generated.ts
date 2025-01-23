@@ -1,4 +1,5 @@
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
+import { TranslateLabelsService } from '../../services/translates/merge-labels';
 import { BaseFormService } from './../../../core/services/base-form.service';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
@@ -23,8 +24,7 @@ import { TableFilter } from 'src/app/core/entities/table-filter';
 import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
 import { SpiderFileSelectEvent } from 'src/app/core/controls/spider-file/spider-file.component';
 import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, BusinessSystemUpdatePointsDataBody, ExcelManualUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, MergedPartnerUser, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerRoleSaveBody, PartnerUserSaveBody, Product, QrCode, SegmentationItem, TierSaveBody, UpdatePoints, UserExtendedSaveBody, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUser, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
-import { Role, UserRole, RolePermission, Permission, RoleSaveBody, UserRoleSaveBody, RolePermissionSaveBody, PermissionSaveBody } from '../../entities/security-entities.generated';
-
+import { Permission, Role, RolePermission, UserRole, PermissionSaveBody, RoleSaveBody, RolePermissionSaveBody, UserRoleSaveBody } from '../../entities/security-entities.generated';
 
 @Component({
     selector: 'business-system-base-details',
@@ -106,6 +106,7 @@ export class BusinessSystemBaseDetailsComponent {
         private route: ActivatedRoute,
         private baseFormService: BaseFormService,
         private validatorService: ValidatorService,
+        private translateLabelsService: TranslateLabelsService,
         private translocoService: TranslocoService,
     ) {}
 
@@ -151,7 +152,11 @@ export class BusinessSystemBaseDetailsComponent {
 
     initBusinessSystemFormGroup(businessSystem: BusinessSystem) {
         this.baseFormService.initFormGroup<BusinessSystem>(
-            this.businessSystemFormGroup, this.formGroup, businessSystem, this.businessSystemSaveBodyName, []
+            this.businessSystemFormGroup, 
+            this.formGroup, 
+            businessSystem, 
+            this.businessSystemSaveBodyName,
+            []
         );
         this.businessSystemFormGroup.mainDTOName = this.businessSystemSaveBodyName;
         this.loading = false;
@@ -277,6 +282,7 @@ export class NotificationBaseDetailsComponent {
         private route: ActivatedRoute,
         private baseFormService: BaseFormService,
         private validatorService: ValidatorService,
+        private translateLabelsService: TranslateLabelsService,
         private translocoService: TranslocoService,
     ) {}
 
@@ -328,7 +334,11 @@ export class NotificationBaseDetailsComponent {
 
     initNotificationFormGroup(notification: Notification) {
         this.baseFormService.initFormGroup<Notification>(
-            this.notificationFormGroup, this.formGroup, notification, this.notificationSaveBodyName, []
+            this.notificationFormGroup, 
+            this.formGroup, 
+            notification, 
+            this.notificationSaveBodyName,
+            []
         );
         this.notificationFormGroup.mainDTOName = this.notificationSaveBodyName;
         this.loading = false;
@@ -456,6 +466,7 @@ export class PartnerBaseDetailsComponent {
         private route: ActivatedRoute,
         private baseFormService: BaseFormService,
         private validatorService: ValidatorService,
+        private translateLabelsService: TranslateLabelsService,
         private translocoService: TranslocoService,
     ) {}
 
@@ -501,7 +512,11 @@ export class PartnerBaseDetailsComponent {
 
     initPartnerFormGroup(partner: Partner) {
         this.baseFormService.initFormGroup<Partner>(
-            this.partnerFormGroup, this.formGroup, partner, this.partnerSaveBodyName, ['primaryColor']
+            this.partnerFormGroup, 
+            this.formGroup, 
+            partner, 
+            this.partnerSaveBodyName,
+            ['primaryColor']
         );
         this.partnerFormGroup.mainDTOName = this.partnerSaveBodyName;
         this.loading = false;
@@ -631,6 +646,7 @@ export class PartnerNotificationBaseDetailsComponent {
         private route: ActivatedRoute,
         private baseFormService: BaseFormService,
         private validatorService: ValidatorService,
+        private translateLabelsService: TranslateLabelsService,
         private translocoService: TranslocoService,
     ) {}
 
@@ -685,7 +701,11 @@ export class PartnerNotificationBaseDetailsComponent {
 
     initPartnerNotificationFormGroup(partnerNotification: PartnerNotification) {
         this.baseFormService.initFormGroup<PartnerNotification>(
-            this.partnerNotificationFormGroup, this.formGroup, partnerNotification, this.partnerNotificationSaveBodyName, []
+            this.partnerNotificationFormGroup, 
+            this.formGroup, 
+            partnerNotification, 
+            this.partnerNotificationSaveBodyName,
+            []
         );
         this.partnerNotificationFormGroup.mainDTOName = this.partnerNotificationSaveBodyName;
         this.loading = false;
@@ -806,6 +826,7 @@ export class PartnerRoleBaseDetailsComponent {
         private route: ActivatedRoute,
         private baseFormService: BaseFormService,
         private validatorService: ValidatorService,
+        private translateLabelsService: TranslateLabelsService,
         private translocoService: TranslocoService,
     ) {}
 
@@ -858,7 +879,11 @@ export class PartnerRoleBaseDetailsComponent {
 
     initPartnerRoleFormGroup(partnerRole: PartnerRole) {
         this.baseFormService.initFormGroup<PartnerRole>(
-            this.partnerRoleFormGroup, this.formGroup, partnerRole, this.partnerRoleSaveBodyName, []
+            this.partnerRoleFormGroup, 
+            this.formGroup, 
+            partnerRole, 
+            this.partnerRoleSaveBodyName,
+            []
         );
         this.partnerRoleFormGroup.mainDTOName = this.partnerRoleSaveBodyName;
         this.loading = false;
@@ -993,6 +1018,7 @@ export class SegmentationBaseDetailsComponent {
         private route: ActivatedRoute,
         private baseFormService: BaseFormService,
         private validatorService: ValidatorService,
+        private translateLabelsService: TranslateLabelsService,
         private translocoService: TranslocoService,
     ) {}
 
@@ -1038,7 +1064,11 @@ export class SegmentationBaseDetailsComponent {
 
     initSegmentationFormGroup(segmentation: Segmentation) {
         this.baseFormService.initFormGroup<Segmentation>(
-            this.segmentationFormGroup, this.formGroup, segmentation, this.segmentationSaveBodyName, []
+            this.segmentationFormGroup, 
+            this.formGroup, 
+            segmentation, 
+            this.segmentationSaveBodyName,
+            []
         );
         this.segmentationFormGroup.mainDTOName = this.segmentationSaveBodyName;
         this.loading = false;
@@ -1047,14 +1077,23 @@ export class SegmentationBaseDetailsComponent {
 
     initSegmentationItemsFormArray(segmentationItems: SegmentationItem[]){
         this.segmentationItemsFormArray = this.baseFormService.initFormArray(
-            this.formGroup, segmentationItems, this.segmentationItemsModel, this.segmentationItemsSaveBodyName, this.segmentationItemsTranslationKey, true
+            this.formGroup, 
+            segmentationItems, 
+            this.segmentationItemsModel, 
+            this.segmentationItemsSaveBodyName, 
+            this.segmentationItemsTranslationKey, 
+            true
         );
         this.segmentationItemsCrudMenu = this.getCrudMenuForOrderedData(this.segmentationItemsFormArray, new SegmentationItem({id: 0}), this.segmentationItemsLastIndexClicked, false);
         this.segmentationItemsFormArray.validator = this.validatorService.isFormArrayEmpty(this.segmentationItemsFormArray);
     }
 
     addNewItemToSegmentationItems(index: number){ 
-        this.baseFormService.addNewFormGroupToFormArray(this.segmentationItemsFormArray, new SegmentationItem({id: 0}), index);
+        this.baseFormService.addNewFormGroupToFormArray(
+            this.segmentationItemsFormArray, 
+            new SegmentationItem({id: 0}), 
+            index
+        );
     }
 
 
@@ -1154,6 +1193,7 @@ export class TierBaseDetailsComponent {
         private route: ActivatedRoute,
         private baseFormService: BaseFormService,
         private validatorService: ValidatorService,
+        private translateLabelsService: TranslateLabelsService,
         private translocoService: TranslocoService,
     ) {}
 
@@ -1199,7 +1239,11 @@ export class TierBaseDetailsComponent {
 
     initTierFormGroup(tier: Tier) {
         this.baseFormService.initFormGroup<Tier>(
-            this.tierFormGroup, this.formGroup, tier, this.tierSaveBodyName, []
+            this.tierFormGroup, 
+            this.formGroup, 
+            tier, 
+            this.tierSaveBodyName,
+            []
         );
         this.tierFormGroup.mainDTOName = this.tierSaveBodyName;
         this.loading = false;
@@ -1308,6 +1352,7 @@ export class UserExtendedBaseDetailsComponent {
         private route: ActivatedRoute,
         private baseFormService: BaseFormService,
         private validatorService: ValidatorService,
+        private translateLabelsService: TranslateLabelsService,
         private translocoService: TranslocoService,
     ) {}
 
@@ -1360,7 +1405,11 @@ export class UserExtendedBaseDetailsComponent {
 
     initUserExtendedFormGroup(userExtended: UserExtended) {
         this.baseFormService.initFormGroup<UserExtended>(
-            this.userExtendedFormGroup, this.formGroup, userExtended, this.userExtendedSaveBodyName, []
+            this.userExtendedFormGroup, 
+            this.formGroup, 
+            userExtended, 
+            this.userExtendedSaveBodyName,
+            []
         );
         this.userExtendedFormGroup.mainDTOName = this.userExtendedSaveBodyName;
         this.loading = false;

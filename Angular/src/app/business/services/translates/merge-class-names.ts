@@ -12,7 +12,7 @@ export class TranslateClassNamesService {
     ) {
     }
 
-    translate(name: string){
+    translate = (name: string) => {
         let result = null;
 
         result = this.translateClassNamesGeneratedService.translate(name);

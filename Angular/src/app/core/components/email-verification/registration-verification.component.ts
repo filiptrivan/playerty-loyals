@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { VerificationWrapperComponent } from './verification-wrapper.component';
 import { TranslocoService } from '@jsverse/transloco';
-import { LayoutService } from 'src/app/layout/services/app.layout.service';
-import { AuthService } from '../../../business/services/auth/auth.service';
 import { SpiderMessageService } from '../../services/spider-message.service';
+import { AuthBaseService } from '../../services/auth-base.service';
 
 @Component({
     selector: 'registration-verification',
@@ -17,8 +16,7 @@ export class RegistrationVerificationComponent implements OnInit {
     @Input() email: string;
 
     constructor(
-      public layoutService: LayoutService, 
-      private authService: AuthService, 
+      private authService: AuthBaseService, 
       private messageService: SpiderMessageService, 
       private translocoService: TranslocoService,
     ) { 
@@ -28,7 +26,7 @@ export class RegistrationVerificationComponent implements OnInit {
     }
 
     resendVerificationToken(){
-        this.authService.sendRegistrationVerificationEmail({email: this.email}).subscribe((res) => {
+        this.authService.sendRegistrationVerificationEmail({email: this.email}).subscribe(() => {
             this.messageService.successMessage(this.translocoService.translate('SuccessfullySentVerificationCode'));
         });
     }

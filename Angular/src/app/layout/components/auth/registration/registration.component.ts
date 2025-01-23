@@ -3,45 +3,48 @@ import { SpiderMessageService } from '../../../../core/services/spider-message.s
 import { AuthService } from '../../../../business/services/auth/auth.service';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { LayoutService } from '../../../services/app.layout.service';
-import { BaseForm } from '../../../../core/components/base-form/base-form';
 import { HttpClient } from '@angular/common/http';
-import { VerificationTypeCodes } from 'src/app/core/enums/verification-type-codes';
 import { Registration } from 'src/app/business/entities/security-entities.generated';
 import { TranslocoService } from '@jsverse/transloco';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
+import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
+import { SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
+import { TranslateLabelsService } from 'src/app/business/services/translates/merge-labels';
+import { BaseFormService } from 'src/app/core/services/base-form.service';
 
 @Component({
     selector: 'app-registration',
     templateUrl: './registration.component.html',
 })
-export class RegistrationComponent extends BaseForm<Registration> implements OnInit {
+export class RegistrationComponent extends BaseFormCopy implements OnInit {
+    registrationFormGroup = new SpiderFormGroup<Registration>({});
+
     companyName: string;
     showEmailSentDialog: boolean = false;
-    verificationType: VerificationTypeCodes = VerificationTypeCodes.Login;
 
     constructor(
       protected override differs: KeyValueDiffers,
       protected override http: HttpClient,
       protected override messageService: SpiderMessageService, 
       protected override changeDetectorRef: ChangeDetectorRef,
-      protected override router: Router,
+      protected override router: Router, 
       protected override route: ActivatedRoute,
       protected override translocoService: TranslocoService,
-      protected override translateClassNamesService: TranslateClassNamesService,
-      protected override validatorService: ValidatorService,
+      protected override baseFormService: BaseFormService,
+      private translateLabelsService: TranslateLabelsService,
+      private validatorService: ValidatorService,
       public layoutService: LayoutService, 
       private authService: AuthService, 
     ) { 
-        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
+      super(differs, http, messageService, changeDetectorRef, router, route, translocoService, baseFormService);
     }
 
     override ngOnInit(){
-        this.init(new Registration());
+        this.initRegistrationFormGroup(new Registration({}));
     }
     
-    init(model: Registration){
-        this.initFormGroup(model);
+    initRegistrationFormGroup(model: Registration){
+        this.initFormGroup(this.registrationFormGroup, this.formGroup, model, model.typeName, []);
     }
 
     companyNameChange(companyName: string){
@@ -52,7 +55,7 @@ export class RegistrationComponent extends BaseForm<Registration> implements OnI
         let isFormGroupValid: boolean = this.checkFormGroupValidity();
         if (isFormGroupValid == false) return;
         // const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
-        this.authService.sendRegistrationVerificationEmail(this.model).subscribe(registrationVerificationResult => {
+        this.authService.sendRegistrationVerificationEmail(this.registrationFormGroup.getRawValue()).subscribe(() => {
             this.showEmailSentDialog = true;
         });
     }

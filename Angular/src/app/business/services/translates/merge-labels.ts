@@ -1,19 +1,20 @@
-import { environment } from "src/environments/environment";
 import { Injectable } from "@angular/core";
 import { TranslateLabelsGeneratedService } from "./labels.generated";
+import { TranslateLabelsAbstractService } from "src/app/core/services/translate-labels-abstract.service";
 
 
 @Injectable({
     providedIn: 'root',
 })
-export class TranslateLabelsService {
+export class TranslateLabelsService extends TranslateLabelsAbstractService {
 
     constructor(
         private translateLabelsGeneratedService: TranslateLabelsGeneratedService,
     ) {
+        super();
     }
 
-    translate(name: string){
+    translate = (name: string) => {
         let result = null;
 
         result = this.translateLabelsGeneratedService.translate(name);

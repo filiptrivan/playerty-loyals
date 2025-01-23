@@ -26,9 +26,8 @@ export class SpiderCheckboxComponent extends BaseControl implements OnInit {
 
     constructor(
         protected override translocoService: TranslocoService,
-        protected override translateLabelsService: TranslateLabelsService,
     ) { 
-        super(translocoService, translateLabelsService);
+        super(translocoService);
     }
 
      override ngOnInit(){

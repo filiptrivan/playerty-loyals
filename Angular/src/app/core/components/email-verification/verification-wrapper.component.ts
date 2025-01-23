@@ -41,7 +41,6 @@ export class VerificationWrapperComponent extends BaseForm<VerificationTokenRequ
         protected override translocoService: TranslocoService,
         protected override translateClassNamesService: TranslateClassNamesService,
         protected override validatorService: ValidatorService,
-        public layoutService: LayoutService, 
     ) { 
         super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService);
     }

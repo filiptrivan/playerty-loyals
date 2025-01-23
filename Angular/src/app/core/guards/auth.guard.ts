@@ -1,14 +1,20 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { AuthService } from '../../business/services/auth/auth.service';
 import { Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { AuthBaseService } from '../services/auth-base.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthBaseService, 
+    private router: Router,
+  ) {
+
+  }
+
   canActivate(): Observable<boolean> {
     return this.checkAuth();
   }

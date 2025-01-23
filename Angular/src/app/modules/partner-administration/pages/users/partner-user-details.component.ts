@@ -1,14 +1,14 @@
+import { TranslateLabelsService } from 'src/app/business/services/translates/merge-labels';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { firstValueFrom, forkJoin, Observable } from 'rxjs';
+import { firstValueFrom, forkJoin } from 'rxjs';
 import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
 import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, Tier, UserExtended } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerService } from 'src/app/business/services/helpers/partner.service';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { SpiderFormArray, SpiderFormControl, SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
@@ -36,7 +36,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     segmentations: Segmentation[] = [];
     segmentationItems: SegmentationItem[] = [];
 
-    segmentationItemsFormArray: SpiderFormArray<SegmentationItem[]>;
+    segmentationItemsFormArray: SpiderFormArray<SegmentationItem>;
     segmentationItemsFormArrayIdentifier: string = crypto.randomUUID(); // FT: Because we are not changing it, we are not using nameof, it's important that it's not the same as property in save body
     segmentationItemsTranslationKey: string = new SegmentationItem().typeName;
     segmentationItemModel: SegmentationItem = new SegmentationItem();
@@ -55,13 +55,13 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         protected override router: Router, 
         protected override route: ActivatedRoute, 
         protected override translocoService: TranslocoService,
-        protected override translateClassNamesService: TranslateClassNamesService,
-        protected override validatorService: ValidatorService,
         protected override baseFormService: BaseFormService,
+        private validatorService: ValidatorService,
+        private translateLabelsService: TranslateLabelsService,
         private apiService: ApiService,
         private partnerService: PartnerService,
     ) {
-        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService, baseFormService);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, baseFormService);
     }
 
 
@@ -89,7 +89,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
             });
 
             this.apiService.getPartnerUser(modelId).subscribe(partnerUser => {
-                this.baseFormService.initFormGroup(this.partnerUserFormGroup, this.formGroup, new PartnerUser(partnerUser), nameof<PartnerUserSaveBody>('partnerUserDTO'));
+                this.initFormGroup(this.partnerUserFormGroup, this.formGroup, new PartnerUser(partnerUser), nameof<PartnerUserSaveBody>('partnerUserDTO'));
                 
                 if (partnerUser?.tierId) {
                     this.apiService.getTier(partnerUser.tierId).subscribe(partnerUserTier => {
@@ -98,7 +98,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
                 }
                 
                 this.apiService.getSegmentationItemListForTheCurrentPartner().subscribe(segmentationItems => {
-                    this.segmentationItemsFormArray = this.baseFormService.initFormArray(this.formGroup, segmentationItems, this.segmentationItemModel, this.segmentationItemsFormArrayIdentifier, this.segmentationItemsTranslationKey);
+                    this.segmentationItemsFormArray = this.initFormArray(this.formGroup, segmentationItems, this.segmentationItemModel, this.segmentationItemsFormArrayIdentifier, this.segmentationItemsTranslationKey);
 
                     this.apiService.getCheckedSegmentationItemIdsForThePartnerUser(partnerUser.id).subscribe(ids => {
                         this.segmentationItemsFormArray.controls.forEach((formGroup: FormGroup) => {
@@ -110,7 +110,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
                 this.getAlreadyFilledSegmentationIdsForThePartnerUser(partnerUser);     
 
                 this.apiService.getUserExtended(partnerUser.userId).subscribe(user => {
-                    this.baseFormService.initFormGroup(this.userExtendedFormGroup, this.formGroup, new UserExtended(user), nameof<PartnerUserSaveBody>('userExtendedDTO'));
+                    this.initFormGroup(this.userExtendedFormGroup, this.formGroup, new UserExtended(user), nameof<PartnerUserSaveBody>('userExtendedDTO'));
 
                     this.apiService.getRolesNamebookListForUserExtended(user.id).subscribe(rolesForTheUser => {
                         this.selectedRoles.setValue(

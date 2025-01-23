@@ -9,6 +9,7 @@ export interface SpiderValidatorFn extends ValidatorFn {
 // FT: It's made like generic type because of <number>, <string> etc. not to put class like User.
 export class SpiderFormControl<T = any> extends FormControl<T> {
     public label: string;
+    public labelForDisplay: string;
     public required: boolean;
     private _spiderValidator: SpiderValidatorFn | null;
 
@@ -47,6 +48,8 @@ export class SpiderFormGroup<TValue = any> extends FormGroup {
     public mainDTOName?: string;
     public saveObservableMethod?: (saveBody: any) => Observable<any>;
     public initSaveBody?: () => BaseEntity = () => null;
+    // public setValidatorMethod?: (formControl: SpiderFormControl, className: string) => SpiderValidatorFn;
+    // public translateLabelMethod?: (formControlName: string) => string;
     public controlNamesFromHtml?: string[] = [];
 }
 

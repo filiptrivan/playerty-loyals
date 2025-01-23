@@ -25,9 +25,8 @@ export class SpiderMultiselectComponent extends BaseDropdownControl implements O
     
     constructor(
         protected override translocoService: TranslocoService,
-        protected override translateLabelsService: TranslateLabelsService,
     ) { 
-        super(translocoService, translateLabelsService);
+        super(translocoService);
     }
 
     override ngOnInit(){

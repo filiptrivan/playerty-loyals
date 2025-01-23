@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { VerificationWrapperComponent } from './verification-wrapper.component';
 import { TranslocoService } from '@jsverse/transloco';
-import { LayoutService } from 'src/app/layout/services/app.layout.service';
-import { AuthService } from '../../../business/services/auth/auth.service';
 import { SpiderMessageService } from '../../services/spider-message.service';
+import { AuthBaseService } from '../../services/auth-base.service';
 
 @Component({
     selector: 'login-verification',
@@ -18,8 +17,7 @@ export class LoginVerificationComponent implements OnInit {
     @Input() userId: number;
 
     constructor(
-      public layoutService: LayoutService, 
-      private authService: AuthService, 
+      private authService: AuthBaseService, 
       private messageService: SpiderMessageService,
       private translocoService: TranslocoService,
     ) { 

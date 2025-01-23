@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
-import { AuthService } from '../../business/services/auth/auth.service';
+import { AuthBaseService } from './auth-base.service';
 
 export function appInitializer(
-  authService: AuthService
+  authService: AuthBaseService
 ): () => Observable<any> {
   return () => authService.refreshToken();
 }

@@ -2,14 +2,11 @@ import { ChangeDetectorRef, Component, Input, KeyValueDiffers, OnInit } from '@a
 import { Segmentation, SegmentationItem } from 'src/app/business/entities/business-entities.generated';
 import { CardSkeletonComponent } from "../../../core/components/card-skeleton/card-skeleton.component";
 import { SpiderCheckboxComponent } from 'src/app/core/controls/spider-checkbox/spider-checkbox.component';
-import { FormGroup } from '@angular/forms';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 import { TranslocoService } from '@jsverse/transloco';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
-import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { SpiderFormArray, SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
 import { BaseFormService } from 'src/app/core/services/base-form.service';
 
@@ -29,7 +26,7 @@ export class SegmentationSelectComponent extends BaseFormCopy implements OnInit 
     @Input() allSegmentationItems: SegmentationItem[]; // All, we need to filter, it's better then making multiple requests
     @Input() partnerUserId: number;
     @Input() override formGroup: SpiderFormGroup;
-    @Input() segmentationItemsFormArray: SpiderFormArray<SegmentationItem[]>;
+    @Input() segmentationItemsFormArray: SpiderFormArray<SegmentationItem>;
     @Input() checkedSegmentationItemIdsForThePartnerUser: number[]; // FT: Because we are not changing it, we are not using nameof
     
     segmentationItemsForTheCurrentSegmentation: SegmentationItemIndex[] = []; // for the current segmentation
@@ -42,12 +39,10 @@ export class SegmentationSelectComponent extends BaseFormCopy implements OnInit 
         protected override router: Router, 
         protected override route: ActivatedRoute, 
         protected override translocoService: TranslocoService,
-        protected override translateClassNamesService: TranslateClassNamesService,
-        protected override validatorService: ValidatorService,
         protected override baseFormService: BaseFormService,
     ) 
     {
-        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService, baseFormService);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, baseFormService);
     }
          
     override ngOnInit() {

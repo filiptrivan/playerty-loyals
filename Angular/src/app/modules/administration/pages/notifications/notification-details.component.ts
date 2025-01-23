@@ -5,8 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { Notification } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
-import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { SpiderFormControl, SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
 import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
@@ -32,12 +30,10 @@ export class NotificationDetailsComponent extends BaseFormCopy implements OnInit
         protected override router: Router, 
         protected override route: ActivatedRoute,
         protected override translocoService: TranslocoService,
-        protected override translateClassNamesService: TranslateClassNamesService,
-        protected override validatorService: ValidatorService,
         protected override baseFormService: BaseFormService,
         private apiService: ApiService,
     ) {
-        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService, baseFormService);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, baseFormService);
     }
          
     override ngOnInit() {

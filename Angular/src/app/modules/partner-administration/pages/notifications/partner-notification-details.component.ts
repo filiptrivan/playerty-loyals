@@ -3,8 +3,6 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
-import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { SpiderFormControl, SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
 import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 import { PartnerNotification } from 'src/app/business/entities/business-entities.generated';
@@ -32,12 +30,10 @@ export class PartnerNotificationDetailsComponent extends BaseFormCopy implements
         protected override router: Router, 
         protected override route: ActivatedRoute,
         protected override translocoService: TranslocoService,
-        protected override translateClassNamesService: TranslateClassNamesService,
-        protected override validatorService: ValidatorService,
         protected override baseFormService: BaseFormService,
         private apiService: ApiService,
     ) {
-        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService, baseFormService);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, baseFormService);
     }
          
     override ngOnInit() {

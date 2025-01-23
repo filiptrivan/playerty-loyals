@@ -1,28 +1,42 @@
-import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { Injectable } from '@angular/core';
 import { SpiderFormArray, SpiderFormControl, SpiderFormGroup } from '../components/spider-form-control/spider-form-control';
 import { BaseEntity } from '../entities/base-entity';
+import { TranslateLabelsAbstractService } from './translate-labels-abstract.service';
+import { ValidatorAbstractService } from './validator-abstract.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BaseFormService {
   constructor(
-    private validatorService: ValidatorService
+    private translateLabelsService: TranslateLabelsAbstractService,
+    private validatorService: ValidatorAbstractService,
   ) {}
 
-  initFormGroup<T>(formGroup: SpiderFormGroup<T>, parentFormGroup: SpiderFormGroup, modelConstructor: any, propertyNameInSaveBody: string, updateOnChangeControls?: (keyof T)[]): void {
+  initFormGroup<T>(
+    formGroup: SpiderFormGroup<T>, 
+    parentFormGroup: SpiderFormGroup, 
+    modelConstructor: any, 
+    propertyNameInSaveBody: string,
+    updateOnChangeControls?: (keyof T)[])
+  {
     if (modelConstructor == null)
       return null;
 
     if (formGroup == null)
       console.error('FT: You need to instantiate the form group.')
 
-    this.createFormGroup(formGroup, modelConstructor, null, updateOnChangeControls);
+    this.createFormGroup(formGroup, modelConstructor, updateOnChangeControls);
     parentFormGroup.addControl(propertyNameInSaveBody, formGroup);
+
+    return formGroup;
   }
 
-  createFormGroup<T>(formGroup: SpiderFormGroup<T>, modelConstructor: T & BaseEntity, disableLambda?: (formControlName: string, model: any) => boolean, updateOnChangeControls?: (keyof any)[]): void {
+  createFormGroup<T>(
+    formGroup: SpiderFormGroup<T>, 
+    modelConstructor: T & BaseEntity, 
+    updateOnChangeControls?: (keyof T)[])
+  {
     if (formGroup == null)
       console.error('FT: You need to instantiate the form group.')
 
@@ -31,7 +45,7 @@ export class BaseFormService {
       
       const formControlValue = modelConstructor[formControlName];
       
-      if (updateOnChangeControls?.includes(formControlName) ||
+      if (updateOnChangeControls?.includes(formControlName as keyof T) ||
         (formControlName.endsWith('Id') && formControlName.length > 2)
       )
         formControl = new SpiderFormControl(formControlValue, { updateOn: 'change' });
@@ -39,40 +53,56 @@ export class BaseFormService {
         formControl = new SpiderFormControl(formControlValue, { updateOn: 'blur' });
 
       formControl.label = formControlName;
-      
+      formControl.labelForDisplay = this.getTranslatedLabel(formControlName);
+
       formGroup.addControl(formControlName, formControl);
 
-      this.setValidator(formControl, modelConstructor);
-      
-      if(disableLambda && disableLambda(formControlName, modelConstructor)){
-        formControl.disable();
-      }
+      this.validatorService.setValidator(formControl, modelConstructor.typeName);
     });
+
+    return formGroup;
   }
 
-  setValidator<T>(formControl: SpiderFormControl, modelConstructor: T & BaseEntity) {
-    if (formControl == null) return null;
+  getTranslatedLabel(formControlName: string): string {
+    if (formControlName.endsWith('Id') && formControlName.length > 2) {
+      formControlName = formControlName.substring(0, formControlName.length - 2);
+    } 
+    else if (formControlName.endsWith('DisplayName')) {
+      formControlName = formControlName.replace('DisplayName', '');
+    } 
 
-    this.validatorService.setValidator(formControl, modelConstructor.typeName);
+    return this.translateLabelsService.translate(formControlName);
   }
 
-  getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
+  getFormArrayGroups<T>(formArray: SpiderFormArray<T>): SpiderFormGroup<T>[]{
     return formArray.controls as SpiderFormGroup<T>[]
   }
 
-  addNewFormGroupToFormArray<T>(formArray: SpiderFormArray, modelConstructor: T & BaseEntity, index: number, disableLambda?: (formControlName: string, model: any) => boolean) {
-    let helperFormGroup: SpiderFormGroup = new SpiderFormGroup({});
-    this.createFormGroup(helperFormGroup, modelConstructor, disableLambda);
+  addNewFormGroupToFormArray<T>(
+    formArray: SpiderFormArray<T>, 
+    modelConstructor: T & BaseEntity,
+    index: number,
+  ) : SpiderFormGroup {
+    let helperFormGroup = new SpiderFormGroup({});
+    this.createFormGroup(helperFormGroup, modelConstructor);
     
     if (index == null) {
       formArray.push(helperFormGroup);
     }else{
       formArray.insert(index, helperFormGroup);
     }
+
+    return helperFormGroup;
   }
 
-  // FT HACK: Using modelConstructor because generics can't instantiate in TS (because JS)
-  initFormArray<T>(parentFormGroup: SpiderFormGroup, modelList: (T & BaseEntity)[], modelConstructor: T & BaseEntity, formArraySaveBodyName: string, formArrayTranslationKey: string, required: boolean = false, disableLambda?: (formControlName: string, model: any) => boolean){
+  initFormArray<T>(
+    parentFormGroup: SpiderFormGroup, 
+    modelList: (T & BaseEntity)[], 
+    modelConstructor: T & BaseEntity, 
+    formArraySaveBodyName: string, 
+    formArrayTranslationKey: string, 
+    required: boolean = false)
+  {
     if (modelList == null)
       return null;
 
@@ -84,7 +114,7 @@ export class BaseFormService {
     modelList.forEach(model => {
       Object.assign(modelConstructor, model);
       let helperFormGroup: SpiderFormGroup = new SpiderFormGroup({});
-      this.createFormGroup(helperFormGroup, formArray.modelConstructor, disableLambda)
+      this.createFormGroup(helperFormGroup, formArray.modelConstructor);
       formArray.push(helperFormGroup);
     });
 

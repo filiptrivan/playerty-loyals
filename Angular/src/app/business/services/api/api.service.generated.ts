@@ -9,25 +9,25 @@ import { SimpleSaveResult } from 'src/app/core/entities/simple-save-result';
 import { TableFilter } from 'src/app/core/entities/table-filter';
 import { TableResponse } from 'src/app/core/entities/table-response';
 import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
-import { UpdatePoints } from '../../entities/business-entities.generated';
-import { PartnerRoleSaveBody } from '../../entities/business-entities.generated';
-import { BusinessSystemTierDiscountProductGroup } from '../../entities/business-entities.generated';
-import { QrCode } from '../../entities/business-entities.generated';
+import { Brand } from '../../entities/business-entities.generated';
+import { BusinessSystemUpdatePointsDataBody } from '../../entities/business-entities.generated';
 import { ExcelManualUpdatePoints } from '../../entities/business-entities.generated';
 import { ExternalDiscountProductGroup } from '../../entities/business-entities.generated';
 import { ExternalTransaction } from '../../entities/business-entities.generated';
-import { TierSaveBody } from '../../entities/business-entities.generated';
 import { MergedPartnerUser } from '../../entities/business-entities.generated';
-import { PartnerNotificationSaveBody } from '../../entities/business-entities.generated';
-import { SegmentationItem } from '../../entities/business-entities.generated';
-import { BusinessSystemTier } from '../../entities/business-entities.generated';
-import { Brand } from '../../entities/business-entities.generated';
-import { PartnerUserSaveBody } from '../../entities/business-entities.generated';
-import { UserExtendedSaveBody } from '../../entities/business-entities.generated';
 import { Product } from '../../entities/business-entities.generated';
-import { NotificationSaveBody } from '../../entities/business-entities.generated';
-import { BusinessSystemUpdatePointsDataBody } from '../../entities/business-entities.generated';
+import { QrCode } from '../../entities/business-entities.generated';
+import { UpdatePoints } from '../../entities/business-entities.generated';
+import { BusinessSystemTierDiscountProductGroup } from '../../entities/business-entities.generated';
+import { BusinessSystemTier } from '../../entities/business-entities.generated';
 import { Notification } from '../../entities/business-entities.generated';
+import { NotificationSaveBody } from '../../entities/business-entities.generated';
+import { PartnerNotificationSaveBody } from '../../entities/business-entities.generated';
+import { PartnerRoleSaveBody } from '../../entities/business-entities.generated';
+import { PartnerUserSaveBody } from '../../entities/business-entities.generated';
+import { SegmentationItem } from '../../entities/business-entities.generated';
+import { TierSaveBody } from '../../entities/business-entities.generated';
+import { UserExtendedSaveBody } from '../../entities/business-entities.generated';
 import { BusinessSystem } from '../../entities/business-entities.generated';
 import { BusinessSystemSaveBody } from '../../entities/business-entities.generated';
 import { BusinessSystemTierSaveBody } from '../../entities/business-entities.generated';
@@ -64,18 +64,18 @@ import { TransactionSaveBody } from '../../entities/business-entities.generated'
 import { UserExtended } from '../../entities/business-entities.generated';
 import { UserNotification } from '../../entities/business-entities.generated';
 import { UserNotificationSaveBody } from '../../entities/business-entities.generated';
-import { RefreshTokenRequest } from '../../entities/security-entities.generated';
-import { JwtAuthResult } from '../../entities/security-entities.generated';
-import { RoleSaveBody } from '../../entities/security-entities.generated';
-import { ExternalProvider } from '../../entities/security-entities.generated';
-import { Login } from '../../entities/security-entities.generated';
 import { AuthResult } from '../../entities/security-entities.generated';
-import { VerificationTokenRequest } from '../../entities/security-entities.generated';
-import { RefreshToken } from '../../entities/security-entities.generated';
-import { RegistrationVerificationToken } from '../../entities/security-entities.generated';
-import { RegistrationVerificationResult } from '../../entities/security-entities.generated';
+import { ExternalProvider } from '../../entities/security-entities.generated';
+import { JwtAuthResult } from '../../entities/security-entities.generated';
+import { Login } from '../../entities/security-entities.generated';
 import { LoginVerificationToken } from '../../entities/security-entities.generated';
+import { RefreshToken } from '../../entities/security-entities.generated';
+import { RefreshTokenRequest } from '../../entities/security-entities.generated';
 import { Registration } from '../../entities/security-entities.generated';
+import { RegistrationVerificationResult } from '../../entities/security-entities.generated';
+import { RegistrationVerificationToken } from '../../entities/security-entities.generated';
+import { RoleSaveBody } from '../../entities/security-entities.generated';
+import { VerificationTokenRequest } from '../../entities/security-entities.generated';
 import { Permission } from '../../entities/security-entities.generated';
 import { PermissionSaveBody } from '../../entities/security-entities.generated';
 import { Role } from '../../entities/security-entities.generated';
@@ -390,44 +390,52 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.get<Namebook[]>(`${environment.apiUrl}/UserExtended/GetGenderListForDropdown`, environment.httpSkipSpinnerOptions);
     }
 
-    getUserExtendedTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<UserExtended>> => { 
-        return this.http.post<TableResponse<UserExtended>>(`${environment.apiUrl}/UserExtended/GetUserExtendedTableData`, tableFilterDTO, environment.httpSkipSpinnerOptions);
+    getNotificationTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<Notification>> => { 
+        return this.http.post<TableResponse<Notification>>(`${environment.apiUrl}/Notification/GetNotificationTableData`, tableFilterDTO, environment.httpSkipSpinnerOptions);
     }
 
-    exportUserExtendedTableDataToExcel = (tableFilterDTO: TableFilter): Observable<any> => { 
-        return this.http.post(`${environment.apiUrl}/UserExtended/ExportUserExtendedTableDataToExcel`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
+    exportNotificationTableDataToExcel = (tableFilterDTO: TableFilter): Observable<any> => { 
+        return this.http.post(`${environment.apiUrl}/Notification/ExportNotificationTableDataToExcel`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
     }
 
-    getUserExtendedList = (): Observable<UserExtended[]> => { 
-        return this.http.get<UserExtended[]>(`${environment.apiUrl}/UserExtended/GetUserExtendedList`, environment.httpOptions);
+    getNotificationList = (): Observable<Notification[]> => { 
+        return this.http.get<Notification[]>(`${environment.apiUrl}/Notification/GetNotificationList`, environment.httpOptions);
     }
 
-    getUserExtended = (id: number): Observable<UserExtended> => { 
-        return this.http.get<UserExtended>(`${environment.apiUrl}/UserExtended/GetUserExtended?id=${id}`, environment.httpOptions);
+    getNotification = (id: number): Observable<Notification> => { 
+        return this.http.get<Notification>(`${environment.apiUrl}/Notification/GetNotification?id=${id}`, environment.httpOptions);
     }
 
-    getUserExtendedListForAutocomplete = (limit: number, query: string): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/UserExtended/GetUserExtendedListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
+    getNotificationListForAutocomplete = (limit: number, query: string): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Notification/GetNotificationListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
     }
 
-    getUserExtendedListForDropdown = (): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/UserExtended/GetUserExtendedListForDropdown`, environment.httpSkipSpinnerOptions);
-    }
-
-
-
-    getRolesNamebookListForUserExtended = (id: number): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/UserExtended/GetRolesNamebookListForUserExtended?id=${id}`, environment.httpSkipSpinnerOptions);
-    }
-
-    saveUserExtended = (saveBodyDTO: UserExtendedSaveBody): Observable<UserExtendedSaveBody> => { 
-        return this.http.put<UserExtendedSaveBody>(`${environment.apiUrl}/UserExtended/SaveUserExtended`, saveBodyDTO, environment.httpOptions);
+    getNotificationListForDropdown = (): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/Notification/GetNotificationListForDropdown`, environment.httpSkipSpinnerOptions);
     }
 
 
 
-    deleteUserExtended = (id: number): Observable<any> => { 
-        return this.http.delete(`${environment.apiUrl}/UserExtended/DeleteUserExtended?id=${id}`, environment.httpOptions);
+    getRecipientsTableDataForNotification = (tableFilterDTO: TableFilter): Observable<TableResponse<UserExtended>> => { 
+        return this.http.post<TableResponse<UserExtended>>(`${environment.apiUrl}/Notification/GetRecipientsTableDataForNotification`, tableFilterDTO, environment.httpSkipSpinnerOptions);
+    }
+
+    exportRecipientsTableDataToExcelForNotification = (tableFilterDTO: TableFilter): Observable<any> => { 
+        return this.http.post(`${environment.apiUrl}/Notification/ExportRecipientsTableDataToExcelForNotification`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
+    }
+
+    lazyLoadSelectedRecipientsIdsForNotification = (tableFilterDTO: TableFilter): Observable<LazyLoadSelectedIdsResult> => { 
+        return this.http.post<LazyLoadSelectedIdsResult>(`${environment.apiUrl}/Notification/LazyLoadSelectedRecipientsIdsForNotification`, tableFilterDTO, environment.httpSkipSpinnerOptions);
+    }
+
+    saveNotification = (saveBodyDTO: NotificationSaveBody): Observable<NotificationSaveBody> => { 
+        return this.http.put<NotificationSaveBody>(`${environment.apiUrl}/Notification/SaveNotification`, saveBodyDTO, environment.httpOptions);
+    }
+
+
+
+    deleteNotification = (id: number): Observable<any> => { 
+        return this.http.delete(`${environment.apiUrl}/Notification/DeleteNotification?id=${id}`, environment.httpOptions);
     }
 
 
@@ -550,55 +558,6 @@ export class ApiGeneratedService extends ApiSecurityService {
     }
 
 
-    getNotificationTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<Notification>> => { 
-        return this.http.post<TableResponse<Notification>>(`${environment.apiUrl}/Notification/GetNotificationTableData`, tableFilterDTO, environment.httpSkipSpinnerOptions);
-    }
-
-    exportNotificationTableDataToExcel = (tableFilterDTO: TableFilter): Observable<any> => { 
-        return this.http.post(`${environment.apiUrl}/Notification/ExportNotificationTableDataToExcel`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
-    }
-
-    getNotificationList = (): Observable<Notification[]> => { 
-        return this.http.get<Notification[]>(`${environment.apiUrl}/Notification/GetNotificationList`, environment.httpOptions);
-    }
-
-    getNotification = (id: number): Observable<Notification> => { 
-        return this.http.get<Notification>(`${environment.apiUrl}/Notification/GetNotification?id=${id}`, environment.httpOptions);
-    }
-
-    getNotificationListForAutocomplete = (limit: number, query: string): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Notification/GetNotificationListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
-    }
-
-    getNotificationListForDropdown = (): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${environment.apiUrl}/Notification/GetNotificationListForDropdown`, environment.httpSkipSpinnerOptions);
-    }
-
-
-
-    getRecipientsTableDataForNotification = (tableFilterDTO: TableFilter): Observable<TableResponse<UserExtended>> => { 
-        return this.http.post<TableResponse<UserExtended>>(`${environment.apiUrl}/Notification/GetRecipientsTableDataForNotification`, tableFilterDTO, environment.httpSkipSpinnerOptions);
-    }
-
-    exportRecipientsTableDataToExcelForNotification = (tableFilterDTO: TableFilter): Observable<any> => { 
-        return this.http.post(`${environment.apiUrl}/Notification/ExportRecipientsTableDataToExcelForNotification`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
-    }
-
-    lazyLoadSelectedRecipientsIdsForNotification = (tableFilterDTO: TableFilter): Observable<LazyLoadSelectedIdsResult> => { 
-        return this.http.post<LazyLoadSelectedIdsResult>(`${environment.apiUrl}/Notification/LazyLoadSelectedRecipientsIdsForNotification`, tableFilterDTO, environment.httpSkipSpinnerOptions);
-    }
-
-    saveNotification = (saveBodyDTO: NotificationSaveBody): Observable<NotificationSaveBody> => { 
-        return this.http.put<NotificationSaveBody>(`${environment.apiUrl}/Notification/SaveNotification`, saveBodyDTO, environment.httpOptions);
-    }
-
-
-
-    deleteNotification = (id: number): Observable<any> => { 
-        return this.http.delete(`${environment.apiUrl}/Notification/DeleteNotification?id=${id}`, environment.httpOptions);
-    }
-
-
 
 
 
@@ -633,6 +592,47 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     deleteSegmentation = (id: number): Observable<any> => { 
         return this.http.delete(`${environment.apiUrl}/Segmentation/DeleteSegmentation?id=${id}`, environment.httpOptions);
+    }
+
+
+    getUserExtendedTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<UserExtended>> => { 
+        return this.http.post<TableResponse<UserExtended>>(`${environment.apiUrl}/UserExtended/GetUserExtendedTableData`, tableFilterDTO, environment.httpSkipSpinnerOptions);
+    }
+
+    exportUserExtendedTableDataToExcel = (tableFilterDTO: TableFilter): Observable<any> => { 
+        return this.http.post(`${environment.apiUrl}/UserExtended/ExportUserExtendedTableDataToExcel`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
+    }
+
+    getUserExtendedList = (): Observable<UserExtended[]> => { 
+        return this.http.get<UserExtended[]>(`${environment.apiUrl}/UserExtended/GetUserExtendedList`, environment.httpOptions);
+    }
+
+    getUserExtended = (id: number): Observable<UserExtended> => { 
+        return this.http.get<UserExtended>(`${environment.apiUrl}/UserExtended/GetUserExtended?id=${id}`, environment.httpOptions);
+    }
+
+    getUserExtendedListForAutocomplete = (limit: number, query: string): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/UserExtended/GetUserExtendedListForAutocomplete?limit=${limit}&query=${query}`, environment.httpSkipSpinnerOptions);
+    }
+
+    getUserExtendedListForDropdown = (): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/UserExtended/GetUserExtendedListForDropdown`, environment.httpSkipSpinnerOptions);
+    }
+
+
+
+    getRolesNamebookListForUserExtended = (id: number): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${environment.apiUrl}/UserExtended/GetRolesNamebookListForUserExtended?id=${id}`, environment.httpSkipSpinnerOptions);
+    }
+
+    saveUserExtended = (saveBodyDTO: UserExtendedSaveBody): Observable<UserExtendedSaveBody> => { 
+        return this.http.put<UserExtendedSaveBody>(`${environment.apiUrl}/UserExtended/SaveUserExtended`, saveBodyDTO, environment.httpOptions);
+    }
+
+
+
+    deleteUserExtended = (id: number): Observable<any> => { 
+        return this.http.delete(`${environment.apiUrl}/UserExtended/DeleteUserExtended?id=${id}`, environment.httpOptions);
     }
 
 

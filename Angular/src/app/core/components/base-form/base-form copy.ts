@@ -7,15 +7,13 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { SpiderFormArray, SpiderFormControl, SpiderFormGroup } from '../spider-form-control/spider-form-control';
+import { SpiderFormArray, SpiderFormControl, SpiderFormGroup, SpiderValidatorFn } from '../spider-form-control/spider-form-control';
 import { HttpClient } from '@angular/common/http';
 import { SpiderMessageService } from '../../services/spider-message.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { getControl, getParentUrl, singleOrDefault } from '../../services/helper-functions';
 import { TranslocoService } from '@jsverse/transloco';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
-import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseEntity } from '../../entities/base-entity';
 import { SpiderTab } from '../spider-panels/panel-header/panel-header.component';
 import { LastMenuIconIndexClicked } from '../../entities/last-menu-icon-index-clicked';
@@ -42,8 +40,6 @@ export class BaseFormCopy implements OnInit {
     protected router: Router, 
     protected route: ActivatedRoute,
     protected translocoService: TranslocoService,
-    protected translateClassNamesService: TranslateClassNamesService,
-    protected validatorService: ValidatorService,
     protected baseFormService: BaseFormService,
   ) {
   }
@@ -52,6 +48,28 @@ export class BaseFormCopy implements OnInit {
   }
 
   //#region Model
+
+  initFormGroup<T>(
+    formGroup: SpiderFormGroup<T>, 
+    parentFormGroup: SpiderFormGroup, 
+    modelConstructor: any, 
+    propertyNameInSaveBody: string,
+    updateOnChangeControls?: (keyof T)[])
+  {
+    return this.baseFormService.initFormGroup(
+      formGroup, parentFormGroup, modelConstructor, propertyNameInSaveBody, updateOnChangeControls
+    );
+  }
+
+  createFormGroup<T>(
+    formGroup: SpiderFormGroup<T>, 
+    modelConstructor: T & BaseEntity, 
+    updateOnChangeControls?: (keyof T)[])
+  {
+    return this.baseFormService.createFormGroup(
+      formGroup, modelConstructor, updateOnChangeControls
+    );
+  }
 
   control<T extends BaseEntity>(formControlName: string & keyof T, formGroup: SpiderFormGroup<T>) {
     return getControl(formControlName, formGroup);
@@ -218,29 +236,8 @@ export class BaseFormCopy implements OnInit {
   //#endregion
 
   //#region Model List
-
-  // FT HACK: Using modelConstructor because generics can't instantiate in TS (because JS)
-  // initFormArray(parentFormGroup: SpiderFormGroup, modelList: any[], modelConstructor: any, formArraySaveBodyName: string, formArrayTranslationKey: string, required: boolean = false, disableLambda?: (formControlName: string, model: any) => boolean){
-  //   if (modelList == null)
-  //     return null;
-
-  //   let formArray: SpiderFormArray = new SpiderFormArray([]);
-  //   formArray.required = required;
-  //   formArray.modelConstructor = modelConstructor;
-  //   formArray.translationKey = formArrayTranslationKey;
-
-  //   modelList.forEach(model => {
-  //     Object.assign(modelConstructor, model);
-  //     formArray.push(this.baseFormService.createFormGroup(modelConstructor, disableLambda));
-  //   });
-
-  //   parentFormGroup.addControl(formArraySaveBodyName, formArray);
-
-  //   return formArray;
-  // }
   
-  // FT: Need to use this from html because can't do "as SpiderFormControl" there
-  getFormArrayControlByIndex<T>(formControlName: keyof T & string, formArray: SpiderFormArray<T[]>, index: number, filter?: (formGroups: SpiderFormGroup<T>[]) => SpiderFormGroup<T>[]): SpiderFormControl {
+  getFormArrayControlByIndex<T>(formControlName: keyof T & string, formArray: SpiderFormArray<T>, index: number, filter?: (formGroups: SpiderFormGroup<T>[]) => SpiderFormGroup<T>[]): SpiderFormControl {
     if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
       this.formArrayControlNamesFromHtml.push(formControlName);
 
@@ -260,7 +257,7 @@ export class BaseFormCopy implements OnInit {
     if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
       this.formArrayControlNamesFromHtml.push(formControlName);
 
-    let formArray: SpiderFormArray<T[]> = this.formGroup.controls[formArraySaveBodyName] as unknown as SpiderFormArray;
+    let formArray: SpiderFormArray<T> = this.formGroup.controls[formArraySaveBodyName] as unknown as SpiderFormArray;
 
     let filteredFormGroups: SpiderFormGroup<T>[];
 
@@ -274,21 +271,29 @@ export class BaseFormCopy implements OnInit {
     return filteredFormGroups.map(x => x.controls[formControlName] as SpiderFormControl);
   }
 
-  // FT: Need to use this from html because can't do "as SpiderFormControl" there
-  // FT: Don't uncomment this, if you realy don't need.
-  // getFormArrayControlById(formControlName: string, formArraySaveBodyName: string, id: number): SpiderFormControl{
-  //   if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
-  //     this.formArrayControlNamesFromHtml.push(formControlName);
-
-  //   return ((this.formGroup.controls[formArraySaveBodyName] as SpiderFormArray)?.controls?.filter(x => x.getRawValue().id == id)[0] as FormGroup)?.controls[formControlName] as SpiderFormControl;
-  // }
-
-  // getFormArrayGroup(index: number): FormGroup{
-  //   return this.formArray.controls[index] as FormGroup
-  // }
-
-  getFormArrayGroups<T>(formArray: SpiderFormArray<T[]>): SpiderFormGroup<T>[]{
+  getFormArrayGroups<T>(formArray: SpiderFormArray<T>): SpiderFormGroup<T>[]{
     return this.baseFormService.getFormArrayGroups(formArray);
+  }
+
+  addNewFormGroupToFormArray<T>(
+    formArray: SpiderFormArray<T>, 
+    modelConstructor: T & BaseEntity,
+    index: number,
+  ) : SpiderFormGroup {
+    return this.baseFormService.addNewFormGroupToFormArray(formArray, modelConstructor, index)
+  }
+
+  initFormArray<T>(
+    parentFormGroup: SpiderFormGroup, 
+    modelList: (T & BaseEntity)[], 
+    modelConstructor: T & BaseEntity, 
+    formArraySaveBodyName: string, 
+    formArrayTranslationKey: string, 
+    required: boolean = false)
+  {
+    return this.baseFormService.initFormArray<T>(
+      parentFormGroup, modelList, modelConstructor, formArraySaveBodyName, formArrayTranslationKey, required
+    );
   }
 
   removeFormControlFromTheFormArray(formArray: SpiderFormArray, index: number) {
@@ -331,7 +336,7 @@ export class BaseFormCopy implements OnInit {
 
         if (formArray.required == true && formArray.length == 0) {
           invalid = true;
-          this.messageService.warningMessage(this.translocoService.translate('ListCanNotBeEmpty', {value: this.translateClassNamesService.translate(formArray.translationKey)}))
+          this.messageService.warningMessage(this.translocoService.translate('ListCanNotBeEmpty'));
         }
       }
     });
@@ -348,7 +353,12 @@ export class BaseFormCopy implements OnInit {
   onAfterSaveListRequest(){}
 
   // FT: Sending LastMenuIconIndexClicked class because of reference type
-  getCrudMenuForOrderedData = (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean = false): MenuItem[] => {
+  getCrudMenuForOrderedData = (
+    formArray: SpiderFormArray, 
+    modelConstructor: BaseEntity, 
+    lastMenuIconIndexClicked: LastMenuIconIndexClicked, 
+    adjustFormArrayManually: boolean = false
+  ): MenuItem[] => {
     let crudMenuForOrderedData: MenuItem[] = [
         {label: this.translocoService.translate('Remove'), icon: 'pi pi-minus', command: () => {
           this.onBeforeRemove(formArray, modelConstructor, lastMenuIconIndexClicked.index);
@@ -359,13 +369,17 @@ export class BaseFormCopy implements OnInit {
         {label: this.translocoService.translate('AddAbove'), icon: 'pi pi-arrow-up', command: () => {
           this.onBeforeAddAbove(formArray, modelConstructor, lastMenuIconIndexClicked.index);
           if (adjustFormArrayManually === false) {
-            this.baseFormService.addNewFormGroupToFormArray(formArray, modelConstructor, lastMenuIconIndexClicked.index);
+            this.baseFormService.addNewFormGroupToFormArray(
+              formArray, modelConstructor, lastMenuIconIndexClicked.index
+            );
           }
         }},
         {label: this.translocoService.translate('AddBelow'), icon: 'pi pi-arrow-down', command: () => {
           this.onBeforeAddBelow(formArray, modelConstructor, lastMenuIconIndexClicked.index);
           if (adjustFormArrayManually === false) {
-            this.baseFormService.addNewFormGroupToFormArray(formArray, modelConstructor, lastMenuIconIndexClicked.index + 1);
+            this.baseFormService.addNewFormGroupToFormArray(
+              formArray, modelConstructor, lastMenuIconIndexClicked.index + 1
+            );
           }
         }},
     ];

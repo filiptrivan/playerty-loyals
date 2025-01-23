@@ -1,21 +1,27 @@
-import { ValidationErrors } from "@angular/forms";
+import { FormControl, ValidationErrors } from "@angular/forms";
 import { SpiderFormArray, SpiderFormControl, SpiderValidatorFn } from "src/app/core/components/spider-form-control/spider-form-control";
 import { TranslocoService } from '@jsverse/transloco';
 import { Injectable } from '@angular/core';
 import { ValidatorServiceGenerated } from "./validation-rules.generated";
+import { ValidatorAbstractService } from "src/app/core/services/validator-abstract.service";
 
 @Injectable({
     providedIn: 'root',
 })
-export class ValidatorService extends ValidatorServiceGenerated {
+export class ValidatorService extends ValidatorAbstractService {
 
     constructor(
-        protected override translocoService: TranslocoService,
+        private translocoService: TranslocoService,
+        private validatorServiceGenerated: ValidatorServiceGenerated,
     ) {
-        super(translocoService)
+        super();
     }
 
-    isArrayEmpty(control: SpiderFormControl): SpiderValidatorFn {
+    override setValidator = (formControl: SpiderFormControl, className: string): SpiderValidatorFn => {
+        return this.validatorServiceGenerated.setValidator(formControl, className);
+    }
+
+    isArrayEmpty = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
     
@@ -30,7 +36,7 @@ export class ValidatorService extends ValidatorServiceGenerated {
         return validator;
     }
 
-    notEmpty(control: SpiderFormControl): void {
+    notEmpty = (control: SpiderFormControl): void => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
     
@@ -46,7 +52,7 @@ export class ValidatorService extends ValidatorServiceGenerated {
         control.updateValueAndValidity();
     }
     
-    isFormArrayEmpty(control: SpiderFormArray): SpiderValidatorFn {
+    isFormArrayEmpty = (control: SpiderFormArray): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control;
     

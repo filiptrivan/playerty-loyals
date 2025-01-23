@@ -25,7 +25,6 @@ import { TranslateLabelsService } from 'src/app/business/services/translates/mer
     
     constructor(
       protected translocoService: TranslocoService,
-      protected translateLabelsService: TranslateLabelsService,
     ) {
 
     }
@@ -45,21 +44,7 @@ import { TranslateLabelsService } from 'src/app/business/services/translates/mer
     }
 
     getTranslatedLabel(): string{
-        if(this.label == null){
-          let formControlName = this.control?.label;
-
-          if (formControlName.endsWith('Id') && formControlName.length > 2) {
-            formControlName = formControlName.substring(0, formControlName.length - 2);
-          } 
-          else if (formControlName.endsWith('DisplayName')) {
-            formControlName = formControlName.replace('DisplayName', '');
-          } 
-
-          return this.translateLabelsService.translate(formControlName);
-        }
-        else{
-          return this.label;
-        }
+      return this.label ?? this.control.labelForDisplay;
     }
 
     getValidationErrrorMessages(){

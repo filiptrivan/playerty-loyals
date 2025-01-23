@@ -19,6 +19,12 @@ import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { environment } from 'src/environments/environment';
 import { BusinessModule } from './business/business.module';
 import { SpiderTranslocoModule } from './core/modules/spider-transloco.module';
+import { TranslateLabelsAbstractService } from './core/services/translate-labels-abstract.service';
+import { TranslateLabelsService } from './business/services/translates/merge-labels';
+import { ValidatorAbstractService } from './core/services/validator-abstract.service';
+import { ValidatorService } from './business/services/validators/validation-rules';
+import { AuthBaseService } from './core/services/auth-base.service';
+import { AuthService } from './business/services/auth/auth.service';
 
 @NgModule({
   declarations: [
@@ -69,6 +75,18 @@ import { SpiderTranslocoModule } from './core/modules/spider-transloco.module';
           console.error(err);
         }
       } as SocialAuthServiceConfig
+    },
+    {
+      provide: ValidatorAbstractService,
+      useClass: ValidatorService,
+    },
+    {
+      provide: TranslateLabelsAbstractService,
+      useClass: TranslateLabelsService,
+    },
+    { 
+      provide: AuthBaseService, 
+      useExisting: AuthService 
     },
     ApiService,
     NgxSpinnerService,

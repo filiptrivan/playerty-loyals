@@ -5,8 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { BusinessSystem, BusinessSystemUpdatePointsDataBody, UpdatePoints, ExcelManualUpdatePoints } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
-import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 import { Column } from 'src/app/core/components/spider-data-table/spider-data-table.component';
@@ -50,12 +48,10 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
         protected override router: Router, 
         protected override route: ActivatedRoute, 
         protected override translocoService: TranslocoService,
-        protected override translateClassNamesService: TranslateClassNamesService,
-        protected override validatorService: ValidatorService,
         protected override baseFormService: BaseFormService,
         private apiService: ApiService,
     ) {
-        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, translateClassNamesService, validatorService, baseFormService);
+        super(differs, http, messageService, changeDetectorRef, router, route, translocoService, baseFormService);
     }
          
     override ngOnInit() {
@@ -84,7 +80,7 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
 
     initBusinessSystemUpdatePointsDataFormGroup = () => {
-        this.baseFormService.createFormGroup(
+        this.createFormGroup(
             this.businessSystemUpdatePointsDataFormGroup, 
             new BusinessSystemUpdatePointsDataBody({
                 businessSystemId: this.businessSystemFormGroup.controls.id.getRawValue(), 
@@ -111,7 +107,7 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
     
     initManualUpdatePointsFormGroup = () => {
-        this.baseFormService.createFormGroup(
+        this.createFormGroup(
             this.manualUpdatePointsFormGroup, 
             new UpdatePoints({
                 businessSystemId: this.businessSystemFormGroup.controls.id.getRawValue(), 
@@ -135,7 +131,7 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
     
     initExcelManualUpdatePointsFormGroup = () => {
-        this.baseFormService.createFormGroup(this.excelManualUpdatePointsFormGroup, new ExcelManualUpdatePoints({}));
+        this.createFormGroup(this.excelManualUpdatePointsFormGroup, new ExcelManualUpdatePoints({}));
     }
 
     onSelectedExcelManualUpdateFile(event: SpiderFileSelectEvent){
