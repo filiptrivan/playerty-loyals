@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { environment } from "src/environments/environment.prod";
 import { LayoutService } from "src/app/layout/services/app.layout.service";
 import { GoogleButtonComponent } from "../../../../core/components/google-button/google-button.component";
 import { CommonModule } from "@angular/common";
@@ -7,6 +6,7 @@ import { PartnerService } from "src/app/business/services/helpers/partner.servic
 import { getHtmlImgDisplayString64 } from "src/app/core/services/helper-functions";
 import { Subscription } from "rxjs";
 import { TranslocoDirective } from "@jsverse/transloco";
+import { ConfigService } from "src/app/business/services/config.service";
 
 @Component({
   selector: 'auth',
@@ -25,11 +25,17 @@ export class AuthComponent {
     @Input() showGoogleAuth: boolean = true;
     @Output() onCompanyNameChange: EventEmitter<string> = new EventEmitter();
 
-    hasGoogleAuth: boolean = environment.googleAuth;
+    hasGoogleAuth: boolean = this.config.googleAuth;
     companyName: string;
     image: string;
     
-    constructor(public layoutService: LayoutService, private partnerService: PartnerService) {}
+    constructor(
+      public layoutService: LayoutService, 
+      private partnerService: PartnerService,
+      private config: ConfigService
+    ) {
+
+    }
 
     ngOnInit(){
       this.partnerSubscription = this.partnerService.partner$.subscribe(partner => {
@@ -39,7 +45,7 @@ export class AuthComponent {
           this.image = `assets/primeng/images/${this.layoutService.config.colorScheme === 'light' ? 'logo-dark' : 'logo-white'}.svg`
         }
         
-        this.companyName = partner?.name ?? environment.companyName;
+        this.companyName = partner?.name ?? this.config.companyName;
         this.onCompanyNameChange.next(this.companyName);
       });
     }

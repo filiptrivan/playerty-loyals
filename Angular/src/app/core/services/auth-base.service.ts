@@ -3,15 +3,15 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, Subject, Subscription } from 'rxjs';
 import { map, tap, delay, finalize } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { SocialUser, SocialAuthService } from '@abacritt/angularx-social-login';
-import { ExternalProvider, Login, VerificationTokenRequest, AuthResult, Registration, RegistrationVerificationResult, RefreshTokenRequest } from 'src/app/business/entities/security-entities.generated';
+import { ExternalProvider, Login, VerificationTokenRequest, AuthResult, Registration, RegistrationVerificationResult, RefreshTokenRequest } from 'src/app/core/entities/security-entities.generated';
 import { UserExtended } from 'src/app/business/entities/business-entities.generated';
+import { ConfigBaseService } from './config-base.service';
 
 @Injectable()
 export class AuthBaseService implements OnDestroy {
-  private readonly apiUrl = environment.apiUrl;
+  private readonly apiUrl = this.config.apiUrl;
   private timer?: Subscription;
 
   protected _user = new BehaviorSubject<UserExtended | null>(null);
@@ -28,6 +28,7 @@ export class AuthBaseService implements OnDestroy {
     protected http: HttpClient,
     protected externalAuthService: SocialAuthService,
     protected apiService: ApiService,
+    protected config: ConfigBaseService,
   ) {
     window.addEventListener('storage', this.storageEventListener.bind(this));
 
@@ -131,7 +132,7 @@ export class AuthBaseService implements OnDestroy {
           this._user.next(null);
           this.onAfterLogout();
           this.stopTokenTimer();
-          this.router.navigate([environment.loginSlug]);
+          this.router.navigate([this.config.loginSlug]);
         })
       )
       .subscribe();
@@ -140,7 +141,7 @@ export class AuthBaseService implements OnDestroy {
     onAfterLogout = () => {}
 
   refreshToken(): Observable<Promise<AuthResult> | null> {
-    let refreshToken = localStorage.getItem(environment.refreshTokenKey);
+    let refreshToken = localStorage.getItem(this.config.refreshTokenKey);
 
     if (!refreshToken) {
       this.clearLocalStorage();
@@ -152,7 +153,7 @@ export class AuthBaseService implements OnDestroy {
     body.browserId = browserId;
     body.refreshToken = refreshToken;
     return this.http
-    .post<AuthResult>(`${this.apiUrl}/Security/RefreshToken`, body, environment.httpSkipSpinnerOptions)
+    .post<AuthResult>(`${this.apiUrl}/Security/RefreshToken`, body, this.config.httpSkipSpinnerOptions)
     .pipe(
       map(async (loginResult) => {
         this._user.next({
@@ -172,22 +173,22 @@ export class AuthBaseService implements OnDestroy {
     onAfterRefreshToken = () => {}
 
   setLocalStorage(loginResult: AuthResult) {
-    localStorage.setItem(environment.accessTokenKey, loginResult.accessToken);
-    localStorage.setItem(environment.refreshTokenKey, loginResult.refreshToken);
+    localStorage.setItem(this.config.accessTokenKey, loginResult.accessToken);
+    localStorage.setItem(this.config.refreshTokenKey, loginResult.refreshToken);
     localStorage.setItem('login-event', 'login' + Math.random());
   }
 
   clearLocalStorage() {
-    localStorage.removeItem(environment.accessTokenKey);
-    localStorage.removeItem(environment.refreshTokenKey);
+    localStorage.removeItem(this.config.accessTokenKey);
+    localStorage.removeItem(this.config.refreshTokenKey);
     localStorage.setItem('logout-event', 'logout' + Math.random());
   }
 
   getBrowserId(): string {
-    let browserId = localStorage.getItem(environment.browserIdKey); // FT: We don't need to remove this from the local storage ever, only if the user manuely deletes it, we will handle it
+    let browserId = localStorage.getItem(this.config.browserIdKey); // FT: We don't need to remove this from the local storage ever, only if the user manuely deletes it, we will handle it
     if (!browserId) {
       browserId = crypto.randomUUID();
-      localStorage.setItem(environment.browserIdKey, browserId);
+      localStorage.setItem(this.config.browserIdKey, browserId);
     }
     return browserId;
   }
@@ -199,7 +200,7 @@ export class AuthBaseService implements OnDestroy {
   }
 
   getTokenRemainingTime(): number {
-    const accessToken = localStorage.getItem(environment.accessTokenKey);
+    const accessToken = localStorage.getItem(this.config.accessTokenKey);
 
     if (!accessToken) {
       return 0;

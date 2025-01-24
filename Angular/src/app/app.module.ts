@@ -25,6 +25,8 @@ import { ValidatorAbstractService } from './core/services/validator-abstract.ser
 import { ValidatorService } from './business/services/validators/validation-rules';
 import { AuthBaseService } from './core/services/auth-base.service';
 import { AuthService } from './business/services/auth/auth.service';
+import { ConfigService } from './business/services/config.service';
+import { ConfigBaseService } from './core/services/config-base.service';
 
 @NgModule({
   declarations: [
@@ -87,6 +89,10 @@ import { AuthService } from './business/services/auth/auth.service';
     { 
       provide: AuthBaseService, 
       useExisting: AuthService 
+    },
+    { 
+      provide: ConfigBaseService, 
+      useExisting: ConfigService 
     },
     ApiService,
     NgxSpinnerService,

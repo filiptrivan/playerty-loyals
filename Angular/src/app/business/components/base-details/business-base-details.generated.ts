@@ -10,7 +10,7 @@ import { SpiderControlsModule } from 'src/app/core/controls/spider-controls.modu
 import { SpiderFormArray, SpiderFormControl, SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
-import { getControl, nameof } from 'src/app/core/services/helper-functions';
+import { getControl, getPrimengNamebookListForAutocomplete, getPrimengNamebookListForDropdown, nameof } from 'src/app/core/services/helper-functions';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom, forkJoin, Observable } from 'rxjs';
 import { BaseEntity } from 'src/app/core/entities/base-entity';
@@ -24,7 +24,7 @@ import { TableFilter } from 'src/app/core/entities/table-filter';
 import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
 import { SpiderFileSelectEvent } from 'src/app/core/controls/spider-file/spider-file.component';
 import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, BusinessSystemUpdatePointsDataBody, ExcelManualUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, MergedPartnerUser, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerRoleSaveBody, PartnerUserSaveBody, Product, QrCode, SegmentationItem, TierSaveBody, UpdatePoints, UserExtendedSaveBody, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUser, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
-import { Permission, Role, RolePermission, UserRole, PermissionSaveBody, RoleSaveBody, RolePermissionSaveBody, UserRoleSaveBody } from '../../entities/security-entities.generated';
+import { Permission, Role, RolePermission, UserRole, PermissionSaveBody, RoleSaveBody, RolePermissionSaveBody, UserRoleSaveBody } from '../../../core/entities/security-entities.generated';
 
 @Component({
     selector: 'business-system-base-details',
@@ -674,8 +674,8 @@ export class PartnerNotificationBaseDetailsComponent {
             this.recipientsTableColsForPartnerNotification = [
                 {name: this.translocoService.translate('User'), filterType: 'text', field: 'userDisplayName'  },
                 {name: this.translocoService.translate('Points'), filterType: 'numeric', field: 'points' , showMatchModes: true },
-                {name: this.translocoService.translate('Tier'), filterType: 'multiselect', field: 'tierDisplayName' , filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(this.apiService.getPrimengNamebookListForDropdown(this.apiService.getTierListForDropdown)) },
-                {name: this.translocoService.translate('Segmentation'), filterType: 'multiselect', field: 'checkedSegmentationItemsCommaSeparated' , dropdownOrMultiselectValues: await firstValueFrom(this.apiService.getPrimengNamebookListForDropdown(this.apiService.getSegmentationItemListForDropdown)) },
+                {name: this.translocoService.translate('Tier'), filterType: 'multiselect', field: 'tierDisplayName' , filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(getPrimengNamebookListForDropdown(this.apiService.getTierListForDropdown)) },
+                {name: this.translocoService.translate('Segmentation'), filterType: 'multiselect', field: 'checkedSegmentationItemsCommaSeparated' , dropdownOrMultiselectValues: await firstValueFrom(getPrimengNamebookListForDropdown(this.apiService.getSegmentationItemListForDropdown)) },
                 {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt' , showMatchModes: true }
             ];
 
@@ -847,7 +847,7 @@ export class PartnerRoleBaseDetailsComponent {
         this.route.params.subscribe(async (params) => {
             this.modelId = params['id'];
 
-            this.apiService.getPrimengNamebookListForDropdown(this.apiService.getPartnerPermissionListForDropdown).subscribe(po => {
+            getPrimengNamebookListForDropdown(this.apiService.getPartnerPermissionListForDropdown).subscribe(po => {
                 this.partnerPermissionsForPartnerRoleOptions = po;
             });
 
@@ -897,7 +897,7 @@ export class PartnerRoleBaseDetailsComponent {
 
 
     searchPartnerUsersForPartnerRole(event: AutoCompleteCompleteEvent) {
-        this.apiService.getPrimengNamebookListForAutocomplete(this.apiService.getPartnerUserListForAutocomplete, 50, event?.query ?? '').subscribe(po => {
+        getPrimengNamebookListForAutocomplete(this.apiService.getPartnerUserListForAutocomplete, 50, event?.query ?? '').subscribe(po => {
             this.partnerUsersForPartnerRoleOptions = po;
         });
     }
@@ -1373,10 +1373,10 @@ export class UserExtendedBaseDetailsComponent {
         this.route.params.subscribe(async (params) => {
             this.modelId = params['id'];
 
-            this.apiService.getPrimengNamebookListForDropdown(this.apiService.getGenderListForDropdown).subscribe(po => {
+            getPrimengNamebookListForDropdown(this.apiService.getGenderListForDropdown).subscribe(po => {
                 this.genderForUserExtendedOptions = po;
             });
-            this.apiService.getPrimengNamebookListForDropdown(this.apiService.getRoleListForDropdown).subscribe(po => {
+            getPrimengNamebookListForDropdown(this.apiService.getRoleListForDropdown).subscribe(po => {
                 this.rolesForUserExtendedOptions = po;
             });
 

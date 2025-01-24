@@ -6,12 +6,11 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/
 import { LayoutService } from '../../../services/app.layout.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Login } from 'src/app/business/entities/security-entities.generated';
+import { Login } from 'src/app/core/entities/security-entities.generated';
 import { TranslocoService } from '@jsverse/transloco';
 import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
-import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
-import { TranslateLabelsService } from 'src/app/business/services/translates/merge-labels';
+import { ConfigService } from 'src/app/business/services/config.service';
 
 @Component({
     selector: 'app-login',
@@ -22,7 +21,7 @@ export class LoginComponent extends BaseFormCopy implements OnInit {
 
     companyName: string;
     showEmailSentDialog: boolean = false;
-    usersCanRegister: boolean = environment.usersCanRegister;
+    usersCanRegister: boolean = this.config.usersCanRegister;
 
     constructor(
       protected override differs: KeyValueDiffers,
@@ -35,6 +34,7 @@ export class LoginComponent extends BaseFormCopy implements OnInit {
       protected override baseFormService: BaseFormService,
       public layoutService: LayoutService, 
       private authService: AuthService, 
+      private config: ConfigService
     ) { 
       super(differs, http, messageService, changeDetectorRef, router, route, translocoService, baseFormService);
     }

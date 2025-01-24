@@ -1,20 +1,21 @@
 import { TranslocoService } from '@jsverse/transloco';
 import { ErrorHandler, Injectable } from '@angular/core';
 import { SpiderMessageService } from '../services/spider-message.service';
-import { environment } from 'src/environments/environment';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ConfigBaseService } from '../services/config-base.service';
 
 @Injectable()
 export class SpiderErrorHandler implements ErrorHandler {
   constructor(
     private messageService: SpiderMessageService, 
     private translocoService: TranslocoService, 
+    private config: ConfigBaseService,
   ) {
 
   }
 
   handleError(error: any): void {
-    if(environment.production == false){
+    if(this.config.production == false){
       console.error(error);
     }
 

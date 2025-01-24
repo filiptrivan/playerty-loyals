@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit {
       this.currentPartnerUser = currentPartnerUser;
       if (currentPartnerUser?.tierId) {
         this.apiService.getTier(currentPartnerUser.tierId).subscribe(tier => {
-            this.currentPartnerTier = tier;
+          this.currentPartnerTier = tier;
         });
       } else {
         this.currentPartnerTier = null; // FT: This line is mandatory.

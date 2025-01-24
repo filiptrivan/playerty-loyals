@@ -7,6 +7,7 @@ import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { adjustColor } from 'src/app/core/services/helper-functions';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { Partner, PartnerUser } from '../../entities/business-entities.generated';
+import { ConfigService } from '../config.service';
 
 @Injectable({
   providedIn: 'root' // FT: Ensures the service is available application-wide
@@ -24,14 +25,15 @@ export class PartnerService {
     private apiService: ApiService,
     private route: ActivatedRoute,
     private authService: AuthService,
+    private config: ConfigService
   ) {
   }
 
   async startListening() {
     this.route.queryParams.subscribe(async params => {
-      const partnerSlug = params[environment.partnerParamKey] ?? '';
+      const partnerSlug = params[this.config.partnerParamKey] ?? '';
         if(partnerSlug != null && partnerSlug != ''){
-          localStorage.setItem(environment.partnerSlugKey, partnerSlug);
+          localStorage.setItem(this.config.partnerSlugKey, partnerSlug);
           await firstValueFrom(this.getCurrentPartner()); // TODO FT: When you have the time fix this, but in most basic case it will be called only once
         }
     });
@@ -81,7 +83,7 @@ export class PartnerService {
         document.documentElement.style.setProperty('--primary-darker-color', primaryDarkerColor);
         document.documentElement.style.setProperty('--highlight-bg', primaryLighterColor);
       } else {
-        const primaryColor = environment.primaryColor;
+        const primaryColor = this.config.primaryColor;
         const primaryLightColor = adjustColor(primaryColor, 35);
         const primaryLighterColor = adjustColor(primaryColor, 80);
         const primaryDarkColor = adjustColor(primaryColor, -10);
@@ -98,7 +100,7 @@ export class PartnerService {
 
   setCurrentPartner(partner: Partner) {
     this._partner.next(partner);
-    localStorage.setItem(environment.partnerSlugKey, partner.slug);
+    localStorage.setItem(this.config.partnerSlugKey, partner.slug);
     this.adjustPartnerColor(partner);
   }
 

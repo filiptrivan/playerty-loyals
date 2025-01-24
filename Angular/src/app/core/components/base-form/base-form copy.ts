@@ -7,7 +7,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { SpiderFormArray, SpiderFormControl, SpiderFormGroup, SpiderValidatorFn } from '../spider-form-control/spider-form-control';
+import { SpiderFormArray, SpiderFormControl, SpiderFormGroup } from '../spider-form-control/spider-form-control';
 import { HttpClient } from '@angular/common/http';
 import { SpiderMessageService } from '../../services/spider-message.service';
 import { ActivatedRoute, Router } from '@angular/router';

@@ -7,15 +7,15 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
-import { BaseEntity } from '../../entities/base-entity';
-import { SpiderFormControl } from '../spider-form-control/spider-form-control';
-import { environment } from 'src/environments/environment';
+import { BaseEntity } from '../../../core/entities/base-entity';
+import { SpiderFormControl } from '../../../core/components/spider-form-control/spider-form-control';
 import { HttpClient } from '@angular/common/http';
-import { SpiderMessageService } from '../../services/spider-message.service';
+import { SpiderMessageService } from '../../../core/services/spider-message.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
+import { ConfigService } from 'src/app/business/services/config.service';
 
 @Component({
   selector: 'base-form',
@@ -46,6 +46,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     protected translocoService: TranslocoService,
     protected translateClassNamesService: TranslateClassNamesService,
     protected validatorService: ValidatorService,
+    protected config: ConfigService
     ) {
   }
 
@@ -146,7 +147,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     if(isValid && isFormArrayValid){
       let controllerName: string = this.controllerName ?? this.model.typeName;
 
-      this.http.put<T>(environment.apiUrl + `/${controllerName}/Save${this.model.typeName}`, this.saveBody, environment.httpOptions).subscribe(res => {
+      this.http.put<T>(this.config.apiUrl + `/${controllerName}/Save${this.model.typeName}`, this.saveBody, this.config.httpOptions).subscribe(res => {
         Object.assign(this.model, res) // this.model = res; // FT: we lose typeName like this and everything that res doesn't have but this.model has
 
         this.messageService.successMessage(this.translocoService.translate('SuccessfulSaveToastDescription'));
@@ -307,7 +308,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     if(isValid){
       let controllerName: string = this.controllerName ?? this.model.typeName;
 
-      this.http.put<T[]>(environment.apiUrl + `/${controllerName}/Save${this.model.typeName}List`, this.formArray.value, environment.httpOptions).subscribe((res: T[]) => {
+      this.http.put<T[]>(this.config.apiUrl + `/${controllerName}/Save${this.model.typeName}List`, this.formArray.value, this.config.httpOptions).subscribe((res: T[]) => {
         this.formArray = null;
         this.initFormArray(res, modelConstructor);
 

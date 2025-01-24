@@ -17,6 +17,7 @@ import { SpiderControlsModule } from '../../controls/spider-controls.module';
 import { SpiderFormControl } from '../spider-form-control/spider-form-control';
 import { TableResponse } from '../../entities/table-response';
 import { LazyLoadSelectedIdsResult } from '../../entities/lazy-load-selected-ids-result';
+import { exportListToExcel } from '../../services/helper-functions';
 
 @Component({
   selector: 'spider-data-table',
@@ -360,7 +361,7 @@ export class SpiderDataTableComponent implements OnInit {
     let tableFilter: TableFilter = this.lastLazyLoadEvent as unknown as TableFilter;
     tableFilter.additionalFilterIdLong = this.additionalFilterIdLong;
 
-    this.apiService.exportListToExcel(this.exportTableDataToExcelObservableMethod, tableFilter);
+    exportListToExcel(this.exportTableDataToExcelObservableMethod, tableFilter);
   }
 
   clear(table: Table) {

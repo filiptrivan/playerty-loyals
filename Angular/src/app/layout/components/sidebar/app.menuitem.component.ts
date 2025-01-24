@@ -13,6 +13,8 @@ import { SpiderFormControl } from '../../../core/components/spider-form-control/
 import { environment } from 'src/environments/environment';
 import { PartnerService } from '../../../business/services/helpers/partner.service';
 import { PrimengOption } from 'src/app/core/entities/primeng-option';
+import { ConfigService } from 'src/app/business/services/config.service';
+import { getPrimengCodebookListForAutocomplete } from 'src/app/core/services/helper-functions';
 
 @Component({
     // eslint-disable-next-line @angular-eslint/component-selector
@@ -62,6 +64,7 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
         private authService: AuthService,
         private apiService: ApiService,
         private partnerService: PartnerService,
+        private config: ConfigService
     ) {
         this.menuSourceSubscription = this.menuService.menuSource$.subscribe(value => {
             Promise.resolve(null).then(() => {
@@ -140,17 +143,17 @@ export class AppMenuitemComponent implements OnInit, OnDestroy {
     }
 
     searchPartners(event: AutoCompleteCompleteEvent) {
-        this.apiService.getPrimengCodebookListForAutocomplete(this.apiService.getPartnerWithSlugListForAutocomplete, 50, event.query).subscribe(po => {
+        getPrimengCodebookListForAutocomplete(this.apiService.getPartnerWithSlugListForAutocomplete, 50, event.query).subscribe(po => {
             this.partnerOptions = po;
         });
     }
 
     async moreOptionsClick(){
         if (this.selectedPartner.value) {
-            localStorage.setItem(environment.partnerSlugKey, this.selectedPartner.value);
+            localStorage.setItem(this.config.partnerSlugKey, this.selectedPartner.value);
             await firstValueFrom(this.partnerService.getCurrentPartner());
             await firstValueFrom(this.partnerService.getCurrentPartnerUser());
-            this.router.navigate(['/'], { queryParams: { [environment.partnerParamKey]: this.selectedPartner.value } });
+            this.router.navigate(['/'], { queryParams: { [this.config.partnerParamKey]: this.selectedPartner.value } });
         }
     }
 

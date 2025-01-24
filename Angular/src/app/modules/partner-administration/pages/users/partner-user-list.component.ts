@@ -5,6 +5,7 @@ import { PartnerUser } from 'src/app/business/entities/business-entities.generat
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerService } from 'src/app/business/services/helpers/partner.service';
 import { Column } from 'src/app/core/components/spider-data-table/spider-data-table.component';
+import { getPrimengNamebookListForDropdown } from 'src/app/core/services/helper-functions';
 
 @Component({
     selector: 'partner-user-list', 
@@ -32,8 +33,8 @@ export class PartnerUserListComponent implements OnInit {
             ]},
             {name: this.translocoService.translate('User'), filterType: 'text', field: 'userDisplayName'},
             {name: this.translocoService.translate('Points'), filterType: 'numeric', field: 'points', showMatchModes: true},
-            {name: this.translocoService.translate('Tier'), filterType: 'multiselect', field: 'tierDisplayName', filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(this.apiService.getPrimengNamebookListForDropdown(this.apiService.getTierListForDropdown)) },
-            {name: this.translocoService.translate('Segmentation'), filterType: 'multiselect', field: 'checkedSegmentationItemsCommaSeparated', dropdownOrMultiselectValues: await firstValueFrom(this.apiService.getPrimengNamebookListForDropdown(this.apiService.getSegmentationItemListForDropdown)) },
+            {name: this.translocoService.translate('Tier'), filterType: 'multiselect', field: 'tierDisplayName', filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(getPrimengNamebookListForDropdown(this.apiService.getTierListForDropdown)) },
+            {name: this.translocoService.translate('Segmentation'), filterType: 'multiselect', field: 'checkedSegmentationItemsCommaSeparated', dropdownOrMultiselectValues: await firstValueFrom(getPrimengNamebookListForDropdown(this.apiService.getSegmentationItemListForDropdown)) },
             {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true},
         ]
     }

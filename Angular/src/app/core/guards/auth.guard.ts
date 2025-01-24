@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { AuthBaseService } from '../services/auth-base.service';
+import { ConfigBaseService } from '../services/config-base.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +11,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private authService: AuthBaseService, 
     private router: Router,
+    private config: ConfigBaseService
   ) {
 
   }
@@ -29,7 +30,7 @@ export class AuthGuard implements CanActivate {
           // this.router.navigate(['auth/login'], {
           //    queryParams: { returnUrl },
           // });
-          this.router.navigate([environment.loginSlug]);
+          this.router.navigate([this.config.loginSlug]);
           return false;
         }
       })

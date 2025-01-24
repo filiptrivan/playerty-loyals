@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { AuthBaseService } from 'src/app/core/services/auth-base.service';
+import { ConfigService } from '../config.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,8 +20,9 @@ export class AuthService extends AuthBaseService implements OnDestroy {
     protected override http: HttpClient,
     protected override externalAuthService: SocialAuthService,
     protected override apiService: ApiService,
+    protected override config: ConfigService,
   ) {
-    super(router, http, externalAuthService, apiService);
+    super(router, http, externalAuthService, apiService, config);
   }
 
   override onAfterLogoutEvent = () => {

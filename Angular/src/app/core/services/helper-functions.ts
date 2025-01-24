@@ -3,6 +3,12 @@ import { Action, Column } from "../components/spider-data-table/spider-data-tabl
 import { HttpResponse } from "@angular/common/http";
 import { BaseEntity } from "../entities/base-entity";
 import { SpiderFormControl, SpiderFormGroup } from "../components/spider-form-control/spider-form-control";
+import { map, Observable } from 'rxjs';
+import * as FileSaver from 'file-saver';
+import { TableFilter } from 'src/app/core/entities/table-filter';
+import { PrimengOption } from 'src/app/core/entities/primeng-option';
+import { Namebook } from 'src/app/core/entities/namebook';
+import { Codebook } from 'src/app/core/entities/codebook';
 
 // Helper function for PrecisionScale validation (to be added in the TypeScript output):
 export function validatePrecisionScale(value: any, precision: number, scale: number, ignoreTrailingZeros: boolean): boolean {
@@ -226,4 +232,43 @@ export function capitalizeFirstLetter(inputString: string): string {
       }
 
       return false;
+  }
+
+  export function exportListToExcel(exportTableDataToExcelObservableMethod: (tableFilter: TableFilter) => Observable<any>, tableFilter: TableFilter) {
+    exportTableDataToExcelObservableMethod(tableFilter).subscribe(res => {
+        let fileName = getFileNameFromContentDisposition(res, "ExcelExport.xlsx");
+        FileSaver.saveAs(res.body, decodeURIComponent(fileName));
+    });
+  }
+
+  export function getPrimengNamebookListForDropdown(getListForDropdownObservable: () => Observable<Namebook[]>): Observable<PrimengOption[]>{
+      return getListForDropdownObservable().pipe(
+          map(res => {
+              return res.map(x => ({ label: x.displayName, value: x.id }));
+          })
+      );
+  }
+
+  export function getPrimengCodebookListForDropdown(getListForDropdownObservable: () => Observable<Codebook[]>): Observable<PrimengOption[]>{
+      return getListForDropdownObservable().pipe(
+          map(res => {
+              return res.map(x => ({ label: x.displayName, value: x.code }));
+          })
+      );
+  }
+
+  export function getPrimengNamebookListForAutocomplete(getListForAutocompleteObservable: (limit: number, query: string) => Observable<Namebook[]>, limit: number, query: string): Observable<PrimengOption[]>{
+      return getListForAutocompleteObservable(limit, query).pipe(
+          map(res => {
+              return res.map(x => ({ label: x.displayName, value: x.id }));
+          })
+      );
+  }
+
+  export function getPrimengCodebookListForAutocomplete(getListForAutocompleteObservable: (limit: number, query: string) => Observable<Codebook[]>, limit: number, query: string): Observable<PrimengOption[]>{
+      return getListForAutocompleteObservable(limit, query).pipe(
+          map(res => {
+              return res.map(x => ({ label: x.displayName, value: x.code }));
+          })
+      );
   }

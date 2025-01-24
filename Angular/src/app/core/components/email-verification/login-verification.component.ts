@@ -27,7 +27,7 @@ export class LoginVerificationComponent implements OnInit {
     }
     
     resendVerificationToken(){
-        this.authService.sendLoginVerificationEmail({email: this.email}).subscribe((res) => {
+        this.authService.sendLoginVerificationEmail({email: this.email}).subscribe(() => {
             this.messageService.successMessage(this.translocoService.translate('SuccessfullySentVerificationCode'));
         });
     }

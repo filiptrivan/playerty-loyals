@@ -1,11 +1,16 @@
 import { Component } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { ConfigBaseService } from '../../services/config-base.service'
 
 @Component({
     selector: 'app-footer',
     templateUrl: './app.footer.component.html'
 })
 export class AppFooterComponent {
-    companyName: string = environment.companyName;
-    constructor() { }
+    companyName: string = this.config.companyName;
+
+    constructor(
+        private config: ConfigBaseService
+    ) { 
+
+    }
 }

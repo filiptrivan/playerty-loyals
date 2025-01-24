@@ -8,9 +8,9 @@ import {
 } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
 import { SpiderMessageService } from '../services/spider-message.service';
 import { TranslocoService } from '@jsverse/transloco';
+import { ConfigBaseService } from '../services/config-base.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +18,8 @@ import { TranslocoService } from '@jsverse/transloco';
 export class UnauthorizedInterceptor implements HttpInterceptor {
   constructor(
     private messageService: SpiderMessageService,
-    private translocoService: TranslocoService
+    private translocoService: TranslocoService,
+    private config: ConfigBaseService,
   ) {}
 
   intercept(
@@ -34,7 +35,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
 
   private handleAuthError(err: HttpErrorResponse, request: HttpRequest<any>): Observable<any> {
 
-    if (!environment.production) {
+    if (!this.config.production) {
       console.error(err);
     }
 

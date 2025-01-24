@@ -3,7 +3,7 @@ import { TableFilter } from "src/app/core/entities/table-filter";
 import { TableFilterContext } from "src/app/core/entities/table-filter-context";
 import { TableFilterSortMeta } from "src/app/core/entities/table-filter-sort-meta";
 import { MimeTypes } from "src/app/core/entities/mime-type";
-import { RegistrationVerificationResultStatusCodes } from "../enums/security-enums.generated";
+import { RegistrationVerificationResultStatusCodes } from "../../business/enums/security-enums.generated";
 
 
 export class JwtAuthResult extends BaseEntity

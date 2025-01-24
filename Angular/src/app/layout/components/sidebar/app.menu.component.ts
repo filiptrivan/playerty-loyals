@@ -6,6 +6,7 @@ import { LayoutService } from '../../services/app.layout.service';
 import { MenuItem } from 'primeng/api';
 import { PartnerService } from '../../../business/services/helpers/partner.service';
 import { environment } from 'src/environments/environment';
+import { ConfigService } from 'src/app/business/services/config.service';
 
 export interface SpiderMenuItem extends MenuItem{
     hasPermission?: (permissionCodes: string[]) => boolean;
@@ -24,7 +25,8 @@ export class AppMenuComponent implements OnInit {
     constructor(
         public layoutService: LayoutService, 
         private partnerService: PartnerService,
-        private translocoService: TranslocoService
+        private translocoService: TranslocoService,
+        private config: ConfigService
     ) {
         
     }
@@ -35,7 +37,7 @@ export class AppMenuComponent implements OnInit {
                 {
                     items: [
                         {
-                            label: `${partner?.name ?? environment.companyName}`,
+                            label: `${partner?.name ?? this.config.companyName}`,
                             icon: 'pi pi-fw pi-at', 
                             visible: true,
                             items: [
@@ -92,7 +94,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: this.translocoService.translate('UserList'),
                                     icon: 'pi pi-fw pi-user',
-                                    routerLink: [`/${environment.administrationSlug}/users`],
+                                    routerLink: [`/${this.config.administrationSlug}/users`],
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
                                     //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]))
                                     // } 
@@ -101,7 +103,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: this.translocoService.translate('RoleList'),
                                     icon: 'pi pi-fw pi-id-card',
-                                    routerLink: [`/${environment.administrationSlug}/roles`],
+                                    routerLink: [`/${this.config.administrationSlug}/roles`],
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
                                     //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]))
                                     // }
@@ -110,7 +112,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: this.translocoService.translate('NotificationList'),
                                     icon: 'pi pi-fw pi-bell',
-                                    routerLink: [`/${environment.administrationSlug}/notifications`],
+                                    routerLink: [`/${this.config.administrationSlug}/notifications`],
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
                                     //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
                                     // }
@@ -119,7 +121,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: this.translocoService.translate('PartnerList'),
                                     icon: 'pi pi-fw pi-at',
-                                    routerLink: [`/${environment.administrationSlug}/partners`],
+                                    routerLink: [`/${this.config.administrationSlug}/partners`],
                                     visible: true
                                 },
                             ]
@@ -139,7 +141,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: this.translocoService.translate('UserList'),
                                     icon: 'pi pi-fw pi-user',
-                                    routerLink: [`/${environment.partnerAdministrationSlug}/users`],
+                                    routerLink: [`/${this.config.partnerAdministrationSlug}/users`],
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
                                     //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]))
                                     // } 
@@ -148,7 +150,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: this.translocoService.translate('RoleList'),
                                     icon: 'pi pi-fw pi-id-card',
-                                    routerLink: [`/${environment.partnerAdministrationSlug}/roles`],
+                                    routerLink: [`/${this.config.partnerAdministrationSlug}/roles`],
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
                                     //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]))
                                     // }
@@ -157,7 +159,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: this.translocoService.translate('NotificationList'),
                                     icon: 'pi pi-fw pi-bell',
-                                    routerLink: [`/${environment.partnerAdministrationSlug}/notifications`],
+                                    routerLink: [`/${this.config.partnerAdministrationSlug}/notifications`],
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
                                     //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
                                     // }
@@ -166,7 +168,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: this.translocoService.translate('SegmentationList'),
                                     icon: 'pi pi-fw pi-hashtag',
-                                    routerLink: [`/${environment.partnerAdministrationSlug}/segmentations`],
+                                    routerLink: [`/${this.config.partnerAdministrationSlug}/segmentations`],
                                     visible: true,
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
                                     //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadSegmentation]))
@@ -175,7 +177,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: this.translocoService.translate('BusinessSystemList'),
                                     icon: 'pi pi-fw pi-shop',
-                                    routerLink: [`/${environment.partnerAdministrationSlug}/business-systems`],
+                                    routerLink: [`/${this.config.partnerAdministrationSlug}/business-systems`],
                                     visible: true,
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
                                     //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadSegmentation]))
@@ -184,7 +186,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: this.translocoService.translate('TierList'),
                                     icon: 'pi pi-fw pi-crown',
-                                    routerLink: [`/${environment.partnerAdministrationSlug}/tiers`],
+                                    routerLink: [`/${this.config.partnerAdministrationSlug}/tiers`],
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
                                     //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]))
                                     // }

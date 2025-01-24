@@ -1,10 +1,16 @@
 import { Component } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { ConfigBaseService } from '../../services/config-base.service';
 
 @Component({
     selector: 'not-found',
     templateUrl: './notfound.component.html',
 })
 export class NotfoundComponent { 
-    companyName = environment.companyName;
+    companyName = this.config.companyName;
+
+    constructor(
+        private config: ConfigBaseService
+    ) { 
+
+    }
 }
