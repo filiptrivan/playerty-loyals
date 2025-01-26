@@ -1,12 +1,11 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { LayoutService } from "src/app/layout/services/app.layout.service";
-import { GoogleButtonComponent } from "../../../../core/components/google-button/google-button.component";
 import { CommonModule } from "@angular/common";
 import { PartnerService } from "src/app/business/services/helpers/partner.service";
-import { getHtmlImgDisplayString64 } from "src/app/core/services/helper-functions";
 import { Subscription } from "rxjs";
 import { TranslocoDirective } from "@jsverse/transloco";
 import { ConfigService } from "src/app/business/services/config.service";
+import { GoogleButtonComponent, getHtmlImgDisplayString64 } from '@playerty/spider';
 
 @Component({
   selector: 'auth',

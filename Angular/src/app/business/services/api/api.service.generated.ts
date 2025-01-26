@@ -1,14 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { ApiSecurityService } from '../../../core/services/api.service.security';
-import { Namebook } from 'src/app/core/entities/namebook';
-import { Codebook } from 'src/app/core/entities/codebook';
-import { SimpleSaveResult } from 'src/app/core/entities/simple-save-result';
-import { TableFilter } from 'src/app/core/entities/table-filter';
-import { TableResponse } from 'src/app/core/entities/table-response';
-import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
+import { ApiSecurityService, TableFilter, TableResponse, Namebook, Codebook, LazyLoadSelectedIdsResult, VerificationTokenRequest, AuthResult, ExternalProvider } from '@playerty/spider';
+import { ConfigService } from '../config.service';
 import { Brand } from '../../entities/business-entities.generated';
 import { BusinessSystemUpdatePointsDataBody } from '../../entities/business-entities.generated';
 import { ExcelManualUpdatePoints } from '../../entities/business-entities.generated';
@@ -52,7 +46,7 @@ import { PartnerUserPartnerNotificationSaveBody } from '../../entities/business-
 import { PartnerUserPartnerRole } from '../../entities/business-entities.generated';
 import { PartnerUserPartnerRoleSaveBody } from '../../entities/business-entities.generated';
 import { PartnerUserSegmentation } from '../../entities/business-entities.generated';
-import { PartnerUserSegmentationSaveBody } from '../../entities/business-entities.generated';
+import { PartnerUserSegmentationSaveBody } from '../../entities/business-entities.generated'; 
 import { PartnerUserSegmentationItem } from '../../entities/business-entities.generated';
 import { PartnerUserSegmentationItemSaveBody } from '../../entities/business-entities.generated';
 import { Segmentation } from '../../entities/business-entities.generated';
@@ -64,27 +58,10 @@ import { TransactionSaveBody } from '../../entities/business-entities.generated'
 import { UserExtended } from '../../entities/business-entities.generated';
 import { UserNotification } from '../../entities/business-entities.generated';
 import { UserNotificationSaveBody } from '../../entities/business-entities.generated';
-import { AuthResult } from '../../../core/entities/security-entities.generated';
-import { ExternalProvider } from '../../../core/entities/security-entities.generated';
-import { JwtAuthResult } from '../../../core/entities/security-entities.generated';
-import { Login } from '../../../core/entities/security-entities.generated';
-import { LoginVerificationToken } from '../../../core/entities/security-entities.generated';
-import { RefreshToken } from '../../../core/entities/security-entities.generated';
-import { RefreshTokenRequest } from '../../../core/entities/security-entities.generated';
-import { Registration } from '../../../core/entities/security-entities.generated';
-import { RegistrationVerificationResult } from '../../../core/entities/security-entities.generated';
-import { RegistrationVerificationToken } from '../../../core/entities/security-entities.generated';
-import { RoleSaveBody } from '../../../core/entities/security-entities.generated';
-import { VerificationTokenRequest } from '../../../core/entities/security-entities.generated';
-import { Permission } from '../../../core/entities/security-entities.generated';
-import { PermissionSaveBody } from '../../../core/entities/security-entities.generated';
-import { Role } from '../../../core/entities/security-entities.generated';
-import { RolePermission } from '../../../core/entities/security-entities.generated';
-import { RolePermissionSaveBody } from '../../../core/entities/security-entities.generated';
-import { UserRoleSaveBody } from '../../../core/entities/security-entities.generated';
-import { ConfigService } from '../config.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ApiGeneratedService extends ApiSecurityService {
 
     constructor(
@@ -306,18 +283,6 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.post<TableResponse<Transaction>>(`${this.config.apiUrl}/PartnerUser/GetTransactionListForTheCurrentPartnerUser`, tableFilterDTO, this.config.httpSkipSpinnerOptions);
     }
 
-    register = (request: VerificationTokenRequest): Observable<AuthResult> => { 
-        return this.http.post<AuthResult>(`${this.config.apiUrl}/Security/Register`, request, this.config.httpOptions);
-    }
-
-    login = (request: VerificationTokenRequest): Observable<AuthResult> => { 
-        return this.http.post<AuthResult>(`${this.config.apiUrl}/Security/Login`, request, this.config.httpOptions);
-    }
-
-    loginExternal = (externalProviderDTO: ExternalProvider): Observable<AuthResult> => { 
-        return this.http.post<AuthResult>(`${this.config.apiUrl}/Security/LoginExternal`, externalProviderDTO, this.config.httpOptions);
-    }
-
     getSegmentationTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<Segmentation>> => { 
         return this.http.post<TableResponse<Segmentation>>(`${this.config.apiUrl}/Segmentation/GetSegmentationTableData`, tableFilterDTO, this.config.httpSkipSpinnerOptions);
     }
@@ -382,8 +347,8 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.get<Tier>(`${this.config.apiUrl}/Tier/GetTierForTheCurrentPartnerUser`, this.config.httpOptions);
     }
 
-    getCurrentUser = (): Observable<UserExtended> => { 
-        return this.http.get<UserExtended>(`${this.config.apiUrl}/UserExtended/GetCurrentUser`, this.config.httpSkipSpinnerOptions);
+    getCurrentUserExtended = (): Observable<UserExtended> => { 
+        return this.http.get<UserExtended>(`${this.config.apiUrl}/UserExtended/GetCurrentUserExtended`, this.config.httpSkipSpinnerOptions);
     }
 
     getCurrentUserPermissionCodes = (): Observable<string[]> => { 

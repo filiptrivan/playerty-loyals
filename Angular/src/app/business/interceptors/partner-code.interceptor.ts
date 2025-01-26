@@ -6,7 +6,6 @@ import {
   HttpInterceptor,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Router } from '@angular/router';
 import { ConfigService } from '../services/config.service';
 
 @Injectable({
@@ -15,7 +14,6 @@ import { ConfigService } from '../services/config.service';
 export class PartnerCodeInterceptor implements HttpInterceptor {
 
   constructor(
-    private router: Router,
     private config: ConfigService
   ) {}
 

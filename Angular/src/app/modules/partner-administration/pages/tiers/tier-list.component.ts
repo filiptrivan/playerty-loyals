@@ -9,14 +9,8 @@ import { forkJoin } from 'rxjs';
 import { DiscountProductGroup, BusinessSystemTier, BusinessSystemTierDiscountProductGroup, Tier, TierSaveBody } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
-import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { AllClickEvent, Column, RowClickEvent, SpiderDataTableComponent } from 'src/app/core/components/spider-data-table/spider-data-table.component';
-import { SpiderFormArray, SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
-import { LastMenuIconIndexClicked } from 'src/app/core/entities/last-menu-icon-index-clicked';
-import { PrimengOption } from 'src/app/core/entities/primeng-option';
-import { BaseFormService } from 'src/app/core/services/base-form.service';
-import { nameof } from 'src/app/core/services/helper-functions';
-import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
+import { BaseFormCopy, nameof, SpiderFormArray, LastMenuIconIndexClicked, PrimengOption, Column, SpiderDataTableComponent, SpiderMessageService, BaseFormService, SpiderFormGroup, AllClickEvent, RowClickEvent } from '@playerty/spider';
+
 
 @Component({
     selector: 'tier-list',

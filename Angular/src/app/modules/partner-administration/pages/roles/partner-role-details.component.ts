@@ -3,10 +3,7 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { PartnerRole } from 'src/app/business/entities/business-entities.generated';
-import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
-import { BaseFormService } from 'src/app/core/services/base-form.service';
-import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
+import { BaseFormCopy, SpiderFormGroup, SpiderMessageService, BaseFormService } from '@playerty/spider';
 
 @Component({
     selector: 'partner-role-details',

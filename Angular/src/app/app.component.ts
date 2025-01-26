@@ -9,7 +9,13 @@ import { PartnerService } from './business/services/helpers/partner.service';
 })
 export class AppComponent implements OnInit {
 
-    constructor(private primengConfig: PrimeNGConfig, private partnerService: PartnerService, private translocoService: TranslocoService) { }
+    constructor(
+        private primengConfig: PrimeNGConfig, 
+        private partnerService: PartnerService, 
+        private translocoService: TranslocoService
+    ) {
+
+    }
 
     ngOnInit() {
         this.primengConfig.ripple = true;

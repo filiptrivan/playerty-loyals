@@ -1,11 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { UserListComponent } from './pages/users/user-list.component';
-import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { UserDetailsComponent } from './pages/users/user-details.component';
-import { SpiderControlsModule } from 'src/app/core/controls/spider-controls.module';
-import { CardSkeletonComponent } from "../../core/components/card-skeleton/card-skeleton.component";
-import { SpiderDataTableComponent } from 'src/app/core/components/spider-data-table/spider-data-table.component';
 import { RoleListComponent } from './pages/roles/role-list.component';
 import { RoleDetailsComponent } from './pages/roles/role-details.component';
 import { NotificationDetailsComponent } from './pages/notifications/notification-details.component';
@@ -15,6 +11,9 @@ import { PartnerListComponent } from './pages/partners/partner-list.component';
 import { PartnerDetailsComponent } from './pages/partners/partner-details.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { NotificationBaseDetailsComponent, PartnerBaseDetailsComponent, UserExtendedBaseDetailsComponent } from 'src/app/business/components/base-details/business-base-details.generated';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PrimengModule, SpiderDataTableComponent, SpiderControlsModule, CardSkeletonComponent } from '@playerty/spider';
 
 const routes: Routes = [
     {
@@ -54,6 +53,9 @@ const routes: Routes = [
 @NgModule({
     imports: [
     RouterModule.forChild(routes),
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     PrimengModule,
     SpiderDataTableComponent,
     SpiderControlsModule,

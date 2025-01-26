@@ -1,14 +1,9 @@
 import { ChangeDetectorRef, Component, Input, KeyValueDiffers, OnInit } from '@angular/core';
 import { Segmentation, SegmentationItem } from 'src/app/business/entities/business-entities.generated';
-import { CardSkeletonComponent } from "../../../core/components/card-skeleton/card-skeleton.component";
-import { SpiderCheckboxComponent } from 'src/app/core/controls/spider-checkbox/spider-checkbox.component';
-import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 import { TranslocoService } from '@jsverse/transloco';
-import { SpiderFormArray, SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
-import { BaseFormService } from 'src/app/core/services/base-form.service';
+import { CardSkeletonComponent, SpiderCheckboxComponent, BaseFormCopy, SpiderFormGroup, SpiderFormArray, SpiderMessageService, BaseFormService } from '@playerty/spider';
 
 @Component({
     selector: 'segmentation-select',

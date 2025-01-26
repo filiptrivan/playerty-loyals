@@ -4,15 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { forkJoin } from 'rxjs';
-import { Role, RoleSaveBody } from 'src/app/core/entities/security-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseForm } from 'src/app/business/components/base-form/base-form';
-import { SpiderFormControl } from 'src/app/core/components/spider-form-control/spider-form-control';
-import { PrimengOption } from 'src/app/core/entities/primeng-option';
-import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 import { ConfigService } from 'src/app/business/services/config.service';
+import { Role, PrimengOption, SpiderFormControl, SpiderMessageService, RoleSaveBody } from '@playerty/spider';
 
 @Component({
     selector: 'role-details',

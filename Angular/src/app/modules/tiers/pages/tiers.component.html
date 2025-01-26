@@ -5,8 +5,8 @@
         <div class="bold-header-separator"></div>
       </div>
       <div style="display: flex; flex-direction: column; position: relative; z-index: 2;">
-        <timeline-index-progressbar *ngIf="tierList !== undefined" #timeline [tierList]="tierList" [currentTier]="tierForTheCurrentPartnerUser" [currentUserPoints]="currentPartnerUser?.points" 
-        [connectorMethod]="connectorMethod"></timeline-index-progressbar>
+        <tier-timeline-index-progressbar *ngIf="tierList !== undefined" #timeline [tierList]="tierList" [currentTier]="tierForTheCurrentPartnerUser" [currentUserPoints]="currentPartnerUser?.points" 
+        [connectorMethod]="connectorMethod"></tier-timeline-index-progressbar>
       </div>
       <div class="card-overflow-icon">
         <i class="pi pi-crown"></i>

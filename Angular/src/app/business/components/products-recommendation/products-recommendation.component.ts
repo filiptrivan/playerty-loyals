@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { ApiService } from '../../services/api/api.service';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Product } from '../../entities/business-entities.generated';
+import { PrimengModule } from '@playerty/spider';
 
 @Component({
     selector: 'products-recommendation',

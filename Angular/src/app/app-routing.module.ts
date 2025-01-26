@@ -1,9 +1,7 @@
 import { PreloadAllModules, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { NotfoundComponent } from './core/components/notfound/notfound.component';
 import { AppLayoutComponent } from "./layout/components/layout/app.layout.component";
-import { AuthGuard } from './core/guards/auth.guard';
-import { NotAuthGuard } from './core/guards/not-auth.guard';
+import { AuthGuard, NotAuthGuard, NotFoundComponent } from '@playerty/spider';
 
 @NgModule({
     imports: [
@@ -59,13 +57,8 @@ import { NotAuthGuard } from './core/guards/not-auth.guard';
                     },
                 ],
             },
-            // {
-            //     path: '',
-            //     loadChildren: () => import('./modules/partner-select/partner-select.module').then(m => m.PartnerSelectModule),
-            //     canActivate: [AuthGuard]
-            // },
             // { path: 'landing', loadChildren: () => import('./layout/components/landing/landing.module').then(m => m.LandingModule) },
-            { path: 'not-found', component: NotfoundComponent },
+            { path: 'not-found', component: NotFoundComponent },
             { path: '**', redirectTo: 'not-found' },
         ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload', preloadingStrategy: PreloadAllModules })
     ],

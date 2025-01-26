@@ -1,8 +1,8 @@
 import { TranslocoService } from '@jsverse/transloco';
 import { Component, OnInit } from '@angular/core';
-import { Column } from 'src/app/core/components/spider-data-table/spider-data-table.component';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { Segmentation } from 'src/app/business/entities/business-entities.generated';
+import { Column } from '@playerty/spider';
 
 @Component({
     selector: 'segmentation-list',

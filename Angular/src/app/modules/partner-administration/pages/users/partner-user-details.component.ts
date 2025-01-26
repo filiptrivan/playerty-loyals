@@ -10,12 +10,7 @@ import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, Tier,
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerService } from 'src/app/business/services/helpers/partner.service';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
-import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { SpiderFormArray, SpiderFormControl, SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
-import { PrimengOption } from 'src/app/core/entities/primeng-option';
-import { BaseFormService } from 'src/app/core/services/base-form.service';
-import { nameof } from 'src/app/core/services/helper-functions';
-import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
+import { BaseFormCopy, PrimengOption, SpiderFormControl, SpiderFormGroup, SpiderFormArray, SpiderMessageService, BaseFormService, nameof } from '@playerty/spider';
 
 @Component({
     selector: 'partner-user-details',

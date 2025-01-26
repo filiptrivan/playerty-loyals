@@ -4,8 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { PartnerUser } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerService } from 'src/app/business/services/helpers/partner.service';
-import { Column } from 'src/app/core/components/spider-data-table/spider-data-table.component';
-import { getPrimengNamebookListForDropdown } from 'src/app/core/services/helper-functions';
+import { Column, getPrimengNamebookListForDropdown } from '@playerty/spider';
 
 @Component({
     selector: 'partner-user-list', 

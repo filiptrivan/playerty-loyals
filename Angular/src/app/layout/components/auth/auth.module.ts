@@ -2,12 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RegistrationComponent } from './registration/registration.component';
 import { LoginComponent } from './login/login.component';
-import { PrimengModule } from '../../../core/modules/primeng.module';
-import { SpiderControlsModule } from 'src/app/core/controls/spider-controls.module';
 import { AuthComponent } from './partials/auth.component';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { LoginVerificationComponent } from 'src/app/core/components/email-verification/login-verification.component';
-import { RegistrationVerificationComponent } from 'src/app/core/components/email-verification/registration-verification.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { PrimengModule, SpiderControlsModule, LoginVerificationComponent, RegistrationVerificationComponent } from '@playerty/spider';
 
 const routes: Routes = [
     { 
@@ -23,6 +22,8 @@ const routes: Routes = [
 @NgModule({
     imports: [
         RouterModule.forChild(routes),
+        CommonModule,
+        ReactiveFormsModule,
         AuthComponent,
         PrimengModule,
         SpiderControlsModule,

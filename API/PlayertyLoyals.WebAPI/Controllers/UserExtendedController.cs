@@ -30,7 +30,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [HttpGet]
         [AuthGuard]
         [SkipSpinner]
-        public async Task<UserExtendedDTO> GetCurrentUser()
+        public async Task<UserExtendedDTO> GetCurrentUserExtended()
         {
             long userId = _authenticationService.GetCurrentUserId();
             return await _loyalsBusinessService.GetUserExtendedDTOAsync(userId);

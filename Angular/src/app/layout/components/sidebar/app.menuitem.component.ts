@@ -9,12 +9,9 @@ import { AuthService } from '../../../business/services/auth/auth.service';
 import { SpiderMenuItem } from './app.menu.component';
 import { ApiService } from '../../../business/services/api/api.service';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
-import { SpiderFormControl } from '../../../core/components/spider-form-control/spider-form-control';
-import { environment } from 'src/environments/environment';
 import { PartnerService } from '../../../business/services/helpers/partner.service';
-import { PrimengOption } from 'src/app/core/entities/primeng-option';
 import { ConfigService } from 'src/app/business/services/config.service';
-import { getPrimengCodebookListForAutocomplete } from 'src/app/core/services/helper-functions';
+import { SpiderFormControl, PrimengOption, getPrimengCodebookListForAutocomplete } from '@playerty/spider';
 
 @Component({
     // eslint-disable-next-line @angular-eslint/component-selector

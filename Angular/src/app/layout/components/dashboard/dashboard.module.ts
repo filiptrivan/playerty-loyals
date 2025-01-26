@@ -1,25 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard.component';
-import { MenuModule } from 'primeng/menu';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { StyleClassModule } from 'primeng/styleclass';
-import { PanelMenuModule } from 'primeng/panelmenu';
-import { ApiService } from '../../../business/services/api/api.service';
-import { PrimengModule } from '../../../core/modules/primeng.module';
-import { SpiderDataTableComponent } from 'src/app/core/components/spider-data-table/spider-data-table.component';
-import { SpiderControlsModule } from 'src/app/core/controls/spider-controls.module';
-import { CardSkeletonComponent } from 'src/app/core/components/card-skeleton/card-skeleton.component';
-import { QRCodeModule } from 'angularx-qrcode';
-import { TiersComponent } from "../../../modules/tiers/pages/tiers.component";
-import { TimelineIndexProgressbarComponent } from 'src/app/core/components/timeline-index-progressbar/timeline-index-progressbar.component';
 import { ProductsRecommendationComponent } from 'src/app/business/components/products-recommendation/products-recommendation.component';
 import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { InfoCardComponent } from "../../../core/components/info-card/info-card.component";
 import { RouterModule, Routes } from '@angular/router';
+import { InfoCardComponent } from '@playerty/spider';
 
 const routes: Routes = [
     {
@@ -31,26 +16,12 @@ const routes: Routes = [
 @NgModule({
     imports: [
     RouterModule.forChild(routes),
-    CommonModule,
-    FormsModule,
-    MenuModule,
-    TableModule,
-    StyleClassModule,
-    PanelMenuModule,
-    ButtonModule,
-    PrimengModule,
-    QRCodeModule,
-    SpiderDataTableComponent,
-    SpiderControlsModule,
-    CardSkeletonComponent,
-    TiersComponent,
-    TimelineIndexProgressbarComponent,
     ProductsRecommendationComponent,
     UserProgressbarComponent,
     TranslocoDirective,
     InfoCardComponent,
 ],
     declarations: [DashboardComponent],
-    providers:[ApiService]
+    providers:[]
 })
 export class DashboardModule { }

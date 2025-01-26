@@ -3,12 +3,8 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { SpiderFormControl, SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
-import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 import { PartnerNotification } from 'src/app/business/entities/business-entities.generated';
-import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { BaseFormService } from 'src/app/core/services/base-form.service';
-import { SpiderButton } from 'src/app/core/entities/spider-button';
+import { BaseFormCopy, SpiderFormGroup, SpiderFormControl, SpiderButton, SpiderMessageService, BaseFormService } from '@playerty/spider';
 
 @Component({
     selector: 'partner-notification-details',

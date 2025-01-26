@@ -5,7 +5,6 @@ import { Component } from '@angular/core';
 import { LayoutService } from '../../services/app.layout.service';
 import { MenuItem } from 'primeng/api';
 import { PartnerService } from '../../../business/services/helpers/partner.service';
-import { environment } from 'src/environments/environment';
 import { ConfigService } from 'src/app/business/services/config.service';
 
 export interface SpiderMenuItem extends MenuItem{

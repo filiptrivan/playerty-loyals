@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 import { ApiGeneratedService } from './api.service.generated';
 import { ConfigService } from '../config.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ApiService extends ApiGeneratedService {
 
     constructor(

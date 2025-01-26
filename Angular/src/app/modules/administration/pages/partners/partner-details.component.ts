@@ -1,4 +1,3 @@
-import { BaseFormService } from './../../../../core/services/base-form.service';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,9 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { Partner, PartnerSaveBody } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerService } from 'src/app/business/services/helpers/partner.service';
-import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
-import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
+import { BaseFormCopy, SpiderFormGroup, SpiderMessageService, BaseFormService } from '@playerty/spider';
 
 @Component({
     selector: 'partner-details',

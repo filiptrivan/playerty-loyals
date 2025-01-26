@@ -2,7 +2,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { NavigationEnd, Router } from '@angular/router';
 import { Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { filter, Subscription, switchMap } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { ApiService } from '../../../business/services/api/api.service';
 import { PartnerService } from '../../../business/services/helpers/partner.service';
 import { LayoutService } from '../../services/app.layout.service';

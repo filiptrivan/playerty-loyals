@@ -3,14 +3,11 @@ import { ApiService } from 'src/app/business/services/api/api.service';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { MenuItem } from 'primeng/api';
 import { PaginatorState } from 'primeng/paginator';
-import { TableFilterContext } from 'src/app/core/entities/table-filter-context';
-import { TableResponse } from 'src/app/core/entities/table-response';
 import { TranslocoService } from '@jsverse/transloco';
 import { Notification } from 'src/app/business/entities/business-entities.generated';
-import { TableFilter } from 'src/app/core/entities/table-filter';
 import { Menu } from 'primeng/menu';
-import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 import { NotificationDiscriminatorCodes } from 'src/app/business/enums/business-enums.generated';
+import { TableResponse, TableFilter, TableFilterContext, SpiderMessageService } from '@playerty/spider';
 
 @Component({
   templateUrl: './notification.component.html',

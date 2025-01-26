@@ -1,9 +1,7 @@
-import { TranslocoService } from '@jsverse/transloco';
 import { PartnerUser, Tier } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from '../../../business/services/api/api.service';
 import { LayoutService } from '../../services/app.layout.service';
 import { Component, OnInit } from '@angular/core';
-import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { PartnerService } from 'src/app/business/services/helpers/partner.service';
@@ -22,10 +20,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     public layoutService: LayoutService,
     private apiService: ApiService,
-    private messageService: SpiderMessageService,
     private authService: AuthService,
     private partnerService: PartnerService,
-    private translocoService: TranslocoService
   ) {}
 
   ngOnInit() {

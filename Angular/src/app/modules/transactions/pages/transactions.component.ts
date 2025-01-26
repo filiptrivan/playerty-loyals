@@ -1,20 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { Transaction } from 'src/app/business/entities/business-entities.generated';
-import { SpiderControlsModule } from 'src/app/core/controls/spider-controls.module';
-import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { PaginatorState } from 'primeng/paginator';
-import { TableFilterContext } from 'src/app/core/entities/table-filter-context';
-import { TableResponse } from 'src/app/core/entities/table-response';
-import { TableFilter } from 'src/app/core/entities/table-filter';
-import { getMonth } from 'src/app/core/services/helper-functions';
+import { CommonModule } from '@angular/common';
+import { PrimengModule, SpiderControlsModule, TableResponse, TableFilter, TableFilterContext, getMonth } from '@playerty/spider';
 
 @Component({
   selector: 'transactions',
   templateUrl: './transactions.component.html',
   standalone: true,
   imports: [
+    CommonModule,
     PrimengModule,
     SpiderControlsModule,
     TranslocoDirective,

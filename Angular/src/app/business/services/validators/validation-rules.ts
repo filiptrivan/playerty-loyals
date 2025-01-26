@@ -1,9 +1,8 @@
-import { FormControl, ValidationErrors } from "@angular/forms";
-import { SpiderFormArray, SpiderFormControl, SpiderValidatorFn } from "src/app/core/components/spider-form-control/spider-form-control";
+import { ValidationErrors } from "@angular/forms";
 import { TranslocoService } from '@jsverse/transloco';
 import { Injectable } from '@angular/core';
-import { ValidatorServiceGenerated } from "./validation-rules.generated";
-import { ValidatorAbstractService } from "src/app/core/services/validator-abstract.service";
+import { ValidatorServiceGenerated } from "./validators.generated";
+import { ValidatorAbstractService, SpiderFormControl, SpiderValidatorFn, SpiderFormArray } from '@playerty/spider';
 
 @Injectable({
     providedIn: 'root',

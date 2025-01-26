@@ -1,8 +1,7 @@
 import { ValidationErrors } from '@angular/forms';
-import { SpiderFormControl, SpiderValidatorFn } from 'src/app/core/components/spider-form-control/spider-form-control';
-import { validatePrecisionScale } from 'src/app/core/services/helper-functions';
 import { TranslocoService } from '@jsverse/transloco';
 import { Injectable } from '@angular/core';
+import { SpiderFormControl, SpiderValidatorFn, validatePrecisionScale } from '@playerty/spider';
 
 @Injectable({
     providedIn: 'root',
@@ -14,7 +13,7 @@ export class ValidatorServiceGenerated {
     ) {
     }
 
-    setValidator = (formControl: SpiderFormControl, className: string): SpiderValidatorFn => {
+    setValidator = (formControl: SpiderFormControl, className: string): SpiderValidatorFn => { 
         switch(formControl.label + className){
 
 
@@ -361,6 +360,7 @@ export class ValidatorServiceGenerated {
             return this.fromDateUpdatePointsValidator(formControl);
         case 'toDateUpdatePoints':
             return this.toDateUpdatePointsValidator(formControl);
+
 
         case 'emailUserExtended':
             return this.emailUserExtendedValidator(formControl);
@@ -2839,6 +2839,7 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
+
 
     emailUserExtendedValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {

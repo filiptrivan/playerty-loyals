@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { PrimengModule } from 'src/app/core/modules/primeng.module';
-import { SpiderPanelsModule } from "../spider-panels/spider-panels.module";
 import { Tier } from 'src/app/business/entities/business-entities.generated';
+import { PrimengModule, SpiderPanelsModule } from '@playerty/spider';
 
 @Component({
-    selector: 'timeline-index-progressbar',
-    templateUrl: './timeline-index-progressbar.component.html',
+    selector: 'tier-timeline-index-progressbar',
+    templateUrl: './tier-timeline-index-progressbar.component.html',
     standalone: true,
     imports: [
     CommonModule,

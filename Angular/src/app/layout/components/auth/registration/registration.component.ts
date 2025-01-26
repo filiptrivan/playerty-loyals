@@ -1,14 +1,10 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { SpiderMessageService } from '../../../../core/services/spider-message.service';
 import { AuthService } from '../../../../business/services/auth/auth.service';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { LayoutService } from '../../../services/app.layout.service';
 import { HttpClient } from '@angular/common/http';
-import { Registration } from 'src/app/core/entities/security-entities.generated';
 import { TranslocoService } from '@jsverse/transloco';
-import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
-import { BaseFormService } from 'src/app/core/services/base-form.service';
+import { BaseFormCopy, SpiderFormGroup, Registration, SpiderMessageService, BaseFormService } from '@playerty/spider';
 
 @Component({
     selector: 'app-registration',

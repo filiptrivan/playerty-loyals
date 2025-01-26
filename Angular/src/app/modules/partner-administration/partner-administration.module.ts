@@ -1,10 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PrimengModule } from 'src/app/core/modules/primeng.module';
-import { SpiderControlsModule } from 'src/app/core/controls/spider-controls.module';
-import { CardSkeletonComponent } from "../../core/components/card-skeleton/card-skeleton.component";
-import { SpiderDataTableComponent } from 'src/app/core/components/spider-data-table/spider-data-table.component';
-import { IndexCardComponent } from 'src/app/core/components/index-card/index-card.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { CommonModule } from '@angular/common';
 import { PartnerUserListComponent } from './pages/users/partner-user-list.component';
@@ -21,6 +16,8 @@ import { UserProgressbarComponent } from "../../business/components/user-progres
 import { BusinessSystemTableComponent } from './pages/business-systems/business-system-list.component';
 import { BusinessSystemDetailsComponent } from './pages/business-systems/business-system-details.component';
 import { SegmentationBaseDetailsComponent, PartnerRoleBaseDetailsComponent, PartnerNotificationBaseDetailsComponent, BusinessSystemBaseDetailsComponent } from 'src/app/business/components/base-details/business-base-details.generated';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PrimengModule, SpiderDataTableComponent, SpiderControlsModule, CardSkeletonComponent, IndexCardComponent } from '@playerty/spider';
 
 const routes: Routes = [
     {
@@ -73,6 +70,8 @@ const routes: Routes = [
     imports: [
     RouterModule.forChild(routes),
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     PrimengModule,
     TranslocoDirective,
     SpiderDataTableComponent,

@@ -1,14 +1,10 @@
-import { BaseFormService } from './../../../../core/services/base-form.service';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { Notification } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { SpiderFormControl, SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
-import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
-import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { SpiderButton } from 'src/app/core/entities/spider-button';
+import { BaseFormCopy, SpiderFormGroup, SpiderFormControl, SpiderButton, SpiderMessageService, BaseFormService } from '@playerty/spider';
 
 @Component({
     selector: 'notification-details',

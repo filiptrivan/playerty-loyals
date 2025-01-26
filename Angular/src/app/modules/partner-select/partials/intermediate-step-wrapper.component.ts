@@ -1,9 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SpiderControlsModule } from 'src/app/core/controls/spider-controls.module';
-import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { TranslocoDirective } from '@jsverse/transloco';
+import { PrimengModule, SpiderControlsModule } from '@playerty/spider';
 
 @Component({
     selector: 'intermediate-step-wrapper',

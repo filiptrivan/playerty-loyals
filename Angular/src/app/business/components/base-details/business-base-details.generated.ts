@@ -1,30 +1,16 @@
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { TranslateLabelsService } from '../../services/translates/merge-labels';
-import { BaseFormService } from './../../../core/services/base-form.service';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { PrimengModule } from 'src/app/core/modules/primeng.module';
 import { ApiService } from '../../services/api/api.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { SpiderControlsModule } from 'src/app/core/controls/spider-controls.module';
-import { SpiderFormArray, SpiderFormControl, SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
-import { PrimengOption } from 'src/app/core/entities/primeng-option';
-import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
-import { getControl, getPrimengNamebookListForAutocomplete, getPrimengNamebookListForDropdown, nameof } from 'src/app/core/services/helper-functions';
+import { AutoCompleteCompleteEvent } from 'primeng/autocomplete'; 
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom, forkJoin, Observable } from 'rxjs';
-import { BaseEntity } from 'src/app/core/entities/base-entity';
-import { CardSkeletonComponent } from "../../../core/components/card-skeleton/card-skeleton.component";
-import { SpiderButton } from 'src/app/core/entities/spider-button';
-import { IndexCardComponent } from 'src/app/core/components/index-card/index-card.component';
-import { LastMenuIconIndexClicked } from 'src/app/core/entities/last-menu-icon-index-clicked';
 import { MenuItem } from 'primeng/api';
-import { AllClickEvent, Column, SpiderDataTableComponent } from 'src/app/core/components/spider-data-table/spider-data-table.component';
-import { TableFilter } from 'src/app/core/entities/table-filter';
-import { LazyLoadSelectedIdsResult } from 'src/app/core/entities/lazy-load-selected-ids-result';
-import { SpiderFileSelectEvent } from 'src/app/core/controls/spider-file/spider-file.component';
+import { PrimengModule, SpiderControlsModule, CardSkeletonComponent, IndexCardComponent, SpiderDataTableComponent, SpiderFormArray, BaseEntity, LastMenuIconIndexClicked, SpiderFormGroup, SpiderButton, nameof, BaseFormService, getControl, Column, TableFilter, LazyLoadSelectedIdsResult, AllClickEvent, SpiderFileSelectEvent, getPrimengNamebookListForDropdown, PrimengOption, SpiderFormControl, getPrimengNamebookListForAutocomplete } from '@playerty/spider';
 import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, BusinessSystemUpdatePointsDataBody, ExcelManualUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, MergedPartnerUser, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerRoleSaveBody, PartnerUserSaveBody, Product, QrCode, SegmentationItem, TierSaveBody, UpdatePoints, UserExtendedSaveBody, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUser, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
-import { Permission, Role, RolePermission, UserRole, PermissionSaveBody, RoleSaveBody, RolePermissionSaveBody, UserRoleSaveBody } from '../../../core/entities/security-entities.generated';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
     selector: 'business-system-base-details',
@@ -788,6 +774,8 @@ export class PartnerNotificationBaseDetailsComponent {
     standalone: true,
     imports: [
         CommonModule, 
+        FormsModule,
+        ReactiveFormsModule,
         PrimengModule,
         SpiderControlsModule,
         TranslocoDirective,
@@ -977,6 +965,8 @@ export class PartnerRoleBaseDetailsComponent {
     standalone: true,
     imports: [
         CommonModule, 
+        FormsModule,
+        ReactiveFormsModule,
         PrimengModule,
         SpiderControlsModule,
         TranslocoDirective,

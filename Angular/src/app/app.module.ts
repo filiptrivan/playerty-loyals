@@ -1,60 +1,33 @@
-import { ErrorHandler, NgModule } from '@angular/core';
-import { AppRoutingModule } from './app-routing.module';
+import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { NotfoundComponent } from './core/components/notfound/notfound.component';
 import { AppLayoutModule } from './layout/components/layout/app.layout.module';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { MessagesModule } from 'primeng/messages';
-import { CoreModule } from './core/modules/core.module';
-import { SpiderMessageService } from './core/services/spider-message.service';
-import { SpiderErrorHandler } from './core/handlers/spider-error-handler';
-import { BrowserModule } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ApiService } from './business/services/api/api.service';
-import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
-import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { environment } from 'src/environments/environment';
 import { BusinessModule } from './business/business.module';
-import { SpiderTranslocoModule } from './core/modules/spider-transloco.module';
-import { TranslateLabelsAbstractService } from './core/services/translate-labels-abstract.service';
 import { TranslateLabelsService } from './business/services/translates/merge-labels';
-import { ValidatorAbstractService } from './core/services/validator-abstract.service';
 import { ValidatorService } from './business/services/validators/validation-rules';
-import { AuthBaseService } from './core/services/auth-base.service';
 import { AuthService } from './business/services/auth/auth.service';
 import { ConfigService } from './business/services/config.service';
-import { ConfigBaseService } from './core/services/config-base.service';
+import { AppRoutingModule } from './app-routing.module';
+import { AuthBaseService, ConfigBaseService, CoreModule, SpiderTranslocoModule, TranslateLabelsAbstractService, ValidatorAbstractService } from '@playerty/spider';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NotfoundComponent,
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
     AppLayoutModule,
-    MessagesModule,
-    ToastModule,
-    SocialLoginModule,
     SpiderTranslocoModule.forRoot(),
     NgxSpinnerModule.forRoot({ type: 'ball-clip-rotate-multiple' }),
     BusinessModule,
     CoreModule,
   ],
   providers: [
-    SpiderMessageService,
     MessageService,
-    {
-    provide: ErrorHandler,
-    useClass: SpiderErrorHandler,
-    },
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
@@ -94,8 +67,6 @@ import { ConfigBaseService } from './core/services/config-base.service';
       provide: ConfigBaseService, 
       useExisting: ConfigService 
     },
-    ApiService,
-    NgxSpinnerService,
   ],
   bootstrap: [AppComponent],
 })

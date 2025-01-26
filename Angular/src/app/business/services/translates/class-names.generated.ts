@@ -176,6 +176,8 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('TransactionSaveBody');
             case 'UpdatePoints':
                 return this.translocoService.translate('UpdatePoints');
+            case 'User':
+                return this.translocoService.translate('User');
             case 'UserExtended':
                 return this.translocoService.translate('UserExtended');
             case 'UserExtendedSaveBody':

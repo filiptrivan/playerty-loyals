@@ -3,9 +3,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "paths": {
-      "@core/*": ["app/core/*"]
-    },
+    "paths": {},
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": false,
@@ -30,11 +28,13 @@
   },
   "exclude": ["node_modules", "**/node_modules/*"],
   "angularCompilerOptions": {
+    "enableIvy": false,
+    "preserveSymlinks": true,
     "enableI18nLegacyMessageIdFormat": false,
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true,
-    "strictInputTypes": true,
+    "strictInputTypes": true
   }
 }

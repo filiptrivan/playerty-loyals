@@ -5,8 +5,8 @@ import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
-import { AuthBaseService } from 'src/app/core/services/auth-base.service';
 import { ConfigService } from '../config.service';
+import { AuthBaseService } from '@playerty/spider';
 
 @Injectable({
   providedIn: 'root',

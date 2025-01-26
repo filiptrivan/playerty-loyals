@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api/api.service';
-import { environment } from 'src/environments/environment';
 import { BehaviorSubject, firstValueFrom, map, Observable, Subscription } from 'rxjs';
-import { PrimengOption } from 'src/app/core/entities/primeng-option';
-import { adjustColor } from 'src/app/core/services/helper-functions';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { Partner, PartnerUser } from '../../entities/business-entities.generated';
 import { ConfigService } from '../config.service';
+import { adjustColor } from '@playerty/spider';
 
 @Injectable({
   providedIn: 'root' // FT: Ensures the service is available application-wide

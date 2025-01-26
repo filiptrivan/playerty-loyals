@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ConfigBaseService } from "src/app/core/services/config-base.service";
 import { environment } from "src/environments/environment";
+import { ConfigBaseService } from '@playerty/spider';
 
 @Injectable({
   providedIn: 'root',

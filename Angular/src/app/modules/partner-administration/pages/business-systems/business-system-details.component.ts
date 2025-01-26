@@ -1,16 +1,10 @@
-import { SpiderFileSelectEvent } from './../../../../core/controls/spider-file/spider-file.component';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { BusinessSystem, BusinessSystemUpdatePointsDataBody, UpdatePoints, ExcelManualUpdatePoints } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { BaseFormCopy } from 'src/app/core/components/base-form/base-form copy';
-import { SpiderMessageService } from 'src/app/core/services/spider-message.service';
-import { Column } from 'src/app/core/components/spider-data-table/spider-data-table.component';
-import { SpiderFormGroup } from 'src/app/core/components/spider-form-control/spider-form-control';
-import { BaseFormService } from 'src/app/core/services/base-form.service';
-import { SpiderButton } from 'src/app/core/entities/spider-button';
+import { BaseFormCopy, SpiderFormGroup, SpiderButton, Column, SpiderMessageService, BaseFormService, SpiderFileSelectEvent } from '@playerty/spider';
 
 @Component({
     selector: 'business-system-details',

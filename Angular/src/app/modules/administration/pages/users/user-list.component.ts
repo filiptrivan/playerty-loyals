@@ -1,7 +1,7 @@
 import { ApiService } from './../../../../business/services/api/api.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { Component, OnInit } from '@angular/core';
-import { Column } from 'src/app/core/components/spider-data-table/spider-data-table.component';
+import { Column } from '@playerty/spider';
 
 @Component({
     selector: 'user-list',

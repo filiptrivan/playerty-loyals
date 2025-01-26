@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Spider.Shared.Terms;
 using Spider.Security.DTO;
 using Spider.Shared.Extensions;
+using Spider.Shared.Attributes.EF.UI;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {
@@ -45,6 +46,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         /// FT: Putting the method here because we need to make new partner user if he doesn't exist
         /// </summary>
         [HttpPost]
+        [UIDoNotGenerate]
         public async Task<AuthResultDTO> Register(VerificationTokenRequestDTO request)
         {
             return await _context.WithTransactionAsync(async () =>
@@ -59,6 +61,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         /// FT: Putting the method here because we need to make new partner user if he doesn't exist
         /// </summary
         [HttpPost]
+        [UIDoNotGenerate]
         public async Task<AuthResultDTO> Login(VerificationTokenRequestDTO request)
         {
             AuthResultDTO authResultDTO = _securityBusinessService.Login(request);
@@ -70,6 +73,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         /// FT: Putting the method here because we need to make new partner user if he doesn't exist
         /// </summary>
         [HttpPost]
+        [UIDoNotGenerate]
         public async Task<AuthResultDTO> LoginExternal(ExternalProviderDTO externalProviderDTO) // TODO FT: Add enum for which external provider you should login user
         {
             return await _context.WithTransactionAsync(async () =>

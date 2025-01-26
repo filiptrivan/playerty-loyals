@@ -6,16 +6,13 @@ import {
   KeyValueDiffers,
   OnInit,
 } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
-import { BaseEntity } from '../../../core/entities/base-entity';
-import { SpiderFormControl } from '../../../core/components/spider-form-control/spider-form-control';
 import { HttpClient } from '@angular/common/http';
-import { SpiderMessageService } from '../../../core/services/spider-message.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { ConfigService } from 'src/app/business/services/config.service';
+import { BaseEntity, SpiderFormArray, SpiderFormControl, SpiderFormGroup, SpiderMessageService } from '@playerty/spider';
 
 @Component({
   selector: 'base-form',
@@ -23,8 +20,8 @@ import { ConfigService } from 'src/app/business/services/config.service';
   styles: [],
 })
 export class BaseForm<T extends BaseEntity> implements OnInit { 
-  formGroup: FormGroup;
-  formArray: FormArray;
+  formGroup: SpiderFormGroup;
+  formArray: SpiderFormArray;
   formArrayControlNamesFromHtml: string[] = [];
   model: T;
   modelList: T[];
@@ -60,12 +57,12 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     
     this.detailsTitle = this.translateClassNamesService.translate(this.model.typeName);
 
-    this.formGroup = new FormGroup({});
+    this.formGroup = new SpiderFormGroup({});
     
     this.modelDiffer = this.differs.find(this.model).create();
   }
 
-  subscribeFormToModelChanges(formGroup: FormGroup, model: T) {
+  subscribeFormToModelChanges(formGroup: SpiderFormGroup, model: T) {
     // both directions
     Object.keys(formGroup.controls).forEach((key) => {
       formGroup.controls[key].setValue(model[key]);
@@ -222,7 +219,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   //#region Model List
 
   initFormArray(modelList: T[], modelConstructor: T){ // FT HACK: Because generics can't instantiate in TS (because JS)
-    this.formArray = new FormArray([]);
+    this.formArray = new SpiderFormArray([]);
     
     if (modelList == null)
       return;
@@ -233,8 +230,8 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     });
   }
 
-  createFormGroup(model: T): FormGroup {
-    let formGroup: FormGroup = new FormGroup({});
+  createFormGroup(model: T): SpiderFormGroup {
+    let formGroup: SpiderFormGroup = new SpiderFormGroup({});
 
     Object.keys(model).forEach((key) => {
       formGroup = this.arrayFormGroup(key, formGroup, model);
@@ -243,7 +240,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
     return formGroup;
   }
 
-  arrayFormGroup(formControlName: string, formGroup: FormGroup, model: T, updateOnChange: boolean = false, customValidation: boolean = false, disable: boolean = false) {
+  arrayFormGroup(formControlName: string, formGroup: SpiderFormGroup, model: T, updateOnChange: boolean = false, customValidation: boolean = false, disable: boolean = false) {
     let formControl: SpiderFormControl = formGroup.controls[formControlName] as SpiderFormControl;
 
     if (formControl == null) {
@@ -285,15 +282,15 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
   getFormArrayControl(formControlName: keyof T & string, index: number): SpiderFormControl{
     if(this.formArrayControlNamesFromHtml.findIndex(x => x === formControlName) === -1)
       this.formArrayControlNamesFromHtml.push(formControlName);
-    return (this.formArray.controls[index] as FormGroup).controls[formControlName] as SpiderFormControl;
+    return (this.formArray.controls[index] as SpiderFormGroup).controls[formControlName] as SpiderFormControl;
   }
 
-  getFormArrayGroup(index: number): FormGroup{
-    return this.formArray.controls[index] as FormGroup
+  getFormArrayGroup(index: number): SpiderFormGroup {
+    return this.formArray.controls[index] as SpiderFormGroup
   }
 
-  getFormArrayGroups(): FormGroup[]{
-    return this.formArray.controls as FormGroup[]
+  getFormArrayGroups(): SpiderFormGroup[]{
+    return this.formArray.controls as SpiderFormGroup[]
   }
 
   removeFormControlFromTheFormArray(index: number) {
@@ -330,7 +327,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
     let invalid: boolean = false;
 
-    (this.formArray.controls as FormGroup[]).forEach(formGroup => {
+    (this.formArray.controls as SpiderFormGroup[]).forEach(formGroup => {
       Object.keys(formGroup.controls).forEach(key => {
         let formControl = formGroup.controls[key] as SpiderFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
         formControl.markAsDirty();
@@ -353,7 +350,7 @@ export class BaseForm<T extends BaseEntity> implements OnInit {
 
     let invalid: boolean = false;
 
-    (this.formArray.controls as FormGroup[]).forEach(formGroup => {
+    (this.formArray.controls as SpiderFormGroup[]).forEach(formGroup => {
       Object.keys(formGroup.controls).forEach(key => {
         let formControl = formGroup.controls[key] as SpiderFormControl; // this.formArray.markAsDirty(); // FT: For some reason this doesnt work
         formControl.markAsDirty();
