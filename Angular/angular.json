@@ -72,7 +72,7 @@
               "sourceMap": true,
 							"outputHashing": "all",
 							"namedChunks": true,
-              "aot": true
+              "aot": false
             }
           },
           "defaultConfiguration": "production"

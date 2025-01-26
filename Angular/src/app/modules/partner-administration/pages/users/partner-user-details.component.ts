@@ -1,4 +1,3 @@
-import { TranslateLabelsService } from 'src/app/business/services/translates/merge-labels';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
@@ -9,7 +8,6 @@ import { UserProgressbarComponent } from 'src/app/business/components/user-progr
 import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, Tier, UserExtended } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerService } from 'src/app/business/services/helpers/partner.service';
-import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { BaseFormCopy, PrimengOption, SpiderFormControl, SpiderFormGroup, SpiderFormArray, SpiderMessageService, BaseFormService, nameof } from '@playerty/spider';
 
 @Component({
@@ -51,8 +49,6 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         protected override route: ActivatedRoute, 
         protected override translocoService: TranslocoService,
         protected override baseFormService: BaseFormService,
-        private validatorService: ValidatorService,
-        private translateLabelsService: TranslateLabelsService,
         private apiService: ApiService,
         private partnerService: PartnerService,
     ) {
@@ -92,21 +88,22 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
                     });
                 }
                 
-                this.apiService.getSegmentationItemListForTheCurrentPartner().subscribe(segmentationItems => {
+                forkJoin({
+                    segmentationItems: this.apiService.getSegmentationItemListForTheCurrentPartner(),
+                    user: this.apiService.getUserExtended(partnerUser.userId),
+                })
+                .subscribe(({ 
+                    segmentationItems, 
+                    user 
+                }) => {
                     this.segmentationItemsFormArray = this.initFormArray(this.formGroup, segmentationItems, this.segmentationItemModel, this.segmentationItemsFormArrayIdentifier, this.segmentationItemsTranslationKey);
-
                     this.apiService.getCheckedSegmentationItemIdsForThePartnerUser(partnerUser.id).subscribe(ids => {
                         this.segmentationItemsFormArray.controls.forEach((formGroup: FormGroup) => {
                             formGroup.controls['checked'].setValue(ids.includes(formGroup.controls['id'].value));
                         });
                     });
-                })
-
-                this.getAlreadyFilledSegmentationIdsForThePartnerUser(partnerUser);     
-
-                this.apiService.getUserExtended(partnerUser.userId).subscribe(user => {
+                    
                     this.initFormGroup(this.userExtendedFormGroup, this.formGroup, new UserExtended(user), nameof<PartnerUserSaveBody>('userExtendedDTO'));
-
                     this.apiService.getRolesNamebookListForUserExtended(user.id).subscribe(rolesForTheUser => {
                         this.selectedRoles.setValue(
                             rolesForTheUser.map(role => { return role.id })
@@ -114,12 +111,15 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
                         this.loading = false;
                     });
                 });
-            })
+
+                this.setAlreadyFilledSegmentationIdsForThePartnerUser(partnerUser);
+
+            });
         });
     }
 
     // TODO FT: Return this inside save result also
-    getAlreadyFilledSegmentationIdsForThePartnerUser(partnerUser: PartnerUser){
+    setAlreadyFilledSegmentationIdsForThePartnerUser(partnerUser: PartnerUser){
         this.apiService.getAlreadyFilledSegmentationIdsForThePartnerUser(partnerUser.id).subscribe(ids => {
             this.alreadyFilledSegmentationIdsForThePartnerUser = ids;
         });
@@ -149,7 +149,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     }
 
     override onAfterSave = async () => {
-        this.getAlreadyFilledSegmentationIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue());
+        this.setAlreadyFilledSegmentationIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue());
         
         if ((await firstValueFrom(this.partnerService.currentPartnerUser$)).id == this.partnerUserFormGroup.getRawValue().id) {
             await firstValueFrom(this.partnerService.getCurrentPartnerUser());

@@ -1,16 +1,16 @@
 import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
 import { TranslateLabelsService } from '../../services/translates/merge-labels';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ApiService } from '../../services/api/api.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
-import { AutoCompleteCompleteEvent } from 'primeng/autocomplete'; 
+import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom, forkJoin, Observable } from 'rxjs';
 import { MenuItem } from 'primeng/api';
 import { PrimengModule, SpiderControlsModule, CardSkeletonComponent, IndexCardComponent, SpiderDataTableComponent, SpiderFormArray, BaseEntity, LastMenuIconIndexClicked, SpiderFormGroup, SpiderButton, nameof, BaseFormService, getControl, Column, TableFilter, LazyLoadSelectedIdsResult, AllClickEvent, SpiderFileSelectEvent, getPrimengNamebookListForDropdown, PrimengOption, SpiderFormControl, getPrimengNamebookListForAutocomplete } from '@playerty/spider';
 import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, BusinessSystemUpdatePointsDataBody, ExcelManualUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, MergedPartnerUser, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerRoleSaveBody, PartnerUserSaveBody, Product, QrCode, SegmentationItem, TierSaveBody, UpdatePoints, UserExtendedSaveBody, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUser, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
     selector: 'business-system-base-details',
@@ -56,6 +56,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     standalone: true,
     imports: [
         CommonModule, 
+        FormsModule,
+        ReactiveFormsModule,
         PrimengModule,
         SpiderControlsModule,
         TranslocoDirective,
@@ -226,6 +228,8 @@ export class BusinessSystemBaseDetailsComponent {
     standalone: true,
     imports: [
         CommonModule, 
+        FormsModule,
+        ReactiveFormsModule,
         PrimengModule,
         SpiderControlsModule,
         TranslocoDirective,
@@ -416,6 +420,8 @@ export class NotificationBaseDetailsComponent {
     standalone: true,
     imports: [
         CommonModule, 
+        FormsModule,
+        ReactiveFormsModule,
         PrimengModule,
         SpiderControlsModule,
         TranslocoDirective,
@@ -590,6 +596,8 @@ export class PartnerBaseDetailsComponent {
     standalone: true,
     imports: [
         CommonModule, 
+        FormsModule,
+        ReactiveFormsModule,
         PrimengModule,
         SpiderControlsModule,
         TranslocoDirective,
@@ -1147,6 +1155,8 @@ export class SegmentationBaseDetailsComponent {
     standalone: true,
     imports: [
         CommonModule, 
+        FormsModule,
+        ReactiveFormsModule,
         PrimengModule,
         SpiderControlsModule,
         TranslocoDirective,
@@ -1305,6 +1315,8 @@ export class TierBaseDetailsComponent {
     standalone: true,
     imports: [
         CommonModule, 
+        FormsModule,
+        ReactiveFormsModule,
         PrimengModule,
         SpiderControlsModule,
         TranslocoDirective,

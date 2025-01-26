@@ -13,7 +13,7 @@ export class ValidatorServiceGenerated {
     ) {
     }
 
-    setValidator = (formControl: SpiderFormControl, className: string): SpiderValidatorFn => { 
+    setValidator = (formControl: SpiderFormControl, className: string): SpiderValidatorFn => {
         switch(formControl.label + className){
 
 
