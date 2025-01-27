@@ -14,7 +14,7 @@ namespace PlayertyLoyals.Business.Entities
         [M2MMaintanceEntity(nameof(PartnerUserThatHasFilledSegmentation.AlreadyFilledSegmentations))]
         public virtual PartnerUser PartnerUserThatHasFilledSegmentation { get; set; }
 
-        [M2MExtendEntity(nameof(AlreadyFilledSegmentation.PartnerUsersThatHasFilledSegmentation))]
+        [M2MEntity(nameof(AlreadyFilledSegmentation.PartnerUsersThatHasFilledSegmentation))]
         public virtual Segmentation AlreadyFilledSegmentation { get; set; }
     }
 }

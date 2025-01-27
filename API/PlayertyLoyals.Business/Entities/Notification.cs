@@ -10,7 +10,7 @@ namespace PlayertyLoyals.Business.Entities
 {
     public class Notification : BusinessObject<long>, INotification<UserExtended>
     {
-        [UIColWidth("col-12")]
+        [UIControlWidth("col-12")]
         [DisplayName]
         [StringLength(100, MinimumLength = 1)]
         [Required]
@@ -25,9 +25,9 @@ namespace PlayertyLoyals.Business.Entities
         [StringLength(1000, MinimumLength = 1)]
         public string EmailBody { get; set; }
 
-        #region UIColumn
-        [UIColumn(nameof(UserExtendedDTO.Email))]
-        [UIColumn(nameof(UserExtendedDTO.CreatedAt))]
+        #region UITableColumn
+        [UITableColumn(nameof(UserExtendedDTO.Email))]
+        [UITableColumn(nameof(UserExtendedDTO.CreatedAt))]
         #endregion
         [SimpleManyToManyTableLazyLoad]
         public virtual List<UserExtended> Recipients { get; } = new(); // M2M

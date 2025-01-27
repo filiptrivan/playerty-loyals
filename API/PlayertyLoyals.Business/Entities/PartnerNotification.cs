@@ -10,7 +10,7 @@ namespace PlayertyLoyals.Business.Entities
 {
     public class PartnerNotification : BusinessObject<long>, INotification<PartnerUser>
     {
-        [UIColWidth("col-12")]
+        [UIControlWidth("col-12")]
         [DisplayName]
         [StringLength(100, MinimumLength = 1)]
         [Required]
@@ -30,12 +30,12 @@ namespace PlayertyLoyals.Business.Entities
         [WithMany(nameof(Partner.PartnerNotifications))]
         public virtual Partner Partner { get; set; }
 
-        #region UIColumn
-        [UIColumn(nameof(PartnerUserDTO.UserDisplayName))]
-        [UIColumn(nameof(PartnerUserDTO.Points))]
-        [UIColumn(nameof(PartnerUserDTO.TierDisplayName))]
-        [UIColumn(nameof(PartnerUserDTO.CheckedSegmentationItemsCommaSeparated), "Segmentation")]
-        [UIColumn(nameof(PartnerUserDTO.CreatedAt))]
+        #region UITableColumn
+        [UITableColumn(nameof(PartnerUserDTO.UserDisplayName))]
+        [UITableColumn(nameof(PartnerUserDTO.Points))]
+        [UITableColumn(nameof(PartnerUserDTO.TierDisplayName))]
+        [UITableColumn(nameof(PartnerUserDTO.CheckedSegmentationItemsCommaSeparated), "Segmentation")]
+        [UITableColumn(nameof(PartnerUserDTO.CreatedAt))]
         #endregion
         [SimpleManyToManyTableLazyLoad]
         public virtual List<PartnerUser> Recipients { get; } = new(); // M2M

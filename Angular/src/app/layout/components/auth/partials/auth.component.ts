@@ -41,7 +41,7 @@ export class AuthComponent {
         if (partner?.logoImageData) {
           this.image = getHtmlImgDisplayString64(partner.logoImageData);
         }else{
-          this.image = `assets/primeng/images/${this.layoutService.config.colorScheme === 'light' ? 'logo-dark' : 'logo-white'}.svg`
+          this.image = `assets/demo/images/logo/logo-dark.svg`
         }
         
         this.companyName = partner?.name ?? this.config.companyName;

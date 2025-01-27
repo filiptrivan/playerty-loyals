@@ -46,10 +46,8 @@ public class Startup
 
     public void ConfigureContainer(IServiceContainer container)
     {
-        // Register container (AntiPattern)
         container.RegisterInstance(typeof(IServiceContainer), container);
 
-        // Init WebAPI
         container.RegisterFrom<CompositionRoot>();
     }
 

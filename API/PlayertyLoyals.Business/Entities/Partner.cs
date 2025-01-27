@@ -45,7 +45,6 @@ namespace PlayertyLoyals.Business.Entities
         [StringLength(7)]
         public string PrimaryColor { get; set; }
 
-
         [StringLength(1000, MinimumLength = 1)]
         public string ProductsRecommendationEndpoint { get; set; }
 

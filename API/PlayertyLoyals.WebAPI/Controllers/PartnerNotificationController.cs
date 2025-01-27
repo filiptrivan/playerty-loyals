@@ -2,15 +2,9 @@
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Services;
-using Spider.Security.DTO;
-using Spider.Security.Entities;
-using Spider.Security.Services;
 using Spider.Shared.Attributes;
 using Spider.Shared.DTO;
-using Spider.Shared.Helpers;
 using Spider.Shared.Interfaces;
-using Spider.Shared.Emailing;
-using PlayertyLoyals.Shared.Terms;
 using Azure.Storage.Blobs;
 
 namespace PlayertyLoyals.WebAPI.Controllers

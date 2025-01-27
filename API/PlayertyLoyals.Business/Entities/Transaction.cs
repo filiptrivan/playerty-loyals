@@ -1,14 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using Spider.Shared.Attributes.EF;
 using Spider.Shared.Attributes.EF.UI;
 using Spider.Shared.BaseEntities;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.Entities
 {

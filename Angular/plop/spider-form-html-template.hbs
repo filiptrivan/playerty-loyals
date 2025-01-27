@@ -1,0 +1,11 @@
+<ng-container *transloco="let t">
+    <spider-card [title]="t('{{filename}}')" icon="pi pi-file-edit">
+        
+        <{{toKebab filename}}-base-details
+        [formGroup]="formGroup" 
+        [{{firstCharToLower filename}}FormGroup]="{{firstCharToLower filename}}FormGroup" 
+        (onSave)="onSave()"
+        />
+
+    </spider-card>
+</ng-container>

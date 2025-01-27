@@ -12,7 +12,7 @@ namespace PlayertyLoyals.Business.Entities
         [M2MMaintanceEntity(nameof(PartnerUser.CheckedSegmentationItems))]
         public virtual PartnerUser PartnerUser { get; set; }
 
-        [M2MExtendEntity(nameof(CheckedSegmentationItem.PartnerUsers))]
+        [M2MEntity(nameof(CheckedSegmentationItem.PartnerUsers))]
         public virtual SegmentationItem CheckedSegmentationItem { get; set; }
     }
 }

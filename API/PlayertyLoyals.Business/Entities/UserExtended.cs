@@ -15,7 +15,7 @@ namespace PlayertyLoyals.Business.Entities
     [Index(nameof(Email), IsUnique = true)]
     public class UserExtended : BusinessObject<long>, IUser
     {
-        [UIColWidth("col-12")]
+        [UIControlWidth("col-12")]
         [TranslateSingularSrLatnRS("Email")]
         [DisplayName]
         [CustomValidator("EmailAddress()")]
@@ -42,7 +42,7 @@ namespace PlayertyLoyals.Business.Entities
 
         public virtual List<PartnerUser> PartnerUsers { get; } = new();
 
-        [BusinessServiceDoNotGenerate]
+        [ExcludeServiceMethodsFromGeneration]
         [UIControlType(nameof(UIControlTypeCodes.MultiSelect))]
         public virtual List<Role> Roles { get; } = new(); // M2M
 

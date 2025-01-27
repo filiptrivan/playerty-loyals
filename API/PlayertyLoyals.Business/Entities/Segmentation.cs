@@ -2,12 +2,7 @@
 using Spider.Shared.Attributes.EF.UI;
 using Spider.Shared.BaseEntities;
 using Spider.Shared.Enums;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.Entities
 {
@@ -32,7 +27,7 @@ namespace PlayertyLoyals.Business.Entities
         public virtual Partner Partner { get; set; }
 
         [UIOrderedOneToMany]
-        [NonEmpty]
+        [Required]
         public virtual List<SegmentationItem> SegmentationItems { get; } = new();
 
         public virtual List<PartnerUser> PartnerUsersThatHasFilledSegmentation { get; } = new(); // M2M

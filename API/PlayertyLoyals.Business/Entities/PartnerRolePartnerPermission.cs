@@ -13,7 +13,7 @@ namespace PlayertyLoyals.Business.Entities
         [M2MMaintanceEntity(nameof(PartnerRole.PartnerPermissions))]
         public virtual PartnerRole PartnerRole { get; set; }
 
-        [M2MExtendEntity(nameof(PartnerPermission.PartnerRoles))]
+        [M2MEntity(nameof(PartnerPermission.PartnerRoles))]
         public virtual PartnerPermission PartnerPermission { get; set; }
     }
 }

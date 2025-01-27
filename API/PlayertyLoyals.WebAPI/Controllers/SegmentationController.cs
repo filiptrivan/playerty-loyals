@@ -5,7 +5,6 @@ using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Services;
 using Spider.Shared.Attributes;
 using Spider.Shared.DTO;
-using Spider.Shared.Helpers;
 using Spider.Shared.Interfaces;
 
 namespace PlayertyLoyals.WebAPI.Controllers
@@ -40,13 +39,6 @@ namespace PlayertyLoyals.WebAPI.Controllers
         {
             byte[] fileContent = await _loyalsBusinessService.ExportSegmentationTableDataToExcel(tableFilterDTO, _context.DbSet<Segmentation>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Segmentacije.xlsx"));
-        }
-
-        [HttpGet]
-        [AuthGuard]
-        public async Task<List<SegmentationItemDTO>> GetSegmentationItemsForTheSegmentation(int segmentationId)
-        {
-            return await _loyalsBusinessService.GetOrderedSegmentationItemsForSegmentation(segmentationId);
         }
 
         [HttpGet]
