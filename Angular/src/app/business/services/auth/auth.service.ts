@@ -33,7 +33,7 @@ export class AuthService extends AuthBaseService implements OnDestroy {
       map(partner => {  
         let image = partner?.logoImageData
           ? getHtmlImgDisplayString64(partner.logoImageData)
-          : `assets/demo/images/logo/logo-dark.svg`;
+          : `assets/images/logo/logo.svg`;
   
         let companyName = partner?.name ?? this.config.companyName;
   
