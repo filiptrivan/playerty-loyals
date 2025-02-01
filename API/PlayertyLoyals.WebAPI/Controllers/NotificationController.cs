@@ -3,6 +3,7 @@ using PlayertyLoyals.Business.Services;
 using Spider.Shared.Attributes;
 using Spider.Shared.Interfaces;
 using Azure.Storage.Blobs;
+using Spider.Shared.Attributes.EF.UI;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {
@@ -48,19 +49,19 @@ namespace PlayertyLoyals.WebAPI.Controllers
             await _loyalsBusinessService.MarkNotificationAsUnreadForCurrentUser(notificationId, notificationVersion);
         }
 
+        [HttpGet]
+        [AuthGuard]
+        [UIDoNotGenerate]
+        public async Task<int> GetUnreadNotificationsCountForCurrentUser()
+        {
+            return await _loyalsBusinessService.GetUnreadNotificationsCountForCurrentUser();
+        }
+
         //[HttpPost]
         //[AuthGuard]
         //public async Task<TableResponseDTO<NotificationDTO>> GetNotificationListForCurrentUser(TableFilterDTO tableFilterDTO)
         //{
         //    return await _loyalsBusinessService.GetNotificationListForCurrentUser(tableFilterDTO);
-        //}
-
-        // TODO FT: This should exist in other systems
-        //[HttpGet]
-        //[AuthGuard]
-        //public async Task<int> GetUnreadNotificationCountForTheCurrentUser()
-        //{
-        //    return await _loyalsBusinessService.GetUnreGetUnreadNotificationCountForTheCurrentUser();
         //}
 
     }

@@ -127,6 +127,7 @@ export class BusinessSystemTier extends BaseEntity
 	businessSystemId?: number;
 	tierDisplayName?: string;
 	tierId?: number;
+	businessSystemTierDiscountProductGroupsDTOList?: BusinessSystemTierDiscountProductGroup[];
 	version?: number;
 	id?: number;
 	createdAt?: Date;
@@ -140,6 +141,7 @@ export class BusinessSystemTier extends BaseEntity
 		businessSystemId,
 		tierDisplayName,
 		tierId,
+		businessSystemTierDiscountProductGroupsDTOList,
 		version,
 		id,
 		createdAt,
@@ -151,6 +153,7 @@ export class BusinessSystemTier extends BaseEntity
 		businessSystemId?: number;
 		tierDisplayName?: string;
 		tierId?: number;
+		businessSystemTierDiscountProductGroupsDTOList?: BusinessSystemTierDiscountProductGroup[];
 		version?: number;
 		id?: number;
 		createdAt?: Date;
@@ -165,6 +168,7 @@ export class BusinessSystemTier extends BaseEntity
 		this.businessSystemId = businessSystemId;
 		this.tierDisplayName = tierDisplayName;
 		this.tierId = tierId;
+		this.businessSystemTierDiscountProductGroupsDTOList = businessSystemTierDiscountProductGroupsDTOList;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;
@@ -1510,6 +1514,7 @@ export class Tier extends BaseEntity
 	validTo?: number;
 	partnerDisplayName?: string;
 	partnerId?: number;
+	businessSystemTiersDTOList?: BusinessSystemTier[];
 	version?: number;
 	id?: number;
 	createdAt?: Date;
@@ -1523,6 +1528,7 @@ export class Tier extends BaseEntity
 		validTo,
 		partnerDisplayName,
 		partnerId,
+		businessSystemTiersDTOList,
 		version,
 		id,
 		createdAt,
@@ -1534,6 +1540,7 @@ export class Tier extends BaseEntity
 		validTo?: number;
 		partnerDisplayName?: string;
 		partnerId?: number;
+		businessSystemTiersDTOList?: BusinessSystemTier[];
 		version?: number;
 		id?: number;
 		createdAt?: Date;
@@ -1548,6 +1555,7 @@ export class Tier extends BaseEntity
 		this.validTo = validTo;
 		this.partnerDisplayName = partnerDisplayName;
 		this.partnerId = partnerId;
+		this.businessSystemTiersDTOList = businessSystemTiersDTOList;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;

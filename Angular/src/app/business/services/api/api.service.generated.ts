@@ -191,10 +191,6 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.post<TableResponse<Notification>>(`${this.config.apiUrl}/PartnerNotification/GetNotificationsForCurrentPartnerUser`, tableFilterDTO, this.config.httpSkipSpinnerOptions);
     }
 
-    getUnreadNotificationCountForCurrentPartnerUser = (): Observable<number> => { 
-        return this.http.get<number>(`${this.config.apiUrl}/PartnerNotification/GetUnreadNotificationCountForCurrentPartnerUser`, this.config.httpOptions);
-    }
-
     deletePartnerNotificationForCurrentPartnerUser = (partnerNotificationId: number, partnerNotificationVersion: number): Observable<any> => { 
         return this.http.delete(`${this.config.apiUrl}/PartnerNotification/DeletePartnerNotificationForCurrentPartnerUser?partnerNotificationId=${partnerNotificationId}&partnerNotificationVersion=${partnerNotificationVersion}`, this.config.httpOptions);
     }
@@ -253,10 +249,6 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     getPartnerUserListForDropdown = (): Observable<Namebook[]> => { 
         return this.http.get<Namebook[]>(`${this.config.apiUrl}/PartnerUser/GetPartnerUserListForDropdown`, this.config.httpSkipSpinnerOptions);
-    }
-
-    getCurrentPartnerUserPermissionCodes = (): Observable<string[]> => { 
-        return this.http.get<string[]>(`${this.config.apiUrl}/PartnerUser/GetCurrentPartnerUserPermissionCodes`, this.config.httpOptions);
     }
 
     getPartnerRoleNamebookListForPartnerUser = (partnerUserId: number): Observable<Namebook[]> => { 
@@ -345,10 +337,6 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     getCurrentUserExtended = (): Observable<UserExtended> => { 
         return this.http.get<UserExtended>(`${this.config.apiUrl}/UserExtended/GetCurrentUserExtended`, this.config.httpSkipSpinnerOptions);
-    }
-
-    getCurrentUserPermissionCodes = (): Observable<string[]> => { 
-        return this.http.get<string[]>(`${this.config.apiUrl}/UserExtended/GetCurrentUserPermissionCodes`, this.config.httpSkipSpinnerOptions);
     }
 
     getGenderListForDropdown = (): Observable<Namebook[]> => { 

@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { TranslateClassNamesService } from 'src/app/business/services/translates/merge-class-names';
-import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
+import { ValidatorService } from 'src/app/business/services/validators/validators';
 import { ConfigService } from 'src/app/business/services/config.service';
 import { BaseEntity, SpiderFormArray, SpiderFormControl, SpiderFormGroup, SpiderMessageService } from '@playerty/spider';
 

@@ -30,7 +30,6 @@
   },
   "exclude": ["node_modules", "**/node_modules/*"],
   "angularCompilerOptions": {
-    "enableIvy": false,
     "preserveSymlinks": true,
     "enableI18nLegacyMessageIdFormat": false,
     "fullTemplateTypeCheck": true,

@@ -1,48 +1,48 @@
 import { PreloadAllModules, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { AppLayoutComponent } from "./layout/components/layout/app.layout.component";
 import { AuthGuard, NotAuthGuard, NotFoundComponent } from '@playerty/spider';
+import { LayoutComponent } from './business/components/layout/layout.component';
 
 @NgModule({
     imports: [
         RouterModule.forRoot([
             {
                 path: '', 
-                component: AppLayoutComponent,
+                component: LayoutComponent,
                 children: [
                     {
                         path: '',
-                        loadChildren: () => import('./layout/components/dashboard/dashboard.module').then(m => m.DashboardModule),
+                        loadChildren: () => import('./features/dashboard/dashboard.module').then(m => m.DashboardModule),
                         canActivate: [AuthGuard]
                     },
                     { 
                         path: 'administration',
-                        loadChildren: () => import('./modules/administration/administration.module').then(m => m.AdministrationModule),
+                        loadChildren: () => import('./features/administration/administration.module').then(m => m.AdministrationModule),
                         canActivate: [AuthGuard]
                     },
                     { 
                         path: 'partner-administration',
-                        loadChildren: () => import('./modules/partner-administration/partner-administration.module').then(m => m.PartnerAdministrationModule),
+                        loadChildren: () => import('./features/partner-administration/partner-administration.module').then(m => m.PartnerAdministrationModule),
                         canActivate: [AuthGuard]
                     },
                     { 
                         path: '',
-                        loadChildren: () => import('./modules/partner-select/partner-select.module').then(m => m.PartnerSelectModule),
+                        loadChildren: () => import('./features/partner-select/partner-select.module').then(m => m.PartnerSelectModule),
                         canActivate: [AuthGuard]
                     },
                     { 
                         path: '',
-                        loadChildren: () => import('./modules/notification/notification.module').then(m => m.NotificationModule),
+                        loadChildren: () => import('./features/notification/notification.module').then(m => m.NotificationModule),
                         canActivate: [AuthGuard]
                     },
                     { 
                         path: '',
-                        loadChildren: () => import('./modules/tiers/tiers.module').then(m => m.TiersModule),
+                        loadChildren: () => import('./features/tiers/tiers.module').then(m => m.TiersModule),
                         canActivate: [AuthGuard]
                     },
                     { 
                         path: '',
-                        loadChildren: () => import('./modules/transactions/transactions.module').then(m => m.TransactionsModule),
+                        loadChildren: () => import('./features/transactions/transactions.module').then(m => m.TransactionsModule),
                         canActivate: [AuthGuard]
                     },
                 ],
@@ -52,7 +52,7 @@ import { AuthGuard, NotAuthGuard, NotFoundComponent } from '@playerty/spider';
                 children: [
                     { 
                         path: 'auth',
-                        loadChildren: () => import('./layout/components/auth/auth.module').then(m => m.AuthModule),
+                        loadChildren: () => import('@playerty/spider').then(m => m.AuthModule),
                         canActivate: [NotAuthGuard],
                     },
                 ],

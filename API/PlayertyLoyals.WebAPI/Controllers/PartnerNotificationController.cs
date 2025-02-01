@@ -85,13 +85,6 @@ namespace PlayertyLoyals.WebAPI.Controllers
             return await _loyalsBusinessService.GetNotificationsForCurrentPartnerUser(tableFilterDTO);
         }
 
-        [HttpGet]
-        [AuthGuard]
-        public async Task<int> GetUnreadNotificationCountForCurrentPartnerUser()
-        {
-            return await _loyalsBusinessService.GetUnreadNotificationCountForCurrentPartnerUser();
-        }
-
         [HttpDelete]
         [AuthGuard]
         public async Task DeletePartnerNotificationForCurrentPartnerUser(long partnerNotificationId, int partnerNotificationVersion)

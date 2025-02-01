@@ -1,7 +1,7 @@
+import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { Component, OnInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
-import { PartnerService } from './business/services/helpers/partner.service';
 
 @Component({
     selector: 'app-root',
@@ -11,7 +11,7 @@ export class AppComponent implements OnInit {
 
     constructor(
         private primengConfig: PrimeNGConfig, 
-        private partnerService: PartnerService, 
+        private authService: AuthService, 
         private translocoService: TranslocoService
     ) {
 
@@ -24,6 +24,6 @@ export class AppComponent implements OnInit {
             this.primengConfig.setTranslation(primengTranslations);
         });
 
-        this.partnerService.startListening();
+        this.authService.startListening();
     }
 }

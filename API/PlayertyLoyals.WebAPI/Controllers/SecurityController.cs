@@ -29,9 +29,17 @@ namespace PlayertyLoyals.WebAPI.Controllers
         private readonly LoyalsBusinessService _loyalsBusinessService;
 
 
-        public SecurityController(ILogger<SecurityController> logger, SecurityBusinessService<UserExtended> securityBusinessService, IJwtAuthManager jwtAuthManagerService, IApplicationDbContext context, AuthenticationService authenticationService,
-            LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService)
-            : base(securityBusinessService, jwtAuthManagerService, context, authenticationService)
+        public SecurityController(
+            ILogger<SecurityController> logger, 
+            SecurityBusinessService<UserExtended> securityBusinessService, 
+            IJwtAuthManager jwtAuthManagerService, 
+            IApplicationDbContext context, 
+            AuthenticationService authenticationService,
+            LoyalsBusinessService loyalsBusinessService, 
+            PartnerUserAuthenticationService partnerUserAuthenticationService,
+            AuthorizationService authorizationService
+        ) 
+            : base(securityBusinessService, jwtAuthManagerService, context, authenticationService, authorizationService)
         {
             _logger = logger;
             _securityBusinessService = securityBusinessService;
@@ -47,7 +55,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         /// </summary>
         [HttpPost]
         [UIDoNotGenerate]
-        public async Task<AuthResultDTO> Register(VerificationTokenRequestDTO request)
+        public override async Task<AuthResultDTO> Register(VerificationTokenRequestDTO request)
         {
             return await _context.WithTransactionAsync(async () =>
             {
@@ -62,7 +70,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         /// </summary
         [HttpPost]
         [UIDoNotGenerate]
-        public async Task<AuthResultDTO> Login(VerificationTokenRequestDTO request)
+        public override async Task<AuthResultDTO> Login(VerificationTokenRequestDTO request)
         {
             AuthResultDTO authResultDTO = _securityBusinessService.Login(request);
             await _loyalsBusinessService.AddPartnerUserAfterAuthResult(authResultDTO);
@@ -74,7 +82,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         /// </summary>
         [HttpPost]
         [UIDoNotGenerate]
-        public async Task<AuthResultDTO> LoginExternal(ExternalProviderDTO externalProviderDTO) // TODO FT: Add enum for which external provider you should login user
+        public override async Task<AuthResultDTO> LoginExternal(ExternalProviderDTO externalProviderDTO) // TODO FT: Add enum for which external provider you should login user
         {
             return await _context.WithTransactionAsync(async () =>
             {
@@ -82,6 +90,14 @@ namespace PlayertyLoyals.WebAPI.Controllers
                 await _loyalsBusinessService.AddPartnerUserAfterAuthResult(authResultDTO);
                 return authResultDTO;
             });
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        [UIDoNotGenerate]
+        public override async Task<List<string>> GetCurrentUserPermissionCodes()
+        {
+            return await _loyalsBusinessService.GetCurrentPartnerUserPermissionCodes();
         }
 
     }

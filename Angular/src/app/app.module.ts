@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { AppLayoutModule } from './layout/components/layout/app.layout.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { environment } from 'src/environments/environment';
 import { BusinessModule } from './business/business.module';
 import { TranslateLabelsService } from './business/services/translates/merge-labels';
-import { ValidatorService } from './business/services/validators/validation-rules';
-import { AuthService } from './business/services/auth/auth.service';
+import { ValidatorService } from './business/services/validators/validators';
+import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { ConfigService } from './business/services/config.service';
 import { AppRoutingModule } from './app-routing.module';
-import { AuthBaseService, ConfigBaseService, CoreModule, SpiderTranslocoModule, TranslateLabelsAbstractService, ValidatorAbstractService } from '@playerty/spider';
 import { MessageService } from 'primeng/api';
+import { AuthBaseService, ConfigBaseService, CoreModule, LayoutBaseService, SpiderTranslocoModule, TranslateLabelsAbstractService, ValidatorAbstractService } from '@playerty/spider';
+import { LayoutService } from './business/services/layout/layout.service';
 
 @NgModule({
   declarations: [
@@ -20,7 +20,6 @@ import { MessageService } from 'primeng/api';
   ],
   imports: [
     AppRoutingModule,
-    AppLayoutModule,
     SpiderTranslocoModule.forRoot(),
     NgxSpinnerModule.forRoot({ type: 'ball-clip-rotate-multiple' }),
     BusinessModule,
@@ -66,6 +65,10 @@ import { MessageService } from 'primeng/api';
     { 
       provide: ConfigBaseService, 
       useExisting: ConfigService 
+    },
+    { 
+      provide: LayoutBaseService, 
+      useExisting: LayoutService 
     },
   ],
   bootstrap: [AppComponent],

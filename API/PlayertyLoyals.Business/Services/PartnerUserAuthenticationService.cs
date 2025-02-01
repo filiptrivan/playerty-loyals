@@ -140,6 +140,22 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
+        public async Task<List<string>> GetCurrentPartnerUserPermissionCodes()
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                string partnerCode = GetCurrentPartnerCode();
+                long userId = _authenticationService.GetCurrentUserId();
+                return await _context.DbSet<PartnerUser>()
+                    .Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId)
+                    .SelectMany(x => x.PartnerRoles)
+                    .SelectMany(x => x.PartnerPermissions)
+                    .Select(x => x.Code)
+                    .Distinct()
+                    .ToListAsync();
+            });
+        }
+
         public async Task<long> GetCurrentPartnerUserId()
         {
             return await _context.WithTransactionAsync(async () =>

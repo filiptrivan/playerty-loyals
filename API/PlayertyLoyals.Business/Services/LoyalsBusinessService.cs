@@ -408,7 +408,7 @@ namespace PlayertyLoyals.Business.Services
 
                         foreach (BusinessSystemTierDiscountProductGroup businessSystemTierDiscountProductGroup in businessSystemTier.BusinessSystemTierDiscountProductGroups)
                         {
-                            BusinessSystemTierDiscountProductGroupDTO businessSystemTierDiscountProductGroupDTO = businessSystemTierDiscountProductGroup.Adapt<BusinessSystemTierDiscountProductGroupDTO>((TypeAdapterConfig)Mapper.BusinessSystemTierDiscountProductGroupToDTOConfig());
+                            BusinessSystemTierDiscountProductGroupDTO businessSystemTierDiscountProductGroupDTO = businessSystemTierDiscountProductGroup.Adapt<BusinessSystemTierDiscountProductGroupDTO>(Mapper.BusinessSystemTierDiscountProductGroupToDTOConfig());
                             businessSystemTierDTO.BusinessSystemTierDiscountProductGroupsDTOList.Add(businessSystemTierDiscountProductGroupDTO);
                         }
 
@@ -800,7 +800,7 @@ namespace PlayertyLoyals.Business.Services
             return result;
         }
 
-        public async Task<int> GetUnreadNotificationCountForCurrentPartnerUser()
+        public async Task<int> GetUnreadNotificationsCountForCurrentUser()
         {
             long currentUserId = _authenticationService.GetCurrentUserId();
 

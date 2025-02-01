@@ -46,7 +46,7 @@ public class Startup
 
     public void ConfigureContainer(IServiceContainer container)
     {
-        container.RegisterInstance(typeof(IServiceContainer), container);
+        container.RegisterInstance(container);
 
         container.RegisterFrom<CompositionRoot>();
     }
@@ -54,5 +54,10 @@ public class Startup
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         app.SpiderConfigure(env);
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
     }
 }

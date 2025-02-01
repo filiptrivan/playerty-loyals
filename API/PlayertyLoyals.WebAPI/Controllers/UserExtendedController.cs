@@ -38,14 +38,6 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        [SkipSpinner]
-        public async Task<List<string>> GetCurrentUserPermissionCodes()
-        {
-            return await _loyalsBusinessService.GetCurrentUserPermissionCodes(); // FT: Not authorizing because we are reading this from the jwt token
-        }
-
-        [HttpGet]
-        [AuthGuard]
         public async Task<List<NamebookDTO<int>>> GetGenderListForDropdown()
         {
             return await _loyalsBusinessService.GetGenderListForDropdown(_context.DbSet<Gender>(), false);

@@ -1,4 +1,4 @@
-import { ValidatorService } from 'src/app/business/services/validators/validation-rules';
+import { ValidatorService } from 'src/app/business/services/validators/validators';
 import { TranslateLabelsService } from '../../services/translates/merge-labels';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
