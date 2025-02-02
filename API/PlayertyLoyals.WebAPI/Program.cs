@@ -1,3 +1,5 @@
+using Serilog;
+
 namespace PlayertyLoyals.WebAPI
 {
     public class Program
@@ -8,7 +10,12 @@ namespace PlayertyLoyals.WebAPI
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+            Host
+                .CreateDefaultBuilder(args)
+                .UseSerilog((context, configuration) =>
+                {
+                    configuration.ReadFrom.Configuration(context.Configuration);
+                })
                 .UseLightInject()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
