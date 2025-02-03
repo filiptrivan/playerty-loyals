@@ -4,11 +4,11 @@ using Spider.Shared.Excel;
 using Spider.Security.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
-using Spider.Shared.FluentValidation;
 using Spider.Shared.Emailing;
 using PlayertyLoyals.Business.Services;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.BackroundJobs;
+using PlayertyLoyals.Shared.FluentValidation;
 
 namespace PlayertyLoyals.WebAPI.DI
 {

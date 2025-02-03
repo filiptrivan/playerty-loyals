@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PlayertyLoyals.Shared.Terms {
+namespace PlayertyLoyals.Shared.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace PlayertyLoyals.Shared.Terms {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PlayertyLoyals.Shared.Terms.TermsGenerated", typeof(TermsGenerated).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PlayertyLoyals.Shared.Resources.TermsGenerated", typeof(TermsGenerated).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

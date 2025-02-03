@@ -23,6 +23,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.partnerUserSubscription = this.authService.currentPartnerUser$.subscribe(currentPartnerUser => {
       this.currentPartnerUser = currentPartnerUser;
+      
       if (currentPartnerUser?.tierId) {
         this.apiService.getTier(currentPartnerUser.tierId).subscribe(tier => {
           this.currentPartnerTier = tier;

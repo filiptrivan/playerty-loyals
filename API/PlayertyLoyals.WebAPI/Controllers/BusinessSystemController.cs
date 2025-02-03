@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Services;
-using PlayertyLoyals.Shared.Terms;
+using PlayertyLoyals.Shared.Resources;
 using Spider.Shared.Attributes;
 using Spider.Shared.DTO;
 using Spider.Shared.Helpers;

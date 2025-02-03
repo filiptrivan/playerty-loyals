@@ -6,7 +6,6 @@ using Azure.Storage.Blobs;
 using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
 using Spider.Shared.DTO;
-using Spider.Shared.Terms;
 using Spider.Security.Services;
 
 namespace PlayertyLoyals.WebAPI.Controllers

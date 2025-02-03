@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PlayertyLoyals.Shared.Terms {
+namespace PlayertyLoyals.Shared.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace PlayertyLoyals.Shared.Terms {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PlayertyLoyals.Shared.Terms.Terms", typeof(Terms).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PlayertyLoyals.Shared.Resources.Terms", typeof(Terms).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,15 @@ namespace PlayertyLoyals.Shared.Terms {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Test {
+            get {
+                return ResourceManager.GetString("Test", resourceCulture);
             }
         }
     }
