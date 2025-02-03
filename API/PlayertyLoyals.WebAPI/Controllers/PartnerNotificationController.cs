@@ -87,6 +87,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpDelete]
         [AuthGuard]
+        [SkipSpinner]
         public async Task DeletePartnerNotificationForCurrentPartnerUser(long partnerNotificationId, int partnerNotificationVersion)
         {
             await _loyalsBusinessService.DeletePartnerNotificationForCurrentPartnerUser(partnerNotificationId, partnerNotificationVersion);
@@ -94,6 +95,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
+        [SkipSpinner]
         public async Task MarkPartnerNotificationAsReadForCurrentPartnerUser(long partnerNotificationId, int partnerNotificationVersion)
         {
             await _loyalsBusinessService.MarkPartnerNotificationAsReadForCurrentPartnerUser(partnerNotificationId, partnerNotificationVersion);
@@ -101,6 +103,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
+        [SkipSpinner]
         public async Task MarkPartnerNotificationAsUnreadForCurrentPartnerUser(long partnerNotificationId, int partnerNotificationVersion)
         {
             await _loyalsBusinessService.MarkPartnerNotificationAsUnreadForCurrentPartnerUser(partnerNotificationId, partnerNotificationVersion);

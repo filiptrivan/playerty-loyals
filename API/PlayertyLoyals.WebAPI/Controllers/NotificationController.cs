@@ -23,6 +23,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
+        [SkipSpinner]
         public async Task SendNotificationEmail(long notificationId, int notificationVersion)
         {
             await _loyalsBusinessService.SendNotificationEmail(notificationId, notificationVersion);
@@ -30,6 +31,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpDelete]
         [AuthGuard]
+        [SkipSpinner]
         public async Task DeleteNotificationForCurrentUser(long notificationId, int notificationVersion)
         {
             await _loyalsBusinessService.DeleteNotificationForCurrentUser(notificationId, notificationVersion);
@@ -37,6 +39,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
+        [SkipSpinner]
         public async Task MarkNotificationAsReadForCurrentUser(long notificationId, int notificationVersion)
         {
             await _loyalsBusinessService.MarkNotificationAsReadForCurrentUser(notificationId, notificationVersion);
@@ -44,6 +47,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
+        [SkipSpinner]
         public async Task MarkNotificationAsUnreadForCurrentUser(long notificationId, int notificationVersion)
         {
             await _loyalsBusinessService.MarkNotificationAsUnreadForCurrentUser(notificationId, notificationVersion);
@@ -51,6 +55,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
+        [SkipSpinner]
         [UIDoNotGenerate]
         public async Task<int> GetUnreadNotificationsCountForCurrentUser()
         {

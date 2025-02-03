@@ -1,3 +1,4 @@
+import { LayoutService } from './../../../business/services/layout/layout.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
@@ -30,6 +31,7 @@ export class NotificationComponent implements OnInit {
     private authService: AuthService,
     private translocoService: TranslocoService,
     private messageService: SpiderMessageService,
+    private layoutService: LayoutService,
   ) {}
 
   ngOnInit() {
@@ -63,13 +65,13 @@ export class NotificationComponent implements OnInit {
     if (this.lastMenuToggledNotification.discriminator == NotificationDiscriminatorCodes.Notification) {
       this.apiService.deleteNotificationForCurrentUser(this.lastMenuToggledNotification.id, this.lastMenuToggledNotification.version).subscribe(() => {
         this.messageService.successMessage(this.translocoService.translate('SuccessfulAction'));
-        this.getNotificationsForCurrentPartnerUser();
+        this.onAfterNotificationCrudOperation();
       });
     }
     else if (this.lastMenuToggledNotification.discriminator == NotificationDiscriminatorCodes.PartnerNotification) {
       this.apiService.deletePartnerNotificationForCurrentPartnerUser(this.lastMenuToggledNotification.id, this.lastMenuToggledNotification.version).subscribe(() => {
         this.messageService.successMessage(this.translocoService.translate('SuccessfulAction'));
-        this.getNotificationsForCurrentPartnerUser();
+        this.onAfterNotificationCrudOperation();
       });
     }
   }
@@ -78,13 +80,13 @@ export class NotificationComponent implements OnInit {
     if (this.lastMenuToggledNotification.discriminator == NotificationDiscriminatorCodes.Notification) {
       this.apiService.markNotificationAsReadForCurrentUser(this.lastMenuToggledNotification.id, this.lastMenuToggledNotification.version).subscribe(() => {
         this.messageService.successMessage(this.translocoService.translate('SuccessfulAction'));
-        this.getNotificationsForCurrentPartnerUser();
+        this.onAfterNotificationCrudOperation();
       });
     }
     else if (this.lastMenuToggledNotification.discriminator == NotificationDiscriminatorCodes.PartnerNotification) {
       this.apiService.markPartnerNotificationAsReadForCurrentPartnerUser(this.lastMenuToggledNotification.id, this.lastMenuToggledNotification.version).subscribe(() => {
         this.messageService.successMessage(this.translocoService.translate('SuccessfulAction'));
-        this.getNotificationsForCurrentPartnerUser();
+        this.onAfterNotificationCrudOperation();
       });
     }
   }
@@ -93,15 +95,20 @@ export class NotificationComponent implements OnInit {
     if (this.lastMenuToggledNotification.discriminator == NotificationDiscriminatorCodes.Notification) {
       this.apiService.markNotificationAsUnreadForCurrentUser(this.lastMenuToggledNotification.id, this.lastMenuToggledNotification.version).subscribe(() => {
         this.messageService.successMessage(this.translocoService.translate('SuccessfulAction'));
-        this.getNotificationsForCurrentPartnerUser();
+        this.onAfterNotificationCrudOperation();
       });
     }
     else if (this.lastMenuToggledNotification.discriminator == NotificationDiscriminatorCodes.PartnerNotification) {
       this.apiService.markPartnerNotificationAsUnreadForCurrentPartnerUser(this.lastMenuToggledNotification.id, this.lastMenuToggledNotification.version).subscribe(() => {
         this.messageService.successMessage(this.translocoService.translate('SuccessfulAction'));
-        this.getNotificationsForCurrentPartnerUser();
+        this.onAfterNotificationCrudOperation();
       });
     }
+  }
+
+  onAfterNotificationCrudOperation = () => {
+    this.getNotificationsForCurrentPartnerUser();
+    this.layoutService.getUnreadNotificationsCountForCurrentUser();
   }
 
 }
