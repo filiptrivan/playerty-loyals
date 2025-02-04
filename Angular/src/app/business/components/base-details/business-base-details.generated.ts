@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom, forkJoin, Observable } from 'rxjs';
 import { MenuItem } from 'primeng/api';
 import { PrimengModule, SpiderControlsModule, CardSkeletonComponent, IndexCardComponent, SpiderDataTableComponent, SpiderFormArray, BaseEntity, LastMenuIconIndexClicked, SpiderFormGroup, SpiderButton, nameof, BaseFormService, getControl, Column, TableFilter, LazyLoadSelectedIdsResult, AllClickEvent, SpiderFileSelectEvent, getPrimengNamebookListForDropdown, PrimengOption, SpiderFormControl, getPrimengNamebookListForAutocomplete } from '@playerty/spider';
-import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, BusinessSystemUpdatePointsDataBody, ExcelManualUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, MergedPartnerUser, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerRoleSaveBody, PartnerUserSaveBody, Product, QrCode, SegmentationItem, TierSaveBody, UpdatePoints, UserExtendedSaveBody, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUser, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
+import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, BusinessSystemUpdatePointsDataBody, ExcelManualUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerUserSaveBody, Product, SegmentationItem, TierSaveBody, UpdatePoints, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUser, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRoleSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserExtendedSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
 
 @Component({
     selector: 'business-system-base-details',
@@ -44,9 +44,9 @@ import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, Busi
         </panel-body>
 
         <panel-footer>
-            <p-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></p-button>
+            <spider-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
-                <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
+                <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
             <spider-return-button></spider-return-button>
         </panel-footer>
@@ -216,9 +216,9 @@ export class BusinessSystemBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <p-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></p-button>
+            <spider-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
-                <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
+                <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
             <spider-return-button></spider-return-button>
         </panel-footer>
@@ -408,9 +408,9 @@ export class NotificationBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <p-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></p-button>
+            <spider-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
-                <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
+                <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
             <spider-return-button></spider-return-button>
         </panel-footer>
@@ -584,9 +584,9 @@ export class PartnerBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <p-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></p-button>
+            <spider-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
-                <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
+                <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
             <spider-return-button></spider-return-button>
         </panel-footer>
@@ -770,9 +770,9 @@ export class PartnerNotificationBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <p-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></p-button>
+            <spider-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
-                <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
+                <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
             <spider-return-button></spider-return-button>
         </panel-footer>
@@ -948,7 +948,7 @@ export class PartnerRoleBaseDetailsComponent {
                             }
 
                             <div class="panel-add-button">
-                                <p-button (onClick)="addNewItemToSegmentationItems(null)" [label]="t('AddNewSegmentationItem')" icon="pi pi-plus"></p-button>
+                                <spider-button (onClick)="addNewItemToSegmentationItems(null)" [label]="t('AddNewSegmentationItem')" icon="pi pi-plus"></spider-button>
                             </div>
 
                         </panel-body>
@@ -961,9 +961,9 @@ export class PartnerRoleBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <p-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></p-button>
+            <spider-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
-                <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
+                <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
             <spider-return-button></spider-return-button>
         </panel-footer>
@@ -1143,9 +1143,9 @@ export class SegmentationBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <p-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></p-button>
+            <spider-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
-                <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
+                <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
             <spider-return-button></spider-return-button>
         </panel-footer>
@@ -1303,9 +1303,9 @@ export class TierBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <p-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></p-button>
+            <spider-button (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
-                <p-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></p-button>
+                <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
             <spider-return-button></spider-return-button>
         </panel-footer>

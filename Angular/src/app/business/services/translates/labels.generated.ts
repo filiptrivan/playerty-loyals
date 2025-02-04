@@ -232,8 +232,6 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('Category');
             case 'linkToWebsite':
                 return this.translocoService.translate('LinkToWebsite');
-            case 'transactionCode':
-                return this.translocoService.translate('TransactionCode');
             case 'ipAddress':
                 return this.translocoService.translate('IpAddress');
             case 'tokenString':

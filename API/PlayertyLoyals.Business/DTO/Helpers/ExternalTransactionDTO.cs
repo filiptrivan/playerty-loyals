@@ -1,6 +1,8 @@
-﻿using Spider.Shared.Attributes;
+﻿using Microsoft.EntityFrameworkCore;
+using Spider.Shared.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,32 +10,38 @@ using System.Threading.Tasks;
 namespace PlayertyLoyals.Business.DTO
 {
     /// <summary>
-    /// Set all to nullable because of validation and returning the good message to the consumer
+    /// Set all to nullable because of validation and returning the good message to the consumer api
     /// </summary>
-    [CustomValidator("RuleFor(x => x.UserEmail).EmailAddress().Length(5, 70).NotEmpty();")]
-    [CustomValidator("RuleFor(x => x.Code).Length(1, 20).NotEmpty();")]
-    [CustomValidator("RuleFor(x => x.ProductName).NotEmpty().Length(1, 500);")]
-    [CustomValidator("RuleFor(x => x.ProductImageUrl).Length(1, 1000).Unless(i => string.IsNullOrEmpty(i.ProductImageUrl));")]
-    [CustomValidator("RuleFor(x => x.ProductCategoryName).NotEmpty().Length(1, 500);")]
-    [CustomValidator("RuleFor(x => x.ProductCategoryImageUrl).Length(1, 1000).Unless(i => string.IsNullOrEmpty(i.ProductCategoryImageUrl));")]
-    [CustomValidator("RuleFor(x => x.Price).PrecisionScale(16, 2, false).NotEmpty();")]
-    [CustomValidator("RuleFor(x => x.BoughtAt).NotEmpty();")]
     public class ExternalTransactionDTO
     {
+        [CustomValidator("EmailAddress()")]
+        [StringLength(70, MinimumLength = 5)]
+        [Required]
         public string UserEmail { get; set; }
 
+        [StringLength(20, MinimumLength = 1)]
+        [Required]
         public string Code { get; set; }
 
+        [StringLength(500, MinimumLength = 1)]
+        [Required]
         public string ProductName { get; set; }
 
+        [StringLength(1000, MinimumLength = 1)]
         public string ProductImageUrl { get; set; }
 
+        [StringLength(500, MinimumLength = 1)]
+        [Required]
         public string ProductCategoryName { get; set; }
 
+        [StringLength(1000, MinimumLength = 1)]
         public string ProductCategoryImageUrl { get; set; }
 
+        [Precision(16, 2)]
+        [Required]
         public decimal? Price { get; set; }
 
+        [Required]
         public DateTime? BoughtAt { get; set; }
     }
 }

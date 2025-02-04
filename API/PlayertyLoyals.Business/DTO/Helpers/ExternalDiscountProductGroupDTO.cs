@@ -1,17 +1,21 @@
 ﻿using Spider.Shared.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.DTO
 {
-    [CustomValidator("RuleFor(x => x.Name).Length(1, 255).NotEmpty();")]
-    [CustomValidator("RuleFor(x => x.Code).Length(1, 100).NotEmpty();")]
     public class ExternalDiscountProductGroupDTO
     {
+        [StringLength(255, MinimumLength = 1)]
+        [Required]
         public string Name { get; set; }
+
+        [StringLength(100, MinimumLength = 1)]
+        [Required]
         public string Code { get; set; }
     }
 }

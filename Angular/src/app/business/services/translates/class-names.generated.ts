@@ -70,8 +70,6 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('Login');
             case 'LoginVerificationToken':
                 return this.translocoService.translate('LoginVerificationToken');
-            case 'MergedPartnerUser':
-                return this.translocoService.translate('MergedPartnerUser');
             case 'Namebook':
                 return this.translocoService.translate('Namebook');
             case 'Notification':
@@ -126,8 +124,6 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('PermissionSaveBody');
             case 'Product':
                 return this.translocoService.translate('Product');
-            case 'QrCode':
-                return this.translocoService.translate('QrCode');
             case 'ReadonlyObject':
                 return this.translocoService.translate('ReadonlyObject');
             case 'RefreshToken':

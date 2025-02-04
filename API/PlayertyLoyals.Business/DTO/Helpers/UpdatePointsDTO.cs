@@ -8,10 +8,6 @@ using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.DTO
 {
-    [CustomValidator("RuleFor(x => x.BusinessSystemId).NotEmpty();")]
-    [CustomValidator("RuleFor(x => x.BusinessSystemVersion).NotEmpty();")]
-    [CustomValidator("RuleFor(x => x.FromDate).NotEmpty();")]
-    [CustomValidator("RuleFor(x => x.ToDate).NotEmpty();")]
     public class UpdatePointsDTO
     {
         [Required]

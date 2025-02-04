@@ -564,24 +564,6 @@ export class GenderSaveBody extends BaseEntity
 }
 
 
-export class MergedPartnerUser extends BaseEntity
-{
-    
-
-    constructor(
-    {
-        
-    }:{
-             
-    } = {}
-    ) {
-        super('MergedPartnerUser'); 
-
-        
-    }
-}
-
-
 export class Notification extends BaseEntity
 {
     title?: string;
@@ -1336,32 +1318,6 @@ export class Product extends BaseEntity
 		this.price = price;
 		this.category = category;
 		this.linkToWebsite = linkToWebsite;
-    }
-}
-
-
-export class QrCode extends BaseEntity
-{
-    email?: string;
-	transactionCode?: any;
-	discount?: number;
-
-    constructor(
-    {
-        email,
-		transactionCode,
-		discount
-    }:{
-        email?: string;
-		transactionCode?: any;
-		discount?: number;     
-    } = {}
-    ) {
-        super('QrCode'); 
-
-        this.email = email;
-		this.transactionCode = transactionCode;
-		this.discount = discount;
     }
 }
 

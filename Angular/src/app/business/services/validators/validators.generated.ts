@@ -135,7 +135,6 @@ export class ValidatorServiceGenerated {
 
 
 
-
         case 'titleNotification':
             return this.titleNotificationValidator(formControl);
         case 'descriptionNotification':
@@ -245,7 +244,6 @@ export class ValidatorServiceGenerated {
             return this.descriptionLatinPermissionValidator(formControl);
         case 'codePermission':
             return this.codePermissionValidator(formControl);
-
 
 
 
@@ -1217,7 +1215,6 @@ export class ValidatorServiceGenerated {
 
 
 
-
     titleNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
@@ -2024,7 +2021,6 @@ export class ValidatorServiceGenerated {
         control.updateValueAndValidity(); // FT: It's necessary for Date angular type
         return validator;
     }
-
 
 
 
