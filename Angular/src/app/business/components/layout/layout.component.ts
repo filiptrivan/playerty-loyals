@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { FooterComponent, LayoutBaseComponent, AppSidebarComponent, AppTopBarComponent, LayoutBaseService, PrimengModule, SpiderMenuItem} from '@playerty/spider';
 import { CommonModule } from '@angular/common';
+import { PermissionCodes } from '../../enums/business-enums.generated';
 
 @Component({
     selector: 'layout',
@@ -93,12 +94,12 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                             label: this.translocoService.translate('SuperAdministration'),
                             icon: 'pi pi-fw pi-cog',
                             visible: true,
-                            // hasPermission: (permissionCodes: string[]): boolean => { 
-                            //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]) ||
-                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]) ||
-                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]) || 
-                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
-                            // },
+                            hasPermission: (permissionCodes: string[]): boolean => { 
+                                return (permissionCodes?.includes(PermissionCodes.ReadUserExtended) ||
+                                        // permissionCodes?.includes(PermissionCodes.ReadRole) ||
+                                        permissionCodes?.includes(PermissionCodes.ReadTier) || 
+                                        permissionCodes?.includes(PermissionCodes.ReadNotification))
+                            },
                             items: [
                                 {
                                     label: this.translocoService.translate('UserList'),

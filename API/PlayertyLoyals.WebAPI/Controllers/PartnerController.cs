@@ -10,6 +10,7 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using PlayertyLoyals.Shared.Resources;
 using Spider.Security.Services;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {

@@ -611,7 +611,7 @@ namespace PlayertyLoyals.Business.Services
             {
                 PartnerUser currentPartnerUser = await _partnerUserAuthenticationService.GetCurrentPartnerUser();
 
-                List<string> currentPartnerUserPermissionCodes = new List<string>();
+                List<string> currentPartnerUserPermissionCodes = new();
 
                 if (currentPartnerUser != null)
                 {
@@ -1003,7 +1003,7 @@ namespace PlayertyLoyals.Business.Services
                 {
                     BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(businessSystemId, businessSystemVersion);
 
-                    List<string> exceptions = new List<string>();
+                    List<string> exceptions = new();
 
                     if (businessSystem.GetTransactionsEndpoint == null)
                         exceptions.Add("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
@@ -1247,10 +1247,10 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
 
         public async Task<TransactionsProcessingResult> ProcessTransactions(BusinessSystem businessSystem, List<ExternalTransactionDTO> externalTransactionDTOList)
         {
-            List<string> partnerUserWhichDoesNotExistList = new List<string>();
-            List<string> transactionWhichUpdateFailedList = new List<string>();
-            List<string> transactionWhichUpdateSucceededList = new List<string>();
-            List<string> transactionWhichWeAlreadyUpdatedForThisPeriodList = new List<string>();
+            List<string> partnerUserWhichDoesNotExistList = new();
+            List<string> transactionWhichUpdateFailedList = new();
+            List<string> transactionWhichUpdateSucceededList = new();
+            List<string> transactionWhichWeAlreadyUpdatedForThisPeriodList = new();
 
             return await _context.WithTransactionAsync(async () =>
             {

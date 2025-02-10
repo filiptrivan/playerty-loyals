@@ -13,7 +13,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { NotificationBaseDetailsComponent, PartnerBaseDetailsComponent, UserExtendedBaseDetailsComponent } from 'src/app/business/components/base-details/business-base-details.generated';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PrimengModule, SpiderDataTableComponent, SpiderControlsModule, CardSkeletonComponent } from '@playerty/spider';
+import { PrimengModule, SpiderDataTableComponent, SpiderControlsModule, CardSkeletonComponent, RoleBaseDetailsComponent } from '@playerty/spider';
 
 const routes: Routes = [
     {
@@ -64,9 +64,10 @@ const routes: Routes = [
     TranslocoDirective,
     PartnerBaseDetailsComponent,
     NotificationBaseDetailsComponent,
-    UserExtendedBaseDetailsComponent
+    UserExtendedBaseDetailsComponent,
+    RoleBaseDetailsComponent,
 ],
-    declarations: [
+declarations: [
         UserListComponent,
         UserDetailsComponent, 
         RoleListComponent,

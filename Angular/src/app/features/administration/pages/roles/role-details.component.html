@@ -1,42 +1,11 @@
 <ng-container *transloco="let t">
-    @defer (when model != null) {
-        <spider-card [title]="detailsTitle" icon="pi pi-id-card">
-            <spider-panel>
-                <panel-header></panel-header>
-        
-                <panel-body>
-                    <form [formGroup]="formGroup" class="grid">
-                        <div class="col-12">
-                            <spider-textbox [control]="control('name')"></spider-textbox>
-                        </div>
-                        <div class="col-12">
-                            <spider-textarea [control]="control('description')"></spider-textarea>
-                        </div>
-                        <div class="col-12">
-                            <spider-multiautocomplete 
-                                [control]="selectedUsers"
-                                (onTextInput)="searchUsers($event)" 
-                                [label]="t('UserList')"
-                                [options]="userOptions"
-                                ></spider-multiautocomplete>
-                        </div>
-                        <div class="col-12">
-                            <spider-multiselect
-                                [control]="selectedPermissions"
-                                [label]="t('PermissionList')"
-                                [options]="permissionOptions"></spider-multiselect>
-                        </div>
-                    </form>
-                </panel-body>
-        
-            <panel-footer>
-                <spider-button (onClick)="onSave()" [label]="t('Save')" icon="pi pi-save"></spider-button>
-                <spider-return-button></spider-return-button>
-            </panel-footer>
-        
-            </spider-panel>
-        </spider-card>
-    } @placeholder {
-        <card-skeleton [height]="502"></card-skeleton>
-    }
+    <spider-card [title]="t('Role')" icon="pi pi-id-card">
+
+        <role-base-details 
+        [formGroup]="formGroup" 
+        [roleFormGroup]="roleFormGroup" 
+        (onSave)="onSave()" 
+        ></role-base-details>
+
+    </spider-card>
 </ng-container>

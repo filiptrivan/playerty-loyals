@@ -3,8 +3,7 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
-import { Partner, PartnerSaveBody } from 'src/app/business/entities/business-entities.generated';
-import { ApiService } from 'src/app/business/services/api/api.service';
+import { Partner } from 'src/app/business/entities/business-entities.generated';
 import { BaseFormCopy, SpiderFormGroup, SpiderMessageService, BaseFormService } from '@playerty/spider';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
 
@@ -25,18 +24,9 @@ export class PartnerDetailsComponent extends BaseFormCopy implements OnInit {
         protected override route: ActivatedRoute, 
         protected override translocoService: TranslocoService,
         protected override baseFormService: BaseFormService,
-        private apiService: ApiService,
         private authService: AuthService,
     ) {
         super(differs, http, messageService, changeDetectorRef, router, route, translocoService, baseFormService);
-    }
-         
-    override ngOnInit() {
-        
-    }
-
-    override onBeforeSave = (saveBody: PartnerSaveBody): void => {
-
     }
 
     override onAfterSave = async () => {

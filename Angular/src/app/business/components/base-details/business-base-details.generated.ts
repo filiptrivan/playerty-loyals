@@ -751,17 +751,17 @@ export class PartnerNotificationBaseDetailsComponent {
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
-                    <div class="col-12 md:col-6">
+                    <div class="col-12">
                         <spider-textbox [control]="control('name', partnerRoleFormGroup)"></spider-textbox>
-                    </div>
-                    <div class="col-12 md:col-6">
-                        <spider-textbox [control]="control('description', partnerRoleFormGroup)"></spider-textbox>
                     </div>
                     <div class="col-12">
                         <spider-multiautocomplete [control]="selectedPartnerUsersForPartnerRole" [options]="partnerUsersForPartnerRoleOptions" (onTextInput)="searchPartnerUsersForPartnerRole($event)" [label]="t('PartnerUsers')"></spider-multiautocomplete>
                     </div>
                     <div class="col-12">
                         <spider-multiselect [control]="selectedPartnerPermissionsForPartnerRole" [options]="partnerPermissionsForPartnerRoleOptions" [label]="t('PartnerPermissions')"></spider-multiselect>
+                    </div>
+                    <div class="col-12">
+                        <spider-textarea [control]="control('description', partnerRoleFormGroup)"></spider-textarea>
                     </div>
                 </form>
             } @placeholder {

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlayertyLoyals.Business.Hack.Enums
+namespace PlayertyLoyals.Business.Enums
 {
-    public enum PermissionCodes
+    public static partial class PermissionCodes
     {
+        public static string Test { get; } = "Test";
     }
 }

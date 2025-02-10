@@ -11,9 +11,11 @@ namespace PlayertyLoyals.Business.Entities
         [DisplayName]
         [Required]
         [StringLength(255, MinimumLength = 1)]
+        [UIControlWidth("col-12")]
         public string Name { get; set; }
 
         [StringLength(400, MinimumLength = 1)]
+        [UIControlType(nameof(UIControlTypeCodes.TextArea))]
         public string Description { get; set; }
 
         [UIDoNotGenerate]

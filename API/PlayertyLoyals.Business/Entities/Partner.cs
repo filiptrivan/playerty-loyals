@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using Spider.Shared.Attributes.EF;
 using Spider.Shared.Attributes;
 using Spider.Shared.BaseEntities;
@@ -28,7 +27,6 @@ namespace PlayertyLoyals.Business.Entities
         [Required]
         public string Email { get; set; }
 
-        //[UIControlType(nameof(UIControlTypeCodes.TextArea))]
         [StringLength(100, MinimumLength = 1)]
         [Required]
         public string Slug { get; set; } // FT: The user will input the slug, and the slug will be the code in the same time

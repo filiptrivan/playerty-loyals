@@ -5,7 +5,6 @@ using PlayertyLoyals.WebAPI.DI;
 using PlayertyLoyals.Infrastructure;
 using Quartz;
 using PlayertyLoyals.Business.BackroundJobs;
-using Serilog;
 
 public class Startup
 {
@@ -58,7 +57,8 @@ public class Startup
 
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapControllers();
+            endpoints
+                .MapControllers();
         });
     }
 }

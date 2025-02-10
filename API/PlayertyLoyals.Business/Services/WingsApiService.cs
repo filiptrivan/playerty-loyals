@@ -49,7 +49,7 @@ namespace PlayertyLoyals.Business.Services
 
             List<ExternalTransactionDTO> externalTransactionDTOList = await response.Content.ReadFromJsonAsync<List<ExternalTransactionDTO>>();
 
-            List<string> validationErrorMessages = new List<string>();
+            List<string> validationErrorMessages = new();
 
             foreach (ExternalTransactionDTO externalTransactionDTO in externalTransactionDTOList)
             {
@@ -93,7 +93,7 @@ namespace PlayertyLoyals.Business.Services
             if (externalDiscountProductGroupDTOList.Count != externalDiscountProductGroupDTOList.DistinctBy(x => x.Code).Count())
                 throw new BusinessException("Partner mora da prosledi jedinstvene kodove za kategorije.");
 
-            List<string> validationErrorMessages = new List<string>();
+            List<string> validationErrorMessages = new();
 
             foreach (ExternalDiscountProductGroupDTO externalDiscountProductGroupDTO in externalDiscountProductGroupDTOList)
             {

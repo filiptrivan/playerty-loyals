@@ -246,12 +246,12 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('Permission');
             case 'rolePermissionDTO':
                 return this.translocoService.translate('RolePermissionDTO');
-            case 'selectedPermissionIds':
-                return this.translocoService.translate('SelectedPermissionIds');
-            case 'selectedUserIds':
-                return this.translocoService.translate('SelectedUserIds');
+            case 'selectedUsersIds':
+                return this.translocoService.translate('SelectedUsersIds');
             case 'roleDTO':
                 return this.translocoService.translate('RoleDTO');
+            case 'selectedPermissionsIds':
+                return this.translocoService.translate('SelectedPermissionsIds');
             case 'pointsForTheFirstTimeFill':
                 return this.translocoService.translate('PointsForTheFirstTimeFill');
             case 'checked':
