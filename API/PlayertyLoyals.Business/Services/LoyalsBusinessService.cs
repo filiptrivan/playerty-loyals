@@ -73,32 +73,15 @@ namespace PlayertyLoyals.Business.Services
             return await _securityBusinessService.GetRolesNamebookListForUserExtended(userExtendedId, authorize);
         }
 
-        public async Task<List<string>> GetCurrentUserPermissionCodes()
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                UserExtended currentUser = await _authenticationService.GetCurrentUser<UserExtended>();
-
-                if (currentUser == null)
-                    return new List<string>();
-
-                return currentUser.Roles
-                    .SelectMany(x => x.Permissions)
-                    .Select(x => x.Code)
-                    .Distinct()
-                    .ToList();
-            });
-        }
-
         #endregion
 
         #region Notification
 
         public async Task SendNotificationEmail(long notificationId, int notificationVersion)
         {
-            await _context.WithTransactionAsync((Func<Task>)(async () =>
+            await _context.WithTransactionAsync(async () =>
             {
-                await _authorizationService.AuthorizeAndThrowAsync<UserExtended>((string)BusinessPermissionCodes.UpdateNotification);
+                await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(BusinessPermissionCodes.UpdateNotification);
 
                 // FT: Checking version because if the user didn't save and some other user changed the version, he will send emails to wrong users
                 Notification notification = await GetInstanceAsync<Notification, long>(notificationId, notificationVersion);
@@ -106,7 +89,7 @@ namespace PlayertyLoyals.Business.Services
                 List<string> recipients = notification.Recipients.Select(x => x.Email).ToList();
 
                 await _emailingService.SendEmailAsync(recipients, notification.Title, notification.EmailBody);
-            }));
+            });
         }
 
         public async Task DeleteNotificationForCurrentUser(long notificationId, int notificationVersion)
@@ -161,9 +144,9 @@ namespace PlayertyLoyals.Business.Services
 
         #region Tier
 
-        public async Task<TierSaveBodyDTO> SaveTier(TierSaveBodyDTO tierSaveBodyDTO)
+        public override async Task<TierSaveBodyDTO> SaveTierAndReturnSaveBodyDTO(TierSaveBodyDTO tierSaveBodyDTO, bool authorizeUpdate = true, bool authorizeInsert = true)
         {
-            List<int> exceptionHelper = new List<int>();
+            List<int> exceptionHelper = new();
 
             for (int i = 0; i < tierSaveBodyDTO.TierDTOList.Count; i++)
             {
@@ -188,24 +171,24 @@ namespace PlayertyLoyals.Business.Services
                 throw new BusinessException($"Neispravno {helper}: {exceptionHelper.ToCommaSeparatedString()}. Nivoi lojalnosti moraju biti sačuvani rastućim redosledom (npr. Nivo 1: 1p - 10p, Nivo 2: 10p - 20p, Nivo 3: 20p - 30p). Ne možete dodati nivo lojalnosti čija je gornja granica veća (ili jednaka) od donje granice.");
             }
 
-            List<TierDTO> tierResultDTOList = new List<TierDTO>();
-            List<BusinessSystemTierDTO> businessSystemTierResultDTOList = new List<BusinessSystemTierDTO>();
+            List<TierDTO> tierResultDTOList = new();
+            List<BusinessSystemTierDTO> businessSystemTierResultDTOList = new();
 
             await _context.WithTransactionAsync(async () =>
             {
                 List<int> tierIdsDTO = tierSaveBodyDTO.TierDTOList.Select(x => x.Id).ToList(); // TODO FT: Check if user is authorized to delete passed tiers
                 List<int> tierIdListToDelete = _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode() && tierIdsDTO.Contains(x.Id) == false).Select(x => x.Id).ToList();
-                await DeleteTierListAsync(tierIdListToDelete, false);
+                await DeleteTierList(tierIdListToDelete, false);
 
                 List<long> businessSystemTierIdsDTO = tierSaveBodyDTO.BusinessSystemTierDTOList.Select(x => x.Id).ToList(); // TODO FT: Check if user is authorized to delete passed businessSystem tiers
                 List<long> businessSystemTierIdListToDelete = _context.DbSet<BusinessSystemTier>().Where(x => tierIdsDTO.Contains(x.Tier.Id) && businessSystemTierIdsDTO.Contains(x.Id) == false).Select(x => x.Id).ToList();
-                await DeleteBusinessSystemTierListAsync(businessSystemTierIdListToDelete, false);
+                await DeleteBusinessSystemTierList(businessSystemTierIdListToDelete, false);
 
                 for (int i = 0; i < tierSaveBodyDTO.TierDTOList.Count; i++)
                 {
                     TierDTO tierDTO = tierSaveBodyDTO.TierDTOList[i];
                     tierDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
-                    TierDTO savedTierDTO = await SaveTierAndReturnDTOAsync(tierDTO, false, false);
+                    TierDTO savedTierDTO = await SaveTierAndReturnDTO(tierDTO, false, false);
                     tierResultDTOList.Add(savedTierDTO);
 
                     List<BusinessSystemTierDTO> businessSystemTierDTOList = tierSaveBodyDTO.BusinessSystemTierDTOList.Where(x => x.TierClientIndex == i).ToList();
@@ -214,7 +197,7 @@ namespace PlayertyLoyals.Business.Services
                         BusinessSystemTierDTO businessSystemTierDTO = businessSystemTierDTOList[j];
                         businessSystemTierDTO.TierId = savedTierDTO.Id;
                         businessSystemTierDTO.OrderNumber = j + 1;
-                        BusinessSystemTierDTO savedBusinessSystemTierDTO = await SaveBusinessSystemTierAndReturnDTOAsync(businessSystemTierDTO, false, false);
+                        BusinessSystemTierDTO savedBusinessSystemTierDTO = await SaveBusinessSystemTierAndReturnDTO(businessSystemTierDTO, false, false);
                         savedBusinessSystemTierDTO.TierClientIndex = i;
                         businessSystemTierResultDTOList.Add(savedBusinessSystemTierDTO);
 
@@ -429,7 +412,7 @@ namespace PlayertyLoyals.Business.Services
         /// <summary>
         /// TODO FT: Add this to generator (you will need to add one more custom attribute [Code])
         /// </summary>
-        public async Task<List<CodebookDTO>> GetPartnerWithSlugAutocompleteList(int limit, string query, IQueryable<Partner> partnerQuery, bool authorize = true)
+        public async Task<List<CodebookDTO>> GetPartnerWithSlugAutocompleteList(int limit, string filter, IQueryable<Partner> query, bool authorize = true)
         {
             long currentUserId = _authenticationService.GetCurrentUserId();
 
@@ -437,15 +420,15 @@ namespace PlayertyLoyals.Business.Services
             {
                 if (authorize)
                 {
-                    await _authorizationService.AuthorizeAndThrowAsync<UserExtended>((string)BusinessPermissionCodes.ReadPartner);
+                    await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(BusinessPermissionCodes.ReadPartner);
                 }
 
-                partnerQuery = partnerQuery.Where(x => x.PartnerUsers.Any(x => x.User.Id == currentUserId));
+                query = query.Where(x => x.PartnerUsers.Any(x => x.User.Id == currentUserId));
 
-                if (!string.IsNullOrEmpty(query))
-                    partnerQuery = partnerQuery.Where(x => x.Name.Contains(query));
+                if (!string.IsNullOrEmpty(filter))
+                    query = query.Where(x => x.Name.Contains(filter));
 
-                return await partnerQuery
+                return await query
                     .AsNoTracking()
                     .Take(limit)
                     .Select(x => new CodebookDTO
@@ -537,37 +520,26 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task<PartnerUserSaveBodyDTO> SavePartnerUserAndReturnSaveBodyDTOAsync(PartnerUserSaveBodyDTO partnerUserSaveBodyDTO)
+        public override async Task<PartnerUserSaveBodyDTO> SavePartnerUserAndReturnSaveBodyDTO(PartnerUserSaveBodyDTO partnerUserSaveBodyDTO, bool authorizeUpdate = true, bool authorizeInsert = true)
         {
-            UserExtendedSaveBodyDTO userExtendedSaveBodyDTO = new UserExtendedSaveBodyDTO
-            {
-                UserExtendedDTO = partnerUserSaveBodyDTO.UserExtendedDTO,
-                SelectedRolesIds = partnerUserSaveBodyDTO.SelectedRoleIds,
-            };
+            if (partnerUserSaveBodyDTO.PartnerUserDTO.Id == 0)
+                throw new HackerException("You can't add new partner user.");
 
             return await _context.WithTransactionAsync(async () =>
             {
-                UserExtendedSaveBodyDTO savedUserExtendedSaveBodyDTO = await SaveUserExtendedAndReturnSaveBodyDTOAsync(userExtendedSaveBodyDTO);
-
-                if (partnerUserSaveBodyDTO.PartnerUserDTO.Id == 0)
-                    throw new HackerException("You can't add new partner user.");
-
-                await UpdatePartnerRolesForPartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO.Id, partnerUserSaveBodyDTO.SelectedPartnerRoleIds);
-
-                await UpdateCheckedSegmentationItemsForPartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO.Id, partnerUserSaveBodyDTO.SelectedSegmentationItemIds);
+                await UpdateCheckedSegmentationItemsForPartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO.Id, partnerUserSaveBodyDTO.SelectedSegmentationItemsIds);
 
                 int pointsBeforeSave = await _context.DbSet<PartnerUser>().Where(x => x.Id == partnerUserSaveBodyDTO.PartnerUserDTO.Id).Select(x => x.Points).SingleAsync();
 
                 PartnerUser savedPartnerUser = await SavePartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO, false, false); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
 
-                await UpdateFirstTimeFilledPointsForThePartnerUser(savedPartnerUser, partnerUserSaveBodyDTO.SelectedSegmentationItemIds);
+                await UpdateFirstTimeFilledPointsForThePartnerUser(savedPartnerUser, partnerUserSaveBodyDTO.SelectedSegmentationItemsIds);
 
                 if (pointsBeforeSave != savedPartnerUser.Points)
                     await UpdatePartnerUserTier(savedPartnerUser);
 
                 return new PartnerUserSaveBodyDTO
                 {
-                    UserExtendedDTO = savedUserExtendedSaveBodyDTO.UserExtendedDTO,
                     PartnerUserDTO = savedPartnerUser.Adapt<PartnerUserDTO>(Mapper.PartnerUserToDTOConfig()),
                 };
             });
@@ -671,11 +643,6 @@ namespace PlayertyLoyals.Business.Services
                 return transactionTableResponse;
             });
         }
-
-        #endregion
-
-        #region Gender
-
 
         #endregion
 
@@ -904,7 +871,7 @@ namespace PlayertyLoyals.Business.Services
 
         #region BusinessSystem
 
-        public async Task<BusinessSystemSaveBodyDTO> SaveBusinessSystemAndReturnSaveBodyDTOAsync(BusinessSystemSaveBodyDTO businessSystemSaveBodyDTO)
+        public override async Task<BusinessSystemSaveBodyDTO> SaveBusinessSystemAndReturnSaveBodyDTO(BusinessSystemSaveBodyDTO businessSystemSaveBodyDTO, bool authorizeUpdate = true, bool authorizeInsert = true)
         {
             if (businessSystemSaveBodyDTO.BusinessSystemDTO.Id == 0 && (businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsInterval != null || businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsStartDate != null))
                 throw new HackerException("Can't save UpdatePointsInterval nor UpdatePointsStartDate from here.");
@@ -919,11 +886,11 @@ namespace PlayertyLoyals.Business.Services
                     BusinessSystem businessSystemBeforeSave = await GetInstanceAsync<BusinessSystem, long>(businessSystemSaveBodyDTO.BusinessSystemDTO.Id, businessSystemSaveBodyDTO.BusinessSystemDTO.Version);
 
                     if ((businessSystemBeforeSave.UpdatePointsInterval != businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsInterval) ||
-                        (!Helper.AreDatesEqualToSeconds(businessSystemBeforeSave.UpdatePointsStartDate, businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsStartDate)))
+                        (!Helpers.AreDatesEqualToSeconds(businessSystemBeforeSave.UpdatePointsStartDate, businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsStartDate)))
                         throw new HackerException("Can't save UpdatePointsInterval nor UpdatePointsStartDate from here.");
                 }
 
-                BusinessSystemDTO savedBusinessSystemDTO = await SaveBusinessSystemAndReturnDTOAsync(businessSystemSaveBodyDTO.BusinessSystemDTO, false, false);
+                BusinessSystemDTO savedBusinessSystemDTO = await SaveBusinessSystemAndReturnDTO(businessSystemSaveBodyDTO.BusinessSystemDTO, false, false);
                 return new BusinessSystemSaveBodyDTO
                 {
                     BusinessSystemDTO = savedBusinessSystemDTO
@@ -931,7 +898,7 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task<int> SaveBusinessSystemUpdatePointsDataAsync(BusinessSystemUpdatePointsDataBodyDTO businessSystemUpdatePointsDataBodyDTO)
+        public async Task<int> SaveBusinessSystemUpdatePointsData(BusinessSystemUpdatePointsDataBodyDTO businessSystemUpdatePointsDataBodyDTO)
         {
             DateTimeOffset? scheduledJobResult = null;
 
@@ -993,7 +960,7 @@ namespace PlayertyLoyals.Business.Services
             }
         }
 
-        public async Task<int> ChangeScheduledTaskUpdatePointsStatusAsync(long businessSystemId, int businessSystemVersion)
+        public async Task<int> ChangeScheduledTaskUpdatePointsStatus(long businessSystemId, int businessSystemVersion)
         {
             bool scheduledJobContinued = false;
 
@@ -1055,7 +1022,7 @@ namespace PlayertyLoyals.Business.Services
         /// <summary>
         /// Pass fromDate only if it is the first time
         /// </summary>
-        public async Task UpdatePointsAsync(UpdatePointsDTO updatePointsDTO)
+        public async Task UpdatePoints(UpdatePointsDTO updatePointsDTO)
         {
             UpdatePointsDTOValidationRules validationRules = new UpdatePointsDTOValidationRules();
             validationRules.ValidateAndThrow(updatePointsDTO);

@@ -1,7 +1,7 @@
 <ng-container *transloco="let t">    
     @defer (when loading === false) {
             <spider-panel>
-                <panel-header [title]="userExtendedFormGroup.get('email').getRawValue()" icon="pi pi-user"></panel-header>
+                <panel-header [title]="partnerUserFormGroup.controls.userDisplayName.getRawValue()" icon="pi pi-user"></panel-header>
         
                 <panel-body>
                     <form [formGroup]="formGroup" class="grid">
@@ -11,18 +11,6 @@
                         <!-- TODO FT: Show only if the user has permission to change points -->
                         <div class="col-12">
                             <spider-number [control]="control('points', partnerUserFormGroup)"></spider-number>
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <spider-calendar [control]="control('birthDate', userExtendedFormGroup)"></spider-calendar>
-                        </div>
-                        <div class="col-12 md:col-6">
-                            <spider-dropdown [control]="control('genderId', userExtendedFormGroup)" [options]="genderOptions"></spider-dropdown>
-                        </div>
-                        <div class="col-12">
-                            <spider-multiselect
-                            [control]="selectedRoles"
-                            [label]="t('SuperRoles')"
-                            [options]="roleOptions"></spider-multiselect>
                         </div>
     
                         @for (segmentation of segmentations; track segmentation.id; let index = $index) {
@@ -37,13 +25,6 @@
                                 </div>
                             </div>
                         }
-                                
-                        <div class="col-12">
-                            <spider-multiselect
-                            [control]="selectedPartnerRoles"
-                            [label]="t('PartnerRoleList')"
-                            [options]="partnerRoleOptions"></spider-multiselect>
-                        </div>
                     </form>
                 </panel-body>
         

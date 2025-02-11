@@ -36,7 +36,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         //[AuthGuard]
         //public async Task<PartnerDTO> SavePartner(PartnerDTO partnerDTO)
         //{
-        //    return await _loyalsBusinessService.SavePartnerAndReturnDTOAsync(partnerDTO, false, false);
+        //    return await _loyalsBusinessService.SavePartnerAndReturnDTO(partnerDTO, false, false);
         //}
         
         [HttpGet]

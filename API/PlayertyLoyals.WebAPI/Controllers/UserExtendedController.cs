@@ -32,14 +32,8 @@ namespace PlayertyLoyals.WebAPI.Controllers
         public async Task<UserExtendedDTO> GetCurrentUserExtended()
         {
             long userId = _authenticationService.GetCurrentUserId();
-            return await _loyalsBusinessService.GetUserExtendedDTOAsync(userId);
+            return await _loyalsBusinessService.GetUserExtendedDTO(userId);
         }
 
-        [HttpGet]
-        [AuthGuard]
-        public async Task<List<NamebookDTO<int>>> GetGenderDropdownList()
-        {
-            return await _loyalsBusinessService.GetGenderDropdownList(_context.DbSet<Gender>(), false);
-        }
     }
 }

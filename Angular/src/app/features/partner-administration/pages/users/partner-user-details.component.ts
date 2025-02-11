@@ -7,7 +7,7 @@ import { firstValueFrom, forkJoin } from 'rxjs';
 import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
 import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, Tier, UserExtended } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { BaseFormCopy, PrimengOption, SpiderFormControl, SpiderFormGroup, SpiderFormArray, SpiderMessageService, BaseFormService, nameof } from '@playerty/spider';
+import { BaseFormCopy, PrimengOption, SpiderFormGroup, SpiderFormArray, SpiderMessageService, BaseFormService, nameof } from '@playerty/spider';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
 
 @Component({
@@ -16,13 +16,8 @@ import { AuthService } from 'src/app/business/services/auth/auth.service';
     styles: [],
 })
 export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit {
-    roleOptions: PrimengOption[];
-    partnerRoleOptions: PrimengOption[];
     genderOptions: PrimengOption[];
-    selectedRoles = new SpiderFormControl<number[]>(null, {updateOn: 'change'});
-    selectedPartnerRoles = new SpiderFormControl<number[]>(null, {updateOn: 'change'});
 
-    userExtendedFormGroup = new SpiderFormGroup<UserExtended>({});
     partnerUserFormGroup = new SpiderFormGroup<PartnerUser>({});
     partnerUserTier: Tier;
 
@@ -63,19 +58,11 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
             let modelId = params['id'];
  
             forkJoin({
-                roleListForPartnerUser: this.apiService.getPartnerRoleNamebookListForPartnerUser(modelId),
-                roleOptionList: this.apiService.getRoleListForDropdown(),
-                genderOptionList: this.apiService.getGenderListForDropdown(),                  
-                partnerRoleOptionList: this.apiService.getPartnerRoleListForDropdown(),
-                segmentationList: this.apiService.getSegmentationListForTheCurrentPartner(),
+                genderOptions: this.apiService.getGenderDropdownListForUserExtended(),                  
+                segmentations: this.apiService.getSegmentationListForTheCurrentPartner(),
             })
-            .subscribe(({ roleListForPartnerUser: rolesForThePartnerUser, roleOptionList: roleOptions, genderOptionList: genderOptions, partnerRoleOptionList: partnerRoleOptions, segmentationList: segmentations }) => {
-                this.selectedPartnerRoles.setValue(
-                    rolesForThePartnerUser.map(role => { return role.id })
-                );
-                this.roleOptions = roleOptions.map(n => { return { label: n.displayName, value: n.id } });
+            .subscribe(({ genderOptions, segmentations }) => {
                 this.genderOptions = genderOptions.map(n => { return { label: n.displayName, value: n.id }});
-                this.partnerRoleOptions = partnerRoleOptions.map(n => { return { label: n.displayName, value: n.id } });
                 this.segmentations = segmentations;
             });
 
@@ -101,14 +88,6 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
                         this.segmentationItemsFormArray.controls.forEach((formGroup: FormGroup) => {
                             formGroup.controls['checked'].setValue(ids.includes(formGroup.controls['id'].value));
                         });
-                    });
-                    
-                    this.initFormGroup(this.userExtendedFormGroup, this.formGroup, new UserExtended(user), nameof<PartnerUserSaveBody>('userExtendedDTO'));
-                    this.apiService.getRolesNamebookListForUserExtended(user.id).subscribe(rolesForTheUser => {
-                        this.selectedRoles.setValue(
-                            rolesForTheUser.map(role => { return role.id })
-                        );
-                        this.loading = false;
                     });
                 });
 
@@ -136,13 +115,9 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     override onBeforeSave = (): void => {
         let saveBody: PartnerUserSaveBody = new PartnerUserSaveBody();
 
-        saveBody.userExtendedDTO = this.userExtendedFormGroup.getRawValue();
-        saveBody.selectedRoleIds = this.selectedRoles.getRawValue();
-        
         saveBody.partnerUserDTO = this.partnerUserFormGroup.getRawValue();
-        saveBody.selectedPartnerRoleIds = this.selectedPartnerRoles.getRawValue();
 
-        saveBody.selectedSegmentationItemIds = this.segmentationItemsFormArray.value.filter(x => x.checked).map(x => x.id);
+        saveBody.selectedSegmentationItemsIds = this.segmentationItemsFormArray.value.filter(x => x.checked).map(x => x.id);
 
         this.saveBody = saveBody;
         return;

@@ -46,33 +46,5 @@ namespace PlayertyLoyals.WebAPI.Controllers
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Uloge.xlsx"));
         }
 
-        //[HttpGet]
-        //[AuthGuard]
-        //public async Task<List<NamebookDTO<long>>> GetPartnerUserNamebookListForPartnerRole(int partnerRoleId)
-        //{
-        //    return await _loyalsBusinessService.GetPartnerUsersNamebookListForPartnerRole(partnerRoleId, false);
-        //}
-
-        //[HttpGet]
-        //[AuthGuard]
-        //public async Task<List<NamebookDTO<int>>> GetPartnerPermissionNamebookListForPartnerRole(int partnerRoleId)
-        //{
-        //    return await _loyalsBusinessService.GetPartnerPermissionsNamebookListForPartnerRole(partnerRoleId, false);
-        //}
-
-        [HttpGet]
-        [AuthGuard]
-        public async Task<List<NamebookDTO<int>>> GetPartnerPermissionDropdownList()
-        {
-            return await _loyalsBusinessService.GetPartnerPermissionDropdownList(_context.DbSet<PartnerPermission>(), false);
-        }
-
-        [HttpGet]
-        [AuthGuard]
-        public override async Task<List<NamebookDTO<int>>> GetPartnerRoleDropdownList()
-        {
-            return await _loyalsBusinessService.GetPartnerRoleDropdownList(_context.DbSet<PartnerRole>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
-        }
-
     }
 }

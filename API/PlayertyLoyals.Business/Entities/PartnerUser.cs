@@ -8,7 +8,7 @@ namespace PlayertyLoyals.Business.Entities
 {
     [UIDoNotGenerate]
     [DisplayName("User.Email")]
-    public class PartnerUser : BusinessObject<long> // https://learn.microsoft.com/en-us/ef/core/modeling/inheritance
+    public class PartnerUser : BusinessObject<long>
     {
         [Required]
         public int Points { get; set; }

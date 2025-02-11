@@ -12,19 +12,20 @@ using Spider.Shared.DTO;
 using PlayertyLoyals.Business.Enums;
 using Spider.Shared.Helpers;
 using Spider.Shared.Extensions;
+using Azure.Storage.Blobs;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {
     [ApiController]
     [Route("/api/[controller]/[action]")]
-    public class PartnerUserController : SpiderBaseController
+    public class PartnerUserController : PartnerUserBaseController
     {
         private readonly IApplicationDbContext _context;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
         private readonly LoyalsBusinessService _loyalsBusinessService;
 
-
-        public PartnerUserController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService)
+        public PartnerUserController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService, BlobContainerClient blobContainerClient)
+            : base(context, loyalsBusinessService, blobContainerClient)
         {
             _context = context;
             _loyalsBusinessService = loyalsBusinessService;
@@ -39,62 +40,19 @@ namespace PlayertyLoyals.WebAPI.Controllers
             return await _partnerUserAuthenticationService.GetCurrentPartnerUserDTO();
         }
 
-
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<PartnerUserDTO>> GetPartnerUserTableData(TableFilterDTO tableFilterDTO)
+        public override async Task<TableResponseDTO<PartnerUserDTO>> GetPartnerUserTableData(TableFilterDTO tableFilterDTO)
         {
             return await _loyalsBusinessService.GetPartnerUserTableData(tableFilterDTO, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task<IActionResult> ExportPartnerUserTableDataToExcel(TableFilterDTO tableFilterDTO)
+        public override async Task<IActionResult> ExportPartnerUserTableDataToExcel(TableFilterDTO tableFilterDTO)
         {
             byte[] fileContent = await _loyalsBusinessService.ExportPartnerUserTableDataToExcel(tableFilterDTO, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Korisnici.xlsx"));
-        }
-
-        [HttpDelete]
-        [AuthGuard]
-        public async Task DeletePartnerUser(long id)
-        {
-            await _loyalsBusinessService.DeletePartnerUserAsync(id, false); // TODO FT: Override
-        }
-
-        [HttpGet]
-        [AuthGuard]
-        public async Task<PartnerUserDTO> GetPartnerUser(long id)
-        {
-            return await _loyalsBusinessService.GetPartnerUserDTOAsync(id, false);
-        }
-
-        [HttpPut]
-        [AuthGuard]
-        public async Task<PartnerUserSaveBodyDTO> SavePartnerUser(PartnerUserSaveBodyDTO saveBodyDTO)
-        {
-            return await _loyalsBusinessService.SavePartnerUserAndReturnSaveBodyDTOAsync(saveBodyDTO);
-        }
-
-        [HttpGet]
-        [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> GetPartnerUserAutocompleteList(int limit, string query)
-        {
-            return await _loyalsBusinessService.GetPartnerUserAutocompleteList(limit, query, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
-        }
-
-        [HttpGet]
-        [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> GetPartnerUserDropdownList()
-        {
-            return await _loyalsBusinessService.GetPartnerUserDropdownList(_context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
-        }
-
-        [HttpGet]
-        [AuthGuard]
-        public async Task<List<NamebookDTO<int>>> GetPartnerRoleNamebookListForPartnerUser(long partnerUserId)
-        {
-            return await _loyalsBusinessService.GetPartnerRolesNamebookListForPartnerUser(partnerUserId, false);
         }
 
         [HttpGet]
@@ -130,6 +88,13 @@ namespace PlayertyLoyals.WebAPI.Controllers
         public async Task<TableResponseDTO<TransactionDTO>> GetTransactionListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
         {
             return await _loyalsBusinessService.GetTransactionListForTheCurrentPartnerUser(tableFilterDTO);
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public override async Task<List<NamebookDTO<int>>> GetTierDropdownListForPartnerUser()
+        {
+            return await _loyalsBusinessService.GetTierDropdownListForPartnerUser(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
         }
 
     }

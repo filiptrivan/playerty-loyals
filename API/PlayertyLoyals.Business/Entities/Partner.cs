@@ -14,6 +14,7 @@ using Spider.Shared.Enums;
 
 namespace PlayertyLoyals.Business.Entities
 {
+    [Authorize]
     [Index(nameof(Slug), IsUnique = true)]
     public class Partner : BusinessObject<int>
     {

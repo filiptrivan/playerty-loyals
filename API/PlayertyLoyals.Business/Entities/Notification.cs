@@ -8,6 +8,7 @@ using Spider.Shared.Interfaces;
 
 namespace PlayertyLoyals.Business.Entities
 {
+    [Authorize]
     public class Notification : BusinessObject<long>, INotification<UserExtended>
     {
         [UIControlWidth("col-12")]

@@ -1053,33 +1053,21 @@ export class PartnerUser extends BaseEntity
 export class PartnerUserSaveBody extends BaseEntity
 {
     partnerUserDTO?: PartnerUser;
-	selectedPartnerRoleIds?: number[];
-	selectedSegmentationItemIds?: number[];
-	userExtendedDTO?: UserExtended;
-	selectedRoleIds?: number[];
+	selectedSegmentationItemsIds?: number[];
 
     constructor(
     {
         partnerUserDTO,
-		selectedPartnerRoleIds,
-		selectedSegmentationItemIds,
-		userExtendedDTO,
-		selectedRoleIds
+		selectedSegmentationItemsIds
     }:{
         partnerUserDTO?: PartnerUser;
-		selectedPartnerRoleIds?: number[];
-		selectedSegmentationItemIds?: number[];
-		userExtendedDTO?: UserExtended;
-		selectedRoleIds?: number[];     
+		selectedSegmentationItemsIds?: number[];     
     } = {}
     ) {
         super('PartnerUserSaveBody'); 
 
         this.partnerUserDTO = partnerUserDTO;
-		this.selectedPartnerRoleIds = selectedPartnerRoleIds;
-		this.selectedSegmentationItemIds = selectedSegmentationItemIds;
-		this.userExtendedDTO = userExtendedDTO;
-		this.selectedRoleIds = selectedRoleIds;
+		this.selectedSegmentationItemsIds = selectedSegmentationItemsIds;
     }
 }
 

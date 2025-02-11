@@ -1,6 +1,7 @@
 ﻿using Spider.Shared.Attributes.EF;
 using Spider.Shared.Attributes.EF.UI;
 using Spider.Shared.BaseEntities;
+using Spider.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,6 +19,7 @@ namespace PlayertyLoyals.Business.Entities
 
         [ManyToOneRequired]
         [WithMany(nameof(BusinessSystem.BusinessSystemTiers))]
+        [UIControlType(nameof(UIControlTypeCodes.Dropdown))]
         public virtual BusinessSystem BusinessSystem { get; set; }
 
         [ManyToOneRequired]

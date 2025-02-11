@@ -204,14 +204,8 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('PartnerUserPartnerNotificationDTO');
             case 'partnerUserPartnerRoleDTO':
                 return this.translocoService.translate('PartnerUserPartnerRoleDTO');
-            case 'selectedPartnerRoleIds':
-                return this.translocoService.translate('SelectedPartnerRoleIds');
-            case 'selectedSegmentationItemIds':
-                return this.translocoService.translate('SelectedSegmentationItemIds');
-            case 'userExtendedDTO':
-                return this.translocoService.translate('UserExtendedDTO');
-            case 'selectedRoleIds':
-                return this.translocoService.translate('SelectedRoleIds');
+            case 'selectedSegmentationItemsIds':
+                return this.translocoService.translate('SelectedSegmentationItemsIds');
             case 'partnerUserDTO':
                 return this.translocoService.translate('PartnerUserDTO');
             case 'partnerUserThatHasFilledSegmentation':
@@ -320,6 +314,8 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('BirthDate');
             case 'gender':
                 return this.translocoService.translate('Gender');
+            case 'userExtendedDTO':
+                return this.translocoService.translate('UserExtendedDTO');
             case 'selectedRolesIds':
                 return this.translocoService.translate('SelectedRolesIds');
             case 'notification':

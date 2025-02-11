@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { ConfigService } from '../config.service';
-import { getPrimengCodebookListForAutocomplete, InitTopBarData, LayoutBaseService, PrimengOption, User } from '@playerty/spider';
+import { getPrimengAutocompleteCodebookOptions, InitTopBarData, LayoutBaseService, PrimengOption, User } from '@playerty/spider';
 import { combineLatest, firstValueFrom, map } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { Partner } from '../../entities/business-entities.generated';
@@ -54,7 +54,7 @@ export class LayoutService extends LayoutBaseService implements OnDestroy {
     //#region Side Bar
 
     override searchPartners = (event: AutoCompleteCompleteEvent) => {
-        return getPrimengCodebookListForAutocomplete(this.apiService.getPartnerWithSlugListForAutocomplete, 50, event.query).pipe(
+        return getPrimengAutocompleteCodebookOptions(this.apiService.getPartnerWithSlugAutocompleteList, 50, event.query).pipe(
             map(po => po)
         );
     }

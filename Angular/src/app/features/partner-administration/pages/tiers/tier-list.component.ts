@@ -71,7 +71,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
 
         forkJoin({
             tierSaveBody: this.apiService.getTierSaveBodyDTO(),
-            businessSystemNamebookList: this.apiService.getBusinessSystemListForDropdown(),
+            businessSystemNamebookList: this.apiService.getBusinessSystemDropdownListForBusinessSystemTier(),
         }).subscribe(({ tierSaveBody, businessSystemNamebookList }) => {
             this.initTierFormArray(tierSaveBody.tierDTOList);
             this.initBusinessSystemTierFormArray(tierSaveBody.businessSystemTierDTOList);
