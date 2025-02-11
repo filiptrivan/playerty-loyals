@@ -1,6 +1,6 @@
 ﻿using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Shared.Resources;
-using Spider.Security.Interface;
+using Spider.Security.Interfaces;
 using Spider.Shared.Extensions;
 using Spider.Shared.Interfaces;
 using System;

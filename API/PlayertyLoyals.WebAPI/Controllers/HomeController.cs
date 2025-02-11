@@ -3,7 +3,7 @@ using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Enums;
 using PlayertyLoyals.Business.Services;
-using Spider.Security.Interface;
+using Spider.Security.Interfaces;
 using Spider.Security.Services;
 using Spider.Shared.Attributes;
 using Spider.Shared.DTO;

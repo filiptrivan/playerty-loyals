@@ -139,9 +139,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> GetBusinessSystemListForDropdown()
+        public async Task<List<NamebookDTO<long>>> GetBusinessSystemDropdownList()
         {
-            return await _loyalsBusinessService.GetBusinessSystemListForDropdown(_context.DbSet<BusinessSystem>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetBusinessSystemDropdownList(_context.DbSet<BusinessSystem>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpPost]

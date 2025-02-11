@@ -57,9 +57,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> GetSegmentationItemListForDropdown()
+        public async Task<List<NamebookDTO<long>>> GetSegmentationItemDropdownList()
         {
-            return await _loyalsBusinessService.GetSegmentationItemListForDropdown(_context.DbSet<SegmentationItem>().Where(x => x.Segmentation.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetSegmentationItemDropdownList(_context.DbSet<SegmentationItem>().Where(x => x.Segmentation.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
     }

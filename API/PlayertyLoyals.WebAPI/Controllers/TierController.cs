@@ -2,7 +2,7 @@
 using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Services;
-using Spider.Security.Interface;
+using Spider.Security.Interfaces;
 using Spider.Security.Services;
 using Spider.Shared.Attributes;
 using Spider.Shared.DTO;
@@ -70,9 +70,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<int>>> GetTierListForDropdown()
+        public async Task<List<NamebookDTO<int>>> GetTierDropdownList()
         {
-            return await _loyalsBusinessService.GetTierListForDropdown(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
+            return await _loyalsBusinessService.GetTierDropdownList(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
         }
 
         [HttpGet]

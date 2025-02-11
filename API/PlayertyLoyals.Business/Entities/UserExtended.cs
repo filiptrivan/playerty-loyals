@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Spider.Security.Entities;
-using Spider.Security.Interface;
+using Spider.Security.Interfaces;
 using Spider.Shared.Attributes;
 using Spider.Shared.Attributes.EF;
 using Spider.Shared.Attributes.EF.Translation;
@@ -11,6 +11,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PlayertyLoyals.Business.Entities
 {
+    [Authorize]
     [TranslateSingularSrLatnRS("Korisnik")]
     [Index(nameof(Email), IsUnique = true)]
     public class UserExtended : BusinessObject<long>, IUser

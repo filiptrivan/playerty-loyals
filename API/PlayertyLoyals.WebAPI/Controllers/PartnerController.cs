@@ -48,9 +48,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<CodebookDTO>> GetPartnerWithSlugListForAutocomplete(int limit, string query)
+        public async Task<List<CodebookDTO>> GetPartnerWithSlugAutocompleteList(int limit, string query)
         {
-            return await _loyalsBusinessService.GetPartnerWithSlugListForAutocomplete(limit, query, _context.DbSet<Partner>(), false);
+            return await _loyalsBusinessService.GetPartnerWithSlugAutocompleteList(limit, query, _context.DbSet<Partner>(), false);
         }
 
         [HttpGet]

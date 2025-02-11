@@ -62,16 +62,16 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<int>>> GetPartnerPermissionListForDropdown()
+        public async Task<List<NamebookDTO<int>>> GetPartnerPermissionDropdownList()
         {
-            return await _loyalsBusinessService.GetPartnerPermissionListForDropdown(_context.DbSet<PartnerPermission>(), false);
+            return await _loyalsBusinessService.GetPartnerPermissionDropdownList(_context.DbSet<PartnerPermission>(), false);
         }
 
         [HttpGet]
         [AuthGuard]
-        public override async Task<List<NamebookDTO<int>>> GetPartnerRoleListForDropdown()
+        public override async Task<List<NamebookDTO<int>>> GetPartnerRoleDropdownList()
         {
-            return await _loyalsBusinessService.GetPartnerRoleListForDropdown(_context.DbSet<PartnerRole>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetPartnerRoleDropdownList(_context.DbSet<PartnerRole>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
     }

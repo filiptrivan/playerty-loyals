@@ -8,7 +8,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { FooterComponent, LayoutBaseComponent, AppSidebarComponent, AppTopBarComponent, LayoutBaseService, PrimengModule, SpiderMenuItem} from '@playerty/spider';
 import { CommonModule } from '@angular/common';
-import { PermissionCodes } from '../../enums/business-enums.generated';
+import { BusinessPermissionCodes } from '../../enums/business-enums.generated';
+import { SecurityPermissionCodes } from '@playerty/spider';
 
 @Component({
     selector: 'layout',
@@ -95,19 +96,19 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                             icon: 'pi pi-fw pi-cog',
                             visible: true,
                             hasPermission: (permissionCodes: string[]): boolean => { 
-                                return (permissionCodes?.includes(PermissionCodes.ReadUserExtended) ||
-                                        // permissionCodes?.includes(PermissionCodes.ReadRole) ||
-                                        permissionCodes?.includes(PermissionCodes.ReadTier) || 
-                                        permissionCodes?.includes(PermissionCodes.ReadNotification))
+                                return (permissionCodes?.includes(BusinessPermissionCodes.ReadUserExtended) ||
+                                        // permissionCodes?.includes(BusinessPermissionCodes.ReadRole) ||
+                                        permissionCodes?.includes(BusinessPermissionCodes.ReadTier) || 
+                                        permissionCodes?.includes(BusinessPermissionCodes.ReadNotification))
                             },
                             items: [
                                 {
                                     label: this.translocoService.translate('UserList'),
                                     icon: 'pi pi-fw pi-user',
                                     routerLink: [`/${this.config.administrationSlug}/users`],
-                                    // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]))
-                                    // } 
+                                    hasPermission: (permissionCodes: string[]): boolean => { 
+                                        return (permissionCodes?.includes(BusinessPermissionCodes.ReadUserExtended))
+                                    },
                                     visible: true,
                                 },
                                 {
@@ -115,7 +116,7 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                                     icon: 'pi pi-fw pi-id-card',
                                     routerLink: [`/${this.config.administrationSlug}/roles`],
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]))
+                                    //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadRole]))
                                     // }
                                     visible: true,
                                 },
@@ -124,7 +125,7 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                                     icon: 'pi pi-fw pi-bell',
                                     routerLink: [`/${this.config.administrationSlug}/notifications`],
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
+                                    //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadNotification]))
                                     // }
                                     visible: true,
                                 },
@@ -140,10 +141,10 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                             label: this.translocoService.translate('Administration'),
                             icon: 'pi pi-fw pi-cog',
                             // hasPermission: (permissionCodes: string[]): boolean => { 
-                            //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]) ||
-                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]) ||
-                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]) || 
-                            //             permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification])) &&
+                            //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadUserExtended]) ||
+                            //             permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadRole]) ||
+                            //             permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadTier]) || 
+                            //             permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadNotification])) &&
                             //             partner != null
                             // },
                             visible: true,
@@ -153,7 +154,7 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                                     icon: 'pi pi-fw pi-user',
                                     routerLink: [`/${this.config.partnerAdministrationSlug}/users`],
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadUserExtended]))
+                                    //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadUserExtended]))
                                     // } 
                                     visible: true,
                                 },
@@ -162,7 +163,7 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                                     icon: 'pi pi-fw pi-id-card',
                                     routerLink: [`/${this.config.partnerAdministrationSlug}/roles`],
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadRole]))
+                                    //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadRole]))
                                     // }
                                     visible: true,
                                 },
@@ -171,7 +172,7 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                                     icon: 'pi pi-fw pi-bell',
                                     routerLink: [`/${this.config.partnerAdministrationSlug}/notifications`],
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadNotification]))
+                                    //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadNotification]))
                                     // }
                                     visible: true,
                                 },
@@ -181,7 +182,7 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                                     routerLink: [`/${this.config.partnerAdministrationSlug}/segmentations`],
                                     visible: true,
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadSegmentation]))
+                                    //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadSegmentation]))
                                     // }
                                 },
                                 {
@@ -190,7 +191,7 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                                     routerLink: [`/${this.config.partnerAdministrationSlug}/business-systems`],
                                     visible: true,
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadSegmentation]))
+                                    //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadSegmentation]))
                                     // }
                                 },
                                 {
@@ -198,7 +199,7 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                                     icon: 'pi pi-fw pi-crown',
                                     routerLink: [`/${this.config.partnerAdministrationSlug}/tiers`],
                                     // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[PermissionCodes.ReadTier]))
+                                    //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadTier]))
                                     // }
                                     visible: true,
                                 },

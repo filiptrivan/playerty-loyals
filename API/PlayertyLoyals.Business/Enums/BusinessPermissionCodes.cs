@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.Enums
 {
-    public static partial class PermissionCodes
+    public static partial class BusinessPermissionCodes
     {
         public static string Test { get; } = "Test";
     }

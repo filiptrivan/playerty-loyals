@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Spider.Security.Interface;
+using Spider.Security.Interfaces;
 using Spider.Security.Services;
 using Spider.Infrastructure;
 using Spider.Security.SecurityControllers;
@@ -78,16 +78,16 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> GetPartnerUserListForAutocomplete(int limit, string query)
+        public async Task<List<NamebookDTO<long>>> GetPartnerUserAutocompleteList(int limit, string query)
         {
-            return await _loyalsBusinessService.GetPartnerUserListForAutocomplete(limit, query, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetPartnerUserAutocompleteList(limit, query, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<long>>> GetPartnerUserListForDropdown()
+        public async Task<List<NamebookDTO<long>>> GetPartnerUserDropdownList()
         {
-            return await _loyalsBusinessService.GetPartnerUserListForDropdown(_context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetPartnerUserDropdownList(_context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
         }
 
         [HttpGet]

@@ -37,9 +37,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<NamebookDTO<int>>> GetGenderListForDropdown()
+        public async Task<List<NamebookDTO<int>>> GetGenderDropdownList()
         {
-            return await _loyalsBusinessService.GetGenderListForDropdown(_context.DbSet<Gender>(), false);
+            return await _loyalsBusinessService.GetGenderDropdownList(_context.DbSet<Gender>(), false);
         }
     }
 }

@@ -668,8 +668,8 @@ export class PartnerNotificationBaseDetailsComponent {
             this.recipientsTableColsForPartnerNotification = [
                 {name: this.translocoService.translate('User'), filterType: 'text', field: 'userDisplayName'  },
                 {name: this.translocoService.translate('Points'), filterType: 'numeric', field: 'points' , showMatchModes: true },
-                {name: this.translocoService.translate('Tier'), filterType: 'multiselect', field: 'tierDisplayName' , filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(getPrimengNamebookListForDropdown(this.apiService.getTierListForDropdown)) },
-                {name: this.translocoService.translate('Segmentation'), filterType: 'multiselect', field: 'checkedSegmentationItemsCommaSeparated' , dropdownOrMultiselectValues: await firstValueFrom(getPrimengNamebookListForDropdown(this.apiService.getSegmentationItemListForDropdown)) },
+                {name: this.translocoService.translate('Tier'), filterType: 'multiselect', field: 'tierDisplayName' , filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(getPrimengNamebookDropdownList(this.apiService.getTierDropdownListForPartnerNotification)) },
+                {name: this.translocoService.translate('Segmentation'), filterType: 'multiselect', field: 'checkedSegmentationItemsCommaSeparated' , dropdownOrMultiselectValues: await firstValueFrom(getPrimengNamebookDropdownList(this.apiService.getCheckedSegmentationItemsDropdownListForPartnerNotification)) },
                 {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt' , showMatchModes: true }
             ];
 
@@ -809,8 +809,8 @@ export class PartnerRoleBaseDetailsComponent {
 
 
 
-    partnerUsersForPartnerRoleOptions: PrimengOption[];
-    partnerPermissionsForPartnerRoleOptions: PrimengOption[];
+    partnerUsersOptionsForPartnerRole: PrimengOption[];
+    partnerPermissionsOptionsForPartnerRole: PrimengOption[];
 
     selectedPartnerUsersForPartnerRole = new SpiderFormControl<PrimengOption[]>(null, {updateOn: 'change'});
     selectedPartnerPermissionsForPartnerRole = new SpiderFormControl<number[]>(null, {updateOn: 'change'});
@@ -843,8 +843,8 @@ export class PartnerRoleBaseDetailsComponent {
         this.route.params.subscribe(async (params) => {
             this.modelId = params['id'];
 
-            getPrimengNamebookListForDropdown(this.apiService.getPartnerPermissionListForDropdown).subscribe(po => {
-                this.partnerPermissionsForPartnerRoleOptions = po;
+            getPrimengNamebookDropdownList(this.apiService.getPartnerPermissionsDropdownListForPartnerRole).subscribe(po => {
+                this.partnerPermissionsOptionsForPartnerRole = po;
             });
 
 
@@ -893,8 +893,8 @@ export class PartnerRoleBaseDetailsComponent {
 
 
     searchPartnerUsersForPartnerRole(event: AutoCompleteCompleteEvent) {
-        getPrimengNamebookListForAutocomplete(this.apiService.getPartnerUserListForAutocomplete, 50, event?.query ?? '').subscribe(po => {
-            this.partnerUsersForPartnerRoleOptions = po;
+        getPrimengNamebookAutocompleteList(this.apiService.getPartnerUsersAutocompleteListForPartnerRole, 50, event?.query ?? '').subscribe(po => {
+            this.partnerUsersOptionsForPartnerRole = po;
         });
     }
 
@@ -1342,8 +1342,8 @@ export class UserExtendedBaseDetailsComponent {
 
 
 
-    genderForUserExtendedOptions: PrimengOption[];
-    rolesForUserExtendedOptions: PrimengOption[];
+    genderOptionsForUserExtended: PrimengOption[];
+    rolesOptionsForUserExtended: PrimengOption[];
 
     selectedRolesForUserExtended = new SpiderFormControl<number[]>(null, {updateOn: 'change'});
 
@@ -1375,11 +1375,11 @@ export class UserExtendedBaseDetailsComponent {
         this.route.params.subscribe(async (params) => {
             this.modelId = params['id'];
 
-            getPrimengNamebookListForDropdown(this.apiService.getGenderListForDropdown).subscribe(po => {
-                this.genderForUserExtendedOptions = po;
+            getPrimengNamebookDropdownList(this.apiService.getGenderDropdownListForUserExtended).subscribe(po => {
+                this.genderOptionsForUserExtended = po;
             });
-            getPrimengNamebookListForDropdown(this.apiService.getRoleListForDropdown).subscribe(po => {
-                this.rolesForUserExtendedOptions = po;
+            getPrimengNamebookDropdownList(this.apiService.getRolesDropdownListForUserExtended).subscribe(po => {
+                this.rolesOptionsForUserExtended = po;
             });
 
 

@@ -96,17 +96,17 @@ namespace PlayertyLoyals.Business.Services
 
         public async Task SendNotificationEmail(long notificationId, int notificationVersion)
         {
-            await _context.WithTransactionAsync(async () =>
+            await _context.WithTransactionAsync((Func<Task>)(async () =>
             {
-                await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.EditNotification);
+                await _authorizationService.AuthorizeAndThrowAsync<UserExtended>((string)BusinessPermissionCodes.UpdateNotification);
 
                 // FT: Checking version because if the user didn't save and some other user changed the version, he will send emails to wrong users
-                Notification notification = await GetInstanceAsync<Notification, long>(notificationId, notificationVersion); 
+                Notification notification = await GetInstanceAsync<Notification, long>(notificationId, notificationVersion);
 
                 List<string> recipients = notification.Recipients.Select(x => x.Email).ToList();
 
                 await _emailingService.SendEmailAsync(recipients, notification.Title, notification.EmailBody);
-            });
+            }));
         }
 
         public async Task DeleteNotificationForCurrentUser(long notificationId, int notificationVersion)
@@ -429,7 +429,7 @@ namespace PlayertyLoyals.Business.Services
         /// <summary>
         /// TODO FT: Add this to generator (you will need to add one more custom attribute [Code])
         /// </summary>
-        public async Task<List<CodebookDTO>> GetPartnerWithSlugListForAutocomplete(int limit, string query, IQueryable<Partner> partnerQuery, bool authorize = true)
+        public async Task<List<CodebookDTO>> GetPartnerWithSlugAutocompleteList(int limit, string query, IQueryable<Partner> partnerQuery, bool authorize = true)
         {
             long currentUserId = _authenticationService.GetCurrentUserId();
 
@@ -437,7 +437,7 @@ namespace PlayertyLoyals.Business.Services
             {
                 if (authorize)
                 {
-                    await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.ReadPartner);
+                    await _authorizationService.AuthorizeAndThrowAsync<UserExtended>((string)BusinessPermissionCodes.ReadPartner);
                 }
 
                 partnerQuery = partnerQuery.Where(x => x.PartnerUsers.Any(x => x.User.Id == currentUserId));
@@ -558,7 +558,7 @@ namespace PlayertyLoyals.Business.Services
 
                 int pointsBeforeSave = await _context.DbSet<PartnerUser>().Where(x => x.Id == partnerUserSaveBodyDTO.PartnerUserDTO.Id).Select(x => x.Points).SingleAsync();
 
-                PartnerUser savedPartnerUser = await SavePartnerUserAndReturnDomainAsync(partnerUserSaveBodyDTO.PartnerUserDTO, false, false); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
+                PartnerUser savedPartnerUser = await SavePartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO, false, false); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
 
                 await UpdateFirstTimeFilledPointsForThePartnerUser(savedPartnerUser, partnerUserSaveBodyDTO.SelectedSegmentationItemIds);
 
@@ -1297,7 +1297,7 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
                     try
                     {
                         await UpdatePointsForThePartnerUser(partnerUser, pointsFromTransaction);
-                        await SaveTransactionAndReturnDomainAsync(transactionDTO, false, false);
+                        await SaveTransaction(transactionDTO, false, false);
 
                         transactionWhichUpdateSucceededList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail})");
                     }

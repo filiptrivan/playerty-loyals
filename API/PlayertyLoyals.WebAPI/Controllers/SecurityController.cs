@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Spider.Security.Interface;
+using Spider.Security.Interfaces;
 using Spider.Security.Services;
 using Spider.Security.SecurityControllers;
 using Spider.Shared.Interfaces;

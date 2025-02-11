@@ -1,6 +1,10 @@
 ﻿using Azure.Storage.Blobs;
 using Spider.Security.Services;
 using Spider.Shared.Interfaces;
+using Spider.Shared.Extensions;
+using PlayertyLoyals.Business.Entities;
+using PlayertyLoyals.Business.Enums;
+using Spider.Shared.Exceptions;
 
 namespace PlayertyLoyals.Business.Services
 {
@@ -16,18 +20,16 @@ namespace PlayertyLoyals.Business.Services
             _authenticationService = authenticationService;
         }
 
+        public override async Task AuthorizeUserExtendedReadAndThrow(long userExtendedId)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                bool hasAdminReadPermission = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.ReadUserExtended);
 
-
-        //public override async Task UserExtendedSingleReadAuthorize(long userExtendedId)
-        //{
-        //    await _context.WithTransactionAsync(async () =>
-        //    {
-        //        bool hasAdminReadPermission = await IsAuthorizedAsync<UserExtended>(PermissionCodes.ReadUserExtended);
-
-        //        if (_authenticationService.GetCurrentUserId() != userExtendedId && hasAdminReadPermission == false)
-        //            throw new UnauthorizedException();
-        //    });
-        //}
+                if (_authenticationService.GetCurrentUserId() != userExtendedId && hasAdminReadPermission == false)
+                    throw new UnauthorizedException();
+            });
+        }
 
         ///// <summary>
         ///// Not implemented on the UI yet, so the user can delete his own account. Maybe add that in the settings.
