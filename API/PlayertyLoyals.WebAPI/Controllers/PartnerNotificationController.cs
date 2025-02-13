@@ -66,9 +66,13 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public override async Task<LazyLoadSelectedIdsResultDTO<long>> LazyLoadSelectedRecipientsIdsForPartnerNotification(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.LazyLoadSelectedRecipientsIdsForPartnerNotification(tableFilterDTO, _context.DbSet<PartnerUser>()
-                .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
-                .OrderBy(x => x.Id));
+            return await _loyalsBusinessService.LazyLoadSelectedRecipientsIdsForPartnerNotification(
+                tableFilterDTO, 
+                _context.DbSet<PartnerUser>()
+                    .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
+                    .OrderBy(x => x.Id),
+                true
+            );
         }
 
         [HttpGet]

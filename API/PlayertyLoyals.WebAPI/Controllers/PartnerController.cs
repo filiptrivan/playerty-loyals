@@ -31,13 +31,6 @@ namespace PlayertyLoyals.WebAPI.Controllers
             _partnerUserAuthenticationService = partnerUserAuthenticationService;
             _blobContainerClient = blobContainerClient;
         }
-
-        //[HttpPut]
-        //[AuthGuard]
-        //public async Task<PartnerDTO> SavePartner(PartnerDTO partnerDTO)
-        //{
-        //    return await _loyalsBusinessService.SavePartnerAndReturnDTO(partnerDTO, false, false);
-        //}
         
         [HttpGet]
         //[AuthGuard] // FT: We should show login page of the partner to the user which is not logged in also.

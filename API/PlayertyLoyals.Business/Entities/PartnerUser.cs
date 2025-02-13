@@ -6,8 +6,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PlayertyLoyals.Business.Entities
 {
+    [Authorize]
     [UIDoNotGenerate]
     [DisplayName("User.Email")]
+    //[CanNotInsertThroughMainUIForm]
     public class PartnerUser : BusinessObject<long>
     {
         [Required]
@@ -27,6 +29,7 @@ namespace PlayertyLoyals.Business.Entities
         [UIControlType(nameof(UIControlTypeCodes.Dropdown))]
         [SetNull]
         [WithMany(nameof(Tier.PartnerUsers))]
+        //[CanNotUpdateThroughMainUIForm]
         public virtual Tier Tier { get; set; } // FT: It's not required because when the user just made the account and the administrator didn't make any tiers, he can't be any
 
         public virtual List<Transaction> Transactions { get; } = new();

@@ -144,7 +144,7 @@ namespace PlayertyLoyals.Business.Services
 
         #region Tier
 
-        public override async Task<TierSaveBodyDTO> SaveTierAndReturnSaveBodyDTO(TierSaveBodyDTO tierSaveBodyDTO, bool authorizeUpdate = true, bool authorizeInsert = true)
+        public override async Task<TierSaveBodyDTO> SaveTierAndReturnSaveBodyDTO(TierSaveBodyDTO tierSaveBodyDTO, bool authorizeUpdate, bool authorizeInsert)
         {
             List<int> exceptionHelper = new();
 
@@ -188,7 +188,7 @@ namespace PlayertyLoyals.Business.Services
                 {
                     TierDTO tierDTO = tierSaveBodyDTO.TierDTOList[i];
                     tierDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
-                    TierDTO savedTierDTO = await SaveTierAndReturnDTO(tierDTO, false, false);
+                    TierDTO savedTierDTO = await SaveTierAndReturnDTO(tierDTO, true, true);
                     tierResultDTOList.Add(savedTierDTO);
 
                     List<BusinessSystemTierDTO> businessSystemTierDTOList = tierSaveBodyDTO.BusinessSystemTierDTOList.Where(x => x.TierClientIndex == i).ToList();
@@ -377,7 +377,7 @@ namespace PlayertyLoyals.Business.Services
                         .ThenInclude(x => x.BusinessSystemTierDiscountProductGroups)
                             .ThenInclude(x => x.DiscountProductGroup)
                     .Include(x => x.Partner)
-                    .OrderByDescending(x => x.ValidFrom), false);
+                    .OrderByDescending(x => x.ValidFrom), true);
 
                 foreach (Tier tier in tierList)
                 {
@@ -531,7 +531,7 @@ namespace PlayertyLoyals.Business.Services
 
                 int pointsBeforeSave = await _context.DbSet<PartnerUser>().Where(x => x.Id == partnerUserSaveBodyDTO.PartnerUserDTO.Id).Select(x => x.Points).SingleAsync();
 
-                PartnerUser savedPartnerUser = await SavePartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO, false, false); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
+                PartnerUser savedPartnerUser = await SavePartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO, true, true); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
 
                 await UpdateFirstTimeFilledPointsForThePartnerUser(savedPartnerUser, partnerUserSaveBodyDTO.SelectedSegmentationItemsIds);
 
@@ -890,7 +890,7 @@ namespace PlayertyLoyals.Business.Services
                         throw new HackerException("Can't save UpdatePointsInterval nor UpdatePointsStartDate from here.");
                 }
 
-                BusinessSystemDTO savedBusinessSystemDTO = await SaveBusinessSystemAndReturnDTO(businessSystemSaveBodyDTO.BusinessSystemDTO, false, false);
+                BusinessSystemDTO savedBusinessSystemDTO = await SaveBusinessSystemAndReturnDTO(businessSystemSaveBodyDTO.BusinessSystemDTO, true, true);
                 return new BusinessSystemSaveBodyDTO
                 {
                     BusinessSystemDTO = savedBusinessSystemDTO

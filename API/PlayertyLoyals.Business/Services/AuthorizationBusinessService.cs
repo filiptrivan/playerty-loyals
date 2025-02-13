@@ -43,6 +43,30 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
+        public override async Task AuthorizeUserExtendedUpdateAndThrow(UserExtendedDTO userExtendedDTO)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                bool hasAdminUpdatePermission = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.UpdateUserExtended);
+                if (hasAdminUpdatePermission)
+                    return;
+
+                long currentUserId = _authenticationService.GetCurrentUserId();
+                if (currentUserId != userExtendedDTO.Id)
+                    throw new UnauthorizedException();
+
+                UserExtended userExtended = await GetInstanceAsync<UserExtended, long>(userExtendedDTO.Id, null);
+
+                if (
+                    userExtendedDTO.IsDisabled != userExtended.IsDisabled ||
+                    userExtendedDTO.HasLoggedInWithExternalProvider != userExtended.HasLoggedInWithExternalProvider
+                )
+                {
+                    throw new UnauthorizedException();
+                }
+            });
+        }
+
         ///// <summary>
         ///// Not implemented on the UI yet, so the user can delete his own account. Maybe add that in the settings.
         ///// </summary>
@@ -73,7 +97,7 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public override async Task AuthorizePartnerUpdateAndThrow(int partnerId)
+        public override async Task AuthorizePartnerUpdateAndThrow(PartnerDTO partnerDTO)
         {
             await _context.WithTransactionAsync(async () =>
             {
@@ -102,38 +126,39 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        //public override async Task AuthorizePartnerUserUpdateAndThrow(long partnerUserId, PartnerUserSaveBodyDTO partnerUserSaveBodyDTO)
-        //{
-        //    await _context.WithTransactionAsync(async () =>
-        //    {
-        //        PartnerUser partnerUser = await GetInstanceAsync<PartnerUser, long>(partnerUserSaveBodyDTO.PartnerUserDTO.Id, null);
+        public override async Task AuthorizePartnerUserUpdateAndThrow(PartnerUserDTO partnerUserDTO)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                PartnerUser partnerUser = await GetInstanceAsync<PartnerUser, long>(partnerUserDTO.Id, null);
 
-        //        // FT: Noone can change these from the partner user page
-        //        if (partnerUser.Tier.Id != partnerUserSaveBodyDTO.PartnerUserDTO.TierId ||
-        //            partnerUser.User.Id != partnerUserSaveBodyDTO.PartnerUserDTO.UserId
-        //        )
-        //        {
-        //            throw new UnauthorizedException();
-        //        }
+                // FT: Noone can change these from the partner user page
+                // TODO FT: Transfer this to on before save (or generate it, but inside save body dto method, not save dto)
+                if (partnerUser.Tier.Id != partnerUserDTO.TierId ||
+                    partnerUser.User.Id != partnerUserDTO.UserId ||
+                    partnerUser.Partner.Id != partnerUserDTO.PartnerId
+                )
+                {
+                    throw new UnauthorizedException();
+                }
 
-        //        bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.UpdatePartnerUser);
-        //        bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedAsync(BusinessPermissionCodes.UpdatePartnerUser);
-        //        bool isCurrentPartnerUser = await _partnerUserAuthenticationService.GetCurrentPartnerUserId() == partnerUserId;
+                bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.UpdatePartnerUser);
+                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedAsync(BusinessPermissionCodes.UpdatePartnerUser);
 
-        //        if (isPartnerUserAuthorized == false && 
-        //            isUserAuthorized == false &&
-        //            partnerUser.Points != partnerUserSaveBodyDTO.PartnerUserDTO.Points
-        //        )
-        //        {
-        //            throw new UnauthorizedException();
-        //        }
+                if (isPartnerUserAuthorized == false &&
+                    isUserAuthorized == false &&
+                    partnerUser.Points != partnerUserDTO.Points
+                )
+                {
+                    throw new UnauthorizedException();
+                }
 
+                bool isCurrentPartnerUser = await _partnerUserAuthenticationService.GetCurrentPartnerUserId() == partnerUser.Id;
 
-
-        //        if (isCurrentPartnerUser == false && isPartnerUserAuthorized == false && isUserAuthorized == false)
-        //            throw new UnauthorizedException();
-        //    });
-        //}
+                if (isCurrentPartnerUser == false && isPartnerUserAuthorized == false && isUserAuthorized == false)
+                    throw new UnauthorizedException();
+            });
+        }
 
         #endregion
 

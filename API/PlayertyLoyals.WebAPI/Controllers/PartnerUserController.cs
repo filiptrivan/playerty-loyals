@@ -44,14 +44,22 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public override async Task<TableResponseDTO<PartnerUserDTO>> GetPartnerUserTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.GetPartnerUserTableData(tableFilterDTO, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetPartnerUserTableData(
+                tableFilterDTO, 
+                _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), 
+                true
+            );
         }
 
         [HttpPost]
         [AuthGuard]
         public override async Task<IActionResult> ExportPartnerUserTableDataToExcel(TableFilterDTO tableFilterDTO)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportPartnerUserTableDataToExcel(tableFilterDTO, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            byte[] fileContent = await _loyalsBusinessService.ExportPartnerUserTableDataToExcel(
+                tableFilterDTO, 
+                _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()),
+                true
+            );
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Korisnici.xlsx"));
         }
 
@@ -92,9 +100,13 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public override async Task<List<NamebookDTO<int>>> GetTierDropdownListForPartnerUser()
+        public override async Task<List<NamebookDTO<int>>> GetTierDropdownListForPartnerUser(long partnerUserId)
         {
-            return await _loyalsBusinessService.GetTierDropdownListForPartnerUser(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
+            return await _loyalsBusinessService.GetTierDropdownListForPartnerUser(
+                partnerUserId,
+                _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), 
+                false
+            );
         }
 
     }

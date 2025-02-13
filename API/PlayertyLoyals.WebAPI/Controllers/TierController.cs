@@ -86,7 +86,11 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<List<NamebookDTO<long>>> GetBusinessSystemDropdownListForBusinessSystemTier()
         {
-            return await _loyalsBusinessService.GetBusinessSystemDropdownListForBusinessSystemTier(_context.DbSet<BusinessSystem>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetBusinessSystemDropdownListForBusinessSystemTier(
+                0,
+                _context.DbSet<BusinessSystem>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), 
+                false
+            );
         }
 
         //[HttpPost]
