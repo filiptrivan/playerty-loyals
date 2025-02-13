@@ -16,9 +16,13 @@ namespace PlayertyLoyals.WebAPI.Controllers
         private readonly IApplicationDbContext _context;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
         private readonly LoyalsBusinessService _loyalsBusinessService;
-        private readonly BlobContainerClient _blobContainerClient;
 
-        public SegmentationController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService, BlobContainerClient blobContainerClient)
+        public SegmentationController(
+            IApplicationDbContext context, 
+            LoyalsBusinessService loyalsBusinessService, 
+            PartnerUserAuthenticationService partnerUserAuthenticationService, 
+            BlobContainerClient blobContainerClient
+        )
             : base (context, loyalsBusinessService, blobContainerClient)
         {
             _context = context;
@@ -30,14 +34,22 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public async override Task<TableResponseDTO<SegmentationDTO>> GetSegmentationTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.GetSegmentationTableData(tableFilterDTO, _context.DbSet<Segmentation>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetSegmentationTableData(
+                tableFilterDTO, 
+                _context.DbSet<Segmentation>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), 
+                true
+            );
         }
 
         [HttpPost]
         [AuthGuard]
         public async override Task<IActionResult> ExportSegmentationTableDataToExcel(TableFilterDTO tableFilterDTO)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportSegmentationTableDataToExcel(tableFilterDTO, _context.DbSet<Segmentation>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            byte[] fileContent = await _loyalsBusinessService.ExportSegmentationTableDataToExcel(
+                tableFilterDTO, 
+                _context.DbSet<Segmentation>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), 
+                true
+            );
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Segmentacije.xlsx"));
         }
 

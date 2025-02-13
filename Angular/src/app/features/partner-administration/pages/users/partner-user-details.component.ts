@@ -16,8 +16,6 @@ import { AuthService } from 'src/app/business/services/auth/auth.service';
     styles: [],
 })
 export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit {
-    genderOptions: PrimengOption[];
-
     partnerUserFormGroup = new SpiderFormGroup<PartnerUser>({});
     partnerUserTier: Tier;
 
@@ -34,6 +32,8 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     alreadyFilledSegmentationIdsForThePartnerUser: number[] = [];
 
     @ViewChild('userProgressbar') userProgressbar: UserProgressbarComponent;
+
+    partnerUserSaveBodyName: string = nameof<PartnerUserSaveBody>('partnerUserDTO');
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -53,41 +53,38 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
 
     override ngOnInit() {
         this.formGroup.saveObservableMethod = this.apiService.savePartnerUser;
+        this.formGroup.mainDTOName = this.partnerUserSaveBodyName;
 
         this.route.params.subscribe((params) => {
             let modelId = params['id'];
  
             forkJoin({
-                genderOptions: this.apiService.getGenderDropdownListForUserExtended(),                  
                 segmentations: this.apiService.getSegmentationListForTheCurrentPartner(),
             })
-            .subscribe(({ genderOptions, segmentations }) => {
-                this.genderOptions = genderOptions.map(n => { return { label: n.displayName, value: n.id }});
+            .subscribe(({ segmentations }) => {
                 this.segmentations = segmentations;
             });
 
-            this.apiService.getPartnerUser(modelId).subscribe(partnerUser => {
-                this.initFormGroup(this.partnerUserFormGroup, this.formGroup, new PartnerUser(partnerUser), nameof<PartnerUserSaveBody>('partnerUserDTO'));
-                
+            this.apiService.getPartnerUser(modelId).subscribe(async partnerUser => {
+                this.initFormGroup(this.partnerUserFormGroup, this.formGroup, new PartnerUser(partnerUser), this.partnerUserSaveBodyName);
+
                 if (partnerUser?.tierId) {
-                    this.apiService.getTier(partnerUser.tierId).subscribe(partnerUserTier => {
-                        this.partnerUserTier = partnerUserTier;
-                    });
+                    this.setTier(partnerUser.id);
                 }
                 
                 forkJoin({
                     segmentationItems: this.apiService.getSegmentationItemListForTheCurrentPartner(),
-                    user: this.apiService.getUserExtended(partnerUser.userId),
                 })
                 .subscribe(({ 
                     segmentationItems, 
-                    user 
                 }) => {
                     this.segmentationItemsFormArray = this.initFormArray(this.formGroup, segmentationItems, this.segmentationItemModel, this.segmentationItemsFormArrayIdentifier, this.segmentationItemsTranslationKey);
                     this.apiService.getCheckedSegmentationItemIdsForThePartnerUser(partnerUser.id).subscribe(ids => {
                         this.segmentationItemsFormArray.controls.forEach((formGroup: FormGroup) => {
                             formGroup.controls['checked'].setValue(ids.includes(formGroup.controls['id'].value));
                         });
+
+                        this.loading = false;
                     });
                 });
 
@@ -131,11 +128,15 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         }
 
         if (this.partnerUserFormGroup.getRawValue()?.tierId) {
-            this.apiService.getTier(this.partnerUserFormGroup.getRawValue().tierId).subscribe(partnerUserTier => {
-                this.partnerUserTier = partnerUserTier;
-            });
+            this.setTier(this.partnerUserFormGroup.getRawValue().id)
         }else{
             this.partnerUserTier = null;
         }
+    }
+
+    async setTier(partnerUserId: number){
+        this.apiService.getTierForPartnerUser(partnerUserId).subscribe(partnerUserTier => {
+            this.partnerUserTier = partnerUserTier;
+        });
     }
 }

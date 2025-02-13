@@ -843,7 +843,7 @@ export class PartnerRoleBaseDetailsComponent {
         this.route.params.subscribe(async (params) => {
             this.modelId = params['id'];
 
-            getPrimengDropdownNamebookOptions(this.apiService.getPartnerPermissionsDropdownListForPartnerRole).subscribe(po => {
+            getPrimengDropdownNamebookOptions(this.apiService.getPartnerPermissionsDropdownListForPartnerRole, this.modelId).subscribe(po => {
                 this.partnerPermissionsOptionsForPartnerRole = po;
             });
 
@@ -1293,9 +1293,6 @@ export class TierBaseDetailsComponent {
                     <div class="col-12 md:col-6">
                         <spider-dropdown [control]="control('genderId', userExtendedFormGroup)" [options]="genderOptionsForUserExtended"></spider-dropdown>
                     </div>
-                    <div class="col-12">
-                        <spider-multiselect [control]="selectedRolesForUserExtended" [options]="rolesOptionsForUserExtended" [label]="t('Roles')"></spider-multiselect>
-                    </div>
                 </form>
             } @placeholder {
                 <card-skeleton [height]="502"></card-skeleton>
@@ -1343,9 +1340,8 @@ export class UserExtendedBaseDetailsComponent {
 
 
     genderOptionsForUserExtended: PrimengOption[];
-    rolesOptionsForUserExtended: PrimengOption[];
 
-    selectedRolesForUserExtended = new SpiderFormControl<number[]>(null, {updateOn: 'change'});
+
 
 
 
@@ -1363,7 +1359,7 @@ export class UserExtendedBaseDetailsComponent {
             let saveBody = new UserExtendedSaveBody();
             saveBody.userExtendedDTO = this.userExtendedFormGroup.getRawValue();
 
-            saveBody.selectedRolesIds = this.selectedRolesForUserExtended.getRawValue();
+
 
 
             return saveBody;
@@ -1375,11 +1371,8 @@ export class UserExtendedBaseDetailsComponent {
         this.route.params.subscribe(async (params) => {
             this.modelId = params['id'];
 
-            getPrimengDropdownNamebookOptions(this.apiService.getGenderDropdownListForUserExtended).subscribe(po => {
+            getPrimengDropdownNamebookOptions(this.apiService.getGenderDropdownListForUserExtended, this.modelId).subscribe(po => {
                 this.genderOptionsForUserExtended = po;
-            });
-            getPrimengDropdownNamebookOptions(this.apiService.getRolesDropdownListForUserExtended).subscribe(po => {
-                this.rolesOptionsForUserExtended = po;
             });
 
 
@@ -1387,14 +1380,12 @@ export class UserExtendedBaseDetailsComponent {
                 forkJoin({
                     userExtended: this.apiService.getUserExtended(this.modelId),
 
-                    rolesForUserExtended: this.apiService.getRolesNamebookListForUserExtended(this.modelId),
+
                 })
-                .subscribe(({ userExtended, rolesForUserExtended }) => {
+                .subscribe(({ userExtended }) => {
                     this.initUserExtendedFormGroup(new UserExtended(userExtended));
 
-                    this.selectedRolesForUserExtended.setValue(
-                        rolesForUserExtended.map(n => { return n.id })
-                    );
+
 
                 });
             }

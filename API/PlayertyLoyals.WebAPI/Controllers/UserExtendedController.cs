@@ -32,7 +32,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         public async Task<UserExtendedDTO> GetCurrentUserExtended()
         {
             long userId = _authenticationService.GetCurrentUserId();
-            return await _loyalsBusinessService.GetUserExtendedDTO(userId, true);
+            return await _loyalsBusinessService.GetUserExtendedDTO(userId, false); // FT: Don't need to authorize because he is current user
         }
 
     }

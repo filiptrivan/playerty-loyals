@@ -21,17 +21,20 @@ namespace PlayertyLoyals.WebAPI.Controllers
         private readonly IApplicationDbContext _context;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
         private readonly LoyalsBusinessService _loyalsBusinessService;
-        private readonly BlobContainerClient _blobContainerClient;
 
-        public PartnerController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService, BlobContainerClient blobContainerClient)
+        public PartnerController(
+            IApplicationDbContext context,
+            LoyalsBusinessService loyalsBusinessService,
+            PartnerUserAuthenticationService partnerUserAuthenticationService,
+            BlobContainerClient blobContainerClient
+        )
             : base(context, loyalsBusinessService, blobContainerClient)
         {
             _context = context;
             _loyalsBusinessService = loyalsBusinessService;
             _partnerUserAuthenticationService = partnerUserAuthenticationService;
-            _blobContainerClient = blobContainerClient;
         }
-        
+
         [HttpGet]
         //[AuthGuard] // FT: We should show login page of the partner to the user which is not logged in also.
         public async Task<PartnerDTO> GetCurrentPartner()
@@ -41,9 +44,16 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<List<CodebookDTO>> GetPartnerWithSlugAutocompleteList(int limit, string query)
+        public async Task<List<CodebookDTO>> GetPartnerWithSlugAutocompleteList(int limit, string filter)
         {
-            return await _loyalsBusinessService.GetPartnerWithSlugAutocompleteList(limit, query, _context.DbSet<Partner>(), false);
+            return await _loyalsBusinessService.GetPartnerWithSlugAutocompleteList(limit, filter, _context.DbSet<Partner>());
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public override async Task<List<PartnerDTO>> GetPartnerList()
+        {
+            return await _loyalsBusinessService.GetPartnerDTOList(_context.DbSet<Partner>(), false);
         }
 
         [HttpGet]

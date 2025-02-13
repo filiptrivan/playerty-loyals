@@ -16,49 +16,21 @@ namespace PlayertyLoyals.WebAPI.Controllers
     [Route("/api/[controller]/[action]")]
     public class TierController : TierBaseController
     {
-        private readonly IJwtAuthManager _jwtAuthManagerService;
         private readonly IApplicationDbContext _context;
-        private readonly AuthenticationService _authenticationService;
         private readonly LoyalsBusinessService _loyalsBusinessService;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
 
         public TierController(
-            IJwtAuthManager jwtAuthManagerService,
             IApplicationDbContext context,
-            AuthenticationService authenticationService,
             LoyalsBusinessService loyalsBusinessService,
-            PartnerUserAuthenticationService partnerUserAuthenticationService,
-            BlobContainerClient blobContainerClient
+            BlobContainerClient blobContainerClient,
+            PartnerUserAuthenticationService partnerUserAuthenticationService
         )
             : base(context, loyalsBusinessService, blobContainerClient)
         {
-            _jwtAuthManagerService = jwtAuthManagerService;
             _context = context;
-            _authenticationService = authenticationService;
             _loyalsBusinessService = loyalsBusinessService;
             _partnerUserAuthenticationService = partnerUserAuthenticationService;
-        }
-
-        [HttpPost]
-        [AuthGuard]
-        public override async Task<TableResponseDTO<TierDTO>> GetTierTableData(TableFilterDTO tableFilterDTO)
-        {
-            return await _loyalsBusinessService.GetTierTableData(tableFilterDTO, _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
-        }
-
-        [HttpPost]
-        [AuthGuard]
-        public override async Task<IActionResult> ExportTierTableDataToExcel(TableFilterDTO tableFilterDTO)
-        {
-            byte[] fileContent = await _loyalsBusinessService.ExportTierTableDataToExcel(tableFilterDTO, _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
-            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Nivoi_Lojalnosti.xlsx"));
-        }
-
-        [HttpGet]
-        [AuthGuard]
-        public async Task<List<TierDTO>> GetTierDTOList()
-        {
-            return await _loyalsBusinessService.GetTierDTOList(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
         }
 
         [HttpGet]
@@ -77,9 +49,16 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<TierDTO> GetTierForTheCurrentPartnerUser()
+        public async Task<TierDTO> GetTierForCurrentPartnerUser()
         {
-            return await _loyalsBusinessService.GetTierDTOForTheCurrentPartnerUser();
+            return await _partnerUserAuthenticationService.GetTierDTOForCurrentPartnerUser();
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<TierDTO> GetTierForPartnerUser(long partnerUserId)
+        {
+            return await _loyalsBusinessService.GetTierDTOForPartnerUser(partnerUserId);
         }
 
         [HttpGet]
@@ -87,9 +66,8 @@ namespace PlayertyLoyals.WebAPI.Controllers
         public async Task<List<NamebookDTO<long>>> GetBusinessSystemDropdownListForBusinessSystemTier()
         {
             return await _loyalsBusinessService.GetBusinessSystemDropdownListForBusinessSystemTier(
-                0,
                 _context.DbSet<BusinessSystem>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), 
-                false
+                true
             );
         }
 

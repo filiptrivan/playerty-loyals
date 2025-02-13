@@ -24,7 +24,12 @@ namespace PlayertyLoyals.WebAPI.Controllers
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
         private readonly LoyalsBusinessService _loyalsBusinessService;
 
-        public PartnerUserController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, PartnerUserAuthenticationService partnerUserAuthenticationService, BlobContainerClient blobContainerClient)
+        public PartnerUserController(
+            IApplicationDbContext context, 
+            LoyalsBusinessService loyalsBusinessService, 
+            PartnerUserAuthenticationService partnerUserAuthenticationService, 
+            BlobContainerClient blobContainerClient
+        )
             : base(context, loyalsBusinessService, blobContainerClient)
         {
             _context = context;
@@ -100,12 +105,12 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public override async Task<List<NamebookDTO<int>>> GetTierDropdownListForPartnerUser(long partnerUserId)
+        public override async Task<List<NamebookDTO<int>>> GetTierDropdownListForPartnerUser(long? partnerUserId)
         {
             return await _loyalsBusinessService.GetTierDropdownListForPartnerUser(
-                partnerUserId,
                 _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), 
-                false
+                true,
+                partnerUserId
             );
         }
 

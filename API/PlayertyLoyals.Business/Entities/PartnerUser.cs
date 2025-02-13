@@ -6,7 +6,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PlayertyLoyals.Business.Entities
 {
-    [Authorize]
     [UIDoNotGenerate]
     [DisplayName("User.Email")]
     //[CanNotInsertThroughMainUIForm]

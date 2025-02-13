@@ -35,8 +35,18 @@ namespace PlayertyLoyals.Business.Services
         private readonly WingsApiService _wingsApiService;
         private readonly UpdatePointsScheduler _updatePointsScheduler;
 
-        public LoyalsBusinessService(IApplicationDbContext context, ExcelService excelService, PlayertyLoyals.Business.Services.AuthorizationBusinessService authorizationService, SecurityBusinessService<UserExtended> securityBusinessService, AuthenticationService authenticationService,
-            PartnerUserAuthenticationService partnerUserAuthenticationService, EmailingService emailingService, BlobContainerClient blobContainerClient, WingsApiService wingsApiService, UpdatePointsScheduler updatePointsScheduler)
+        public LoyalsBusinessService(
+            IApplicationDbContext context,
+            ExcelService excelService,
+            PlayertyLoyals.Business.Services.AuthorizationBusinessService authorizationService,
+            SecurityBusinessService<UserExtended> securityBusinessService,
+            AuthenticationService authenticationService,
+            PartnerUserAuthenticationService partnerUserAuthenticationService,
+            EmailingService emailingService,
+            BlobContainerClient blobContainerClient,
+            WingsApiService wingsApiService,
+            UpdatePointsScheduler updatePointsScheduler
+        )
             : base(context, excelService, authorizationService, blobContainerClient)
         {
             _context = context;
@@ -56,21 +66,14 @@ namespace PlayertyLoyals.Business.Services
         {
             await _context.WithTransactionAsync(async () =>
             {
-                if (userExtendedSaveBodyDTO.UserExtendedDTO.Id == 0)
+                if (userExtendedSaveBodyDTO.UserExtendedDTO.Id <= 0)
                     throw new HackerException("You can't add new user.");
 
                 UserExtended user = await GetInstanceAsync<UserExtended, long>(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.UserExtendedDTO.Version);
 
                 if (userExtendedSaveBodyDTO.UserExtendedDTO.Email != user.Email)
                     throw new HackerException("You can't change email from here.");
-
-                await _securityBusinessService.UpdateRoleListForUser(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.SelectedRolesIds);
             });
-        }
-
-        public async Task<List<NamebookDTO<int>>> GetRolesNamebookListForUserExtended(long userExtendedId, bool authorize)
-        {
-            return await _securityBusinessService.GetRolesNamebookListForUserExtended(userExtendedId, authorize);
         }
 
         #endregion
@@ -92,13 +95,14 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
+        /// <summary>
+        /// FT: Don't need authorization because user can do whatever he wants with his notifications
+        /// </summary>
         public async Task DeleteNotificationForCurrentUser(long notificationId, int notificationVersion)
         {
             await _context.WithTransactionAsync(async () =>
             {
                 long currentUserId = _authenticationService.GetCurrentUserId();
-
-                //await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.EditNotification);
 
                 Notification notification = await GetInstanceAsync<Notification, long>(notificationId, notificationVersion);
 
@@ -108,13 +112,14 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
+        /// <summary>
+        /// FT: Don't need authorization because user can do whatever he wants with his notifications
+        /// </summary>
         public async Task MarkNotificationAsReadForCurrentUser(long notificationId, int notificationVersion)
         {
             await _context.WithTransactionAsync(async () =>
             {
                 long currentUserId = _authenticationService.GetCurrentUserId();
-
-                //await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.EditNotification);
 
                 Notification notification = await GetInstanceAsync<Notification, long>(notificationId, notificationVersion);
 
@@ -124,13 +129,14 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
+        /// <summary>
+        /// FT: Don't need authorization because user can do whatever he wants with his notifications
+        /// </summary>
         public async Task MarkNotificationAsUnreadForCurrentUser(long notificationId, int notificationVersion)
         {
             await _context.WithTransactionAsync(async () =>
             {
                 long currentUserId = _authenticationService.GetCurrentUserId();
-
-                //await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.EditNotification);
 
                 Notification notification = await GetInstanceAsync<Notification, long>(notificationId, notificationVersion);
 
@@ -273,34 +279,30 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task<TierDTO> GetTierDTOForTheCurrentPartnerUser()
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                PartnerUser partnerUser = await _partnerUserAuthenticationService.GetCurrentPartnerUser();
-
-                if (partnerUser == null)
-                    return null;
-
-                Tier tier = await GetTierForThePoints(partnerUser.Points);
-
-                return tier.Adapt<TierDTO>(Mapper.TierToDTOConfig());
-            });
-        }
-
         public async Task<TierSaveBodyDTO> GetTierSaveBodyDTO()
         {
             TierSaveBodyDTO tierSaveBodyDTO = new TierSaveBodyDTO();
 
             await _context.WithTransactionAsync(async () =>
             {
-                List<TierDTO> tierDTOList = await GetTierDTOList(_context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), false);
+                await _authorizationService.AuthorizeTierReadAndThrow();
+
+                List<TierDTO> tierDTOList = await GetTierDTOList(
+                    _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), 
+                    false
+                );
                 List<int> tierIds = tierDTOList.Select(x => x.Id).ToList();
 
-                List<BusinessSystemTierDTO> businessSystemTierDTOList = await GetBusinessSystemTierDTOList(_context.DbSet<BusinessSystemTier>().Where(x => tierIds.Contains(x.Tier.Id)).OrderBy(x => x.OrderNumber), false);
+                List<BusinessSystemTierDTO> businessSystemTierDTOList = await GetBusinessSystemTierDTOList(
+                    _context.DbSet<BusinessSystemTier>().Where(x => tierIds.Contains(x.Tier.Id)).OrderBy(x => x.OrderNumber), 
+                    false
+                );
                 List<long> businessSystemTierIds = businessSystemTierDTOList.Select(x => x.Id).ToList();
 
-                List<DiscountProductGroupDTO> discountCategoryDTOList = await GetDiscountProductGroupDTOList(_context.DbSet<DiscountProductGroup>().Where(x => x.BusinessSystem.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false); // 14
+                List<DiscountProductGroupDTO> discountCategoryDTOList = await GetDiscountProductGroupDTOList(
+                    _context.DbSet<DiscountProductGroup>().Where(x => x.BusinessSystem.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), 
+                    false
+                );
                 List<BusinessSystemTierDiscountProductGroupDTO> businessSystemTierDiscountProductGroupResultDTOList = discountCategoryDTOList
                     .Select(x => new BusinessSystemTierDiscountProductGroupDTO
                     {
@@ -368,16 +370,19 @@ namespace PlayertyLoyals.Business.Services
             {
                 List<TierDTO> tierDTOList = new List<TierDTO>();
 
-                List<Tier> tierList = await GetTierList(_context.DbSet<Tier>()
-                    .AsNoTracking()
-                    .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
-                    .Include(x => x.BusinessSystemTiers)
-                        .ThenInclude(x => x.BusinessSystem)
-                    .Include(x => x.BusinessSystemTiers)
-                        .ThenInclude(x => x.BusinessSystemTierDiscountProductGroups)
-                            .ThenInclude(x => x.DiscountProductGroup)
-                    .Include(x => x.Partner)
-                    .OrderByDescending(x => x.ValidFrom), true);
+                List<Tier> tierList = await GetTierList(
+                    _context.DbSet<Tier>()
+                        .AsNoTracking()
+                        .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
+                        .Include(x => x.BusinessSystemTiers)
+                            .ThenInclude(x => x.BusinessSystem)
+                        .Include(x => x.BusinessSystemTiers)
+                            .ThenInclude(x => x.BusinessSystemTierDiscountProductGroups)
+                                .ThenInclude(x => x.DiscountProductGroup)
+                        .Include(x => x.Partner)
+                        .OrderByDescending(x => x.ValidFrom), 
+                    false
+                );
 
                 foreach (Tier tier in tierList)
                 {
@@ -405,6 +410,21 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
+        public async Task<TierDTO> GetTierDTOForPartnerUser(long partnerUserId)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                await _authorizationService.AuthorizePartnerUserReadAndThrow(partnerUserId);
+
+                return await _context.DbSet<PartnerUser>()
+                    .AsNoTracking()
+                    .Where(x => x.Id == partnerUserId)
+                    .Select(x => x.Tier)
+                    .ProjectToType<TierDTO>(Mapper.TierProjectToConfig())
+                    .SingleOrDefaultAsync();
+            });
+        }
+
         #endregion
 
         #region Partner
@@ -412,17 +432,12 @@ namespace PlayertyLoyals.Business.Services
         /// <summary>
         /// TODO FT: Add this to generator (you will need to add one more custom attribute [Code])
         /// </summary>
-        public async Task<List<CodebookDTO>> GetPartnerWithSlugAutocompleteList(int limit, string filter, IQueryable<Partner> query, bool authorize = true)
+        public async Task<List<CodebookDTO>> GetPartnerWithSlugAutocompleteList(int limit, string filter, IQueryable<Partner> query)
         {
             long currentUserId = _authenticationService.GetCurrentUserId();
 
             return await _context.WithTransactionAsync(async () =>
             {
-                if (authorize)
-                {
-                    await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(BusinessPermissionCodes.ReadPartner);
-                }
-
                 query = query.Where(x => x.PartnerUsers.Any(x => x.User.Id == currentUserId));
 
                 if (!string.IsNullOrEmpty(filter))
@@ -458,10 +473,8 @@ namespace PlayertyLoyals.Business.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                //if (authorize)
-                //{
-                //    await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.ReadPartnerUser);
-                //}
+                await _authorizationService.AuthorizeUserExtendedReadAndThrow(userId);
+
                 return await _context.DbSet<PartnerUser>().AsNoTracking()
                     .Where(x => x.User.Id == userId && x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
                     .ProjectToType<PartnerUserDTO>(Mapper.PartnerUserProjectToConfig())
@@ -681,7 +694,10 @@ namespace PlayertyLoyals.Business.Services
         {
             await _context.WithTransactionAsync(async () =>
             {
-                PartnerNotification partnerNotification = await GetInstanceAsync<PartnerNotification, long>(partnerNotificationId, partnerNotificationVersion); // FT: Checking version because if the user didn't save and some other user changed the version, he will send emails to wrong users
+                await _authorizationService.AuthorizePartnerNotificationUpdateAndThrow(null);
+
+                // FT: Checking version because if the user didn't save and some other user changed the version, he will send emails to wrong users
+                PartnerNotification partnerNotification = await GetInstanceAsync<PartnerNotification, long>(partnerNotificationId, partnerNotificationVersion);
 
                 List<string> recipients = partnerNotification.Recipients.Select(x => x.User.Email).ToList();
 
@@ -787,13 +803,14 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
+        /// <summary>
+        /// FT: Don't need authorization because user can do whatever he wants with his notifications
+        /// </summary>
         public async Task DeletePartnerNotificationForCurrentPartnerUser(long partnerNotificationId, int partnerNotificationVersion)
         {
             await _context.WithTransactionAsync(async () =>
             {
                 long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
-
-                //await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.EditNotification);
 
                 PartnerNotification partnerNotification = await GetInstanceAsync<PartnerNotification, long>(partnerNotificationId, partnerNotificationVersion);
 
@@ -803,13 +820,14 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
+        /// <summary>
+        /// FT: Don't need authorization because user can do whatever he wants with his notifications
+        /// </summary>
         public async Task MarkPartnerNotificationAsReadForCurrentPartnerUser(long partnerNotificationId, int partnerNotificationVersion)
         {
             await _context.WithTransactionAsync(async () =>
             {
                 long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
-
-                //await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.EditPartnerNotification);
 
                 PartnerNotification partnerNotification = await GetInstanceAsync<PartnerNotification, long>(partnerNotificationId, partnerNotificationVersion);
 
@@ -819,13 +837,14 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
+        /// <summary>
+        /// FT: Don't need authorization because user can do whatever he wants with his notifications
+        /// </summary>
         public async Task MarkPartnerNotificationAsUnreadForCurrentPartnerUser(long partnerNotificationId, int partnerNotificationVersion)
         {
             await _context.WithTransactionAsync(async () =>
             {
                 long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
-
-                //await _authorizationService.AuthorizeAndThrowAsync<UserExtended>(PermissionCodes.EditPartnerNotification);
 
                 PartnerNotification partnerNotification = await GetInstanceAsync<PartnerNotification, long>(partnerNotificationId, partnerNotificationVersion);
 
@@ -851,7 +870,11 @@ namespace PlayertyLoyals.Business.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                return await _context.DbSet<Segmentation>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.Id).ProjectToType<SegmentationDTO>(Mapper.SegmentationToDTOConfig()).ToListAsync();
+                return await _context.DbSet<Segmentation>()
+                    .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
+                    .OrderBy(x => x.Id)
+                    .ProjectToType<SegmentationDTO>(Mapper.SegmentationToDTOConfig())
+                    .ToListAsync();
             });
         }
 
@@ -1089,7 +1112,7 @@ namespace PlayertyLoyals.Business.Services
                 using (ExcelPackage package = new ExcelPackage(stream))
                 {
                     ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault();
-                    
+
                     if (worksheet == null)
                         throw new InvalidOperationException("The Excel file does not contain any worksheets.");
 

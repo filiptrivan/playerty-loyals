@@ -17,7 +17,12 @@ namespace PlayertyLoyals.WebAPI.Controllers
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
         private readonly LoyalsBusinessService _loyalsBusinessService;
 
-        public PartnerNotificationController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, BlobContainerClient blobContainerClient, PartnerUserAuthenticationService partnerUserAuthenticationService)
+        public PartnerNotificationController(
+            IApplicationDbContext context, 
+            LoyalsBusinessService loyalsBusinessService, 
+            BlobContainerClient blobContainerClient, 
+            PartnerUserAuthenticationService partnerUserAuthenticationService
+        )
             : base (context, loyalsBusinessService, blobContainerClient)
         {
             _context = context;
@@ -29,14 +34,22 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public override async Task<TableResponseDTO<PartnerNotificationDTO>> GetPartnerNotificationTableData(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.GetPartnerNotificationTableData(tableFilterDTO, _context.DbSet<PartnerNotification>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            return await _loyalsBusinessService.GetPartnerNotificationTableData(
+                tableFilterDTO, 
+                _context.DbSet<PartnerNotification>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), 
+                true
+            );
         }
 
         [HttpPost]
         [AuthGuard]
         public override async Task<IActionResult> ExportPartnerNotificationTableDataToExcel(TableFilterDTO tableFilterDTO)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportPartnerNotificationTableDataToExcel(tableFilterDTO, _context.DbSet<PartnerNotification>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            byte[] fileContent = await _loyalsBusinessService.ExportPartnerNotificationTableDataToExcel(
+                tableFilterDTO, 
+                _context.DbSet<PartnerNotification>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), 
+                true
+            );
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Notifikacije.xlsx"));
         }
 
@@ -44,14 +57,22 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public override async Task<TableResponseDTO<PartnerUserDTO>> GetRecipientsTableDataForPartnerNotification(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.GetPartnerUserTableData(tableFilterDTO, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.Id), false);
+            return await _loyalsBusinessService.GetPartnerUserTableData(
+                tableFilterDTO, 
+                _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.Id), 
+                true
+            );
         }
 
         [HttpPost]
         [AuthGuard]
         public override async Task<IActionResult> ExportRecipientsTableDataToExcelForPartnerNotification(TableFilterDTO tableFilterDTO)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportPartnerUserTableDataToExcel(tableFilterDTO, _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), false);
+            byte[] fileContent = await _loyalsBusinessService.ExportPartnerUserTableDataToExcel(
+                tableFilterDTO, 
+                _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), 
+                true
+            );
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Korisnici.xlsx"));
         }
 
@@ -59,7 +80,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<List<NamebookDTO<long>>> GetRecipientsNamebookListForPartnerNotification(long partnerNotificationId)
         {
-            return await _loyalsBusinessService.GetRecipientsNamebookListForPartnerNotification(partnerNotificationId, false);
+            return await _loyalsBusinessService.GetRecipientsNamebookListForPartnerNotification(partnerNotificationId, true);
         }
 
         [HttpPost]
@@ -68,9 +89,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         {
             return await _loyalsBusinessService.LazyLoadSelectedRecipientsIdsForPartnerNotification(
                 tableFilterDTO, 
-                _context.DbSet<PartnerUser>()
-                    .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
-                    .OrderBy(x => x.Id),
+                _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.Id),
                 true
             );
         }

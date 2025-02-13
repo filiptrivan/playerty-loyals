@@ -1721,21 +1721,17 @@ export class UserExtended extends BaseEntity
 export class UserExtendedSaveBody extends BaseEntity
 {
     userExtendedDTO?: UserExtended;
-	selectedRolesIds?: number[];
 
     constructor(
     {
-        userExtendedDTO,
-		selectedRolesIds
+        userExtendedDTO
     }:{
-        userExtendedDTO?: UserExtended;
-		selectedRolesIds?: number[];     
+        userExtendedDTO?: UserExtended;     
     } = {}
     ) {
         super('UserExtendedSaveBody'); 
 
         this.userExtendedDTO = userExtendedDTO;
-		this.selectedRolesIds = selectedRolesIds;
     }
 }
 

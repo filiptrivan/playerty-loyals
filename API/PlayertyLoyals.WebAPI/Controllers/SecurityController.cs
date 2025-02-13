@@ -18,10 +18,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
     {
         private readonly ILogger<SecurityController> _logger;
         private readonly SecurityBusinessService<UserExtended> _securityBusinessService;
-        private readonly IJwtAuthManager _jwtAuthManagerService;
         private readonly IApplicationDbContext _context;
-        private readonly AuthenticationService _authenticationService;
-        private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
         private readonly LoyalsBusinessService _loyalsBusinessService;
 
 
@@ -39,11 +36,8 @@ namespace PlayertyLoyals.WebAPI.Controllers
         {
             _logger = logger;
             _securityBusinessService = securityBusinessService;
-            _jwtAuthManagerService = jwtAuthManagerService;
             _context = context;
-            _authenticationService = authenticationService;
             _loyalsBusinessService = loyalsBusinessService;
-            _partnerUserAuthenticationService = partnerUserAuthenticationService;
         }
 
         /// <summary>

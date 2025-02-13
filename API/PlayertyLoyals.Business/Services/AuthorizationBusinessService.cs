@@ -32,13 +32,14 @@ namespace PlayertyLoyals.Business.Services
 
         #region UserExtended
 
-        public override async Task AuthorizeUserExtendedReadAndThrow(long userExtendedId)
+        public override async Task AuthorizeUserExtendedReadAndThrow(long? userExtendedId)
         {
             await _context.WithTransactionAsync(async () =>
             {
                 bool hasAdminReadPermission = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.ReadUserExtended);
+                bool isCurrentUser = _authenticationService.GetCurrentUserId() == userExtendedId;
 
-                if (_authenticationService.GetCurrentUserId() != userExtendedId && hasAdminReadPermission == false)
+                if (isCurrentUser == false && hasAdminReadPermission == false)
                     throw new UnauthorizedException();
             });
         }
@@ -85,7 +86,17 @@ namespace PlayertyLoyals.Business.Services
 
         #region Partner
 
-        public override async Task AuthorizePartnerReadAndThrow(int partnerId)
+        public override async Task AuthorizePartnerReadAndThrow(int? partnerId)
+        {
+            await AuthorizePartnerReadAndThrow();
+        }
+
+        public override async Task AuthorizePartnerReadAndThrow(List<int> partnerIds)
+        {
+            await AuthorizePartnerReadAndThrow();
+        }
+
+        private async Task AuthorizePartnerReadAndThrow()
         {
             await _context.WithTransactionAsync(async () =>
             {
@@ -111,17 +122,35 @@ namespace PlayertyLoyals.Business.Services
 
         #endregion
 
+        #region Notification
+
+        // FT: No need for overriding anything, for administration, everything is covered with the generated code, while for displaying and managing notifications of the current user, we rely on the id we have on the backend.
+
+        #endregion
+
         #region PartnerUser
 
-        public override async Task AuthorizePartnerUserReadAndThrow(long partnerUserId)
+        public override async Task AuthorizePartnerUserReadAndThrow(long? partnerUserId)
         {
             await _context.WithTransactionAsync(async () =>
             {
-                bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.ReadPartnerUser);
+                bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.ReadPartner);
                 bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedAsync(BusinessPermissionCodes.ReadPartnerUser);
                 bool isCurrentPartnerUser = await _partnerUserAuthenticationService.GetCurrentPartnerUserId() == partnerUserId;
 
                 if (isCurrentPartnerUser == false && isPartnerUserAuthorized == false && isUserAuthorized == false)
+                    throw new UnauthorizedException();
+            });
+        }
+
+        public override async Task AuthorizePartnerUserReadAndThrow(List<long> partnerUserIds)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.ReadPartner);
+                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedAsync(BusinessPermissionCodes.ReadPartnerUser);
+
+                if (isPartnerUserAuthorized == false && isUserAuthorized == false)
                     throw new UnauthorizedException();
             });
         }
@@ -142,7 +171,7 @@ namespace PlayertyLoyals.Business.Services
                     throw new UnauthorizedException();
                 }
 
-                bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.UpdatePartnerUser);
+                bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.UpdatePartner);
                 bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedAsync(BusinessPermissionCodes.UpdatePartnerUser);
 
                 if (isPartnerUserAuthorized == false &&
@@ -160,25 +189,217 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
+        public override async Task AuthorizePartnerUserDeleteAndThrow(long partnerUserId)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.UpdatePartner);
+                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedAsync(BusinessPermissionCodes.DeletePartnerUser);
+
+                if (isPartnerUserAuthorized == false && isUserAuthorized == false)
+                    throw new UnauthorizedException();
+            });
+        }
+
         #endregion
 
         #region PartnerRole
+
+        public override async Task AuthorizePartnerRoleReadAndThrow(List<int> partnerRoleIds)
+        {
+            await AuthorizePartnerRoleReadAndThrow();
+        }
+
+        public override async Task AuthorizePartnerRoleReadAndThrow(int? partnerRoleId)
+        {
+            await AuthorizePartnerRoleReadAndThrow();
+        }
+
+        private async Task AuthorizePartnerRoleReadAndThrow()
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.ReadPartner, BusinessPermissionCodes.ReadPartnerRole);
+        }
+
+        public override async Task AuthorizePartnerRoleUpdateAndThrow(PartnerRoleDTO dto)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.UpdatePartnerRole);
+        }
+
+        public override async Task AuthorizePartnerRoleInsertAndThrow(PartnerRoleDTO dto)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.InsertPartnerRole);
+        }
+
+        public override async Task AuthorizePartnerRoleDeleteAndThrow(int partnerRoleId)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.DeletePartnerRole);
+        }
+
+        public override async Task AuthorizePartnerRoleDeleteAndThrow(List<int> partnerRoleListToDelete)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.DeletePartnerRole);
+        }
 
         #endregion
 
         #region PartnerNotification
 
+        public override async Task AuthorizePartnerNotificationReadAndThrow(List<long> partnerNotificationIds)
+        {
+            await AuthorizePartnerNotificationReadAndThrow();
+        }
+
+        public override async Task AuthorizePartnerNotificationReadAndThrow(long? partnerNotificationId)
+        {
+            await AuthorizePartnerNotificationReadAndThrow();
+        }
+
+        private async Task AuthorizePartnerNotificationReadAndThrow()
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.ReadPartner, BusinessPermissionCodes.ReadPartnerNotification);
+        }
+
+        public override async Task AuthorizePartnerNotificationUpdateAndThrow(PartnerNotificationDTO dto)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.UpdatePartnerNotification);
+        }
+
+        public override async Task AuthorizePartnerNotificationInsertAndThrow(PartnerNotificationDTO dto)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.InsertPartnerNotification);
+        }
+
+        public override async Task AuthorizePartnerNotificationDeleteAndThrow(long partnerNotificationId)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.DeletePartnerNotification);
+        }
+
+        public override async Task AuthorizePartnerNotificationDeleteAndThrow(List<long> partnerNotificationListToDelete)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.DeletePartnerNotification);
+        }
+
         #endregion
 
         #region Segmentation
 
+        public override async Task AuthorizeSegmentationReadAndThrow(List<int> segmentationIds)
+        {
+            await AuthorizeSegmentationReadAndThrow();
+        }
+
+        public override async Task AuthorizeSegmentationReadAndThrow(int? segmentationId)
+        {
+            await AuthorizeSegmentationReadAndThrow();
+        }
+
+        private async Task AuthorizeSegmentationReadAndThrow()
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.ReadPartner, BusinessPermissionCodes.ReadSegmentation);
+        }
+
+        public override async Task AuthorizeSegmentationUpdateAndThrow(SegmentationDTO dto)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.UpdateSegmentation);
+        }
+
+        public override async Task AuthorizeSegmentationInsertAndThrow(SegmentationDTO dto)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.InsertSegmentation);
+        }
+
+        public override async Task AuthorizeSegmentationDeleteAndThrow(int segmentationId)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.DeleteSegmentation);
+        }
+
+        public override async Task AuthorizeSegmentationDeleteAndThrow(List<int> segmentationListToDelete)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.DeleteSegmentation);
+        }
+
         #endregion
 
         #region BusinessSystem
+        
+        public override async Task AuthorizeBusinessSystemReadAndThrow(List<long> businessSystemIds)
+        {
+            await AuthorizeBusinessSystemReadAndThrow();
+        }
+
+        public override async Task AuthorizeBusinessSystemReadAndThrow(long? businessSystemId)
+        {
+            await AuthorizeBusinessSystemReadAndThrow();
+        }
+
+        private async Task AuthorizeBusinessSystemReadAndThrow()
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.ReadPartner, BusinessPermissionCodes.ReadBusinessSystem);
+        }
+
+        public override async Task AuthorizeBusinessSystemUpdateAndThrow(BusinessSystemDTO dto)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.UpdateBusinessSystem);
+        }
+
+        public override async Task AuthorizeBusinessSystemInsertAndThrow(BusinessSystemDTO dto)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.InsertBusinessSystem);
+        }
+
+        public override async Task AuthorizeBusinessSystemDeleteAndThrow(long businessSystemId)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.DeleteBusinessSystem);
+        }
+
+        public override async Task AuthorizeBusinessSystemDeleteAndThrow(List<long> businessSystemListToDelete)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.DeleteBusinessSystem);
+        }
 
         #endregion
 
         #region Tier
+
+        public override async Task AuthorizeTierReadAndThrow(List<int> tierIds)
+        {
+            await AuthorizeTierReadAndThrow();
+        }
+
+        public override async Task AuthorizeTierReadAndThrow(int? tierId)
+        {
+            await AuthorizeTierReadAndThrow();
+        }
+
+        public override async Task AuthorizeBusinessSystemTierReadAndThrow(long? businessSystemTier)
+        {
+            await AuthorizeTierReadAndThrow();
+        }
+
+        public async Task AuthorizeTierReadAndThrow()
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.ReadPartner, BusinessPermissionCodes.ReadTier);
+        }
+
+        public override async Task AuthorizeTierUpdateAndThrow(TierDTO dto)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.UpdateTier);
+        }
+
+        public override async Task AuthorizeTierInsertAndThrow(TierDTO dto)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.InsertTier);
+        }
+
+        public override async Task AuthorizeTierDeleteAndThrow(int tierId)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.DeleteTier);
+        }
+
+        public override async Task AuthorizeTierDeleteAndThrow(List<int> tierListToDelete)
+        {
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.DeleteTier);
+        }
 
         #endregion
 
@@ -204,6 +425,18 @@ namespace PlayertyLoyals.Business.Services
             });
 
             return result;
+        }
+
+        public async Task AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(string userPermissionCode, string partnerUserPermissionCode)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(userPermissionCode);
+                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedAsync(partnerUserPermissionCode);
+
+                if (isPartnerUserAuthorized == false && isUserAuthorized == false)
+                    throw new UnauthorizedException();
+            });
         }
 
         #endregion

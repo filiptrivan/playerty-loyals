@@ -26,36 +26,26 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('BusinessObjectNamebook');
             case 'BusinessSystem':
                 return this.translocoService.translate('BusinessSystem');
-            case 'BusinessSystemMainUIFormInitialization':
-                return this.translocoService.translate('BusinessSystemMainUIFormInitialization');
             case 'BusinessSystemSaveBody':
                 return this.translocoService.translate('BusinessSystemSaveBody');
             case 'BusinessSystemTierDiscountProductGroup':
                 return this.translocoService.translate('BusinessSystemTierDiscountProductGroup');
-            case 'BusinessSystemTierDiscountProductGroupMainUIFormInitialization':
-                return this.translocoService.translate('BusinessSystemTierDiscountProductGroupMainUIFormInitialization');
             case 'BusinessSystemTierDiscountProductGroupSaveBody':
                 return this.translocoService.translate('BusinessSystemTierDiscountProductGroupSaveBody');
             case 'BusinessSystemTier':
                 return this.translocoService.translate('BusinessSystemTier');
-            case 'BusinessSystemTierMainUIFormInitialization':
-                return this.translocoService.translate('BusinessSystemTierMainUIFormInitialization');
             case 'BusinessSystemTierSaveBody':
                 return this.translocoService.translate('BusinessSystemTierSaveBody');
             case 'BusinessSystemUpdatePointsDataBody':
                 return this.translocoService.translate('BusinessSystemUpdatePointsDataBody');
             case 'BusinessSystemUpdatePointsScheduledTask':
                 return this.translocoService.translate('BusinessSystemUpdatePointsScheduledTask');
-            case 'BusinessSystemUpdatePointsScheduledTaskMainUIFormInitialization':
-                return this.translocoService.translate('BusinessSystemUpdatePointsScheduledTaskMainUIFormInitialization');
             case 'BusinessSystemUpdatePointsScheduledTaskSaveBody':
                 return this.translocoService.translate('BusinessSystemUpdatePointsScheduledTaskSaveBody');
             case 'Codebook':
                 return this.translocoService.translate('Codebook');
             case 'DiscountProductGroup':
                 return this.translocoService.translate('DiscountProductGroup');
-            case 'DiscountProductGroupMainUIFormInitialization':
-                return this.translocoService.translate('DiscountProductGroupMainUIFormInitialization');
             case 'DiscountProductGroupSaveBody':
                 return this.translocoService.translate('DiscountProductGroupSaveBody');
             case 'ExcelManualUpdatePoints':
@@ -70,8 +60,6 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('ExternalTransaction');
             case 'Gender':
                 return this.translocoService.translate('Gender');
-            case 'GenderMainUIFormInitialization':
-                return this.translocoService.translate('GenderMainUIFormInitialization');
             case 'GenderSaveBody':
                 return this.translocoService.translate('GenderSaveBody');
             case 'JwtAuthResult':
@@ -86,36 +74,24 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('Namebook');
             case 'Notification':
                 return this.translocoService.translate('Notification');
-            case 'NotificationMainUIFormInitialization':
-                return this.translocoService.translate('NotificationMainUIFormInitialization');
             case 'NotificationSaveBody':
                 return this.translocoService.translate('NotificationSaveBody');
             case 'PaginationResult':
                 return this.translocoService.translate('PaginationResult');
             case 'Partner':
                 return this.translocoService.translate('Partner');
-            case 'PartnerMainUIFormInitialization':
-                return this.translocoService.translate('PartnerMainUIFormInitialization');
             case 'PartnerNotification':
                 return this.translocoService.translate('PartnerNotification');
-            case 'PartnerNotificationMainUIFormInitialization':
-                return this.translocoService.translate('PartnerNotificationMainUIFormInitialization');
             case 'PartnerNotificationSaveBody':
                 return this.translocoService.translate('PartnerNotificationSaveBody');
             case 'PartnerPermission':
                 return this.translocoService.translate('PartnerPermission');
-            case 'PartnerPermissionMainUIFormInitialization':
-                return this.translocoService.translate('PartnerPermissionMainUIFormInitialization');
             case 'PartnerPermissionSaveBody':
                 return this.translocoService.translate('PartnerPermissionSaveBody');
             case 'PartnerRole':
                 return this.translocoService.translate('PartnerRole');
-            case 'PartnerRoleMainUIFormInitialization':
-                return this.translocoService.translate('PartnerRoleMainUIFormInitialization');
             case 'PartnerRolePartnerPermission':
                 return this.translocoService.translate('PartnerRolePartnerPermission');
-            case 'PartnerRolePartnerPermissionMainUIFormInitialization':
-                return this.translocoService.translate('PartnerRolePartnerPermissionMainUIFormInitialization');
             case 'PartnerRolePartnerPermissionSaveBody':
                 return this.translocoService.translate('PartnerRolePartnerPermissionSaveBody');
             case 'PartnerRoleSaveBody':
@@ -124,18 +100,12 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('PartnerSaveBody');
             case 'PartnerUser':
                 return this.translocoService.translate('PartnerUser');
-            case 'PartnerUserMainUIFormInitialization':
-                return this.translocoService.translate('PartnerUserMainUIFormInitialization');
             case 'PartnerUserPartnerNotification':
                 return this.translocoService.translate('PartnerUserPartnerNotification');
-            case 'PartnerUserPartnerNotificationMainUIFormInitialization':
-                return this.translocoService.translate('PartnerUserPartnerNotificationMainUIFormInitialization');
             case 'PartnerUserPartnerNotificationSaveBody':
                 return this.translocoService.translate('PartnerUserPartnerNotificationSaveBody');
             case 'PartnerUserPartnerRole':
                 return this.translocoService.translate('PartnerUserPartnerRole');
-            case 'PartnerUserPartnerRoleMainUIFormInitialization':
-                return this.translocoService.translate('PartnerUserPartnerRoleMainUIFormInitialization');
             case 'PartnerUserPartnerRoleSaveBody':
                 return this.translocoService.translate('PartnerUserPartnerRoleSaveBody');
             case 'PartnerUserSaveBody':
@@ -144,18 +114,12 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('PartnerUserSegmentation');
             case 'PartnerUserSegmentationItem':
                 return this.translocoService.translate('PartnerUserSegmentationItem');
-            case 'PartnerUserSegmentationItemMainUIFormInitialization':
-                return this.translocoService.translate('PartnerUserSegmentationItemMainUIFormInitialization');
             case 'PartnerUserSegmentationItemSaveBody':
                 return this.translocoService.translate('PartnerUserSegmentationItemSaveBody');
-            case 'PartnerUserSegmentationMainUIFormInitialization':
-                return this.translocoService.translate('PartnerUserSegmentationMainUIFormInitialization');
             case 'PartnerUserSegmentationSaveBody':
                 return this.translocoService.translate('PartnerUserSegmentationSaveBody');
             case 'Permission':
                 return this.translocoService.translate('Permission');
-            case 'PermissionMainUIFormInitialization':
-                return this.translocoService.translate('PermissionMainUIFormInitialization');
             case 'PermissionSaveBody':
                 return this.translocoService.translate('PermissionSaveBody');
             case 'Product':
@@ -174,12 +138,8 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('RegistrationVerificationToken');
             case 'Role':
                 return this.translocoService.translate('Role');
-            case 'RoleMainUIFormInitialization':
-                return this.translocoService.translate('RoleMainUIFormInitialization');
             case 'RolePermission':
                 return this.translocoService.translate('RolePermission');
-            case 'RolePermissionMainUIFormInitialization':
-                return this.translocoService.translate('RolePermissionMainUIFormInitialization');
             case 'RolePermissionSaveBody':
                 return this.translocoService.translate('RolePermissionSaveBody');
             case 'RoleSaveBody':
@@ -188,12 +148,8 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('Segmentation');
             case 'SegmentationItem':
                 return this.translocoService.translate('SegmentationItem');
-            case 'SegmentationItemMainUIFormInitialization':
-                return this.translocoService.translate('SegmentationItemMainUIFormInitialization');
             case 'SegmentationItemSaveBody':
                 return this.translocoService.translate('SegmentationItemSaveBody');
-            case 'SegmentationMainUIFormInitialization':
-                return this.translocoService.translate('SegmentationMainUIFormInitialization');
             case 'SegmentationSaveBody':
                 return this.translocoService.translate('SegmentationSaveBody');
             case 'SimpleSaveResult':
@@ -208,14 +164,10 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('TableResponse');
             case 'Tier':
                 return this.translocoService.translate('Tier');
-            case 'TierMainUIFormInitialization':
-                return this.translocoService.translate('TierMainUIFormInitialization');
             case 'TierSaveBody':
                 return this.translocoService.translate('TierSaveBody');
             case 'Transaction':
                 return this.translocoService.translate('Transaction');
-            case 'TransactionMainUIFormInitialization':
-                return this.translocoService.translate('TransactionMainUIFormInitialization');
             case 'TransactionSaveBody':
                 return this.translocoService.translate('TransactionSaveBody');
             case 'UpdatePoints':
@@ -224,20 +176,14 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('User');
             case 'UserExtended':
                 return this.translocoService.translate('UserExtended');
-            case 'UserExtendedMainUIFormInitialization':
-                return this.translocoService.translate('UserExtendedMainUIFormInitialization');
             case 'UserExtendedSaveBody':
                 return this.translocoService.translate('UserExtendedSaveBody');
             case 'UserNotification':
                 return this.translocoService.translate('UserNotification');
-            case 'UserNotificationMainUIFormInitialization':
-                return this.translocoService.translate('UserNotificationMainUIFormInitialization');
             case 'UserNotificationSaveBody':
                 return this.translocoService.translate('UserNotificationSaveBody');
             case 'UserRole':
                 return this.translocoService.translate('UserRole');
-            case 'UserRoleMainUIFormInitialization':
-                return this.translocoService.translate('UserRoleMainUIFormInitialization');
             case 'UserRoleSaveBody':
                 return this.translocoService.translate('UserRoleSaveBody');
             case 'VerificationTokenRequest':

@@ -33,7 +33,7 @@ export class TiersComponent implements OnInit {
   async ngOnInit() {
     forkJoin({
       tierList: this.apiService.getTierListForDisplay(),
-      tierForCurrentPartnerUser: this.apiService.getTierForTheCurrentPartnerUser(),
+      tierForCurrentPartnerUser: this.apiService.getTierForCurrentPartnerUser(),
       currentPartnerUser: this.apiService.getCurrentPartnerUser(),
     }).subscribe(({ tierList: tierList, tierForCurrentPartnerUser: tierForTheCurrentPartnerUser, currentPartnerUser }) => {
       this.currentPartnerUser = currentPartnerUser;

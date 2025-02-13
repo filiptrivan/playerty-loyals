@@ -82,11 +82,10 @@ namespace PlayertyLoyals.Business.Services
             //if (!_cache.TryGetValue(cacheKey, out PartnerDTO partnerDTO))
             //{
             PartnerDTO partnerDTO = null;
+            string partnerCode = GetCurrentPartnerCode();
 
             await _context.WithTransactionAsync(async () =>
             {
-                string partnerCode = GetCurrentPartnerCode();
-
                 partnerDTO = await _context.DbSet<Partner>()
                     .AsNoTracking()
                     .Where(x => x.Slug == partnerCode)
@@ -132,20 +131,38 @@ namespace PlayertyLoyals.Business.Services
 
         public async Task<PartnerUser> GetCurrentPartnerUser()
         {
+            string partnerCode = GetCurrentPartnerCode();
+            long userId = _authenticationService.GetCurrentUserId();
+
             return await _context.WithTransactionAsync(async () =>
             {
-                string partnerCode = GetCurrentPartnerCode();
-                long userId = _authenticationService.GetCurrentUserId();
                 return await _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId).SingleOrDefaultAsync();
+            });
+        }
+
+        public async Task<TierDTO> GetTierDTOForCurrentPartnerUser()
+        {
+            string partnerCode = GetCurrentPartnerCode();
+            long userId = _authenticationService.GetCurrentUserId();
+
+            return await _context.WithTransactionAsync(async () =>
+            {
+                return await _context.DbSet<PartnerUser>()
+                    .AsNoTracking()
+                    .Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId)
+                    .Select(x => x.Tier)
+                    .ProjectToType<TierDTO>(Mapper.TierProjectToConfig())
+                    .SingleOrDefaultAsync();
             });
         }
 
         public async Task<List<string>> GetCurrentPartnerUserPermissionCodes()
         {
+            string partnerCode = GetCurrentPartnerCode();
+            long userId = _authenticationService.GetCurrentUserId();
+
             return await _context.WithTransactionAsync(async () =>
             {
-                string partnerCode = GetCurrentPartnerCode();
-                long userId = _authenticationService.GetCurrentUserId();
                 return await _context.DbSet<PartnerUser>()
                     .Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId)
                     .SelectMany(x => x.PartnerRoles)
@@ -158,12 +175,16 @@ namespace PlayertyLoyals.Business.Services
 
         public async Task<long> GetCurrentPartnerUserId()
         {
+            string partnerCode = GetCurrentPartnerCode();
+            long userId = _authenticationService.GetCurrentUserId();
+
             return await _context.WithTransactionAsync(async () =>
             {
-                string partnerCode = GetCurrentPartnerCode();
-                long userId = _authenticationService.GetCurrentUserId();
-
-                long partnerUserId = await _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId).Select(x => x.Id).SingleOrDefaultAsync();
+                long partnerUserId = await _context.DbSet<PartnerUser>()
+                    .AsNoTracking()
+                    .Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId)
+                    .Select(x => x.Id)
+                    .SingleOrDefaultAsync();
 
                 if (partnerUserId == 0)
                 {
@@ -177,11 +198,16 @@ namespace PlayertyLoyals.Business.Services
 
         public async Task<PartnerUserDTO> GetCurrentPartnerUserDTO()
         {
+            string partnerCode = GetCurrentPartnerCode();
+            long userId = _authenticationService.GetCurrentUserId();
+
             return await _context.WithTransactionAsync(async () =>
             {
-                string partnerCode = GetCurrentPartnerCode();
-                long userId = _authenticationService.GetCurrentUserId();
-                return await _context.DbSet<PartnerUser>().AsNoTracking().Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId).ProjectToType<PartnerUserDTO>(Mapper.PartnerUserProjectToConfig()).SingleOrDefaultAsync();
+                return await _context.DbSet<PartnerUser>()
+                    .AsNoTracking()
+                    .Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId)
+                    .ProjectToType<PartnerUserDTO>(Mapper.PartnerUserProjectToConfig())
+                    .SingleOrDefaultAsync();
             });
         }
 

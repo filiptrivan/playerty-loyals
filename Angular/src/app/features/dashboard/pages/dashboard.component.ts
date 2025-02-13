@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
       this.currentPartnerUser = currentPartnerUser;
       
       if (currentPartnerUser?.tierId) {
-        this.apiService.getTier(currentPartnerUser.tierId).subscribe(tier => {
+        this.apiService.getTierForCurrentPartnerUser().subscribe(tier => {
           this.currentPartnerTier = tier;
         });
       } else {
