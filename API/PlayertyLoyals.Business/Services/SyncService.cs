@@ -12,20 +12,28 @@ namespace PlayertyLoyals.Business.Services
         private readonly IApplicationDbContext _context;
         private readonly WingsApiService _wingsApiService;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
+        private readonly AuthorizationBusinessService _authorizationService;
 
-        public SyncService(IApplicationDbContext context, WingsApiService wingsApiService, PartnerUserAuthenticationService partnerUserAuthenticationService)
+        public SyncService(
+            IApplicationDbContext context, 
+            WingsApiService wingsApiService, 
+            PartnerUserAuthenticationService partnerUserAuthenticationService,
+            AuthorizationBusinessService authorizationService
+        )
             : base(context, null)
         {
             _context = context;
             _wingsApiService = wingsApiService;
             _partnerUserAuthenticationService = partnerUserAuthenticationService;
+            _authorizationService = authorizationService;
         }
 
         public async Task SyncDiscountCategories(long businessSystemId)
         {
-            // TODO FT: We need to validate if the current user is authorized to get the data
             await _context.WithTransactionAsync(async () =>
             {
+                await _authorizationService.AuthorizeBusinessSystemUpdateAndThrow(null);
+
                 BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(businessSystemId, null);
                 List<ExternalDiscountProductGroupDTO> externalDiscountProductGroupDTOList = await _wingsApiService.GetExternalDiscountProductGroupDTOList(businessSystem);
 

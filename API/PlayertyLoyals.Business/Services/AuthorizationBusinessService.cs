@@ -332,7 +332,7 @@ namespace PlayertyLoyals.Business.Services
             await AuthorizeBusinessSystemReadAndThrow();
         }
 
-        private async Task AuthorizeBusinessSystemReadAndThrow()
+        public async Task AuthorizeBusinessSystemReadAndThrow()
         {
             await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.ReadPartner, BusinessPermissionCodes.ReadBusinessSystem);
         }

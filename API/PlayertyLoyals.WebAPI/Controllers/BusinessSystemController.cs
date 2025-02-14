@@ -99,23 +99,16 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<BusinessSystemUpdatePointsScheduledTaskDTO>> GetBusinessSystemUpdatePointsScheduledTaskTableData(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<BusinessSystemUpdatePointsScheduledTaskDTO>> GetBusinessSystemUpdatePointsScheduledTaskTableDataForBusinessSystem(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.GetBusinessSystemUpdatePointsScheduledTaskTableData(
-                tableFilterDTO, 
-                _context.DbSet<BusinessSystemUpdatePointsScheduledTask>().Where(x => x.BusinessSystem.Id == tableFilterDTO.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo), 
-                true
-            );
+            return await _loyalsBusinessService.GetBusinessSystemUpdatePointsScheduledTaskTableDataForBusinessSystem(tableFilterDTO);
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task<IActionResult> ExportBusinessSystemUpdatePointsScheduledTaskTableDataToExcel(TableFilterDTO tableFilterDTO)
+        public async Task<IActionResult> ExportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelForBusinessSystem(TableFilterDTO tableFilterDTO)
         {
-            byte[] fileContent = await _loyalsBusinessService.ExportBusinessSystemUpdatePointsScheduledTaskTableDataToExcel(
-                tableFilterDTO, _context.DbSet<BusinessSystemUpdatePointsScheduledTask>().Where(x => x.BusinessSystem.Id == tableFilterDTO.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo), 
-                true
-            );
+            byte[] fileContent = await _loyalsBusinessService.ExportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelForBusinessSystem(tableFilterDTO);
             return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Izvršena_Ažuriranja_Poena.xlsx"));
         }
     }

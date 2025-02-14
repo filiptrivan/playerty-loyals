@@ -20,6 +20,7 @@ using PlayertyLoyals.Business.ValidationRules;
 using PlayertyLoyals.Business.DTO.Helpers;
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PlayertyLoyals.Business.Services
 {
@@ -194,7 +195,7 @@ namespace PlayertyLoyals.Business.Services
                 {
                     TierDTO tierDTO = tierSaveBodyDTO.TierDTOList[i];
                     tierDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
-                    TierDTO savedTierDTO = await SaveTierAndReturnDTO(tierDTO, true, true);
+                    TierDTO savedTierDTO = await SaveTierAndReturnDTO(tierDTO, authorizeUpdate, authorizeInsert);
                     tierResultDTOList.Add(savedTierDTO);
 
                     List<BusinessSystemTierDTO> businessSystemTierDTOList = tierSaveBodyDTO.BusinessSystemTierDTOList.Where(x => x.TierClientIndex == i).ToList();
@@ -221,7 +222,10 @@ namespace PlayertyLoyals.Business.Services
             return tierSaveBodyDTO;
         }
 
-        public async Task UpdatePartnerUsersTiers()
+        /// <summary>
+        /// FT: Updating tiers when tiers changed
+        /// </summary>
+        private async Task UpdatePartnerUsersTiers()
         {
             await _context.WithTransactionAsync(async () =>
             {
@@ -238,7 +242,7 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task UpdatePartnerUserTier(PartnerUser partnerUser)
+        private async Task UpdatePartnerUserTier(PartnerUser partnerUser)
         {
             await _context.WithTransactionAsync(async () =>
             {
@@ -250,11 +254,12 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task<Tier> GetTierForThePoints(int points)
+        private async Task<Tier> GetTierForThePoints(int points)
         {
             return await _context.WithTransactionAsync(async () =>
             {
                 Tier greatestTier = await GetTheGreatestTier();
+
                 if (greatestTier == null)
                 {
                     return null;
@@ -271,7 +276,7 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task<Tier> GetTheGreatestTier()
+        private async Task<Tier> GetTheGreatestTier()
         {
             return await _context.WithTransactionAsync(async () =>
             {
@@ -281,26 +286,26 @@ namespace PlayertyLoyals.Business.Services
 
         public async Task<TierSaveBodyDTO> GetTierSaveBodyDTO()
         {
-            TierSaveBodyDTO tierSaveBodyDTO = new TierSaveBodyDTO();
+            TierSaveBodyDTO tierSaveBodyDTO = new();
 
             await _context.WithTransactionAsync(async () =>
             {
                 await _authorizationService.AuthorizeTierReadAndThrow();
 
                 List<TierDTO> tierDTOList = await GetTierDTOList(
-                    _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), 
+                    _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom),
                     false
                 );
                 List<int> tierIds = tierDTOList.Select(x => x.Id).ToList();
 
                 List<BusinessSystemTierDTO> businessSystemTierDTOList = await GetBusinessSystemTierDTOList(
-                    _context.DbSet<BusinessSystemTier>().Where(x => tierIds.Contains(x.Tier.Id)).OrderBy(x => x.OrderNumber), 
+                    _context.DbSet<BusinessSystemTier>().Where(x => tierIds.Contains(x.Tier.Id)).OrderBy(x => x.OrderNumber),
                     false
                 );
                 List<long> businessSystemTierIds = businessSystemTierDTOList.Select(x => x.Id).ToList();
 
                 List<DiscountProductGroupDTO> discountCategoryDTOList = await GetDiscountProductGroupDTOList(
-                    _context.DbSet<DiscountProductGroup>().Where(x => x.BusinessSystem.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), 
+                    _context.DbSet<DiscountProductGroup>().Where(x => x.BusinessSystem.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()),
                     false
                 );
                 List<BusinessSystemTierDiscountProductGroupDTO> businessSystemTierDiscountProductGroupResultDTOList = discountCategoryDTOList
@@ -380,7 +385,7 @@ namespace PlayertyLoyals.Business.Services
                             .ThenInclude(x => x.BusinessSystemTierDiscountProductGroups)
                                 .ThenInclude(x => x.DiscountProductGroup)
                         .Include(x => x.Partner)
-                        .OrderByDescending(x => x.ValidFrom), 
+                        .OrderByDescending(x => x.ValidFrom),
                     false
                 );
 
@@ -533,7 +538,7 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public override async Task<PartnerUserSaveBodyDTO> SavePartnerUserAndReturnSaveBodyDTO(PartnerUserSaveBodyDTO partnerUserSaveBodyDTO, bool authorizeUpdate = true, bool authorizeInsert = true)
+        public override async Task<PartnerUserSaveBodyDTO> SavePartnerUserAndReturnSaveBodyDTO(PartnerUserSaveBodyDTO partnerUserSaveBodyDTO, bool authorizeUpdate, bool authorizeInsert)
         {
             if (partnerUserSaveBodyDTO.PartnerUserDTO.Id == 0)
                 throw new HackerException("You can't add new partner user.");
@@ -544,7 +549,7 @@ namespace PlayertyLoyals.Business.Services
 
                 int pointsBeforeSave = await _context.DbSet<PartnerUser>().Where(x => x.Id == partnerUserSaveBodyDTO.PartnerUserDTO.Id).Select(x => x.Points).SingleAsync();
 
-                PartnerUser savedPartnerUser = await SavePartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO, true, true); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
+                PartnerUser savedPartnerUser = await SavePartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO, authorizeUpdate, authorizeInsert); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
 
                 await UpdateFirstTimeFilledPointsForThePartnerUser(savedPartnerUser, partnerUserSaveBodyDTO.SelectedSegmentationItemsIds);
 
@@ -580,7 +585,7 @@ namespace PlayertyLoyals.Business.Services
         /// <summary>
         /// </summary>
         /// <param name="pointsToAdd">Can be negative value also</param>
-        public async Task UpdatePointsForThePartnerUser(PartnerUser partnerUser, int pointsToAdd)
+        private async Task UpdatePointsForThePartnerUser(PartnerUser partnerUser, int pointsToAdd)
         {
             await _context.WithTransactionAsync(async () =>
             {
@@ -623,6 +628,8 @@ namespace PlayertyLoyals.Business.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
+                await _authorizationService.AuthorizePartnerUserReadAndThrow(partnerUserId);
+
                 return await _context.DbSet<PartnerUser>()
                     .AsNoTracking()
                     .Where(x => x.Id == partnerUserId)
@@ -636,6 +643,8 @@ namespace PlayertyLoyals.Business.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
+                await _authorizationService.AuthorizePartnerUserReadAndThrow(partnerUserId);
+
                 return await _context.DbSet<PartnerUser>()
                     .AsNoTracking()
                     .Where(x => x.Id == partnerUserId)
@@ -651,7 +660,11 @@ namespace PlayertyLoyals.Business.Services
             {
                 long partnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
 
-                TableResponseDTO<TransactionDTO> transactionTableResponse = await GetTransactionTableData(tableFilterDTO, _context.DbSet<Transaction>().Where(x => x.PartnerUser.Id == partnerUserId).OrderByDescending(x => x.Id), false);
+                TableResponseDTO<TransactionDTO> transactionTableResponse = await GetTransactionTableData(
+                    tableFilterDTO,
+                    _context.DbSet<Transaction>().Where(x => x.PartnerUser.Id == partnerUserId).OrderByDescending(x => x.Id),
+                    false
+                );
 
                 return transactionTableResponse;
             });
@@ -894,7 +907,7 @@ namespace PlayertyLoyals.Business.Services
 
         #region BusinessSystem
 
-        public override async Task<BusinessSystemSaveBodyDTO> SaveBusinessSystemAndReturnSaveBodyDTO(BusinessSystemSaveBodyDTO businessSystemSaveBodyDTO, bool authorizeUpdate = true, bool authorizeInsert = true)
+        public override async Task<BusinessSystemSaveBodyDTO> SaveBusinessSystemAndReturnSaveBodyDTO(BusinessSystemSaveBodyDTO businessSystemSaveBodyDTO, bool authorizeUpdate, bool authorizeInsert)
         {
             if (businessSystemSaveBodyDTO.BusinessSystemDTO.Id == 0 && (businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsInterval != null || businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsStartDate != null))
                 throw new HackerException("Can't save UpdatePointsInterval nor UpdatePointsStartDate from here.");
@@ -913,7 +926,7 @@ namespace PlayertyLoyals.Business.Services
                         throw new HackerException("Can't save UpdatePointsInterval nor UpdatePointsStartDate from here.");
                 }
 
-                BusinessSystemDTO savedBusinessSystemDTO = await SaveBusinessSystemAndReturnDTO(businessSystemSaveBodyDTO.BusinessSystemDTO, true, true);
+                BusinessSystemDTO savedBusinessSystemDTO = await SaveBusinessSystemAndReturnDTO(businessSystemSaveBodyDTO.BusinessSystemDTO, authorizeUpdate, authorizeInsert);
                 return new BusinessSystemSaveBodyDTO
                 {
                     BusinessSystemDTO = savedBusinessSystemDTO
@@ -942,6 +955,8 @@ namespace PlayertyLoyals.Business.Services
             {
                 return await _context.WithTransactionAsync(async () =>
                 {
+                    await _authorizationService.AuthorizeBusinessSystemUpdateAndThrow(null);
+
                     BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(businessSystemUpdatePointsDataBodyDTO.BusinessSystemId, businessSystemUpdatePointsDataBodyDTO.BusinessSystemVersion);
 
                     if (businessSystem.GetTransactionsEndpoint == null)
@@ -991,6 +1006,8 @@ namespace PlayertyLoyals.Business.Services
             {
                 return await _context.WithTransactionAsync(async () =>
                 {
+                    await _authorizationService.AuthorizeBusinessSystemUpdateAndThrow(null);
+
                     BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(businessSystemId, businessSystemVersion);
 
                     List<string> exceptions = new();
@@ -1047,7 +1064,7 @@ namespace PlayertyLoyals.Business.Services
         /// </summary>
         public async Task UpdatePoints(UpdatePointsDTO updatePointsDTO)
         {
-            UpdatePointsDTOValidationRules validationRules = new UpdatePointsDTOValidationRules();
+            UpdatePointsDTOValidationRules validationRules = new();
             validationRules.ValidateAndThrow(updatePointsDTO);
 
             DateTime now = DateTime.Now;
@@ -1060,6 +1077,8 @@ namespace PlayertyLoyals.Business.Services
 
             await _context.WithTransactionAsync(async () =>
             {
+                await _authorizationService.AuthorizeBusinessSystemUpdateAndThrow(null);
+
                 BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(updatePointsDTO.BusinessSystemId.Value, updatePointsDTO.BusinessSystemVersion);
 
                 if (businessSystem.GetTransactionsEndpoint == null)
@@ -1071,11 +1090,13 @@ namespace PlayertyLoyals.Business.Services
 
         public async Task ExcelManualUpdatePoints(ExcelManualUpdatePointsDTO excelManualUpdatePointsDTO)
         {
-            ExcelManualUpdatePointsDTOValidationRules validationRules = new ExcelManualUpdatePointsDTOValidationRules();
+            ExcelManualUpdatePointsDTOValidationRules validationRules = new();
             validationRules.ValidateAndThrow(excelManualUpdatePointsDTO);
 
             await _context.WithTransactionAsync(async () =>
             {
+                await _authorizationService.AuthorizeBusinessSystemUpdateAndThrow(null);
+
                 List<ExternalTransactionDTO> externalTransactionDTOList = GetExternalTransactionsFromExcel(excelManualUpdatePointsDTO.Excel);
 
                 BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(excelManualUpdatePointsDTO.BusinessSystemId.Value, null);
@@ -1097,7 +1118,7 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public List<ExternalTransactionDTO> GetExternalTransactionsFromExcel(IFormFile excel)
+        private List<ExternalTransactionDTO> GetExternalTransactionsFromExcel(IFormFile excel)
         {
             if (excel == null || excel.Length == 0)
                 throw new ArgumentException("The provided Excel file is invalid or empty.");
@@ -1308,6 +1329,34 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
                     TransactionWhichWeAlreadyUpdatedForThisPeriodList = transactionWhichWeAlreadyUpdatedForThisPeriodList,
                     TotalProcessedTransactionsCount = externalTransactionDTOList.Count,
                 };
+            });
+        }
+
+        public async Task<TableResponseDTO<BusinessSystemUpdatePointsScheduledTaskDTO>> GetBusinessSystemUpdatePointsScheduledTaskTableDataForBusinessSystem(TableFilterDTO tableFilterDTO)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                await _authorizationService.AuthorizeBusinessSystemReadAndThrow();
+
+                return await GetBusinessSystemUpdatePointsScheduledTaskTableData(
+                    tableFilterDTO,
+                    _context.DbSet<BusinessSystemUpdatePointsScheduledTask>().Where(x => x.BusinessSystem.Id == tableFilterDTO.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo),
+                    false
+                );
+            });
+        }
+
+        public async Task<byte[]> ExportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelForBusinessSystem(TableFilterDTO tableFilterDTO)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                await _authorizationService.AuthorizeBusinessSystemReadAndThrow();
+
+                byte[] fileContent = await ExportBusinessSystemUpdatePointsScheduledTaskTableDataToExcel(
+                    tableFilterDTO, _context.DbSet<BusinessSystemUpdatePointsScheduledTask>().Where(x => x.BusinessSystem.Id == tableFilterDTO.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo),
+                    false
+                );
+                return fileContent;
             });
         }
 

@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private async handleMissingPartner() {
-    const permissionCodes: string[] = await firstValueFrom(this.authService.currentUserPermissions$);
+    const permissionCodes: string[] = await firstValueFrom(this.authService.currentUserPermissionCodes$);
     if (permissionCodes != null && permissionCodes.length === 0) {
       // this.authService.navigateToSelectPartner();
     }
