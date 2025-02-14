@@ -5,9 +5,12 @@ using System.ComponentModel.DataAnnotations;
 using Spider.Shared.Interfaces;
 using Spider.Shared.Enums;
 using Spider.Shared.BaseEntities;
+using PlayertyLoyals.Business.Enums;
 
 namespace PlayertyLoyals.Business.Entities
 {
+    [CanInsertAdditionalPermissionCode(nameof(BusinessPermissionCodes.UpdatePartner))]
+    [CanUpdateAdditionalPermissionCode(nameof(BusinessPermissionCodes.UpdatePartner))]
     public class PartnerNotification : BusinessObject<long>, INotification<PartnerUser>
     {
         [UIControlWidth("col-12")]

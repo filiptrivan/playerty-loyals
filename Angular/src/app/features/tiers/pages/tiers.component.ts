@@ -35,11 +35,11 @@ export class TiersComponent implements OnInit {
       tierList: this.apiService.getTierListForDisplay(),
       tierForCurrentPartnerUser: this.apiService.getTierForCurrentPartnerUser(),
       currentPartnerUser: this.apiService.getCurrentPartnerUser(),
-    }).subscribe(({ tierList: tierList, tierForCurrentPartnerUser: tierForTheCurrentPartnerUser, currentPartnerUser }) => {
+    }).subscribe(({ tierList, tierForCurrentPartnerUser, currentPartnerUser }) => {
       this.currentPartnerUser = currentPartnerUser;
       this.tierList = tierList;
       this.assignIndexesToTiers(tierList);
-      this.tierForTheCurrentPartnerUser = tierForTheCurrentPartnerUser;
+      this.tierForTheCurrentPartnerUser = tierForCurrentPartnerUser;
     });
 
   }

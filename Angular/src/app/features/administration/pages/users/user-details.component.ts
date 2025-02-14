@@ -5,7 +5,6 @@ import { TranslocoService } from '@jsverse/transloco';
 import { UserExtended } from 'src/app/business/entities/business-entities.generated';
 import { BaseFormCopy, SpiderFormGroup, SpiderMessageService, BaseFormService, User } from '@playerty/spider';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
-import { firstValueFrom } from 'rxjs';
 
 @Component({
     selector: 'user-details',
@@ -14,7 +13,8 @@ import { firstValueFrom } from 'rxjs';
 })
 export class UserDetailsComponent extends BaseFormCopy implements OnInit {
     userExtendedFormGroup = new SpiderFormGroup<UserExtended>({});
-    isAuthorizedToSave: boolean;
+    
+    isAuthorizedForSave: boolean = false;
     currentUser: User;
 
     constructor(
@@ -38,10 +38,8 @@ export class UserDetailsComponent extends BaseFormCopy implements OnInit {
 
     userExtendedFormGroupInitFinish(){
         this.userExtendedFormGroup.controls.email.disable();
-    }
 
-    isAuthorizedForSave = (): boolean => {
-        return this.userExtendedFormGroup.getRawValue().id === this.currentUser.id;
+        this.isAuthorizedForSave = this.userExtendedFormGroup.getRawValue().id === this.currentUser.id;
     }
 
     override onBeforeSave = (): void => {

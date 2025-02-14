@@ -1,8 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, firstValueFrom, Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, firstValueFrom, Observable, of, Subscription } from 'rxjs';
+import { delay, filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { ConfigService } from '../config.service';
@@ -14,7 +14,6 @@ import { Partner, PartnerUser } from '../../entities/business-entities.generated
 })
 export class AuthService extends AuthBaseService implements OnDestroy {
 
-
   constructor(
     protected override router: Router,
     protected override http: HttpClient,
@@ -24,6 +23,7 @@ export class AuthService extends AuthBaseService implements OnDestroy {
     private route: ActivatedRoute,
   ) {
     super(router, http, externalAuthService, apiService, config);
+    this.initCurrentPartnerUserState()
   }
 
   //#region Partner
@@ -45,42 +45,42 @@ export class AuthService extends AuthBaseService implements OnDestroy {
     );
   };
 
-  private userSubscription: Subscription | null = null;
-
   private _partner = new BehaviorSubject<Partner | undefined>(undefined);
   partner$ = this._partner.asObservable();
 
   private _currentPartnerUser = new BehaviorSubject<PartnerUser | undefined>(undefined);
   currentPartnerUser$ = this._currentPartnerUser.asObservable();
 
-  async startListening() {
-    this.route.queryParams.subscribe(async params => {
-      const partnerSlug = params[this.config.partnerParamKey] ?? '';
-        if(partnerSlug != null && partnerSlug != ''){
-          localStorage.setItem(this.config.partnerSlugKey, partnerSlug);
-          await firstValueFrom(this.getCurrentPartner()); // TODO FT: When you have the time fix this, but in most basic case it will be called only once
-        }
-    });
+  initCurrentPartnerUserState = async () => {
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
-    await firstValueFrom(this.getCurrentPartner()); // TODO FT: When you have the time fix this, but in most basic case it will be called only once
+    const params = this.route.snapshot.queryParams;
+    const partnerSlug = params[this.config.partnerParamKey] ?? '';
+  
+    if (partnerSlug !== '') {
+      localStorage.setItem(this.config.partnerSlugKey, partnerSlug);
+    }
+  
+    this.setCurrentPartnerObservable().subscribe();
 
-    this.userSubscription = this.user$.subscribe(async user => {
-      const currentPartner = await firstValueFrom(this.partner$);
-
-      if (currentPartner == null) {
-        this._currentPartnerUser.next(null);
-      }else{
-        if (user == null) {
-          this._currentPartnerUser.next(null);
+    combineLatest([
+      this.user$,
+      this.partner$
+    ]).pipe(
+      switchMap(([user, partner]) => {
+        if (user && partner) {
+          return this.setCurrentPartnerUser();
         }
         else{
-          await firstValueFrom(this.getCurrentPartnerUser());
+          this._currentPartnerUser.next(null);
+          return of(null);
         }
-      }
-    });
+      }),
+      shareReplay(1)
+    ).subscribe();
   }
 
-  getCurrentPartner(): Observable<Promise<Partner>> {
+  setCurrentPartnerObservable(): Observable<Promise<Partner>> {
     return this.apiService.getCurrentPartner().pipe(
       map(async partner => {
         this._partner.next(partner);
@@ -128,7 +128,7 @@ export class AuthService extends AuthBaseService implements OnDestroy {
     this.adjustPartnerColor(partner);
   }
 
-  getCurrentPartnerUser(): Observable<PartnerUser> {  
+  setCurrentPartnerUser(): Observable<PartnerUser> {  
     return this.apiService.getCurrentPartnerUser().pipe(
       map(currentPartnerUser => {
         this._currentPartnerUser.next(currentPartnerUser);
@@ -138,9 +138,7 @@ export class AuthService extends AuthBaseService implements OnDestroy {
   }
 
   override onAfterNgOnDestroy = () => {
-    if (this.userSubscription) {
-      this.userSubscription.unsubscribe();
-    }
+
   };
 
   //#endregion

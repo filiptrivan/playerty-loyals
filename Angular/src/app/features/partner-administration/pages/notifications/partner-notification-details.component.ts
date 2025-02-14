@@ -17,6 +17,7 @@ export class PartnerNotificationDetailsComponent extends BaseFormCopy implements
     isMarkedAsRead = new SpiderFormControl<boolean>(true, {updateOn: 'change'})
 
     additionalButtons: SpiderButton[];
+    isAuthorizedForSave: boolean = false;
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -43,6 +44,12 @@ export class PartnerNotificationDetailsComponent extends BaseFormCopy implements
         this.apiService.sendPartnerNotificationEmail(this.partnerNotificationFormGroup.getRawValue().id, this.partnerNotificationFormGroup.getRawValue().version).subscribe(() => {
             this.messageService.successMessage(this.translocoService.translate('SuccessfulAttempt'));
         });
+    }
+
+    isAuthorizedForSaveChange = ($event: boolean) => {
+        if ($event === false) {
+            this.isMarkedAsRead.disable();
+        }
     }
 
     override onBeforeSave = (): void => {

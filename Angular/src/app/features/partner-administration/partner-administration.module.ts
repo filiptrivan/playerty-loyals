@@ -15,7 +15,7 @@ import { SegmentationSelectComponent } from '../administration/partials/segmenta
 import { UserProgressbarComponent } from "../../business/components/user-progressbar/user-progressbar.component";
 import { BusinessSystemTableComponent } from './pages/business-systems/business-system-list.component';
 import { BusinessSystemDetailsComponent } from './pages/business-systems/business-system-details.component';
-import { SegmentationBaseDetailsComponent, PartnerRoleBaseDetailsComponent, PartnerNotificationBaseDetailsComponent, BusinessSystemBaseDetailsComponent } from 'src/app/business/components/base-details/business-base-details.generated';
+import { SegmentationBaseDetailsComponent, PartnerRoleBaseDetailsComponent, PartnerNotificationBaseDetailsComponent, BusinessSystemBaseDetailsComponent, PartnerUserBaseDetailsComponent } from 'src/app/business/components/base-details/business-base-details.generated';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PrimengModule, SpiderDataTableComponent, SpiderControlsModule, CardSkeletonComponent, IndexCardComponent } from '@playerty/spider';
 
@@ -83,7 +83,8 @@ const routes: Routes = [
     SegmentationBaseDetailsComponent,
     PartnerRoleBaseDetailsComponent,
     PartnerNotificationBaseDetailsComponent,
-    BusinessSystemBaseDetailsComponent
+    BusinessSystemBaseDetailsComponent,
+    PartnerUserBaseDetailsComponent,
 ],
     declarations: [
         PartnerUserListComponent,

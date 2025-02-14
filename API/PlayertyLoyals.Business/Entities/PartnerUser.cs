@@ -6,25 +6,26 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PlayertyLoyals.Business.Entities
 {
-    [UIDoNotGenerate]
+    //[UIDoNotGenerate]
     [DisplayName("User.Email")]
     //[CanNotInsertThroughMainUIForm]
     public class PartnerUser : BusinessObject<long>
     {
+        [UIControlWidth("col-12")]
         [Required]
         public int Points { get; set; }
 
+        [UIDoNotGenerate]
         [ManyToOneRequired] // TODO FT: Add partner and user to the primary key
         [WithMany(nameof(Partner.PartnerUsers))]
         public virtual Partner Partner { get; set; }
 
+        [UIDoNotGenerate]
         [ManyToOneRequired] // TODO FT: Add partner and user to the primary key
         [WithMany(nameof(User.PartnerUsers))]
         public virtual UserExtended User { get; set; }
 
-        /// <summary>
-        /// [SET NULL] https://www.learnentityframeworkcore.com/conventions/one-to-many-relationship
-        /// </summary>
+        [UIDoNotGenerate]
         [UIControlType(nameof(UIControlTypeCodes.Dropdown))]
         [SetNull]
         [WithMany(nameof(Tier.PartnerUsers))]

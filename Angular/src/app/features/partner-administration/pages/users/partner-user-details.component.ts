@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit, ViewChild } from
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { firstValueFrom, forkJoin } from 'rxjs';
+import { firstValueFrom, forkJoin, lastValueFrom } from 'rxjs';
 import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
 import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, Tier, UserExtended } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
@@ -33,7 +33,8 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
 
     @ViewChild('userProgressbar') userProgressbar: UserProgressbarComponent;
 
-    partnerUserSaveBodyName: string = nameof<PartnerUserSaveBody>('partnerUserDTO');
+    isAuthorizedForSave: boolean = false;
+    currentPartnerUser: PartnerUser;
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -48,50 +49,44 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         private authService: AuthService,
     ) {
         super(differs, http, messageService, changeDetectorRef, router, route, translocoService, baseFormService);
+        this.authService.currentPartnerUser$.subscribe(currentPartnerUser => this.currentPartnerUser = currentPartnerUser);
     }
 
 
     override ngOnInit() {
-        this.formGroup.saveObservableMethod = this.apiService.savePartnerUser;
-        this.formGroup.mainDTOName = this.partnerUserSaveBodyName;
+        
+    }
 
-        this.route.params.subscribe((params) => {
-            let modelId = params['id'];
- 
-            forkJoin({
-                segmentations: this.apiService.getSegmentationListForTheCurrentPartner(),
-            })
-            .subscribe(({ segmentations }) => {
-                this.segmentations = segmentations;
-            });
+    partnerUserFormGroupInitFinish = () => {
+        if (this.partnerUserFormGroup.getRawValue()?.tierId) {
+            this.setTier(this.partnerUserFormGroup.getRawValue().id);
+        }
 
-            this.apiService.getPartnerUser(modelId).subscribe(async partnerUser => {
-                this.initFormGroup(this.partnerUserFormGroup, this.formGroup, new PartnerUser(partnerUser), this.partnerUserSaveBodyName);
-
-                if (partnerUser?.tierId) {
-                    this.setTier(partnerUser.id);
-                }
-                
-                forkJoin({
-                    segmentationItems: this.apiService.getSegmentationItemListForTheCurrentPartner(),
-                })
-                .subscribe(({ 
-                    segmentationItems, 
-                }) => {
-                    this.segmentationItemsFormArray = this.initFormArray(this.formGroup, segmentationItems, this.segmentationItemModel, this.segmentationItemsFormArrayIdentifier, this.segmentationItemsTranslationKey);
-                    this.apiService.getCheckedSegmentationItemIdsForThePartnerUser(partnerUser.id).subscribe(ids => {
-                        this.segmentationItemsFormArray.controls.forEach((formGroup: FormGroup) => {
-                            formGroup.controls['checked'].setValue(ids.includes(formGroup.controls['id'].value));
-                        });
-
-                        this.loading = false;
-                    });
+        forkJoin({
+            segmentations: this.apiService.getSegmentationListForTheCurrentPartner(),
+            segmentationItems: this.apiService.getSegmentationItemListForTheCurrentPartner(),
+        })
+        .subscribe(({ 
+            segmentations,
+            segmentationItems, 
+        }) => {
+            this.segmentations = segmentations;
+            this.segmentationItemsFormArray = this.initFormArray(this.formGroup, segmentationItems, this.segmentationItemModel, this.segmentationItemsFormArrayIdentifier, this.segmentationItemsTranslationKey);
+            this.apiService.getCheckedSegmentationItemIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue().id).subscribe(ids => {
+                this.segmentationItemsFormArray.controls.forEach((formGroup: FormGroup) => {
+                    formGroup.controls['checked'].setValue(ids.includes(formGroup.controls['id'].value));
                 });
 
-                this.setAlreadyFilledSegmentationIdsForThePartnerUser(partnerUser);
-
+                this.loading = false;
             });
         });
+
+        this.setAlreadyFilledSegmentationIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue());
+    }
+
+    isAuthorizedForSaveMethod = async () => {
+        const currentPartnerUser = await firstValueFrom(this.authService.currentPartnerUser$);
+        return this.partnerUserFormGroup.getRawValue().id === currentPartnerUser.id;
     }
 
     // TODO FT: Return this inside save result also
@@ -124,7 +119,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         this.setAlreadyFilledSegmentationIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue());
         
         if ((await firstValueFrom(this.authService.currentPartnerUser$)).id == this.partnerUserFormGroup.getRawValue().id) {
-            await firstValueFrom(this.authService.getCurrentPartnerUser());
+            await firstValueFrom(this.authService.setCurrentPartnerUser());
         }
 
         if (this.partnerUserFormGroup.getRawValue()?.tierId) {

@@ -108,7 +108,7 @@ export class NotificationComponent implements OnInit {
 
   onAfterNotificationCrudOperation = () => {
     this.getNotificationsForCurrentPartnerUser();
-    this.layoutService.getUnreadNotificationsCountForCurrentUser();
+    this.layoutService.setUnreadNotificationsCountForCurrentUser();
   }
 
 }

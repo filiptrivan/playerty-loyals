@@ -3,7 +3,7 @@ import { Segmentation, SegmentationItem } from 'src/app/business/entities/busine
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { CardSkeletonComponent, SpiderCheckboxComponent, BaseFormCopy, SpiderFormGroup, SpiderFormArray, SpiderMessageService, BaseFormService } from '@playerty/spider';
+import { CardSkeletonComponent, SpiderCheckboxComponent, BaseFormCopy, SpiderFormGroup, SpiderFormArray, SpiderMessageService, BaseFormService, SpiderFormControl } from '@playerty/spider';
 
 @Component({
     selector: 'segmentation-select',
@@ -23,6 +23,7 @@ export class SegmentationSelectComponent extends BaseFormCopy implements OnInit 
     @Input() override formGroup: SpiderFormGroup;
     @Input() segmentationItemsFormArray: SpiderFormArray<SegmentationItem>;
     @Input() checkedSegmentationItemIdsForThePartnerUser: number[]; // FT: Because we are not changing it, we are not using nameof
+    @Input() readonly: boolean = false;
     
     segmentationItemsForTheCurrentSegmentation: SegmentationItemIndex[] = []; // for the current segmentation
 
@@ -46,6 +47,14 @@ export class SegmentationSelectComponent extends BaseFormCopy implements OnInit 
                 this.segmentationItemsForTheCurrentSegmentation.push({...segmentationItem, index: index})
             }
         });
+
+        if (this.readonly) {
+            this.segmentationItemsFormArray.controls.forEach((segmentationItemFormGroup: SpiderFormGroup) => {
+                Object.keys(segmentationItemFormGroup.controls).forEach(key => {
+                    segmentationItemFormGroup.controls[key].disable();
+                });
+            });
+        }
     }
 
 }

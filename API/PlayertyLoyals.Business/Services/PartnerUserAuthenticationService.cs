@@ -20,6 +20,18 @@ using Microsoft.Extensions.Caching.Memory;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Spider.Shared.Exceptions;
+using Castle.Components.DictionaryAdapter.Xml;
+using Castle.DynamicProxy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Options;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
+using System.CodeDom.Compiler;
+using System.Diagnostics;
+using System.Net.NetworkInformation;
+using System.Security.Policy;
 
 namespace PlayertyLoyals.Business.Services
 {
@@ -139,20 +151,22 @@ namespace PlayertyLoyals.Business.Services
                 return await _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId).SingleOrDefaultAsync();
             });
         }
-
         public async Task<TierDTO> GetTierDTOForCurrentPartnerUser()
         {
             string partnerCode = GetCurrentPartnerCode();
             long userId = _authenticationService.GetCurrentUserId();
-
             return await _context.WithTransactionAsync(async () =>
             {
-                return await _context.DbSet<PartnerUser>()
-                    .AsNoTracking()
+                Tier tier = await _context.DbSet<PartnerUser>()
+                    .AsNoTracking() // The navigation 'Tier.Partner' cannot be loaded because one or more of the key or foreign key properties are shadow properties and the entity is not being tracked. Relationships using shadow values can only be loaded for tracked entities.
                     .Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId)
                     .Select(x => x.Tier)
-                    .ProjectToType<TierDTO>(Mapper.TierProjectToConfig())
                     .SingleOrDefaultAsync();
+
+                if (tier == null)
+                    return null;
+
+                return tier.Adapt<TierDTO>(Mapper.TierToDTOConfig());
             });
         }
 
