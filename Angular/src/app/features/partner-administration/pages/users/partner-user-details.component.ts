@@ -36,6 +36,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     @ViewChild('userProgressbar') userProgressbar: UserProgressbarComponent;
 
     isAuthorizedForSave: boolean = false;
+    showPointsFormControl: boolean = false;
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -104,8 +105,8 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         return combineLatest([this.authService.currentPartnerUser$, this._segmentationItemsFormArray]).pipe(
             map(([currentPartnerUser]) => {
                 if (currentPartnerUser) {
-
-                    return this.partnerUserFormGroup.getRawValue().id === currentPartnerUser.id;
+                    const isCurrentPartnerUserPage = this.isCurrentPartnerUserPage(currentPartnerUser);
+                    return isCurrentPartnerUserPage;
                 }
 
                 return false;
@@ -125,11 +126,21 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
             }
         }
         
-        if (event.currentUserPermissionCodes.includes(BusinessPermissionCodes.UpdatePartner) === false &&
-            event.currentUserPermissionCodes.includes(BusinessPermissionCodes.UpdatePartnerUser) === false
-        ) {
-            this.partnerUserFormGroup.controls.points.disable();
+        if (this.isAdmin(event.currentUserPermissionCodes)) {
+            this.showPointsFormControl = true;
         }
+        else{
+            this.showPointsFormControl = false;
+        }
+    }
+
+    isAdmin = (permissionCodes: string[]) => {
+        return permissionCodes.includes(BusinessPermissionCodes.UpdatePartner) ||
+               permissionCodes.includes(BusinessPermissionCodes.UpdatePartnerUser);
+    }
+
+    isCurrentPartnerUserPage = (currentPartnerUser: PartnerUser) => {
+        return currentPartnerUser.id === this.partnerUserFormGroup.getRawValue().id;
     }
 
     override onBeforeSave = (): void => {

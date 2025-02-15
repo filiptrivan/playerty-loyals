@@ -108,7 +108,7 @@ export class NotificationComponent implements OnInit {
 
   onAfterNotificationCrudOperation = () => {
     this.getNotificationsForCurrentPartnerUser();
-    this.layoutService.setUnreadNotificationsCountForCurrentUser();
+    this.layoutService.setUnreadNotificationsCountForCurrentUser().subscribe(); // FT: Don't need to unsubscribe from the http observable
   }
 
 }

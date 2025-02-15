@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { Notification } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { BaseFormCopy, SpiderFormGroup, SpiderFormControl, SpiderButton, SpiderMessageService, BaseFormService } from '@playerty/spider';
+import { BaseFormCopy, SpiderFormGroup, SpiderFormControl, SpiderButton, SpiderMessageService, BaseFormService, IsAuthorizedForSaveEvent } from '@playerty/spider';
 
 @Component({
     selector: 'notification-details',
@@ -14,9 +14,10 @@ import { BaseFormCopy, SpiderFormGroup, SpiderFormControl, SpiderButton, SpiderM
 export class NotificationDetailsComponent extends BaseFormCopy implements OnInit {
     notificationFormGroup = new SpiderFormGroup<Notification>({});
 
-    isMarkedAsRead = new SpiderFormControl<boolean>(true, {updateOn: 'change'})
+    isMarkedAsRead = new SpiderFormControl<boolean>(true, {updateOn: 'change'});
 
-    additionalButtons: SpiderButton[];
+    additionalButtons: SpiderButton[] = [];
+    sendEmailNotificationButton = new SpiderButton({label: this.translocoService.translate('SendEmailNotification'), icon: 'pi pi-send', disabled: true});
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -33,9 +34,19 @@ export class NotificationDetailsComponent extends BaseFormCopy implements OnInit
     }
          
     override ngOnInit() {
-        this.additionalButtons = [
-            {label: this.translocoService.translate('SendEmailNotification'), onClick: this.sendEmailNotification, icon: 'pi pi-send'}
-        ];
+        this.sendEmailNotificationButton.onClick = this.sendEmailNotification;
+        this.additionalButtons.push(this.sendEmailNotificationButton);
+    }
+
+    isAuthorizedForSaveChange = (event: IsAuthorizedForSaveEvent) => {
+        this.sendEmailNotificationButton.disabled = !event.isAuthorizedForSave;
+
+        if (event.isAuthorizedForSave) {
+            this.isMarkedAsRead.enable();
+        }
+        else{
+            this.isMarkedAsRead.disable();
+        }
     }
 
     // FT: We must to do it like arrow function
@@ -48,4 +59,5 @@ export class NotificationDetailsComponent extends BaseFormCopy implements OnInit
     override onBeforeSave = (): void => {
         this.saveBody.isMarkedAsRead = this.isMarkedAsRead.value;
     }
+
 }

@@ -22,6 +22,7 @@
     [showReturnButton]="false"
     [authorizedForSaveObservable]="authorizedForSaveObservable"
     (onIsAuthorizedForSaveChange)="isAuthorizedForSaveChange($event)"
+    [showPointsForPartnerUser]="showPointsFormControl"
     >
         <ng-container AFTER>
             @for (segmentation of segmentations; track segmentation.id; let index = $index) {

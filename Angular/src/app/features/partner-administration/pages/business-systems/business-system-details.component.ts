@@ -14,10 +14,6 @@ import { BaseFormCopy, SpiderFormGroup, SpiderButton, Column, SpiderMessageServi
 export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnInit {
     businessSystemFormGroup = new SpiderFormGroup<BusinessSystem>({});
     
-    additionalButtons: SpiderButton[] = [
-        {label: this.translocoService.translate('SyncDiscountCategories'), onClick: this.onSyncDiscountCategories, icon: 'pi pi-sync'}
-    ]
-
     businessSystemUpdatePointsScheduledTaskTableCols: Column[];
     getBusinessSystemUpdatePointsScheduledTaskTableDataObservableMethod = this.apiService.getBusinessSystemUpdatePointsScheduledTaskTableDataForBusinessSystem;
     exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelObservableMethod = this.apiService.exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelForBusinessSystem;
@@ -27,12 +23,13 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     businessSystemUpdatePointsDataFormGroup = new SpiderFormGroup<BusinessSystemUpdatePointsDataBody>({});
     
     savedBusinessSystemUpdatePointsScheduledTaskIsPaused: boolean = null;
-
+    
     manualUpdatePointsFormGroup = new SpiderFormGroup<UpdatePoints>({});
     
     excelManualUpdatePointsFormGroup = new SpiderFormGroup<ExcelManualUpdatePoints>({});
     excelManualUpdatePointsFormData: FormData;
-    excelManualUpdatePointsFile: File;
+    
+    isAuthorizedForSave: boolean = false;
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -58,7 +55,7 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
         this.initExcelManualUpdatePointsFormGroup();
     }
 
-    onSyncDiscountCategories(){
+    syncDiscountCategories = () => {
         this.apiService.syncDiscountCategories(this.businessSystemFormGroup.getRawValue().id).subscribe(() => {
             this.messageService.successMessage(this.translocoService.translate('SuccessfulSyncToastDescription'));
         })
@@ -129,20 +126,28 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
 
     onSelectedExcelManualUpdateFile(event: SpiderFileSelectEvent){
-        this.excelManualUpdatePointsFile = event.file;
+        this.excelManualUpdatePointsFormGroup.controls.excel.setValue(event.file);
+        this.excelManualUpdatePointsFormGroup.controls.excel.setErrors(null);
+    }
+
+    onRemovedExcelManualUpdateFile(){
+        this.excelManualUpdatePointsFormGroup.controls.excel.setValue(null);
     }
 
     excelManualUpdatePoints(){
-        if (this.excelManualUpdatePointsFile == null) {
+        if (this.excelManualUpdatePointsFormGroup.controls.excel.getRawValue() == null) {
             this.showInvalidFieldsMessage();
+            this.excelManualUpdatePointsFormGroup.controls.excel.markAsDirty();
+            this.excelManualUpdatePointsFormGroup.controls.excel.setErrors({_: true});
             return;
         }
         
-        let excelManualUpdatePoints = new ExcelManualUpdatePoints({
+        const excelManualUpdatePoints = new ExcelManualUpdatePoints({
             businessSystemId: this.businessSystemFormGroup.controls.id.getRawValue(),
             businessSystemVersion: this.businessSystemFormGroup.controls.version.getRawValue(),
-            excel: this.excelManualUpdatePointsFile
+            excel: this.excelManualUpdatePointsFormGroup.controls.excel.getRawValue()
         });
+
         this.apiService.excelManualUpdatePoints(excelManualUpdatePoints).subscribe(() => {
             this.messageService.successMessage(this.translocoService.translate('SuccessfulAction'));
         });
@@ -155,5 +160,9 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     override onAfterSave = (): void => {
         this.savedBusinessSystemUpdatePointsScheduledTaskIsPaused = this.businessSystemFormGroup.controls.updatePointsScheduledTaskIsPaused.getRawValue();
     }
+
+    additionalButtons: SpiderButton[] = [
+        {label: this.translocoService.translate('SyncDiscountCategories'), icon: 'pi pi-sync', onClick: this.syncDiscountCategories, disabled: !this.isAuthorizedForSave}
+    ];
 }
 

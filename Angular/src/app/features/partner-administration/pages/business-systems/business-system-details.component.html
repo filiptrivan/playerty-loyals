@@ -8,6 +8,7 @@
         [isFirstMultiplePanel]="true"
         (onBusinessSystemFormGroupInitFinish)="businessSystemFormGroupInitFinish()"
         [additionalButtons]="additionalButtons"
+        (onIsAuthorizedForSaveChange)="isAuthorizedForSave = $event.isAuthorizedForSave"
         ></business-system-base-details>
 
         <spider-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0 && businessSystemUpdatePointsDataFormGroup != null" [isMiddleMultiplePanel]="true">
@@ -25,10 +26,10 @@
             </panel-body>
 
             <panel-footer>
-                <p-button (onClick)="onSaveBusinessSystemUpdatePointsData()" [label]="t('Save')" icon="pi pi-save"></p-button>
-                <p-button *ngIf="savedBusinessSystemUpdatePointsScheduledTaskIsPaused === false" 
+                <p-button [disabled]="!isAuthorizedForSave" (onClick)="onSaveBusinessSystemUpdatePointsData()" [label]="t('Save')" icon="pi pi-save"></p-button>
+                <p-button [disabled]="!isAuthorizedForSave" *ngIf="savedBusinessSystemUpdatePointsScheduledTaskIsPaused === false" 
                 (onClick)="onSaveBusinessSystemUpdatePointsData()" [label]="t('PauseUpdatePointsScheduledTask')" icon="pi pi-pause" severity="warning"></p-button>
-                <p-button *ngIf="savedBusinessSystemUpdatePointsScheduledTaskIsPaused === true" 
+                <p-button [disabled]="!isAuthorizedForSave" *ngIf="savedBusinessSystemUpdatePointsScheduledTaskIsPaused === true" 
                 (onClick)="onSaveBusinessSystemUpdatePointsData()" [label]="t('StartUpdatePointsScheduledTask')" icon="pi pi-play" severity="success"></p-button>
             </panel-footer>
 
@@ -49,7 +50,7 @@
             </panel-body>
 
             <panel-footer>
-                <p-button (onClick)="scheduleJobManually()" [label]="t('UpdatePoints')" icon="pi pi-history"></p-button>
+                <p-button [disabled]="!isAuthorizedForSave" (onClick)="scheduleJobManually()" [label]="t('UpdatePoints')" icon="pi pi-history"></p-button>
             </panel-footer>
         </spider-panel>
 
@@ -63,13 +64,17 @@
                         [label]="t('File')"
                         [required]="true"
                         [acceptedFileTypes]="['.xlsx', '.xls']" 
-                        (onSelectedFile)="onSelectedExcelManualUpdateFile($event)"></spider-file>
+                        (onFileSelected)="onSelectedExcelManualUpdateFile($event)"
+                        (onFileRemoved)="onRemovedExcelManualUpdateFile()"
+                        [control]="excelManualUpdatePointsFormGroup.controls.excel"
+                        [disabled]="!isAuthorizedForSave"
+                        ></spider-file>
                     </div>
                 </form>
             </panel-body>
 
             <panel-footer>
-                <p-button (onClick)="excelManualUpdatePoints()" [label]="t('UpdatePoints')" icon="pi pi-history"></p-button>
+                <p-button [disabled]="!isAuthorizedForSave" (onClick)="excelManualUpdatePoints()" [label]="t('UpdatePoints')" icon="pi pi-history"></p-button>
             </panel-footer>
         </spider-panel>
 
