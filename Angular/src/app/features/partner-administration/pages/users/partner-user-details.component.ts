@@ -3,12 +3,13 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit, ViewChild } from
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { firstValueFrom, forkJoin, lastValueFrom } from 'rxjs';
+import { BehaviorSubject, combineLatest, firstValueFrom, forkJoin, map, Observable } from 'rxjs';
 import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
-import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, Tier, UserExtended } from 'src/app/business/entities/business-entities.generated';
+import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, Tier } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { BaseFormCopy, PrimengOption, SpiderFormGroup, SpiderFormArray, SpiderMessageService, BaseFormService, nameof } from '@playerty/spider';
+import { BaseFormCopy, SpiderFormGroup, SpiderFormArray, SpiderMessageService, BaseFormService, IsAuthorizedForSaveEvent } from '@playerty/spider';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
+import { BusinessPermissionCodes } from 'src/app/business/enums/business-enums.generated';
 
 @Component({
     selector: 'partner-user-details',
@@ -23,6 +24,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     segmentationItems: SegmentationItem[] = [];
 
     segmentationItemsFormArray: SpiderFormArray<SegmentationItem>;
+    _segmentationItemsFormArray = new BehaviorSubject<SpiderFormArray<SegmentationItem>>(undefined);
     segmentationItemsFormArrayIdentifier: string = crypto.randomUUID(); // FT: Because we are not changing it, we are not using nameof, it's important that it's not the same as property in save body
     segmentationItemsTranslationKey: string = new SegmentationItem().typeName;
     segmentationItemModel: SegmentationItem = new SegmentationItem();
@@ -34,7 +36,6 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     @ViewChild('userProgressbar') userProgressbar: UserProgressbarComponent;
 
     isAuthorizedForSave: boolean = false;
-    currentPartnerUser: PartnerUser;
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -49,12 +50,11 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         private authService: AuthService,
     ) {
         super(differs, http, messageService, changeDetectorRef, router, route, translocoService, baseFormService);
-        this.authService.currentPartnerUser$.subscribe(currentPartnerUser => this.currentPartnerUser = currentPartnerUser);
     }
 
 
     override ngOnInit() {
-        
+
     }
 
     partnerUserFormGroupInitFinish = () => {
@@ -72,6 +72,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         }) => {
             this.segmentations = segmentations;
             this.segmentationItemsFormArray = this.initFormArray(this.formGroup, segmentationItems, this.segmentationItemModel, this.segmentationItemsFormArrayIdentifier, this.segmentationItemsTranslationKey);
+            this._segmentationItemsFormArray.next(null);
             this.apiService.getCheckedSegmentationItemIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue().id).subscribe(ids => {
                 this.segmentationItemsFormArray.controls.forEach((formGroup: FormGroup) => {
                     formGroup.controls['checked'].setValue(ids.includes(formGroup.controls['id'].value));
@@ -82,11 +83,6 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         });
 
         this.setAlreadyFilledSegmentationIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue());
-    }
-
-    isAuthorizedForSaveMethod = async () => {
-        const currentPartnerUser = await firstValueFrom(this.authService.currentPartnerUser$);
-        return this.partnerUserFormGroup.getRawValue().id === currentPartnerUser.id;
     }
 
     // TODO FT: Return this inside save result also
@@ -102,6 +98,38 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         }
 
         return true;
+    }
+
+    authorizedForSaveObservable = (): Observable<boolean> => {
+        return combineLatest([this.authService.currentPartnerUser$, this._segmentationItemsFormArray]).pipe(
+            map(([currentPartnerUser]) => {
+                if (currentPartnerUser) {
+
+                    return this.partnerUserFormGroup.getRawValue().id === currentPartnerUser.id;
+                }
+
+                return false;
+            })
+        );
+    }
+
+    isAuthorizedForSaveChange = (event: IsAuthorizedForSaveEvent) => {
+        this.isAuthorizedForSave = event.isAuthorizedForSave;
+
+        if (this.segmentationItemsFormArray != null) {
+            if (event.isAuthorizedForSave === false) {
+                this.baseFormService.disableAllFormControls(this.segmentationItemsFormArray);
+            }
+            else{
+                this.baseFormService.enableAllFormControls(this.segmentationItemsFormArray);
+            }
+        }
+        
+        if (event.currentUserPermissionCodes.includes(BusinessPermissionCodes.UpdatePartner) === false &&
+            event.currentUserPermissionCodes.includes(BusinessPermissionCodes.UpdatePartnerUser) === false
+        ) {
+            this.partnerUserFormGroup.controls.points.disable();
+        }
     }
 
     override onBeforeSave = (): void => {

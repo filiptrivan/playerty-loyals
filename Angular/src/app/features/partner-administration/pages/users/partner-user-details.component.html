@@ -1,52 +1,46 @@
 <ng-container *transloco="let t">
-        <spider-panel [isFirstMultiplePanel]="true" >
-            <panel-header [title]="partnerUserFormGroup.controls.userDisplayName?.getRawValue()" icon="pi pi-user"></panel-header>
-    
-            <panel-body>
-                <form class="grid">
-                    <div class="col-12">
-                        <user-progressbar [partnerUser]="partnerUserFormGroup.getRawValue()" [tier]="partnerUserTier"></user-progressbar>
-                    </div>
-                </form>
-            </panel-body>
-    
-        </spider-panel>
+    <spider-panel [isFirstMultiplePanel]="true" >
+        <panel-header [title]="partnerUserFormGroup.controls.userDisplayName?.getRawValue()" icon="pi pi-user"></panel-header>
 
-        <spider-panel [isMiddleMultiplePanel]="true" [showPanelHeader]="false">
-            <panel-body>
-                <form class="grid">
-                    @for (segmentation of segmentations; track segmentation.id; let index = $index) {
-                        <div class="col-12">
-                            <div class="flex flex-column gap-2">
-                                <div>
-                                    {{segmentation.name}} <i *ngIf="showSegmentationFirstTimeFillIcon(segmentation)" class="pi pi-info-circle" style="margin-left: 5px; cursor: pointer;" [pTooltip]="firstTimeFillText" tabindex="-1" tooltipEvent="focus"></i>
-                                </div>
-                                <segmentation-select 
-                                [formGroup]="formGroup" 
-                                [partnerUserId]="partnerUserFormGroup.getRawValue().id" 
-                                [segmentation]="segmentation" 
-                                [allSegmentationItems]="segmentationItemsFormArray.getRawValue()" 
-                                [segmentationItemsFormArray]="segmentationItemsFormArray"
-                                [readonly]="!isAuthorizedForSave"
-                                ></segmentation-select>
-                            </div>
+        <panel-body>
+            <form class="grid">
+                <div class="col-12">
+                    <user-progressbar [partnerUser]="partnerUserFormGroup.getRawValue()" [tier]="partnerUserTier"></user-progressbar>
+                </div>
+            </form>
+        </panel-body>
+
+    </spider-panel>
+
+    <partner-user-base-details
+    [formGroup]="formGroup" 
+    [partnerUserFormGroup]="partnerUserFormGroup" 
+    (onSave)="onSave()" 
+    (onPartnerUserFormGroupInitFinish)="partnerUserFormGroupInitFinish()"
+    [isLastMultiplePanel]="true"
+    [showPanelHeader]="false"
+    [showReturnButton]="false"
+    [authorizedForSaveObservable]="authorizedForSaveObservable"
+    (onIsAuthorizedForSaveChange)="isAuthorizedForSaveChange($event)"
+    >
+        <ng-container AFTER>
+            @for (segmentation of segmentations; track segmentation.id; let index = $index) {
+                <div class="col-12">
+                    <div class="flex flex-column gap-2">
+                        <div>
+                            {{segmentation.name}} <i *ngIf="showSegmentationFirstTimeFillIcon(segmentation)" class="pi pi-info-circle" style="margin-left: 5px; cursor: pointer;" [pTooltip]="firstTimeFillText" tabindex="-1" tooltipEvent="focus"></i>
                         </div>
-                    }
-                </form>
-            </panel-body>
-    
-        </spider-panel>
-
-        <partner-user-base-details
-        [formGroup]="formGroup" 
-        [partnerUserFormGroup]="partnerUserFormGroup" 
-        (onSave)="onSave()" 
-        (onPartnerUserFormGroupInitFinish)="partnerUserFormGroupInitFinish()"
-        [isAuthorizedForSave]="isAuthorizedForSave"
-        [isLastMultiplePanel]="true"
-        [showPanelHeader]="false"
-        [onBeforeIsAuthorizedForSaveAssigned]="isAuthorizedForSaveMethod"
-        (onIsAuthorizedForSaveChange)="isAuthorizedForSave = $event"
-        ></partner-user-base-details>
+                        <segmentation-select 
+                        [formGroup]="formGroup" 
+                        [partnerUserId]="partnerUserFormGroup.getRawValue().id" 
+                        [segmentation]="segmentation" 
+                        [allSegmentationItems]="segmentationItemsFormArray.getRawValue()" 
+                        [segmentationItemsFormArray]="segmentationItemsFormArray"
+                        ></segmentation-select>
+                    </div>
+                </div>
+            }
+        </ng-container>
+    </partner-user-base-details>
 
 </ng-container>

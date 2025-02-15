@@ -51,7 +51,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         [AuthGuard]
         public async Task<TierDTO> GetTierForCurrentPartnerUser()
         {
-            return await _partnerUserAuthenticationService.GetTierDTOForCurrentPartnerUser();
+            return await _loyalsBusinessService.GetTierDTOForCurrentPartnerUser();
         }
 
         [HttpGet]

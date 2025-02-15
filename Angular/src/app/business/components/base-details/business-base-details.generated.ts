@@ -7,10 +7,10 @@ import { ApiService } from '../../services/api/api.service';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { ActivatedRoute } from '@angular/router';
-import { firstValueFrom, forkJoin, Observable } from 'rxjs';
+import { combineLatest, firstValueFrom, forkJoin, map, Observable, of, Subscription } from 'rxjs';
 import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../services/auth/auth.service';
-import { PrimengModule, SpiderControlsModule, CardSkeletonComponent, IndexCardComponent, SpiderDataTableComponent, SpiderFormArray, BaseEntity, LastMenuIconIndexClicked, SpiderFormGroup, SpiderButton, nameof, BaseFormService, getControl, Column, TableFilter, LazyLoadSelectedIdsResult, AllClickEvent, SpiderFileSelectEvent, getPrimengDropdownNamebookOptions, PrimengOption, SpiderFormControl, getPrimengAutocompleteNamebookOptions } from '@playerty/spider';
+import { PrimengModule, SpiderControlsModule, CardSkeletonComponent, IndexCardComponent, IsAuthorizedForSaveEvent, SpiderDataTableComponent, SpiderFormArray, BaseEntity, LastMenuIconIndexClicked, SpiderFormGroup, SpiderButton, nameof, BaseFormService, getControl, Column, TableFilter, LazyLoadSelectedIdsResult, AllClickEvent, SpiderFileSelectEvent, getPrimengDropdownNamebookOptions, PrimengOption, SpiderFormControl, getPrimengAutocompleteNamebookOptions } from '@playerty/spider';
 import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, BusinessSystemUpdatePointsDataBody, ExcelManualUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerUserSaveBody, Product, SegmentationItem, TierSaveBody, UpdatePoints, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUser, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRoleSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserExtendedSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
 
 @Component({
@@ -23,21 +23,23 @@ import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, Busi
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
-                    <div class="col-12 md:col-6">
+                    <ng-content select="[BEFORE]"></ng-content>
+                    <div *ngIf="showNameForBusinessSystem" class="col-12 md:col-6">
                         <spider-textbox [control]="control('name', businessSystemFormGroup)"></spider-textbox>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div *ngIf="showGetTransactionsEndpointForBusinessSystem" class="col-12 md:col-6">
                         <spider-textbox [control]="control('getTransactionsEndpoint', businessSystemFormGroup)"></spider-textbox>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div *ngIf="showGetDiscountProductGroupsEndpointForBusinessSystem" class="col-12 md:col-6">
                         <spider-textbox [control]="control('getDiscountProductGroupsEndpoint', businessSystemFormGroup)"></spider-textbox>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div *ngIf="showCreateUserEndpointForBusinessSystem" class="col-12 md:col-6">
                         <spider-textbox [control]="control('createUserEndpoint', businessSystemFormGroup)"></spider-textbox>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div *ngIf="showUpdateUserGroupEndpointForBusinessSystem" class="col-12 md:col-6">
                         <spider-textbox [control]="control('updateUserGroupEndpoint', businessSystemFormGroup)"></spider-textbox>
                     </div>
+                    <ng-content select="[AFTER]"></ng-content>
                 </form>
             } @placeholder {
                 <card-skeleton [height]="502"></card-skeleton>
@@ -45,11 +47,11 @@ import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, Busi
         </panel-body>
 
         <panel-footer>
-            <spider-button *ngIf="isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
                 <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
-            <spider-return-button></spider-return-button>
+            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
         </panel-footer>
     </spider-panel>
 </ng-container>
@@ -78,8 +80,11 @@ export class BusinessSystemBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
-    @Input() isAuthorizedForSave: boolean = false;
-    @Output() onIsAuthorizedForSaveChange = new EventEmitter<boolean>(); 
+    @Input() showReturnButton: boolean = true;
+    authorizationForSaveSubscription: Subscription;
+    @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
+    isAuthorizedForSave: boolean = false;
+    @Output() onIsAuthorizedForSaveChange = new EventEmitter<IsAuthorizedForSaveEvent>(); 
 
     modelId: number;
     loading: boolean = true;
@@ -94,6 +99,13 @@ export class BusinessSystemBaseDetailsComponent {
 
 
 
+
+
+    @Input() showNameForBusinessSystem: boolean = true;
+    @Input() showGetTransactionsEndpointForBusinessSystem: boolean = true;
+    @Input() showGetDiscountProductGroupsEndpointForBusinessSystem: boolean = true;
+    @Input() showCreateUserEndpointForBusinessSystem: boolean = true;
+    @Input() showUpdateUserGroupEndpointForBusinessSystem: boolean = true;
 
 
     constructor(
@@ -158,27 +170,45 @@ export class BusinessSystemBaseDetailsComponent {
 
         this.onBusinessSystemFormGroupInitFinish.next();
 
-        this.authService.currentUserPermissionCodes$.subscribe(currentUserPermissionCodes => {
-            // FT: On logout currentUserPermissionCodes become null
-            this.isAuthorizedForSave =
-
-				(currentUserPermissionCodes?.includes('InsertBusinessSystem') && this.modelId <= 0) || 
-				(currentUserPermissionCodes?.includes('UpdateBusinessSystem') && this.modelId > 0) ||
-				this.isAuthorizedForSave;
-
-            this.onIsAuthorizedForSaveChange.next(this.isAuthorizedForSave); 
-
-            if (!this.isAuthorizedForSave) {
-                this.businessSystemFormGroup.controls.name.disable();
-                this.businessSystemFormGroup.controls.getTransactionsEndpoint.disable();
-                this.businessSystemFormGroup.controls.getDiscountProductGroupsEndpoint.disable();
-                this.businessSystemFormGroup.controls.createUserEndpoint.disable();
-                this.businessSystemFormGroup.controls.updateUserGroupEndpoint.disable();
-
-            }
-        });
+        this.authorizationForSaveSubscription = this.handleAuthorizationForSave().subscribe();
 
         this.loading = false;
+    }
+
+    handleAuthorizationForSave = () => {
+        return combineLatest([this.authService.currentUserPermissionCodes$, this.authorizedForSaveObservable()]).pipe(
+            map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
+                if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
+                    this.isAuthorizedForSave =
+
+                        (currentUserPermissionCodes.includes('InsertPartnerUser') && this.modelId <= 0) || 
+                        (currentUserPermissionCodes.includes('UpdatePartnerUser') && this.modelId > 0) ||
+                        isAuthorizedForSave;
+
+                    if (this.isAuthorizedForSave) { 
+                        this.businessSystemFormGroup.controls.name.enable();
+                        this.businessSystemFormGroup.controls.getTransactionsEndpoint.enable();
+                        this.businessSystemFormGroup.controls.getDiscountProductGroupsEndpoint.enable();
+                        this.businessSystemFormGroup.controls.createUserEndpoint.enable();
+                        this.businessSystemFormGroup.controls.updateUserGroupEndpoint.enable();
+
+                    }
+                    else{
+                        this.businessSystemFormGroup.controls.name.disable();
+                        this.businessSystemFormGroup.controls.getTransactionsEndpoint.disable();
+                        this.businessSystemFormGroup.controls.getDiscountProductGroupsEndpoint.disable();
+                        this.businessSystemFormGroup.controls.createUserEndpoint.disable();
+                        this.businessSystemFormGroup.controls.updateUserGroupEndpoint.disable();
+
+                    }
+
+                    this.onIsAuthorizedForSaveChange.next(new IsAuthorizedForSaveEvent({
+                        isAuthorizedForSave: this.isAuthorizedForSave, 
+                        currentUserPermissionCodes: currentUserPermissionCodes
+                    })); 
+                }
+            })
+        );
     }
 
 
@@ -203,6 +233,12 @@ export class BusinessSystemBaseDetailsComponent {
         this.onSave.next();
     }
 
+	ngOnDestroy(){
+        if (this.authorizationForSaveSubscription) {
+            this.authorizationForSaveSubscription.unsubscribe();
+        }
+    }
+
 }
 
 @Component({
@@ -215,16 +251,17 @@ export class BusinessSystemBaseDetailsComponent {
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
-                    <div class="col-12">
+                    <ng-content select="[BEFORE]"></ng-content>
+                    <div *ngIf="showTitleForNotification" class="col-12">
                         <spider-textbox [control]="control('title', notificationFormGroup)"></spider-textbox>
                     </div>
-                    <div class="col-12">
+                    <div *ngIf="showDescriptionForNotification" class="col-12">
                         <spider-textarea [control]="control('description', notificationFormGroup)"></spider-textarea>
                     </div>
-                    <div class="col-12">
+                    <div *ngIf="showEmailBodyForNotification" class="col-12">
                         <spider-editor [control]="control('emailBody', notificationFormGroup)"></spider-editor>
                     </div>
-                    <div class="col-12">
+                    <div *ngIf="showRecipientsForNotification" class="col-12">
                         <spider-data-table 
                             [tableTitle]="t('RecipientsForNotification')" 
                             [cols]="recipientsTableColsForNotification" 
@@ -240,6 +277,7 @@ export class BusinessSystemBaseDetailsComponent {
                             [selectedLazyLoadObservableMethod]="selectedRecipientsLazyLoadMethodForNotification" 
                             (onIsAllSelectedChange)="areAllRecipientsSelectedChangeForNotification($event)"></spider-data-table>
                     </div>
+                    <ng-content select="[AFTER]"></ng-content>
                 </form>
             } @placeholder {
                 <card-skeleton [height]="502"></card-skeleton>
@@ -247,11 +285,11 @@ export class BusinessSystemBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <spider-button *ngIf="isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
                 <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
-            <spider-return-button></spider-return-button>
+            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
         </panel-footer>
     </spider-panel>
 </ng-container>
@@ -280,8 +318,11 @@ export class NotificationBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
-    @Input() isAuthorizedForSave: boolean = false;
-    @Output() onIsAuthorizedForSaveChange = new EventEmitter<boolean>(); 
+    @Input() showReturnButton: boolean = true;
+    authorizationForSaveSubscription: Subscription;
+    @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
+    isAuthorizedForSave: boolean = false;
+    @Output() onIsAuthorizedForSaveChange = new EventEmitter<IsAuthorizedForSaveEvent>(); 
 
     modelId: number;
     loading: boolean = true;
@@ -303,6 +344,12 @@ export class NotificationBaseDetailsComponent {
     unselectedRecipientsIdsForNotification: number[] = [];
     areAllRecipientsSelectedForNotification: boolean = null;
     lastRecipientsLazyLoadTableFilterForNotification: TableFilter;
+
+    @Input() showTitleForNotification: boolean = true;
+    @Input() showDescriptionForNotification: boolean = true;
+    @Input() showEmailBodyForNotification: boolean = true;
+    @Input() showRecipientsForNotification: boolean = true;
+
 
     constructor(
         private apiService: ApiService,
@@ -372,25 +419,41 @@ export class NotificationBaseDetailsComponent {
 
         this.onNotificationFormGroupInitFinish.next();
 
-        this.authService.currentUserPermissionCodes$.subscribe(currentUserPermissionCodes => {
-            // FT: On logout currentUserPermissionCodes become null
-            this.isAuthorizedForSave =
-
-				(currentUserPermissionCodes?.includes('InsertNotification') && this.modelId <= 0) || 
-				(currentUserPermissionCodes?.includes('UpdateNotification') && this.modelId > 0) ||
-				this.isAuthorizedForSave;
-
-            this.onIsAuthorizedForSaveChange.next(this.isAuthorizedForSave); 
-
-            if (!this.isAuthorizedForSave) {
-                this.notificationFormGroup.controls.title.disable();
-                this.notificationFormGroup.controls.description.disable();
-                this.notificationFormGroup.controls.emailBody.disable();
-
-            }
-        });
+        this.authorizationForSaveSubscription = this.handleAuthorizationForSave().subscribe();
 
         this.loading = false;
+    }
+
+    handleAuthorizationForSave = () => {
+        return combineLatest([this.authService.currentUserPermissionCodes$, this.authorizedForSaveObservable()]).pipe(
+            map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
+                if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
+                    this.isAuthorizedForSave =
+
+                        (currentUserPermissionCodes.includes('InsertPartnerUser') && this.modelId <= 0) || 
+                        (currentUserPermissionCodes.includes('UpdatePartnerUser') && this.modelId > 0) ||
+                        isAuthorizedForSave;
+
+                    if (this.isAuthorizedForSave) { 
+                        this.notificationFormGroup.controls.title.enable();
+                        this.notificationFormGroup.controls.description.enable();
+                        this.notificationFormGroup.controls.emailBody.enable();
+
+                    }
+                    else{
+                        this.notificationFormGroup.controls.title.disable();
+                        this.notificationFormGroup.controls.description.disable();
+                        this.notificationFormGroup.controls.emailBody.disable();
+
+                    }
+
+                    this.onIsAuthorizedForSaveChange.next(new IsAuthorizedForSaveEvent({
+                        isAuthorizedForSave: this.isAuthorizedForSave, 
+                        currentUserPermissionCodes: currentUserPermissionCodes
+                    })); 
+                }
+            })
+        );
     }
 
 
@@ -426,6 +489,12 @@ export class NotificationBaseDetailsComponent {
         this.onSave.next();
     }
 
+	ngOnDestroy(){
+        if (this.authorizationForSaveSubscription) {
+            this.authorizationForSaveSubscription.unsubscribe();
+        }
+    }
+
 }
 
 @Component({
@@ -438,27 +507,29 @@ export class NotificationBaseDetailsComponent {
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
-                    <div class="col-12">
+                    <ng-content select="[BEFORE]"></ng-content>
+                    <div *ngIf="showLogoImageForPartner" class="col-12">
                         <spider-file [control]="control('logoImage', partnerFormGroup)" [fileData]="partnerFormGroup.controls.logoImageData.getRawValue()" [objectId]="partnerFormGroup.controls.id.getRawValue()" (onSelectedFile)="uploadLogoImageForPartner($event)"></spider-file>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div *ngIf="showNameForPartner" class="col-12 md:col-6">
                         <spider-textbox [control]="control('name', partnerFormGroup)"></spider-textbox>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div *ngIf="showEmailForPartner" class="col-12 md:col-6">
                         <spider-textbox [control]="control('email', partnerFormGroup)"></spider-textbox>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div *ngIf="showSlugForPartner" class="col-12 md:col-6">
                         <spider-textbox [control]="control('slug', partnerFormGroup)"></spider-textbox>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div *ngIf="showPrimaryColorForPartner" class="col-12 md:col-6">
                         <spider-colorpick [control]="control('primaryColor', partnerFormGroup)"></spider-colorpick>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div *ngIf="showProductsRecommendationEndpointForPartner" class="col-12 md:col-6">
                         <spider-textbox [control]="control('productsRecommendationEndpoint', partnerFormGroup)"></spider-textbox>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div *ngIf="showPointsMultiplierForPartner" class="col-12 md:col-6">
                         <spider-number [control]="control('pointsMultiplier', partnerFormGroup)" [decimal]="true" [maxFractionDigits]=" 2"></spider-number>
                     </div>
+                    <ng-content select="[AFTER]"></ng-content>
                 </form>
             } @placeholder {
                 <card-skeleton [height]="502"></card-skeleton>
@@ -466,11 +537,11 @@ export class NotificationBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <spider-button *ngIf="isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
                 <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
-            <spider-return-button></spider-return-button>
+            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
         </panel-footer>
     </spider-panel>
 </ng-container>
@@ -499,8 +570,11 @@ export class PartnerBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
-    @Input() isAuthorizedForSave: boolean = false;
-    @Output() onIsAuthorizedForSaveChange = new EventEmitter<boolean>(); 
+    @Input() showReturnButton: boolean = true;
+    authorizationForSaveSubscription: Subscription;
+    @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
+    isAuthorizedForSave: boolean = false;
+    @Output() onIsAuthorizedForSaveChange = new EventEmitter<IsAuthorizedForSaveEvent>(); 
 
     modelId: number;
     loading: boolean = true;
@@ -515,6 +589,15 @@ export class PartnerBaseDetailsComponent {
 
 
 
+
+
+    @Input() showLogoImageForPartner: boolean = true;
+    @Input() showNameForPartner: boolean = true;
+    @Input() showEmailForPartner: boolean = true;
+    @Input() showSlugForPartner: boolean = true;
+    @Input() showPrimaryColorForPartner: boolean = true;
+    @Input() showProductsRecommendationEndpointForPartner: boolean = true;
+    @Input() showPointsMultiplierForPartner: boolean = true;
 
 
     constructor(
@@ -579,29 +662,49 @@ export class PartnerBaseDetailsComponent {
 
         this.onPartnerFormGroupInitFinish.next();
 
-        this.authService.currentUserPermissionCodes$.subscribe(currentUserPermissionCodes => {
-            // FT: On logout currentUserPermissionCodes become null
-            this.isAuthorizedForSave =
-
-				(currentUserPermissionCodes?.includes('InsertPartner') && this.modelId <= 0) || 
-				(currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId > 0) ||
-				this.isAuthorizedForSave;
-
-            this.onIsAuthorizedForSaveChange.next(this.isAuthorizedForSave); 
-
-            if (!this.isAuthorizedForSave) {
-                this.partnerFormGroup.controls.logoImage.disable();
-                this.partnerFormGroup.controls.name.disable();
-                this.partnerFormGroup.controls.email.disable();
-                this.partnerFormGroup.controls.slug.disable();
-                this.partnerFormGroup.controls.primaryColor.disable();
-                this.partnerFormGroup.controls.productsRecommendationEndpoint.disable();
-                this.partnerFormGroup.controls.pointsMultiplier.disable();
-
-            }
-        });
+        this.authorizationForSaveSubscription = this.handleAuthorizationForSave().subscribe();
 
         this.loading = false;
+    }
+
+    handleAuthorizationForSave = () => {
+        return combineLatest([this.authService.currentUserPermissionCodes$, this.authorizedForSaveObservable()]).pipe(
+            map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
+                if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
+                    this.isAuthorizedForSave =
+
+                        (currentUserPermissionCodes.includes('InsertPartnerUser') && this.modelId <= 0) || 
+                        (currentUserPermissionCodes.includes('UpdatePartnerUser') && this.modelId > 0) ||
+                        isAuthorizedForSave;
+
+                    if (this.isAuthorizedForSave) { 
+                        this.partnerFormGroup.controls.logoImage.enable();
+                        this.partnerFormGroup.controls.name.enable();
+                        this.partnerFormGroup.controls.email.enable();
+                        this.partnerFormGroup.controls.slug.enable();
+                        this.partnerFormGroup.controls.primaryColor.enable();
+                        this.partnerFormGroup.controls.productsRecommendationEndpoint.enable();
+                        this.partnerFormGroup.controls.pointsMultiplier.enable();
+
+                    }
+                    else{
+                        this.partnerFormGroup.controls.logoImage.disable();
+                        this.partnerFormGroup.controls.name.disable();
+                        this.partnerFormGroup.controls.email.disable();
+                        this.partnerFormGroup.controls.slug.disable();
+                        this.partnerFormGroup.controls.primaryColor.disable();
+                        this.partnerFormGroup.controls.productsRecommendationEndpoint.disable();
+                        this.partnerFormGroup.controls.pointsMultiplier.disable();
+
+                    }
+
+                    this.onIsAuthorizedForSaveChange.next(new IsAuthorizedForSaveEvent({
+                        isAuthorizedForSave: this.isAuthorizedForSave, 
+                        currentUserPermissionCodes: currentUserPermissionCodes
+                    })); 
+                }
+            })
+        );
     }
 
 
@@ -630,6 +733,12 @@ export class PartnerBaseDetailsComponent {
         this.onSave.next();
     }
 
+	ngOnDestroy(){
+        if (this.authorizationForSaveSubscription) {
+            this.authorizationForSaveSubscription.unsubscribe();
+        }
+    }
+
 }
 
 @Component({
@@ -642,16 +751,17 @@ export class PartnerBaseDetailsComponent {
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
-                    <div class="col-12">
+                    <ng-content select="[BEFORE]"></ng-content>
+                    <div *ngIf="showTitleForPartnerNotification" class="col-12">
                         <spider-textbox [control]="control('title', partnerNotificationFormGroup)"></spider-textbox>
                     </div>
-                    <div class="col-12">
+                    <div *ngIf="showDescriptionForPartnerNotification" class="col-12">
                         <spider-textarea [control]="control('description', partnerNotificationFormGroup)"></spider-textarea>
                     </div>
-                    <div class="col-12">
+                    <div *ngIf="showEmailBodyForPartnerNotification" class="col-12">
                         <spider-editor [control]="control('emailBody', partnerNotificationFormGroup)"></spider-editor>
                     </div>
-                    <div class="col-12">
+                    <div *ngIf="showRecipientsForPartnerNotification" class="col-12">
                         <spider-data-table 
                             [tableTitle]="t('RecipientsForPartnerNotification')" 
                             [cols]="recipientsTableColsForPartnerNotification" 
@@ -667,6 +777,7 @@ export class PartnerBaseDetailsComponent {
                             [selectedLazyLoadObservableMethod]="selectedRecipientsLazyLoadMethodForPartnerNotification" 
                             (onIsAllSelectedChange)="areAllRecipientsSelectedChangeForPartnerNotification($event)"></spider-data-table>
                     </div>
+                    <ng-content select="[AFTER]"></ng-content>
                 </form>
             } @placeholder {
                 <card-skeleton [height]="502"></card-skeleton>
@@ -674,11 +785,11 @@ export class PartnerBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <spider-button *ngIf="isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
                 <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
-            <spider-return-button></spider-return-button>
+            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
         </panel-footer>
     </spider-panel>
 </ng-container>
@@ -707,8 +818,11 @@ export class PartnerNotificationBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
-    @Input() isAuthorizedForSave: boolean = false;
-    @Output() onIsAuthorizedForSaveChange = new EventEmitter<boolean>(); 
+    @Input() showReturnButton: boolean = true;
+    authorizationForSaveSubscription: Subscription;
+    @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
+    isAuthorizedForSave: boolean = false;
+    @Output() onIsAuthorizedForSaveChange = new EventEmitter<IsAuthorizedForSaveEvent>(); 
 
     modelId: number;
     loading: boolean = true;
@@ -730,6 +844,12 @@ export class PartnerNotificationBaseDetailsComponent {
     unselectedRecipientsIdsForPartnerNotification: number[] = [];
     areAllRecipientsSelectedForPartnerNotification: boolean = null;
     lastRecipientsLazyLoadTableFilterForPartnerNotification: TableFilter;
+
+    @Input() showTitleForPartnerNotification: boolean = true;
+    @Input() showDescriptionForPartnerNotification: boolean = true;
+    @Input() showEmailBodyForPartnerNotification: boolean = true;
+    @Input() showRecipientsForPartnerNotification: boolean = true;
+
 
     constructor(
         private apiService: ApiService,
@@ -802,27 +922,43 @@ export class PartnerNotificationBaseDetailsComponent {
 
         this.onPartnerNotificationFormGroupInitFinish.next();
 
-        this.authService.currentUserPermissionCodes$.subscribe(currentUserPermissionCodes => {
-            // FT: On logout currentUserPermissionCodes become null
-            this.isAuthorizedForSave =
+        this.authorizationForSaveSubscription = this.handleAuthorizationForSave().subscribe();
+
+        this.loading = false;
+    }
+
+    handleAuthorizationForSave = () => {
+        return combineLatest([this.authService.currentUserPermissionCodes$, this.authorizedForSaveObservable()]).pipe(
+            map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
+                if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
+                    this.isAuthorizedForSave =
                 (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId <= 0) || 
                 (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId > 0) || 
 
-				(currentUserPermissionCodes?.includes('InsertPartnerNotification') && this.modelId <= 0) || 
-				(currentUserPermissionCodes?.includes('UpdatePartnerNotification') && this.modelId > 0) ||
-				this.isAuthorizedForSave;
+                        (currentUserPermissionCodes.includes('InsertPartnerUser') && this.modelId <= 0) || 
+                        (currentUserPermissionCodes.includes('UpdatePartnerUser') && this.modelId > 0) ||
+                        isAuthorizedForSave;
 
-            this.onIsAuthorizedForSaveChange.next(this.isAuthorizedForSave); 
+                    if (this.isAuthorizedForSave) { 
+                        this.partnerNotificationFormGroup.controls.title.enable();
+                        this.partnerNotificationFormGroup.controls.description.enable();
+                        this.partnerNotificationFormGroup.controls.emailBody.enable();
 
-            if (!this.isAuthorizedForSave) {
-                this.partnerNotificationFormGroup.controls.title.disable();
-                this.partnerNotificationFormGroup.controls.description.disable();
-                this.partnerNotificationFormGroup.controls.emailBody.disable();
+                    }
+                    else{
+                        this.partnerNotificationFormGroup.controls.title.disable();
+                        this.partnerNotificationFormGroup.controls.description.disable();
+                        this.partnerNotificationFormGroup.controls.emailBody.disable();
 
-            }
-        });
+                    }
 
-        this.loading = false;
+                    this.onIsAuthorizedForSaveChange.next(new IsAuthorizedForSaveEvent({
+                        isAuthorizedForSave: this.isAuthorizedForSave, 
+                        currentUserPermissionCodes: currentUserPermissionCodes
+                    })); 
+                }
+            })
+        );
     }
 
 
@@ -858,6 +994,12 @@ export class PartnerNotificationBaseDetailsComponent {
         this.onSave.next();
     }
 
+	ngOnDestroy(){
+        if (this.authorizationForSaveSubscription) {
+            this.authorizationForSaveSubscription.unsubscribe();
+        }
+    }
+
 }
 
 @Component({
@@ -870,18 +1012,20 @@ export class PartnerNotificationBaseDetailsComponent {
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
-                    <div class="col-12">
+                    <ng-content select="[BEFORE]"></ng-content>
+                    <div *ngIf="showNameForPartnerRole" class="col-12">
                         <spider-textbox [control]="control('name', partnerRoleFormGroup)"></spider-textbox>
                     </div>
-                    <div class="col-12">
+                    <div *ngIf="showPartnerUsersForPartnerRole" class="col-12">
                         <spider-multiautocomplete [control]="selectedPartnerUsersForPartnerRole" [options]="partnerUsersOptionsForPartnerRole" (onTextInput)="searchPartnerUsersForPartnerRole($event)" [label]="t('PartnerUsers')"></spider-multiautocomplete>
                     </div>
-                    <div class="col-12">
+                    <div *ngIf="showPartnerPermissionsForPartnerRole" class="col-12">
                         <spider-multiselect [control]="selectedPartnerPermissionsForPartnerRole" [options]="partnerPermissionsOptionsForPartnerRole" [label]="t('PartnerPermissions')"></spider-multiselect>
                     </div>
-                    <div class="col-12">
+                    <div *ngIf="showDescriptionForPartnerRole" class="col-12">
                         <spider-textarea [control]="control('description', partnerRoleFormGroup)"></spider-textarea>
                     </div>
+                    <ng-content select="[AFTER]"></ng-content>
                 </form>
             } @placeholder {
                 <card-skeleton [height]="502"></card-skeleton>
@@ -889,11 +1033,11 @@ export class PartnerNotificationBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <spider-button *ngIf="isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
                 <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
-            <spider-return-button></spider-return-button>
+            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
         </panel-footer>
     </spider-panel>
 </ng-container>
@@ -922,8 +1066,11 @@ export class PartnerRoleBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
-    @Input() isAuthorizedForSave: boolean = false;
-    @Output() onIsAuthorizedForSaveChange = new EventEmitter<boolean>(); 
+    @Input() showReturnButton: boolean = true;
+    authorizationForSaveSubscription: Subscription;
+    @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
+    isAuthorizedForSave: boolean = false;
+    @Output() onIsAuthorizedForSaveChange = new EventEmitter<IsAuthorizedForSaveEvent>(); 
 
     modelId: number;
     loading: boolean = true;
@@ -940,6 +1087,12 @@ export class PartnerRoleBaseDetailsComponent {
     selectedPartnerUsersForPartnerRole = new SpiderFormControl<PrimengOption[]>(null, {updateOn: 'change'});
     selectedPartnerPermissionsForPartnerRole = new SpiderFormControl<number[]>(null, {updateOn: 'change'});
 
+
+
+    @Input() showNameForPartnerRole: boolean = true;
+    @Input() showPartnerUsersForPartnerRole: boolean = true;
+    @Input() showPartnerPermissionsForPartnerRole: boolean = true;
+    @Input() showDescriptionForPartnerRole: boolean = true;
 
 
     constructor(
@@ -1011,26 +1164,43 @@ export class PartnerRoleBaseDetailsComponent {
 
         this.onPartnerRoleFormGroupInitFinish.next();
 
-        this.authService.currentUserPermissionCodes$.subscribe(currentUserPermissionCodes => {
-            // FT: On logout currentUserPermissionCodes become null
-            this.isAuthorizedForSave =
-
-				(currentUserPermissionCodes?.includes('InsertPartnerRole') && this.modelId <= 0) || 
-				(currentUserPermissionCodes?.includes('UpdatePartnerRole') && this.modelId > 0) ||
-				this.isAuthorizedForSave;
-
-            this.onIsAuthorizedForSaveChange.next(this.isAuthorizedForSave); 
-
-            if (!this.isAuthorizedForSave) {
-                this.partnerRoleFormGroup.controls.name.disable();
-                this.selectedPartnerUsersForPartnerRole.disable();
-                this.selectedPartnerPermissionsForPartnerRole.disable();
-                this.partnerRoleFormGroup.controls.description.disable();
-
-            }
-        });
+        this.authorizationForSaveSubscription = this.handleAuthorizationForSave().subscribe();
 
         this.loading = false;
+    }
+
+    handleAuthorizationForSave = () => {
+        return combineLatest([this.authService.currentUserPermissionCodes$, this.authorizedForSaveObservable()]).pipe(
+            map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
+                if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
+                    this.isAuthorizedForSave =
+
+                        (currentUserPermissionCodes.includes('InsertPartnerUser') && this.modelId <= 0) || 
+                        (currentUserPermissionCodes.includes('UpdatePartnerUser') && this.modelId > 0) ||
+                        isAuthorizedForSave;
+
+                    if (this.isAuthorizedForSave) { 
+                        this.partnerRoleFormGroup.controls.name.enable();
+                        this.selectedPartnerUsersForPartnerRole.enable();
+                        this.selectedPartnerPermissionsForPartnerRole.enable();
+                        this.partnerRoleFormGroup.controls.description.enable();
+
+                    }
+                    else{
+                        this.partnerRoleFormGroup.controls.name.disable();
+                        this.selectedPartnerUsersForPartnerRole.disable();
+                        this.selectedPartnerPermissionsForPartnerRole.disable();
+                        this.partnerRoleFormGroup.controls.description.disable();
+
+                    }
+
+                    this.onIsAuthorizedForSaveChange.next(new IsAuthorizedForSaveEvent({
+                        isAuthorizedForSave: this.isAuthorizedForSave, 
+                        currentUserPermissionCodes: currentUserPermissionCodes
+                    })); 
+                }
+            })
+        );
     }
 
 
@@ -1059,6 +1229,12 @@ export class PartnerRoleBaseDetailsComponent {
         this.onSave.next();
     }
 
+	ngOnDestroy(){
+        if (this.authorizationForSaveSubscription) {
+            this.authorizationForSaveSubscription.unsubscribe();
+        }
+    }
+
 }
 
 @Component({
@@ -1071,9 +1247,11 @@ export class PartnerRoleBaseDetailsComponent {
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
-                    <div class="col-12">
+                    <ng-content select="[BEFORE]"></ng-content>
+                    <div *ngIf="showPointsForPartnerUser" class="col-12">
                         <spider-number [control]="control('points', partnerUserFormGroup)"></spider-number>
                     </div>
+                    <ng-content select="[AFTER]"></ng-content>
                 </form>
             } @placeholder {
                 <card-skeleton [height]="502"></card-skeleton>
@@ -1081,11 +1259,11 @@ export class PartnerRoleBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <spider-button *ngIf="isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
                 <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
-            <spider-return-button></spider-return-button>
+            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
         </panel-footer>
     </spider-panel>
 </ng-container>
@@ -1114,8 +1292,11 @@ export class PartnerUserBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
-    @Input() isAuthorizedForSave: boolean = false;
-    @Output() onIsAuthorizedForSaveChange = new EventEmitter<boolean>(); 
+    @Input() showReturnButton: boolean = true;
+    authorizationForSaveSubscription: Subscription;
+    @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
+    isAuthorizedForSave: boolean = false;
+    @Output() onIsAuthorizedForSaveChange = new EventEmitter<IsAuthorizedForSaveEvent>(); 
 
     modelId: number;
     loading: boolean = true;
@@ -1130,6 +1311,9 @@ export class PartnerUserBaseDetailsComponent {
 
 
 
+
+
+    @Input() showPointsForPartnerUser: boolean = true;
 
 
     constructor(
@@ -1194,23 +1378,37 @@ export class PartnerUserBaseDetailsComponent {
 
         this.onPartnerUserFormGroupInitFinish.next();
 
-        this.authService.currentUserPermissionCodes$.subscribe(currentUserPermissionCodes => {
-            // FT: On logout currentUserPermissionCodes become null
-            this.isAuthorizedForSave =
-
-				(currentUserPermissionCodes?.includes('InsertPartnerUser') && this.modelId <= 0) || 
-				(currentUserPermissionCodes?.includes('UpdatePartnerUser') && this.modelId > 0) ||
-				this.isAuthorizedForSave;
-
-            this.onIsAuthorizedForSaveChange.next(this.isAuthorizedForSave); 
-
-            if (!this.isAuthorizedForSave) {
-                this.partnerUserFormGroup.controls.points.disable();
-
-            }
-        });
+        this.authorizationForSaveSubscription = this.handleAuthorizationForSave().subscribe();
 
         this.loading = false;
+    }
+
+    handleAuthorizationForSave = () => {
+        return combineLatest([this.authService.currentUserPermissionCodes$, this.authorizedForSaveObservable()]).pipe(
+            map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
+                if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
+                    this.isAuthorizedForSave =
+
+                        (currentUserPermissionCodes.includes('InsertPartnerUser') && this.modelId <= 0) || 
+                        (currentUserPermissionCodes.includes('UpdatePartnerUser') && this.modelId > 0) ||
+                        isAuthorizedForSave;
+
+                    if (this.isAuthorizedForSave) { 
+                        this.partnerUserFormGroup.controls.points.enable();
+
+                    }
+                    else{
+                        this.partnerUserFormGroup.controls.points.disable();
+
+                    }
+
+                    this.onIsAuthorizedForSaveChange.next(new IsAuthorizedForSaveEvent({
+                        isAuthorizedForSave: this.isAuthorizedForSave, 
+                        currentUserPermissionCodes: currentUserPermissionCodes
+                    })); 
+                }
+            })
+        );
     }
 
 
@@ -1235,6 +1433,12 @@ export class PartnerUserBaseDetailsComponent {
         this.onSave.next();
     }
 
+	ngOnDestroy(){
+        if (this.authorizationForSaveSubscription) {
+            this.authorizationForSaveSubscription.unsubscribe();
+        }
+    }
+
 }
 
 @Component({
@@ -1247,23 +1451,24 @@ export class PartnerUserBaseDetailsComponent {
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
-                    <div class="col-12 md:col-6">
+                    <ng-content select="[BEFORE]"></ng-content>
+                    <div *ngIf="showNameForSegmentation" class="col-12 md:col-6">
                         <spider-textbox [control]="control('name', segmentationFormGroup)"></spider-textbox>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div *ngIf="showPointsForTheFirstTimeFillForSegmentation" class="col-12 md:col-6">
                         <spider-number [control]="control('pointsForTheFirstTimeFill', segmentationFormGroup)"></spider-number>
                     </div>
-                    <div class="col-12">
+                    <div *ngIf="showDescriptionForSegmentation" class="col-12">
                         <spider-textarea [control]="control('description', segmentationFormGroup)"></spider-textarea>
                     </div>
-                 <div class="col-12">
+                 <div *ngIf="showSegmentationItemsForSegmentation" class="col-12">
                     <spider-panel>
                         <panel-header [title]="t('SegmentationItems')" icon="pi pi-list"></panel-header>
                         <panel-body [normalBottomPadding]="true">
                             @for (segmentationItemFormGroup of getFormArrayGroups(segmentationItemsFormArray); track segmentationItemFormGroup; let index = $index; let last = $last) {
                                 <index-card [index]="index" [last]="false" [crudMenu]="segmentationItemsCrudMenu" (onMenuIconClick)="segmentationItemsLastIndexClicked.index = $event">
                                     <form [formGroup]="segmentationItemFormGroup" class="grid">
-                    <div class="col-12">
+                    <div *ngIf="showNameForSegmentationItem" class="col-12">
                         <spider-textbox [control]="control('name', segmentationItemFormGroup)"></spider-textbox>
                     </div>
                                     </form>
@@ -1277,6 +1482,7 @@ export class PartnerUserBaseDetailsComponent {
                         </panel-body>
                     </spider-panel>
                 </div>       
+                    <ng-content select="[AFTER]"></ng-content>
                 </form>
             } @placeholder {
                 <card-skeleton [height]="502"></card-skeleton>
@@ -1284,11 +1490,11 @@ export class PartnerUserBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <spider-button *ngIf="isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
                 <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
-            <spider-return-button></spider-return-button>
+            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
         </panel-footer>
     </spider-panel>
 </ng-container>
@@ -1317,8 +1523,11 @@ export class SegmentationBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
-    @Input() isAuthorizedForSave: boolean = false;
-    @Output() onIsAuthorizedForSaveChange = new EventEmitter<boolean>(); 
+    @Input() showReturnButton: boolean = true;
+    authorizationForSaveSubscription: Subscription;
+    @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
+    isAuthorizedForSave: boolean = false;
+    @Output() onIsAuthorizedForSaveChange = new EventEmitter<IsAuthorizedForSaveEvent>(); 
 
     modelId: number;
     loading: boolean = true;
@@ -1338,6 +1547,13 @@ export class SegmentationBaseDetailsComponent {
 
 
 
+
+
+    @Input() showNameForSegmentation: boolean = true;
+    @Input() showPointsForTheFirstTimeFillForSegmentation: boolean = true;
+    @Input() showDescriptionForSegmentation: boolean = true;
+    @Input() showSegmentationItemsForSegmentation: boolean = true;
+    @Input() showNameForSegmentationItem: boolean = true;
 
 
     constructor(
@@ -1402,26 +1618,43 @@ export class SegmentationBaseDetailsComponent {
 
         this.onSegmentationFormGroupInitFinish.next();
 
-        this.authService.currentUserPermissionCodes$.subscribe(currentUserPermissionCodes => {
-            // FT: On logout currentUserPermissionCodes become null
-            this.isAuthorizedForSave =
-
-				(currentUserPermissionCodes?.includes('InsertSegmentation') && this.modelId <= 0) || 
-				(currentUserPermissionCodes?.includes('UpdateSegmentation') && this.modelId > 0) ||
-				this.isAuthorizedForSave;
-
-            this.onIsAuthorizedForSaveChange.next(this.isAuthorizedForSave); 
-
-            if (!this.isAuthorizedForSave) {
-                this.segmentationFormGroup.controls.name.disable();
-                this.segmentationFormGroup.controls.pointsForTheFirstTimeFill.disable();
-                this.segmentationFormGroup.controls.description.disable();
-                this.segmentationFormGroup.controls.name.disable();
-
-            }
-        });
+        this.authorizationForSaveSubscription = this.handleAuthorizationForSave().subscribe();
 
         this.loading = false;
+    }
+
+    handleAuthorizationForSave = () => {
+        return combineLatest([this.authService.currentUserPermissionCodes$, this.authorizedForSaveObservable()]).pipe(
+            map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
+                if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
+                    this.isAuthorizedForSave =
+
+                        (currentUserPermissionCodes.includes('InsertPartnerUser') && this.modelId <= 0) || 
+                        (currentUserPermissionCodes.includes('UpdatePartnerUser') && this.modelId > 0) ||
+                        isAuthorizedForSave;
+
+                    if (this.isAuthorizedForSave) { 
+                        this.segmentationFormGroup.controls.name.enable();
+                        this.segmentationFormGroup.controls.pointsForTheFirstTimeFill.enable();
+                        this.segmentationFormGroup.controls.description.enable();
+                        this.segmentationFormGroup.controls.name.enable();
+
+                    }
+                    else{
+                        this.segmentationFormGroup.controls.name.disable();
+                        this.segmentationFormGroup.controls.pointsForTheFirstTimeFill.disable();
+                        this.segmentationFormGroup.controls.description.disable();
+                        this.segmentationFormGroup.controls.name.disable();
+
+                    }
+
+                    this.onIsAuthorizedForSaveChange.next(new IsAuthorizedForSaveEvent({
+                        isAuthorizedForSave: this.isAuthorizedForSave, 
+                        currentUserPermissionCodes: currentUserPermissionCodes
+                    })); 
+                }
+            })
+        );
     }
 
     initSegmentationItemsFormArray(segmentationItems: SegmentationItem[]){
@@ -1463,6 +1696,12 @@ export class SegmentationBaseDetailsComponent {
         this.onSave.next();
     }
 
+	ngOnDestroy(){
+        if (this.authorizationForSaveSubscription) {
+            this.authorizationForSaveSubscription.unsubscribe();
+        }
+    }
+
 }
 
 @Component({
@@ -1475,18 +1714,20 @@ export class SegmentationBaseDetailsComponent {
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
-                    <div class="col-12 md:col-6">
+                    <ng-content select="[BEFORE]"></ng-content>
+                    <div *ngIf="showNameForTier" class="col-12 md:col-6">
                         <spider-textbox [control]="control('name', tierFormGroup)"></spider-textbox>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div *ngIf="showDescriptionForTier" class="col-12 md:col-6">
                         <spider-textbox [control]="control('description', tierFormGroup)"></spider-textbox>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div *ngIf="showValidFromForTier" class="col-12 md:col-6">
                         <spider-number [control]="control('validFrom', tierFormGroup)"></spider-number>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div *ngIf="showValidToForTier" class="col-12 md:col-6">
                         <spider-number [control]="control('validTo', tierFormGroup)"></spider-number>
                     </div>
+                    <ng-content select="[AFTER]"></ng-content>
                 </form>
             } @placeholder {
                 <card-skeleton [height]="502"></card-skeleton>
@@ -1494,11 +1735,11 @@ export class SegmentationBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <spider-button *ngIf="isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
                 <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
-            <spider-return-button></spider-return-button>
+            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
         </panel-footer>
     </spider-panel>
 </ng-container>
@@ -1527,8 +1768,11 @@ export class TierBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
-    @Input() isAuthorizedForSave: boolean = false;
-    @Output() onIsAuthorizedForSaveChange = new EventEmitter<boolean>(); 
+    @Input() showReturnButton: boolean = true;
+    authorizationForSaveSubscription: Subscription;
+    @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
+    isAuthorizedForSave: boolean = false;
+    @Output() onIsAuthorizedForSaveChange = new EventEmitter<IsAuthorizedForSaveEvent>(); 
 
     modelId: number;
     loading: boolean = true;
@@ -1543,6 +1787,12 @@ export class TierBaseDetailsComponent {
 
 
 
+
+
+    @Input() showNameForTier: boolean = true;
+    @Input() showDescriptionForTier: boolean = true;
+    @Input() showValidFromForTier: boolean = true;
+    @Input() showValidToForTier: boolean = true;
 
 
     constructor(
@@ -1607,26 +1857,43 @@ export class TierBaseDetailsComponent {
 
         this.onTierFormGroupInitFinish.next();
 
-        this.authService.currentUserPermissionCodes$.subscribe(currentUserPermissionCodes => {
-            // FT: On logout currentUserPermissionCodes become null
-            this.isAuthorizedForSave =
-
-				(currentUserPermissionCodes?.includes('InsertTier') && this.modelId <= 0) || 
-				(currentUserPermissionCodes?.includes('UpdateTier') && this.modelId > 0) ||
-				this.isAuthorizedForSave;
-
-            this.onIsAuthorizedForSaveChange.next(this.isAuthorizedForSave); 
-
-            if (!this.isAuthorizedForSave) {
-                this.tierFormGroup.controls.name.disable();
-                this.tierFormGroup.controls.description.disable();
-                this.tierFormGroup.controls.validFrom.disable();
-                this.tierFormGroup.controls.validTo.disable();
-
-            }
-        });
+        this.authorizationForSaveSubscription = this.handleAuthorizationForSave().subscribe();
 
         this.loading = false;
+    }
+
+    handleAuthorizationForSave = () => {
+        return combineLatest([this.authService.currentUserPermissionCodes$, this.authorizedForSaveObservable()]).pipe(
+            map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
+                if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
+                    this.isAuthorizedForSave =
+
+                        (currentUserPermissionCodes.includes('InsertPartnerUser') && this.modelId <= 0) || 
+                        (currentUserPermissionCodes.includes('UpdatePartnerUser') && this.modelId > 0) ||
+                        isAuthorizedForSave;
+
+                    if (this.isAuthorizedForSave) { 
+                        this.tierFormGroup.controls.name.enable();
+                        this.tierFormGroup.controls.description.enable();
+                        this.tierFormGroup.controls.validFrom.enable();
+                        this.tierFormGroup.controls.validTo.enable();
+
+                    }
+                    else{
+                        this.tierFormGroup.controls.name.disable();
+                        this.tierFormGroup.controls.description.disable();
+                        this.tierFormGroup.controls.validFrom.disable();
+                        this.tierFormGroup.controls.validTo.disable();
+
+                    }
+
+                    this.onIsAuthorizedForSaveChange.next(new IsAuthorizedForSaveEvent({
+                        isAuthorizedForSave: this.isAuthorizedForSave, 
+                        currentUserPermissionCodes: currentUserPermissionCodes
+                    })); 
+                }
+            })
+        );
     }
 
 
@@ -1651,6 +1918,12 @@ export class TierBaseDetailsComponent {
         this.onSave.next();
     }
 
+	ngOnDestroy(){
+        if (this.authorizationForSaveSubscription) {
+            this.authorizationForSaveSubscription.unsubscribe();
+        }
+    }
+
 }
 
 @Component({
@@ -1663,15 +1936,17 @@ export class TierBaseDetailsComponent {
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
-                    <div class="col-12">
+                    <ng-content select="[BEFORE]"></ng-content>
+                    <div *ngIf="showEmailForUserExtended" class="col-12">
                         <spider-textbox [control]="control('email', userExtendedFormGroup)"></spider-textbox>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div *ngIf="showBirthDateForUserExtended" class="col-12 md:col-6">
                         <spider-calendar [control]="control('birthDate', userExtendedFormGroup)"></spider-calendar>
                     </div>
-                    <div class="col-12 md:col-6">
+                    <div *ngIf="showGenderForUserExtended" class="col-12 md:col-6">
                         <spider-dropdown [control]="control('genderId', userExtendedFormGroup)" [options]="genderOptionsForUserExtended"></spider-dropdown>
                     </div>
+                    <ng-content select="[AFTER]"></ng-content>
                 </form>
             } @placeholder {
                 <card-skeleton [height]="502"></card-skeleton>
@@ -1679,11 +1954,11 @@ export class TierBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <spider-button *ngIf="isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
             @for (button of additionalButtons; track button.label) {
                 <spider-button (onClick)="button.onClick()" [label]="button.label" [icon]="button.icon"></spider-button>
             }
-            <spider-return-button></spider-return-button>
+            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
         </panel-footer>
     </spider-panel>
 </ng-container>
@@ -1712,8 +1987,11 @@ export class UserExtendedBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
-    @Input() isAuthorizedForSave: boolean = false;
-    @Output() onIsAuthorizedForSaveChange = new EventEmitter<boolean>(); 
+    @Input() showReturnButton: boolean = true;
+    authorizationForSaveSubscription: Subscription;
+    @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
+    isAuthorizedForSave: boolean = false;
+    @Output() onIsAuthorizedForSaveChange = new EventEmitter<IsAuthorizedForSaveEvent>(); 
 
     modelId: number;
     loading: boolean = true;
@@ -1728,6 +2006,11 @@ export class UserExtendedBaseDetailsComponent {
 
 
 
+
+
+    @Input() showEmailForUserExtended: boolean = true;
+    @Input() showBirthDateForUserExtended: boolean = true;
+    @Input() showGenderForUserExtended: boolean = true;
 
 
     constructor(
@@ -1794,25 +2077,41 @@ export class UserExtendedBaseDetailsComponent {
 
         this.onUserExtendedFormGroupInitFinish.next();
 
-        this.authService.currentUserPermissionCodes$.subscribe(currentUserPermissionCodes => {
-            // FT: On logout currentUserPermissionCodes become null
-            this.isAuthorizedForSave =
-
-				(currentUserPermissionCodes?.includes('InsertUserExtended') && this.modelId <= 0) || 
-				(currentUserPermissionCodes?.includes('UpdateUserExtended') && this.modelId > 0) ||
-				this.isAuthorizedForSave;
-
-            this.onIsAuthorizedForSaveChange.next(this.isAuthorizedForSave); 
-
-            if (!this.isAuthorizedForSave) {
-                this.userExtendedFormGroup.controls.email.disable();
-                this.userExtendedFormGroup.controls.birthDate.disable();
-                this.userExtendedFormGroup.controls.genderId.disable();
-
-            }
-        });
+        this.authorizationForSaveSubscription = this.handleAuthorizationForSave().subscribe();
 
         this.loading = false;
+    }
+
+    handleAuthorizationForSave = () => {
+        return combineLatest([this.authService.currentUserPermissionCodes$, this.authorizedForSaveObservable()]).pipe(
+            map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
+                if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
+                    this.isAuthorizedForSave =
+
+                        (currentUserPermissionCodes.includes('InsertPartnerUser') && this.modelId <= 0) || 
+                        (currentUserPermissionCodes.includes('UpdatePartnerUser') && this.modelId > 0) ||
+                        isAuthorizedForSave;
+
+                    if (this.isAuthorizedForSave) { 
+                        this.userExtendedFormGroup.controls.email.enable();
+                        this.userExtendedFormGroup.controls.birthDate.enable();
+                        this.userExtendedFormGroup.controls.genderId.enable();
+
+                    }
+                    else{
+                        this.userExtendedFormGroup.controls.email.disable();
+                        this.userExtendedFormGroup.controls.birthDate.disable();
+                        this.userExtendedFormGroup.controls.genderId.disable();
+
+                    }
+
+                    this.onIsAuthorizedForSaveChange.next(new IsAuthorizedForSaveEvent({
+                        isAuthorizedForSave: this.isAuthorizedForSave, 
+                        currentUserPermissionCodes: currentUserPermissionCodes
+                    })); 
+                }
+            })
+        );
     }
 
 
@@ -1835,6 +2134,12 @@ export class UserExtendedBaseDetailsComponent {
 
     save(){
         this.onSave.next();
+    }
+
+	ngOnDestroy(){
+        if (this.authorizationForSaveSubscription) {
+            this.authorizationForSaveSubscription.unsubscribe();
+        }
     }
 
 }

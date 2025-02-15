@@ -620,7 +620,7 @@ namespace PlayertyLoyals.Business.Services
                     .Distinct()
                     .ToList();
 
-                return currentUserPermissionCodes.Concat(currentUserPermissionCodes).ToList();
+                return currentUserPermissionCodes.Concat(currentPartnerUserPermissionCodes).ToList();
             });
         }
 
@@ -667,6 +667,26 @@ namespace PlayertyLoyals.Business.Services
                 );
 
                 return transactionTableResponse;
+            });
+        }
+
+        public async Task<TierDTO> GetTierDTOForCurrentPartnerUser()
+        {
+            string partnerCode = _partnerUserAuthenticationService.GetCurrentPartnerCode();
+            long userId = _authenticationService.GetCurrentUserId();
+
+            return await _context.WithTransactionAsync(async () =>
+            {
+                int? tierId = await _context.DbSet<PartnerUser>()
+                    .AsNoTracking()
+                    .Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId)
+                    .Select(x => (int?)x.Tier.Id) // FT: Nullable object must have a value, if we don't add (int?)
+                    .SingleOrDefaultAsync();
+
+                if (tierId == null)
+                    return null;
+
+                return await GetTierDTO(tierId.Value, false);
             });
         }
 

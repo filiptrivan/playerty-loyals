@@ -3,21 +3,21 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiSecurityService, TableFilter, TableResponse, Namebook, Codebook, LazyLoadSelectedIdsResult, VerificationTokenRequest, AuthResult, ExternalProvider } from '@playerty/spider';
 import { ConfigService } from '../config.service';
-import { TierSaveBody } from '../../entities/business-entities.generated';
 import { Brand } from '../../entities/business-entities.generated';
+import { BusinessSystemUpdatePointsDataBody } from '../../entities/business-entities.generated';
+import { ExcelManualUpdatePoints } from '../../entities/business-entities.generated';
+import { ExternalDiscountProductGroup } from '../../entities/business-entities.generated';
+import { ExternalTransaction } from '../../entities/business-entities.generated';
+import { Product } from '../../entities/business-entities.generated';
 import { UpdatePoints } from '../../entities/business-entities.generated';
 import { BusinessSystemTierDiscountProductGroup } from '../../entities/business-entities.generated';
-import { Notification } from '../../entities/business-entities.generated';
-import { SegmentationItem } from '../../entities/business-entities.generated';
-import { NotificationSaveBody } from '../../entities/business-entities.generated';
 import { BusinessSystemTier } from '../../entities/business-entities.generated';
-import { ExternalTransaction } from '../../entities/business-entities.generated';
-import { PartnerUserSaveBody } from '../../entities/business-entities.generated';
-import { Product } from '../../entities/business-entities.generated';
-import { BusinessSystemUpdatePointsDataBody } from '../../entities/business-entities.generated';
-import { ExternalDiscountProductGroup } from '../../entities/business-entities.generated';
-import { ExcelManualUpdatePoints } from '../../entities/business-entities.generated';
+import { Notification } from '../../entities/business-entities.generated';
+import { NotificationSaveBody } from '../../entities/business-entities.generated';
 import { PartnerNotificationSaveBody } from '../../entities/business-entities.generated';
+import { PartnerUserSaveBody } from '../../entities/business-entities.generated';
+import { SegmentationItem } from '../../entities/business-entities.generated';
+import { TierSaveBody } from '../../entities/business-entities.generated';
 import { BusinessSystem } from '../../entities/business-entities.generated';
 import { BusinessSystemSaveBody } from '../../entities/business-entities.generated';
 import { BusinessSystemTierSaveBody } from '../../entities/business-entities.generated';
@@ -281,39 +281,110 @@ export class ApiGeneratedService extends ApiSecurityService {
 
 
 
-    getPartnerRoleList = (): Observable<PartnerRole[]> => { 
-        return this.http.get<PartnerRole[]>(`${this.config.apiUrl}/PartnerRole/GetPartnerRoleList`, this.config.httpOptions);
+    getBusinessSystemList = (): Observable<BusinessSystem[]> => { 
+        return this.http.get<BusinessSystem[]>(`${this.config.apiUrl}/BusinessSystem/GetBusinessSystemList`, this.config.httpOptions);
     }
 
-    getPartnerRole = (id: number): Observable<PartnerRole> => { 
-        return this.http.get<PartnerRole>(`${this.config.apiUrl}/PartnerRole/GetPartnerRole?id=${id}`, this.config.httpOptions);
-    }
-
-
-
-    getPartnerPermissionsDropdownListForPartnerRole = (partnerRoleId?: number): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${this.config.apiUrl}/PartnerRole/GetPartnerPermissionsDropdownListForPartnerRole?partnerRoleId=${partnerRoleId}`, this.config.httpSkipSpinnerOptions);
+    getBusinessSystem = (id: number): Observable<BusinessSystem> => { 
+        return this.http.get<BusinessSystem>(`${this.config.apiUrl}/BusinessSystem/GetBusinessSystem?id=${id}`, this.config.httpOptions);
     }
 
 
 
 
-    getPartnerUsersNamebookListForPartnerRole = (id: number): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${this.config.apiUrl}/PartnerRole/GetPartnerUsersNamebookListForPartnerRole?id=${id}`, this.config.httpSkipSpinnerOptions);
-    }
 
-    getPartnerPermissionsNamebookListForPartnerRole = (id: number): Observable<Namebook[]> => { 
-        return this.http.get<Namebook[]>(`${this.config.apiUrl}/PartnerRole/GetPartnerPermissionsNamebookListForPartnerRole?id=${id}`, this.config.httpSkipSpinnerOptions);
-    }
 
-    savePartnerRole = (saveBodyDTO: PartnerRoleSaveBody): Observable<PartnerRoleSaveBody> => { 
-        return this.http.put<PartnerRoleSaveBody>(`${this.config.apiUrl}/PartnerRole/SavePartnerRole`, saveBodyDTO, this.config.httpOptions);
+
+
+
+    saveBusinessSystem = (saveBodyDTO: BusinessSystemSaveBody): Observable<BusinessSystemSaveBody> => { 
+        return this.http.put<BusinessSystemSaveBody>(`${this.config.apiUrl}/BusinessSystem/SaveBusinessSystem`, saveBodyDTO, this.config.httpOptions);
     }
 
 
 
-    deletePartnerRole = (id: number): Observable<any> => { 
-        return this.http.delete(`${this.config.apiUrl}/PartnerRole/DeletePartnerRole?id=${id}`, this.config.httpOptions);
+    deleteBusinessSystem = (id: number): Observable<any> => { 
+        return this.http.delete(`${this.config.apiUrl}/BusinessSystem/DeleteBusinessSystem?id=${id}`, this.config.httpOptions);
+    }
+
+
+    getNotificationTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<Notification>> => { 
+        return this.http.post<TableResponse<Notification>>(`${this.config.apiUrl}/Notification/GetNotificationTableData`, tableFilterDTO, this.config.httpSkipSpinnerOptions);
+    }
+
+    exportNotificationTableDataToExcel = (tableFilterDTO: TableFilter): Observable<any> => { 
+        return this.http.post(`${this.config.apiUrl}/Notification/ExportNotificationTableDataToExcel`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
+    }
+
+    getNotificationList = (): Observable<Notification[]> => { 
+        return this.http.get<Notification[]>(`${this.config.apiUrl}/Notification/GetNotificationList`, this.config.httpOptions);
+    }
+
+    getNotification = (id: number): Observable<Notification> => { 
+        return this.http.get<Notification>(`${this.config.apiUrl}/Notification/GetNotification?id=${id}`, this.config.httpOptions);
+    }
+
+
+
+
+
+
+
+    getRecipientsTableDataForNotification = (tableFilterDTO: TableFilter): Observable<TableResponse<UserExtended>> => { 
+        return this.http.post<TableResponse<UserExtended>>(`${this.config.apiUrl}/Notification/GetRecipientsTableDataForNotification`, tableFilterDTO, this.config.httpSkipSpinnerOptions);
+    }
+
+    exportRecipientsTableDataToExcelForNotification = (tableFilterDTO: TableFilter): Observable<any> => { 
+        return this.http.post(`${this.config.apiUrl}/Notification/ExportRecipientsTableDataToExcelForNotification`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
+    }
+
+    lazyLoadSelectedRecipientsIdsForNotification = (tableFilterDTO: TableFilter): Observable<LazyLoadSelectedIdsResult> => { 
+        return this.http.post<LazyLoadSelectedIdsResult>(`${this.config.apiUrl}/Notification/LazyLoadSelectedRecipientsIdsForNotification`, tableFilterDTO, this.config.httpSkipSpinnerOptions);
+    }
+
+    saveNotification = (saveBodyDTO: NotificationSaveBody): Observable<NotificationSaveBody> => { 
+        return this.http.put<NotificationSaveBody>(`${this.config.apiUrl}/Notification/SaveNotification`, saveBodyDTO, this.config.httpOptions);
+    }
+
+
+
+    deleteNotification = (id: number): Observable<any> => { 
+        return this.http.delete(`${this.config.apiUrl}/Notification/DeleteNotification?id=${id}`, this.config.httpOptions);
+    }
+
+
+    getPartnerTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<Partner>> => { 
+        return this.http.post<TableResponse<Partner>>(`${this.config.apiUrl}/Partner/GetPartnerTableData`, tableFilterDTO, this.config.httpSkipSpinnerOptions);
+    }
+
+    exportPartnerTableDataToExcel = (tableFilterDTO: TableFilter): Observable<any> => { 
+        return this.http.post(`${this.config.apiUrl}/Partner/ExportPartnerTableDataToExcel`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
+    }
+
+
+
+    getPartner = (id: number): Observable<Partner> => { 
+        return this.http.get<Partner>(`${this.config.apiUrl}/Partner/GetPartner?id=${id}`, this.config.httpOptions);
+    }
+
+
+
+
+
+
+
+
+
+    savePartner = (saveBodyDTO: PartnerSaveBody): Observable<PartnerSaveBody> => { 
+        return this.http.put<PartnerSaveBody>(`${this.config.apiUrl}/Partner/SavePartner`, saveBodyDTO, this.config.httpOptions);
+    }
+
+    uploadLogoImageForPartner = (file: any): Observable<string> => { 
+        return this.http.post(`${this.config.apiUrl}/Partner/UploadLogoImageForPartner`, file, { ...this.config.httpOptions, responseType: 'text' });
+    }
+
+    deletePartner = (id: number): Observable<any> => { 
+        return this.http.delete(`${this.config.apiUrl}/Partner/DeletePartner?id=${id}`, this.config.httpOptions);
     }
 
 
@@ -356,6 +427,46 @@ export class ApiGeneratedService extends ApiSecurityService {
 
 
 
+    getPartnerRoleList = (): Observable<PartnerRole[]> => { 
+        return this.http.get<PartnerRole[]>(`${this.config.apiUrl}/PartnerRole/GetPartnerRoleList`, this.config.httpOptions);
+    }
+
+    getPartnerRole = (id: number): Observable<PartnerRole> => { 
+        return this.http.get<PartnerRole>(`${this.config.apiUrl}/PartnerRole/GetPartnerRole?id=${id}`, this.config.httpOptions);
+    }
+
+
+
+    getPartnerPermissionsDropdownListForPartnerRole = (partnerRoleId?: number): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${this.config.apiUrl}/PartnerRole/GetPartnerPermissionsDropdownListForPartnerRole?partnerRoleId=${partnerRoleId}`, this.config.httpSkipSpinnerOptions);
+    }
+
+
+
+
+    getPartnerUsersNamebookListForPartnerRole = (id: number): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${this.config.apiUrl}/PartnerRole/GetPartnerUsersNamebookListForPartnerRole?id=${id}`, this.config.httpSkipSpinnerOptions);
+    }
+
+    getPartnerPermissionsNamebookListForPartnerRole = (id: number): Observable<Namebook[]> => { 
+        return this.http.get<Namebook[]>(`${this.config.apiUrl}/PartnerRole/GetPartnerPermissionsNamebookListForPartnerRole?id=${id}`, this.config.httpSkipSpinnerOptions);
+    }
+
+    savePartnerRole = (saveBodyDTO: PartnerRoleSaveBody): Observable<PartnerRoleSaveBody> => { 
+        return this.http.put<PartnerRoleSaveBody>(`${this.config.apiUrl}/PartnerRole/SavePartnerRole`, saveBodyDTO, this.config.httpOptions);
+    }
+
+
+
+    deletePartnerRole = (id: number): Observable<any> => { 
+        return this.http.delete(`${this.config.apiUrl}/PartnerRole/DeletePartnerRole?id=${id}`, this.config.httpOptions);
+    }
+
+
+
+
+
+
     getPartnerUserList = (): Observable<PartnerUser[]> => { 
         return this.http.get<PartnerUser[]>(`${this.config.apiUrl}/PartnerUser/GetPartnerUserList`, this.config.httpOptions);
     }
@@ -383,41 +494,6 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     deletePartnerUser = (id: number): Observable<any> => { 
         return this.http.delete(`${this.config.apiUrl}/PartnerUser/DeletePartnerUser?id=${id}`, this.config.httpOptions);
-    }
-
-
-    getPartnerTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<Partner>> => { 
-        return this.http.post<TableResponse<Partner>>(`${this.config.apiUrl}/Partner/GetPartnerTableData`, tableFilterDTO, this.config.httpSkipSpinnerOptions);
-    }
-
-    exportPartnerTableDataToExcel = (tableFilterDTO: TableFilter): Observable<any> => { 
-        return this.http.post(`${this.config.apiUrl}/Partner/ExportPartnerTableDataToExcel`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
-    }
-
-
-
-    getPartner = (id: number): Observable<Partner> => { 
-        return this.http.get<Partner>(`${this.config.apiUrl}/Partner/GetPartner?id=${id}`, this.config.httpOptions);
-    }
-
-
-
-
-
-
-
-
-
-    savePartner = (saveBodyDTO: PartnerSaveBody): Observable<PartnerSaveBody> => { 
-        return this.http.put<PartnerSaveBody>(`${this.config.apiUrl}/Partner/SavePartner`, saveBodyDTO, this.config.httpOptions);
-    }
-
-    uploadLogoImageForPartner = (file: any): Observable<string> => { 
-        return this.http.post(`${this.config.apiUrl}/Partner/UploadLogoImageForPartner`, file, { ...this.config.httpOptions, responseType: 'text' });
-    }
-
-    deletePartner = (id: number): Observable<any> => { 
-        return this.http.delete(`${this.config.apiUrl}/Partner/DeletePartner?id=${id}`, this.config.httpOptions);
     }
 
 
@@ -486,82 +562,6 @@ export class ApiGeneratedService extends ApiSecurityService {
 
     deleteTier = (id: number): Observable<any> => { 
         return this.http.delete(`${this.config.apiUrl}/Tier/DeleteTier?id=${id}`, this.config.httpOptions);
-    }
-
-
-    getNotificationTableData = (tableFilterDTO: TableFilter): Observable<TableResponse<Notification>> => { 
-        return this.http.post<TableResponse<Notification>>(`${this.config.apiUrl}/Notification/GetNotificationTableData`, tableFilterDTO, this.config.httpSkipSpinnerOptions);
-    }
-
-    exportNotificationTableDataToExcel = (tableFilterDTO: TableFilter): Observable<any> => { 
-        return this.http.post(`${this.config.apiUrl}/Notification/ExportNotificationTableDataToExcel`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
-    }
-
-    getNotificationList = (): Observable<Notification[]> => { 
-        return this.http.get<Notification[]>(`${this.config.apiUrl}/Notification/GetNotificationList`, this.config.httpOptions);
-    }
-
-    getNotification = (id: number): Observable<Notification> => { 
-        return this.http.get<Notification>(`${this.config.apiUrl}/Notification/GetNotification?id=${id}`, this.config.httpOptions);
-    }
-
-
-
-
-
-
-
-    getRecipientsTableDataForNotification = (tableFilterDTO: TableFilter): Observable<TableResponse<UserExtended>> => { 
-        return this.http.post<TableResponse<UserExtended>>(`${this.config.apiUrl}/Notification/GetRecipientsTableDataForNotification`, tableFilterDTO, this.config.httpSkipSpinnerOptions);
-    }
-
-    exportRecipientsTableDataToExcelForNotification = (tableFilterDTO: TableFilter): Observable<any> => { 
-        return this.http.post(`${this.config.apiUrl}/Notification/ExportRecipientsTableDataToExcelForNotification`, tableFilterDTO, { observe: 'response', responseType: 'blob' });
-    }
-
-    lazyLoadSelectedRecipientsIdsForNotification = (tableFilterDTO: TableFilter): Observable<LazyLoadSelectedIdsResult> => { 
-        return this.http.post<LazyLoadSelectedIdsResult>(`${this.config.apiUrl}/Notification/LazyLoadSelectedRecipientsIdsForNotification`, tableFilterDTO, this.config.httpSkipSpinnerOptions);
-    }
-
-    saveNotification = (saveBodyDTO: NotificationSaveBody): Observable<NotificationSaveBody> => { 
-        return this.http.put<NotificationSaveBody>(`${this.config.apiUrl}/Notification/SaveNotification`, saveBodyDTO, this.config.httpOptions);
-    }
-
-
-
-    deleteNotification = (id: number): Observable<any> => { 
-        return this.http.delete(`${this.config.apiUrl}/Notification/DeleteNotification?id=${id}`, this.config.httpOptions);
-    }
-
-
-
-
-
-
-    getBusinessSystemList = (): Observable<BusinessSystem[]> => { 
-        return this.http.get<BusinessSystem[]>(`${this.config.apiUrl}/BusinessSystem/GetBusinessSystemList`, this.config.httpOptions);
-    }
-
-    getBusinessSystem = (id: number): Observable<BusinessSystem> => { 
-        return this.http.get<BusinessSystem>(`${this.config.apiUrl}/BusinessSystem/GetBusinessSystem?id=${id}`, this.config.httpOptions);
-    }
-
-
-
-
-
-
-
-
-
-    saveBusinessSystem = (saveBodyDTO: BusinessSystemSaveBody): Observable<BusinessSystemSaveBody> => { 
-        return this.http.put<BusinessSystemSaveBody>(`${this.config.apiUrl}/BusinessSystem/SaveBusinessSystem`, saveBodyDTO, this.config.httpOptions);
-    }
-
-
-
-    deleteBusinessSystem = (id: number): Observable<any> => { 
-        return this.http.delete(`${this.config.apiUrl}/BusinessSystem/DeleteBusinessSystem?id=${id}`, this.config.httpOptions);
     }
 
 

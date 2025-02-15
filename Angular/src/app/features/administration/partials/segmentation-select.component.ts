@@ -23,7 +23,6 @@ export class SegmentationSelectComponent extends BaseFormCopy implements OnInit 
     @Input() override formGroup: SpiderFormGroup;
     @Input() segmentationItemsFormArray: SpiderFormArray<SegmentationItem>;
     @Input() checkedSegmentationItemIdsForThePartnerUser: number[]; // FT: Because we are not changing it, we are not using nameof
-    @Input() readonly: boolean = false;
     
     segmentationItemsForTheCurrentSegmentation: SegmentationItemIndex[] = []; // for the current segmentation
 
@@ -47,14 +46,6 @@ export class SegmentationSelectComponent extends BaseFormCopy implements OnInit 
                 this.segmentationItemsForTheCurrentSegmentation.push({...segmentationItem, index: index})
             }
         });
-
-        if (this.readonly) {
-            this.segmentationItemsFormArray.controls.forEach((segmentationItemFormGroup: SpiderFormGroup) => {
-                Object.keys(segmentationItemFormGroup.controls).forEach(key => {
-                    segmentationItemFormGroup.controls[key].disable();
-                });
-            });
-        }
     }
 
 }
