@@ -180,6 +180,8 @@ export class BusinessSystemBaseDetailsComponent {
             map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
                 if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
                     this.isAuthorizedForSave =
+                (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId <= 0) || 
+                (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId > 0) || 
 
                         (currentUserPermissionCodes.includes('InsertBusinessSystem') && this.modelId <= 0) || 
                         (currentUserPermissionCodes.includes('UpdateBusinessSystem') && this.modelId > 0) ||
@@ -1174,6 +1176,8 @@ export class PartnerRoleBaseDetailsComponent {
             map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
                 if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
                     this.isAuthorizedForSave =
+                (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId <= 0) || 
+                (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId > 0) || 
 
                         (currentUserPermissionCodes.includes('InsertPartnerRole') && this.modelId <= 0) || 
                         (currentUserPermissionCodes.includes('UpdatePartnerRole') && this.modelId > 0) ||
@@ -1634,6 +1638,8 @@ export class SegmentationBaseDetailsComponent {
             map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
                 if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
                     this.isAuthorizedForSave =
+                (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId <= 0) || 
+                (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId > 0) || 
 
                         (currentUserPermissionCodes.includes('InsertSegmentation') && this.modelId <= 0) || 
                         (currentUserPermissionCodes.includes('UpdateSegmentation') && this.modelId > 0) ||

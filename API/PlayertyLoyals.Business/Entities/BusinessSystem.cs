@@ -1,4 +1,5 @@
-﻿using Spider.Shared.Attributes.EF;
+﻿using PlayertyLoyals.Business.Enums;
+using Spider.Shared.Attributes.EF;
 using Spider.Shared.Attributes.EF.UI;
 using Spider.Shared.BaseEntities;
 using System;
@@ -10,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.Entities
 {
+    [CanInsertAdditionalPermissionCode(nameof(BusinessPermissionCodes.UpdatePartner))]
+    [CanUpdateAdditionalPermissionCode(nameof(BusinessPermissionCodes.UpdatePartner))]
     public class BusinessSystem : BusinessObject<long>
     {
         [DisplayName]

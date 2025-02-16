@@ -9,6 +9,7 @@ import { DiscountProductGroup, BusinessSystemTier, BusinessSystemTierDiscountPro
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { BaseFormCopy, nameof, SpiderFormArray, LastMenuIconIndexClicked, PrimengOption, Column, SpiderDataTableComponent, SpiderMessageService, BaseFormService, SpiderFormGroup, AllClickEvent, RowClickEvent } from '@playerty/spider';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
+import { BusinessPermissionCodes } from 'src/app/business/enums/business-enums.generated';
 
 @Component({
     selector: 'tier-list',
@@ -311,9 +312,10 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
             map(([currentUserPermissionCodes]) => {
                 if (currentUserPermissionCodes != null) {
                     this.isAuthorizedForSave =
-                        (currentUserPermissionCodes.includes('UpdatePartner')) || 
-                        (currentUserPermissionCodes.includes('InsertTier')) || 
-                        (currentUserPermissionCodes.includes('UpdateTier'));
+                        (currentUserPermissionCodes.includes(BusinessPermissionCodes.UpdatePartner)) || 
+                        (currentUserPermissionCodes.includes(BusinessPermissionCodes.InsertTier)) || 
+                        (currentUserPermissionCodes.includes(BusinessPermissionCodes.UpdateTier)) ||
+                        (currentUserPermissionCodes.includes(BusinessPermissionCodes.DeleteTier));
                 }
             })
         );

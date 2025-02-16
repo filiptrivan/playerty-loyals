@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 using Spider.Shared.Attributes.EF.UI;
 using Spider.Shared.Enums;
+using PlayertyLoyals.Business.Enums;
 
 namespace PlayertyLoyals.Business.Entities
 {

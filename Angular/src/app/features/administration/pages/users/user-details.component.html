@@ -5,8 +5,8 @@
         [formGroup]="formGroup" 
         [userExtendedFormGroup]="userExtendedFormGroup" 
         (onSave)="onSave()" 
-        (onUserExtendedFormGroupInitFinish)="userExtendedFormGroupInitFinish()"
-        [isAuthorizedForSave]="isAuthorizedForSave"
+        [authorizedForSaveObservable]="authorizedForSaveObservable"
+        (onIsAuthorizedForSaveChange)="isAuthorizedForSaveChange($event)"
         ></user-extended-base-details>
 
     </spider-card>

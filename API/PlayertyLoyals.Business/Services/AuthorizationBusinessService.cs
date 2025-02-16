@@ -170,9 +170,9 @@ namespace PlayertyLoyals.Business.Services
 
                 // FT: Noone can change these from the partner user page
                 // TODO FT: Transfer this to on before save (or generate it, but inside save body dto method, not save dto)
-                if (partnerUser.Tier.Id != partnerUserDTO.TierId ||
-                    partnerUser.User.Id != partnerUserDTO.UserId ||
-                    partnerUser.Partner.Id != partnerUserDTO.PartnerId
+                if (partnerUser.Tier?.Id != partnerUserDTO.TierId ||
+                    partnerUser.User?.Id != partnerUserDTO.UserId ||
+                    partnerUser.Partner?.Id != partnerUserDTO.PartnerId
                 )
                 {
                     throw new UnauthorizedException();

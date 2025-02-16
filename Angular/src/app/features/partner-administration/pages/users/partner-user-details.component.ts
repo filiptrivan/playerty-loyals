@@ -104,7 +104,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     authorizedForSaveObservable = (): Observable<boolean> => {
         return combineLatest([this.authService.currentPartnerUser$, this._segmentationItemsFormArray]).pipe(
             map(([currentPartnerUser]) => {
-                if (currentPartnerUser) {
+                if (currentPartnerUser != null) {
                     const isCurrentPartnerUserPage = this.isCurrentPartnerUserPage(currentPartnerUser);
                     return isCurrentPartnerUserPage;
                 }

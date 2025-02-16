@@ -3,8 +3,9 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { UserExtended } from 'src/app/business/entities/business-entities.generated';
-import { BaseFormCopy, SpiderFormGroup, SpiderMessageService, BaseFormService, User } from '@playerty/spider';
+import { BaseFormCopy, SpiderFormGroup, SpiderMessageService, BaseFormService, IsAuthorizedForSaveEvent } from '@playerty/spider';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
+import { map, Observable } from 'rxjs';
 
 @Component({
     selector: 'user-details',
@@ -15,7 +16,6 @@ export class UserDetailsComponent extends BaseFormCopy implements OnInit {
     userExtendedFormGroup = new SpiderFormGroup<UserExtended>({});
     
     isAuthorizedForSave: boolean = false;
-    currentUser: User;
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -29,17 +29,33 @@ export class UserDetailsComponent extends BaseFormCopy implements OnInit {
         private authService: AuthService
     ) {
         super(differs, http, messageService, changeDetectorRef, router, route, translocoService, baseFormService);
-        this.authService.user$.subscribe(user => this.currentUser = user);
     }
          
     override ngOnInit() {
         
     }
 
-    userExtendedFormGroupInitFinish(){
-        this.userExtendedFormGroup.controls.email.disable();
+    authorizedForSaveObservable = (): Observable<boolean> => {
+        return this.authService.user$.pipe(
+            map((currentUser) => {
+                if (currentUser) {
+                    const isCurrentUserPage = this.isCurrentUserPage(currentUser.id);
+                    return isCurrentUserPage;
+                }
 
-        this.isAuthorizedForSave = this.userExtendedFormGroup.getRawValue().id === this.currentUser.id;
+                return false;
+            })
+        );
+    }
+
+    isCurrentUserPage = (currentUserId: number) => {
+        return currentUserId === this.userExtendedFormGroup.getRawValue().id;
+    }
+
+    isAuthorizedForSaveChange = (event: IsAuthorizedForSaveEvent) => {
+        this.isAuthorizedForSave = event.isAuthorizedForSave;
+
+        this.userExtendedFormGroup.controls.email.disable();
     }
 
     override onBeforeSave = (): void => {
