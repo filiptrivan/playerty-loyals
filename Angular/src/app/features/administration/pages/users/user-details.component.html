@@ -1,13 +1,11 @@
 <ng-container *transloco="let t">
-    <spider-card [title]="t('User')" icon="pi pi-user">
-
-        <user-extended-base-details
-        [formGroup]="formGroup" 
-        [userExtendedFormGroup]="userExtendedFormGroup" 
-        (onSave)="onSave()" 
-        [authorizedForSaveObservable]="authorizedForSaveObservable"
-        (onIsAuthorizedForSaveChange)="isAuthorizedForSaveChange($event)"
-        ></user-extended-base-details>
-
-    </spider-card>
+    <user-extended-base-details
+    [panelTitle]="userExtendedFormGroup.getRawValue().email"
+    panelIcon="pi pi-user"
+    [formGroup]="formGroup" 
+    [userExtendedFormGroup]="userExtendedFormGroup" 
+    (onSave)="onSave()" 
+    [authorizedForSaveObservable]="authorizedForSaveObservable"
+    (onIsAuthorizedForSaveChange)="isAuthorizedForSaveChange($event)"
+    ></user-extended-base-details>
 </ng-container>

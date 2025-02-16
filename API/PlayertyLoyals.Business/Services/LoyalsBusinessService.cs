@@ -63,6 +63,9 @@ namespace PlayertyLoyals.Business.Services
 
         #region User
 
+        /// <summary>
+        /// FT: IsDisabled and HasLoggedInWithExternalProvider are handled inside authorization service
+        /// </summary>
         protected override async Task OnBeforeSaveUserExtendedAndReturnSaveBodyDTO(UserExtendedSaveBodyDTO userExtendedSaveBodyDTO)
         {
             await _context.WithTransactionAsync(async () =>
@@ -73,7 +76,7 @@ namespace PlayertyLoyals.Business.Services
                 UserExtended user = await GetInstanceAsync<UserExtended, long>(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.UserExtendedDTO.Version);
 
                 if (userExtendedSaveBodyDTO.UserExtendedDTO.Email != user.Email)
-                    throw new HackerException("You can't change email from here.");
+                    throw new HackerException("You can't change email from the main UI form.");
             });
         }
 
@@ -183,20 +186,25 @@ namespace PlayertyLoyals.Business.Services
 
             await _context.WithTransactionAsync(async () =>
             {
+                int currentPartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
+
                 List<int> tierIdsDTO = tierSaveBodyDTO.TierDTOList.Select(x => x.Id).ToList(); // TODO FT: Check if user is authorized to delete passed tiers
-                List<int> tierIdsToDelete = _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode() && tierIdsDTO.Contains(x.Id) == false).Select(x => x.Id).ToList();
+                List<int> tierIdsToDelete = _context.DbSet<Tier>().Where(x => x.Partner.Id == currentPartnerId && tierIdsDTO.Contains(x.Id) == false).Select(x => x.Id).ToList();
                 if (tierIdsToDelete.Count > 0)
                     await DeleteTierList(tierIdsToDelete, true);
 
                 List<long> businessSystemTierIdsDTO = tierSaveBodyDTO.BusinessSystemTierDTOList.Select(x => x.Id).ToList(); // TODO FT: Check if user is authorized to delete passed businessSystem tiers
                 List<long> businessSystemTierIdsToDelete = _context.DbSet<BusinessSystemTier>().Where(x => tierIdsDTO.Contains(x.Tier.Id) && businessSystemTierIdsDTO.Contains(x.Id) == false).Select(x => x.Id).ToList();
                 if (businessSystemTierIdsToDelete.Count > 0)
+                {
+                    await _authorizationService.AuthorizeTierDeleteAndThrow();
                     await DeleteBusinessSystemTierList(businessSystemTierIdsToDelete, false);
+                }
 
                 for (int i = 0; i < tierSaveBodyDTO.TierDTOList.Count; i++)
                 {
                     TierDTO tierDTO = tierSaveBodyDTO.TierDTOList[i];
-                    tierDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
+                    tierDTO.PartnerId = currentPartnerId;
                     TierDTO savedTierDTO = await SaveTierAndReturnDTO(tierDTO, authorizeUpdate, authorizeInsert);
                     tierResultDTOList.Add(savedTierDTO);
 
@@ -210,7 +218,9 @@ namespace PlayertyLoyals.Business.Services
                         savedBusinessSystemTierDTO.TierClientIndex = i;
                         businessSystemTierResultDTOList.Add(savedBusinessSystemTierDTO);
 
-                        List<BusinessSystemTierDiscountProductGroupDTO> businessSystemTierDiscountProductGroupDTOList = tierSaveBodyDTO.BusinessSystemTierDiscountProductGroupDTOList.Where(x => x.SelectedForBusinessSystem == true && x.TierClientIndex == i && x.BusinessSystemTierClientIndex == j).ToList();
+                        List<BusinessSystemTierDiscountProductGroupDTO> businessSystemTierDiscountProductGroupDTOList = tierSaveBodyDTO.BusinessSystemTierDiscountProductGroupDTOList
+                            .Where(x => x.SelectedForBusinessSystem == true && x.TierClientIndex == i && x.BusinessSystemTierClientIndex == j)
+                            .ToList();
                         await UpdateDiscountProductGroupListForBusinessSystemTier(savedBusinessSystemTierDTO.Id, businessSystemTierDiscountProductGroupDTOList);
                     }
                 }
@@ -547,6 +557,8 @@ namespace PlayertyLoyals.Business.Services
 
             return await _context.WithTransactionAsync(async () =>
             {
+                await ValidateExistingPartnerUserAndThrow(partnerUserSaveBodyDTO.PartnerUserDTO);
+
                 await UpdateCheckedSegmentationItemsForPartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO.Id, partnerUserSaveBodyDTO.SelectedSegmentationItemsIds);
 
                 int pointsBeforeSave = await _context.DbSet<PartnerUser>().Where(x => x.Id == partnerUserSaveBodyDTO.PartnerUserDTO.Id).Select(x => x.Points).SingleAsync();
@@ -562,6 +574,23 @@ namespace PlayertyLoyals.Business.Services
                 {
                     PartnerUserDTO = savedPartnerUser.Adapt<PartnerUserDTO>(Mapper.PartnerUserToDTOConfig()),
                 };
+            });
+        }
+
+        private async Task ValidateExistingPartnerUserAndThrow(PartnerUserDTO partnerUserDTO)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                PartnerUser partnerUser = await GetInstanceAsync<PartnerUser, long>(partnerUserDTO.Id, partnerUserDTO.Version);
+
+                // FT: Noone can change these from the partner user page
+                if (partnerUser.Tier?.Id != partnerUserDTO.TierId ||
+                    partnerUser.User.Id != partnerUserDTO.UserId ||
+                    partnerUser.Partner.Id != partnerUserDTO.PartnerId
+                )
+                {
+                    throw new UnauthorizedException();
+                }
             });
         }
 
@@ -700,6 +729,7 @@ namespace PlayertyLoyals.Business.Services
         {
             await _context.WithTransactionAsync(async () =>
             {
+                // FT: There is no need to validate PartnerId changes because we are reading it from the server
                 partnerRoleSaveBodyDTO.PartnerRoleDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
             });
         }
@@ -712,6 +742,7 @@ namespace PlayertyLoyals.Business.Services
         {
             await _context.WithTransactionAsync(async () =>
             {
+                // FT: There is no need to validate PartnerId changes because we are reading it from the server
                 partnerNotificationSaveBodyDTO.PartnerNotificationDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
             });
         }
@@ -804,7 +835,7 @@ namespace PlayertyLoyals.Business.Services
                     }
 
                     notificationDTO.IsMarkedAsRead = item.IsMarkedAsRead;
-                    notificationDTO.Discriminator = item.Discriminator;
+                    notificationDTO.Discriminator = item.Discriminator; // FT: Using it on the frontend also
 
                     notificationsDTO.Add(notificationDTO);
                 }
@@ -897,10 +928,14 @@ namespace PlayertyLoyals.Business.Services
         {
             await _context.WithTransactionAsync(async () =>
             {
+                // FT: There is no need to validate PartnerId changes because we are reading it from the server
                 segmentationSaveBodyDTO.SegmentationDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
             });
         }
 
+        /// <summary>
+        /// The information is available as soon as you register, there is no need for further authorization
+        /// </summary>
         public async Task<List<SegmentationDTO>> GetSegmentationListForTheCurrentPartner()
         {
             return await _context.WithTransactionAsync(async () =>
@@ -913,6 +948,9 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
+        /// <summary>
+        /// The information is available as soon as you register, there is no need for further authorization
+        /// </summary>
         public async Task<List<SegmentationItemDTO>> GetSegmentationItemListForTheCurrentPartner()
         {
             return await _context.WithTransactionAsync(async () =>
@@ -931,28 +969,53 @@ namespace PlayertyLoyals.Business.Services
 
         public override async Task<BusinessSystemSaveBodyDTO> SaveBusinessSystemAndReturnSaveBodyDTO(BusinessSystemSaveBodyDTO businessSystemSaveBodyDTO, bool authorizeUpdate, bool authorizeInsert)
         {
-            if (businessSystemSaveBodyDTO.BusinessSystemDTO.Id == 0 && (businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsInterval != null || businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsStartDate != null))
-                throw new HackerException("Can't save UpdatePointsInterval nor UpdatePointsStartDate from here.");
+            ValidateNewBusinessSystemAndThrow(businessSystemSaveBodyDTO.BusinessSystemDTO);
 
             return await _context.WithTransactionAsync(async () =>
             {
-                int currentPartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
-                businessSystemSaveBodyDTO.BusinessSystemDTO.PartnerId = currentPartnerId;
-
                 if (businessSystemSaveBodyDTO.BusinessSystemDTO.Id > 0)
-                {
-                    BusinessSystem businessSystemBeforeSave = await GetInstanceAsync<BusinessSystem, long>(businessSystemSaveBodyDTO.BusinessSystemDTO.Id, businessSystemSaveBodyDTO.BusinessSystemDTO.Version);
+                    await ValidateExistingBusinessSystemAndThrow(businessSystemSaveBodyDTO.BusinessSystemDTO);
 
-                    if ((businessSystemBeforeSave.UpdatePointsInterval != businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsInterval) ||
-                        (!Helpers.AreDatesEqualToSeconds(businessSystemBeforeSave.UpdatePointsStartDate, businessSystemSaveBodyDTO.BusinessSystemDTO.UpdatePointsStartDate)))
-                        throw new HackerException("Can't save UpdatePointsInterval nor UpdatePointsStartDate from here.");
-                }
+                // FT: There is no need to validate PartnerId changes because we are reading it from the server
+                businessSystemSaveBodyDTO.BusinessSystemDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
 
                 BusinessSystemDTO savedBusinessSystemDTO = await SaveBusinessSystemAndReturnDTO(businessSystemSaveBodyDTO.BusinessSystemDTO, authorizeUpdate, authorizeInsert);
                 return new BusinessSystemSaveBodyDTO
                 {
                     BusinessSystemDTO = savedBusinessSystemDTO
                 };
+            });
+        }
+
+        private static void ValidateNewBusinessSystemAndThrow(BusinessSystemDTO businessSystemDTO)
+        {
+            if (
+                businessSystemDTO.Id == 0 &&
+               (
+                businessSystemDTO.UpdatePointsInterval != null ||
+                businessSystemDTO.UpdatePointsStartDate != null ||
+                businessSystemDTO.UpdatePointsScheduledTaskIsPaused != null
+               )
+            )
+            {
+                throw new HackerException("Can't save UpdatePointsInterval nor UpdatePointsStartDate from here.");
+            }
+        }
+
+        private async Task ValidateExistingBusinessSystemAndThrow(BusinessSystemDTO businessSystemDTO)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                BusinessSystem businessSystemBeforeSave = await GetInstanceAsync<BusinessSystem, long>(businessSystemDTO.Id, businessSystemDTO.Version);
+
+                if (
+                    businessSystemBeforeSave.UpdatePointsInterval != businessSystemDTO.UpdatePointsInterval ||
+                    Helpers.AreDatesEqualToSeconds(businessSystemBeforeSave.UpdatePointsStartDate, businessSystemDTO.UpdatePointsStartDate) == false ||
+                    businessSystemBeforeSave.UpdatePointsScheduledTaskIsPaused != businessSystemDTO.UpdatePointsScheduledTaskIsPaused
+                )
+                {
+                    throw new HackerException("Can't save UpdatePointsInterval, UpdatePointsStartDate nor UpdatePointsScheduledTaskIsPaused from the main UI form page.");
+                }
             });
         }
 
@@ -1375,7 +1438,7 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
                 await _authorizationService.AuthorizeBusinessSystemReadAndThrow(tableFilterDTO.AdditionalFilterIdLong);
 
                 byte[] fileContent = await ExportBusinessSystemUpdatePointsScheduledTaskTableDataToExcel(
-                    tableFilterDTO, 
+                    tableFilterDTO,
                     _context.DbSet<BusinessSystemUpdatePointsScheduledTask>().Where(x => x.BusinessSystem.Id == tableFilterDTO.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo),
                     false
                 );

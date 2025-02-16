@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.Entities
 {
-    [CanInsertAdditionalPermissionCode(nameof(BusinessPermissionCodes.UpdatePartner))]
-    [CanUpdateAdditionalPermissionCode(nameof(BusinessPermissionCodes.UpdatePartner))]
+    [UIAdditionalPermissionCodeForInsert(nameof(BusinessPermissionCodes.UpdatePartner))]
+    [UIAdditionalPermissionCodeForUpdate(nameof(BusinessPermissionCodes.UpdatePartner))]
     public class BusinessSystem : BusinessObject<long>
     {
         [DisplayName]

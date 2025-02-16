@@ -180,8 +180,6 @@ export class BusinessSystemBaseDetailsComponent {
             map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
                 if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
                     this.isAuthorizedForSave =
-                (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId <= 0) || 
-                (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId > 0) || 
 
                         (currentUserPermissionCodes.includes('InsertBusinessSystem') && this.modelId <= 0) || 
                         (currentUserPermissionCodes.includes('UpdateBusinessSystem') && this.modelId > 0) ||
@@ -934,8 +932,6 @@ export class PartnerNotificationBaseDetailsComponent {
             map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
                 if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
                     this.isAuthorizedForSave =
-                (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId <= 0) || 
-                (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId > 0) || 
 
                         (currentUserPermissionCodes.includes('InsertPartnerNotification') && this.modelId <= 0) || 
                         (currentUserPermissionCodes.includes('UpdatePartnerNotification') && this.modelId > 0) ||
@@ -1176,8 +1172,6 @@ export class PartnerRoleBaseDetailsComponent {
             map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
                 if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
                     this.isAuthorizedForSave =
-                (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId <= 0) || 
-                (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId > 0) || 
 
                         (currentUserPermissionCodes.includes('InsertPartnerRole') && this.modelId <= 0) || 
                         (currentUserPermissionCodes.includes('UpdatePartnerRole') && this.modelId > 0) ||
@@ -1392,7 +1386,6 @@ export class PartnerUserBaseDetailsComponent {
             map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
                 if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
                     this.isAuthorizedForSave =
-                (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId > 0) || 
 
                         (currentUserPermissionCodes.includes('InsertPartnerUser') && this.modelId <= 0) || 
                         (currentUserPermissionCodes.includes('UpdatePartnerUser') && this.modelId > 0) ||
@@ -1638,8 +1631,6 @@ export class SegmentationBaseDetailsComponent {
             map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
                 if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
                     this.isAuthorizedForSave =
-                (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId <= 0) || 
-                (currentUserPermissionCodes?.includes('UpdatePartner') && this.modelId > 0) || 
 
                         (currentUserPermissionCodes.includes('InsertSegmentation') && this.modelId <= 0) || 
                         (currentUserPermissionCodes.includes('UpdateSegmentation') && this.modelId > 0) ||
@@ -1949,9 +1940,6 @@ export class TierBaseDetailsComponent {
             @defer (when loading === false) {
                 <form class="grid">
                     <ng-content select="[BEFORE]"></ng-content>
-                    <div *ngIf="showEmailForUserExtended" class="col-12">
-                        <spider-textbox [control]="control('email', userExtendedFormGroup)"></spider-textbox>
-                    </div>
                     <div *ngIf="showBirthDateForUserExtended" class="col-12 md:col-6">
                         <spider-calendar [control]="control('birthDate', userExtendedFormGroup)"></spider-calendar>
                     </div>
@@ -2020,7 +2008,6 @@ export class UserExtendedBaseDetailsComponent {
 
 
 
-    @Input() showEmailForUserExtended: boolean = true;
     @Input() showBirthDateForUserExtended: boolean = true;
     @Input() showGenderForUserExtended: boolean = true;
 
@@ -2105,13 +2092,11 @@ export class UserExtendedBaseDetailsComponent {
                         isAuthorizedForSave;
 
                     if (this.isAuthorizedForSave) { 
-                        this.userExtendedFormGroup.controls.email.enable();
                         this.userExtendedFormGroup.controls.birthDate.enable();
                         this.userExtendedFormGroup.controls.genderId.enable();
 
                     }
                     else{
-                        this.userExtendedFormGroup.controls.email.disable();
                         this.userExtendedFormGroup.controls.birthDate.disable();
                         this.userExtendedFormGroup.controls.genderId.disable();
 

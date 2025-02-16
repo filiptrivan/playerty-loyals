@@ -166,33 +166,25 @@ namespace PlayertyLoyals.Business.Services
         {
             await _context.WithTransactionAsync(async () =>
             {
+                bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.UpdatePartner);
+                if (isUserAuthorized)
+                    return;
+
+                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedForCurrentPartnerAsync(BusinessPermissionCodes.UpdatePartnerUser);
+                if (isPartnerUserAuthorized)
+                    return;
+
                 PartnerUser partnerUser = await GetInstanceAsync<PartnerUser, long>(partnerUserDTO.Id, null);
 
-                // FT: Noone can change these from the partner user page
-                // TODO FT: Transfer this to on before save (or generate it, but inside save body dto method, not save dto)
-                if (partnerUser.Tier?.Id != partnerUserDTO.TierId ||
-                    partnerUser.User?.Id != partnerUserDTO.UserId ||
-                    partnerUser.Partner?.Id != partnerUserDTO.PartnerId
-                )
-                {
+                if (partnerUser.Points != partnerUserDTO.Points)
                     throw new UnauthorizedException();
-                }
-
-                bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.UpdatePartner);
-                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedForCurrentPartnerAsync(BusinessPermissionCodes.UpdatePartnerUser);
-
-                if (isPartnerUserAuthorized == false &&
-                    isUserAuthorized == false &&
-                    partnerUser.Points != partnerUserDTO.Points
-                )
-                {
-                    throw new UnauthorizedException();
-                }
 
                 bool isCurrentPartnerUser = await _partnerUserAuthenticationService.GetCurrentPartnerUserId() == partnerUser.Id;
 
-                if (isCurrentPartnerUser == false && isPartnerUserAuthorized == false && isUserAuthorized == false)
-                    throw new UnauthorizedException();
+                if (isCurrentPartnerUser)
+                    return;
+
+                throw new UnauthorizedException();
             });
         }
 
@@ -403,10 +395,15 @@ namespace PlayertyLoyals.Business.Services
 
         public override async Task AuthorizeTierDeleteAndThrow(int tierId)
         {
-            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.DeleteTier);
+            await AuthorizeTierDeleteAndThrow();
         }
 
         public override async Task AuthorizeTierDeleteAndThrow(List<int> tierListToDelete)
+        {
+            await AuthorizeTierDeleteAndThrow();
+        }
+
+        public async Task AuthorizeTierDeleteAndThrow()
         {
             await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.UpdatePartner, BusinessPermissionCodes.DeleteTier);
         }

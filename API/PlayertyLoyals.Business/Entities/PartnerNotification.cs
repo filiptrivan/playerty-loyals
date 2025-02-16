@@ -9,8 +9,8 @@ using PlayertyLoyals.Business.Enums;
 
 namespace PlayertyLoyals.Business.Entities
 {
-    [CanInsertAdditionalPermissionCode(nameof(BusinessPermissionCodes.UpdatePartner))]
-    [CanUpdateAdditionalPermissionCode(nameof(BusinessPermissionCodes.UpdatePartner))]
+    [UIAdditionalPermissionCodeForInsert(nameof(BusinessPermissionCodes.UpdatePartner))]
+    [UIAdditionalPermissionCodeForUpdate(nameof(BusinessPermissionCodes.UpdatePartner))]
     public class PartnerNotification : BusinessObject<long>, INotification<PartnerUser>
     {
         [UIControlWidth("col-12")]

@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 namespace PlayertyLoyals.Business.Entities
 {
     [DisplayName("User.Email")]
-    [CanUpdateAdditionalPermissionCode(nameof(BusinessPermissionCodes.UpdatePartner))]
+    [UIAdditionalPermissionCodeForUpdate(nameof(BusinessPermissionCodes.UpdatePartner))]
     public class PartnerUser : BusinessObject<long>
     {
         [UIControlWidth("col-12")]

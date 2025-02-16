@@ -15,6 +15,7 @@ namespace PlayertyLoyals.Business.Entities
     [Index(nameof(Email), IsUnique = true)]
     public class UserExtended : BusinessObject<long>, IUser
     {
+        [UIDoNotGenerate]
         [UIControlWidth("col-12")]
         [TranslateSingularSrLatnRS("Email")]
         [DisplayName]
