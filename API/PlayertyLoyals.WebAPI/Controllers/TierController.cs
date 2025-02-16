@@ -35,9 +35,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task<TierSaveBodyDTO> GetTierSaveBodyDTO()
+        public async Task<TierSaveBodyDTO> GetTierSaveBodyForCurrentPartner()
         {
-            return await _loyalsBusinessService.GetTierSaveBodyDTO();
+            return await _loyalsBusinessService.GetTierSaveBodyDTOForCurrentPartner();
         }
 
         [HttpGet]

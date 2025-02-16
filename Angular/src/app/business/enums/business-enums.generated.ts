@@ -13,7 +13,8 @@ export enum TransactionStatusCodes
 
 export enum BusinessPermissionCodes
 {
-    Test = "Test",
+    ReadCurrentPartner = "ReadCurrentPartner",
+	UpdateCurrentPartner = "UpdateCurrentPartner",
 	ReadBusinessSystem = "ReadBusinessSystem",
 	UpdateBusinessSystem = "UpdateBusinessSystem",
 	InsertBusinessSystem = "InsertBusinessSystem",

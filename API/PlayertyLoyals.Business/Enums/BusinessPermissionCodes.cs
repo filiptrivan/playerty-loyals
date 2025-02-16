@@ -8,6 +8,14 @@ namespace PlayertyLoyals.Business.Enums
 {
     public static partial class BusinessPermissionCodes
     {
-        public static string Test { get; } = "Test";
+        /// <summary>
+        /// FT HACK: Made for partner permission
+        /// </summary>
+        public static string ReadCurrentPartner { get; } = "ReadCurrentPartner";
+
+        /// <summary>
+        /// FT HACK: Made for partner permission
+        /// </summary>
+        public static string UpdateCurrentPartner { get; } = "UpdateCurrentPartner";
     }
 }

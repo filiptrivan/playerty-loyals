@@ -253,8 +253,8 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.get<SegmentationItem[]>(`${this.config.apiUrl}/Segmentation/GetSegmentationItemListForTheCurrentPartner`, this.config.httpOptions);
     }
 
-    getTierSaveBodyDTO = (): Observable<TierSaveBody> => { 
-        return this.http.get<TierSaveBody>(`${this.config.apiUrl}/Tier/GetTierSaveBodyDTO`, this.config.httpOptions);
+    getTierSaveBodyForCurrentPartner = (): Observable<TierSaveBody> => { 
+        return this.http.get<TierSaveBody>(`${this.config.apiUrl}/Tier/GetTierSaveBodyForCurrentPartner`, this.config.httpOptions);
     }
 
     getTierListForDisplay = (): Observable<Tier[]> => { 

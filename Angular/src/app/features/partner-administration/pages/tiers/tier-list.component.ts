@@ -1,16 +1,14 @@
-import { TranslateLabelsService } from 'src/app/business/services/translates/merge-labels';
 import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { MenuItem } from 'primeng/api';
 import { DropdownChangeEvent } from 'primeng/dropdown';
-import { forkJoin } from 'rxjs';
+import { combineLatest, forkJoin, map, Subscription } from 'rxjs';
 import { DiscountProductGroup, BusinessSystemTier, BusinessSystemTierDiscountProductGroup, Tier, TierSaveBody } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { ValidatorService } from 'src/app/business/services/validators/validators';
 import { BaseFormCopy, nameof, SpiderFormArray, LastMenuIconIndexClicked, PrimengOption, Column, SpiderDataTableComponent, SpiderMessageService, BaseFormService, SpiderFormGroup, AllClickEvent, RowClickEvent } from '@playerty/spider';
-
+import { AuthService } from 'src/app/business/services/auth/auth.service';
 
 @Component({
     selector: 'tier-list',
@@ -19,31 +17,35 @@ import { BaseFormCopy, nameof, SpiderFormArray, LastMenuIconIndexClicked, Primen
 })
 export class TierListComponent extends BaseFormCopy implements OnInit {
     // Tier
-    tierModel: Tier = new Tier();
+    tierModel = new Tier();
     tierDTOListSaveBodyName: string = nameof<TierSaveBody>('tierDTOList');
     tierTranslationKey: string = new Tier().typeName;
     tierFormArray: SpiderFormArray<Tier>;
     tierCrudMenu: MenuItem[];
-    tierLastIndexClicked: LastMenuIconIndexClicked = new LastMenuIconIndexClicked();
+    tierLastIndexClicked = new LastMenuIconIndexClicked();
 
     // BusinessSystemTier
-    businessSystemTierModel: BusinessSystemTier = new BusinessSystemTier();
+    businessSystemTierModel = new BusinessSystemTier();
     businessSystemTierDTOListSaveBodyName: string = nameof<TierSaveBody>('businessSystemTierDTOList');
     businessSystemTierTranslationKey: string = new BusinessSystemTier().typeName;
     businessSystemTierFormArray: SpiderFormArray<BusinessSystemTier>;
     businessSystemTierCrudMenu: MenuItem[];
     businessSystemOptions: PrimengOption[];
-    businessSystemTierLastIndexClicked: LastMenuIconIndexClicked = new LastMenuIconIndexClicked();
+    businessSystemTierLastIndexClicked = new LastMenuIconIndexClicked();
 
     // BusinessSystemTierDiscountProductGroup M2M
     businessSystemTierDiscountProductGroupCols: Column<BusinessSystemTierDiscountProductGroup>[];
-    businessSystemTierDiscountProductGroupModel: BusinessSystemTierDiscountProductGroup = new BusinessSystemTierDiscountProductGroup();
+    businessSystemTierDiscountProductGroupModel = new BusinessSystemTierDiscountProductGroup();
     businessSystemTierDiscountProductGroupSaveBodyName: string = nameof<TierSaveBody>('businessSystemTierDiscountProductGroupDTOList');
     businessSystemTierDiscountProductGroupTranslationKey: string = new BusinessSystemTierDiscountProductGroup().typeName;
     businessSystemTierDiscountProductGroupFormArray: SpiderFormArray<BusinessSystemTierDiscountProductGroup>;
     alreadySelectedDiscountProductGroupListForBusinessSystem: BusinessSystemTierDiscountProductGroup[] = [];
     alreadySelectedBusinessSystemTierDiscountProductGroupIdsForBusinessSystem: number[] = [];
     @ViewChildren('businessSystemTierDiscountProductGroupTable') businessSystemTierDiscountProductGroupTables: QueryList<SpiderDataTableComponent>; // FT: Made for refreshing table
+
+    // Authorization
+    authorizationForSaveSubscription: Subscription;
+    isAuthorizedForSave = false;
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -54,9 +56,8 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         protected override route: ActivatedRoute, 
         protected override translocoService: TranslocoService,
         protected override baseFormService: BaseFormService,
-        private validatorService: ValidatorService,
-        private translateLabelsService: TranslateLabelsService,
-        private apiService: ApiService
+        private apiService: ApiService,
+        private authService: AuthService
     ) {
         super(differs, http, messageService, changeDetectorRef, router, route, translocoService, baseFormService);
     }
@@ -70,7 +71,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         ];
 
         forkJoin({
-            tierSaveBody: this.apiService.getTierSaveBodyDTO(),
+            tierSaveBody: this.apiService.getTierSaveBodyForCurrentPartner(),
             businessSystemNamebookList: this.apiService.getBusinessSystemDropdownListForBusinessSystemTier(),
         }).subscribe(({ tierSaveBody, businessSystemNamebookList }) => {
             this.initTierFormArray(tierSaveBody.tierDTOList);
@@ -78,6 +79,8 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
             this.initBusinessSystemTierDiscountCategoriesFormArray(tierSaveBody.businessSystemTierDiscountProductGroupDTOList);
 
             this.businessSystemOptions = businessSystemNamebookList.map(n => { return { label: n.displayName, value: n.id }});
+
+            this.authorizationForSaveSubscription = this.handleAuthorizationForSave().subscribe();
         });
     }
 
@@ -102,7 +105,12 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         this.businessSystemTierFormArray = this.initFormArray(
             this.formGroup, businessSystemTierList, this.businessSystemTierModel, this.businessSystemTierDTOListSaveBodyName, this.businessSystemTierTranslationKey
         );
-        this.businessSystemTierCrudMenu = this.getCrudMenuForOrderedData(this.businessSystemTierFormArray, new BusinessSystemTier({id: 0}), this.businessSystemTierLastIndexClicked, true);
+        this.businessSystemTierCrudMenu = this.getCrudMenuForOrderedData(
+            this.businessSystemTierFormArray, 
+            new BusinessSystemTier({id: 0}), 
+            this.businessSystemTierLastIndexClicked,
+            true
+        );
     }
 
     addNewBusinessSystemTier(tierIndex: number, formArrayIndex: number = null){
@@ -152,7 +160,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     }
 
     getBusinessSystemTierIndexInTheFormArray(tierIndex: number, businessSystemTierIndex: number){
-        const businessSystemTierList = this.businessSystemTierFormArray.value;
+        const businessSystemTierList = this.businessSystemTierFormArray.getRawValue();
 
         let j: number = 0
 
@@ -292,6 +300,23 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         return this.businessSystemTierDiscountProductGroupTables.find(x => 
             (x.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).tierIndex === tierIndex && 
             (x.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).businessSystemTierIndex === businessSystemTierIndex);
+    }
+
+    //#endregion
+
+    //#region Authorization
+
+    handleAuthorizationForSave = () => {
+        return combineLatest([this.authService.currentUserPermissionCodes$]).pipe(
+            map(([currentUserPermissionCodes]) => {
+                if (currentUserPermissionCodes != null) {
+                    this.isAuthorizedForSave =
+                        (currentUserPermissionCodes.includes('UpdatePartner')) || 
+                        (currentUserPermissionCodes.includes('InsertTier')) || 
+                        (currentUserPermissionCodes.includes('UpdateTier'));
+                }
+            })
+        );
     }
 
     //#endregion
@@ -506,6 +531,12 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
                 discountFormControl.disable();
             }
         });
+    }
+
+    ngOnDestroy(){
+        if (this.authorizationForSaveSubscription) {
+            this.authorizationForSaveSubscription.unsubscribe();
+        }
     }
 }
 

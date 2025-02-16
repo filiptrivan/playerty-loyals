@@ -1,8 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, combineLatest, firstValueFrom, Observable, of, Subscription } from 'rxjs';
-import { delay, filter, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { map, shareReplay, switchMap } from 'rxjs/operators';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { ConfigService } from '../config.service';
@@ -52,8 +52,6 @@ export class AuthService extends AuthBaseService implements OnDestroy {
   currentPartnerUser$ = this._currentPartnerUser.asObservable();
 
   initCurrentPartnerUserState = async () => {
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
     const params = this.route.snapshot.queryParams;
     const partnerSlug = params[this.config.partnerParamKey] ?? '';
   

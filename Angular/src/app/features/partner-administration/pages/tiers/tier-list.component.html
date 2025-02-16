@@ -68,7 +68,7 @@
             </panel-body>
     
             <panel-footer>
-                <p-button (onClick)="onSave(false)" [label]="t('Save')" icon="pi pi-save"></p-button>
+                <p-button [disabled]="!isAuthorizedForSave" (onClick)="onSave(false)" [label]="t('Save')" icon="pi pi-save"></p-button>
             </panel-footer>
     
         </spider-panel>

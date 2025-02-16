@@ -88,20 +88,10 @@ namespace PlayertyLoyals.Business.Services
 
         public override async Task AuthorizePartnerReadAndThrow(int? partnerId)
         {
-            await AuthorizePartnerReadAndThrow();
-        }
-
-        public override async Task AuthorizePartnerReadAndThrow(List<int> partnerIds)
-        {
-            await AuthorizePartnerReadAndThrow();
-        }
-
-        private async Task AuthorizePartnerReadAndThrow()
-        {
             await _context.WithTransactionAsync(async () =>
             {
                 bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.ReadPartner);
-                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedAsync(BusinessPermissionCodes.ReadPartner);
+                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedForPartnerAsync(BusinessPermissionCodes.ReadCurrentPartner, partnerId.Value);
 
                 if (isPartnerUserAuthorized == false && isUserAuthorized == false)
                     throw new UnauthorizedException();
@@ -113,11 +103,34 @@ namespace PlayertyLoyals.Business.Services
             await _context.WithTransactionAsync(async () =>
             {
                 bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.UpdatePartner);
-                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedAsync(BusinessPermissionCodes.UpdatePartner);
+                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedForPartnerAsync(BusinessPermissionCodes.UpdateCurrentPartner, partnerDTO.Id);
 
                 if (isPartnerUserAuthorized == false && isUserAuthorized == false)
                     throw new UnauthorizedException();
             });
+        }
+
+        private async Task<bool> IsPartnerUserAuthorizedForPartnerAsync(string permissionCode, int partnerId)
+        {
+            if (permissionCode == null)
+                throw new ArgumentNullException("Permission code is not provided.");
+
+            bool result = false;
+
+            long currentUserId = _authenticationService.GetCurrentUserId();
+
+            await _context.WithTransactionAsync(async () =>
+            {
+                result = await _context.DbSet<PartnerUser>()
+                    .AsNoTracking()
+                    .AnyAsync(pu =>
+                        pu.User.Id == currentUserId &&
+                        pu.Partner.Id == partnerId &&
+                        pu.PartnerRoles.Any(r => r.PartnerPermissions.Any(p => p.Code == permissionCode))
+                    );
+            });
+
+            return result;
         }
 
         #endregion
@@ -135,7 +148,8 @@ namespace PlayertyLoyals.Business.Services
             await _context.WithTransactionAsync(async () =>
             {
                 bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.ReadPartner);
-                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedAsync(BusinessPermissionCodes.ReadPartnerUser);
+                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedForCurrentPartnerAsync(BusinessPermissionCodes.ReadPartnerUser);
+
                 bool isCurrentPartnerUser = await _partnerUserAuthenticationService.GetCurrentPartnerUserId() == partnerUserId;
 
                 if (isCurrentPartnerUser == false && isPartnerUserAuthorized == false && isUserAuthorized == false)
@@ -145,14 +159,7 @@ namespace PlayertyLoyals.Business.Services
 
         public override async Task AuthorizePartnerUserReadAndThrow(List<long> partnerUserIds)
         {
-            await _context.WithTransactionAsync(async () =>
-            {
-                bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.ReadPartner);
-                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedAsync(BusinessPermissionCodes.ReadPartnerUser);
-
-                if (isPartnerUserAuthorized == false && isUserAuthorized == false)
-                    throw new UnauthorizedException();
-            });
+            await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.ReadPartner, BusinessPermissionCodes.ReadPartnerUser);
         }
 
         public override async Task AuthorizePartnerUserUpdateAndThrow(PartnerUserDTO partnerUserDTO)
@@ -172,7 +179,7 @@ namespace PlayertyLoyals.Business.Services
                 }
 
                 bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.UpdatePartner);
-                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedAsync(BusinessPermissionCodes.UpdatePartnerUser);
+                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedForCurrentPartnerAsync(BusinessPermissionCodes.UpdatePartnerUser);
 
                 if (isPartnerUserAuthorized == false &&
                     isUserAuthorized == false &&
@@ -189,12 +196,15 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
+        /// <summary>
+        /// Didn't use AuthorizePartnerEntityWithoutSpecificCurrentUserLogic method because in the future partner user could delete his partner profile
+        /// </summary>
         public override async Task AuthorizePartnerUserDeleteAndThrow(long partnerUserId)
         {
             await _context.WithTransactionAsync(async () =>
             {
                 bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(BusinessPermissionCodes.UpdatePartner);
-                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedAsync(BusinessPermissionCodes.DeletePartnerUser);
+                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedForCurrentPartnerAsync(BusinessPermissionCodes.DeletePartnerUser);
 
                 if (isPartnerUserAuthorized == false && isUserAuthorized == false)
                     throw new UnauthorizedException();
@@ -332,7 +342,7 @@ namespace PlayertyLoyals.Business.Services
             await AuthorizeBusinessSystemReadAndThrow();
         }
 
-        public async Task AuthorizeBusinessSystemReadAndThrow()
+        private async Task AuthorizeBusinessSystemReadAndThrow()
         {
             await AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(BusinessPermissionCodes.ReadPartner, BusinessPermissionCodes.ReadBusinessSystem);
         }
@@ -405,21 +415,35 @@ namespace PlayertyLoyals.Business.Services
 
         #region Helpers
 
-        public async Task<bool> IsPartnerUserAuthorizedAsync(string permissionCode)
+        public async Task AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(string userPermissionCode, string partnerUserPermissionCode)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(userPermissionCode);
+                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedForCurrentPartnerAsync(partnerUserPermissionCode);
+
+                if (isPartnerUserAuthorized == false && isUserAuthorized == false)
+                    throw new UnauthorizedException();
+            });
+        }
+
+        public async Task<bool> IsPartnerUserAuthorizedForCurrentPartnerAsync(string permissionCode)
         {
             if (permissionCode == null)
                 throw new ArgumentNullException("Permission code is not provided.");
 
             bool result = false;
 
+            long currentUserId = _authenticationService.GetCurrentUserId();
+            string currentPartnerCode = _partnerUserAuthenticationService.GetCurrentPartnerCode();
+
             await _context.WithTransactionAsync(async () =>
             {
-                long partnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
-
                 result = await _context.DbSet<PartnerUser>()
                     .AsNoTracking()
                     .AnyAsync(pu =>
-                        pu.Id == partnerUserId &&
+                        pu.User.Id == currentUserId &&
+                        pu.Partner.Slug == currentPartnerCode &&
                         pu.PartnerRoles.Any(r => r.PartnerPermissions.Any(p => p.Code == permissionCode))
                     );
             });
@@ -427,17 +451,21 @@ namespace PlayertyLoyals.Business.Services
             return result;
         }
 
-        public async Task AuthorizePartnerEntityWithoutSpecificCurrentUserLogic(string userPermissionCode, string partnerUserPermissionCode)
-        {
-            await _context.WithTransactionAsync(async () =>
-            {
-                bool isUserAuthorized = await IsAuthorizedAsync<UserExtended>(userPermissionCode);
-                bool isPartnerUserAuthorized = await IsPartnerUserAuthorizedAsync(partnerUserPermissionCode);
+        //public async Task<bool> IsPartnerUserAuthorizedForPartnerAsync(string permissionCode, List<int> partnerIds)
+        //{
+        //    if (permissionCode == null)
+        //        throw new ArgumentNullException("Permission code is not provided.");
 
-                if (isPartnerUserAuthorized == false && isUserAuthorized == false)
-                    throw new UnauthorizedException();
-            });
-        }
+        //    if (partnerIds.Count == 0)
+        //        return false;
+
+        //    if (partnerIds.Count != partnerIds.Distinct().Count())
+        //        return false;
+
+        //    int partnerId = partnerIds.FirstOrDefault();
+
+        //    return await IsPartnerUserAuthorizedForPartnerAsync(permissionCode, partnerId);
+        //}
 
         #endregion
 

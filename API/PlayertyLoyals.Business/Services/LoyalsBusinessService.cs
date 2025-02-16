@@ -184,12 +184,14 @@ namespace PlayertyLoyals.Business.Services
             await _context.WithTransactionAsync(async () =>
             {
                 List<int> tierIdsDTO = tierSaveBodyDTO.TierDTOList.Select(x => x.Id).ToList(); // TODO FT: Check if user is authorized to delete passed tiers
-                List<int> tierIdListToDelete = _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode() && tierIdsDTO.Contains(x.Id) == false).Select(x => x.Id).ToList();
-                await DeleteTierList(tierIdListToDelete, false);
+                List<int> tierIdsToDelete = _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode() && tierIdsDTO.Contains(x.Id) == false).Select(x => x.Id).ToList();
+                if (tierIdsToDelete.Count > 0)
+                    await DeleteTierList(tierIdsToDelete, true);
 
                 List<long> businessSystemTierIdsDTO = tierSaveBodyDTO.BusinessSystemTierDTOList.Select(x => x.Id).ToList(); // TODO FT: Check if user is authorized to delete passed businessSystem tiers
-                List<long> businessSystemTierIdListToDelete = _context.DbSet<BusinessSystemTier>().Where(x => tierIdsDTO.Contains(x.Tier.Id) && businessSystemTierIdsDTO.Contains(x.Id) == false).Select(x => x.Id).ToList();
-                await DeleteBusinessSystemTierList(businessSystemTierIdListToDelete, false);
+                List<long> businessSystemTierIdsToDelete = _context.DbSet<BusinessSystemTier>().Where(x => tierIdsDTO.Contains(x.Tier.Id) && businessSystemTierIdsDTO.Contains(x.Id) == false).Select(x => x.Id).ToList();
+                if (businessSystemTierIdsToDelete.Count > 0)
+                    await DeleteBusinessSystemTierList(businessSystemTierIdsToDelete, false);
 
                 for (int i = 0; i < tierSaveBodyDTO.TierDTOList.Count; i++)
                 {
@@ -284,7 +286,7 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task<TierSaveBodyDTO> GetTierSaveBodyDTO()
+        public async Task<TierSaveBodyDTO> GetTierSaveBodyDTOForCurrentPartner()
         {
             TierSaveBodyDTO tierSaveBodyDTO = new();
 
@@ -1356,7 +1358,7 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                await _authorizationService.AuthorizeBusinessSystemReadAndThrow();
+                await _authorizationService.AuthorizeBusinessSystemReadAndThrow(tableFilterDTO.AdditionalFilterIdLong);
 
                 return await GetBusinessSystemUpdatePointsScheduledTaskTableData(
                     tableFilterDTO,
@@ -1370,12 +1372,14 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                await _authorizationService.AuthorizeBusinessSystemReadAndThrow();
+                await _authorizationService.AuthorizeBusinessSystemReadAndThrow(tableFilterDTO.AdditionalFilterIdLong);
 
                 byte[] fileContent = await ExportBusinessSystemUpdatePointsScheduledTaskTableDataToExcel(
-                    tableFilterDTO, _context.DbSet<BusinessSystemUpdatePointsScheduledTask>().Where(x => x.BusinessSystem.Id == tableFilterDTO.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo),
+                    tableFilterDTO, 
+                    _context.DbSet<BusinessSystemUpdatePointsScheduledTask>().Where(x => x.BusinessSystem.Id == tableFilterDTO.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo),
                     false
                 );
+
                 return fileContent;
             });
         }
