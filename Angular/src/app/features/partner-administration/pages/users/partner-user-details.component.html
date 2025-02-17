@@ -29,13 +29,10 @@
                 <div class="col-12">
                     <div class="flex flex-column gap-2">
                         <div>
-                            {{segmentation.name}} <i *ngIf="showSegmentationFirstTimeFillIcon(segmentation)" class="pi pi-info-circle" style="margin-left: 5px; cursor: pointer;" [pTooltip]="firstTimeFillText" tabindex="-1" tooltipEvent="focus"></i>
+                            {{segmentation.name}} <i *ngIf="showSegmentationFirstTimeFillIcon(segmentation)" [pTooltip]="firstTimeFillText" tabindex="-1" tooltipEvent="focus" class="pi pi-info-circle" style="margin-left: 5px; cursor: pointer;"></i>
                         </div>
                         <segmentation-select 
-                        [formGroup]="formGroup" 
-                        [partnerUserId]="partnerUserFormGroup.getRawValue().id" 
                         [segmentation]="segmentation" 
-                        [allSegmentationItems]="segmentationItemsFormArray.getRawValue()" 
                         [segmentationItemsFormArray]="segmentationItemsFormArray"
                         ></segmentation-select>
                     </div>

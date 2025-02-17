@@ -30,6 +30,7 @@ namespace PlayertyLoyals.Business.Entities
         public virtual Partner Partner { get; set; }
 
         [UIOrderedOneToMany]
+        [IncludeInDTO]
         [Required]
         public virtual List<SegmentationItem> SegmentationItems { get; } = new();
 

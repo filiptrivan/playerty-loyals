@@ -18,7 +18,7 @@ import { Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, Busi
     template:`
 <ng-container *transloco="let t">
     <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
-        <panel-header></panel-header>
+        <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
@@ -80,6 +80,8 @@ export class BusinessSystemBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
+    @Input() panelTitle: string;
+    @Input() panelIcon: string;
     @Input() showReturnButton: boolean = true;
     authorizationForSaveSubscription: Subscription;
     @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
@@ -180,6 +182,8 @@ export class BusinessSystemBaseDetailsComponent {
             map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
                 if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
                     this.isAuthorizedForSave =
+                        (currentUserPermissionCodes.includes('UpdatePartner') && this.modelId <= 0) || 
+                        (currentUserPermissionCodes.includes('UpdatePartner') && this.modelId > 0) || 
 
                         (currentUserPermissionCodes.includes('InsertBusinessSystem') && this.modelId <= 0) || 
                         (currentUserPermissionCodes.includes('UpdateBusinessSystem') && this.modelId > 0) ||
@@ -246,7 +250,7 @@ export class BusinessSystemBaseDetailsComponent {
     template:`
 <ng-container *transloco="let t">
     <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
-        <panel-header></panel-header>
+        <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
@@ -318,6 +322,8 @@ export class NotificationBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
+    @Input() panelTitle: string;
+    @Input() panelIcon: string;
     @Input() showReturnButton: boolean = true;
     authorizationForSaveSubscription: Subscription;
     @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
@@ -502,7 +508,7 @@ export class NotificationBaseDetailsComponent {
     template:`
 <ng-container *transloco="let t">
     <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
-        <panel-header></panel-header>
+        <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
@@ -570,6 +576,8 @@ export class PartnerBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
+    @Input() panelTitle: string;
+    @Input() panelIcon: string;
     @Input() showReturnButton: boolean = true;
     authorizationForSaveSubscription: Subscription;
     @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
@@ -746,7 +754,7 @@ export class PartnerBaseDetailsComponent {
     template:`
 <ng-container *transloco="let t">
     <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
-        <panel-header></panel-header>
+        <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
@@ -818,6 +826,8 @@ export class PartnerNotificationBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
+    @Input() panelTitle: string;
+    @Input() panelIcon: string;
     @Input() showReturnButton: boolean = true;
     authorizationForSaveSubscription: Subscription;
     @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
@@ -932,6 +942,8 @@ export class PartnerNotificationBaseDetailsComponent {
             map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
                 if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
                     this.isAuthorizedForSave =
+                        (currentUserPermissionCodes.includes('UpdatePartner') && this.modelId <= 0) || 
+                        (currentUserPermissionCodes.includes('UpdatePartner') && this.modelId > 0) || 
 
                         (currentUserPermissionCodes.includes('InsertPartnerNotification') && this.modelId <= 0) || 
                         (currentUserPermissionCodes.includes('UpdatePartnerNotification') && this.modelId > 0) ||
@@ -1005,7 +1017,7 @@ export class PartnerNotificationBaseDetailsComponent {
     template:`
 <ng-container *transloco="let t">
     <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
-        <panel-header></panel-header>
+        <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
@@ -1064,6 +1076,8 @@ export class PartnerRoleBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
+    @Input() panelTitle: string;
+    @Input() panelIcon: string;
     @Input() showReturnButton: boolean = true;
     authorizationForSaveSubscription: Subscription;
     @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
@@ -1172,6 +1186,8 @@ export class PartnerRoleBaseDetailsComponent {
             map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
                 if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
                     this.isAuthorizedForSave =
+                        (currentUserPermissionCodes.includes('UpdatePartner') && this.modelId <= 0) || 
+                        (currentUserPermissionCodes.includes('UpdatePartner') && this.modelId > 0) || 
 
                         (currentUserPermissionCodes.includes('InsertPartnerRole') && this.modelId <= 0) || 
                         (currentUserPermissionCodes.includes('UpdatePartnerRole') && this.modelId > 0) ||
@@ -1240,7 +1256,7 @@ export class PartnerRoleBaseDetailsComponent {
     template:`
 <ng-container *transloco="let t">
     <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
-        <panel-header></panel-header>
+        <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
@@ -1290,6 +1306,8 @@ export class PartnerUserBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
+    @Input() panelTitle: string;
+    @Input() panelIcon: string;
     @Input() showReturnButton: boolean = true;
     authorizationForSaveSubscription: Subscription;
     @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
@@ -1386,6 +1404,7 @@ export class PartnerUserBaseDetailsComponent {
             map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
                 if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
                     this.isAuthorizedForSave =
+                        (currentUserPermissionCodes.includes('UpdatePartner') && this.modelId > 0) || 
 
                         (currentUserPermissionCodes.includes('InsertPartnerUser') && this.modelId <= 0) || 
                         (currentUserPermissionCodes.includes('UpdatePartnerUser') && this.modelId > 0) ||
@@ -1444,7 +1463,7 @@ export class PartnerUserBaseDetailsComponent {
     template:`
 <ng-container *transloco="let t">
     <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
-        <panel-header></panel-header>
+        <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
@@ -1527,6 +1546,8 @@ export class SegmentationBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
+    @Input() panelTitle: string;
+    @Input() panelIcon: string;
     @Input() showReturnButton: boolean = true;
     authorizationForSaveSubscription: Subscription;
     @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
@@ -1631,6 +1652,8 @@ export class SegmentationBaseDetailsComponent {
             map(([currentUserPermissionCodes, isAuthorizedForSave]) => {
                 if (currentUserPermissionCodes != null && isAuthorizedForSave != null) {
                     this.isAuthorizedForSave =
+                        (currentUserPermissionCodes.includes('UpdatePartner') && this.modelId <= 0) || 
+                        (currentUserPermissionCodes.includes('UpdatePartner') && this.modelId > 0) || 
 
                         (currentUserPermissionCodes.includes('InsertSegmentation') && this.modelId <= 0) || 
                         (currentUserPermissionCodes.includes('UpdateSegmentation') && this.modelId > 0) ||
@@ -1712,7 +1735,7 @@ export class SegmentationBaseDetailsComponent {
     template:`
 <ng-container *transloco="let t">
     <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
-        <panel-header></panel-header>
+        <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
@@ -1771,6 +1794,8 @@ export class TierBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
+    @Input() panelTitle: string;
+    @Input() panelIcon: string;
     @Input() showReturnButton: boolean = true;
     authorizationForSaveSubscription: Subscription;
     @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
@@ -1934,12 +1959,18 @@ export class TierBaseDetailsComponent {
     template:`
 <ng-container *transloco="let t">
     <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
-        <panel-header></panel-header>
+        <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
             @defer (when loading === false) {
                 <form class="grid">
                     <ng-content select="[BEFORE]"></ng-content>
+                    <div *ngIf="showHasLoggedInWithExternalProviderForUserExtended" class="col-12 md:col-6">
+                        <spider-checkbox [control]="control('hasLoggedInWithExternalProvider', userExtendedFormGroup)"></spider-checkbox>
+                    </div>
+                    <div *ngIf="showIsDisabledForUserExtended" class="col-12 md:col-6">
+                        <spider-checkbox [control]="control('isDisabled', userExtendedFormGroup)"></spider-checkbox>
+                    </div>
                     <div *ngIf="showBirthDateForUserExtended" class="col-12 md:col-6">
                         <spider-calendar [control]="control('birthDate', userExtendedFormGroup)"></spider-calendar>
                     </div>
@@ -1987,6 +2018,8 @@ export class UserExtendedBaseDetailsComponent {
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
     @Input() showPanelHeader: boolean = true;
+    @Input() panelTitle: string;
+    @Input() panelIcon: string;
     @Input() showReturnButton: boolean = true;
     authorizationForSaveSubscription: Subscription;
     @Input() authorizedForSaveObservable: () => Observable<boolean> = () => of(false);
@@ -2008,6 +2041,8 @@ export class UserExtendedBaseDetailsComponent {
 
 
 
+    @Input() showHasLoggedInWithExternalProviderForUserExtended: boolean = true;
+    @Input() showIsDisabledForUserExtended: boolean = true;
     @Input() showBirthDateForUserExtended: boolean = true;
     @Input() showGenderForUserExtended: boolean = true;
 
@@ -2092,11 +2127,15 @@ export class UserExtendedBaseDetailsComponent {
                         isAuthorizedForSave;
 
                     if (this.isAuthorizedForSave) { 
+                        this.userExtendedFormGroup.controls.hasLoggedInWithExternalProvider.enable();
+                        this.userExtendedFormGroup.controls.isDisabled.enable();
                         this.userExtendedFormGroup.controls.birthDate.enable();
                         this.userExtendedFormGroup.controls.genderId.enable();
 
                     }
                     else{
+                        this.userExtendedFormGroup.controls.hasLoggedInWithExternalProvider.disable();
+                        this.userExtendedFormGroup.controls.isDisabled.disable();
                         this.userExtendedFormGroup.controls.birthDate.disable();
                         this.userExtendedFormGroup.controls.genderId.disable();
 

@@ -1,8 +1,8 @@
-@defer (when segmentationItemsForTheCurrentSegmentation != null) {
-    @defer (when segmentationItemsForTheCurrentSegmentation.length > 0) {
+@defer (when segmentation?.segmentationItemsDTOList != null) {
+    @defer (when segmentation.segmentationItemsDTOList.length > 0) {
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-            @for (segmentationItemFormGroup of getFormArrayGroups(segmentationItemsFormArray); track segmentationItemFormGroup) {
-                <spider-checkbox [control]="control('checked', segmentationItemFormGroup)" [label]="segmentationItemFormGroup.getRawValue().name" [initializeToFalse]="false"></spider-checkbox>
+            @for (segmentationItemFormGroup of getSegmentationItemFormArrayGroups(segmentationItemsFormArray); track segmentationItemFormGroup) {
+                <spider-checkbox [control]="control('checked', segmentationItemFormGroup)" [label]="segmentationItemFormGroup.getRawValue().name" [inlineLabel]="true"></spider-checkbox>
             }
         </div>
     }

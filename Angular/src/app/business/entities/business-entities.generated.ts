@@ -1317,6 +1317,7 @@ export class Segmentation extends BaseEntity
 	pointsForTheFirstTimeFill?: number;
 	partnerDisplayName?: string;
 	partnerId?: number;
+	segmentationItemsDTOList?: SegmentationItem[];
 	version?: number;
 	id?: number;
 	createdAt?: Date;
@@ -1329,6 +1330,7 @@ export class Segmentation extends BaseEntity
 		pointsForTheFirstTimeFill,
 		partnerDisplayName,
 		partnerId,
+		segmentationItemsDTOList,
 		version,
 		id,
 		createdAt,
@@ -1339,6 +1341,7 @@ export class Segmentation extends BaseEntity
 		pointsForTheFirstTimeFill?: number;
 		partnerDisplayName?: string;
 		partnerId?: number;
+		segmentationItemsDTOList?: SegmentationItem[];
 		version?: number;
 		id?: number;
 		createdAt?: Date;
@@ -1352,6 +1355,7 @@ export class Segmentation extends BaseEntity
 		this.pointsForTheFirstTimeFill = pointsForTheFirstTimeFill;
 		this.partnerDisplayName = partnerDisplayName;
 		this.partnerId = partnerId;
+		this.segmentationItemsDTOList = segmentationItemsDTOList;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;

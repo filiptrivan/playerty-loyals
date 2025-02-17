@@ -24,10 +24,8 @@ namespace PlayertyLoyals.Business.Entities
         [Required]
         public string Email { get; set; }
 
-        [UIDoNotGenerate]
         public bool? HasLoggedInWithExternalProvider { get; set; }
 
-        [UIDoNotGenerate]
         public bool? IsDisabled { get; set; }
 
         [TranslateSingularSrLatnRS("Datum rođenja")]

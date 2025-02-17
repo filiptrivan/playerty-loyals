@@ -64,7 +64,7 @@ namespace PlayertyLoyals.Business.Services
         #region User
 
         /// <summary>
-        /// FT: IsDisabled and HasLoggedInWithExternalProvider are handled inside authorization service
+        /// FT: IsDisabled is handled inside authorization service
         /// </summary>
         protected override async Task OnBeforeSaveUserExtendedAndReturnSaveBodyDTO(UserExtendedSaveBodyDTO userExtendedSaveBodyDTO)
         {
@@ -73,10 +73,14 @@ namespace PlayertyLoyals.Business.Services
                 if (userExtendedSaveBodyDTO.UserExtendedDTO.Id <= 0)
                     throw new HackerException("You can't add new user.");
 
-                UserExtended user = await GetInstanceAsync<UserExtended, long>(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.UserExtendedDTO.Version);
+                UserExtended userExtended = await GetInstanceAsync<UserExtended, long>(userExtendedSaveBodyDTO.UserExtendedDTO.Id, userExtendedSaveBodyDTO.UserExtendedDTO.Version);
 
-                if (userExtendedSaveBodyDTO.UserExtendedDTO.Email != user.Email)
-                    throw new HackerException("You can't change email from the main UI form.");
+                if (userExtendedSaveBodyDTO.UserExtendedDTO.Email != userExtended.Email ||
+                    userExtendedSaveBodyDTO.UserExtendedDTO.HasLoggedInWithExternalProvider != userExtended.HasLoggedInWithExternalProvider
+                )
+                { 
+                    throw new HackerException("You can't change Email and HasLoggedInWithExternalProvider from the main UI form.");
+                }
             });
         }
 
@@ -938,30 +942,50 @@ namespace PlayertyLoyals.Business.Services
         /// </summary>
         public async Task<List<SegmentationDTO>> GetSegmentationListForTheCurrentPartner()
         {
-            return await _context.WithTransactionAsync(async () =>
+            List<SegmentationDTO> segmentationDTOList = new();
+
+            await _context.WithTransactionAsync(async () =>
             {
-                return await _context.DbSet<Segmentation>()
+                List<Segmentation> segmentations = await _context.DbSet<Segmentation>()
+                    .AsNoTracking()
+                    .Include(x => x.Partner)
+                    .Include(x => x.SegmentationItems)
                     .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
                     .OrderBy(x => x.Id)
-                    .ProjectToType<SegmentationDTO>(Mapper.SegmentationToDTOConfig())
                     .ToListAsync();
+
+                foreach (Segmentation segmentation in segmentations)
+                {
+                    SegmentationDTO segmentationDTO = segmentation.Adapt<SegmentationDTO>(Mapper.SegmentationToDTOConfig());
+                    segmentationDTO.SegmentationItemsDTOList = new List<SegmentationItemDTO>();
+
+                    foreach (SegmentationItem segmentationItem in segmentation.SegmentationItems.OrderBy(x => x.OrderNumber))
+                    {
+                        SegmentationItemDTO segmentationItemDTO = segmentationItem.Adapt<SegmentationItemDTO>(Mapper.SegmentationItemToDTOConfig());
+                        segmentationDTO.SegmentationItemsDTOList.Add(segmentationItemDTO);
+                    }
+                    
+                    segmentationDTOList.Add(segmentationDTO);
+                }
             });
+
+            return segmentationDTOList;
         }
 
         /// <summary>
         /// The information is available as soon as you register, there is no need for further authorization
         /// </summary>
-        public async Task<List<SegmentationItemDTO>> GetSegmentationItemListForTheCurrentPartner()
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                return await _context.DbSet<SegmentationItem>()
-                    .Where(x => x.Segmentation.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
-                    .OrderBy(x => x.OrderNumber)
-                    .ProjectToType<SegmentationItemDTO>(Mapper.SegmentationItemToDTOConfig())
-                    .ToListAsync();
-            });
-        }
+        //public async Task<List<SegmentationItemDTO>> GetSegmentationItemListForTheCurrentPartner()
+        //{
+        //    return await _context.WithTransactionAsync(async () =>
+        //    {
+        //        return await _context.DbSet<SegmentationItem>()
+        //            .Where(x => x.Segmentation.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
+        //            .OrderBy(x => x.OrderNumber)
+        //            .ProjectToType<SegmentationItemDTO>(Mapper.SegmentationItemToDTOConfig())
+        //            .ToListAsync();
+        //    });
+        //}
 
         #endregion
 
@@ -1010,7 +1034,7 @@ namespace PlayertyLoyals.Business.Services
 
                 if (
                     businessSystemBeforeSave.UpdatePointsInterval != businessSystemDTO.UpdatePointsInterval ||
-                    Helpers.AreDatesEqualToSeconds(businessSystemBeforeSave.UpdatePointsStartDate, businessSystemDTO.UpdatePointsStartDate) == false ||
+                    Helper.AreDatesEqualToSeconds(businessSystemBeforeSave.UpdatePointsStartDate, businessSystemDTO.UpdatePointsStartDate) == false ||
                     businessSystemBeforeSave.UpdatePointsScheduledTaskIsPaused != businessSystemDTO.UpdatePointsScheduledTaskIsPaused
                 )
                 {

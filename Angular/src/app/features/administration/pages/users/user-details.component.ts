@@ -5,7 +5,8 @@ import { TranslocoService } from '@jsverse/transloco';
 import { UserExtended } from 'src/app/business/entities/business-entities.generated';
 import { BaseFormCopy, SpiderFormGroup, SpiderMessageService, BaseFormService, IsAuthorizedForSaveEvent } from '@playerty/spider';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
-import { map, Observable } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
+import { BusinessPermissionCodes } from 'src/app/business/enums/business-enums.generated';
 
 @Component({
     selector: 'user-details',
@@ -14,6 +15,9 @@ import { map, Observable } from 'rxjs';
 })
 export class UserDetailsComponent extends BaseFormCopy implements OnInit {
     userExtendedFormGroup = new SpiderFormGroup<UserExtended>({});
+
+    showIsDisabledControl: boolean = false;
+    showHasLoggedInWithExternalProvider: boolean = false;
     
     isAuthorizedForSave: boolean = false;
 
@@ -36,16 +40,23 @@ export class UserDetailsComponent extends BaseFormCopy implements OnInit {
     }
 
     authorizedForSaveObservable = (): Observable<boolean> => {
-        return this.authService.user$.pipe(
-            map((currentUser) => {
-                if (currentUser) {
-                    const isCurrentUserPage = this.isCurrentUserPage(currentUser.id);
-                    return isCurrentUserPage;
+        return combineLatest([this.authService.currentUserPermissionCodes$, this.authService.user$]).pipe(
+            map(([currentUserPermissionCodes, currentUser]) => {
+                if (currentUserPermissionCodes != null && currentUser != null) {
+                    const IsDisabledAndExternalLoggedInControls = this.showIsDisabledAndExternalLoggedInControlsForPermissions(currentUserPermissionCodes);
+                    this.showIsDisabledControl = IsDisabledAndExternalLoggedInControls;
+                    this.showHasLoggedInWithExternalProvider = IsDisabledAndExternalLoggedInControls;
+                    return this.isCurrentUserPage(currentUser.id);
                 }
 
                 return false;
             })
         );
+    }
+
+    showIsDisabledAndExternalLoggedInControlsForPermissions = (currentUserPermissionCodes: string[]) => {
+        return currentUserPermissionCodes.includes(BusinessPermissionCodes.ReadUserExtended) ||
+               currentUserPermissionCodes.includes(BusinessPermissionCodes.UpdateUserExtended);
     }
 
     isCurrentUserPage = (currentUserId: number) => {
@@ -55,7 +66,7 @@ export class UserDetailsComponent extends BaseFormCopy implements OnInit {
     isAuthorizedForSaveChange = (event: IsAuthorizedForSaveEvent) => {
         this.isAuthorizedForSave = event.isAuthorizedForSave;
 
-        this.userExtendedFormGroup.controls.email.disable();
+        this.userExtendedFormGroup.controls.hasLoggedInWithExternalProvider.disable();
     }
 
     override onBeforeSave = (): void => {

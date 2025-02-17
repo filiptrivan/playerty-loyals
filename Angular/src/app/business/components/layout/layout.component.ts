@@ -83,13 +83,13 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                             label: this.translocoService.translate('TransactionList'),
                             icon: 'pi pi-fw pi-wallet',
                             routerLink: [`/transactions`],
-                            visible: true
+                            visible: partner != null
                         },
                         {
                             label: this.translocoService.translate('PartnerList'),
                             icon: 'pi pi-fw pi-at',
                             routerLink: [`/partner-select`],
-                            visible: true
+                            visible: partner != null
                         },
                         {
                             label: this.translocoService.translate('SuperAdministration'),
@@ -97,7 +97,7 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                             visible: true,
                             hasPermission: (permissionCodes: string[]): boolean => { 
                                 return (permissionCodes?.includes(BusinessPermissionCodes.ReadUserExtended) ||
-                                        // permissionCodes?.includes(BusinessPermissionCodes.ReadRole) ||
+                                        permissionCodes?.includes(SecurityPermissionCodes.ReadRole) ||
                                         permissionCodes?.includes(BusinessPermissionCodes.ReadTier) || 
                                         permissionCodes?.includes(BusinessPermissionCodes.ReadNotification))
                             },
@@ -115,24 +115,27 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                                     label: this.translocoService.translate('RoleList'),
                                     icon: 'pi pi-fw pi-id-card',
                                     routerLink: [`/${this.config.administrationSlug}/roles`],
-                                    // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadRole]))
-                                    // }
+                                    hasPermission: (permissionCodes: string[]): boolean => { 
+                                        return (permissionCodes?.includes(SecurityPermissionCodes.ReadRole))
+                                    },
                                     visible: true,
                                 },
                                 {
                                     label: this.translocoService.translate('NotificationList'),
                                     icon: 'pi pi-fw pi-bell',
                                     routerLink: [`/${this.config.administrationSlug}/notifications`],
-                                    // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadNotification]))
-                                    // }
+                                    hasPermission: (permissionCodes: string[]): boolean => { 
+                                        return (permissionCodes?.includes(BusinessPermissionCodes.ReadNotification))
+                                    },
                                     visible: true,
                                 },
                                 {
                                     label: this.translocoService.translate('PartnerList'),
                                     icon: 'pi pi-fw pi-at',
                                     routerLink: [`/${this.config.administrationSlug}/partners`],
+                                    hasPermission: (permissionCodes: string[]): boolean => { 
+                                        return (permissionCodes?.includes(BusinessPermissionCodes.ReadPartner))
+                                    },
                                     visible: true
                                 },
                             ]
@@ -140,67 +143,90 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                         {
                             label: this.translocoService.translate('Administration'),
                             icon: 'pi pi-fw pi-cog',
-                            // hasPermission: (permissionCodes: string[]): boolean => { 
-                            //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadUserExtended]) ||
-                            //             permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadRole]) ||
-                            //             permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadTier]) || 
-                            //             permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadNotification])) &&
-                            //             partner != null
-                            // },
-                            visible: true,
+                            hasPermission: (permissionCodes: string[]): boolean => { 
+                                return (
+                                        permissionCodes?.includes(BusinessPermissionCodes.ReadPartner) ||
+                                        permissionCodes?.includes(BusinessPermissionCodes.ReadPartnerUser) ||
+                                        permissionCodes?.includes(BusinessPermissionCodes.ReadPartnerRole) ||
+                                        permissionCodes?.includes(BusinessPermissionCodes.ReadPartnerNotification) || 
+                                        permissionCodes?.includes(BusinessPermissionCodes.ReadSegmentation) || 
+                                        permissionCodes?.includes(BusinessPermissionCodes.ReadBusinessSystem) || 
+                                        permissionCodes?.includes(BusinessPermissionCodes.ReadTier)
+                                    ) &&
+                                    partner != null
+                            },
+                            visible: partner != null,
                             items: [
                                 {
                                     label: this.translocoService.translate('UserList'),
                                     icon: 'pi pi-fw pi-user',
                                     routerLink: [`/${this.config.partnerAdministrationSlug}/users`],
-                                    // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadUserExtended]))
-                                    // } 
+                                    hasPermission: (permissionCodes: string[]): boolean => { 
+                                        return (
+                                            permissionCodes?.includes(BusinessPermissionCodes.ReadPartnerUser) ||
+                                            permissionCodes?.includes(BusinessPermissionCodes.ReadPartner)
+                                        )
+                                    },
                                     visible: true,
                                 },
                                 {
                                     label: this.translocoService.translate('RoleList'),
                                     icon: 'pi pi-fw pi-id-card',
                                     routerLink: [`/${this.config.partnerAdministrationSlug}/roles`],
-                                    // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadRole]))
-                                    // }
+                                    hasPermission: (permissionCodes: string[]): boolean => { 
+                                        return (
+                                            permissionCodes?.includes(BusinessPermissionCodes.ReadPartnerRole) ||
+                                            permissionCodes?.includes(BusinessPermissionCodes.ReadPartner)
+                                        )
+                                    },
                                     visible: true,
                                 },
                                 {
                                     label: this.translocoService.translate('NotificationList'),
                                     icon: 'pi pi-fw pi-bell',
                                     routerLink: [`/${this.config.partnerAdministrationSlug}/notifications`],
-                                    // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadNotification]))
-                                    // }
+                                    hasPermission: (permissionCodes: string[]): boolean => { 
+                                        return (
+                                            permissionCodes?.includes(BusinessPermissionCodes.ReadPartnerNotification) ||
+                                            permissionCodes?.includes(BusinessPermissionCodes.ReadPartner)
+                                        )
+                                    },
                                     visible: true,
                                 },
                                 {
                                     label: this.translocoService.translate('SegmentationList'),
                                     icon: 'pi pi-fw pi-hashtag',
                                     routerLink: [`/${this.config.partnerAdministrationSlug}/segmentations`],
+                                    hasPermission: (permissionCodes: string[]): boolean => { 
+                                        return (
+                                            permissionCodes?.includes(BusinessPermissionCodes.ReadSegmentation) ||
+                                            permissionCodes?.includes(BusinessPermissionCodes.ReadPartner)
+                                        )
+                                    },
                                     visible: true,
-                                    // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadSegmentation]))
-                                    // }
                                 },
                                 {
                                     label: this.translocoService.translate('BusinessSystemList'),
                                     icon: 'pi pi-fw pi-shop',
                                     routerLink: [`/${this.config.partnerAdministrationSlug}/business-systems`],
+                                    hasPermission: (permissionCodes: string[]): boolean => { 
+                                        return (
+                                            permissionCodes?.includes(BusinessPermissionCodes.ReadBusinessSystem) ||
+                                            permissionCodes?.includes(BusinessPermissionCodes.ReadPartner)
+                                        )
+                                    },
                                     visible: true,
-                                    // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadSegmentation]))
-                                    // }
                                 },
                                 {
                                     label: this.translocoService.translate('TierList'),
                                     icon: 'pi pi-fw pi-crown',
                                     routerLink: [`/${this.config.partnerAdministrationSlug}/tiers`],
-                                    // hasPermission: (permissionCodes: string[]): boolean => { 
-                                    //     return (permissionCodes?.includes(PermissionCodes[BusinessPermissionCodes.ReadTier]))
-                                    // }
+                                    hasPermission: (permissionCodes: string[]): boolean => { 
+                                        return (
+                                            permissionCodes?.includes(BusinessPermissionCodes.ReadTier) ||
+                                            permissionCodes?.includes(BusinessPermissionCodes.ReadPartner)
+                                        )
+                                    },
                                     visible: true,
                                 },
                             ]

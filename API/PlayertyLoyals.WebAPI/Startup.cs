@@ -21,11 +21,11 @@ public class Startup
         else if (_hostEnvironment.IsProduction())
             _jsonConfigurationFile = "appsettings.Production.json";
 
-        PlayertyLoyals.WebAPI.SettingsProvider.Current = Helpers.ReadAssemblyConfiguration<PlayertyLoyals.WebAPI.Settings>(_jsonConfigurationFile);
-        PlayertyLoyals.Business.SettingsProvider.Current = Helpers.ReadAssemblyConfiguration<PlayertyLoyals.Business.Settings>(_jsonConfigurationFile);
-        Spider.Infrastructure.SettingsProvider.Current = Helpers.ReadAssemblyConfiguration<Spider.Infrastructure.Settings>(_jsonConfigurationFile);
-        Spider.Security.SettingsProvider.Current = Helpers.ReadAssemblyConfiguration<Spider.Security.Settings>(_jsonConfigurationFile);
-        Spider.Shared.SettingsProvider.Current = Helpers.ReadAssemblyConfiguration<Spider.Shared.Settings>(_jsonConfigurationFile);
+        PlayertyLoyals.WebAPI.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<PlayertyLoyals.WebAPI.Settings>(_jsonConfigurationFile);
+        PlayertyLoyals.Business.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<PlayertyLoyals.Business.Settings>(_jsonConfigurationFile);
+        Spider.Infrastructure.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<Spider.Infrastructure.Settings>(_jsonConfigurationFile);
+        Spider.Security.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<Spider.Security.Settings>(_jsonConfigurationFile);
+        Spider.Shared.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<Spider.Shared.Settings>(_jsonConfigurationFile);
     }
 
     public IConfiguration Configuration { get; }

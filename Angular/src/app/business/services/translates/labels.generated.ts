@@ -248,6 +248,8 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('SelectedPermissionsIds');
             case 'pointsForTheFirstTimeFill':
                 return this.translocoService.translate('PointsForTheFirstTimeFill');
+            case 'segmentationItemsDTOList':
+                return this.translocoService.translate('SegmentationItemsDTOList');
             case 'checked':
                 return this.translocoService.translate('Checked');
             case 'segmentation':

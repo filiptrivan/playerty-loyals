@@ -21,13 +21,12 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     partnerUserTier: Tier;
 
     segmentations: Segmentation[] = [];
-    segmentationItems: SegmentationItem[] = [];
 
     segmentationItemsFormArray: SpiderFormArray<SegmentationItem>;
     _segmentationItemsFormArray = new BehaviorSubject<SpiderFormArray<SegmentationItem>>(undefined);
     segmentationItemsFormArrayIdentifier: string = crypto.randomUUID(); // FT: Because we are not changing it, we are not using nameof, it's important that it's not the same as property in save body
     segmentationItemsTranslationKey: string = new SegmentationItem().typeName;
-    segmentationItemModel: SegmentationItem = new SegmentationItem();
+    segmentationItemModel = new SegmentationItem();
 
     firstTimeFillText: string = this.translocoService.translate('FirstTimeFieldFillTooltipText');
 
@@ -65,15 +64,21 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
 
         forkJoin({
             segmentations: this.apiService.getSegmentationListForTheCurrentPartner(),
-            segmentationItems: this.apiService.getSegmentationItemListForTheCurrentPartner(),
         })
         .subscribe(({ 
             segmentations,
-            segmentationItems, 
         }) => {
             this.segmentations = segmentations;
-            this.segmentationItemsFormArray = this.initFormArray(this.formGroup, segmentationItems, this.segmentationItemModel, this.segmentationItemsFormArrayIdentifier, this.segmentationItemsTranslationKey);
+
+            this.segmentationItemsFormArray = this.initFormArray(
+                this.formGroup, 
+                segmentations.flatMap(x => x.segmentationItemsDTOList), 
+                this.segmentationItemModel, 
+                this.segmentationItemsFormArrayIdentifier, 
+                this.segmentationItemsTranslationKey
+            );
             this._segmentationItemsFormArray.next(null);
+
             this.apiService.getCheckedSegmentationItemIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue().id).subscribe(ids => {
                 this.segmentationItemsFormArray.controls.forEach((formGroup: FormGroup) => {
                     formGroup.controls['checked'].setValue(ids.includes(formGroup.controls['id'].value));
