@@ -16,6 +16,8 @@ export class TranslateClassNamesGeneratedService {
         {
             case 'AuthResult':
                 return this.translocoService.translate('AuthResult');
+            case 'AutomaticUpdatePoints':
+                return this.translocoService.translate('AutomaticUpdatePoints');
             case 'Brand':
                 return this.translocoService.translate('Brand');
             case 'BusinessObjectCodebook':
@@ -36,8 +38,6 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('BusinessSystemTier');
             case 'BusinessSystemTierSaveBody':
                 return this.translocoService.translate('BusinessSystemTierSaveBody');
-            case 'BusinessSystemUpdatePointsDataBody':
-                return this.translocoService.translate('BusinessSystemUpdatePointsDataBody');
             case 'BusinessSystemUpdatePointsScheduledTask':
                 return this.translocoService.translate('BusinessSystemUpdatePointsScheduledTask');
             case 'BusinessSystemUpdatePointsScheduledTaskSaveBody':
@@ -48,10 +48,10 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('DiscountProductGroup');
             case 'DiscountProductGroupSaveBody':
                 return this.translocoService.translate('DiscountProductGroupSaveBody');
-            case 'ExcelManualUpdatePoints':
-                return this.translocoService.translate('ExcelManualUpdatePoints');
             case 'ExcelReportOptions':
                 return this.translocoService.translate('ExcelReportOptions');
+            case 'ExcelUpdatePoints':
+                return this.translocoService.translate('ExcelUpdatePoints');
             case 'ExternalDiscountProductGroup':
                 return this.translocoService.translate('ExternalDiscountProductGroup');
             case 'ExternalProvider':
@@ -70,6 +70,8 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('Login');
             case 'LoginVerificationToken':
                 return this.translocoService.translate('LoginVerificationToken');
+            case 'ManualUpdatePoints':
+                return this.translocoService.translate('ManualUpdatePoints');
             case 'Namebook':
                 return this.translocoService.translate('Namebook');
             case 'Notification':
@@ -170,8 +172,6 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('Transaction');
             case 'TransactionSaveBody':
                 return this.translocoService.translate('TransactionSaveBody');
-            case 'UpdatePoints':
-                return this.translocoService.translate('UpdatePoints');
             case 'User':
                 return this.translocoService.translate('User');
             case 'UserExtended':

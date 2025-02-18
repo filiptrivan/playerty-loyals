@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.DTO
 {
-    public partial class BusinessSystemUpdatePointsDataBodyDTO
+    public class AutomaticUpdatePointsDTO
     {
-        public long BusinessSystemId { get; set; }
+        [Required]
+        public long? BusinessSystemId { get; set; }
 
-        public int BusinessSystemVersion { get; set; }
+        [Required]
+        public int? BusinessSystemVersion { get; set; }
 
         [Required]
         public DateTime? UpdatePointsStartDate { get; set; }

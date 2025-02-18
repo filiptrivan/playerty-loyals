@@ -71,30 +71,30 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPut]
         [AuthGuard]
-        public async Task<int> SaveBusinessSystemUpdatePointsData(BusinessSystemUpdatePointsDataBodyDTO businessSystemUpdatePointsDataBodyDTO)
+        public async Task<int> AutomaticUpdatePoints(AutomaticUpdatePointsDTO businessSystemUpdatePointsDataBodyDTO)
         {
-            return await _loyalsBusinessService.SaveBusinessSystemUpdatePointsData(businessSystemUpdatePointsDataBodyDTO);
+            return await _loyalsBusinessService.AutomaticUpdatePoints(businessSystemUpdatePointsDataBodyDTO);
         }
 
         [HttpGet]
         [AuthGuard]
-        public async Task ChangeScheduledTaskUpdatePointsStatus(long businessSystemId, int businessSystemVersion)
+        public async Task<int> ChangeScheduledTaskUpdatePointsStatus(long businessSystemId, int businessSystemVersion)
         {
-            await _loyalsBusinessService.ChangeScheduledTaskUpdatePointsStatus(businessSystemId, businessSystemVersion);
+            return await _loyalsBusinessService.ChangeScheduledTaskUpdatePointsStatus(businessSystemId, businessSystemVersion);
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task UpdatePoints(UpdatePointsDTO updatePointsDTO)
+        public async Task ManualUpdatePoints(ManualUpdatePointsDTO updatePointsDTO)
         {
-            await _loyalsBusinessService.UpdatePoints(updatePointsDTO);
+            await _loyalsBusinessService.ManualUpdatePoints(updatePointsDTO);
         }
 
         [HttpPost]
         [AuthGuard]
-        public async Task ExcelManualUpdatePoints([FromForm] ExcelManualUpdatePointsDTO excelManualUpdatePointsDTO) // FT: It doesn't work without interface
+        public async Task ExcelUpdatePoints([FromForm] ExcelUpdatePointsDTO excelUpdatePointsDTO) // FT: It doesn't work without interface
         {
-            await _loyalsBusinessService.ExcelManualUpdatePoints(excelManualUpdatePointsDTO); // TODO: Make authorization in business service
+            await _loyalsBusinessService.ExcelUpdatePoints(excelUpdatePointsDTO); // TODO: Make authorization in business service
         }
 
         [HttpPost]

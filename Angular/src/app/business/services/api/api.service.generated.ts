@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { ApiSecurityService, TableFilter, TableResponse, Namebook, Codebook, LazyLoadSelectedIdsResult, VerificationTokenRequest, AuthResult, ExternalProvider } from '@playerty/spider';
 import { ConfigService } from '../config.service';
 import { Brand } from '../../entities/business-entities.generated';
-import { UpdatePoints } from '../../entities/business-entities.generated';
 import { BusinessSystemTierDiscountProductGroup } from '../../entities/business-entities.generated';
 import { Notification } from '../../entities/business-entities.generated';
 import { NotificationSaveBody } from '../../entities/business-entities.generated';
@@ -12,12 +11,13 @@ import { ExternalDiscountProductGroup } from '../../entities/business-entities.g
 import { PartnerNotificationSaveBody } from '../../entities/business-entities.generated';
 import { Product } from '../../entities/business-entities.generated';
 import { SegmentationItem } from '../../entities/business-entities.generated';
-import { BusinessSystemUpdatePointsDataBody } from '../../entities/business-entities.generated';
 import { PartnerUserSaveBody } from '../../entities/business-entities.generated';
 import { TierSaveBody } from '../../entities/business-entities.generated';
 import { BusinessSystemTier } from '../../entities/business-entities.generated';
 import { ExternalTransaction } from '../../entities/business-entities.generated';
-import { ExcelManualUpdatePoints } from '../../entities/business-entities.generated';
+import { AutomaticUpdatePoints } from '../../entities/business-entities.generated';
+import { ExcelUpdatePoints } from '../../entities/business-entities.generated';
+import { ManualUpdatePoints } from '../../entities/business-entities.generated';
 import { BusinessSystem } from '../../entities/business-entities.generated';
 import { BusinessSystemSaveBody } from '../../entities/business-entities.generated';
 import { BusinessSystemTierSaveBody } from '../../entities/business-entities.generated';
@@ -81,19 +81,19 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.get(`${this.config.apiUrl}/BusinessSystem/SyncDiscountCategories?businessSystemId=${businessSystemId}`, this.config.httpOptions);
     }
 
-    saveBusinessSystemUpdatePointsData = (businessSystemUpdatePointsDataBodyDTO: BusinessSystemUpdatePointsDataBody): Observable<number> => { 
-        return this.http.put<number>(`${this.config.apiUrl}/BusinessSystem/SaveBusinessSystemUpdatePointsData`, businessSystemUpdatePointsDataBodyDTO, this.config.httpOptions);
+    automaticUpdatePoints = (businessSystemUpdatePointsDataBodyDTO: AutomaticUpdatePoints): Observable<number> => { 
+        return this.http.put<number>(`${this.config.apiUrl}/BusinessSystem/AutomaticUpdatePoints`, businessSystemUpdatePointsDataBodyDTO, this.config.httpOptions);
     }
 
-    changeScheduledTaskUpdatePointsStatus = (businessSystemId: number, businessSystemVersion: number): Observable<any> => { 
-        return this.http.get(`${this.config.apiUrl}/BusinessSystem/ChangeScheduledTaskUpdatePointsStatus?businessSystemId=${businessSystemId}&businessSystemVersion=${businessSystemVersion}`, this.config.httpOptions);
+    changeScheduledTaskUpdatePointsStatus = (businessSystemId: number, businessSystemVersion: number): Observable<number> => { 
+        return this.http.get<number>(`${this.config.apiUrl}/BusinessSystem/ChangeScheduledTaskUpdatePointsStatus?businessSystemId=${businessSystemId}&businessSystemVersion=${businessSystemVersion}`, this.config.httpOptions);
     }
 
-    updatePoints = (updatePointsDTO: UpdatePoints): Observable<any> => { 
-        return this.http.post(`${this.config.apiUrl}/BusinessSystem/UpdatePoints`, updatePointsDTO, this.config.httpOptions);
+    manualUpdatePoints = (updatePointsDTO: ManualUpdatePoints): Observable<any> => { 
+        return this.http.post(`${this.config.apiUrl}/BusinessSystem/ManualUpdatePoints`, updatePointsDTO, this.config.httpOptions);
     }
 
-    excelManualUpdatePoints = (dto: ExcelManualUpdatePoints): Observable<any> => { 
+    excelManualUpdatePoints = (dto: ExcelUpdatePoints): Observable<any> => { 
         let formData = new FormData();
         formData.append('BusinessSystemId', dto.businessSystemId.toString());
         formData.append('BusinessSystemVersion', dto.businessSystemVersion.toString());

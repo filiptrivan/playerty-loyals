@@ -195,9 +195,13 @@ namespace PlayertyLoyals.Business.BackroundJobs
 
         public async Task DeleteJob(long businessSystemId)
         {
-            JobKey jobKey = new JobKey($"{nameof(UpdatePointsScheduler)}_{businessSystemId}");
+            JobKey jobKey = new JobKey($"Job_{nameof(UpdatePointsScheduler)}_{businessSystemId}");
 
-            await _scheduler.DeleteJob(jobKey);
+            bool deleted = await _scheduler.DeleteJob(jobKey);
+
+            if (deleted == false)
+                throw new HackerException("The job which you tried to delete doesn't exist.");
         }
+
     }
 }

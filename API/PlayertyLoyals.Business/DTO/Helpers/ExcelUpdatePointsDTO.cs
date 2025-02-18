@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.DTO
 {
-    public class ExcelManualUpdatePointsDTO
+    public class ExcelUpdatePointsDTO
     {
         [Required]
         public long? BusinessSystemId { get; set; }

@@ -2,7 +2,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
 import { ButtonModule } from "primeng/button";
 import { getControl, SpiderControlsModule, SpiderFormGroup, SpiderPanelsModule } from '@playerty/spider';
-import { BusinessSystemUpdatePointsDataBody } from 'src/app/business/entities/business-entities.generated';
+import { AutomaticUpdatePoints } from 'src/app/business/entities/business-entities.generated';
 
 @Component({
     selector: 'automatic-update-points-body',
@@ -17,7 +17,7 @@ import { BusinessSystemUpdatePointsDataBody } from 'src/app/business/entities/bu
     ]
 })
 export class AutomaticUpdatePointsBodyComponent implements OnInit {
-    @Input() automaticUpdatePointsFormGroup: SpiderFormGroup<BusinessSystemUpdatePointsDataBody>;
+    @Input() automaticUpdatePointsFormGroup: SpiderFormGroup<AutomaticUpdatePoints>;
 
     constructor(
     ) { 

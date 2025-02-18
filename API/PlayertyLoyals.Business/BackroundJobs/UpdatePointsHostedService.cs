@@ -40,7 +40,10 @@ namespace PlayertyLoyals.Business.BackroundJobs
 
                 foreach (BusinessSystem businessSystem in businessSystemList)
                 {
-                    BusinessSystemUpdatePointsScheduledTask lastBusinessSystemUpdatePointsScheduledTask = businessSystem.BusinessSystemUpdatePointsScheduledTasks.OrderByDescending(x => x.TransactionsTo).FirstOrDefault();
+                    BusinessSystemUpdatePointsScheduledTask lastBusinessSystemUpdatePointsScheduledTask = businessSystem.BusinessSystemUpdatePointsScheduledTasks
+                        .Where(x => x.IsManual == false)
+                        .OrderByDescending(x => x.TransactionsTo)
+                        .FirstOrDefault();
 
                     await _updatePointsScheduler.ContinueJob(businessSystem.Id, businessSystem.UpdatePointsInterval.Value, businessSystem.UpdatePointsStartDate.Value, lastBusinessSystemUpdatePointsScheduledTask?.TransactionsTo);
                 }

@@ -2,7 +2,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
 import { ButtonModule } from "primeng/button";
 import { getControl, SpiderControlsModule, SpiderFileSelectEvent, SpiderFormGroup, SpiderPanelsModule } from '@playerty/spider';
-import { ExcelManualUpdatePoints } from 'src/app/business/entities/business-entities.generated';
+import { ExcelUpdatePoints } from 'src/app/business/entities/business-entities.generated';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 @Component({
@@ -19,7 +19,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
     ]
 })
 export class ExcelUpdatePointsBodyComponent implements OnInit {
-    @Input() excelUpdatePointsFormGroup: SpiderFormGroup<ExcelManualUpdatePoints>;
+    @Input() excelUpdatePointsFormGroup: SpiderFormGroup<ExcelUpdatePoints>;
     @Input() isAuthorizedForSave: boolean = false;
 
     constructor(

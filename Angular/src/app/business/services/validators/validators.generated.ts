@@ -15,6 +15,15 @@ export class ValidatorServiceGenerated {
 
     setValidator = (formControl: SpiderFormControl, className: string): SpiderValidatorFn => {
         switch(formControl.label + className){
+            case 'businessSystemIdAutomaticUpdatePoints':
+                return this.businessSystemIdAutomaticUpdatePointsValidator(formControl);
+            case 'businessSystemVersionAutomaticUpdatePoints':
+                return this.businessSystemVersionAutomaticUpdatePointsValidator(formControl);
+            case 'updatePointsStartDateAutomaticUpdatePoints':
+                return this.updatePointsStartDateAutomaticUpdatePointsValidator(formControl);
+            case 'updatePointsIntervalAutomaticUpdatePoints':
+                return this.updatePointsIntervalAutomaticUpdatePointsValidator(formControl);
+
             case 'nameBusinessSystem':
                 return this.nameBusinessSystemValidator(formControl);
             case 'getTransactionsEndpointBusinessSystem':
@@ -52,11 +61,6 @@ export class ValidatorServiceGenerated {
             case 'modifiedAtBusinessSystemTier':
                 return this.modifiedAtBusinessSystemTierValidator(formControl);
 
-            case 'updatePointsStartDateBusinessSystemUpdatePointsDataBody':
-                return this.updatePointsStartDateBusinessSystemUpdatePointsDataBodyValidator(formControl);
-            case 'updatePointsIntervalBusinessSystemUpdatePointsDataBody':
-                return this.updatePointsIntervalBusinessSystemUpdatePointsDataBodyValidator(formControl);
-
             case 'isManualBusinessSystemUpdatePointsScheduledTask':
                 return this.isManualBusinessSystemUpdatePointsScheduledTaskValidator(formControl);
             case 'businessSystemIdBusinessSystemUpdatePointsScheduledTask':
@@ -81,10 +85,10 @@ export class ValidatorServiceGenerated {
             case 'modifiedAtDiscountProductGroup':
                 return this.modifiedAtDiscountProductGroupValidator(formControl);
 
-            case 'businessSystemIdExcelManualUpdatePoints':
-                return this.businessSystemIdExcelManualUpdatePointsValidator(formControl);
-            case 'businessSystemVersionExcelManualUpdatePoints':
-                return this.businessSystemVersionExcelManualUpdatePointsValidator(formControl);
+            case 'businessSystemIdExcelUpdatePoints':
+                return this.businessSystemIdExcelUpdatePointsValidator(formControl);
+            case 'businessSystemVersionExcelUpdatePoints':
+                return this.businessSystemVersionExcelUpdatePointsValidator(formControl);
 
             case 'nameExternalDiscountProductGroup':
                 return this.nameExternalDiscountProductGroupValidator(formControl);
@@ -113,6 +117,15 @@ export class ValidatorServiceGenerated {
 
             case 'emailLogin':
                 return this.emailLoginValidator(formControl);
+
+            case 'businessSystemIdManualUpdatePoints':
+                return this.businessSystemIdManualUpdatePointsValidator(formControl);
+            case 'businessSystemVersionManualUpdatePoints':
+                return this.businessSystemVersionManualUpdatePointsValidator(formControl);
+            case 'fromDateManualUpdatePoints':
+                return this.fromDateManualUpdatePointsValidator(formControl);
+            case 'toDateManualUpdatePoints':
+                return this.toDateManualUpdatePointsValidator(formControl);
 
             case 'titleNotification':
                 return this.titleNotificationValidator(formControl);
@@ -293,15 +306,6 @@ export class ValidatorServiceGenerated {
             case 'modifiedAtTransaction':
                 return this.modifiedAtTransactionValidator(formControl);
 
-            case 'businessSystemIdUpdatePoints':
-                return this.businessSystemIdUpdatePointsValidator(formControl);
-            case 'businessSystemVersionUpdatePoints':
-                return this.businessSystemVersionUpdatePointsValidator(formControl);
-            case 'fromDateUpdatePoints':
-                return this.fromDateUpdatePointsValidator(formControl);
-            case 'toDateUpdatePoints':
-                return this.toDateUpdatePointsValidator(formControl);
-
             case 'emailUserExtended':
                 return this.emailUserExtendedValidator(formControl);
             case 'versionUserExtended':
@@ -320,6 +324,77 @@ export class ValidatorServiceGenerated {
                 return null;
         }
     }
+
+    businessSystemIdAutomaticUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    businessSystemVersionAutomaticUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    updatePointsStartDateAutomaticUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+    updatePointsIntervalAutomaticUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+            const min = 1;
+            const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
+
+            const valid = notEmptyRule && numberMinRangeRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmptyNumberRangeMin', {min}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
 
     nameBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
@@ -624,43 +699,6 @@ export class ValidatorServiceGenerated {
     }
 
 
-    updatePointsStartDateBusinessSystemUpdatePointsDataBodyValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    updatePointsIntervalBusinessSystemUpdatePointsDataBodyValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-            const min = 1;
-            const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
-
-            const valid = notEmptyRule && numberMinRangeRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmptyNumberRangeMin', {min}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-
-        return validator;
-    }
-
-
     isManualBusinessSystemUpdatePointsScheduledTaskValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
@@ -856,7 +894,7 @@ export class ValidatorServiceGenerated {
     }
 
 
-    businessSystemIdExcelManualUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+    businessSystemIdExcelUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -873,7 +911,7 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    businessSystemVersionExcelManualUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+    businessSystemVersionExcelUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
@@ -1127,6 +1165,75 @@ export class ValidatorServiceGenerated {
         control.required = true;
         control.validator = validator;
 
+        return validator;
+    }
+
+
+    businessSystemIdManualUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    businessSystemVersionManualUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    fromDateManualUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+    toDateManualUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
         return validator;
     }
 
@@ -2630,75 +2737,6 @@ export class ValidatorServiceGenerated {
     }
 
     modifiedAtTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-
-    businessSystemIdUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-
-        return validator;
-    }
-
-    businessSystemVersionUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-
-        return validator;
-    }
-
-    fromDateUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    toDateUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 

@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { BusinessSystem, BusinessSystemUpdatePointsDataBody, UpdatePoints, ExcelManualUpdatePoints } from 'src/app/business/entities/business-entities.generated';
+import { BusinessSystem, AutomaticUpdatePoints, ManualUpdatePoints, ExcelUpdatePoints } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { BaseFormCopy, SpiderFormGroup, SpiderButton, Column, SpiderMessageService, BaseFormService, SpiderFileSelectEvent, IsAuthorizedForSaveEvent, SpiderTab } from '@playerty/spider';
+import { BaseFormCopy, SpiderFormGroup, SpiderButton, Column, SpiderMessageService, BaseFormService, IsAuthorizedForSaveEvent, SpiderTab } from '@playerty/spider';
 
 @Component({
     selector: 'business-system-details',
@@ -19,13 +19,13 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelObservableMethod = this.apiService.exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelForBusinessSystem;
     businessSystemUpdatePointsScheduledTaskTableTotalRecords: number;
     
-    automaticUpdatePointsFormGroup = new SpiderFormGroup<BusinessSystemUpdatePointsDataBody>({});
+    automaticUpdatePointsFormGroup = new SpiderFormGroup<AutomaticUpdatePoints>({});
     
-    savedBusinessSystemUpdatePointsScheduledTaskIsPaused: boolean = null;
+    automaticUpdatePointsIsPaused: boolean = null;
     
-    manualUpdatePointsFormGroup = new SpiderFormGroup<UpdatePoints>({});
+    manualUpdatePointsFormGroup = new SpiderFormGroup<ManualUpdatePoints>({});
     
-    excelUpdatePointsFormGroup = new SpiderFormGroup<ExcelManualUpdatePoints>({});
+    excelUpdatePointsFormGroup = new SpiderFormGroup<ExcelUpdatePoints>({});
     
     isAuthorizedForSave: boolean = false;
 
@@ -33,8 +33,8 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     additionalButtons: SpiderButton[] = [];
 
     updatePointsTabs: SpiderTab[] = [
-        {label: this.translocoService.translate('ExcelManualUpdatePoints'), icon: 'pi pi-file-excel', isSelected: true, id: 1},
-        {label: this.translocoService.translate('BusinessSystemUpdatePointsData'), icon: 'pi pi-calendar-clock', isSelected: false, id: 2},
+        {label: this.translocoService.translate('ExcelUpdatePoints'), icon: 'pi pi-file-excel', isSelected: true, id: 1},
+        {label: this.translocoService.translate('AutomaticUpdatePoints'), icon: 'pi pi-calendar-clock', isSelected: false, id: 2},
         {label: this.translocoService.translate('ManualUpdatePoints'), icon: 'pi pi-hammer', isSelected: false, id: 3},
     ];
 
@@ -78,10 +78,10 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     initAutomaticUpdatePointsFormGroup = () => {
         this.createFormGroup(
             this.automaticUpdatePointsFormGroup, 
-            new BusinessSystemUpdatePointsDataBody({
-                businessSystemId: this.businessSystemFormGroup.controls.id.getRawValue(), 
-                updatePointsStartDate: this.businessSystemFormGroup.controls.updatePointsStartDate.getRawValue(), 
-                updatePointsInterval: this.businessSystemFormGroup.controls.updatePointsInterval.getRawValue(),
+            new AutomaticUpdatePoints({
+                businessSystemId: this.businessSystemFormGroup.getRawValue().id, 
+                updatePointsStartDate: this.businessSystemFormGroup.getRawValue().updatePointsStartDate, 
+                updatePointsInterval: this.businessSystemFormGroup.getRawValue().updatePointsInterval,
             })
         );
     }
@@ -89,15 +89,15 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     initManualUpdatePointsFormGroup = () => {
         this.createFormGroup(
             this.manualUpdatePointsFormGroup, 
-            new UpdatePoints({
-                businessSystemId: this.businessSystemFormGroup.controls.id.getRawValue(), 
+            new ManualUpdatePoints({
+                businessSystemId: this.businessSystemFormGroup.getRawValue().id, 
             }),
             ['fromDate', 'toDate']
         );
     }
     
     initExcelUpdatePointsFormGroup = () => {
-        this.createFormGroup(this.excelUpdatePointsFormGroup, new ExcelManualUpdatePoints({}));
+        this.createFormGroup(this.excelUpdatePointsFormGroup, new ExcelUpdatePoints({}));
     }
 
     //#endregion
@@ -119,7 +119,7 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
 
     override onAfterSave = (): void => {
         console.log(this.businessSystemFormGroup.controls.updatePointsScheduledTaskIsPaused.getRawValue())
-        this.savedBusinessSystemUpdatePointsScheduledTaskIsPaused = this.businessSystemFormGroup.controls.updatePointsScheduledTaskIsPaused.getRawValue();
+        this.automaticUpdatePointsIsPaused = this.businessSystemFormGroup.controls.updatePointsScheduledTaskIsPaused.getRawValue();
     }
 }
 

@@ -1028,22 +1028,13 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task<int> SaveBusinessSystemUpdatePointsData(BusinessSystemUpdatePointsDataBodyDTO businessSystemUpdatePointsDataBodyDTO)
+        public async Task<int> AutomaticUpdatePoints(AutomaticUpdatePointsDTO automaticUpdatePointsDTO)
         {
             DateTimeOffset? scheduledJobResult = null;
 
-            if ((businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval == null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate != null) ||
-                (businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval != null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate == null))
-                throw new BusinessException("Ako želite da ažurirate poene na određenom intervalu, morate da popunite polje interval i polje početak ažuriranja.");
-
-            if (businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval != null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval <= 0)
-                throw new HackerException($"The negative or zero interval can't be saved (BusinessSystemId: {businessSystemUpdatePointsDataBodyDTO.BusinessSystemId}).");
-
             DateTime now = DateTime.Now;
 
-            // FT: We redundantly check both here and inside the ScheduleJob method, in the method due to the programming principle, and here so that they do not enter the transaction and block other threads from executing
-            if (businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate != null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate.Value <= now)
-                throw new BusinessException("Vreme početka ažuriranja poena mora biti veće od sadašnjeg trenutka.");
+            ValidateAutomaticUpdatePoints(automaticUpdatePointsDTO, now);
 
             try
             {
@@ -1051,34 +1042,23 @@ namespace PlayertyLoyals.Business.Services
                 {
                     await _authorizationService.AuthorizeBusinessSystemUpdateAndThrow(null);
 
-                    BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(businessSystemUpdatePointsDataBodyDTO.BusinessSystemId, businessSystemUpdatePointsDataBodyDTO.BusinessSystemVersion);
+                    BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(automaticUpdatePointsDTO.BusinessSystemId.Value, automaticUpdatePointsDTO.BusinessSystemVersion);
 
                     if (businessSystem.GetTransactionsEndpoint == null)
                         throw new BusinessException("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
 
-                    businessSystem.UpdatePointsInterval = businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval;
-                    businessSystem.UpdatePointsStartDate = businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate;
+                    businessSystem.UpdatePointsInterval = automaticUpdatePointsDTO.UpdatePointsInterval;
+                    businessSystem.UpdatePointsStartDate = automaticUpdatePointsDTO.UpdatePointsStartDate;
+                    businessSystem.UpdatePointsScheduledTaskIsPaused = false;
 
-                    if (businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval != null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate != null)
-                    {
-                        businessSystem.UpdatePointsScheduledTaskIsPaused = false;
-                        await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
 
-                        scheduledJobResult = await _updatePointsScheduler.ScheduleJob(
-                            businessSystemUpdatePointsDataBodyDTO.BusinessSystemId,
-                            businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval.Value,
-                            businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate.Value,
-                            now
-                        );
-                    }
-                    else if (businessSystemUpdatePointsDataBodyDTO.UpdatePointsInterval == null && businessSystemUpdatePointsDataBodyDTO.UpdatePointsStartDate == null)
-                    {
-                        businessSystem.UpdatePointsScheduledTaskIsPaused = true;
-                        await _context.SaveChangesAsync();
-
-                        await _updatePointsScheduler.DeleteJob(businessSystemUpdatePointsDataBodyDTO.BusinessSystemId);
-                    }
-
+                    scheduledJobResult = await _updatePointsScheduler.ScheduleJob(
+                        automaticUpdatePointsDTO.BusinessSystemId.Value,
+                        automaticUpdatePointsDTO.UpdatePointsInterval.Value,
+                        automaticUpdatePointsDTO.UpdatePointsStartDate.Value,
+                        now
+                    );
 
                     return businessSystem.Version;
                 });
@@ -1086,10 +1066,20 @@ namespace PlayertyLoyals.Business.Services
             catch (Exception)
             {
                 if (scheduledJobResult != null)
-                    await _updatePointsScheduler.DeleteJob(businessSystemUpdatePointsDataBodyDTO.BusinessSystemId);
+                    await _updatePointsScheduler.DeleteJob(automaticUpdatePointsDTO.BusinessSystemId.Value);
 
                 throw;
             }
+        }
+
+        public static void ValidateAutomaticUpdatePoints(AutomaticUpdatePointsDTO automaticUpdatePointsDTO, DateTime now)
+        {
+            AutomaticUpdatePointsDTOValidationRules validationRules = new();
+            validationRules.ValidateAndThrow(automaticUpdatePointsDTO);
+
+            // FT: We redundantly check both here and inside the ScheduleJob method, in the method due to the programming principle, and here so that they do not enter the transaction and block other threads from executing
+            if (automaticUpdatePointsDTO.UpdatePointsStartDate != null && automaticUpdatePointsDTO.UpdatePointsStartDate.Value <= now)
+                throw new BusinessException("Vreme početka ažuriranja poena mora biti veće od sadašnjeg trenutka.");
         }
 
         public async Task<int> ChangeScheduledTaskUpdatePointsStatus(long businessSystemId, int businessSystemVersion)
@@ -1104,34 +1094,14 @@ namespace PlayertyLoyals.Business.Services
 
                     BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(businessSystemId, businessSystemVersion);
 
-                    List<string> exceptions = new();
-
-                    if (businessSystem.GetTransactionsEndpoint == null)
-                        exceptions.Add("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
-
-                    if (businessSystem.UpdatePointsInterval == null)
-                        exceptions.Add("Morate da popunite i sačuvate polje 'Interval ažuriranja', kako biste pokrenuli ažuriranje poena.");
-
-                    if (businessSystem.UpdatePointsStartDate == null)
-                        exceptions.Add("Morate da popunite i sačuvate polje 'Početak ažuriranja', kako biste pokrenuli ažuriranje poena.");
-
-                    if (businessSystem.UpdatePointsScheduledTaskIsPaused == null)
-                        exceptions.Add("Pre promene statusa, morate da pokrenete automatsko ažuriranje.");
-
-                    if (exceptions.Count > 0)
-                        throw new BusinessException(string.Join("\n", exceptions));
-
-                    businessSystem.UpdatePointsScheduledTaskIsPaused = !businessSystem.UpdatePointsScheduledTaskIsPaused.Value;
-
-                    await _context.SaveChangesAsync();
+                    ValidateExistingBusinssSystemForChangeScheduledTaskUpdatePointsStatusAndThrow(businessSystem);
 
                     if (businessSystem.UpdatePointsScheduledTaskIsPaused.Value)
                     {
-                        await _updatePointsScheduler.DeleteJob(businessSystemId);
-                    }
-                    else
-                    {
-                        BusinessSystemUpdatePointsScheduledTask lastBusinessSystemUpdatePointsScheduledTask = businessSystem.BusinessSystemUpdatePointsScheduledTasks.OrderByDescending(x => x.TransactionsTo).FirstOrDefault();
+                        BusinessSystemUpdatePointsScheduledTask lastBusinessSystemUpdatePointsScheduledTask = businessSystem.BusinessSystemUpdatePointsScheduledTasks
+                            .Where(x => x.IsManual == false)
+                            .OrderByDescending(x => x.TransactionsTo)
+                            .FirstOrDefault();
 
                         scheduledJobContinued = await _updatePointsScheduler.ContinueJob(
                             businessSystem.Id,
@@ -1140,6 +1110,14 @@ namespace PlayertyLoyals.Business.Services
                             lastBusinessSystemUpdatePointsScheduledTask?.TransactionsTo
                         );
                     }
+                    else
+                    {
+                        await _updatePointsScheduler.DeleteJob(businessSystemId);
+                    }
+
+                    businessSystem.UpdatePointsScheduledTaskIsPaused = !businessSystem.UpdatePointsScheduledTaskIsPaused.Value;
+
+                    await _context.SaveChangesAsync();
 
                     return businessSystem.Version;
                 });
@@ -1153,47 +1131,67 @@ namespace PlayertyLoyals.Business.Services
             }
         }
 
+        private static void ValidateExistingBusinssSystemForChangeScheduledTaskUpdatePointsStatusAndThrow(BusinessSystem businessSystem)
+        {
+            List<string> exceptions = new();
+
+            if (businessSystem.GetTransactionsEndpoint == null)
+                exceptions.Add("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
+
+            if (businessSystem.UpdatePointsInterval == null)
+                exceptions.Add("Morate da popunite i sačuvate polje 'Interval ažuriranja', kako biste pokrenuli ažuriranje poena.");
+
+            if (businessSystem.UpdatePointsStartDate == null)
+                exceptions.Add("Morate da popunite i sačuvate polje 'Početak ažuriranja', kako biste pokrenuli ažuriranje poena.");
+
+            if (businessSystem.UpdatePointsScheduledTaskIsPaused == null)
+                exceptions.Add("Pre promene statusa, morate da pokrenete automatsko ažuriranje.");
+
+            if (exceptions.Count > 0)
+                throw new BusinessException(string.Join("\n", exceptions));
+        }
+
         /// <summary>
         /// Pass fromDate only if it is the first time
         /// </summary>
-        public async Task UpdatePoints(UpdatePointsDTO updatePointsDTO)
+        public async Task ManualUpdatePoints(ManualUpdatePointsDTO manualUpdatePointsDTO)
         {
-            UpdatePointsDTOValidationRules validationRules = new();
-            validationRules.ValidateAndThrow(updatePointsDTO);
+            ManualUpdatePointsDTOValidationRules validationRules = new();
+            validationRules.ValidateAndThrow(manualUpdatePointsDTO);
 
             DateTime now = DateTime.Now;
 
-            if (updatePointsDTO.ToDate >= now)
+            if (manualUpdatePointsDTO.ToDate >= now)
                 throw new BusinessException("Datum do kog želite da ažurirate poene ne sme biti veći od sadašnjeg trenutka.");
 
-            if (updatePointsDTO.ToDate <= updatePointsDTO.FromDate)
-                throw new HackerException($"BusinessSystem: {updatePointsDTO.BusinessSystemId}. Can not pass greater {nameof(updatePointsDTO.ToDate)} then {nameof(updatePointsDTO.FromDate)} in manually started points update.");
+            if (manualUpdatePointsDTO.ToDate <= manualUpdatePointsDTO.FromDate)
+                throw new BusinessException($"Datum do ne sme biti veći od datuma od kog želite da ažurirate poene.");
 
             await _context.WithTransactionAsync(async () =>
             {
                 await _authorizationService.AuthorizeBusinessSystemUpdateAndThrow(null);
 
-                BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(updatePointsDTO.BusinessSystemId.Value, updatePointsDTO.BusinessSystemVersion);
+                BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(manualUpdatePointsDTO.BusinessSystemId.Value, manualUpdatePointsDTO.BusinessSystemVersion);
 
                 if (businessSystem.GetTransactionsEndpoint == null)
                     throw new BusinessException("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
 
-                await _updatePointsScheduler.ScheduleJobManually(updatePointsDTO.BusinessSystemId.Value, updatePointsDTO.FromDate.Value, updatePointsDTO.ToDate.Value);
+                await _updatePointsScheduler.ScheduleJobManually(manualUpdatePointsDTO.BusinessSystemId.Value, manualUpdatePointsDTO.FromDate.Value, manualUpdatePointsDTO.ToDate.Value);
             });
         }
 
-        public async Task ExcelManualUpdatePoints(ExcelManualUpdatePointsDTO excelManualUpdatePointsDTO)
+        public async Task ExcelUpdatePoints(ExcelUpdatePointsDTO excelUpdatePointsDTO)
         {
-            ExcelManualUpdatePointsDTOValidationRules validationRules = new();
-            validationRules.ValidateAndThrow(excelManualUpdatePointsDTO);
+            ExcelUpdatePointsDTOValidationRules validationRules = new();
+            validationRules.ValidateAndThrow(excelUpdatePointsDTO);
 
             await _context.WithTransactionAsync(async () =>
             {
                 await _authorizationService.AuthorizeBusinessSystemUpdateAndThrow(null);
 
-                List<ExternalTransactionDTO> externalTransactionDTOList = GetExternalTransactionsFromExcel(excelManualUpdatePointsDTO.Excel);
+                List<ExternalTransactionDTO> externalTransactionDTOList = GetExternalTransactionsFromExcel(excelUpdatePointsDTO.Excel);
 
-                BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(excelManualUpdatePointsDTO.BusinessSystemId.Value, null);
+                BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(excelUpdatePointsDTO.BusinessSystemId.Value, null);
 
                 TransactionsProcessingResult transactionsProcessingResult = await ProcessTransactions(businessSystem, externalTransactionDTOList);
 
@@ -1314,7 +1312,8 @@ namespace PlayertyLoyals.Business.Services
         }
 
         public static string GetSuccessMessageForProcessedTransactions(
-    TransactionsProcessingResult transactionsProcessingResult, DateTime? processedTransactionsFrom, DateTime? processedTransactionsTo)
+            TransactionsProcessingResult transactionsProcessingResult, DateTime? processedTransactionsFrom, DateTime? processedTransactionsTo
+        )
         {
             return $$"""
 Interval u kom su obrađene transakcije: {{(processedTransactionsFrom?.ToString("dd.MM.yyyy. HH:mm") ?? "?")}} - {{(processedTransactionsTo?.ToString("dd.MM.yyyy. HH:mm") ?? "?")}}. <br/>

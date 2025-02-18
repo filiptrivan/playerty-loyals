@@ -2,6 +2,36 @@ import { BaseEntity, TableFilter, TableFilterContext, TableFilterSortMeta, MimeT
 import { NotificationDiscriminatorCodes } from "../enums/business-enums.generated";
 
 
+export class AutomaticUpdatePoints extends BaseEntity
+{
+    businessSystemId?: number;
+	businessSystemVersion?: number;
+	updatePointsStartDate?: Date;
+	updatePointsInterval?: number;
+
+    constructor(
+    {
+        businessSystemId,
+		businessSystemVersion,
+		updatePointsStartDate,
+		updatePointsInterval
+    }:{
+        businessSystemId?: number;
+		businessSystemVersion?: number;
+		updatePointsStartDate?: Date;
+		updatePointsInterval?: number;     
+    } = {}
+    ) {
+        super('AutomaticUpdatePoints'); 
+
+        this.businessSystemId = businessSystemId;
+		this.businessSystemVersion = businessSystemVersion;
+		this.updatePointsStartDate = updatePointsStartDate;
+		this.updatePointsInterval = updatePointsInterval;
+    }
+}
+
+
 export class Brand extends BaseEntity
 {
     name?: string;
@@ -268,36 +298,6 @@ export class BusinessSystemTierDiscountProductGroupSaveBody extends BaseEntity
 }
 
 
-export class BusinessSystemUpdatePointsDataBody extends BaseEntity
-{
-    businessSystemId?: number;
-	businessSystemVersion?: number;
-	updatePointsStartDate?: Date;
-	updatePointsInterval?: number;
-
-    constructor(
-    {
-        businessSystemId,
-		businessSystemVersion,
-		updatePointsStartDate,
-		updatePointsInterval
-    }:{
-        businessSystemId?: number;
-		businessSystemVersion?: number;
-		updatePointsStartDate?: Date;
-		updatePointsInterval?: number;     
-    } = {}
-    ) {
-        super('BusinessSystemUpdatePointsDataBody'); 
-
-        this.businessSystemId = businessSystemId;
-		this.businessSystemVersion = businessSystemVersion;
-		this.updatePointsStartDate = updatePointsStartDate;
-		this.updatePointsInterval = updatePointsInterval;
-    }
-}
-
-
 export class BusinessSystemUpdatePointsScheduledTask extends BaseEntity
 {
     transactionsFrom?: Date;
@@ -430,7 +430,7 @@ export class DiscountProductGroupSaveBody extends BaseEntity
 }
 
 
-export class ExcelManualUpdatePoints extends BaseEntity
+export class ExcelUpdatePoints extends BaseEntity
 {
     businessSystemId?: number;
 	businessSystemVersion?: number;
@@ -447,7 +447,7 @@ export class ExcelManualUpdatePoints extends BaseEntity
 		excel?: any;     
     } = {}
     ) {
-        super('ExcelManualUpdatePoints'); 
+        super('ExcelUpdatePoints'); 
 
         this.businessSystemId = businessSystemId;
 		this.businessSystemVersion = businessSystemVersion;
@@ -560,6 +560,36 @@ export class GenderSaveBody extends BaseEntity
         super('GenderSaveBody'); 
 
         this.genderDTO = genderDTO;
+    }
+}
+
+
+export class ManualUpdatePoints extends BaseEntity
+{
+    businessSystemId?: number;
+	businessSystemVersion?: number;
+	fromDate?: Date;
+	toDate?: Date;
+
+    constructor(
+    {
+        businessSystemId,
+		businessSystemVersion,
+		fromDate,
+		toDate
+    }:{
+        businessSystemId?: number;
+		businessSystemVersion?: number;
+		fromDate?: Date;
+		toDate?: Date;     
+    } = {}
+    ) {
+        super('ManualUpdatePoints'); 
+
+        this.businessSystemId = businessSystemId;
+		this.businessSystemVersion = businessSystemVersion;
+		this.fromDate = fromDate;
+		this.toDate = toDate;
     }
 }
 
@@ -1634,36 +1664,6 @@ export class TransactionSaveBody extends BaseEntity
         super('TransactionSaveBody'); 
 
         this.transactionDTO = transactionDTO;
-    }
-}
-
-
-export class UpdatePoints extends BaseEntity
-{
-    businessSystemId?: number;
-	businessSystemVersion?: number;
-	fromDate?: Date;
-	toDate?: Date;
-
-    constructor(
-    {
-        businessSystemId,
-		businessSystemVersion,
-		fromDate,
-		toDate
-    }:{
-        businessSystemId?: number;
-		businessSystemVersion?: number;
-		fromDate?: Date;
-		toDate?: Date;     
-    } = {}
-    ) {
-        super('UpdatePoints'); 
-
-        this.businessSystemId = businessSystemId;
-		this.businessSystemVersion = businessSystemVersion;
-		this.fromDate = fromDate;
-		this.toDate = toDate;
     }
 }
 

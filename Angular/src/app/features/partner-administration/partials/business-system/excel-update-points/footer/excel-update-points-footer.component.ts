@@ -2,7 +2,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
 import { ButtonModule } from "primeng/button";
 import { BaseFormService, SpiderControlsModule, SpiderFormGroup, SpiderMessageService, SpiderPanelsModule } from '@playerty/spider';
-import { BusinessSystem, ExcelManualUpdatePoints } from 'src/app/business/entities/business-entities.generated';
+import { BusinessSystem, ExcelUpdatePoints } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslocoService, TranslocoDirective } from '@jsverse/transloco';
 
@@ -20,7 +20,7 @@ import { TranslocoService, TranslocoDirective } from '@jsverse/transloco';
     ]
 })
 export class ExcelUpdatePointsFooterComponent implements OnInit {
-    @Input() excelUpdatePointsFormGroup: SpiderFormGroup<ExcelManualUpdatePoints>;
+    @Input() excelUpdatePointsFormGroup: SpiderFormGroup<ExcelUpdatePoints>;
     @Input() businessSystemFormGroup: SpiderFormGroup<BusinessSystem>;
     @Input() isAuthorizedForSave: boolean = false;
 
@@ -44,13 +44,13 @@ export class ExcelUpdatePointsFooterComponent implements OnInit {
             return;
         }
         
-        const excelManualUpdatePoints = new ExcelManualUpdatePoints({
+        const excelUpdatePoints = new ExcelUpdatePoints({
             businessSystemId: this.businessSystemFormGroup.controls.id.getRawValue(),
             businessSystemVersion: this.businessSystemFormGroup.controls.version.getRawValue(),
             excel: this.excelUpdatePointsFormGroup.controls.excel.getRawValue()
         });
 
-        this.apiService.excelManualUpdatePoints(excelManualUpdatePoints).subscribe(() => {
+        this.apiService.excelManualUpdatePoints(excelUpdatePoints).subscribe(() => {
             this.messageService.successMessage(this.translocoService.translate('SuccessfulAction'));
         });
     }

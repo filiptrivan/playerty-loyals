@@ -22,6 +22,14 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('AccessToken');
             case 'refreshToken':
                 return this.translocoService.translate('RefreshToken');
+            case 'businessSystem':
+                return this.translocoService.translate('BusinessSystem');
+            case 'businessSystemVersion':
+                return this.translocoService.translate('BusinessSystemVersion');
+            case 'updatePointsStartDate':
+                return this.translocoService.translate('UpdatePointsStartDate');
+            case 'updatePointsInterval':
+                return this.translocoService.translate('UpdatePointsInterval');
             case 'name':
                 return this.translocoService.translate('Name');
             case 'nameLatin':
@@ -46,18 +54,12 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('CreateUserEndpoint');
             case 'updateUserGroupEndpoint':
                 return this.translocoService.translate('UpdateUserGroupEndpoint');
-            case 'updatePointsInterval':
-                return this.translocoService.translate('UpdatePointsInterval');
-            case 'updatePointsStartDate':
-                return this.translocoService.translate('UpdatePointsStartDate');
             case 'updatePointsScheduledTaskIsPaused':
                 return this.translocoService.translate('UpdatePointsScheduledTaskIsPaused');
             case 'partner':
                 return this.translocoService.translate('Partner');
             case 'businessSystemDTO':
                 return this.translocoService.translate('BusinessSystemDTO');
-            case 'businessSystem':
-                return this.translocoService.translate('BusinessSystem');
             case 'selectedForBusinessSystem':
                 return this.translocoService.translate('SelectedForBusinessSystem');
             case 'businessSystemTierClientIndex':
@@ -80,8 +82,6 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('BusinessSystemTierDiscountProductGroupsDTOList');
             case 'businessSystemTierDTO':
                 return this.translocoService.translate('BusinessSystemTierDTO');
-            case 'businessSystemVersion':
-                return this.translocoService.translate('BusinessSystemVersion');
             case 'transactionsFrom':
                 return this.translocoService.translate('TransactionsFrom');
             case 'transactionsTo':
@@ -96,8 +96,6 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('IsLeaf');
             case 'discountProductGroupDTO':
                 return this.translocoService.translate('DiscountProductGroupDTO');
-            case 'excel':
-                return this.translocoService.translate('Excel');
             case 'additionalColumnHeaders':
                 return this.translocoService.translate('AdditionalColumnHeaders');
             case 'additionalDataStartColumn':
@@ -112,6 +110,8 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('DataStartColumn');
             case 'createNewDataRows':
                 return this.translocoService.translate('CreateNewDataRows');
+            case 'excel':
+                return this.translocoService.translate('Excel');
             case 'idToken':
                 return this.translocoService.translate('IdToken');
             case 'browser':
@@ -140,6 +140,10 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('TotalRecordsSelected');
             case 'expireAt':
                 return this.translocoService.translate('ExpireAt');
+            case 'fromDate':
+                return this.translocoService.translate('FromDate');
+            case 'toDate':
+                return this.translocoService.translate('ToDate');
             case 'isMarkedAsRead':
                 return this.translocoService.translate('IsMarkedAsRead');
             case 'discriminator':
@@ -304,10 +308,6 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('TierDTO');
             case 'transactionDTO':
                 return this.translocoService.translate('TransactionDTO');
-            case 'fromDate':
-                return this.translocoService.translate('FromDate');
-            case 'toDate':
-                return this.translocoService.translate('ToDate');
             case 'hasLoggedInWithExternalProvider':
                 return this.translocoService.translate('HasLoggedInWithExternalProvider');
             case 'isDisabled':
