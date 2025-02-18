@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using PlayertyLoyals.Business.Entities;
+﻿using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Services;
 using Quartz;
@@ -14,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Spider.Shared.Emailing;
 using PlayertyLoyals.Business.DTO.Helpers;
+using Serilog;
 using System.Diagnostics;
 
 namespace PlayertyLoyals.Business.BackroundJobs
@@ -26,10 +26,10 @@ namespace PlayertyLoyals.Business.BackroundJobs
         private readonly LoyalsBusinessService _loyalsBusinessService;
         private readonly WingsApiService _wingsApiService;
         private readonly IApplicationDbContext _context;
-        private readonly ILogger<UpdatePointsBackgroundJob> _logger;
+        private readonly ILogger _logger;
         private readonly EmailingService _emailingService;
 
-        public UpdatePointsBackgroundJob(LoyalsBusinessService loyalsBusinessService, WingsApiService wingsApiService, IApplicationDbContext context, ILogger<UpdatePointsBackgroundJob> logger,
+        public UpdatePointsBackgroundJob(LoyalsBusinessService loyalsBusinessService, WingsApiService wingsApiService, IApplicationDbContext context, ILogger logger,
             EmailingService emailingService)
         {
             _loyalsBusinessService = loyalsBusinessService;
@@ -62,7 +62,7 @@ namespace PlayertyLoyals.Business.BackroundJobs
                     businessSystem = await _loyalsBusinessService.GetInstanceAsync<BusinessSystem, long>(businessSystemId, null);
 
                     if (businessSystem.GetTransactionsEndpoint == null)
-                        throw new BusinessException($"Na stranici prodavnice '{businessSystem.Name}' morate da sačuvate popunjeno polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
+                        throw new BusinessException($"Na stranici poslovnog sistema '{businessSystem.Name}' morate da sačuvate popunjeno polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
 
                     PeriodInWhichTransactionsShouldBeProcessed periodInWhichTransactionsShouldBeProcessed = 
                         await _loyalsBusinessService.GetPeriodInWhichTransactionsShouldBeProcessed(businessSystem, manualDateFrom, manualDateTo, now);
@@ -87,16 +87,19 @@ namespace PlayertyLoyals.Business.BackroundJobs
                     await _context.DbSet<BusinessSystemUpdatePointsScheduledTask>().AddAsync(businessSystemUpdatePointsScheduledTaskForSave);
                     await _context.SaveChangesAsync();
 
-                    await _loyalsBusinessService.NotifyPartnerAboutSuccessfullyProcessedTransactions(
+                    await _loyalsBusinessService.NotifyPartnerAboutSuccessfullyProcessedTransactionsFromBackgroundJob(
                         businessSystem.Partner, transactionsProcessingResult, periodInWhichTransactionsShouldBeProcessed.DateFrom, periodInWhichTransactionsShouldBeProcessed.DateTo
                     );
                 });
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex.ToString()); TODO FT: Make real logging
-
-                await _loyalsBusinessService.NotifyPartnerAboutUnsuccessfullyProcessedTransactions(businessSystem, ex);
+                _logger.ForContext<UpdatePointsBackgroundJob>().Error(
+                    ex,
+                    "Poslovni sistem: {businessSystemName} (id: {businessSystemId});",
+                    businessSystem?.Name, businessSystem?.Id
+                );
+                await _loyalsBusinessService.NotifyPartnerAboutUnsuccessfullyProcessedTransactionsFromBackgroundJob(businessSystem, ex);
             }
         }
     }

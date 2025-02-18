@@ -1,0 +1,10 @@
+<ng-container *transloco="let t">
+    <form [formGroup]="manualUpdatePointsFormGroup" class="grid">
+        <div class="col-12 md:col-6">
+            <spider-calendar [control]="control('fromDate', manualUpdatePointsFormGroup)" [showTime]="true" [label]="t('ManualUpdatePointsFromDate')"></spider-calendar>
+        </div>
+        <div class="col-12 md:col-6">
+            <spider-calendar [control]="control('toDate', manualUpdatePointsFormGroup)" [showTime]="true" [label]="t('ManualUpdatePointsToDate')"></spider-calendar>
+        </div>
+    </form>
+</ng-container>

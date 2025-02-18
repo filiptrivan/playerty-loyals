@@ -60,12 +60,5 @@ namespace PlayertyLoyals.WebAPI.Controllers
             return await _loyalsBusinessService.GetSegmentationListForTheCurrentPartner();
         }
 
-        //[HttpGet]
-        //[AuthGuard]
-        //public async Task<List<SegmentationItemDTO>> GetSegmentationItemListForTheCurrentPartner()
-        //{
-        //    return await _loyalsBusinessService.GetSegmentationItemListForTheCurrentPartner();
-        //}
-
     }
 }

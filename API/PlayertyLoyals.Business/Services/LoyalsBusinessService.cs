@@ -78,7 +78,7 @@ namespace PlayertyLoyals.Business.Services
                 if (userExtendedSaveBodyDTO.UserExtendedDTO.Email != userExtended.Email ||
                     userExtendedSaveBodyDTO.UserExtendedDTO.HasLoggedInWithExternalProvider != userExtended.HasLoggedInWithExternalProvider
                 )
-                { 
+                {
                     throw new HackerException("You can't change Email and HasLoggedInWithExternalProvider from the main UI form.");
                 }
             });
@@ -964,28 +964,13 @@ namespace PlayertyLoyals.Business.Services
                         SegmentationItemDTO segmentationItemDTO = segmentationItem.Adapt<SegmentationItemDTO>(Mapper.SegmentationItemToDTOConfig());
                         segmentationDTO.SegmentationItemsDTOList.Add(segmentationItemDTO);
                     }
-                    
+
                     segmentationDTOList.Add(segmentationDTO);
                 }
             });
 
             return segmentationDTOList;
         }
-
-        /// <summary>
-        /// The information is available as soon as you register, there is no need for further authorization
-        /// </summary>
-        //public async Task<List<SegmentationItemDTO>> GetSegmentationItemListForTheCurrentPartner()
-        //{
-        //    return await _context.WithTransactionAsync(async () =>
-        //    {
-        //        return await _context.DbSet<SegmentationItem>()
-        //            .Where(x => x.Segmentation.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
-        //            .OrderBy(x => x.OrderNumber)
-        //            .ProjectToType<SegmentationItemDTO>(Mapper.SegmentationItemToDTOConfig())
-        //            .ToListAsync();
-        //    });
-        //}
 
         #endregion
 
@@ -1319,32 +1304,20 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task NotifyPartnerAboutUnsuccessfullyProcessedTransactions(BusinessSystem businessSystem, Exception ex)
-        {
-            if (ex is BusinessException)
-            {
-                await _emailingService.SendEmailAsync(
-                    businessSystem.Partner.Email,
-                    "Greška prilikom ažuriranja poena",
-                    $"Prodavnica: {businessSystem.Name}. {ex.Message}"
-                );
-            }
-            else
-            {
-                await _emailingService.SendEmailAsync(
-                    businessSystem.Partner.Email,
-                    "Greška prilikom ažuriranja poena",
-                    "Došlo je do greške prilikom ažuriranja poena. Molimo Vas da pokušate ponovo. Ako se problem ponovi, kontaktirajte podršku."
-                );
-            }
-        }
-
         public async Task NotifyPartnerAboutSuccessfullyProcessedTransactions(
-            Partner partner, TransactionsProcessingResult transactionsProcessingResult, DateTime? processedTransactionsFrom, DateTime? processedTransactionsFromTo
+            Partner partner, TransactionsProcessingResult transactionsProcessingResult, DateTime? processedTransactionsFrom, DateTime? processedTransactionsTo
         )
         {
-            string successMessage = $$"""
-Interval u kom su obrađene transakcije: {{(processedTransactionsFrom?.ToString("dd.MM.yyyy. HH:mm") ?? "?")}} - {{(processedTransactionsFromTo?.ToString("dd.MM.yyyy. HH:mm") ?? "?")}}. <br/>
+            string successMessage = GetSuccessMessageForProcessedTransactions(transactionsProcessingResult, processedTransactionsFrom, processedTransactionsTo);
+
+            await _emailingService.SendEmailAsync(partner.Email, "Uspešno izvršeno ažuriranje poena", successMessage);
+        }
+
+        public static string GetSuccessMessageForProcessedTransactions(
+    TransactionsProcessingResult transactionsProcessingResult, DateTime? processedTransactionsFrom, DateTime? processedTransactionsTo)
+        {
+            return $$"""
+Interval u kom su obrađene transakcije: {{(processedTransactionsFrom?.ToString("dd.MM.yyyy. HH:mm") ?? "?")}} - {{(processedTransactionsTo?.ToString("dd.MM.yyyy. HH:mm") ?? "?")}}. <br/>
 <br/>
 Ukupan broj obrađenih transakcija: {{transactionsProcessingResult.TotalProcessedTransactionsCount}}. <br/>
 <br/>
@@ -1361,8 +1334,6 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
     {{string.Join(",<br/>    ", transactionsProcessingResult.PartnerUserWhichDoesNotExistList)}}
 <br/>
 """;
-
-            await _emailingService.SendEmailAsync(partner.Email, "Uspešno izvršeno ažuriranje poena", successMessage);
         }
 
         public async Task<TransactionsProcessingResult> ProcessTransactions(BusinessSystem businessSystem, List<ExternalTransactionDTO> externalTransactionDTOList)
@@ -1470,6 +1441,45 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
                 return fileContent;
             });
         }
+
+        #region Background Job
+
+        public async Task NotifyPartnerAboutSuccessfullyProcessedTransactionsFromBackgroundJob(
+            Partner partner, TransactionsProcessingResult transactionsProcessingResult, DateTime? processedTransactionsFrom, DateTime? processedTransactionsTo
+        )
+        {
+            string successMessage = GetSuccessMessageForProcessedTransactions(transactionsProcessingResult, processedTransactionsFrom, processedTransactionsTo);
+
+            await _emailingService.SendEmailFromBackgroundJobAsync(partner.Email, "Uspešno izvršeno ažuriranje poena", successMessage);
+        }
+
+        /// <summary>
+        /// FT: Should only call this method from the background job
+        /// </summary>
+        public async Task NotifyPartnerAboutUnsuccessfullyProcessedTransactionsFromBackgroundJob(BusinessSystem businessSystem, Exception ex)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                if (businessSystem != null && ex is BusinessException)
+                {
+                    await _emailingService.SendEmailFromBackgroundJobAsync(
+                        businessSystem.Partner.Email,
+                        "Greška prilikom ažuriranja poena",
+                        $"Poslovni sistem: {businessSystem.Name}. {ex.Message}"
+                    );
+                }
+                else if (businessSystem != null)
+                {
+                    await _emailingService.SendEmailFromBackgroundJobAsync(
+                        businessSystem.Partner.Email,
+                        "Greška prilikom ažuriranja poena",
+                        $"Poslovni sistem: {businessSystem.Name}. Došlo je do greške prilikom ažuriranja poena. Molimo Vas da pokušate ponovo. Ako se problem ponovi, kontaktirajte podršku."
+                    );
+                }
+            });
+        }
+
+        #endregion
 
         #endregion
 

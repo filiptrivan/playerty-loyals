@@ -59,7 +59,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
                 _context.DbSet<BusinessSystem>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()), 
                 true
             );
-            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Prodavnice.xlsx"));
+            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Poslovni_Sistemi.xlsx"));
         }
 
         [HttpGet]

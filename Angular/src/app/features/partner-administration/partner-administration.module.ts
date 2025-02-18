@@ -18,6 +18,12 @@ import { BusinessSystemDetailsComponent } from './pages/business-systems/busines
 import { SegmentationBaseDetailsComponent, PartnerRoleBaseDetailsComponent, PartnerNotificationBaseDetailsComponent, BusinessSystemBaseDetailsComponent, PartnerUserBaseDetailsComponent } from 'src/app/business/components/base-details/business-base-details.generated';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PrimengModule, SpiderDataTableComponent, SpiderControlsModule, CardSkeletonComponent, IndexCardComponent } from '@playerty/spider';
+import { ExcelUpdatePointsBodyComponent } from './partials/business-system/excel-update-points/body/excel-update-points-body.component';
+import { ManualUpdatePointsBodyComponent } from './partials/business-system/manual-update-points/body/manual-update-points-body.component';
+import { AutomaticUpdatePointsBodyComponent } from './partials/business-system/automatic-update-points/body/automatic-update-points-body.component';
+import { AutomaticUpdatePointsFooterComponent } from './partials/business-system/automatic-update-points/footer/automatic-update-points-footer.component';
+import { ExcelUpdatePointsFooterComponent } from './partials/business-system/excel-update-points/footer/excel-update-points-footer.component';
+import { ManualUpdatePointsFooterComponent } from './partials/business-system/manual-update-points/footer/manual-update-points-footer.component';
 
 const routes: Routes = [
     {
@@ -85,6 +91,12 @@ const routes: Routes = [
     PartnerNotificationBaseDetailsComponent,
     BusinessSystemBaseDetailsComponent,
     PartnerUserBaseDetailsComponent,
+    AutomaticUpdatePointsBodyComponent,
+    ExcelUpdatePointsBodyComponent,
+    ManualUpdatePointsBodyComponent,
+    AutomaticUpdatePointsFooterComponent,
+    ExcelUpdatePointsFooterComponent,
+    ManualUpdatePointsFooterComponent,
 ],
     declarations: [
         PartnerUserListComponent,

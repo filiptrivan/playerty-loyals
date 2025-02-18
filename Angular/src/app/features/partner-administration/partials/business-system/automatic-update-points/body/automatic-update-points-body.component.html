@@ -1,0 +1,8 @@
+<form [formGroup]="automaticUpdatePointsFormGroup" class="grid">
+    <div class="col-12 md:col-6">
+        <spider-calendar [control]="control('updatePointsStartDate', automaticUpdatePointsFormGroup)" [showTime]="true"></spider-calendar>
+    </div>
+    <div class="col-12 md:col-6">
+        <spider-number [control]="control('updatePointsInterval', automaticUpdatePointsFormGroup)"></spider-number>
+    </div>
+</form>

@@ -1,0 +1,26 @@
+<ng-container *transloco="let t">
+    <p-button 
+    [disabled]="!isAuthorizedForSave" 
+    (onClick)="onSaveBusinessSystemUpdatePointsData()" 
+    [label]="t('Save')" 
+    icon="pi pi-save"
+    ></p-button>
+
+    <p-button 
+    *ngIf="savedBusinessSystemUpdatePointsScheduledTaskIsPaused === false" 
+    [disabled]="!isAuthorizedForSave" 
+    (onClick)="onSaveBusinessSystemUpdatePointsData()" 
+    [label]="t('PauseUpdatePointsScheduledTask')" 
+    icon="pi pi-pause" 
+    severity="warning"
+    ></p-button>
+
+    <p-button 
+    *ngIf="savedBusinessSystemUpdatePointsScheduledTaskIsPaused === true" 
+    [disabled]="!isAuthorizedForSave" 
+    (onClick)="onSaveBusinessSystemUpdatePointsData()" 
+    [label]="t('StartUpdatePointsScheduledTask')" 
+    icon="pi pi-play" 
+    severity="success"
+    ></p-button>
+</ng-container>
