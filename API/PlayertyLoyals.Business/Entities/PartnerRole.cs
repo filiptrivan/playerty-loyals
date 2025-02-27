@@ -1,5 +1,6 @@
 ﻿using PlayertyLoyals.Business.Enums;
 using Spider.Shared.Attributes.EF;
+using Spider.Shared.Attributes.EF.Translation;
 using Spider.Shared.Attributes.EF.UI;
 using Spider.Shared.BaseEntities;
 using Spider.Shared.Enums;
@@ -27,9 +28,11 @@ namespace PlayertyLoyals.Business.Entities
         public virtual Partner Partner { get; set; }
 
         [UIControlType(nameof(UIControlTypeCodes.MultiAutocomplete))]
+        [TranslateSingularSrLatnRS("Korisnici")]
         public virtual List<PartnerUser> PartnerUsers { get; } = new(); // M2M
 
         [UIControlType(nameof(UIControlTypeCodes.MultiSelect))]
+        [TranslateSingularSrLatnRS("Permisije")]
         public virtual List<PartnerPermission> PartnerPermissions { get; } = new(); // M2M
     }
 }

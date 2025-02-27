@@ -28,7 +28,7 @@ namespace PlayertyLoyals.Business.Services
             _authorizationService = authorizationService;
         }
 
-        public async Task SyncDiscountCategories(long businessSystemId)
+        public async Task SyncDiscountProductGroups(long businessSystemId)
         {
             await _context.WithTransactionAsync(async () =>
             {

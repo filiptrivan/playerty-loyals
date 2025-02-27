@@ -121,7 +121,7 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                                     visible: true,
                                 },
                                 {
-                                    label: this.translocoService.translate('NotificationList'),
+                                    label: this.translocoService.translate('Notifications'),
                                     icon: 'pi pi-fw pi-bell',
                                     routerLink: [`/${this.config.administrationSlug}/notifications`],
                                     hasPermission: (permissionCodes: string[]): boolean => { 
@@ -182,7 +182,7 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                                     visible: true,
                                 },
                                 {
-                                    label: this.translocoService.translate('NotificationList'),
+                                    label: this.translocoService.translate('Notifications'),
                                     icon: 'pi pi-fw pi-bell',
                                     routerLink: [`/${this.config.partnerAdministrationSlug}/notifications`],
                                     hasPermission: (permissionCodes: string[]): boolean => { 

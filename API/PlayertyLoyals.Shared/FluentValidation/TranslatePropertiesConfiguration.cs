@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using PlayertyLoyals.Shared.Resources;
-using Spider.Shared.Helpers;
+using Spider.Shared.Extensions;
 using Spider.Shared.Resources;
 using System;
 using System.Collections.Generic;

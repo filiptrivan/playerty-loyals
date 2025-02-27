@@ -1,4 +1,5 @@
 ﻿using Spider.Shared.Attributes.EF;
+using Spider.Shared.Attributes.EF.Translation;
 using Spider.Shared.Attributes.EF.UI;
 using Spider.Shared.BaseEntities;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Business.Entities
 {
+    [TranslatePluralSrLatnRS("Grupa proizvoda za popust")]
     [UIDoNotGenerate]
     public class DiscountProductGroup : BusinessObject<long>
     {

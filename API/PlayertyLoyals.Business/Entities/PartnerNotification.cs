@@ -6,6 +6,7 @@ using Spider.Shared.Interfaces;
 using Spider.Shared.Enums;
 using Spider.Shared.BaseEntities;
 using PlayertyLoyals.Business.Enums;
+using Spider.Shared.Attributes.EF.Translation;
 
 namespace PlayertyLoyals.Business.Entities
 {

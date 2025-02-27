@@ -64,9 +64,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public async Task SyncDiscountCategories(long businessSystemId)
+        public async Task SyncDiscountProductGroups(long businessSystemId)
         {
-            await _syncService.SyncDiscountCategories(businessSystemId);
+            await _syncService.SyncDiscountProductGroups(businessSystemId);
         }
 
         [HttpPut]

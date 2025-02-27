@@ -7,6 +7,8 @@ using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
 using Spider.Shared.DTO;
 using Spider.Security.Services;
+using PlayertyLoyals.Shared.Resources;
+using Spider.Shared.Extensions;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {

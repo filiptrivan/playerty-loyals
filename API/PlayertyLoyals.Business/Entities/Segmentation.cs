@@ -1,5 +1,6 @@
 ﻿using PlayertyLoyals.Business.Enums;
 using Spider.Shared.Attributes.EF;
+using Spider.Shared.Attributes.EF.Translation;
 using Spider.Shared.Attributes.EF.UI;
 using Spider.Shared.BaseEntities;
 using Spider.Shared.Enums;
@@ -29,6 +30,7 @@ namespace PlayertyLoyals.Business.Entities
         [WithMany(nameof(Partner.Segmentations))]
         public virtual Partner Partner { get; set; }
 
+        [TranslateSingularSrLatnRS("Stavke segmentacije")]
         [UIOrderedOneToMany]
         [IncludeInDTO]
         [Required]

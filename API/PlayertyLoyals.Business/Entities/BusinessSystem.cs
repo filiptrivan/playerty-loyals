@@ -1,5 +1,6 @@
 ﻿using PlayertyLoyals.Business.Enums;
 using Spider.Shared.Attributes.EF;
+using Spider.Shared.Attributes.EF.Translation;
 using Spider.Shared.Attributes.EF.UI;
 using Spider.Shared.BaseEntities;
 using System;
@@ -20,28 +21,35 @@ namespace PlayertyLoyals.Business.Entities
         [Required]
         public string Name { get; set; }
 
+        [TranslateSingularSrLatnRS("Putanja za učitavanje transakcija")]
         [StringLength(1000, MinimumLength = 1)]
         public string GetTransactionsEndpoint { get; set; }
 
+        [TranslateSingularSrLatnRS("Putanja učitavanja grupa proizvoda za popust")]
         [StringLength(1000, MinimumLength = 1)]
         public string GetDiscountProductGroupsEndpoint { get; set; }
 
+        [TranslateSingularSrLatnRS("Putanja za kreiranje korisnika")]
         [StringLength(1000, MinimumLength = 1)]
         public string CreateUserEndpoint { get; set; }
 
+        [TranslateSingularSrLatnRS("Putanja za ažuriranje grupa korisnika")]
         [StringLength(1000, MinimumLength = 1)]
         public string UpdateUserGroupEndpoint { get; set; }
 
         /// <summary>
         /// In hours, look if user can pass start time in DTO, so we can initialize scheduler in Azure, it would be nice if we don't have that field in the database.
         /// </summary>
+        [TranslateSingularSrLatnRS("Interval za ažuriranje poena")]
         [UIDoNotGenerate]
         [GreaterThanOrEqualTo(1)]
         public int? UpdatePointsInterval { get; set; }
 
+        [TranslateSingularSrLatnRS("Datum početka ažuriranja poena")]
         [UIDoNotGenerate]
         public DateTime? UpdatePointsStartDate { get; set; }
 
+        [TranslateSingularSrLatnRS("Ažuriranje poena pauzirano")]
         [UIDoNotGenerate]
         public bool? UpdatePointsScheduledTaskIsPaused { get; set; }
 

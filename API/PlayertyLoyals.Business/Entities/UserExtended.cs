@@ -3,7 +3,6 @@ using Spider.Security.Entities;
 using Spider.Security.Interfaces;
 using Spider.Shared.Attributes;
 using Spider.Shared.Attributes.EF;
-using Spider.Shared.Attributes.EF.Translation;
 using Spider.Shared.Attributes.EF.UI;
 using Spider.Shared.BaseEntities;
 using Spider.Shared.Enums;
@@ -11,13 +10,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PlayertyLoyals.Business.Entities
 {
-    [TranslateSingularSrLatnRS("Korisnik")]
     [Index(nameof(Email), IsUnique = true)]
     public class UserExtended : BusinessObject<long>, IUser
     {
         [UIDoNotGenerate]
         [UIControlWidth("col-12")]
-        [TranslateSingularSrLatnRS("Email")]
         [DisplayName]
         [CustomValidator("EmailAddress()")]
         [StringLength(70, MinimumLength = 5)]
@@ -28,7 +25,6 @@ namespace PlayertyLoyals.Business.Entities
 
         public bool? IsDisabled { get; set; }
 
-        [TranslateSingularSrLatnRS("Datum rođenja")]
         public DateTime? BirthDate { get; set; }
 
         /// <summary>

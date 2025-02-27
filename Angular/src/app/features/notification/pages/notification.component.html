@@ -1,7 +1,7 @@
 <ng-container *transloco="let t">
   <div class="card dashboard-card-wrapper">
     <div class="big-header" style="margin-bottom: 10px;">
-      {{t('NotificationList')}}
+      {{t('Notifications')}}
       <div class="bold-header-separator"></div>
     </div>
     <div style="display: flex; flex-direction: column; position: relative; z-index: 2;">
@@ -27,7 +27,7 @@
         </div>
       }
       @if (currentUserNotifications?.totalRecords == 0) {
-        {{t('YouDoNotHaveAnyNotifications')}}
+        {{t('YouDoNotHaveAnyNotification')}}
       }
     </div>
     <p-paginator

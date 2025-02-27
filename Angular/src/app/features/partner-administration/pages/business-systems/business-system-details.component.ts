@@ -29,7 +29,7 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     
     isAuthorizedForSave: boolean = false;
 
-    syncDiscountCategoriesButton = new SpiderButton({label: this.translocoService.translate('SyncDiscountCategories'), icon: 'pi pi-sync', disabled: true});
+    syncDiscountProductGroupsButton = new SpiderButton({label: this.translocoService.translate('SyncDiscountProductGroups'), icon: 'pi pi-sync', disabled: true});
     additionalButtons: SpiderButton[] = [];
 
     updatePointsTabs: SpiderTab[] = [
@@ -53,8 +53,8 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
          
     override ngOnInit() {
-        this.syncDiscountCategoriesButton.onClick = this.syncDiscountCategories;
-        this.additionalButtons.push(this.syncDiscountCategoriesButton);
+        this.syncDiscountProductGroupsButton.onClick = this.syncDiscountProductGroups;
+        this.additionalButtons.push(this.syncDiscountProductGroupsButton);
         this.initBusinessSystemUpdatePointsScheduledTaskTableCols();
     }
 
@@ -102,15 +102,15 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
 
     //#endregion
 
-    syncDiscountCategories = () => {
-        this.apiService.syncDiscountCategories(this.businessSystemFormGroup.getRawValue().id).subscribe(() => {
+    syncDiscountProductGroups = () => {
+        this.apiService.syncDiscountProductGroups(this.businessSystemFormGroup.getRawValue().id).subscribe(() => {
             this.messageService.successMessage(this.translocoService.translate('SuccessfulSyncToastDescription'));
         })
     }
 
     isAuthorizedForSaveChange = (event: IsAuthorizedForSaveEvent) => {
         this.isAuthorizedForSave = event.isAuthorizedForSave;
-        this.syncDiscountCategoriesButton.disabled = !event.isAuthorizedForSave;
+        this.syncDiscountProductGroupsButton.disabled = !event.isAuthorizedForSave;
     }
 
     override onBeforeSave = (): void => {
