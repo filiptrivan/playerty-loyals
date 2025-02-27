@@ -118,7 +118,6 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
 
     override onAfterSave = (): void => {
-        console.log(this.businessSystemFormGroup.controls.updatePointsScheduledTaskIsPaused.getRawValue())
         this.automaticUpdatePointsIsPaused = this.businessSystemFormGroup.controls.updatePointsScheduledTaskIsPaused.getRawValue();
     }
 }
