@@ -1,4 +1,4 @@
-import { BaseEntity, TableFilter, TableFilterContext, TableFilterSortMeta, MimeTypes } from '@playerty/spider';
+import { BaseEntity, TableFilter, TableFilterContext, TableFilterSortMeta, MimeTypes, Namebook } from '@playerty/spider';
 import { NotificationDiscriminatorCodes } from "../enums/business-enums.generated";
 
 
@@ -150,6 +150,24 @@ export class BusinessSystemSaveBody extends BaseEntity
 }
 
 
+export class BusinessSystemMainUIForm extends BaseEntity
+{
+    businessSystemDTO?: BusinessSystem;
+
+    constructor(
+    {
+        businessSystemDTO
+    }:{
+        businessSystemDTO?: BusinessSystem;     
+    } = {}
+    ) {
+        super('BusinessSystemMainUIForm'); 
+
+        this.businessSystemDTO = businessSystemDTO;
+    }
+}
+
+
 export class BusinessSystemTier extends BaseEntity
 {
     orderNumber?: number;
@@ -220,6 +238,24 @@ export class BusinessSystemTierSaveBody extends BaseEntity
     } = {}
     ) {
         super('BusinessSystemTierSaveBody'); 
+
+        this.businessSystemTierDTO = businessSystemTierDTO;
+    }
+}
+
+
+export class BusinessSystemTierMainUIForm extends BaseEntity
+{
+    businessSystemTierDTO?: BusinessSystemTier;
+
+    constructor(
+    {
+        businessSystemTierDTO
+    }:{
+        businessSystemTierDTO?: BusinessSystemTier;     
+    } = {}
+    ) {
+        super('BusinessSystemTierMainUIForm'); 
 
         this.businessSystemTierDTO = businessSystemTierDTO;
     }
@@ -298,6 +334,24 @@ export class BusinessSystemTierDiscountProductGroupSaveBody extends BaseEntity
 }
 
 
+export class BusinessSystemTierDiscountProductGroupMainUIForm extends BaseEntity
+{
+    businessSystemTierDiscountProductGroupDTO?: BusinessSystemTierDiscountProductGroup;
+
+    constructor(
+    {
+        businessSystemTierDiscountProductGroupDTO
+    }:{
+        businessSystemTierDiscountProductGroupDTO?: BusinessSystemTierDiscountProductGroup;     
+    } = {}
+    ) {
+        super('BusinessSystemTierDiscountProductGroupMainUIForm'); 
+
+        this.businessSystemTierDiscountProductGroupDTO = businessSystemTierDiscountProductGroupDTO;
+    }
+}
+
+
 export class BusinessSystemUpdatePointsScheduledTask extends BaseEntity
 {
     transactionsFrom?: Date;
@@ -366,6 +420,24 @@ export class BusinessSystemUpdatePointsScheduledTaskSaveBody extends BaseEntity
 }
 
 
+export class BusinessSystemUpdatePointsScheduledTaskMainUIForm extends BaseEntity
+{
+    businessSystemUpdatePointsScheduledTaskDTO?: BusinessSystemUpdatePointsScheduledTask;
+
+    constructor(
+    {
+        businessSystemUpdatePointsScheduledTaskDTO
+    }:{
+        businessSystemUpdatePointsScheduledTaskDTO?: BusinessSystemUpdatePointsScheduledTask;     
+    } = {}
+    ) {
+        super('BusinessSystemUpdatePointsScheduledTaskMainUIForm'); 
+
+        this.businessSystemUpdatePointsScheduledTaskDTO = businessSystemUpdatePointsScheduledTaskDTO;
+    }
+}
+
+
 export class DiscountProductGroup extends BaseEntity
 {
     name?: string;
@@ -424,6 +496,24 @@ export class DiscountProductGroupSaveBody extends BaseEntity
     } = {}
     ) {
         super('DiscountProductGroupSaveBody'); 
+
+        this.discountProductGroupDTO = discountProductGroupDTO;
+    }
+}
+
+
+export class DiscountProductGroupMainUIForm extends BaseEntity
+{
+    discountProductGroupDTO?: DiscountProductGroup;
+
+    constructor(
+    {
+        discountProductGroupDTO
+    }:{
+        discountProductGroupDTO?: DiscountProductGroup;     
+    } = {}
+    ) {
+        super('DiscountProductGroupMainUIForm'); 
 
         this.discountProductGroupDTO = discountProductGroupDTO;
     }
@@ -564,6 +654,24 @@ export class GenderSaveBody extends BaseEntity
 }
 
 
+export class GenderMainUIForm extends BaseEntity
+{
+    genderDTO?: Gender;
+
+    constructor(
+    {
+        genderDTO
+    }:{
+        genderDTO?: Gender;     
+    } = {}
+    ) {
+        super('GenderMainUIForm'); 
+
+        this.genderDTO = genderDTO;
+    }
+}
+
+
 export class ManualUpdatePoints extends BaseEntity
 {
     businessSystemId?: number;
@@ -682,6 +790,24 @@ export class NotificationSaveBody extends BaseEntity
 }
 
 
+export class NotificationMainUIForm extends BaseEntity
+{
+    notificationDTO?: Notification;
+
+    constructor(
+    {
+        notificationDTO
+    }:{
+        notificationDTO?: Notification;     
+    } = {}
+    ) {
+        super('NotificationMainUIForm'); 
+
+        this.notificationDTO = notificationDTO;
+    }
+}
+
+
 export class Partner extends BaseEntity
 {
     name?: string;
@@ -756,6 +882,24 @@ export class PartnerSaveBody extends BaseEntity
     } = {}
     ) {
         super('PartnerSaveBody'); 
+
+        this.partnerDTO = partnerDTO;
+    }
+}
+
+
+export class PartnerMainUIForm extends BaseEntity
+{
+    partnerDTO?: Partner;
+
+    constructor(
+    {
+        partnerDTO
+    }:{
+        partnerDTO?: Partner;     
+    } = {}
+    ) {
+        super('PartnerMainUIForm'); 
 
         this.partnerDTO = partnerDTO;
     }
@@ -850,6 +994,24 @@ export class PartnerNotificationSaveBody extends BaseEntity
 }
 
 
+export class PartnerNotificationMainUIForm extends BaseEntity
+{
+    partnerNotificationDTO?: PartnerNotification;
+
+    constructor(
+    {
+        partnerNotificationDTO
+    }:{
+        partnerNotificationDTO?: PartnerNotification;     
+    } = {}
+    ) {
+        super('PartnerNotificationMainUIForm'); 
+
+        this.partnerNotificationDTO = partnerNotificationDTO;
+    }
+}
+
+
 export class PartnerPermission extends BaseEntity
 {
     name?: string;
@@ -892,6 +1054,24 @@ export class PartnerPermissionSaveBody extends BaseEntity
     } = {}
     ) {
         super('PartnerPermissionSaveBody'); 
+
+        this.partnerPermissionDTO = partnerPermissionDTO;
+    }
+}
+
+
+export class PartnerPermissionMainUIForm extends BaseEntity
+{
+    partnerPermissionDTO?: PartnerPermission;
+
+    constructor(
+    {
+        partnerPermissionDTO
+    }:{
+        partnerPermissionDTO?: PartnerPermission;     
+    } = {}
+    ) {
+        super('PartnerPermissionMainUIForm'); 
 
         this.partnerPermissionDTO = partnerPermissionDTO;
     }
@@ -970,6 +1150,32 @@ export class PartnerRoleSaveBody extends BaseEntity
 }
 
 
+export class PartnerRoleMainUIForm extends BaseEntity
+{
+    partnerRoleDTO?: PartnerRole;
+	partnerUsersNamebookDTOList?: Namebook[];
+	partnerPermissionsNamebookDTOList?: Namebook[];
+
+    constructor(
+    {
+        partnerRoleDTO,
+		partnerUsersNamebookDTOList,
+		partnerPermissionsNamebookDTOList
+    }:{
+        partnerRoleDTO?: PartnerRole;
+		partnerUsersNamebookDTOList?: Namebook[];
+		partnerPermissionsNamebookDTOList?: Namebook[];     
+    } = {}
+    ) {
+        super('PartnerRoleMainUIForm'); 
+
+        this.partnerRoleDTO = partnerRoleDTO;
+		this.partnerUsersNamebookDTOList = partnerUsersNamebookDTOList;
+		this.partnerPermissionsNamebookDTOList = partnerPermissionsNamebookDTOList;
+    }
+}
+
+
 export class PartnerRolePartnerPermission extends BaseEntity
 {
     partnerRoleDisplayName?: string;
@@ -1012,6 +1218,24 @@ export class PartnerRolePartnerPermissionSaveBody extends BaseEntity
     } = {}
     ) {
         super('PartnerRolePartnerPermissionSaveBody'); 
+
+        this.partnerRolePartnerPermissionDTO = partnerRolePartnerPermissionDTO;
+    }
+}
+
+
+export class PartnerRolePartnerPermissionMainUIForm extends BaseEntity
+{
+    partnerRolePartnerPermissionDTO?: PartnerRolePartnerPermission;
+
+    constructor(
+    {
+        partnerRolePartnerPermissionDTO
+    }:{
+        partnerRolePartnerPermissionDTO?: PartnerRolePartnerPermission;     
+    } = {}
+    ) {
+        super('PartnerRolePartnerPermissionMainUIForm'); 
 
         this.partnerRolePartnerPermissionDTO = partnerRolePartnerPermissionDTO;
     }
@@ -1102,6 +1326,24 @@ export class PartnerUserSaveBody extends BaseEntity
 }
 
 
+export class PartnerUserMainUIForm extends BaseEntity
+{
+    partnerUserDTO?: PartnerUser;
+
+    constructor(
+    {
+        partnerUserDTO
+    }:{
+        partnerUserDTO?: PartnerUser;     
+    } = {}
+    ) {
+        super('PartnerUserMainUIForm'); 
+
+        this.partnerUserDTO = partnerUserDTO;
+    }
+}
+
+
 export class PartnerUserPartnerNotification extends BaseEntity
 {
     partnerNotificationDisplayName?: string;
@@ -1148,6 +1390,24 @@ export class PartnerUserPartnerNotificationSaveBody extends BaseEntity
     } = {}
     ) {
         super('PartnerUserPartnerNotificationSaveBody'); 
+
+        this.partnerUserPartnerNotificationDTO = partnerUserPartnerNotificationDTO;
+    }
+}
+
+
+export class PartnerUserPartnerNotificationMainUIForm extends BaseEntity
+{
+    partnerUserPartnerNotificationDTO?: PartnerUserPartnerNotification;
+
+    constructor(
+    {
+        partnerUserPartnerNotificationDTO
+    }:{
+        partnerUserPartnerNotificationDTO?: PartnerUserPartnerNotification;     
+    } = {}
+    ) {
+        super('PartnerUserPartnerNotificationMainUIForm'); 
 
         this.partnerUserPartnerNotificationDTO = partnerUserPartnerNotificationDTO;
     }
@@ -1202,6 +1462,24 @@ export class PartnerUserPartnerRoleSaveBody extends BaseEntity
 }
 
 
+export class PartnerUserPartnerRoleMainUIForm extends BaseEntity
+{
+    partnerUserPartnerRoleDTO?: PartnerUserPartnerRole;
+
+    constructor(
+    {
+        partnerUserPartnerRoleDTO
+    }:{
+        partnerUserPartnerRoleDTO?: PartnerUserPartnerRole;     
+    } = {}
+    ) {
+        super('PartnerUserPartnerRoleMainUIForm'); 
+
+        this.partnerUserPartnerRoleDTO = partnerUserPartnerRoleDTO;
+    }
+}
+
+
 export class PartnerUserSegmentation extends BaseEntity
 {
     partnerUserThatHasFilledSegmentationDisplayName?: string;
@@ -1250,6 +1528,24 @@ export class PartnerUserSegmentationSaveBody extends BaseEntity
 }
 
 
+export class PartnerUserSegmentationMainUIForm extends BaseEntity
+{
+    partnerUserSegmentationDTO?: PartnerUserSegmentation;
+
+    constructor(
+    {
+        partnerUserSegmentationDTO
+    }:{
+        partnerUserSegmentationDTO?: PartnerUserSegmentation;     
+    } = {}
+    ) {
+        super('PartnerUserSegmentationMainUIForm'); 
+
+        this.partnerUserSegmentationDTO = partnerUserSegmentationDTO;
+    }
+}
+
+
 export class PartnerUserSegmentationItem extends BaseEntity
 {
     partnerUserDisplayName?: string;
@@ -1292,6 +1588,24 @@ export class PartnerUserSegmentationItemSaveBody extends BaseEntity
     } = {}
     ) {
         super('PartnerUserSegmentationItemSaveBody'); 
+
+        this.partnerUserSegmentationItemDTO = partnerUserSegmentationItemDTO;
+    }
+}
+
+
+export class PartnerUserSegmentationItemMainUIForm extends BaseEntity
+{
+    partnerUserSegmentationItemDTO?: PartnerUserSegmentationItem;
+
+    constructor(
+    {
+        partnerUserSegmentationItemDTO
+    }:{
+        partnerUserSegmentationItemDTO?: PartnerUserSegmentationItem;     
+    } = {}
+    ) {
+        super('PartnerUserSegmentationItemMainUIForm'); 
 
         this.partnerUserSegmentationItemDTO = partnerUserSegmentationItemDTO;
     }
@@ -1416,6 +1730,28 @@ export class SegmentationSaveBody extends BaseEntity
 }
 
 
+export class SegmentationMainUIForm extends BaseEntity
+{
+    segmentationDTO?: Segmentation;
+	orderedSegmentationItemsDTO?: SegmentationItem[];
+
+    constructor(
+    {
+        segmentationDTO,
+		orderedSegmentationItemsDTO
+    }:{
+        segmentationDTO?: Segmentation;
+		orderedSegmentationItemsDTO?: SegmentationItem[];     
+    } = {}
+    ) {
+        super('SegmentationMainUIForm'); 
+
+        this.segmentationDTO = segmentationDTO;
+		this.orderedSegmentationItemsDTO = orderedSegmentationItemsDTO;
+    }
+}
+
+
 export class SegmentationItem extends BaseEntity
 {
     name?: string;
@@ -1478,6 +1814,24 @@ export class SegmentationItemSaveBody extends BaseEntity
     } = {}
     ) {
         super('SegmentationItemSaveBody'); 
+
+        this.segmentationItemDTO = segmentationItemDTO;
+    }
+}
+
+
+export class SegmentationItemMainUIForm extends BaseEntity
+{
+    segmentationItemDTO?: SegmentationItem;
+
+    constructor(
+    {
+        segmentationItemDTO
+    }:{
+        segmentationItemDTO?: SegmentationItem;     
+    } = {}
+    ) {
+        super('SegmentationItemMainUIForm'); 
 
         this.segmentationItemDTO = segmentationItemDTO;
     }
@@ -1568,6 +1922,24 @@ export class TierSaveBody extends BaseEntity
 		this.tierDTOList = tierDTOList;
 		this.businessSystemTierDTOList = businessSystemTierDTOList;
 		this.businessSystemTierDiscountProductGroupDTOList = businessSystemTierDiscountProductGroupDTOList;
+    }
+}
+
+
+export class TierMainUIForm extends BaseEntity
+{
+    tierDTO?: Tier;
+
+    constructor(
+    {
+        tierDTO
+    }:{
+        tierDTO?: Tier;     
+    } = {}
+    ) {
+        super('TierMainUIForm'); 
+
+        this.tierDTO = tierDTO;
     }
 }
 
@@ -1668,6 +2040,24 @@ export class TransactionSaveBody extends BaseEntity
 }
 
 
+export class TransactionMainUIForm extends BaseEntity
+{
+    transactionDTO?: Transaction;
+
+    constructor(
+    {
+        transactionDTO
+    }:{
+        transactionDTO?: Transaction;     
+    } = {}
+    ) {
+        super('TransactionMainUIForm'); 
+
+        this.transactionDTO = transactionDTO;
+    }
+}
+
+
 export class UserExtended extends BaseEntity
 {
     email?: string;
@@ -1740,6 +2130,24 @@ export class UserExtendedSaveBody extends BaseEntity
 }
 
 
+export class UserExtendedMainUIForm extends BaseEntity
+{
+    userExtendedDTO?: UserExtended;
+
+    constructor(
+    {
+        userExtendedDTO
+    }:{
+        userExtendedDTO?: UserExtended;     
+    } = {}
+    ) {
+        super('UserExtendedMainUIForm'); 
+
+        this.userExtendedDTO = userExtendedDTO;
+    }
+}
+
+
 export class UserNotification extends BaseEntity
 {
     notificationDisplayName?: string;
@@ -1786,6 +2194,24 @@ export class UserNotificationSaveBody extends BaseEntity
     } = {}
     ) {
         super('UserNotificationSaveBody'); 
+
+        this.userNotificationDTO = userNotificationDTO;
+    }
+}
+
+
+export class UserNotificationMainUIForm extends BaseEntity
+{
+    userNotificationDTO?: UserNotification;
+
+    constructor(
+    {
+        userNotificationDTO
+    }:{
+        userNotificationDTO?: UserNotification;     
+    } = {}
+    ) {
+        super('UserNotificationMainUIForm'); 
 
         this.userNotificationDTO = userNotificationDTO;
     }

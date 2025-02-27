@@ -1,17 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
-using PlayertyLoyals.Business.Entities;
-using PlayertyLoyals.Business.Services;
-using Quartz;
-using Spider.Shared.Interfaces;
-using Spider.Shared.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using PlayertyLoyals.Business.DTO;
+﻿using Quartz;
 using Spider.Shared.Exceptions;
 
 namespace PlayertyLoyals.Business.BackroundJobs

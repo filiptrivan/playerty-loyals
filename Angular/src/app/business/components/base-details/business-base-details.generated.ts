@@ -142,12 +142,10 @@ export class BusinessSystemBaseDetailsComponent {
 
             if(this.modelId > 0){
                 forkJoin({
-                    businessSystem: this.apiService.getBusinessSystem(this.modelId),
-
-
+                    mainUIFormDTO: this.apiService.getBusinessSystemMainUIFormDTO(this.modelId),
                 })
-                .subscribe(({ businessSystem }) => {
-                    this.initBusinessSystemFormGroup(new BusinessSystem(businessSystem));
+                .subscribe(({ mainUIFormDTO }) => {
+                    this.initBusinessSystemFormGroup(new BusinessSystem(mainUIFormDTO.businessSystemDTO));
 
 
 
@@ -395,12 +393,10 @@ export class NotificationBaseDetailsComponent {
 
             if(this.modelId > 0){
                 forkJoin({
-                    notification: this.apiService.getNotification(this.modelId),
-
-
+                    mainUIFormDTO: this.apiService.getNotificationMainUIFormDTO(this.modelId),
                 })
-                .subscribe(({ notification }) => {
-                    this.initNotificationFormGroup(new Notification(notification));
+                .subscribe(({ mainUIFormDTO }) => {
+                    this.initNotificationFormGroup(new Notification(mainUIFormDTO.notificationDTO));
 
 
 
@@ -640,12 +636,10 @@ export class PartnerBaseDetailsComponent {
 
             if(this.modelId > 0){
                 forkJoin({
-                    partner: this.apiService.getPartner(this.modelId),
-
-
+                    mainUIFormDTO: this.apiService.getPartnerMainUIFormDTO(this.modelId),
                 })
-                .subscribe(({ partner }) => {
-                    this.initPartnerFormGroup(new Partner(partner));
+                .subscribe(({ mainUIFormDTO }) => {
+                    this.initPartnerFormGroup(new Partner(mainUIFormDTO.partnerDTO));
 
 
 
@@ -902,12 +896,10 @@ export class PartnerNotificationBaseDetailsComponent {
 
             if(this.modelId > 0){
                 forkJoin({
-                    partnerNotification: this.apiService.getPartnerNotification(this.modelId),
-
-
+                    mainUIFormDTO: this.apiService.getPartnerNotificationMainUIFormDTO(this.modelId),
                 })
-                .subscribe(({ partnerNotification }) => {
-                    this.initPartnerNotificationFormGroup(new PartnerNotification(partnerNotification));
+                .subscribe(({ mainUIFormDTO }) => {
+                    this.initPartnerNotificationFormGroup(new PartnerNotification(mainUIFormDTO.partnerNotificationDTO));
 
 
 
@@ -1141,19 +1133,16 @@ export class PartnerRoleBaseDetailsComponent {
 
             if(this.modelId > 0){
                 forkJoin({
-                    partnerRole: this.apiService.getPartnerRole(this.modelId),
-
-                    partnerUsersForPartnerRole: this.apiService.getPartnerUsersNamebookListForPartnerRole(this.modelId),
-                    partnerPermissionsForPartnerRole: this.apiService.getPartnerPermissionsNamebookListForPartnerRole(this.modelId),
+                    mainUIFormDTO: this.apiService.getPartnerRoleMainUIFormDTO(this.modelId),
                 })
-                .subscribe(({ partnerRole, partnerUsersForPartnerRole, partnerPermissionsForPartnerRole }) => {
-                    this.initPartnerRoleFormGroup(new PartnerRole(partnerRole));
+                .subscribe(({ mainUIFormDTO }) => {
+                    this.initPartnerRoleFormGroup(new PartnerRole(mainUIFormDTO.partnerRoleDTO));
 
                     this.selectedPartnerPermissionsForPartnerRole.setValue(
-                        partnerPermissionsForPartnerRole.map(n => { return n.id })
+                        mainUIFormDTO.partnerPermissionsNamebookDTOList.map(n => { return n.id })
                     );
                     this.selectedPartnerUsersForPartnerRole.setValue(
-                        partnerUsersForPartnerRole.map(n => ({ label: n.displayName, value: n.id }))
+                        mainUIFormDTO.partnerUsersNamebookDTOList.map(n => ({ label: n.displayName, value: n.id }))
                     );
                     this.authorizationForSaveSubscription = this.handleAuthorizationForSave().subscribe();
                     this.loading = false;
@@ -1364,12 +1353,10 @@ export class PartnerUserBaseDetailsComponent {
 
             if(this.modelId > 0){
                 forkJoin({
-                    partnerUser: this.apiService.getPartnerUser(this.modelId),
-
-
+                    mainUIFormDTO: this.apiService.getPartnerUserMainUIFormDTO(this.modelId),
                 })
-                .subscribe(({ partnerUser }) => {
-                    this.initPartnerUserFormGroup(new PartnerUser(partnerUser));
+                .subscribe(({ mainUIFormDTO }) => {
+                    this.initPartnerUserFormGroup(new PartnerUser(mainUIFormDTO.partnerUserDTO));
 
 
 
@@ -1561,11 +1548,11 @@ export class SegmentationBaseDetailsComponent {
 
     segmentationSaveBodyName: string = nameof<SegmentationSaveBody>('segmentationDTO');
 
-    segmentationItemsModel: SegmentationItem = new SegmentationItem();
-    segmentationItemsSaveBodyName: string = nameof<SegmentationItemSaveBody>('segmentationItemDTO');
+    segmentationItemsModel = new SegmentationItem();
+    segmentationItemsSaveBodyName: string = nameof<SegmentationSaveBody>('segmentationItemsDTO');
     segmentationItemsTranslationKey: string = new SegmentationItem().typeName;
     segmentationItemsFormArray: SpiderFormArray<SegmentationItem>;
-    segmentationItemsLastIndexClicked: LastMenuIconIndexClicked = new LastMenuIconIndexClicked();
+    segmentationItemsLastIndexClicked = new LastMenuIconIndexClicked();
     segmentationItemsCrudMenu: MenuItem[] = [];
 
 
@@ -1612,13 +1599,11 @@ export class SegmentationBaseDetailsComponent {
 
             if(this.modelId > 0){
                 forkJoin({
-                    segmentation: this.apiService.getSegmentation(this.modelId),
-                    segmentationItemsForSegmentation: this.apiService.getOrderedSegmentationItemsForSegmentation(this.modelId),
-
+                    mainUIFormDTO: this.apiService.getSegmentationMainUIFormDTO(this.modelId),
                 })
-                .subscribe(({ segmentation, segmentationItemsForSegmentation }) => {
-                    this.initSegmentationFormGroup(new Segmentation(segmentation));
-                    this.initSegmentationItemsFormArray(segmentationItemsForSegmentation);
+                .subscribe(({ mainUIFormDTO }) => {
+                    this.initSegmentationFormGroup(new Segmentation(mainUIFormDTO.segmentationDTO));
+                    this.initSegmentationItemsFormArray(mainUIFormDTO.orderedSegmentationItemsDTO);
 
 
                     this.authorizationForSaveSubscription = this.handleAuthorizationForSave().subscribe();
@@ -1855,12 +1840,10 @@ export class TierBaseDetailsComponent {
 
             if(this.modelId > 0){
                 forkJoin({
-                    tier: this.apiService.getTier(this.modelId),
-
-
+                    mainUIFormDTO: this.apiService.getTierMainUIFormDTO(this.modelId),
                 })
-                .subscribe(({ tier }) => {
-                    this.initTierFormGroup(new Tier(tier));
+                .subscribe(({ mainUIFormDTO }) => {
+                    this.initTierFormGroup(new Tier(mainUIFormDTO.tierDTO));
 
 
 
@@ -2081,12 +2064,10 @@ export class UserExtendedBaseDetailsComponent {
 
             if(this.modelId > 0){
                 forkJoin({
-                    userExtended: this.apiService.getUserExtended(this.modelId),
-
-
+                    mainUIFormDTO: this.apiService.getUserExtendedMainUIFormDTO(this.modelId),
                 })
-                .subscribe(({ userExtended }) => {
-                    this.initUserExtendedFormGroup(new UserExtended(userExtended));
+                .subscribe(({ mainUIFormDTO }) => {
+                    this.initUserExtendedFormGroup(new UserExtended(mainUIFormDTO.userExtendedDTO));
 
 
 
