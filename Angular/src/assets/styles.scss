@@ -12,7 +12,8 @@ $gutter: 1rem; // FT: For primeflex grid system, it needs to be rigth above prim
 
 //#region Spider
 
-@import "../../../../../SpiderFramework/spider-framework/Angular/projects/spider/src/lib/styles/styles.scss";
+// @import "../../../../../SpiderFramework/spider-framework/Angular/projects/spider/src/lib/styles/styles.scss";
+@import "../../node_modules/@playerty/spider/styles/styles/styles.scss";
 
 //#endregion
 
