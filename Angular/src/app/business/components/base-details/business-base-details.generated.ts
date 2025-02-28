@@ -11,7 +11,7 @@ import { combineLatest, firstValueFrom, forkJoin, map, Observable, of, Subscript
 import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../services/auth/auth.service';
 import { PrimengModule, SpiderControlsModule, CardSkeletonComponent, IndexCardComponent, IsAuthorizedForSaveEvent, SpiderDataTableComponent, SpiderFormArray, BaseEntity, LastMenuIconIndexClicked, SpiderFormGroup, SpiderButton, nameof, BaseFormService, getControl, Column, TableFilter, LazyLoadSelectedIdsResult, AllClickEvent, SpiderFileSelectEvent, getPrimengDropdownNamebookOptions, PrimengOption, SpiderFormControl, getPrimengAutocompleteNamebookOptions } from '@playerty/spider';
-import { AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, ExcelUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, ManualUpdatePoints, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerUserSaveBody, Product, SegmentationItem, TierSaveBody, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUser, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRoleSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserExtendedSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
+import { AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, ExcelUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, ManualUpdatePoints, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerUser, PartnerUserSaveBody, Product, SegmentationItem, TierSaveBody, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRoleSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserExtendedSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
 
 @Component({
     selector: 'business-system-base-details',
@@ -91,8 +91,6 @@ export class BusinessSystemBaseDetailsComponent {
     modelId: number;
     loading: boolean = true;
 
-    currentUserPermissionCodes: string[] = [];
-
     businessSystemSaveBodyName: string = nameof<BusinessSystemSaveBody>('businessSystemDTO');
 
 
@@ -163,7 +161,7 @@ export class BusinessSystemBaseDetailsComponent {
     }
 
     initBusinessSystemFormGroup(businessSystem: BusinessSystem) {
-        this.baseFormService.initFormGroup<BusinessSystem>(
+        this.baseFormService.addFormGroup<BusinessSystem>(
             this.businessSystemFormGroup, 
             this.formGroup, 
             businessSystem, 
@@ -265,7 +263,7 @@ export class BusinessSystemBaseDetailsComponent {
                     </div>
                     <div *ngIf="showRecipientsForNotification" class="col-12">
                         <spider-data-table 
-                            [tableTitle]="t('RecipientsForNotification')" 
+                            [tableTitle]="t('Recipients')" 
                             [cols]="recipientsTableColsForNotification" 
                             [getTableDataObservableMethod]="getRecipientsTableDataObservableMethodForNotification" 
                             [exportTableDataToExcelObservableMethod]="exportRecipientsTableDataToExcelObservableMethodForNotification"
@@ -330,8 +328,6 @@ export class NotificationBaseDetailsComponent {
 
     modelId: number;
     loading: boolean = true;
-
-    currentUserPermissionCodes: string[] = [];
 
     notificationSaveBodyName: string = nameof<NotificationSaveBody>('notificationDTO');
 
@@ -414,7 +410,7 @@ export class NotificationBaseDetailsComponent {
     }
 
     initNotificationFormGroup(notification: Notification) {
-        this.baseFormService.initFormGroup<Notification>(
+        this.baseFormService.addFormGroup<Notification>(
             this.notificationFormGroup, 
             this.formGroup, 
             notification, 
@@ -583,8 +579,6 @@ export class PartnerBaseDetailsComponent {
     modelId: number;
     loading: boolean = true;
 
-    currentUserPermissionCodes: string[] = [];
-
     partnerSaveBodyName: string = nameof<PartnerSaveBody>('partnerDTO');
 
 
@@ -657,7 +651,7 @@ export class PartnerBaseDetailsComponent {
     }
 
     initPartnerFormGroup(partner: Partner) {
-        this.baseFormService.initFormGroup<Partner>(
+        this.baseFormService.addFormGroup<Partner>(
             this.partnerFormGroup, 
             this.formGroup, 
             partner, 
@@ -765,7 +759,7 @@ export class PartnerBaseDetailsComponent {
                     </div>
                     <div *ngIf="showRecipientsForPartnerNotification" class="col-12">
                         <spider-data-table 
-                            [tableTitle]="t('RecipientsForPartnerNotification')" 
+                            [tableTitle]="t('Recipients')" 
                             [cols]="recipientsTableColsForPartnerNotification" 
                             [getTableDataObservableMethod]="getRecipientsTableDataObservableMethodForPartnerNotification" 
                             [exportTableDataToExcelObservableMethod]="exportRecipientsTableDataToExcelObservableMethodForPartnerNotification"
@@ -830,8 +824,6 @@ export class PartnerNotificationBaseDetailsComponent {
 
     modelId: number;
     loading: boolean = true;
-
-    currentUserPermissionCodes: string[] = [];
 
     partnerNotificationSaveBodyName: string = nameof<PartnerNotificationSaveBody>('partnerNotificationDTO');
 
@@ -917,7 +909,7 @@ export class PartnerNotificationBaseDetailsComponent {
     }
 
     initPartnerNotificationFormGroup(partnerNotification: PartnerNotification) {
-        this.baseFormService.initFormGroup<PartnerNotification>(
+        this.baseFormService.addFormGroup<PartnerNotification>(
             this.partnerNotificationFormGroup, 
             this.formGroup, 
             partnerNotification, 
@@ -1079,8 +1071,6 @@ export class PartnerRoleBaseDetailsComponent {
     modelId: number;
     loading: boolean = true;
 
-    currentUserPermissionCodes: string[] = [];
-
     partnerRoleSaveBodyName: string = nameof<PartnerRoleSaveBody>('partnerRoleDTO');
 
 
@@ -1158,7 +1148,7 @@ export class PartnerRoleBaseDetailsComponent {
     }
 
     initPartnerRoleFormGroup(partnerRole: PartnerRole) {
-        this.baseFormService.initFormGroup<PartnerRole>(
+        this.baseFormService.addFormGroup<PartnerRole>(
             this.partnerRoleFormGroup, 
             this.formGroup, 
             partnerRole, 
@@ -1306,8 +1296,6 @@ export class PartnerUserBaseDetailsComponent {
     modelId: number;
     loading: boolean = true;
 
-    currentUserPermissionCodes: string[] = [];
-
     partnerUserSaveBodyName: string = nameof<PartnerUserSaveBody>('partnerUserDTO');
 
 
@@ -1374,7 +1362,7 @@ export class PartnerUserBaseDetailsComponent {
     }
 
     initPartnerUserFormGroup(partnerUser: PartnerUser) {
-        this.baseFormService.initFormGroup<PartnerUser>(
+        this.baseFormService.addFormGroup<PartnerUser>(
             this.partnerUserFormGroup, 
             this.formGroup, 
             partnerUser, 
@@ -1544,8 +1532,6 @@ export class SegmentationBaseDetailsComponent {
     modelId: number;
     loading: boolean = true;
 
-    currentUserPermissionCodes: string[] = [];
-
     segmentationSaveBodyName: string = nameof<SegmentationSaveBody>('segmentationDTO');
 
     segmentationItemsModel = new SegmentationItem();
@@ -1620,7 +1606,7 @@ export class SegmentationBaseDetailsComponent {
     }
 
     initSegmentationFormGroup(segmentation: Segmentation) {
-        this.baseFormService.initFormGroup<Segmentation>(
+        this.baseFormService.addFormGroup<Segmentation>(
             this.segmentationFormGroup, 
             this.formGroup, 
             segmentation, 
@@ -1790,8 +1776,6 @@ export class TierBaseDetailsComponent {
     modelId: number;
     loading: boolean = true;
 
-    currentUserPermissionCodes: string[] = [];
-
     tierSaveBodyName: string = nameof<TierSaveBody>('tierDTO');
 
 
@@ -1861,7 +1845,7 @@ export class TierBaseDetailsComponent {
     }
 
     initTierFormGroup(tier: Tier) {
-        this.baseFormService.initFormGroup<Tier>(
+        this.baseFormService.addFormGroup<Tier>(
             this.tierFormGroup, 
             this.formGroup, 
             tier, 
@@ -2012,8 +1996,6 @@ export class UserExtendedBaseDetailsComponent {
     modelId: number;
     loading: boolean = true;
 
-    currentUserPermissionCodes: string[] = [];
-
     userExtendedSaveBodyName: string = nameof<UserExtendedSaveBody>('userExtendedDTO');
 
 
@@ -2085,7 +2067,7 @@ export class UserExtendedBaseDetailsComponent {
     }
 
     initUserExtendedFormGroup(userExtended: UserExtended) {
-        this.baseFormService.initFormGroup<UserExtended>(
+        this.baseFormService.addFormGroup<UserExtended>(
             this.userExtendedFormGroup, 
             this.formGroup, 
             userExtended, 

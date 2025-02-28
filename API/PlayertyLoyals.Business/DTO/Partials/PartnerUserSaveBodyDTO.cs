@@ -9,5 +9,8 @@ namespace PlayertyLoyals.Business.DTO
     public partial class PartnerUserSaveBodyDTO
     {
         public List<long> SelectedSegmentationItemsIds { get; set; }
+
+        public DateTime? BirthDate { get; set; }
+        public int? GenderId { get; set; }
     }
 }

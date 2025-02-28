@@ -1308,20 +1308,28 @@ export class PartnerUserSaveBody extends BaseEntity
 {
     partnerUserDTO?: PartnerUser;
 	selectedSegmentationItemsIds?: number[];
+	birthDate?: Date;
+	genderId?: number;
 
     constructor(
     {
         partnerUserDTO,
-		selectedSegmentationItemsIds
+		selectedSegmentationItemsIds,
+		birthDate,
+		genderId
     }:{
         partnerUserDTO?: PartnerUser;
-		selectedSegmentationItemsIds?: number[];     
+		selectedSegmentationItemsIds?: number[];
+		birthDate?: Date;
+		genderId?: number;     
     } = {}
     ) {
         super('PartnerUserSaveBody'); 
 
         this.partnerUserDTO = partnerUserDTO;
 		this.selectedSegmentationItemsIds = selectedSegmentationItemsIds;
+		this.birthDate = birthDate;
+		this.genderId = genderId;
     }
 }
 

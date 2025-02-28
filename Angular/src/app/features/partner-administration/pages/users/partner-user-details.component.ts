@@ -5,9 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { BehaviorSubject, combineLatest, firstValueFrom, forkJoin, map, Observable } from 'rxjs';
 import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
-import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, Tier } from 'src/app/business/entities/business-entities.generated';
+import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, Tier, UserExtended } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { BaseFormCopy, SpiderFormGroup, SpiderFormArray, SpiderMessageService, BaseFormService, IsAuthorizedForSaveEvent } from '@playerty/spider';
+import { BaseFormCopy, SpiderFormGroup, SpiderFormArray, SpiderMessageService, BaseFormService, IsAuthorizedForSaveEvent, getPrimengDropdownNamebookOptions, PrimengOption } from '@playerty/spider';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { BusinessPermissionCodes } from 'src/app/business/enums/business-enums.generated';
 
@@ -17,6 +17,10 @@ import { BusinessPermissionCodes } from 'src/app/business/enums/business-enums.g
     styles: [],
 })
 export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit {
+    userExtendedFormGroup = new SpiderFormGroup<UserExtended>({});
+    genderOptionsForUserExtended: PrimengOption[];
+    userExtendedLoading = true;
+
     partnerUserFormGroup = new SpiderFormGroup<PartnerUser>({});
     partnerUserTier: Tier;
 
@@ -54,13 +58,15 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
 
 
     override ngOnInit() {
-
+        
     }
 
     partnerUserFormGroupInitFinish = () => {
         if (this.partnerUserFormGroup.getRawValue()?.tierId) {
             this.setTier(this.partnerUserFormGroup.getRawValue().id);
         }
+
+        this.initUserExtendedFormGroup();
 
         forkJoin({
             segmentations: this.apiService.getSegmentationListForTheCurrentPartner(),
@@ -89,6 +95,26 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         });
 
         this.setAlreadyFilledSegmentationIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue());
+    }
+
+    initUserExtendedFormGroup = () => {
+        const userExtendedId = this.partnerUserFormGroup.getRawValue().userId;
+
+        getPrimengDropdownNamebookOptions(this.apiService.getGenderDropdownListForUserExtended, userExtendedId).subscribe(po => {
+            this.genderOptionsForUserExtended = po;
+        });
+
+        this.userExtendedFormGroup = new SpiderFormGroup<UserExtended>({});
+
+        this.apiService.getUserExtended(userExtendedId).subscribe(userExtended => {
+            this.baseFormService.initFormGroup<UserExtended>(
+                this.userExtendedFormGroup, 
+                userExtended, 
+                []
+            );
+
+            this.userExtendedLoading = false;
+        });
     }
 
     // TODO FT: Return this inside save result also
@@ -149,11 +175,14 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     }
 
     override onBeforeSave = (): void => {
-        let saveBody: PartnerUserSaveBody = new PartnerUserSaveBody();
+        let saveBody = new PartnerUserSaveBody();
 
         saveBody.partnerUserDTO = this.partnerUserFormGroup.getRawValue();
 
         saveBody.selectedSegmentationItemsIds = this.segmentationItemsFormArray.value.filter(x => x.checked).map(x => x.id);
+
+        saveBody.birthDate = this.userExtendedFormGroup.getRawValue().birthDate;
+        saveBody.genderId = this.userExtendedFormGroup.getRawValue().genderId;
 
         this.saveBody = saveBody;
         return;

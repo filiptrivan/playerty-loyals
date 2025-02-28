@@ -571,6 +571,9 @@ namespace PlayertyLoyals.Business.Services
 
                 await UpdateFirstTimeFilledPointsForThePartnerUser(savedPartnerUser, partnerUserSaveBodyDTO.SelectedSegmentationItemsIds);
 
+                // FT: We don't need to authorize, we will authorize everything in SavePartnerUser method
+                await UpdateBirthDateAndGenderForUser(partnerUserSaveBodyDTO.PartnerUserDTO.UserId.Value, partnerUserSaveBodyDTO.BirthDate, partnerUserSaveBodyDTO.GenderId);
+
                 if (pointsBeforeSave != savedPartnerUser.Points)
                     await UpdatePartnerUserTier(savedPartnerUser);
 
@@ -595,6 +598,28 @@ namespace PlayertyLoyals.Business.Services
                 {
                     throw new UnauthorizedException();
                 }
+            });
+        }
+
+        private async Task UpdateBirthDateAndGenderForUser(long userExtendedId, DateTime? birthDate, int? genderId)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                UserExtended userExtended = await GetInstanceAsync<UserExtended, long>(userExtendedId, null);
+
+                userExtended.BirthDate = birthDate;
+
+                if (genderId > 0)
+                {
+                    userExtended.Gender = await GetInstanceAsync<Gender, int>(genderId.Value);
+                }
+                else
+                {
+                    var _ = userExtended.Gender; // FT HACK: https://github.com/dotnet/efcore/issues/14086
+                    userExtended.Gender = null;
+                }
+
+                await _context.SaveChangesAsync();
             });
         }
 
