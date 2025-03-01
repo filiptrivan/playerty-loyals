@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { map, shareReplay, switchMap } from 'rxjs/operators';
+import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { ConfigService } from '../config.service';
@@ -52,14 +52,24 @@ export class AuthService extends AuthBaseService implements OnDestroy {
   currentPartnerUser$ = this._currentPartnerUser.asObservable();
 
   initCurrentPartnerUserState = async () => {
-    const params = this.route.snapshot.queryParams;
-    const partnerSlug = params[this.config.partnerParamKey] ?? '';
-  
-    if (partnerSlug !== '') {
-      localStorage.setItem(this.config.partnerSlugKey, partnerSlug);
-    }
-  
-    this.setCurrentPartnerObservable().subscribe();
+    this.route.queryParams // FT HACK: https://github.com/angular/angular/issues/12157
+    .pipe(
+      filter(queryParams => 
+        Object.keys(queryParams).length > 0 === window.location.href.includes('?')
+      )
+    )
+    .subscribe(params => {
+      const partnerSlug = params[this.config.partnerParamKey];
+
+      if (localStorage.getItem(this.config.partnerSlugKey) != null && partnerSlug == null) {
+        this.setCurrentPartnerObservable().subscribe();
+      }
+      else if (partnerSlug != null) {
+        localStorage.setItem(this.config.partnerSlugKey, partnerSlug);
+        
+        this.setCurrentPartnerObservable().subscribe();
+      }
+    })
 
     combineLatest([
       this.user$,
@@ -76,6 +86,10 @@ export class AuthService extends AuthBaseService implements OnDestroy {
       }),
       shareReplay(1)
     ).subscribe();
+  }
+
+  get(){
+;
   }
 
   setCurrentPartnerObservable(): Observable<Promise<Partner>> {

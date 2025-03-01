@@ -51,6 +51,10 @@ namespace PlayertyLoyals.Business.Entities
         [Required]
         public decimal PointsMultiplier { get; set; }
 
+        [Timestamp]
+        [ExcludeFromDTO]
+        public byte[] CacheVersion { get; set; }
+
         public virtual List<PartnerUser> PartnerUsers { get; } = new();
 
         public virtual List<Tier> Tiers { get; } = new();

@@ -472,7 +472,9 @@ export class ApiGeneratedService extends ApiSecurityService {
 
 
 
-
+    getOrderedDiscountProductGroupsForBusinessSystem = (id: number): Observable<DiscountProductGroup[]> => { 
+        return this.http.get<DiscountProductGroup[]>(`${this.config.apiUrl}/BusinessSystem/GetOrderedDiscountProductGroupsForBusinessSystem?id=${id}`, this.config.httpOptions);
+    }
 
 
 

@@ -135,17 +135,21 @@ export class BusinessSystem extends BaseEntity
 export class BusinessSystemSaveBody extends BaseEntity
 {
     businessSystemDTO?: BusinessSystem;
+	discountProductGroupsDTO?: DiscountProductGroup[];
 
     constructor(
     {
-        businessSystemDTO
+        businessSystemDTO,
+		discountProductGroupsDTO
     }:{
-        businessSystemDTO?: BusinessSystem;     
+        businessSystemDTO?: BusinessSystem;
+		discountProductGroupsDTO?: DiscountProductGroup[];     
     } = {}
     ) {
         super('BusinessSystemSaveBody'); 
 
         this.businessSystemDTO = businessSystemDTO;
+		this.discountProductGroupsDTO = discountProductGroupsDTO;
     }
 }
 
@@ -153,17 +157,21 @@ export class BusinessSystemSaveBody extends BaseEntity
 export class BusinessSystemMainUIForm extends BaseEntity
 {
     businessSystemDTO?: BusinessSystem;
+	orderedDiscountProductGroupsDTO?: DiscountProductGroup[];
 
     constructor(
     {
-        businessSystemDTO
+        businessSystemDTO,
+		orderedDiscountProductGroupsDTO
     }:{
-        businessSystemDTO?: BusinessSystem;     
+        businessSystemDTO?: BusinessSystem;
+		orderedDiscountProductGroupsDTO?: DiscountProductGroup[];     
     } = {}
     ) {
         super('BusinessSystemMainUIForm'); 
 
         this.businessSystemDTO = businessSystemDTO;
+		this.orderedDiscountProductGroupsDTO = orderedDiscountProductGroupsDTO;
     }
 }
 
@@ -442,6 +450,7 @@ export class DiscountProductGroup extends BaseEntity
 {
     name?: string;
 	code?: string;
+	orderNumber?: number;
 	businessSystemDisplayName?: string;
 	businessSystemId?: number;
 	version?: number;
@@ -453,6 +462,7 @@ export class DiscountProductGroup extends BaseEntity
     {
         name,
 		code,
+		orderNumber,
 		businessSystemDisplayName,
 		businessSystemId,
 		version,
@@ -462,6 +472,7 @@ export class DiscountProductGroup extends BaseEntity
     }:{
         name?: string;
 		code?: string;
+		orderNumber?: number;
 		businessSystemDisplayName?: string;
 		businessSystemId?: number;
 		version?: number;
@@ -474,6 +485,7 @@ export class DiscountProductGroup extends BaseEntity
 
         this.name = name;
 		this.code = code;
+		this.orderNumber = orderNumber;
 		this.businessSystemDisplayName = businessSystemDisplayName;
 		this.businessSystemId = businessSystemId;
 		this.version = version;

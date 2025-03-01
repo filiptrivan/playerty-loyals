@@ -121,7 +121,7 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                                     visible: true,
                                 },
                                 {
-                                    label: this.translocoService.translate('Notifications'),
+                                    label: this.translocoService.translate('NotificationList'),
                                     icon: 'pi pi-fw pi-bell',
                                     routerLink: [`/${this.config.administrationSlug}/notifications`],
                                     hasPermission: (permissionCodes: string[]): boolean => { 
@@ -149,6 +149,7 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                                         permissionCodes?.includes(BusinessPermissionCodes.ReadPartnerUser) ||
                                         permissionCodes?.includes(BusinessPermissionCodes.ReadPartnerRole) ||
                                         permissionCodes?.includes(BusinessPermissionCodes.ReadPartnerNotification) || 
+                                        permissionCodes?.includes(BusinessPermissionCodes.ReadCurrentPartner) || 
                                         permissionCodes?.includes(BusinessPermissionCodes.ReadSegmentation) || 
                                         permissionCodes?.includes(BusinessPermissionCodes.ReadBusinessSystem) || 
                                         permissionCodes?.includes(BusinessPermissionCodes.ReadTier)
@@ -157,6 +158,18 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                             },
                             visible: partner != null,
                             items: [
+                                {
+                                    label: this.translocoService.translate('PartnerProfile'),
+                                    icon: 'pi pi-fw pi-at',
+                                    routerLink: [`/${this.config.administrationSlug}/partners/${partner?.id}`],
+                                    hasPermission: (permissionCodes: string[]): boolean => { 
+                                        return (
+                                            permissionCodes?.includes(BusinessPermissionCodes.ReadCurrentPartner) ||
+                                            permissionCodes?.includes(BusinessPermissionCodes.ReadPartner)
+                                        )
+                                    },
+                                    visible: true
+                                },
                                 {
                                     label: this.translocoService.translate('UserList'),
                                     icon: 'pi pi-fw pi-user',
@@ -182,7 +195,7 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                                     visible: true,
                                 },
                                 {
-                                    label: this.translocoService.translate('Notifications'),
+                                    label: this.translocoService.translate('NotificationList'),
                                     icon: 'pi pi-fw pi-bell',
                                     routerLink: [`/${this.config.partnerAdministrationSlug}/notifications`],
                                     hasPermission: (permissionCodes: string[]): boolean => { 

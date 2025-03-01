@@ -39,6 +39,36 @@ import { AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountProductGroup, B
                     <div *ngIf="showUpdateUserGroupEndpointForBusinessSystem" class="col-12 md:col-6">
                         <spider-textbox [control]="control('updateUserGroupEndpoint', businessSystemFormGroup)"></spider-textbox>
                     </div>
+                     <div *ngIf="showDiscountProductGroupsForBusinessSystem" class="col-12">
+                        <spider-panel>
+                            <panel-header [title]="t('DiscountProductGroups')" icon="pi pi-list"></panel-header>
+                            <panel-body [normalBottomPadding]="true">
+                                @for (discountProductGroupFormGroup of getFormArrayGroups(discountProductGroupsFormArray); track discountProductGroupFormGroup; let index = $index; let last = $last) {
+                                    <index-card 
+                                    [index]="index" 
+                                    [last]="false" 
+                                    [crudMenu]="discountProductGroupsCrudMenu" 
+                                    [showCrudMenu]="isAuthorizedForSave"
+                                    (onMenuIconClick)="discountProductGroupsLastIndexClicked.index = $event"
+                                    >
+                                        <form [formGroup]="discountProductGroupFormGroup" class="grid">
+                    <div  class="col-12 md:col-6">
+                        <spider-textbox [control]="control('name', discountProductGroupFormGroup)"></spider-textbox>
+                    </div>
+                    <div  class="col-12 md:col-6">
+                        <spider-textbox [control]="control('code', discountProductGroupFormGroup)"></spider-textbox>
+                    </div>
+                                        </form>
+                                    </index-card>
+                                }
+
+                                <div class="panel-add-button">
+                                    <spider-button [disabled]="!isAuthorizedForSave" (onClick)="addNewItemToDiscountProductGroups(null)" [label]="t('AddNewDiscountProductGroup')" icon="pi pi-plus"></spider-button>
+                                </div>
+
+                            </panel-body>
+                        </spider-panel>
+                    </div>
                     <ng-content select="[AFTER]"></ng-content>
                 </form>
             } @placeholder {
@@ -93,7 +123,12 @@ export class BusinessSystemBaseDetailsComponent {
 
     businessSystemSaveBodyName: string = nameof<BusinessSystemSaveBody>('businessSystemDTO');
 
-
+    discountProductGroupsModel = new DiscountProductGroup();
+    discountProductGroupsSaveBodyName: string = nameof<BusinessSystemSaveBody>('discountProductGroupsDTO');
+    discountProductGroupsTranslationKey: string = new DiscountProductGroup().typeName;
+    discountProductGroupsFormArray: SpiderFormArray<DiscountProductGroup>;
+    discountProductGroupsLastIndexClicked = new LastMenuIconIndexClicked();
+    discountProductGroupsCrudMenu: MenuItem[] = [];
 
 
 
@@ -106,6 +141,7 @@ export class BusinessSystemBaseDetailsComponent {
     @Input() showGetDiscountProductGroupsEndpointForBusinessSystem: boolean = true;
     @Input() showCreateUserEndpointForBusinessSystem: boolean = true;
     @Input() showUpdateUserGroupEndpointForBusinessSystem: boolean = true;
+    @Input() showDiscountProductGroupsForBusinessSystem: boolean = true;
 
 
     constructor(
@@ -122,7 +158,7 @@ export class BusinessSystemBaseDetailsComponent {
         this.formGroup.initSaveBody = () => { 
             let saveBody = new BusinessSystemSaveBody();
             saveBody.businessSystemDTO = this.businessSystemFormGroup.getRawValue();
-
+            saveBody.discountProductGroupsDTO = this.discountProductGroupsFormArray.getRawValue();
 
 
 
@@ -144,7 +180,7 @@ export class BusinessSystemBaseDetailsComponent {
                 })
                 .subscribe(({ mainUIFormDTO }) => {
                     this.initBusinessSystemFormGroup(new BusinessSystem(mainUIFormDTO.businessSystemDTO));
-
+                    this.initDiscountProductGroupsFormArray(mainUIFormDTO.orderedDiscountProductGroupsDTO);
 
 
                     this.authorizationForSaveSubscription = this.handleAuthorizationForSave().subscribe();
@@ -153,7 +189,7 @@ export class BusinessSystemBaseDetailsComponent {
             }
             else{
                 this.initBusinessSystemFormGroup(new BusinessSystem({id: 0}));
-
+                this.initDiscountProductGroupsFormArray([]);
                 this.authorizationForSaveSubscription = this.handleAuthorizationForSave().subscribe();
                 this.loading = false;
             }
@@ -191,6 +227,7 @@ export class BusinessSystemBaseDetailsComponent {
                         this.businessSystemFormGroup.controls.getDiscountProductGroupsEndpoint.enable();
                         this.businessSystemFormGroup.controls.createUserEndpoint.enable();
                         this.businessSystemFormGroup.controls.updateUserGroupEndpoint.enable();
+                        this.baseFormService.enableAllFormControls(this.discountProductGroupsFormArray);
 
                     }
                     else{
@@ -199,6 +236,7 @@ export class BusinessSystemBaseDetailsComponent {
                         this.businessSystemFormGroup.controls.getDiscountProductGroupsEndpoint.disable();
                         this.businessSystemFormGroup.controls.createUserEndpoint.disable();
                         this.businessSystemFormGroup.controls.updateUserGroupEndpoint.disable();
+                        this.baseFormService.disableAllFormControls(this.discountProductGroupsFormArray);
 
                     }
 
@@ -211,9 +249,26 @@ export class BusinessSystemBaseDetailsComponent {
         );
     }
 
+    initDiscountProductGroupsFormArray(discountProductGroups: DiscountProductGroup[]){
+        this.discountProductGroupsFormArray = this.baseFormService.initFormArray(
+            this.formGroup, 
+            discountProductGroups, 
+            this.discountProductGroupsModel, 
+            this.discountProductGroupsSaveBodyName, 
+            this.discountProductGroupsTranslationKey, 
+            true
+        );
+        this.discountProductGroupsCrudMenu = this.getCrudMenuForOrderedData(this.discountProductGroupsFormArray, new DiscountProductGroup({id: 0}), this.discountProductGroupsLastIndexClicked, false);
 
+    }
 
-
+    addNewItemToDiscountProductGroups(index: number){ 
+        this.baseFormService.addNewFormGroupToFormArray(
+            this.discountProductGroupsFormArray, 
+            new DiscountProductGroup({id: 0}), 
+            index
+        );
+    }
 
 
 

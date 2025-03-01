@@ -62,6 +62,8 @@ namespace PlayertyLoyals.Business.Entities
 
         public virtual List<BusinessSystemUpdatePointsScheduledTask> BusinessSystemUpdatePointsScheduledTasks { get; } = new();
 
+        [UIOrderedOneToMany]
+        [TranslateSingularSrLatnRS("Grupe proizvoda za popust")]
         public virtual List<DiscountProductGroup> DiscountProductGroups { get; } = new();
 
         public virtual List<Transaction> Transactions { get; } = new();

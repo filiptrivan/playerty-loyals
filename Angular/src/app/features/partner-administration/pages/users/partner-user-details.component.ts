@@ -104,8 +104,6 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
             this.genderOptionsForUserExtended = po;
         });
 
-        this.userExtendedFormGroup = new SpiderFormGroup<UserExtended>({});
-
         this.apiService.getUserExtended(userExtendedId).subscribe(userExtended => {
             this.baseFormService.initFormGroup<UserExtended>(
                 this.userExtendedFormGroup, 
@@ -151,9 +149,13 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         if (this.segmentationItemsFormArray != null) {
             if (event.isAuthorizedForSave === false) {
                 this.baseFormService.disableAllFormControls(this.segmentationItemsFormArray);
+                this.userExtendedFormGroup.controls.birthDate.disable();
+                this.userExtendedFormGroup.controls.genderId.disable();
             }
             else{
                 this.baseFormService.enableAllFormControls(this.segmentationItemsFormArray);
+                this.userExtendedFormGroup.controls.birthDate.enable();
+                this.userExtendedFormGroup.controls.genderId.enable();
             }
         }
         

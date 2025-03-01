@@ -34,8 +34,8 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
 
     updatePointsTabs: SpiderTab[] = [
         {label: this.translocoService.translate('ExcelUpdatePoints'), icon: 'pi pi-file-excel', isSelected: true, id: 1},
-        {label: this.translocoService.translate('AutomaticUpdatePoints'), icon: 'pi pi-calendar-clock', isSelected: false, id: 2},
-        {label: this.translocoService.translate('ManualUpdatePoints'), icon: 'pi pi-hammer', isSelected: false, id: 3},
+        // {label: this.translocoService.translate('AutomaticUpdatePoints'), icon: 'pi pi-calendar-clock', isSelected: false, id: 2}, // FT: TBD
+        // {label: this.translocoService.translate('ManualUpdatePoints'), icon: 'pi pi-hammer', isSelected: false, id: 3}, // FT: TBD
     ];
 
     constructor(
@@ -53,8 +53,10 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
     }
          
     override ngOnInit() {
-        this.syncDiscountProductGroupsButton.onClick = this.syncDiscountProductGroups;
-        this.additionalButtons.push(this.syncDiscountProductGroupsButton);
+        // FT: TBD
+        // this.syncDiscountProductGroupsButton.onClick = this.syncDiscountProductGroups;
+        // this.additionalButtons.push(this.syncDiscountProductGroupsButton);
+
         this.initBusinessSystemUpdatePointsScheduledTaskTableCols();
     }
 

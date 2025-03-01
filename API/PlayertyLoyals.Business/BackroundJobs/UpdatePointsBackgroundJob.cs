@@ -29,8 +29,13 @@ namespace PlayertyLoyals.Business.BackroundJobs
         private readonly ILogger _logger;
         private readonly EmailingService _emailingService;
 
-        public UpdatePointsBackgroundJob(LoyalsBusinessService loyalsBusinessService, WingsApiService wingsApiService, IApplicationDbContext context, ILogger logger,
-            EmailingService emailingService)
+        public UpdatePointsBackgroundJob(
+            LoyalsBusinessService loyalsBusinessService, 
+            WingsApiService wingsApiService, 
+            IApplicationDbContext context, 
+            ILogger logger,
+            EmailingService emailingService
+        )
         {
             _loyalsBusinessService = loyalsBusinessService;
             _wingsApiService = wingsApiService;

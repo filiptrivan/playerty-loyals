@@ -25,6 +25,10 @@ namespace PlayertyLoyals.Business.Entities
         [Required]
         public string Code { get; set; }
 
+        [UIDoNotGenerate]
+        [Required]
+        public int OrderNumber { get; set; }
+
         [ManyToOneRequired]
         [WithMany(nameof(BusinessSystem.DiscountProductGroups))]
         public virtual BusinessSystem BusinessSystem { get; set; }

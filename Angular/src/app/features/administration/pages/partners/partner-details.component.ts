@@ -16,6 +16,8 @@ import { BusinessPermissionCodes } from 'src/app/business/enums/business-enums.g
 export class PartnerDetailsComponent extends BaseFormCopy implements OnInit {
     partnerFormGroup = new SpiderFormGroup<Partner>({});
 
+    override successfulSaveToastDescription = this.translocoService.translate('SuccessfulSaveAndRefreshThePageToastDescription');
+
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
@@ -48,8 +50,9 @@ export class PartnerDetailsComponent extends BaseFormCopy implements OnInit {
     }
 
     override onAfterSave = async () => {
-        if ((await firstValueFrom(this.authService.partner$))?.id == this.partnerFormGroup.controls.id.getRawValue()) {
-            this.authService.setCurrentPartner(this.partnerFormGroup.getRawValue()); // FT: Not doing this because maybe the administrator is saving it.
-        }
+        // FT: We are not getting back logoImageData from the backend, so it updates it to null, and when we log out, there is no logo
+        // if ((await firstValueFrom(this.authService.partner$))?.id == this.partnerFormGroup.controls.id.getRawValue()) {
+        //     this.authService.setCurrentPartner(this.partnerFormGroup.getRawValue());
+        // }
     }
 }

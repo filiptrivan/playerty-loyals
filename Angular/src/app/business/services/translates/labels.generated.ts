@@ -60,6 +60,10 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('Partner');
             case 'businessSystemDTO':
                 return this.translocoService.translate('BusinessSystemDTO');
+            case 'orderedDiscountProductGroupsDTO':
+                return this.translocoService.translate('OrderedDiscountProductGroupsDTO');
+            case 'discountProductGroupsDTO':
+                return this.translocoService.translate('DiscountProductGroupsDTO');
             case 'selectedForBusinessSystem':
                 return this.translocoService.translate('SelectedForBusinessSystem');
             case 'businessSystemTierClientIndex':

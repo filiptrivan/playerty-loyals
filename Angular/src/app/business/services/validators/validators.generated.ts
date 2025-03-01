@@ -76,6 +76,8 @@ export class ValidatorServiceGenerated {
                 return this.nameDiscountProductGroupValidator(formControl);
             case 'codeDiscountProductGroup':
                 return this.codeDiscountProductGroupValidator(formControl);
+            case 'orderNumberDiscountProductGroup':
+                return this.orderNumberDiscountProductGroupValidator(formControl);
             case 'businessSystemIdDiscountProductGroup':
                 return this.businessSystemIdDiscountProductGroupValidator(formControl);
             case 'versionDiscountProductGroup':
@@ -817,6 +819,23 @@ export class ValidatorServiceGenerated {
             const valid = notEmptyRule && stringLengthRule;
 
             return valid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    orderNumberDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
         };
         validator.hasNotEmptyRule = true;
         control.required = true;

@@ -716,13 +716,14 @@ namespace PlayertyLoyals.Business.Services
 
         public async Task<TableResponseDTO<TransactionDTO>> GetTransactionListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
         {
+            long currentUserId = _authenticationService.GetCurrentUserId();
+            string currentPartnerSlug = _partnerUserAuthenticationService.GetCurrentPartnerCode();
+
             return await _context.WithTransactionAsync(async () =>
             {
-                long partnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
-
                 TableResponseDTO<TransactionDTO> transactionTableResponse = await GetTransactionTableData(
                     tableFilterDTO,
-                    _context.DbSet<Transaction>().Where(x => x.PartnerUser.Id == partnerUserId).OrderByDescending(x => x.Id),
+                    _context.DbSet<Transaction>().Where(x => x.PartnerUser.User.Id == currentUserId && x.PartnerUser.Partner.Slug == currentPartnerSlug).OrderByDescending(x => x.Id),
                     false
                 );
 
@@ -804,10 +805,11 @@ namespace PlayertyLoyals.Business.Services
         {
             TableResponseDTO<NotificationDTO> result = new TableResponseDTO<NotificationDTO>();
             long currentUserId = _authenticationService.GetCurrentUserId(); // FT: Not doing user.Notifications, because he could have a lot of them.
+            string currentPartnerSlug = _partnerUserAuthenticationService.GetCurrentPartnerCode();
 
             await _context.WithTransactionAsync(async () =>
             {
-                long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
+                //long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
 
                 var notificationUsersQuery = _context.DbSet<UserNotification>()
                     .Where(x => x.User.Id == currentUserId)
@@ -820,7 +822,7 @@ namespace PlayertyLoyals.Business.Services
                     });
 
                 var partnerNotificationPartnerUsersQuery = _context.DbSet<PartnerUserPartnerNotification>()
-                    .Where(x => x.PartnerUser.Id == currentPartnerUserId)
+                    .Where(x => x.PartnerUser.User.Id == currentUserId && x.PartnerUser.Partner.Slug == currentPartnerSlug)
                     .Select(x => new
                     {
                         UserId = x.PartnerUser.Id,
@@ -881,16 +883,15 @@ namespace PlayertyLoyals.Business.Services
         public async Task<int> GetUnreadNotificationsCountForCurrentUser()
         {
             long currentUserId = _authenticationService.GetCurrentUserId();
+            string currentPartnerSlug = _partnerUserAuthenticationService.GetCurrentPartnerCode();
 
             return await _context.WithTransactionAsync(async () =>
             {
-                long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
-
                 var notificationUsersQuery = _context.DbSet<UserNotification>()
                     .Where(x => x.User.Id == currentUserId && x.IsMarkedAsRead == false);
 
                 var partnerNotificationPartnerUsersQuery = _context.DbSet<PartnerUserPartnerNotification>()
-                    .Where(x => x.PartnerUser.Id == currentPartnerUserId && x.IsMarkedAsRead == false);
+                    .Where(x => x.PartnerUser.User.Id == currentUserId && x.PartnerUser.Partner.Slug == currentPartnerSlug && x.IsMarkedAsRead == false);
 
                 int count = await notificationUsersQuery.CountAsync() + await partnerNotificationPartnerUsersQuery.CountAsync();
 
@@ -903,14 +904,15 @@ namespace PlayertyLoyals.Business.Services
         /// </summary>
         public async Task DeletePartnerNotificationForCurrentPartnerUser(long partnerNotificationId, int partnerNotificationVersion)
         {
+            long currentUserId = _authenticationService.GetCurrentUserId();
+            string currentPartnerSlug = _partnerUserAuthenticationService.GetCurrentPartnerCode();
+
             await _context.WithTransactionAsync(async () =>
             {
-                long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
-
                 PartnerNotification partnerNotification = await GetInstanceAsync<PartnerNotification, long>(partnerNotificationId, partnerNotificationVersion);
 
                 await _context.DbSet<PartnerUserPartnerNotification>()
-                    .Where(x => x.PartnerUser.Id == currentPartnerUserId && x.PartnerNotification.Id == partnerNotification.Id)
+                    .Where(x => x.PartnerUser.User.Id == currentUserId && x.PartnerUser.Partner.Slug == currentPartnerSlug && x.PartnerNotification.Id == partnerNotification.Id)
                     .ExecuteDeleteAsync();
             });
         }
@@ -920,14 +922,15 @@ namespace PlayertyLoyals.Business.Services
         /// </summary>
         public async Task MarkPartnerNotificationAsReadForCurrentPartnerUser(long partnerNotificationId, int partnerNotificationVersion)
         {
+            long currentUserId = _authenticationService.GetCurrentUserId();
+            string currentPartnerSlug = _partnerUserAuthenticationService.GetCurrentPartnerCode();
+
             await _context.WithTransactionAsync(async () =>
             {
-                long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
-
                 PartnerNotification partnerNotification = await GetInstanceAsync<PartnerNotification, long>(partnerNotificationId, partnerNotificationVersion);
 
                 await _context.DbSet<PartnerUserPartnerNotification>()
-                    .Where(x => x.PartnerUser.Id == currentPartnerUserId && x.PartnerNotification.Id == partnerNotification.Id)
+                    .Where(x => x.PartnerUser.User.Id == currentUserId && x.PartnerUser.Partner.Slug == currentPartnerSlug && x.PartnerNotification.Id == partnerNotification.Id)
                     .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.IsMarkedAsRead, true));
             });
         }
@@ -937,14 +940,15 @@ namespace PlayertyLoyals.Business.Services
         /// </summary>
         public async Task MarkPartnerNotificationAsUnreadForCurrentPartnerUser(long partnerNotificationId, int partnerNotificationVersion)
         {
+            long currentUserId = _authenticationService.GetCurrentUserId();
+            string currentPartnerSlug = _partnerUserAuthenticationService.GetCurrentPartnerCode();
+
             await _context.WithTransactionAsync(async () =>
             {
-                long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
-
                 PartnerNotification partnerNotification = await GetInstanceAsync<PartnerNotification, long>(partnerNotificationId, partnerNotificationVersion);
 
                 await _context.DbSet<PartnerUserPartnerNotification>()
-                    .Where(x => x.PartnerUser.Id == currentPartnerUserId && x.PartnerNotification.Id == partnerNotification.Id)
+                    .Where(x => x.PartnerUser.User.Id == currentUserId && x.PartnerUser.Partner.Slug == currentPartnerSlug && x.PartnerNotification.Id == partnerNotification.Id)
                     .ExecuteUpdateAsync(setters => setters.SetProperty(x => x.IsMarkedAsRead, false));
             });
         }
@@ -1014,9 +1018,13 @@ namespace PlayertyLoyals.Business.Services
                 businessSystemSaveBodyDTO.BusinessSystemDTO.PartnerId = await _partnerUserAuthenticationService.GetCurrentPartnerId();
 
                 BusinessSystemDTO savedBusinessSystemDTO = await SaveBusinessSystemAndReturnDTO(businessSystemSaveBodyDTO.BusinessSystemDTO, authorizeUpdate, authorizeInsert);
+
+                List<DiscountProductGroupDTO> savedDiscountProductGroupsDTO = await UpdateOrderedDiscountProductGroupsForBusinessSystem(savedBusinessSystemDTO.Id, businessSystemSaveBodyDTO.DiscountProductGroupsDTO);
+
                 return new BusinessSystemSaveBodyDTO
                 {
-                    BusinessSystemDTO = savedBusinessSystemDTO
+                    BusinessSystemDTO = savedBusinessSystemDTO,
+                    DiscountProductGroupsDTO = savedDiscountProductGroupsDTO,
                 };
             });
         }
