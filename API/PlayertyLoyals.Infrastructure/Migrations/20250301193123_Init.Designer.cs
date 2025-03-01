@@ -12,8 +12,8 @@ using PlayertyLoyals.Infrastructure;
 namespace PlayertyLoyals.Infrastructure.Migrations
 {
     [DbContext(typeof(PlayertyApplicationDbContext))]
-    [Migration("20250206183148_ETagCache")]
-    partial class ETagCache
+    [Migration("20250301193123_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -201,6 +201,9 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<int>("OrderNumber")
+                        .HasColumnType("int");
+
                     b.Property<int>("Version")
                         .HasColumnType("int");
 
@@ -273,6 +276,11 @@ namespace PlayertyLoyals.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<byte[]>("CacheVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -304,11 +312,6 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     b.Property<string>("ProductsRecommendationEndpoint")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
 
                     b.Property<string>("Slug")
                         .IsRequired()

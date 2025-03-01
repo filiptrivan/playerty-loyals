@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PlayertyLoyals.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,6 +25,24 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Notification",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: false),
+                    EmailBody = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Version = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notification", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Partner",
                 columns: table => new
                 {
@@ -37,6 +55,7 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     PrimaryColor = table.Column<string>(type: "nvarchar(7)", maxLength: 7, nullable: true),
                     ProductsRecommendationEndpoint = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     PointsMultiplier = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
+                    CacheVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     Version = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -113,9 +132,8 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Email = table.Column<string>(type: "nvarchar(70)", maxLength: 70, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: true),
-                    HasLoggedInWithExternalProvider = table.Column<bool>(type: "bit", nullable: false),
-                    NumberOfFailedAttemptsInARow = table.Column<int>(type: "int", nullable: false),
+                    HasLoggedInWithExternalProvider = table.Column<bool>(type: "bit", nullable: true),
+                    IsDisabled = table.Column<bool>(type: "bit", nullable: true),
                     BirthDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     GenderId = table.Column<int>(type: "int", nullable: true),
                     Version = table.Column<int>(type: "int", nullable: false),
@@ -129,7 +147,8 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                         name: "FK_User_Gender_GenderId",
                         column: x => x.GenderId,
                         principalTable: "Gender",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -139,12 +158,12 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    UpdatePointsInterval = table.Column<int>(type: "int", nullable: true),
-                    UpdatePointsStartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     GetTransactionsEndpoint = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    GetDiscountCategoriesEndpoint = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    GetDiscountProductGroupsEndpoint = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     CreateUserEndpoint = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     UpdateUserGroupEndpoint = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    UpdatePointsInterval = table.Column<int>(type: "int", nullable: true),
+                    UpdatePointsStartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatePointsScheduledTaskIsPaused = table.Column<bool>(type: "bit", nullable: true),
                     PartnerId = table.Column<int>(type: "int", nullable: false),
                     Version = table.Column<int>(type: "int", nullable: false),
@@ -162,7 +181,7 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Notification",
+                name: "PartnerNotification",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -170,17 +189,16 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: false),
                     EmailBody = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
-                    PartnerId = table.Column<int>(type: "int", nullable: true),
+                    PartnerId = table.Column<int>(type: "int", nullable: false),
                     Version = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Notification", x => x.Id);
+                    table.PrimaryKey("PK_PartnerNotification", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Notification_Partner_PartnerId",
+                        name: "FK_PartnerNotification_Partner_PartnerId",
                         column: x => x.PartnerId,
                         principalTable: "Partner",
                         principalColumn: "Id");
@@ -283,6 +301,31 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserNotification",
+                columns: table => new
+                {
+                    NotificationId = table.Column<long>(type: "bigint", nullable: false),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    IsMarkedAsRead = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserNotification", x => new { x.NotificationId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_UserNotification_Notification_NotificationId",
+                        column: x => x.NotificationId,
+                        principalTable: "Notification",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserNotification_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserRole",
                 columns: table => new
                 {
@@ -312,8 +355,8 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TransactionsFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TransactionsTo = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TransactionsFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TransactionsTo = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsManual = table.Column<bool>(type: "bit", nullable: false),
                     BusinessSystemId = table.Column<long>(type: "bigint", nullable: false),
                     Version = table.Column<int>(type: "int", nullable: false),
@@ -338,6 +381,7 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    OrderNumber = table.Column<int>(type: "int", nullable: false),
                     BusinessSystemId = table.Column<long>(type: "bigint", nullable: false),
                     Version = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -351,31 +395,6 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                         column: x => x.BusinessSystemId,
                         principalTable: "BusinessSystem",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserNotification",
-                columns: table => new
-                {
-                    NotificationId = table.Column<long>(type: "bigint", nullable: false),
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    IsMarkedAsRead = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserNotification", x => new { x.NotificationId, x.UserId });
-                    table.ForeignKey(
-                        name: "FK_UserNotification_Notification_NotificationId",
-                        column: x => x.NotificationId,
-                        principalTable: "Notification",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserNotification_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -479,7 +498,8 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                         name: "FK_PartnerUser_Tier_TierId",
                         column: x => x.TierId,
                         principalTable: "Tier",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_PartnerUser_User_UserId",
                         column: x => x.UserId,
@@ -524,9 +544,9 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_PartnerUserPartnerNotification", x => new { x.PartnerNotificationId, x.PartnerUserId });
                     table.ForeignKey(
-                        name: "FK_PartnerUserPartnerNotification_Notification_PartnerNotificationId",
+                        name: "FK_PartnerUserPartnerNotification_PartnerNotification_PartnerNotificationId",
                         column: x => x.PartnerNotificationId,
-                        principalTable: "Notification",
+                        principalTable: "PartnerNotification",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -675,15 +695,15 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                 column: "BusinessSystemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notification_PartnerId",
-                table: "Notification",
-                column: "PartnerId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Partner_Slug",
                 table: "Partner",
                 column: "Slug",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PartnerNotification_PartnerId",
+                table: "PartnerNotification",
+                column: "PartnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PartnerPermission_Code",
@@ -841,6 +861,9 @@ namespace PlayertyLoyals.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "PartnerPermission");
+
+            migrationBuilder.DropTable(
+                name: "PartnerNotification");
 
             migrationBuilder.DropTable(
                 name: "PartnerRole");
