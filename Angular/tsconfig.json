@@ -4,7 +4,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@playerty/spider": ["../../../SpiderFramework/spider-framework/Angular/projects/spider/src/public-api"]
+      // "@playerty/spider": ["../../../SpiderFramework/spider-framework/Angular/projects/spider/src/public-api"]
     },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
