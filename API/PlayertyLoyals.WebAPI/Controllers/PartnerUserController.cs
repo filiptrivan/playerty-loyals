@@ -45,6 +45,14 @@ namespace PlayertyLoyals.WebAPI.Controllers
             return await _partnerUserAuthenticationService.GetCurrentPartnerUserDTO();
         }
 
+        [HttpGet]
+        [AuthGuard]
+        [SkipSpinner]
+        public async Task<int> GetCurrentPartnerUserPoints()
+        {
+            return await _partnerUserAuthenticationService.GetCurrentPartnerUserPoints();
+        }
+        
         [HttpPost]
         [AuthGuard]
         public override async Task<TableResponseDTO<PartnerUserDTO>> GetPartnerUserTableData(TableFilterDTO tableFilterDTO)
@@ -101,6 +109,13 @@ namespace PlayertyLoyals.WebAPI.Controllers
         public async Task<TableResponseDTO<TransactionDTO>> GetTransactionListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
         {
             return await _loyalsBusinessService.GetTransactionListForTheCurrentPartnerUser(tableFilterDTO);
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task<TierDTO> GetTierForCurrentPartnerUser()
+        {
+            return await _loyalsBusinessService.GetTierDTOForCurrentPartnerUser();
         }
 
         [HttpGet]

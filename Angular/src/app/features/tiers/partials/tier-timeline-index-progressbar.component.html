@@ -1,10 +1,10 @@
-<p-timeline [value]="tierList" align="left" styleClass="customized-timeline">
-	<ng-template pTemplate="marker" let-tier>
+<p-timeline [value]="tiers" align="left" styleClass="customized-timeline">
+	<ng-template pTemplate="marker" let-tier let-index>
 	  <span [class]="(isCurrentTier(tier) ? 'current-item ' : ' ') + (isPassed(tier) ? 'passed-item ' : ' ') + 'circle'">
-		<ng-container *ngIf="isPassed(tier) == false">
-			{{tier.displayName}}
+		<ng-container *ngIf="isPassed(tier) === false">
+			{{tier.index + 1}}
 		</ng-container>
-		<ng-container *ngIf="isPassed(tier) == true">
+		<ng-container *ngIf="isPassed(tier) === true">
 			<i class="pi pi-check"></i>
 		</ng-container>
 	  </span>

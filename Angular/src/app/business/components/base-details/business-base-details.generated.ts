@@ -40,7 +40,7 @@ import { AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountProductGroup, B
                         <spider-textbox [control]="control('updateUserGroupEndpoint', businessSystemFormGroup)"></spider-textbox>
                     </div>
                      <div *ngIf="showDiscountProductGroupsForBusinessSystem" class="col-12">
-                        <spider-panel>
+                        <spider-panel [toggleable]="true">
                             <panel-header [title]="t('DiscountProductGroups')" icon="pi pi-list"></panel-header>
                             <panel-body [normalBottomPadding]="true">
                                 @for (discountProductGroupFormGroup of getFormArrayGroups(discountProductGroupsFormArray); track discountProductGroupFormGroup; let index = $index; let last = $last) {
@@ -1509,7 +1509,7 @@ export class PartnerUserBaseDetailsComponent {
                         <spider-textarea [control]="control('description', segmentationFormGroup)"></spider-textarea>
                     </div>
                      <div *ngIf="showSegmentationItemsForSegmentation" class="col-12">
-                        <spider-panel>
+                        <spider-panel [toggleable]="true">
                             <panel-header [title]="t('SegmentationItems')" icon="pi pi-list"></panel-header>
                             <panel-body [normalBottomPadding]="true">
                                 @for (segmentationItemFormGroup of getFormArrayGroups(segmentationItemsFormArray); track segmentationItemFormGroup; let index = $index; let last = $last) {

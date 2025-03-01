@@ -1,11 +1,12 @@
-import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerUser, Tier } from 'src/app/business/entities/business-entities.generated';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { TimelineIndexProgressbarComponent } from 'src/app/business/components/tier-timeline-index-progressbar/tier-timeline-index-progressbar.component';
+import { TimelineIndexProgressbarComponent } from 'src/app/features/tiers/partials/tier-timeline-index-progressbar.component';
 import { CommonModule } from '@angular/common';
 import { PrimengModule, SpiderControlsModule } from '@playerty/spider';
+import { AuthService } from 'src/app/business/services/auth/auth.service';
 
 @Component({
   selector: 'tiers',
@@ -20,58 +21,45 @@ import { PrimengModule, SpiderControlsModule } from '@playerty/spider';
   ]
 })
 export class TiersComponent implements OnInit {
-  tierList: TierWithIndex[];
-  tierForTheCurrentPartnerUser: Tier;
+  currentPartnerUserSubscription: Subscription;
+
+  tiers: TierWithIndex[]; // FT: Don't try to change this with Tier, p-timeline doesn't support let-index
   currentPartnerUser: PartnerUser;
-  @ViewChild('timeline') timelineIndexProgressbarComponent!: TimelineIndexProgressbarComponent;
 
   constructor(
     private apiService: ApiService,
-    private renderer: Renderer2,
+    private authService: AuthService,
   ) {}
 
   async ngOnInit() {
-    forkJoin({
-      tierList: this.apiService.getTierListForDisplay(),
-      tierForCurrentPartnerUser: this.apiService.getTierForCurrentPartnerUser(),
-      currentPartnerUser: this.apiService.getCurrentPartnerUser(),
-    }).subscribe(({ tierList, tierForCurrentPartnerUser, currentPartnerUser }) => {
+    this.currentPartnerUserSubscription = this.authService.currentPartnerUser$.subscribe(currentPartnerUser => {
       this.currentPartnerUser = currentPartnerUser;
-      this.tierList = tierList;
-      this.assignIndexesToTiers(tierList);
-      this.tierForTheCurrentPartnerUser = tierForCurrentPartnerUser;
+    })
+
+    forkJoin({
+      tiers: this.apiService.getTierListForDisplay(),
+    }).subscribe(({ tiers }) => {
+      this.tiers = tiers;
+      this.assignIndexesToTiers(tiers);
     });
 
   }
 
-  assignIndexesToTiers(tierList: TierWithIndex[]){
+  assignIndexesToTiers(tiers: TierWithIndex[]){
     let reverseIndex = 0;
 
-    for (let i = tierList.length - 1; i >= 0; i--) {
-      tierList[i].index = i;
+    for (let i = tiers.length - 1; i >= 0; i--) {
+      tiers[i].index = i;
 
-      tierList[reverseIndex].displayName = i + 1;
+      tiers[reverseIndex].displayName = i + 1;
       reverseIndex++;
     }
   }
 
-  connectorMethod = (connector: Element, index: number) => {
-    const fromTier = this.tierList.find(x => x.index === index + 1);
-
-    let levelPercentForTheCurrentUserHelper: number = 0;
-    
-    if (this.currentPartnerUser.points >= fromTier.validFrom) {
-      levelPercentForTheCurrentUserHelper = Math.round(this.currentPartnerUser.points / fromTier.validTo * 100);
-    }
-    
-    const percent = Math.min(levelPercentForTheCurrentUserHelper, 100);
-
-    if (!connector.classList.contains(`custom-connector-${percent}`)) {
-      this.renderer.addClass(connector, `custom-connector-${percent}`);
-    }
-  }
-
   ngOnDestroy(): void {
+    if (this.currentPartnerUserSubscription) {
+      this.currentPartnerUserSubscription.unsubscribe();
+    }
   }
 
 }
