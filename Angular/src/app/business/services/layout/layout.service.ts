@@ -67,9 +67,7 @@ export class LayoutService extends LayoutBaseService implements OnDestroy {
 
     override partnersAutocompleteButtonClick = async (selectedPartner: PrimengOption) => {
         if (selectedPartner.value) {
-            localStorage.setItem(this.config.partnerSlugKey, selectedPartner.value);
             this.router.navigate(['/'], { queryParams: { [this.config.partnerParamKey]: selectedPartner.value } });
-            this.authService.setCurrentPartnerObservable().subscribe();
         }
     }
 

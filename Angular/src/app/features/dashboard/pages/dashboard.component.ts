@@ -13,7 +13,7 @@ export class DashboardComponent implements OnInit {
   private permissionsSubscription: Subscription | null = null;
   
   currentPartnerUser: PartnerUser;
-  currentPartnerTier: Tier;
+  currentPartnerUserTier: Tier;
 
   constructor(
     private apiService: ApiService,
@@ -26,10 +26,10 @@ export class DashboardComponent implements OnInit {
       
       if (currentPartnerUser?.tierId) {
         this.apiService.getTierForCurrentPartnerUser().subscribe(tier => {
-          this.currentPartnerTier = tier;
+          this.currentPartnerUserTier = tier;
         });
       } else {
-        this.currentPartnerTier = null; // FT: This line is mandatory.
+        this.currentPartnerUserTier = null; // FT: This line is mandatory.
       }
     });
     

@@ -321,7 +321,9 @@ namespace PlayertyLoyals.Business.Services
                 List<long> businessSystemTierIds = businessSystemTierDTOList.Select(x => x.Id).ToList();
 
                 List<DiscountProductGroupDTO> discountCategoryDTOList = await GetDiscountProductGroupDTOList(
-                    _context.DbSet<DiscountProductGroup>().Where(x => x.BusinessSystem.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()),
+                    _context.DbSet<DiscountProductGroup>()
+                        .Where(x => x.BusinessSystem.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
+                        .OrderBy(x => x.OrderNumber),
                     false
                 );
                 List<BusinessSystemTierDiscountProductGroupDTO> businessSystemTierDiscountProductGroupResultDTOList = discountCategoryDTOList
@@ -389,7 +391,7 @@ namespace PlayertyLoyals.Business.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                List<TierDTO> tierDTOList = new List<TierDTO>();
+                List<TierDTO> tierDTOList = new();
 
                 List<Tier> tierList = await GetTierList(
                     _context.DbSet<Tier>()
@@ -401,7 +403,7 @@ namespace PlayertyLoyals.Business.Services
                             .ThenInclude(x => x.BusinessSystemTierDiscountProductGroups)
                                 .ThenInclude(x => x.DiscountProductGroup)
                         .Include(x => x.Partner)
-                        .OrderByDescending(x => x.ValidFrom),
+                        .OrderBy(x => x.ValidFrom),
                     false
                 );
 
@@ -415,7 +417,7 @@ namespace PlayertyLoyals.Business.Services
                         BusinessSystemTierDTO businessSystemTierDTO = businessSystemTier.Adapt<BusinessSystemTierDTO>(Mapper.BusinessSystemTierToDTOConfig());
                         businessSystemTierDTO.BusinessSystemTierDiscountProductGroupsDTOList = new List<BusinessSystemTierDiscountProductGroupDTO>();
 
-                        foreach (BusinessSystemTierDiscountProductGroup businessSystemTierDiscountProductGroup in businessSystemTier.BusinessSystemTierDiscountProductGroups)
+                        foreach (BusinessSystemTierDiscountProductGroup businessSystemTierDiscountProductGroup in businessSystemTier.BusinessSystemTierDiscountProductGroups.OrderBy(x => x.DiscountProductGroup.OrderNumber))
                         {
                             BusinessSystemTierDiscountProductGroupDTO businessSystemTierDiscountProductGroupDTO = businessSystemTierDiscountProductGroup.Adapt<BusinessSystemTierDiscountProductGroupDTO>(Mapper.BusinessSystemTierDiscountProductGroupToDTOConfig());
                             businessSystemTierDTO.BusinessSystemTierDiscountProductGroupsDTOList.Add(businessSystemTierDiscountProductGroupDTO);
@@ -659,26 +661,8 @@ namespace PlayertyLoyals.Business.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                PartnerUser currentPartnerUser = await _partnerUserAuthenticationService.GetCurrentPartnerUser();
-
-                List<string> currentPartnerUserPermissionCodes = new();
-
-                if (currentPartnerUser != null)
-                {
-                    currentPartnerUserPermissionCodes = currentPartnerUser.PartnerRoles
-                        .SelectMany(x => x.PartnerPermissions)
-                        .Select(x => x.Code)
-                        .Distinct()
-                        .ToList();
-                }
-
-                UserExtended currentUser = await _authenticationService.GetCurrentUser<UserExtended>();
-
-                List<string> currentUserPermissionCodes = currentUser.Roles
-                    .SelectMany(x => x.Permissions)
-                    .Select(x => x.Code)
-                    .Distinct()
-                    .ToList();
+                List<string> currentPartnerUserPermissionCodes = await _partnerUserAuthenticationService.GetCurrentPartnerUserPermissionCodes();
+                List<string> currentUserPermissionCodes = await _authorizationService.GetCurrentUserPermissionCodes<UserExtended>();
 
                 return currentUserPermissionCodes.Concat(currentPartnerUserPermissionCodes).ToList();
             });

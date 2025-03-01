@@ -196,15 +196,34 @@ namespace PlayertyLoyals.Business.Services
             string partnerCode = GetCurrentPartnerCode();
             long userId = _authenticationService.GetCurrentUserId();
 
+            if (partnerCode == null)
+                return new List<string>();
+
             return await _context.WithTransactionAsync(async () =>
             {
                 return await _context.DbSet<PartnerUser>()
+                    .AsNoTracking()
                     .Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId)
                     .SelectMany(x => x.PartnerRoles)
                     .SelectMany(x => x.PartnerPermissions)
                     .Select(x => x.Code)
                     .Distinct()
                     .ToListAsync();
+            });
+        }
+
+        public async Task<int> GetCurrentPartnerUserPoints()
+        {
+            string partnerCode = GetCurrentPartnerCode();
+            long userId = _authenticationService.GetCurrentUserId();
+
+            return await _context.WithTransactionAsync(async () =>
+            {
+                return await _context.DbSet<PartnerUser>()
+                    .AsNoTracking()
+                    .Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId)
+                    .Select(x => x.Points)
+                    .SingleOrDefaultAsync();
             });
         }
 
