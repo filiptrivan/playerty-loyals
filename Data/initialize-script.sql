@@ -1,27 +1,8 @@
-﻿-- FT: First you need to register the user in the app
+﻿-- FT: First you need to register the user in the app and add permissions
 
 begin transaction;
    
 INSERT INTO Role (Version, Name, CreatedAt, ModifiedAt) VALUES (1, N'Admin', getdate(), getdate());
-
-insert into Permission(Name, Description, Code) values(N'Pregled korisnika', null, N'ReadUserExtended');
-insert into Permission(Name, Description, Code) values(N'Promena postojećih korisnika', null, N'EditUserExtended');
-insert into Permission(Name, Description, Code) values(N'Brisanje korisnika', null, N'DeleteUserExtended');
-insert into Permission(Name, Description, Code) values(N'Pregled notifikacija', null, N'ReadNotification');
-insert into Permission(Name, Description, Code) values(N'Promena postojećih notifikacija', null, N'EditNotification');
-insert into Permission(Name, Description, Code) values(N'Dodavanje novih notifikacija', null, N'InsertNotification');
-insert into Permission(Name, Description, Code) values(N'Brisanje notifikacija', null, N'DeleteNotification');
-insert into Permission(Name, Description, Code) values(N'Pregled partnera', null, N'ReadPartner');
-insert into Permission(Name, Description, Code) values(N'Promena postojećih partnera', null, N'EditPartner');
-insert into Permission(Name, Description, Code) values(N'Dodavanje novih partnera', null, N'InsertPartner');
-insert into Permission(Name, Description, Code) values(N'Brisanje partnera', null, N'DeletePartner');
-insert into Permission(Name, Description, Code) values(N'Pregled uloga', null, N'ReadRole');
-insert into Permission(Name, Description, Code) values(N'Promena postojećih uloga', null, N'EditRole');
-insert into Permission(Name, Description, Code) values(N'Dodavanje novih uloga', null, N'InsertRole');
-insert into Permission(Name, Description, Code) values(N'Brisanje uloga', null, N'DeleteRole');
-
-insert into Gender(Name) values(N'Muški');
-insert into Gender(Name) values(N'Ženski');
 
 DECLARE @AdminRoleId INT;
 DECLARE @AdminUserId INT;

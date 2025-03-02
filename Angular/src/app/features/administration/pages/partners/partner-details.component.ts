@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { combineLatest, firstValueFrom, map, Observable } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
 import { Partner } from 'src/app/business/entities/business-entities.generated';
 import { BaseFormCopy, SpiderFormGroup, SpiderMessageService, BaseFormService } from '@playerty/spider';
 import { AuthService } from 'src/app/business/services/auth/auth.service';

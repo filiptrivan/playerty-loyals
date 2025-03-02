@@ -4,7 +4,6 @@ import { ConfigService } from '../config.service';
 import { getPrimengAutocompleteCodebookOptions, InitTopBarData, LayoutBaseService, PrimengOption, User } from '@playerty/spider';
 import { combineLatest, map } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
-import { Partner } from '../../entities/business-entities.generated';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { Router } from '@angular/router';
 
@@ -33,7 +32,7 @@ export class LayoutService extends LayoutBaseService implements OnDestroy {
                     companyName: currentPartner?.name ?? this.config.companyName,
                     userProfilePath: currentPartnerUser ? `/partner-administration/users/${currentPartnerUser.id}` : `/administration/users/${currentUser?.id}`,
                     unreadNotificationsCount: unreadNotificationsCount,
-                    showProfileIcon: this.showProfileIcon(currentPartner, currentUser),
+                    showProfileIcon: true,
                     currentUser: currentUser,
                 });
             })
@@ -42,17 +41,6 @@ export class LayoutService extends LayoutBaseService implements OnDestroy {
 
     override initUnreadNotificationsCountForCurrentUserObservable = () => {
         return this.authService.currentPartnerUser$;
-    }
-
-    showProfileIcon = (currentPartner: Partner, currentUser: User): boolean => {
-        if (currentPartner === null) { 
-            return currentUser != null;
-        }
-        else if (currentPartner !== undefined){
-            return true;
-        }
-
-        return false;
     }
 
     //#endregion
