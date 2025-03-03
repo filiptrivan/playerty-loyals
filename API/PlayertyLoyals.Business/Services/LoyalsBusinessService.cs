@@ -274,21 +274,19 @@ namespace PlayertyLoyals.Business.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                Tier greatestTier = await GetTheGreatestTier();
+                Tier tier = await _context.DbSet<Tier>()
+                    .Where(x =>
+                        points >= x.ValidFrom &&
+                        points < x.ValidTo &&
+                        x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()
+                    )
+                    .SingleOrDefaultAsync();
 
-                if (greatestTier == null)
-                {
-                    return null;
-                }
-                else if (greatestTier.ValidTo <= points)
-                {
-                    return greatestTier;
-                }
+
+                if (tier == null)
+                    return await GetTheGreatestTier(); // FT: If there is no any tier, we will return null
                 else
-                {
-                    Tier tier = await _context.DbSet<Tier>().Where(x => points >= x.ValidFrom && points < x.ValidTo && x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).SingleOrDefaultAsync();
                     return tier;
-                }
             });
         }
 
@@ -296,7 +294,10 @@ namespace PlayertyLoyals.Business.Services
         {
             return await _context.WithTransactionAsync(async () =>
             {
-                return await _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderByDescending(x => x.ValidTo).FirstOrDefaultAsync();
+                return await _context.DbSet<Tier>()
+                    .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
+                    .OrderByDescending(x => x.ValidTo)
+                    .FirstOrDefaultAsync();
             });
         }
 
@@ -1214,20 +1215,172 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
+        public async Task<InfoAndWarningResultDTO> ExcelUpdatePointsForWings(ExcelUpdatePointsDTO excelUpdatePointsDTO)
+        {
+            new ExcelUpdatePointsDTOValidationRules().ValidateAndThrow(excelUpdatePointsDTO);
+
+            return await _context.WithTransactionAsync(async () =>
+            {
+                await _authorizationService.AuthorizeBusinessSystemUpdateAndThrow(null);
+
+                ExternalTransactionsExcelParsingResultDTO externalTransactionsExcelParsingResultDTO = GetExternalTransactionsFromExcelsForWings(excelUpdatePointsDTO.Excels);
+
+                await ProccessTransactions(excelUpdatePointsDTO.BusinessSystemId.Value, externalTransactionsExcelParsingResultDTO.ExternalTransactionDTOList);
+
+                return externalTransactionsExcelParsingResultDTO.WarningAndInfoResultDTO;
+            });
+        }
+
         public async Task ExcelUpdatePoints(ExcelUpdatePointsDTO excelUpdatePointsDTO)
         {
-            ExcelUpdatePointsDTOValidationRules validationRules = new();
-            validationRules.ValidateAndThrow(excelUpdatePointsDTO);
+            new ExcelUpdatePointsDTOValidationRules().ValidateAndThrow(excelUpdatePointsDTO);
 
             await _context.WithTransactionAsync(async () =>
             {
                 await _authorizationService.AuthorizeBusinessSystemUpdateAndThrow(null);
 
-                List<ExternalTransactionDTO> externalTransactionDTOList = GetExternalTransactionsFromExcel(excelUpdatePointsDTO.Excel);
+                List<ExternalTransactionDTO> externalTransactionDTOList = GetExternalTransactionsFromExcels(excelUpdatePointsDTO.Excels);
 
-                BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(excelUpdatePointsDTO.BusinessSystemId.Value, null);
+                await ProccessTransactions(excelUpdatePointsDTO.BusinessSystemId.Value, externalTransactionDTOList);
+            });
+        }
 
-                TransactionsProcessingResult transactionsProcessingResult = await ProcessTransactions(businessSystem, externalTransactionDTOList);
+        private List<ExternalTransactionDTO> GetExternalTransactionsFromExcels(List<IFormFile> excels)
+        {
+            if (excels == null || excels.Count == 0)
+                throw new ArgumentException("You need to provide at least one excel file.");
+
+            List<ExternalTransactionDTO> transactions = new();
+
+            foreach (IFormFile excel in excels)
+            {
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    excel.CopyTo(stream);
+                    stream.Position = 0;
+
+                    using (ExcelPackage package = new ExcelPackage(stream))
+                    {
+                        ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault();
+
+                        if (worksheet == null)
+                            throw new InvalidOperationException("The Excel file does not contain any worksheets.");
+
+                        int row = 2;
+
+                        while (true)
+                        {
+                            string idCell = worksheet.Cells[row, 1].Text;
+                            if (string.IsNullOrWhiteSpace(idCell)) break;
+
+                            transactions.Add(new ExternalTransactionDTO
+                            {
+                                // TODO FT
+                            });
+
+                            row++;
+                        }
+                    }
+                }
+            }
+
+            return transactions;
+        }
+
+        private ExternalTransactionsExcelParsingResultDTO GetExternalTransactionsFromExcelsForWings(List<IFormFile> excels)
+        {
+            if (excels == null || excels.Count == 0)
+                throw new ArgumentException("You need to provide at least one excel file.");
+
+            List<ExternalTransactionDTO> externalTransactions = new();
+            List<string> exceptions = new();
+            List<string> infos = new();
+            List<string> warnings = new();
+            int processedTransactionsCount = 0;
+
+            foreach (IFormFile excel in excels)
+            {
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    excel.CopyTo(stream);
+                    stream.Position = 0;
+
+                    using (ExcelPackage package = new ExcelPackage(stream))
+                    {
+                        ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault();
+
+                        if (worksheet == null)
+                            throw new InvalidOperationException("The Excel file does not contain any worksheets.");
+
+                        int row = SettingsProvider.Current.WingsStartingRow;
+
+                        while (true)
+                        {
+                            List<string> rowExceptions = new();
+                            List<string> rowWarnings = new();
+
+                            string transactionId = worksheet.Cells[row, 4].Text;
+                            if (string.IsNullOrWhiteSpace(transactionId))
+                            {
+                                infos.Add($"Excel {excel.FileName} sa transakcijama je obrađen do {row}. reda.");
+                                break;
+                            }
+
+                            string priceText = worksheet.Cells[row, 6].Text;
+                            if (decimal.TryParse(priceText, out decimal price) == false)
+                                rowExceptions.Add($"Polje F{row}, predviđeno za cenu je prazno.");
+
+
+                            string boughtAtText = worksheet.Cells[row, 7].Text;
+                            if (DateTime.TryParse(boughtAtText, out DateTime boughtAt) == false)
+                                rowExceptions.Add($"Polje G{row}, predviđeno za vreme kupovine je prazno.");
+
+                            string userEmail = worksheet.Cells[row, 10].Text;
+                            if (string.IsNullOrEmpty(userEmail))
+                                rowWarnings.Add($"Polje J{row}, predviđeno za email kupca je prazno, ta transakcija je preskočena prilikom obračuna.");
+
+                            if (rowExceptions.Count == 0 && rowWarnings.Count == 0)
+                            {
+                                externalTransactions.Add(new ExternalTransactionDTO
+                                {
+                                   BoughtAt = boughtAt,
+                                   Code = transactionId,
+                                   Price = price,
+                                   UserEmail = userEmail
+                                });
+                            }
+
+                            exceptions.AddRange(rowExceptions);
+                            warnings.AddRange(rowWarnings);
+
+                            processedTransactionsCount++;
+                            row++;
+                        }
+                    }
+                }
+            }
+
+            if (exceptions.Count > 0)
+                throw new BusinessException(string.Join("\n", exceptions));
+
+            return new ExternalTransactionsExcelParsingResultDTO 
+            { 
+                ExternalTransactionDTOList = externalTransactions,
+                WarningAndInfoResultDTO = new InfoAndWarningResultDTO
+                {
+                    Info = $"Obrađenih transakcija: {processedTransactionsCount}.\n\n{string.Join("\n", infos)}",
+                    Warning = string.Join("\n", warnings),
+                }
+            };
+        }
+
+        private async Task ProccessTransactions(long businessSystemId, List<ExternalTransactionDTO> externalTransactionDTOList)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(businessSystemId, null);
+
+                TransactionsProcessingResult transactionsProcessingResult = await ProcessTransactionsAndReturnResult(businessSystem, externalTransactionDTOList);
 
                 BusinessSystemUpdatePointsScheduledTask businessSystemUpdatePointsScheduledTaskForSave = new BusinessSystemUpdatePointsScheduledTask
                 {
@@ -1242,45 +1395,6 @@ namespace PlayertyLoyals.Business.Services
 
                 await NotifyPartnerAboutSuccessfullyProcessedTransactions(businessSystem.Partner, transactionsProcessingResult, null, null);
             });
-        }
-
-        private List<ExternalTransactionDTO> GetExternalTransactionsFromExcel(IFormFile excel)
-        {
-            if (excel == null || excel.Length == 0)
-                throw new ArgumentException("The provided Excel file is invalid or empty.");
-
-            List<ExternalTransactionDTO> transactions = new List<ExternalTransactionDTO>();
-
-            using (MemoryStream stream = new MemoryStream())
-            {
-                excel.CopyTo(stream);
-                stream.Position = 0;
-
-                using (ExcelPackage package = new ExcelPackage(stream))
-                {
-                    ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault();
-
-                    if (worksheet == null)
-                        throw new InvalidOperationException("The Excel file does not contain any worksheets.");
-
-                    int row = 2;
-
-                    while (true)
-                    {
-                        string idCell = worksheet.Cells[row, 1].Text;
-                        if (string.IsNullOrWhiteSpace(idCell)) break;
-
-                        transactions.Add(new ExternalTransactionDTO
-                        {
-                            // TODO FT
-                        });
-
-                        row++;
-                    }
-                }
-            }
-
-            return transactions;
         }
 
         public async Task<PeriodInWhichTransactionsShouldBeProcessed> GetPeriodInWhichTransactionsShouldBeProcessed(BusinessSystem businessSystem, DateTime? manualDateFrom, DateTime? manualDateTo, DateTime now)
@@ -1369,7 +1483,7 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
 """;
         }
 
-        public async Task<TransactionsProcessingResult> ProcessTransactions(BusinessSystem businessSystem, List<ExternalTransactionDTO> externalTransactionDTOList)
+        public async Task<TransactionsProcessingResult> ProcessTransactionsAndReturnResult(BusinessSystem businessSystem, List<ExternalTransactionDTO> externalTransactionDTOList)
         {
             List<string> partnerUserWhichDoesNotExistList = new();
             List<string> transactionWhichUpdateFailedList = new();
@@ -1389,21 +1503,33 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
                 {
                     if (await _context.DbSet<Transaction>().AnyAsync(x => x.BusinessSystem.Id == businessSystem.Id && x.Code == externalTransactionDTO.Code))
                     {
-                        transactionWhichWeAlreadyUpdatedForThisPeriodList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail})"); // TODO FT: This doesn't have sence, you should businessSystem transaction here, and put user email in the brackets, also then we should show the table of the transactions on the client.
+                        // TODO FT: This doesn't have sence, you should businessSystem transaction here, and put user email in the brackets, also then we should show the table of the transactions on the client.
+                        transactionWhichWeAlreadyUpdatedForThisPeriodList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail})");
                         continue;
                     }
 
                     PartnerUser partnerUser = partnerUserList.Where(x => x.User.Email == externalTransactionDTO.UserEmail).SingleOrDefault();
+
+                    int pointsFromTransaction = (int)Math.Floor(externalTransactionDTO.Price.Value * businessSystem.Partner.PointsMultiplier); // FT: Test this for negative and positive price
 
                     if (partnerUser == null)
                     {
                         if (partnerUserWhichDoesNotExistList.Contains(externalTransactionDTO.UserEmail) == false)
                             partnerUserWhichDoesNotExistList.Add(externalTransactionDTO.UserEmail);
 
-                        continue;
-                    }
+                        partnerUser = new PartnerUser
+                        {
+                            User = new UserExtended { Email = externalTransactionDTO.UserEmail },
+                            Partner = businessSystem.Partner,
+                            Points = pointsFromTransaction,
+                            Tier = await GetTierForThePoints(pointsFromTransaction)
+                        };
 
-                    int pointsFromTransaction = (int)Math.Floor(externalTransactionDTO.Price.Value * businessSystem.Partner.PointsMultiplier); // FT: Test this for negative and positive price
+                        await _context.DbSet<PartnerUser>().AddAsync(partnerUser);
+                        await _context.SaveChangesAsync();
+
+                        //continue;
+                    }
 
                     TransactionDTO transactionDTO = new TransactionDTO
                     {
@@ -1453,7 +1579,7 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
 
                 return await GetBusinessSystemUpdatePointsScheduledTaskTableData(
                     tableFilterDTO,
-                    _context.DbSet<BusinessSystemUpdatePointsScheduledTask>().Where(x => x.BusinessSystem.Id == tableFilterDTO.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo),
+                    _context.DbSet<BusinessSystemUpdatePointsScheduledTask>().Where(x => x.BusinessSystem.Id == tableFilterDTO.AdditionalFilterIdLong).OrderByDescending(x => x.Id), // FT: With Id because null values of dates
                     false
                 );
             });

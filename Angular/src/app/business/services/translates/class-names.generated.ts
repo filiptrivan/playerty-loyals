@@ -76,6 +76,8 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('GenderMainUIForm');
             case 'GenderSaveBody':
                 return this.translocoService.translate('GenderSaveBody');
+            case 'InfoAndWarningResult':
+                return this.translocoService.translate('InfoAndWarningResult');
             case 'JwtAuthResult':
                 return this.translocoService.translate('JwtAuthResult');
             case 'LazyLoadSelectedIdsResult':

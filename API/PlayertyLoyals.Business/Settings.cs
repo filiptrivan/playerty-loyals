@@ -14,5 +14,6 @@ namespace PlayertyLoyals.Business
     public class Settings
     {
         public string PartnerHeadersKey { get; set; }
+        public int WingsStartingRow { get; set; }
     }
 }

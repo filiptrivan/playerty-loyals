@@ -4,10 +4,12 @@
             <spider-file 
             [label]="t('File')"
             [required]="true"
+            [multiple]="true"
+            [files]="excels"
             [acceptedFileTypes]="['.xlsx', '.xls']" 
             (onFileSelected)="onSelectedExcelUpdateFile($event)"
             (onFileRemoved)="onRemovedExcelUpdateFile()"
-            [control]="excelUpdatePointsFormGroup.controls.excel"
+            [control]="excelUpdatePointsFormGroup.controls.excels"
             [disabled]="!isAuthorizedForSave"
             ></spider-file>
         </div>

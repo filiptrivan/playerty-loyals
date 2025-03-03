@@ -17,6 +17,6 @@ namespace PlayertyLoyals.Business.DTO
         [Required]
         public int? BusinessSystemVersion { get; set; }
 
-        public IFormFile Excel { get; set; }
+        public List<IFormFile> Excels { get; set; } = new();
     }
 }

@@ -53,7 +53,7 @@
                                 }
 
                                 <div>
-                                    <p-button (onClick)="addNewBusinessSystemTier(tierIndex)" [label]="t('AddNewBusinessSystemTier')" icon="pi pi-plus"></p-button>
+                                    <spider-button (onClick)="addNewBusinessSystemTier(tierIndex)" [label]="t('AddNewBusinessSystemTier')" icon="pi pi-plus"></spider-button>
                                 </div>
                             </div>
     
@@ -62,13 +62,13 @@
                 }
     
                 <div class="panel-add-button">
-                    <p-button (onClick)="addNewTier(null)" [label]="t('AddNewTier')" icon="pi pi-plus"></p-button>
+                    <spider-button (onClick)="addNewTier(null)" [label]="t('AddNewTier')" icon="pi pi-plus"></spider-button>
                 </div>
     
             </panel-body>
     
             <panel-footer>
-                <p-button [disabled]="!isAuthorizedForSave" (onClick)="onSave(false)" [label]="t('Save')" icon="pi pi-save"></p-button>
+                <spider-button [disabled]="!isAuthorizedForSave" (onClick)="onSave(false)" [label]="t('Save')" icon="pi pi-save"></spider-button>
             </panel-footer>
     
         </spider-panel>

@@ -21,6 +21,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 export class ExcelUpdatePointsBodyComponent implements OnInit {
     @Input() excelUpdatePointsFormGroup: SpiderFormGroup<ExcelUpdatePoints>;
     @Input() isAuthorizedForSave: boolean = false;
+    excels: File[] = [];
 
     constructor(
         
@@ -32,12 +33,13 @@ export class ExcelUpdatePointsBodyComponent implements OnInit {
     }
 
     onSelectedExcelUpdateFile(event: SpiderFileSelectEvent){
-        this.excelUpdatePointsFormGroup.controls.excel.setValue(event.file);
-        this.excelUpdatePointsFormGroup.controls.excel.setErrors(null);
+        this.excels.push(event.file);
+        this.excelUpdatePointsFormGroup.controls.excels.setValue(this.excels);
+        this.excelUpdatePointsFormGroup.controls.excels.setErrors(null);
     }
 
     onRemovedExcelUpdateFile(){
-        this.excelUpdatePointsFormGroup.controls.excel.setValue(null);
+        this.excelUpdatePointsFormGroup.controls.excels.setValue(null);
     }
 
     control(formControlName: string, formGroup: SpiderFormGroup){

@@ -536,24 +536,24 @@ export class ExcelUpdatePoints extends BaseEntity
 {
     businessSystemId?: number;
 	businessSystemVersion?: number;
-	excel?: any;
+	excels?: any[];
 
     constructor(
     {
         businessSystemId,
 		businessSystemVersion,
-		excel
+		excels
     }:{
         businessSystemId?: number;
 		businessSystemVersion?: number;
-		excel?: any;     
+		excels?: any[];     
     } = {}
     ) {
         super('ExcelUpdatePoints'); 
 
         this.businessSystemId = businessSystemId;
 		this.businessSystemVersion = businessSystemVersion;
-		this.excel = excel;
+		this.excels = excels;
     }
 }
 
@@ -702,6 +702,28 @@ export class GenderAndBirthDate extends BaseEntity
 
         this.birthDate = birthDate;
 		this.genderId = genderId;
+    }
+}
+
+
+export class InfoAndWarningResult extends BaseEntity
+{
+    info?: string;
+	warning?: string;
+
+    constructor(
+    {
+        info,
+		warning
+    }:{
+        info?: string;
+		warning?: string;     
+    } = {}
+    ) {
+        super('InfoAndWarningResult'); 
+
+        this.info = info;
+		this.warning = warning;
     }
 }
 

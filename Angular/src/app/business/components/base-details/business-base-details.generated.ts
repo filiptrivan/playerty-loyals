@@ -11,7 +11,7 @@ import { combineLatest, firstValueFrom, forkJoin, map, Observable, of, Subscript
 import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../services/auth/auth.service';
 import { PrimengModule, SpiderControlsModule, CardSkeletonComponent, IndexCardComponent, IsAuthorizedForSaveEvent, SpiderDataTableComponent, SpiderFormArray, BaseEntity, LastMenuIconIndexClicked, SpiderFormGroup, SpiderButton, nameof, BaseFormService, getControl, Column, TableFilter, LazyLoadSelectedIdsResult, AllClickEvent, SpiderFileSelectEvent, getPrimengDropdownNamebookOptions, PrimengOption, SpiderFormControl, getPrimengAutocompleteNamebookOptions } from '@playerty/spider';
-import { AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, ExcelUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, GenderAndBirthDate, ManualUpdatePoints, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerUser, PartnerUserSaveBody, Product, SegmentationItem, TierSaveBody, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRoleSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserExtendedSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
+import { AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, ExcelUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, GenderAndBirthDate, InfoAndWarningResult, ManualUpdatePoints, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerUser, PartnerUserSaveBody, Product, SegmentationItem, TierSaveBody, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRoleSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserExtendedSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
 
 @Component({
     selector: 'business-system-base-details',
@@ -40,7 +40,7 @@ import { AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountProductGroup, B
                         <spider-textbox [control]="control('updateUserGroupEndpoint', businessSystemFormGroup)"></spider-textbox>
                     </div>
                      <div *ngIf="showDiscountProductGroupsForBusinessSystem" class="col-12">
-                        <spider-panel [toggleable]="true">
+                        <spider-panel [toggleable]="true" [collapsed]="discountProductGroupsPanelCollapsed">
                             <panel-header [title]="t('DiscountProductGroups')" icon="pi pi-list"></panel-header>
                             <panel-body [normalBottomPadding]="true">
                                 @for (discountProductGroupFormGroup of getFormArrayGroups(discountProductGroupsFormArray); track discountProductGroupFormGroup; let index = $index; let last = $last) {
@@ -129,6 +129,7 @@ export class BusinessSystemBaseDetailsComponent {
     discountProductGroupsFormArray: SpiderFormArray<DiscountProductGroup>;
     discountProductGroupsLastIndexClicked = new LastMenuIconIndexClicked();
     discountProductGroupsCrudMenu: MenuItem[] = [];
+    discountProductGroupsPanelCollapsed: boolean = false;
 
 
 
@@ -1509,7 +1510,7 @@ export class PartnerUserBaseDetailsComponent {
                         <spider-textarea [control]="control('description', segmentationFormGroup)"></spider-textarea>
                     </div>
                      <div *ngIf="showSegmentationItemsForSegmentation" class="col-12">
-                        <spider-panel [toggleable]="true">
+                        <spider-panel [toggleable]="true" [collapsed]="segmentationItemsPanelCollapsed">
                             <panel-header [title]="t('SegmentationItems')" icon="pi pi-list"></panel-header>
                             <panel-body [normalBottomPadding]="true">
                                 @for (segmentationItemFormGroup of getFormArrayGroups(segmentationItemsFormArray); track segmentationItemFormGroup; let index = $index; let last = $last) {
@@ -1595,6 +1596,7 @@ export class SegmentationBaseDetailsComponent {
     segmentationItemsFormArray: SpiderFormArray<SegmentationItem>;
     segmentationItemsLastIndexClicked = new LastMenuIconIndexClicked();
     segmentationItemsCrudMenu: MenuItem[] = [];
+    segmentationItemsPanelCollapsed: boolean = false;
 
 
 

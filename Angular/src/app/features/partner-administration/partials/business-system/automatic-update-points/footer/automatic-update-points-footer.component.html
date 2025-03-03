@@ -1,26 +1,26 @@
 <div class="buttons-wrapper" *transloco="let t">
-    <p-button 
+    <spider-button 
     [disabled]="!isAuthorizedForSave" 
     (onClick)="automaticUpdatePoints()" 
     [label]="t('Save')" 
     icon="pi pi-save"
-    ></p-button>
+    ></spider-button>
 
-    <p-button 
+    <spider-button 
     *ngIf="businessSystemFormGroup.getRawValue().updatePointsScheduledTaskIsPaused === false" 
     [disabled]="!isAuthorizedForSave" 
     (onClick)="changeScheduledTaskUpdatePointsStatus()" 
     [label]="t('PauseUpdatePointsScheduledTask')" 
     icon="pi pi-pause" 
     severity="warning"
-    ></p-button>
+    ></spider-button>
 
-    <p-button 
+    <spider-button 
     *ngIf="businessSystemFormGroup.getRawValue().updatePointsScheduledTaskIsPaused === true" 
     [disabled]="!isAuthorizedForSave" 
     (onClick)="changeScheduledTaskUpdatePointsStatus()" 
     [label]="t('StartUpdatePointsScheduledTask')" 
     icon="pi pi-play" 
     severity="success"
-    ></p-button>
+    ></spider-button>
 </div>

@@ -114,8 +114,8 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('DataStartColumn');
             case 'createNewDataRows':
                 return this.translocoService.translate('CreateNewDataRows');
-            case 'excel':
-                return this.translocoService.translate('Excel');
+            case 'excels':
+                return this.translocoService.translate('Excels');
             case 'idToken':
                 return this.translocoService.translate('IdToken');
             case 'browser':
@@ -140,6 +140,10 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('Gender');
             case 'genderDTO':
                 return this.translocoService.translate('GenderDTO');
+            case 'info':
+                return this.translocoService.translate('Info');
+            case 'warning':
+                return this.translocoService.translate('Warning');
             case 'token':
                 return this.translocoService.translate('Token');
             case 'selectedIds':

@@ -1,7 +1,9 @@
 ﻿using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Nucleus.Core.Exceptions;
 using PlayertyLoyals.Business.DTO;
+using PlayertyLoyals.Business.DTO.Helpers;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Services;
 using PlayertyLoyals.Shared.Resources;
@@ -92,9 +94,17 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task ExcelUpdatePoints([FromForm] ExcelUpdatePointsDTO excelUpdatePointsDTO) // FT: It doesn't work without interface
+        public async Task ExcelUpdatePoints([FromForm] ExcelUpdatePointsDTO excelUpdatePointsDTO)
         {
-            await _loyalsBusinessService.ExcelUpdatePoints(excelUpdatePointsDTO); // TODO: Make authorization in business service
+            throw new NotImplementedException(); // FT TBD
+            await _loyalsBusinessService.ExcelUpdatePoints(excelUpdatePointsDTO);
+        }
+
+        [HttpPost]
+        [AuthGuard]
+        public async Task<InfoAndWarningResultDTO> ExcelUpdatePointsForWings([FromForm] ExcelUpdatePointsDTO excelUpdatePointsDTO)
+        {
+            return await _loyalsBusinessService.ExcelUpdatePointsForWings(excelUpdatePointsDTO);
         }
 
         [HttpPost]
