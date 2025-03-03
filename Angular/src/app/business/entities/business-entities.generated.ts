@@ -684,6 +684,28 @@ export class GenderMainUIForm extends BaseEntity
 }
 
 
+export class GenderAndBirthDate extends BaseEntity
+{
+    birthDate?: Date;
+	genderId?: number;
+
+    constructor(
+    {
+        birthDate,
+		genderId
+    }:{
+        birthDate?: Date;
+		genderId?: number;     
+    } = {}
+    ) {
+        super('GenderAndBirthDate'); 
+
+        this.birthDate = birthDate;
+		this.genderId = genderId;
+    }
+}
+
+
 export class ManualUpdatePoints extends BaseEntity
 {
     businessSystemId?: number;

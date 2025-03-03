@@ -735,6 +735,23 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
+        public async Task<GenderAndBirthDateDTO> GetPartnerUserGenderAndBirthDateDTO(long partnerUserId)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                await _authorizationService.AuthorizePartnerUserReadAndThrow(partnerUserId);
+
+                return await _context.DbSet<PartnerUser>()
+                    .Where(x => x.Id == partnerUserId)
+                    .Select(x => new GenderAndBirthDateDTO
+                    {
+                        BirthDate = x.User.BirthDate,
+                        GenderId = x.User.Gender.Id
+                    })
+                    .SingleAsync();
+            });
+        }
+
         #endregion
 
         #region PartnerRole

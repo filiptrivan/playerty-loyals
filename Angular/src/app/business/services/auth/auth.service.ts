@@ -52,6 +52,25 @@ export class AuthService extends AuthBaseService implements OnDestroy {
   currentPartnerUser$ = this._currentPartnerUser.asObservable();
 
   initCurrentPartnerUserState = async () => {
+    combineLatest([
+      this.user$,
+      this.partner$
+    ]).pipe(
+      switchMap(([user, partner]) => {
+        if (user != null && partner != null) {
+          return this.setCurrentPartnerUser();
+        }
+        else if (user !== undefined && partner !== undefined){
+          this._currentPartnerUser.next(null);
+          return of(null);
+        }
+        else{
+          return of(null);
+        }
+      }),
+      shareReplay(1)
+    ).subscribe();
+
     this.route.queryParams // FT HACK: https://github.com/angular/angular/issues/12157
     .pipe(
       filter(queryParams => 
@@ -68,28 +87,10 @@ export class AuthService extends AuthBaseService implements OnDestroy {
         localStorage.setItem(this.config.partnerSlugKey, partnerSlug);
         
         this.setCurrentPartnerObservable().subscribe();
+      }else{
+        this._partner.next(null);
       }
-    })
-
-    combineLatest([
-      this.user$,
-      this.partner$
-    ]).pipe(
-      switchMap(([user, partner]) => {
-        if (user && partner) {
-          return this.setCurrentPartnerUser();
-        }
-        else{
-          this._currentPartnerUser.next(null);
-          return of(null);
-        }
-      }),
-      shareReplay(1)
-    ).subscribe();
-  }
-
-  get(){
-;
+    });
   }
 
   setCurrentPartnerObservable(): Observable<Promise<Partner>> {
@@ -134,11 +135,11 @@ export class AuthService extends AuthBaseService implements OnDestroy {
       }
   }
 
-  setCurrentPartner(partner: Partner) {
-    this._partner.next(partner);
-    localStorage.setItem(this.config.partnerSlugKey, partner.slug);
-    this.adjustPartnerColor(partner);
-  }
+  // setCurrentPartner(partner: Partner) {
+  //   this._partner.next(partner);
+  //   localStorage.setItem(this.config.partnerSlugKey, partner.slug);
+  //   this.adjustPartnerColor(partner);
+  // }
 
   setCurrentPartnerUser(): Observable<PartnerUser> {  
     return this.apiService.getCurrentPartnerUser().pipe(
@@ -149,9 +150,9 @@ export class AuthService extends AuthBaseService implements OnDestroy {
     );
   }
 
-  override onAfterNgOnDestroy = () => {
-
-  };
+  override onAfterRefreshToken = () => {
+    // FT: If we not override this, the GetCurrentUserPermissionCodes would be called twice
+  }
 
   //#endregion
 

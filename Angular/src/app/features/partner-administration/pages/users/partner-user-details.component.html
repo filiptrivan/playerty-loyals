@@ -24,12 +24,12 @@
     (onIsAuthorizedForSaveChange)="isAuthorizedForSaveChange($event)"
     [showPointsForPartnerUser]="showPointsFormControl"
     >
-        <ng-container *ngIf="!userExtendedLoading" BEFORE>
+        <ng-container *ngIf="!loading" BEFORE>
             <div class="col-12 md:col-6">
-                <spider-calendar [control]="control('birthDate', userExtendedFormGroup)"></spider-calendar>
+                <spider-calendar [control]="control('birthDate', genderAndBirthDateFormGroup)"></spider-calendar>
             </div>
             <div class="col-12 md:col-6">
-                <spider-dropdown [control]="control('genderId', userExtendedFormGroup)" [options]="genderOptionsForUserExtended"></spider-dropdown>
+                <spider-dropdown [control]="control('genderId', genderAndBirthDateFormGroup)" [options]="genderOptions"></spider-dropdown>
             </div>
         </ng-container>
 

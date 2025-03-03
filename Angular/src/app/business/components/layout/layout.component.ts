@@ -44,6 +44,10 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
 
     ngOnInit(): void {
         this.partnerSubscription = this.authService.partner$.subscribe(partner => {
+            if(partner !== undefined){
+                this.authService.setCurrentUserPermissionCodes().subscribe();
+            }
+
             this.menu = [
                 {
                     items: [
@@ -98,8 +102,8 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                             hasPermission: (permissionCodes: string[]): boolean => { 
                                 return (permissionCodes?.includes(BusinessPermissionCodes.ReadUserExtended) ||
                                         permissionCodes?.includes(SecurityPermissionCodes.ReadRole) ||
-                                        permissionCodes?.includes(BusinessPermissionCodes.ReadTier) || 
-                                        permissionCodes?.includes(BusinessPermissionCodes.ReadNotification))
+                                        permissionCodes?.includes(BusinessPermissionCodes.ReadNotification) || 
+                                        permissionCodes?.includes(BusinessPermissionCodes.ReadPartner))
                             },
                             items: [
                                 {

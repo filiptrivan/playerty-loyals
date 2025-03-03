@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { BehaviorSubject, combineLatest, firstValueFrom, forkJoin, map, Observable } from 'rxjs';
 import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
-import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, Tier, UserExtended } from 'src/app/business/entities/business-entities.generated';
+import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, Tier, GenderAndBirthDate } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { BaseFormCopy, SpiderFormGroup, SpiderFormArray, SpiderMessageService, BaseFormService, IsAuthorizedForSaveEvent, getPrimengDropdownNamebookOptions, PrimengOption } from '@playerty/spider';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
@@ -17,9 +17,8 @@ import { BusinessPermissionCodes } from 'src/app/business/enums/business-enums.g
     styles: [],
 })
 export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit {
-    userExtendedFormGroup = new SpiderFormGroup<UserExtended>({});
-    genderOptionsForUserExtended: PrimengOption[];
-    userExtendedLoading = true;
+    genderAndBirthDateFormGroup = new SpiderFormGroup<GenderAndBirthDate>({});
+    genderOptions: PrimengOption[];
 
     partnerUserFormGroup = new SpiderFormGroup<PartnerUser>({});
     partnerUserTier: Tier;
@@ -66,52 +65,52 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
             this.setTier(this.partnerUserFormGroup.getRawValue().id);
         }
 
-        this.initUserExtendedFormGroup();
+        getPrimengDropdownNamebookOptions(this.apiService.getGenderDropdownListForUserExtended, null).subscribe(po => {
+            this.genderOptions = po;
+        });
 
         forkJoin({
+            genderAndBirthDate: this.apiService.getPartnerUserGenderAndBirthDate(this.partnerUserFormGroup.getRawValue().id),
             segmentations: this.apiService.getSegmentationListForTheCurrentPartner(),
         })
         .subscribe(({ 
+            genderAndBirthDate,
             segmentations,
         }) => {
-            this.segmentations = segmentations;
+            this.initGenderAndBirthDateFormGroup(genderAndBirthDate);
 
-            this.segmentationItemsFormArray = this.initFormArray(
-                this.formGroup, 
-                segmentations.flatMap(x => x.segmentationItemsDTOList), 
-                this.segmentationItemModel, 
-                this.segmentationItemsFormArrayIdentifier, 
-                this.segmentationItemsTranslationKey
-            );
-            this._segmentationItemsFormArray.next(null);
-
-            this.apiService.getCheckedSegmentationItemIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue().id).subscribe(ids => {
-                this.segmentationItemsFormArray.controls.forEach((formGroup: FormGroup) => {
-                    formGroup.controls['checked'].setValue(ids.includes(formGroup.controls['id'].value));
-                });
-
-                this.loading = false;
-            });
+            this.initSegmentationsFormArray(segmentations);
         });
 
         this.setAlreadyFilledSegmentationIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue());
     }
 
-    initUserExtendedFormGroup = () => {
-        const userExtendedId = this.partnerUserFormGroup.getRawValue().userId;
+    initGenderAndBirthDateFormGroup = (genderAndBirthDate: GenderAndBirthDate) => {
+        this.baseFormService.initFormGroup<GenderAndBirthDate>(
+            this.genderAndBirthDateFormGroup, 
+            genderAndBirthDate, 
+            []
+        );
+    }
 
-        getPrimengDropdownNamebookOptions(this.apiService.getGenderDropdownListForUserExtended, userExtendedId).subscribe(po => {
-            this.genderOptionsForUserExtended = po;
-        });
+    initSegmentationsFormArray = (segmentations: Segmentation[]) => {
+        this.segmentations = segmentations;
 
-        this.apiService.getUserExtended(userExtendedId).subscribe(userExtended => {
-            this.baseFormService.initFormGroup<UserExtended>(
-                this.userExtendedFormGroup, 
-                userExtended, 
-                []
-            );
+        this.segmentationItemsFormArray = this.initFormArray(
+            this.formGroup, 
+            segmentations.flatMap(x => x.segmentationItemsDTOList), 
+            this.segmentationItemModel, 
+            this.segmentationItemsFormArrayIdentifier, 
+            this.segmentationItemsTranslationKey
+        );
+        this._segmentationItemsFormArray.next(null);
 
-            this.userExtendedLoading = false;
+        this.apiService.getCheckedSegmentationItemIdsForThePartnerUser(this.partnerUserFormGroup.getRawValue().id).subscribe(ids => {
+            this.segmentationItemsFormArray.controls.forEach((formGroup: FormGroup) => {
+                formGroup.controls['checked'].setValue(ids.includes(formGroup.controls['id'].value));
+            });
+
+            this.loading = false;
         });
     }
 
@@ -149,13 +148,13 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         if (this.segmentationItemsFormArray != null) {
             if (event.isAuthorizedForSave === false) {
                 this.baseFormService.disableAllFormControls(this.segmentationItemsFormArray);
-                this.userExtendedFormGroup.controls.birthDate.disable();
-                this.userExtendedFormGroup.controls.genderId.disable();
+                this.genderAndBirthDateFormGroup.controls.birthDate.disable();
+                this.genderAndBirthDateFormGroup.controls.genderId.disable();
             }
             else{
                 this.baseFormService.enableAllFormControls(this.segmentationItemsFormArray);
-                this.userExtendedFormGroup.controls.birthDate.enable();
-                this.userExtendedFormGroup.controls.genderId.enable();
+                this.genderAndBirthDateFormGroup.controls.birthDate.enable();
+                this.genderAndBirthDateFormGroup.controls.genderId.enable();
             }
         }
         
@@ -183,8 +182,8 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
 
         saveBody.selectedSegmentationItemsIds = this.segmentationItemsFormArray.value.filter(x => x.checked).map(x => x.id);
 
-        saveBody.birthDate = this.userExtendedFormGroup.getRawValue().birthDate;
-        saveBody.genderId = this.userExtendedFormGroup.getRawValue().genderId;
+        saveBody.birthDate = this.genderAndBirthDateFormGroup.getRawValue().birthDate;
+        saveBody.genderId = this.genderAndBirthDateFormGroup.getRawValue().genderId;
 
         this.saveBody = saveBody;
         return;

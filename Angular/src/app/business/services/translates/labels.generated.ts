@@ -134,6 +134,10 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('Price');
             case 'boughtAt':
                 return this.translocoService.translate('BoughtAt');
+            case 'birthDate':
+                return this.translocoService.translate('BirthDate');
+            case 'gender':
+                return this.translocoService.translate('Gender');
             case 'genderDTO':
                 return this.translocoService.translate('GenderDTO');
             case 'token':
@@ -220,10 +224,6 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('PartnerUserPartnerRoleDTO');
             case 'selectedSegmentationItemsIds':
                 return this.translocoService.translate('SelectedSegmentationItemsIds');
-            case 'birthDate':
-                return this.translocoService.translate('BirthDate');
-            case 'gender':
-                return this.translocoService.translate('Gender');
             case 'partnerUserThatHasFilledSegmentation':
                 return this.translocoService.translate('PartnerUserThatHasFilledSegmentation');
             case 'alreadyFilledSegmentation':

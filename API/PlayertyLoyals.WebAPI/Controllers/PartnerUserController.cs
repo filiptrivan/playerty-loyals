@@ -129,5 +129,12 @@ namespace PlayertyLoyals.WebAPI.Controllers
             );
         }
 
+        [HttpGet]
+        [AuthGuard]
+        public async Task<GenderAndBirthDateDTO> GetPartnerUserGenderAndBirthDate(long partnerUserId)
+        {
+            return await _loyalsBusinessService.GetPartnerUserGenderAndBirthDateDTO(partnerUserId);
+        }
+
     }
 }

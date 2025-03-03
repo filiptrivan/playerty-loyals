@@ -37,5 +37,16 @@ namespace PlayertyLoyals.WebAPI.Controllers
             return await _loyalsBusinessService.GetUserExtendedDTO(userId, false); // FT: Don't need to authorize because he is current user
         }
 
+        [HttpGet]
+        [AuthGuard]
+        public override async Task<List<NamebookDTO<int>>> GetGenderDropdownListForUserExtended(long? userExtendedId)
+        {
+            return await _loyalsBusinessService.GetGenderDropdownListForUserExtended(
+                _context.DbSet<Gender>(),
+                false, // FT: It's not important data, it's okay to not authorize
+                null
+            );
+        }
+
     }
 }

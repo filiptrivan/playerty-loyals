@@ -68,6 +68,8 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('ExternalProvider');
             case 'ExternalTransaction':
                 return this.translocoService.translate('ExternalTransaction');
+            case 'GenderAndBirthDate':
+                return this.translocoService.translate('GenderAndBirthDate');
             case 'Gender':
                 return this.translocoService.translate('Gender');
             case 'GenderMainUIForm':
