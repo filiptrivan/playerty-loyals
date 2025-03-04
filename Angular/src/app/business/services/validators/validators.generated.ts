@@ -299,8 +299,8 @@ export class ValidatorServiceGenerated {
                 return this.pointsTransactionValidator(formControl);
             case 'partnerUserIdTransaction':
                 return this.partnerUserIdTransactionValidator(formControl);
-            case 'businessSystemIdTransaction':
-                return this.businessSystemIdTransactionValidator(formControl);
+            case 'businessSystemUpdatePointsScheduledTaskIdTransaction':
+                return this.businessSystemUpdatePointsScheduledTaskIdTransactionValidator(formControl);
             case 'versionTransaction':
                 return this.versionTransactionValidator(formControl);
             case 'createdAtTransaction':
@@ -2704,7 +2704,7 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    businessSystemIdTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+    businessSystemUpdatePointsScheduledTaskIdTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 

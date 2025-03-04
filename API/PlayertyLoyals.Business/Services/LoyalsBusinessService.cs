@@ -77,12 +77,48 @@ namespace PlayertyLoyals.Business.Services
 
                 if (userExtendedSaveBodyDTO.UserExtendedDTO.Email != userExtended.Email ||
                     userExtendedSaveBodyDTO.UserExtendedDTO.HasLoggedInWithExternalProvider != userExtended.HasLoggedInWithExternalProvider
+                    //userExtendedSaveBodyDTO.UserExtendedDTO.AccessedTheSystem != userExtended.AccessedTheSystem
                 )
                 {
-                    throw new HackerException("You can't change Email and HasLoggedInWithExternalProvider from the main UI form.");
+                    throw new HackerException("You can't change Email, HasLoggedInWithExternalProvider nor AccessedTheSystem from the main UI form.");
                 }
             });
         }
+
+        public async Task OnAfterRegister(AuthResultDTO authResultDTO)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                //await SetAccessedTheSystemToTrue(authResultDTO);
+                await AddPartnerUserAfterAuthResult(authResultDTO);
+            });
+        }
+
+        public async Task OnAfterLogin(AuthResultDTO authResultDTO)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                //await SetAccessedTheSystemToTrue(authResultDTO);
+                await AddPartnerUserAfterAuthResult(authResultDTO);
+            });
+        }
+
+        public async Task OnAfterLoginExternal(AuthResultDTO authResultDTO)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                //await SetAccessedTheSystemToTrue(authResultDTO);
+                await AddPartnerUserAfterAuthResult(authResultDTO);
+            });
+        }
+
+        //public async Task SetAccessedTheSystemToTrue(AuthResultDTO authResultDTO)
+        //{
+        //    await _context.WithTransactionAsync(async () =>
+        //    {
+        //        await _context.DbSet<UserExtended>().Where(x => x.Id == authResultDTO.UserId && x.AccessedTheSystem != true).ExecuteUpdateAsync(x => x.SetProperty(x => x.AccessedTheSystem, true));
+        //    });
+        //}
 
         #endregion
 
@@ -508,32 +544,38 @@ namespace PlayertyLoyals.Business.Services
 
         public async Task AddPartnerUserAfterAuthResult(AuthResultDTO authResultDTO)
         {
+            string currentPartnerSlug = _partnerUserAuthenticationService.GetCurrentPartnerCode();
+
             await _context.WithTransactionAsync(async () =>
             {
-                Partner currentPartner = await _partnerUserAuthenticationService.GetCurrentPartner();
-
-                if (currentPartner != null)
+                if (currentPartnerSlug != null)
                 {
-                    UserExtended user = await GetInstanceAsync<UserExtended, long>(authResultDTO.UserId, null);
+                    PartnerUser partnerUser = await _context.DbSet<PartnerUser>().Where(x => x.User.Id == authResultDTO.UserId && x.Partner.Slug == currentPartnerSlug).SingleOrDefaultAsync();
 
-                    PartnerUser partnerUser = await _context.DbSet<PartnerUser>().Where(x => x.User.Id == user.Id && x.Partner.Id == currentPartner.Id).SingleOrDefaultAsync();
-
-                    await AddPartnerUser(partnerUser, user, currentPartner);
+                    if (partnerUser == null)
+                    {
+                        Partner currentPartner = await _context.DbSet<Partner>().Where(x => x.Slug == currentPartnerSlug).SingleAsync();
+                        UserExtended user = await GetInstanceAsync<UserExtended, long>(authResultDTO.UserId, null);
+                        await AddPartnerUser(partnerUser, user, currentPartner);
+                    }
                 }
             });
         }
 
         public async Task AddPartnerUserForTheCurrentUser(int partnerId)
         {
+            long currentUserId = _authenticationService.GetCurrentUserId();
+
             await _context.WithTransactionAsync(async () =>
             {
-                Partner partner = await GetInstanceAsync<Partner, int>(partnerId, null);
+                PartnerUser partnerUser = await _context.DbSet<PartnerUser>().Where(x => x.User.Id == currentUserId && x.Partner.Id == partnerId).SingleOrDefaultAsync();
 
-                UserExtended user = await _authenticationService.GetCurrentUser<UserExtended>();
-
-                PartnerUser partnerUser = await _context.DbSet<PartnerUser>().Where(x => x.User.Id == user.Id && x.Partner.Id == partner.Id).SingleOrDefaultAsync();
-
-                await AddPartnerUser(partnerUser, user, partner);
+                if (partnerUser == null)
+                {
+                    Partner partner = await GetInstanceAsync<Partner, int>(partnerId, null);
+                    UserExtended currentUser = await GetInstanceAsync<UserExtended, long>(currentUserId, null);
+                    await AddPartnerUser(partnerUser, currentUser, partner);
+                }
             });
         }
 
@@ -1343,10 +1385,10 @@ namespace PlayertyLoyals.Business.Services
                             {
                                 externalTransactions.Add(new ExternalTransactionDTO
                                 {
-                                   BoughtAt = boughtAt,
-                                   Code = transactionId,
-                                   Price = price,
-                                   UserEmail = userEmail
+                                    BoughtAt = boughtAt,
+                                    Code = transactionId,
+                                    Price = price,
+                                    UserEmail = userEmail
                                 });
                             }
 
@@ -1363,8 +1405,8 @@ namespace PlayertyLoyals.Business.Services
             if (exceptions.Count > 0)
                 throw new BusinessException(string.Join("\n", exceptions));
 
-            return new ExternalTransactionsExcelParsingResultDTO 
-            { 
+            return new ExternalTransactionsExcelParsingResultDTO
+            {
                 ExternalTransactionDTOList = externalTransactions,
                 WarningAndInfoResultDTO = new InfoAndWarningResultDTO
                 {
@@ -1380,8 +1422,6 @@ namespace PlayertyLoyals.Business.Services
             {
                 BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(businessSystemId, null);
 
-                TransactionsProcessingResult transactionsProcessingResult = await ProcessTransactionsAndReturnResult(businessSystem, externalTransactionDTOList);
-
                 BusinessSystemUpdatePointsScheduledTask businessSystemUpdatePointsScheduledTaskForSave = new BusinessSystemUpdatePointsScheduledTask
                 {
                     TransactionsFrom = null,
@@ -1392,6 +1432,8 @@ namespace PlayertyLoyals.Business.Services
 
                 await _context.DbSet<BusinessSystemUpdatePointsScheduledTask>().AddAsync(businessSystemUpdatePointsScheduledTaskForSave);
                 await _context.SaveChangesAsync();
+
+                TransactionsProcessingResult transactionsProcessingResult = await ProcessTransactionsAndReturnResult(businessSystemUpdatePointsScheduledTaskForSave, externalTransactionDTOList);
 
                 await NotifyPartnerAboutSuccessfullyProcessedTransactions(businessSystem.Partner, transactionsProcessingResult, null, null);
             });
@@ -1483,7 +1525,10 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
 """;
         }
 
-        public async Task<TransactionsProcessingResult> ProcessTransactionsAndReturnResult(BusinessSystem businessSystem, List<ExternalTransactionDTO> externalTransactionDTOList)
+        public async Task<TransactionsProcessingResult> ProcessTransactionsAndReturnResult(
+            BusinessSystemUpdatePointsScheduledTask savedBusinessSystemUpdatePointsScheduledTask,
+            List<ExternalTransactionDTO> externalTransactionDTOList
+        )
         {
             List<string> partnerUserWhichDoesNotExistList = new();
             List<string> transactionWhichUpdateFailedList = new();
@@ -1496,39 +1541,38 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
 
                 List<PartnerUser> partnerUserList = await _context.DbSet<PartnerUser>()
                     .Include(x => x.User)
-                    .Where(x => x.Partner.Id == businessSystem.Partner.Id && userEmailList.Contains(x.User.Email))
+                    .Where(x => x.Partner.Id == savedBusinessSystemUpdatePointsScheduledTask.BusinessSystem.Partner.Id && userEmailList.Contains(x.User.Email))
                     .ToListAsync();
 
                 foreach (ExternalTransactionDTO externalTransactionDTO in externalTransactionDTOList)
                 {
-                    if (await _context.DbSet<Transaction>().AnyAsync(x => x.BusinessSystem.Id == businessSystem.Id && x.Code == externalTransactionDTO.Code))
+                    if (await _context.DbSet<Transaction>().AnyAsync(x => 
+                        x.BusinessSystemUpdatePointsScheduledTask.BusinessSystem.Id == savedBusinessSystemUpdatePointsScheduledTask.BusinessSystem.Id && 
+                        x.Code == externalTransactionDTO.Code)
+                    )
                     {
-                        // TODO FT: This doesn't have sence, you should businessSystem transaction here, and put user email in the brackets, also then we should show the table of the transactions on the client.
                         transactionWhichWeAlreadyUpdatedForThisPeriodList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail})");
                         continue;
                     }
 
                     PartnerUser partnerUser = partnerUserList.Where(x => x.User.Email == externalTransactionDTO.UserEmail).SingleOrDefault();
 
-                    int pointsFromTransaction = (int)Math.Floor(externalTransactionDTO.Price.Value * businessSystem.Partner.PointsMultiplier); // FT: Test this for negative and positive price
+                    int pointsFromTransaction = (int)Math.Floor(externalTransactionDTO.Price.Value * savedBusinessSystemUpdatePointsScheduledTask.BusinessSystem.Partner.PointsMultiplier); // FT: Test this for negative and positive price
 
                     if (partnerUser == null)
                     {
-                        if (partnerUserWhichDoesNotExistList.Contains(externalTransactionDTO.UserEmail) == false)
-                            partnerUserWhichDoesNotExistList.Add(externalTransactionDTO.UserEmail);
+                        partnerUserWhichDoesNotExistList.Add(externalTransactionDTO.UserEmail);
 
                         partnerUser = new PartnerUser
                         {
                             User = new UserExtended { Email = externalTransactionDTO.UserEmail },
-                            Partner = businessSystem.Partner,
+                            Partner = savedBusinessSystemUpdatePointsScheduledTask.BusinessSystem.Partner,
                             Points = pointsFromTransaction,
                             Tier = await GetTierForThePoints(pointsFromTransaction)
                         };
 
                         await _context.DbSet<PartnerUser>().AddAsync(partnerUser);
                         await _context.SaveChangesAsync();
-
-                        //continue;
                     }
 
                     TransactionDTO transactionDTO = new TransactionDTO
@@ -1541,7 +1585,7 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
                         Points = pointsFromTransaction,
                         PartnerUserId = partnerUser.Id,
                         BoughtAt = externalTransactionDTO.BoughtAt,
-                        BusinessSystemId = businessSystem.Id,
+                        BusinessSystemUpdatePointsScheduledTaskId = savedBusinessSystemUpdatePointsScheduledTask.Id,
                     };
 
                     try
@@ -1571,6 +1615,36 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
             });
         }
 
+        public async Task GoToTaskState(long taskId)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                BusinessSystemUpdatePointsScheduledTask taskForRevert = await GetInstanceAsync<BusinessSystemUpdatePointsScheduledTask, long>(taskId, null);
+
+                IQueryable<BusinessSystemUpdatePointsScheduledTask> tasksQuery = _context.DbSet<BusinessSystemUpdatePointsScheduledTask>()
+                    .Where(x => x.CreatedAt >= taskForRevert.CreatedAt);
+
+                List<BusinessSystemUpdatePointsScheduledTask> tasks = await tasksQuery.ToListAsync();
+
+                foreach (BusinessSystemUpdatePointsScheduledTask task in tasks)
+                {
+                    //await DeleteUsersWhichDidNotEverAccessedTheSystem(task.Transactions.Select(x => x.PartnerUser).ToList());
+
+                    foreach (Transaction transaction in task.Transactions.ToList())
+                    {
+                        transaction.PartnerUser.Points -= transaction.Points;
+                    }
+                }
+
+                await tasksQuery.ExecuteDeleteAsync();
+            });
+        }
+
+        //private async Task DeleteUsersWhichDidNotEverAccessedTheSystem(List<PartnerUser> partnerUsers)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         public async Task<TableResponseDTO<BusinessSystemUpdatePointsScheduledTaskDTO>> GetBusinessSystemUpdatePointsScheduledTaskTableDataForBusinessSystem(TableFilterDTO tableFilterDTO)
         {
             return await _context.WithTransactionAsync(async () =>
@@ -1593,7 +1667,7 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
 
                 byte[] fileContent = await ExportBusinessSystemUpdatePointsScheduledTaskTableDataToExcel(
                     tableFilterDTO,
-                    _context.DbSet<BusinessSystemUpdatePointsScheduledTask>().Where(x => x.BusinessSystem.Id == tableFilterDTO.AdditionalFilterIdLong).OrderByDescending(x => x.TransactionsTo),
+                    _context.DbSet<BusinessSystemUpdatePointsScheduledTask>().Where(x => x.BusinessSystem.Id == tableFilterDTO.AdditionalFilterIdLong).OrderByDescending(x => x.Id), // FT: With Id because null values of dates
                     false
                 );
 
@@ -1648,8 +1722,14 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
         {
             await _context.WithTransactionAsync(async () =>
             {
-                if (await EntityFrameworkQueryableExtensions.AnyAsync<Transaction>(_context.DbSet<Transaction>(), x => x.BusinessSystem.Id == (long)transactionDTO.BusinessSystemId && x.Code == transactionDTO.Code))
+                if (await _context.DbSet<Transaction>()
+                    .AnyAsync(x => 
+                        x.BusinessSystemUpdatePointsScheduledTask.BusinessSystem.Id == transactionDTO.BusinessSystemUpdatePointsScheduledTaskId.Value && 
+                        x.Code == transactionDTO.Code)
+                    )
+                {
                     throw new BusinessException($"Transakcija '{transactionDTO.Code}' već postoji u sistemu.");
+                }
             });
         }
 

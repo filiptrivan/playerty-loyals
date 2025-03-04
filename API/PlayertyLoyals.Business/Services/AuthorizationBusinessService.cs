@@ -60,7 +60,8 @@ namespace PlayertyLoyals.Business.Services
 
                 if (
                     userExtendedDTO.IsDisabled != userExtended.IsDisabled ||
-                    userExtendedDTO.HasLoggedInWithExternalProvider != userExtended.HasLoggedInWithExternalProvider
+                    userExtendedDTO.HasLoggedInWithExternalProvider != userExtended.HasLoggedInWithExternalProvider ||
+                    userExtendedDTO.AccessedTheSystem != userExtended.AccessedTheSystem
                 )
                 {
                     throw new UnauthorizedException();

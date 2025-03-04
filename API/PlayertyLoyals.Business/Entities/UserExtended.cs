@@ -27,6 +27,8 @@ namespace PlayertyLoyals.Business.Entities
 
         public DateTime? BirthDate { get; set; }
 
+        //public bool? AccessedTheSystem { get; set; }
+
         /// <summary>
         /// [SET NULL] https://www.learnentityframeworkcore.com/conventions/one-to-many-relationship
         /// </summary>

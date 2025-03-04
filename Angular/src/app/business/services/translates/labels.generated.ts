@@ -328,6 +328,8 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('BusinessSystemTierDTOList');
             case 'businessSystemTierDiscountProductGroupDTOList':
                 return this.translocoService.translate('BusinessSystemTierDiscountProductGroupDTOList');
+            case 'businessSystemUpdatePointsScheduledTask':
+                return this.translocoService.translate('BusinessSystemUpdatePointsScheduledTask');
             case 'transactionDTO':
                 return this.translocoService.translate('TransactionDTO');
             case 'hasLoggedInWithExternalProvider':

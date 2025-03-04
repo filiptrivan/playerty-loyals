@@ -50,7 +50,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
             return await _context.WithTransactionAsync(async () =>
             {
                 AuthResultDTO authResultDTO = await _securityBusinessService.Register(request);
-                await _loyalsBusinessService.AddPartnerUserAfterAuthResult(authResultDTO);
+                await _loyalsBusinessService.OnAfterRegister(authResultDTO);
                 return authResultDTO;
             });
         }
@@ -63,7 +63,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         public override async Task<AuthResultDTO> Login(VerificationTokenRequestDTO request)
         {
             AuthResultDTO authResultDTO = _securityBusinessService.Login(request);
-            await _loyalsBusinessService.AddPartnerUserAfterAuthResult(authResultDTO);
+            await _loyalsBusinessService.OnAfterLogin(authResultDTO);
             return authResultDTO;
         }
 
@@ -77,7 +77,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
             return await _context.WithTransactionAsync(async () =>
             {
                 AuthResultDTO authResultDTO = await _securityBusinessService.LoginExternal(externalProviderDTO, SettingsProvider.Current.GoogleClientId);
-                await _loyalsBusinessService.AddPartnerUserAfterAuthResult(authResultDTO);
+                await _loyalsBusinessService.OnAfterLoginExternal(authResultDTO);
                 return authResultDTO;
             });
         }

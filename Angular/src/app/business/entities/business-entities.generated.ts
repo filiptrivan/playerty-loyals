@@ -2020,8 +2020,8 @@ export class Transaction extends BaseEntity
 	points?: number;
 	partnerUserDisplayName?: string;
 	partnerUserId?: number;
-	businessSystemDisplayName?: string;
-	businessSystemId?: number;
+	businessSystemUpdatePointsScheduledTaskDisplayName?: string;
+	businessSystemUpdatePointsScheduledTaskId?: number;
 	version?: number;
 	id?: number;
 	createdAt?: Date;
@@ -2039,8 +2039,8 @@ export class Transaction extends BaseEntity
 		points,
 		partnerUserDisplayName,
 		partnerUserId,
-		businessSystemDisplayName,
-		businessSystemId,
+		businessSystemUpdatePointsScheduledTaskDisplayName,
+		businessSystemUpdatePointsScheduledTaskId,
 		version,
 		id,
 		createdAt,
@@ -2056,8 +2056,8 @@ export class Transaction extends BaseEntity
 		points?: number;
 		partnerUserDisplayName?: string;
 		partnerUserId?: number;
-		businessSystemDisplayName?: string;
-		businessSystemId?: number;
+		businessSystemUpdatePointsScheduledTaskDisplayName?: string;
+		businessSystemUpdatePointsScheduledTaskId?: number;
 		version?: number;
 		id?: number;
 		createdAt?: Date;
@@ -2076,8 +2076,8 @@ export class Transaction extends BaseEntity
 		this.points = points;
 		this.partnerUserDisplayName = partnerUserDisplayName;
 		this.partnerUserId = partnerUserId;
-		this.businessSystemDisplayName = businessSystemDisplayName;
-		this.businessSystemId = businessSystemId;
+		this.businessSystemUpdatePointsScheduledTaskDisplayName = businessSystemUpdatePointsScheduledTaskDisplayName;
+		this.businessSystemUpdatePointsScheduledTaskId = businessSystemUpdatePointsScheduledTaskId;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;

@@ -26,10 +26,10 @@ export class ExcelUpdatePointsFooterComponent implements OnInit {
     @Input() businessSystemFormGroup: SpiderFormGroup<BusinessSystem>;
     @Input() isAuthorizedForSave: boolean = false;
 
-    buttonExcelManualUpdatePointsForWings: MenuItem = {label: 'Wings', icon:'pi pi-history'};
-    dropdownButtonItems: MenuItem[] = [
-        this.buttonExcelManualUpdatePointsForWings
-    ];
+    // buttonExcelManualUpdatePointsForWings: MenuItem = {label: 'Wings', icon:'pi pi-history'};
+    // dropdownButtonItems: MenuItem[] = [
+    //     this.buttonExcelManualUpdatePointsForWings
+    // ];
 
     constructor(
         private baseFormService: BaseFormService,
@@ -40,7 +40,7 @@ export class ExcelUpdatePointsFooterComponent implements OnInit {
     }
 
     ngOnInit(){
-        this.buttonExcelManualUpdatePointsForWings.command = this.excelManualUpdatePointsForWings;
+        // this.buttonExcelManualUpdatePointsForWings.command = this.excelManualUpdatePointsForWings;
     }
 
     excelManualUpdatePoints = () => {

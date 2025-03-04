@@ -51,7 +51,7 @@ namespace PlayertyLoyals.Business.Entities
         public virtual PartnerUser PartnerUser {  get; set; }
 
         [ManyToOneRequired]
-        [WithMany(nameof(BusinessSystem.Transactions))]
-        public virtual BusinessSystem BusinessSystem { get; set; }
+        [WithMany(nameof(BusinessSystemUpdatePointsScheduledTask.Transactions))]
+        public virtual BusinessSystemUpdatePointsScheduledTask BusinessSystemUpdatePointsScheduledTask { get; set; }
     }
 }

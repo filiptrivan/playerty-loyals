@@ -18,6 +18,7 @@ export class UserDetailsComponent extends BaseFormCopy implements OnInit {
 
     showIsDisabledControl: boolean = false;
     showHasLoggedInWithExternalProvider: boolean = false;
+    // showAccessedTheSystem: boolean = false;
     
     isAuthorizedForSave: boolean = false;
 
@@ -46,6 +47,7 @@ export class UserDetailsComponent extends BaseFormCopy implements OnInit {
                     const IsDisabledAndExternalLoggedInControls = this.showIsDisabledAndExternalLoggedInControlsForPermissions(currentUserPermissionCodes);
                     this.showIsDisabledControl = IsDisabledAndExternalLoggedInControls;
                     this.showHasLoggedInWithExternalProvider = IsDisabledAndExternalLoggedInControls;
+                    // this.showAccessedTheSystem = IsDisabledAndExternalLoggedInControls;
                     return this.isCurrentUserPage(currentUser.id);
                 }
 
@@ -67,6 +69,7 @@ export class UserDetailsComponent extends BaseFormCopy implements OnInit {
         this.isAuthorizedForSave = event.isAuthorizedForSave;
 
         this.userExtendedFormGroup.controls.hasLoggedInWithExternalProvider.disable();
+        // this.userExtendedFormGroup.controls.accessedTheSystem.disable();
     }
 
     override onBeforeSave = (): void => {

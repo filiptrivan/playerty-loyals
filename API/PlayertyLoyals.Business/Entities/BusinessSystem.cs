@@ -65,7 +65,5 @@ namespace PlayertyLoyals.Business.Entities
         [UIOrderedOneToMany]
         [TranslateSingularSrLatnRS("Grupe proizvoda za popust")]
         public virtual List<DiscountProductGroup> DiscountProductGroups { get; } = new();
-
-        public virtual List<Transaction> Transactions { get; } = new();
     }
 }

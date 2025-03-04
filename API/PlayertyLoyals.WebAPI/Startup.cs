@@ -34,14 +34,14 @@ public class Startup
     {
         services.SpiderConfigureServices<PlayertyApplicationDbContext>();
 
-        services.AddQuartz();
+        //services.AddQuartz();
 
-        services.AddQuartzHostedService(options =>
-        {
-            options.WaitForJobsToComplete = true; // FT: If the application is turning off while the job is running, it will not turn off till the job is done.
-        });
+        //services.AddQuartzHostedService(options =>
+        //{
+        //    options.WaitForJobsToComplete = true; // FT: If the application is turning off while the job is running, it will not turn off till the job is done.
+        //});
 
-        services.AddHostedService<UpdatePointsHostedService>();
+        //services.AddHostedService<UpdatePointsHostedService>(); // TBD
     }
 
     public void ConfigureContainer(IServiceContainer container)

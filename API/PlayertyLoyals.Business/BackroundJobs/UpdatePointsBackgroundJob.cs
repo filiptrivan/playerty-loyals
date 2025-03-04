@@ -79,7 +79,7 @@ namespace PlayertyLoyals.Business.BackroundJobs
                     // FT: when we make an agreement with the partners that they update the categories, we will just send them an email, the update of your points failed, due to mismatched categories, please harmonize the categories and stop the execution manually.
                     // await _loyalsBusinessService.SyncDiscountCategories(); // FT: You don't need to sync here, we will just use passed name as category
 
-                    TransactionsProcessingResult transactionsProcessingResult = await _loyalsBusinessService.ProcessTransactionsAndReturnResult(businessSystem, externalTransactionDTOList);
+                    //TransactionsProcessingResult transactionsProcessingResult = await _loyalsBusinessService.ProcessTransactionsAndReturnResult(businessSystem, externalTransactionDTOList);
 
                     BusinessSystemUpdatePointsScheduledTask businessSystemUpdatePointsScheduledTaskForSave = new BusinessSystemUpdatePointsScheduledTask
                     {

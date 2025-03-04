@@ -25,5 +25,7 @@ namespace PlayertyLoyals.Business.Entities
         [ManyToOneRequired]
         [WithMany(nameof(BusinessSystem.BusinessSystemUpdatePointsScheduledTasks))]
         public virtual BusinessSystem BusinessSystem { get; set; }
+
+        public virtual List<Transaction> Transactions { get; } = new();
     }
 }

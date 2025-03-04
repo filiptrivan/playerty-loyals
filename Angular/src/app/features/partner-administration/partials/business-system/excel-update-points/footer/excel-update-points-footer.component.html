@@ -1,3 +1,4 @@
 <ng-container *transloco="let t">
-    <spider-button [disabled]="!isAuthorizedForSave" (onClick)="excelManualUpdatePoints()" [dropdownItems]="dropdownButtonItems" [label]="t('UpdatePoints')" icon="pi pi-history"></spider-button>
+    <!-- <spider-button [disabled]="!isAuthorizedForSave" (onClick)="excelManualUpdatePoints()" [dropdownItems]="dropdownButtonItems" [label]="t('UpdatePoints')" icon="pi pi-history"></spider-button> -->
+    <spider-button [disabled]="!isAuthorizedForSave" (onClick)="excelManualUpdatePointsForWings()" [label]="t('UpdatePoints')" icon="pi pi-history"></spider-button>
 </ng-container>
