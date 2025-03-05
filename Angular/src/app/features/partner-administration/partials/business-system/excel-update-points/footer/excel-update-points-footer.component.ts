@@ -1,4 +1,3 @@
-import { ExternalBusinessAppCodes } from './../../../../../../business/enums/external-business-app-codes';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
 import { ButtonModule } from "primeng/button";
@@ -6,7 +5,6 @@ import { BaseFormService, isNullOrEmpty, SpiderControlsModule, SpiderFormGroup, 
 import { BusinessSystem, ExcelUpdatePoints } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslocoService, TranslocoDirective } from '@jsverse/transloco';
-import { MenuItem } from 'primeng/api/menuitem';
 
 @Component({
     selector: 'excel-update-points-footer',
@@ -26,11 +24,6 @@ export class ExcelUpdatePointsFooterComponent implements OnInit {
     @Input() businessSystemFormGroup: SpiderFormGroup<BusinessSystem>;
     @Input() isAuthorizedForSave: boolean = false;
 
-    // buttonExcelManualUpdatePointsForWings: MenuItem = {label: 'Wings', icon:'pi pi-history'};
-    // dropdownButtonItems: MenuItem[] = [
-    //     this.buttonExcelManualUpdatePointsForWings
-    // ];
-
     constructor(
         private baseFormService: BaseFormService,
         private apiService: ApiService,
@@ -40,20 +33,6 @@ export class ExcelUpdatePointsFooterComponent implements OnInit {
     }
 
     ngOnInit(){
-        // this.buttonExcelManualUpdatePointsForWings.command = this.excelManualUpdatePointsForWings;
-    }
-
-    excelManualUpdatePoints = () => {
-        if (this.excelUpdatePointsFormGroup.controls.excels.getRawValue() == null) {
-            this.handleExcelNotSelectedError();
-            return;
-        }
-        
-        const excelUpdatePoints = this.getExcelUpdatePoints();
-
-        // this.apiService.excelUpdatePoints(excelUpdatePoints).subscribe(() => {
-        //     this.messageService.successMessage(this.translocoService.translate('SuccessfulAction'));
-        // });
     }
 
     excelManualUpdatePointsForWings = () => {

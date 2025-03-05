@@ -97,7 +97,7 @@
   "Equals": "Equals",
   "MoreThan": "Missing value for 'MoreThan'",
   "LessThan": "Less than",
-  "AreYouSureToDelete": "Are you sure?",
+  "AreYouSure": "Are you sure?",
   "SuccessfullyDeletedMessage": "Successful deletion.",
   "Yes": "Yes",
   "No": "No",

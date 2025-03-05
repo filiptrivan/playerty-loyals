@@ -21,6 +21,9 @@ using PlayertyLoyals.Business.DTO.Helpers;
 using Microsoft.AspNetCore.Http;
 using OfficeOpenXml;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using System;
+using Serilog.Events;
 
 namespace PlayertyLoyals.Business.Services
 {
@@ -34,7 +37,6 @@ namespace PlayertyLoyals.Business.Services
         private readonly EmailingService _emailingService;
         private readonly BlobContainerClient _blobContainerClient;
         private readonly WingsApiService _wingsApiService;
-        private readonly UpdatePointsScheduler _updatePointsScheduler;
 
         public LoyalsBusinessService(
             IApplicationDbContext context,
@@ -45,8 +47,7 @@ namespace PlayertyLoyals.Business.Services
             PartnerUserAuthenticationService partnerUserAuthenticationService,
             EmailingService emailingService,
             BlobContainerClient blobContainerClient,
-            WingsApiService wingsApiService,
-            UpdatePointsScheduler updatePointsScheduler
+            WingsApiService wingsApiService
         )
             : base(context, excelService, authorizationService, blobContainerClient)
         {
@@ -58,7 +59,6 @@ namespace PlayertyLoyals.Business.Services
             _emailingService = emailingService;
             _blobContainerClient = blobContainerClient;
             _wingsApiService = wingsApiService;
-            _updatePointsScheduler = updatePointsScheduler;
         }
 
         #region User
@@ -77,7 +77,7 @@ namespace PlayertyLoyals.Business.Services
 
                 if (userExtendedSaveBodyDTO.UserExtendedDTO.Email != userExtended.Email ||
                     userExtendedSaveBodyDTO.UserExtendedDTO.HasLoggedInWithExternalProvider != userExtended.HasLoggedInWithExternalProvider
-                    //userExtendedSaveBodyDTO.UserExtendedDTO.AccessedTheSystem != userExtended.AccessedTheSystem
+                //userExtendedSaveBodyDTO.UserExtendedDTO.AccessedTheSystem != userExtended.AccessedTheSystem
                 )
                 {
                     throw new HackerException("You can't change Email, HasLoggedInWithExternalProvider nor AccessedTheSystem from the main UI form.");
@@ -89,7 +89,6 @@ namespace PlayertyLoyals.Business.Services
         {
             await _context.WithTransactionAsync(async () =>
             {
-                //await SetAccessedTheSystemToTrue(authResultDTO);
                 await AddPartnerUserAfterAuthResult(authResultDTO);
             });
         }
@@ -98,7 +97,6 @@ namespace PlayertyLoyals.Business.Services
         {
             await _context.WithTransactionAsync(async () =>
             {
-                //await SetAccessedTheSystemToTrue(authResultDTO);
                 await AddPartnerUserAfterAuthResult(authResultDTO);
             });
         }
@@ -107,18 +105,9 @@ namespace PlayertyLoyals.Business.Services
         {
             await _context.WithTransactionAsync(async () =>
             {
-                //await SetAccessedTheSystemToTrue(authResultDTO);
                 await AddPartnerUserAfterAuthResult(authResultDTO);
             });
         }
-
-        //public async Task SetAccessedTheSystemToTrue(AuthResultDTO authResultDTO)
-        //{
-        //    await _context.WithTransactionAsync(async () =>
-        //    {
-        //        await _context.DbSet<UserExtended>().Where(x => x.Id == authResultDTO.UserId && x.AccessedTheSystem != true).ExecuteUpdateAsync(x => x.SetProperty(x => x.AccessedTheSystem, true));
-        //    });
-        //}
 
         #endregion
 
@@ -300,9 +289,13 @@ namespace PlayertyLoyals.Business.Services
             {
                 int points = partnerUser.Points;
                 Tier tier = await GetTierForThePoints(points);
-                partnerUser.Tier = tier;
 
-                await _context.SaveChangesAsync();
+                if (tier == null)
+                {
+                    var _ = partnerUser.Tier; // HACK
+                }
+
+                partnerUser.Tier = tier;
             });
         }
 
@@ -318,22 +311,18 @@ namespace PlayertyLoyals.Business.Services
                     )
                     .SingleOrDefaultAsync();
 
-
                 if (tier == null)
-                    return await GetTheGreatestTier(); // FT: If there is no any tier, we will return null
-                else
-                    return tier;
-            });
-        }
-
-        private async Task<Tier> GetTheGreatestTier()
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                return await _context.DbSet<Tier>()
-                    .Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode())
+                {
+                    tier = await _context.DbSet<Tier>()
+                    .Where(x =>
+                        points >= x.ValidTo &&
+                        x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()
+                    )
                     .OrderByDescending(x => x.ValidTo)
                     .FirstOrDefaultAsync();
+                }
+
+                return tier;
             });
         }
 
@@ -620,7 +609,10 @@ namespace PlayertyLoyals.Business.Services
                 await UpdateBirthDateAndGenderForUser(partnerUserSaveBodyDTO.PartnerUserDTO.UserId.Value, partnerUserSaveBodyDTO.BirthDate, partnerUserSaveBodyDTO.GenderId);
 
                 if (pointsBeforeSave != savedPartnerUser.Points)
+                {
                     await UpdatePartnerUserTier(savedPartnerUser);
+                    await _context.SaveChangesAsync();
+                }
 
                 return new PartnerUserSaveBodyDTO
                 {
@@ -1105,158 +1097,6 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task<int> AutomaticUpdatePoints(AutomaticUpdatePointsDTO automaticUpdatePointsDTO)
-        {
-            DateTimeOffset? scheduledJobResult = null;
-
-            DateTime now = DateTime.Now;
-
-            ValidateAutomaticUpdatePoints(automaticUpdatePointsDTO, now);
-
-            try
-            {
-                return await _context.WithTransactionAsync(async () =>
-                {
-                    await _authorizationService.AuthorizeBusinessSystemUpdateAndThrow(null);
-
-                    BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(automaticUpdatePointsDTO.BusinessSystemId.Value, automaticUpdatePointsDTO.BusinessSystemVersion);
-
-                    if (businessSystem.GetTransactionsEndpoint == null)
-                        throw new BusinessException("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
-
-                    businessSystem.UpdatePointsInterval = automaticUpdatePointsDTO.UpdatePointsInterval;
-                    businessSystem.UpdatePointsStartDate = automaticUpdatePointsDTO.UpdatePointsStartDate;
-                    businessSystem.UpdatePointsScheduledTaskIsPaused = false;
-
-                    await _context.SaveChangesAsync();
-
-                    scheduledJobResult = await _updatePointsScheduler.ScheduleJob(
-                        automaticUpdatePointsDTO.BusinessSystemId.Value,
-                        automaticUpdatePointsDTO.UpdatePointsInterval.Value,
-                        automaticUpdatePointsDTO.UpdatePointsStartDate.Value,
-                        now
-                    );
-
-                    return businessSystem.Version;
-                });
-            }
-            catch (Exception)
-            {
-                if (scheduledJobResult != null)
-                    await _updatePointsScheduler.DeleteJob(automaticUpdatePointsDTO.BusinessSystemId.Value);
-
-                throw;
-            }
-        }
-
-        public static void ValidateAutomaticUpdatePoints(AutomaticUpdatePointsDTO automaticUpdatePointsDTO, DateTime now)
-        {
-            AutomaticUpdatePointsDTOValidationRules validationRules = new();
-            validationRules.ValidateAndThrow(automaticUpdatePointsDTO);
-
-            // FT: We redundantly check both here and inside the ScheduleJob method, in the method due to the programming principle, and here so that they do not enter the transaction and block other threads from executing
-            if (automaticUpdatePointsDTO.UpdatePointsStartDate != null && automaticUpdatePointsDTO.UpdatePointsStartDate.Value <= now)
-                throw new BusinessException("Vreme početka ažuriranja poena mora biti veće od sadašnjeg trenutka.");
-        }
-
-        public async Task<int> ChangeScheduledTaskUpdatePointsStatus(long businessSystemId, int businessSystemVersion)
-        {
-            bool scheduledJobContinued = false;
-
-            try
-            {
-                return await _context.WithTransactionAsync(async () =>
-                {
-                    await _authorizationService.AuthorizeBusinessSystemUpdateAndThrow(null);
-
-                    BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(businessSystemId, businessSystemVersion);
-
-                    ValidateExistingBusinssSystemForChangeScheduledTaskUpdatePointsStatusAndThrow(businessSystem);
-
-                    if (businessSystem.UpdatePointsScheduledTaskIsPaused.Value)
-                    {
-                        BusinessSystemUpdatePointsScheduledTask lastBusinessSystemUpdatePointsScheduledTask = businessSystem.BusinessSystemUpdatePointsScheduledTasks
-                            .Where(x => x.IsManual == false)
-                            .OrderByDescending(x => x.TransactionsTo)
-                            .FirstOrDefault();
-
-                        scheduledJobContinued = await _updatePointsScheduler.ContinueJob(
-                            businessSystem.Id,
-                            businessSystem.UpdatePointsInterval.Value,
-                            businessSystem.UpdatePointsStartDate.Value,
-                            lastBusinessSystemUpdatePointsScheduledTask?.TransactionsTo
-                        );
-                    }
-                    else
-                    {
-                        await _updatePointsScheduler.DeleteJob(businessSystemId);
-                    }
-
-                    businessSystem.UpdatePointsScheduledTaskIsPaused = !businessSystem.UpdatePointsScheduledTaskIsPaused.Value;
-
-                    await _context.SaveChangesAsync();
-
-                    return businessSystem.Version;
-                });
-            }
-            catch (Exception)
-            {
-                if (scheduledJobContinued == true)
-                    await _updatePointsScheduler.DeleteJob(businessSystemId);
-
-                throw;
-            }
-        }
-
-        private static void ValidateExistingBusinssSystemForChangeScheduledTaskUpdatePointsStatusAndThrow(BusinessSystem businessSystem)
-        {
-            List<string> exceptions = new();
-
-            if (businessSystem.GetTransactionsEndpoint == null)
-                exceptions.Add("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
-
-            if (businessSystem.UpdatePointsInterval == null)
-                exceptions.Add("Morate da popunite i sačuvate polje 'Interval ažuriranja', kako biste pokrenuli ažuriranje poena.");
-
-            if (businessSystem.UpdatePointsStartDate == null)
-                exceptions.Add("Morate da popunite i sačuvate polje 'Početak ažuriranja', kako biste pokrenuli ažuriranje poena.");
-
-            if (businessSystem.UpdatePointsScheduledTaskIsPaused == null)
-                exceptions.Add("Pre promene statusa, morate da pokrenete automatsko ažuriranje.");
-
-            if (exceptions.Count > 0)
-                throw new BusinessException(string.Join("\n", exceptions));
-        }
-
-        /// <summary>
-        /// Pass fromDate only if it is the first time
-        /// </summary>
-        public async Task ManualUpdatePoints(ManualUpdatePointsDTO manualUpdatePointsDTO)
-        {
-            ManualUpdatePointsDTOValidationRules validationRules = new();
-            validationRules.ValidateAndThrow(manualUpdatePointsDTO);
-
-            DateTime now = DateTime.Now;
-
-            if (manualUpdatePointsDTO.ToDate >= now)
-                throw new BusinessException("Datum do kog želite da ažurirate poene ne sme biti veći od sadašnjeg trenutka.");
-
-            if (manualUpdatePointsDTO.ToDate <= manualUpdatePointsDTO.FromDate)
-                throw new BusinessException($"Datum do ne sme biti veći od datuma od kog želite da ažurirate poene.");
-
-            await _context.WithTransactionAsync(async () =>
-            {
-                await _authorizationService.AuthorizeBusinessSystemUpdateAndThrow(null);
-
-                BusinessSystem businessSystem = await GetInstanceAsync<BusinessSystem, long>(manualUpdatePointsDTO.BusinessSystemId.Value, manualUpdatePointsDTO.BusinessSystemVersion);
-
-                if (businessSystem.GetTransactionsEndpoint == null)
-                    throw new BusinessException("Morate da popunite i sačuvate polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
-
-                await _updatePointsScheduler.ScheduleJobManually(manualUpdatePointsDTO.BusinessSystemId.Value, manualUpdatePointsDTO.FromDate.Value, manualUpdatePointsDTO.ToDate.Value);
-            });
-        }
-
         public async Task<InfoAndWarningResultDTO> ExcelUpdatePointsForWings(ExcelUpdatePointsDTO excelUpdatePointsDTO)
         {
             new ExcelUpdatePointsDTOValidationRules().ValidateAndThrow(excelUpdatePointsDTO);
@@ -1271,62 +1111,6 @@ namespace PlayertyLoyals.Business.Services
 
                 return externalTransactionsExcelParsingResultDTO.WarningAndInfoResultDTO;
             });
-        }
-
-        public async Task ExcelUpdatePoints(ExcelUpdatePointsDTO excelUpdatePointsDTO)
-        {
-            new ExcelUpdatePointsDTOValidationRules().ValidateAndThrow(excelUpdatePointsDTO);
-
-            await _context.WithTransactionAsync(async () =>
-            {
-                await _authorizationService.AuthorizeBusinessSystemUpdateAndThrow(null);
-
-                List<ExternalTransactionDTO> externalTransactionDTOList = GetExternalTransactionsFromExcels(excelUpdatePointsDTO.Excels);
-
-                await ProccessTransactions(excelUpdatePointsDTO.BusinessSystemId.Value, externalTransactionDTOList);
-            });
-        }
-
-        private List<ExternalTransactionDTO> GetExternalTransactionsFromExcels(List<IFormFile> excels)
-        {
-            if (excels == null || excels.Count == 0)
-                throw new ArgumentException("You need to provide at least one excel file.");
-
-            List<ExternalTransactionDTO> transactions = new();
-
-            foreach (IFormFile excel in excels)
-            {
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    excel.CopyTo(stream);
-                    stream.Position = 0;
-
-                    using (ExcelPackage package = new ExcelPackage(stream))
-                    {
-                        ExcelWorksheet worksheet = package.Workbook.Worksheets.FirstOrDefault();
-
-                        if (worksheet == null)
-                            throw new InvalidOperationException("The Excel file does not contain any worksheets.");
-
-                        int row = 2;
-
-                        while (true)
-                        {
-                            string idCell = worksheet.Cells[row, 1].Text;
-                            if (string.IsNullOrWhiteSpace(idCell)) break;
-
-                            transactions.Add(new ExternalTransactionDTO
-                            {
-                                // TODO FT
-                            });
-
-                            row++;
-                        }
-                    }
-                }
-            }
-
-            return transactions;
         }
 
         private ExternalTransactionsExcelParsingResultDTO GetExternalTransactionsFromExcelsForWings(List<IFormFile> excels)
@@ -1364,22 +1148,22 @@ namespace PlayertyLoyals.Business.Services
                             string transactionId = worksheet.Cells[row, 4].Text;
                             if (string.IsNullOrWhiteSpace(transactionId))
                             {
-                                infos.Add($"Excel {excel.FileName} sa transakcijama je obrađen do {row}. reda.");
+                                infos.Add($"Excel '{excel.FileName}' je obrađen do {row}. reda.");
                                 break;
                             }
 
                             string priceText = worksheet.Cells[row, 6].Text;
                             if (decimal.TryParse(priceText, out decimal price) == false)
-                                rowExceptions.Add($"Polje F{row}, predviđeno za cenu je prazno.");
+                                rowExceptions.Add($"Greška: Prazno polje 'F{row}'.");
 
 
                             string boughtAtText = worksheet.Cells[row, 7].Text;
                             if (DateTime.TryParse(boughtAtText, out DateTime boughtAt) == false)
-                                rowExceptions.Add($"Polje G{row}, predviđeno za vreme kupovine je prazno.");
+                                rowExceptions.Add($"Greška: Prazno polje 'G{row}'.");
 
                             string userEmail = worksheet.Cells[row, 10].Text;
                             if (string.IsNullOrEmpty(userEmail))
-                                rowWarnings.Add($"Polje J{row}, predviđeno za email kupca je prazno, ta transakcija je preskočena prilikom obračuna.");
+                                rowWarnings.Add($"Upozorenje: Prazno polje J{row}, transakcija preskočena."); // It's not exception because user can buy, but don't want to give email address for loyalty
 
                             if (rowExceptions.Count == 0 && rowWarnings.Count == 0)
                             {
@@ -1410,6 +1194,7 @@ namespace PlayertyLoyals.Business.Services
                 ExternalTransactionDTOList = externalTransactions,
                 WarningAndInfoResultDTO = new InfoAndWarningResultDTO
                 {
+                    // FT: These infos are for excel parsing, more detailed stats is sent to the email
                     Info = $"Obrađenih transakcija: {processedTransactionsCount}.\n\n{string.Join("\n", infos)}",
                     Warning = string.Join("\n", warnings),
                 }
@@ -1434,65 +1219,11 @@ namespace PlayertyLoyals.Business.Services
                 await _context.SaveChangesAsync();
 
                 TransactionsProcessingResult transactionsProcessingResult = await ProcessTransactionsAndReturnResult(businessSystemUpdatePointsScheduledTaskForSave, externalTransactionDTOList);
-
                 await NotifyPartnerAboutSuccessfullyProcessedTransactions(businessSystem.Partner, transactionsProcessingResult, null, null);
             });
         }
 
-        public async Task<PeriodInWhichTransactionsShouldBeProcessed> GetPeriodInWhichTransactionsShouldBeProcessed(BusinessSystem businessSystem, DateTime? manualDateFrom, DateTime? manualDateTo, DateTime now)
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                int? interval = businessSystem.UpdatePointsInterval;
-
-                DateTime? lastShouldStartedAt = await _context.DbSet<BusinessSystemUpdatePointsScheduledTask>()
-                    .Where(x => x.BusinessSystem.Id == businessSystem.Id && x.IsManual != true)
-                    .OrderByDescending(x => x.TransactionsTo)
-                    .Select(x => (DateTime?)x.TransactionsTo)
-                    .FirstOrDefaultAsync();
-
-                DateTime? lastWithManualsShouldStartedAt = await _context.DbSet<BusinessSystemUpdatePointsScheduledTask>()
-                    .Where(x => x.BusinessSystem.Id == businessSystem.Id)
-                    .OrderByDescending(x => x.TransactionsTo)
-                    .Select(x => (DateTime?)x.TransactionsTo)
-                    .FirstOrDefaultAsync();
-
-                DateTime? startDateTime = businessSystem.UpdatePointsStartDate; // FT: When the startDateTime == null, the user is manually starting the update
-
-                DateTime dateTo;
-
-                if (manualDateFrom == null && manualDateTo == null) // FT: If it's not manual update
-                    dateTo = UpdatePointsBackgroundJobHelpers.GetShouldStartedAtForSave(interval.Value, startDateTime.Value, lastShouldStartedAt, now);
-                else
-                    dateTo = manualDateTo.Value; // FT: When the user has not startDateTime, he is only manually starting the update
-
-                DateTime dateFrom;
-
-                if (lastWithManualsShouldStartedAt == null) // FT: If lastShouldStartedAt == null that means that this is the first update ever for this businessSystem
-                {
-                    if (manualDateFrom == null && manualDateTo == null)
-                        //dateFrom = shouldStartedAtForSave.AddHours(-interval.Value);
-                        dateFrom = dateTo.AddMinutes(-interval.Value);
-                    else // FT: If the first update ever is manual
-                        dateFrom = manualDateFrom.Value;
-                }
-                else
-                {
-                    if (manualDateFrom == null && manualDateTo == null)
-                        dateFrom = lastWithManualsShouldStartedAt.Value;
-                    else // FT: manual
-                        dateFrom = manualDateFrom.Value;
-                }
-
-                return new PeriodInWhichTransactionsShouldBeProcessed
-                {
-                    DateFrom = dateFrom,
-                    DateTo = dateTo,
-                };
-            });
-        }
-
-        public async Task NotifyPartnerAboutSuccessfullyProcessedTransactions(
+        private async Task NotifyPartnerAboutSuccessfullyProcessedTransactions(
             Partner partner, TransactionsProcessingResult transactionsProcessingResult, DateTime? processedTransactionsFrom, DateTime? processedTransactionsTo
         )
         {
@@ -1501,44 +1232,42 @@ namespace PlayertyLoyals.Business.Services
             await _emailingService.SendEmailAsync(partner.Email, "Uspešno izvršeno ažuriranje poena", successMessage);
         }
 
-        public static string GetSuccessMessageForProcessedTransactions(
+        private static string GetSuccessMessageForProcessedTransactions(
             TransactionsProcessingResult transactionsProcessingResult, DateTime? processedTransactionsFrom, DateTime? processedTransactionsTo
         )
         {
             return $$"""
-Interval u kom su obrađene transakcije: {{(processedTransactionsFrom?.ToString("dd.MM.yyyy. HH:mm") ?? "?")}} - {{(processedTransactionsTo?.ToString("dd.MM.yyyy. HH:mm") ?? "?")}}. <br/>
-<br/>
-Ukupan broj obrađenih transakcija: {{transactionsProcessingResult.TotalProcessedTransactionsCount}}. <br/>
-<br/>
-Uspešno obrađene transakcije ({{transactionsProcessingResult.TransactionWhichUpdateSucceededList.Count}}): <br/>
-    {{string.Join(",<br/>    ", transactionsProcessingResult.TransactionWhichUpdateSucceededList)}}
-<br/>
-Neuspešno obrađene transakcije ({{transactionsProcessingResult.TransactionWhichUpdateFailedList.Count}}): <br/>
-    {{string.Join(",<br/>    ", transactionsProcessingResult.TransactionWhichUpdateFailedList)}}
-<br/>
-Već obrađene transakcije u prosleđenom periodu ({{transactionsProcessingResult.TransactionWhichWeAlreadyUpdatedForThisPeriodList.Count}}): <br/>
-    {{string.Join(",<br/>    ", transactionsProcessingResult.TransactionWhichWeAlreadyUpdatedForThisPeriodList)}}
-<br/>
-Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty program' sistemu ({{transactionsProcessingResult.PartnerUserWhichDoesNotExistList.Count}}): <br/>
-    {{string.Join(",<br/>    ", transactionsProcessingResult.PartnerUserWhichDoesNotExistList)}}
-<br/>
+Interval u kom su obrađene transakcije: {{(processedTransactionsFrom?.ToString("dd.MM.yyyy. HH:mm") ?? "?")}} - {{(processedTransactionsTo?.ToString("dd.MM.yyyy. HH:mm") ?? "?")}}. <br>
+<br>
+Ukupan broj obrađenih transakcija: {{transactionsProcessingResult.TotalProcessedTransactionsCount}}. <br>
+<br>
+Uspešno obrađene transakcije ({{transactionsProcessingResult.TransactionWhichUpdateSucceededList.Count}}): <br>
+{{string.Join("", transactionsProcessingResult.TransactionWhichUpdateSucceededList.Select(x => $"    {x}<br>"))}}
+<br>
+Neuspešno obrađene transakcije ({{transactionsProcessingResult.TransactionWhichUpdateFailedList.Count}}): <br>
+{{string.Join("", transactionsProcessingResult.TransactionWhichUpdateFailedList.Select(x => $"    {x}<br>"))}}
+<br>
+Već obrađene transakcije u prosleđenom periodu ({{transactionsProcessingResult.TransactionWhichWeAlreadyUpdatedForThisPeriodList.Count}}): <br>
+{{string.Join("", transactionsProcessingResult.TransactionWhichWeAlreadyUpdatedForThisPeriodList.Select(x => $"    {x}<br>"))}}
+<br>
+Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty program' sistemu ({{transactionsProcessingResult.PartnerUserWhichDoesNotExistList.Count}}): <br>
+{{string.Join("", transactionsProcessingResult.PartnerUserWhichDoesNotExistList.Select(x => $"    {x}<br>"))}}
+<br>
 """;
         }
 
-        public async Task<TransactionsProcessingResult> ProcessTransactionsAndReturnResult(
+        private async Task<TransactionsProcessingResult> ProcessTransactionsAndReturnResult(
             BusinessSystemUpdatePointsScheduledTask savedBusinessSystemUpdatePointsScheduledTask,
             List<ExternalTransactionDTO> externalTransactionDTOList
         )
         {
             List<string> partnerUserWhichDoesNotExistList = new();
-            List<string> transactionWhichUpdateFailedList = new();
             List<string> transactionWhichUpdateSucceededList = new();
             List<string> transactionWhichWeAlreadyUpdatedForThisPeriodList = new();
+            List<string> userEmailList = externalTransactionDTOList.Select(x => x.UserEmail).ToList();
 
             return await _context.WithTransactionAsync(async () =>
             {
-                List<string> userEmailList = externalTransactionDTOList.Select(x => x.UserEmail).ToList();
-
                 List<PartnerUser> partnerUserList = await _context.DbSet<PartnerUser>()
                     .Include(x => x.User)
                     .Where(x => x.Partner.Id == savedBusinessSystemUpdatePointsScheduledTask.BusinessSystem.Partner.Id && userEmailList.Contains(x.User.Email))
@@ -1546,8 +1275,8 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
 
                 foreach (ExternalTransactionDTO externalTransactionDTO in externalTransactionDTOList)
                 {
-                    if (await _context.DbSet<Transaction>().AnyAsync(x => 
-                        x.BusinessSystemUpdatePointsScheduledTask.BusinessSystem.Id == savedBusinessSystemUpdatePointsScheduledTask.BusinessSystem.Id && 
+                    if (await _context.DbSet<Transaction>().AnyAsync(x =>
+                        x.BusinessSystemUpdatePointsScheduledTask.BusinessSystem.Id == savedBusinessSystemUpdatePointsScheduledTask.BusinessSystem.Id &&
                         x.Code == externalTransactionDTO.Code)
                     )
                     {
@@ -1577,6 +1306,7 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
 
                     TransactionDTO transactionDTO = new TransactionDTO
                     {
+                        Code = externalTransactionDTO.Code,
                         ProductName = externalTransactionDTO.ProductName,
                         ProductImageUrl = externalTransactionDTO.ProductImageUrl,
                         ProductCategoryName = externalTransactionDTO.ProductCategoryName,
@@ -1588,26 +1318,16 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
                         BusinessSystemUpdatePointsScheduledTaskId = savedBusinessSystemUpdatePointsScheduledTask.Id,
                     };
 
-                    try
-                    {
-                        await UpdatePointsForThePartnerUser(partnerUser, pointsFromTransaction);
-                        await SaveTransaction(transactionDTO, false, false);
+                    await UpdatePointsForThePartnerUser(partnerUser, pointsFromTransaction);
+                    await SaveTransaction(transactionDTO, false, false);
+                    await _context.SaveChangesAsync();
 
-                        transactionWhichUpdateSucceededList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail})");
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ex is BusinessException)
-                            transactionWhichUpdateFailedList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail}): {ex.Message}");
-                        else
-                            transactionWhichUpdateFailedList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail})");
-                    }
+                    transactionWhichUpdateSucceededList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail})");
                 }
 
                 return new TransactionsProcessingResult
                 {
                     PartnerUserWhichDoesNotExistList = partnerUserWhichDoesNotExistList,
-                    TransactionWhichUpdateFailedList = transactionWhichUpdateFailedList,
                     TransactionWhichUpdateSucceededList = transactionWhichUpdateSucceededList,
                     TransactionWhichWeAlreadyUpdatedForThisPeriodList = transactionWhichWeAlreadyUpdatedForThisPeriodList,
                     TotalProcessedTransactionsCount = externalTransactionDTOList.Count,
@@ -1615,35 +1335,40 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
             });
         }
 
-        public async Task GoToTaskState(long taskId)
+        public async Task RevertToTaskState(long taskForRevertId)
         {
             await _context.WithTransactionAsync(async () =>
             {
-                BusinessSystemUpdatePointsScheduledTask taskForRevert = await GetInstanceAsync<BusinessSystemUpdatePointsScheduledTask, long>(taskId, null);
+                await _authorizationService.AuthorizeBusinessSystemUpdateAndThrow(null);
+
+                BusinessSystemUpdatePointsScheduledTask taskForRevert = await GetInstanceAsync<BusinessSystemUpdatePointsScheduledTask, long>(taskForRevertId, null);
 
                 IQueryable<BusinessSystemUpdatePointsScheduledTask> tasksQuery = _context.DbSet<BusinessSystemUpdatePointsScheduledTask>()
-                    .Where(x => x.CreatedAt >= taskForRevert.CreatedAt);
+                    .Include(x => x.Transactions)
+                    .ThenInclude(x => x.PartnerUser)
+                    .ThenInclude(x => x.Tier)
+                    .Where(x =>
+                        x.BusinessSystem.Id == taskForRevert.BusinessSystem.Id &&
+                        x.Id > taskForRevert.Id // FT: We don't want to delete current
+                    );
 
                 List<BusinessSystemUpdatePointsScheduledTask> tasks = await tasksQuery.ToListAsync();
 
                 foreach (BusinessSystemUpdatePointsScheduledTask task in tasks)
                 {
-                    //await DeleteUsersWhichDidNotEverAccessedTheSystem(task.Transactions.Select(x => x.PartnerUser).ToList());
-
-                    foreach (Transaction transaction in task.Transactions.ToList())
+                    foreach (Transaction transaction in task.Transactions)
                     {
                         transaction.PartnerUser.Points -= transaction.Points;
+                        await UpdatePartnerUserTier(transaction.PartnerUser);
                     }
                 }
 
-                await tasksQuery.ExecuteDeleteAsync();
+                List<long> taskIds = tasks.Select(x => x.Id).ToList();
+                await DeleteBusinessSystemUpdatePointsScheduledTaskList(taskIds, false);
+
+                await _context.SaveChangesAsync();
             });
         }
-
-        //private async Task DeleteUsersWhichDidNotEverAccessedTheSystem(List<PartnerUser> partnerUsers)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public async Task<TableResponseDTO<BusinessSystemUpdatePointsScheduledTaskDTO>> GetBusinessSystemUpdatePointsScheduledTaskTableDataForBusinessSystem(TableFilterDTO tableFilterDTO)
         {
@@ -1675,45 +1400,6 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
             });
         }
 
-        #region Background Job
-
-        public async Task NotifyPartnerAboutSuccessfullyProcessedTransactionsFromBackgroundJob(
-            Partner partner, TransactionsProcessingResult transactionsProcessingResult, DateTime? processedTransactionsFrom, DateTime? processedTransactionsTo
-        )
-        {
-            string successMessage = GetSuccessMessageForProcessedTransactions(transactionsProcessingResult, processedTransactionsFrom, processedTransactionsTo);
-
-            await _emailingService.SendEmailFromBackgroundJobAsync(partner.Email, "Uspešno izvršeno ažuriranje poena", successMessage);
-        }
-
-        /// <summary>
-        /// FT: Should only call this method from the background job
-        /// </summary>
-        public async Task NotifyPartnerAboutUnsuccessfullyProcessedTransactionsFromBackgroundJob(BusinessSystem businessSystem, Exception ex)
-        {
-            await _context.WithTransactionAsync(async () =>
-            {
-                if (businessSystem != null && ex is BusinessException)
-                {
-                    await _emailingService.SendEmailFromBackgroundJobAsync(
-                        businessSystem.Partner.Email,
-                        "Greška prilikom ažuriranja poena",
-                        $"Poslovni sistem: {businessSystem.Name}. {ex.Message}"
-                    );
-                }
-                else if (businessSystem != null)
-                {
-                    await _emailingService.SendEmailFromBackgroundJobAsync(
-                        businessSystem.Partner.Email,
-                        "Greška prilikom ažuriranja poena",
-                        $"Poslovni sistem: {businessSystem.Name}. Došlo je do greške prilikom ažuriranja poena. Molimo Vas da pokušate ponovo. Ako se problem ponovi, kontaktirajte podršku."
-                    );
-                }
-            });
-        }
-
-        #endregion
-
         #endregion
 
         #region Transaction
@@ -1723,8 +1409,8 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
             await _context.WithTransactionAsync(async () =>
             {
                 if (await _context.DbSet<Transaction>()
-                    .AnyAsync(x => 
-                        x.BusinessSystemUpdatePointsScheduledTask.BusinessSystem.Id == transactionDTO.BusinessSystemUpdatePointsScheduledTaskId.Value && 
+                    .AnyAsync(x =>
+                        x.BusinessSystemUpdatePointsScheduledTask.BusinessSystem.Id == transactionDTO.BusinessSystemUpdatePointsScheduledTaskId.Value &&
                         x.Code == transactionDTO.Code)
                     )
                 {

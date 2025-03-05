@@ -2540,17 +2540,15 @@ export class ValidatorServiceGenerated {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
             const min = 1;
             const max = 500;
             const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
-            const valid = notEmptyRule && stringLengthRule;
+            const valid = stringLengthRule;
 
-            return valid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+            return valid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
+
         control.validator = validator;
 
         return validator;
@@ -2598,17 +2596,15 @@ export class ValidatorServiceGenerated {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
             const min = 1;
             const max = 500;
             const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
 
-            const valid = notEmptyRule && stringLengthRule;
+            const valid = stringLengthRule;
 
-            return valid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
+            return valid ? null : { _ : this.translocoService.translate('Length', {min, max}) };
         };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
+
         control.validator = validator;
 
         return validator;

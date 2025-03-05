@@ -34,7 +34,6 @@ namespace PlayertyLoyals.WebAPI.DI
             registry.Register<PartnerUserAuthenticationService>();
             registry.Register<WingsApiService>();
             registry.Register<SyncService>();
-            registry.RegisterSingleton<UpdatePointsScheduler>();
             registry.Register<PlayertyLoyals.Business.Services.AuthorizationBusinessService>();
             registry.Register<PlayertyLoyals.Business.Services.AuthorizationBusinessServiceGenerated>();
         }

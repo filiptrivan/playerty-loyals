@@ -16,15 +16,18 @@ namespace PlayertyLoyals.Business.Entities
     [UIAdditionalPermissionCodeForUpdate(nameof(BusinessPermissionCodes.UpdatePartner))]
     public class BusinessSystem : BusinessObject<long>
     {
+        [UIControlWidth("col-12")]
         [DisplayName]
         [StringLength(255, MinimumLength = 1)]
         [Required]
         public string Name { get; set; }
 
+        [UIDoNotGenerate]
         [TranslateSingularSrLatnRS("Putanja za učitavanje transakcija")]
         [StringLength(1000, MinimumLength = 1)]
         public string GetTransactionsEndpoint { get; set; }
 
+        [UIDoNotGenerate]
         [TranslateSingularSrLatnRS("Putanja učitavanja grupa proizvoda za popust")]
         [StringLength(1000, MinimumLength = 1)]
         public string GetDiscountProductGroupsEndpoint { get; set; }

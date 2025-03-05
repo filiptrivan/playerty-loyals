@@ -71,40 +71,18 @@ namespace PlayertyLoyals.WebAPI.Controllers
             await _syncService.SyncDiscountProductGroups(businessSystemId);
         }
 
-        [HttpPut]
-        [AuthGuard]
-        public async Task<int> AutomaticUpdatePoints(AutomaticUpdatePointsDTO businessSystemUpdatePointsDataBodyDTO)
-        {
-            return await _loyalsBusinessService.AutomaticUpdatePoints(businessSystemUpdatePointsDataBodyDTO);
-        }
-
-        [HttpGet]
-        [AuthGuard]
-        public async Task<int> ChangeScheduledTaskUpdatePointsStatus(long businessSystemId, int businessSystemVersion)
-        {
-            return await _loyalsBusinessService.ChangeScheduledTaskUpdatePointsStatus(businessSystemId, businessSystemVersion);
-        }
-
-        [HttpPost]
-        [AuthGuard]
-        public async Task ManualUpdatePoints(ManualUpdatePointsDTO updatePointsDTO)
-        {
-            await _loyalsBusinessService.ManualUpdatePoints(updatePointsDTO);
-        }
-
-        [HttpPost]
-        [AuthGuard]
-        public async Task ExcelUpdatePoints([FromForm] ExcelUpdatePointsDTO excelUpdatePointsDTO)
-        {
-            throw new NotImplementedException(); // FT TBD
-            await _loyalsBusinessService.ExcelUpdatePoints(excelUpdatePointsDTO);
-        }
-
         [HttpPost]
         [AuthGuard]
         public async Task<InfoAndWarningResultDTO> ExcelUpdatePointsForWings([FromForm] ExcelUpdatePointsDTO excelUpdatePointsDTO)
         {
             return await _loyalsBusinessService.ExcelUpdatePointsForWings(excelUpdatePointsDTO);
+        }
+
+        [HttpGet]
+        [AuthGuard]
+        public async Task RevertToTaskState(long taskForRevertId)
+        {
+            await _loyalsBusinessService.RevertToTaskState(taskForRevertId);
         }
 
         [HttpPost]

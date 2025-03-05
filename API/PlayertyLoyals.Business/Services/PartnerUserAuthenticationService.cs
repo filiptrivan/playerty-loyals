@@ -142,7 +142,7 @@ namespace PlayertyLoyals.Business.Services
                 }
                 catch (Exception ex)
                 {
-                    _logger.ForContext<UpdatePointsBackgroundJob>().Error(
+                    _logger.ForContext<PartnerUserAuthenticationService>().Error(
                         ex,
                         "Currently authenticated user: {userEmail} (id: {userId}); Couldn't load partners ({partnerId}) logo image;",
                         _authenticationService.GetCurrentUserEmail(), _authenticationService.GetCurrentUserId(), partnerCode

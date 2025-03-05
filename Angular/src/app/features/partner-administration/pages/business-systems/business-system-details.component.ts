@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { BusinessSystem, AutomaticUpdatePoints, ManualUpdatePoints, ExcelUpdatePoints } from 'src/app/business/entities/business-entities.generated';
+import { BusinessSystem, ExcelUpdatePoints } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { BaseFormCopy, SpiderFormGroup, SpiderButton, Column, SpiderMessageService, BaseFormService, IsAuthorizedForSaveEvent, SpiderTab } from '@playerty/spider';
+import { BaseFormCopy, SpiderFormGroup, Column, SpiderMessageService, BaseFormService, IsAuthorizedForSaveEvent, SpiderDataTableComponent } from '@playerty/spider';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
     selector: 'business-system-details',
@@ -14,29 +15,15 @@ import { BaseFormCopy, SpiderFormGroup, SpiderButton, Column, SpiderMessageServi
 export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnInit {
     businessSystemFormGroup = new SpiderFormGroup<BusinessSystem>({});
     
+    @ViewChild('updatePointsTaskTable') updatePointsTaskTable: SpiderDataTableComponent; // FT: Made for refreshing table
     businessSystemUpdatePointsScheduledTaskTableCols: Column[];
     getBusinessSystemUpdatePointsScheduledTaskTableDataObservableMethod = this.apiService.getBusinessSystemUpdatePointsScheduledTaskTableDataForBusinessSystem;
     exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelObservableMethod = this.apiService.exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelForBusinessSystem;
     businessSystemUpdatePointsScheduledTaskTableTotalRecords: number;
     
-    automaticUpdatePointsFormGroup = new SpiderFormGroup<AutomaticUpdatePoints>({});
-    
-    automaticUpdatePointsIsPaused: boolean = null;
-    
-    manualUpdatePointsFormGroup = new SpiderFormGroup<ManualUpdatePoints>({});
-    
     excelUpdatePointsFormGroup = new SpiderFormGroup<ExcelUpdatePoints>({});
     
     isAuthorizedForSave: boolean = false;
-
-    syncDiscountProductGroupsButton = new SpiderButton({label: this.translocoService.translate('SyncDiscountProductGroups'), icon: 'pi pi-sync', disabled: true});
-    additionalButtons: SpiderButton[] = [];
-
-    updatePointsTabs: SpiderTab[] = [
-        {label: this.translocoService.translate('ExcelUpdatePoints'), icon: 'pi pi-file-excel', isSelected: true, id: 1},
-        // {label: this.translocoService.translate('AutomaticUpdatePoints'), icon: 'pi pi-calendar-clock', isSelected: false, id: 2}, // FT: TBD
-        // {label: this.translocoService.translate('ManualUpdatePoints'), icon: 'pi pi-hammer', isSelected: false, id: 3}, // FT: TBD
-    ];
 
     constructor(
         protected override differs: KeyValueDiffers,
@@ -48,79 +35,54 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
         protected override translocoService: TranslocoService,
         protected override baseFormService: BaseFormService,
         private apiService: ApiService,
+        private confirmationService: ConfirmationService,
     ) {
         super(differs, http, messageService, changeDetectorRef, router, route, translocoService, baseFormService);
     }
          
     override ngOnInit() {
-        // FT: TBD
-        // this.syncDiscountProductGroupsButton.onClick = this.syncDiscountProductGroups;
-        // this.additionalButtons.push(this.syncDiscountProductGroupsButton);
-
         this.initBusinessSystemUpdatePointsScheduledTaskTableCols();
+    }
+
+    notifyUsers = (taskId: number) => {
+        console.log(taskId);
+    }
+
+    revert = (taskForRevertId: number) => {
+        this.confirmationService.confirm({
+            message: 'Ako prihvatite, obrisaćete sve transakcije i vratiti poene korisnicima do odabranog stanja.',
+            accept: () => {
+                this.apiService.revertToTaskState(taskForRevertId).subscribe(() => {
+                    this.messageService.successMessage(this.translocoService.translate('SuccessfulAction'));
+                    this.updatePointsTaskTable.reload();
+                });
+            }
+        });
     }
 
     initBusinessSystemUpdatePointsScheduledTaskTableCols(){
         this.businessSystemUpdatePointsScheduledTaskTableCols = [
-            {name: this.translocoService.translate('TransactionsFrom'), filterType: 'date', field: 'transactionsFrom', showMatchModes: true, showTime: true},
-            {name: this.translocoService.translate('TransactionsTo'), filterType: 'date', field: 'transactionsTo', showMatchModes: true, showTime: true},
+            {name: this.translocoService.translate('Actions'), actions:[
+                {name: this.translocoService.translate('NotifyUsers'), field: 'NotifyUsers', icon: 'pi pi-send', onClick: this.notifyUsers},
+                {name: this.translocoService.translate('Revert'), field: 'Revert', icon: 'pi pi-undo', style: 'text-red-500', onClick: this.revert},
+            ]},
             {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true, showTime: true},
-            {name: this.translocoService.translate('IsManuallyStarted'), filterType: 'boolean', field: 'isManual'},
         ]
     }
     
     businessSystemFormGroupInitFinish(){
-        this.initAutomaticUpdatePointsFormGroup();
         this.initExcelUpdatePointsFormGroup();
-        this.initManualUpdatePointsFormGroup();
     }
 
-    //#region Init form groups
-
-    initAutomaticUpdatePointsFormGroup = () => {
-        this.createFormGroup(
-            this.automaticUpdatePointsFormGroup, 
-            new AutomaticUpdatePoints({
-                businessSystemId: this.businessSystemFormGroup.getRawValue().id, 
-                updatePointsStartDate: this.businessSystemFormGroup.getRawValue().updatePointsStartDate, 
-                updatePointsInterval: this.businessSystemFormGroup.getRawValue().updatePointsInterval,
-            })
-        );
-    }
-    
-    initManualUpdatePointsFormGroup = () => {
-        this.createFormGroup(
-            this.manualUpdatePointsFormGroup, 
-            new ManualUpdatePoints({
-                businessSystemId: this.businessSystemFormGroup.getRawValue().id, 
-            }),
-            ['fromDate', 'toDate']
-        );
-    }
-    
     initExcelUpdatePointsFormGroup = () => {
         this.createFormGroup(this.excelUpdatePointsFormGroup, new ExcelUpdatePoints({}));
     }
 
-    //#endregion
-
-    syncDiscountProductGroups = () => {
-        this.apiService.syncDiscountProductGroups(this.businessSystemFormGroup.getRawValue().id).subscribe(() => {
-            this.messageService.successMessage(this.translocoService.translate('SuccessfulSyncToastDescription'));
-        })
-    }
-
     isAuthorizedForSaveChange = (event: IsAuthorizedForSaveEvent) => {
         this.isAuthorizedForSave = event.isAuthorizedForSave;
-        this.syncDiscountProductGroupsButton.disabled = !event.isAuthorizedForSave;
-    }
-
-    override onBeforeSave = (): void => {
-        
     }
 
     override onAfterSave = (): void => {
-        this.automaticUpdatePointsIsPaused = this.businessSystemFormGroup.controls.updatePointsScheduledTaskIsPaused.getRawValue();
     }
 }
 

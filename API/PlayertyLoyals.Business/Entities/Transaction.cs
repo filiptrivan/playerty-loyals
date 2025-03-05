@@ -12,7 +12,6 @@ namespace PlayertyLoyals.Business.Entities
     /// </summary>
     public class Transaction : BusinessObject<long>
     {
-        [Required]
         [StringLength(500, MinimumLength = 1)]
         public string ProductName { get; set; }
 
@@ -26,7 +25,6 @@ namespace PlayertyLoyals.Business.Entities
         [StringLength(1000, MinimumLength = 1)]
         public string ProductImageUrl { get; set; }
 
-        [Required]
         [StringLength(500, MinimumLength = 1)]
         public string ProductCategoryName { get; set; }
 

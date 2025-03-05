@@ -60,28 +60,13 @@ namespace PlayertyLoyals.Business.Services
 
                 if (
                     userExtendedDTO.IsDisabled != userExtended.IsDisabled ||
-                    userExtendedDTO.HasLoggedInWithExternalProvider != userExtended.HasLoggedInWithExternalProvider ||
-                    userExtendedDTO.AccessedTheSystem != userExtended.AccessedTheSystem
+                    userExtendedDTO.HasLoggedInWithExternalProvider != userExtended.HasLoggedInWithExternalProvider
                 )
                 {
                     throw new UnauthorizedException();
                 }
             });
         }
-
-        ///// <summary>
-        ///// Not implemented on the UI yet, so the user can delete his own account. Maybe add that in the settings.
-        ///// </summary>
-        //public override async Task UserExtendedDeleteAuthorize(long userExtendedId)
-        //{
-        //    await _context.WithTransactionAsync(async () =>
-        //    {
-        //        bool hasAdminReadPermission = await IsAuthorizedAsync<UserExtended>(PermissionCodes.ReadUserExtended);
-
-        //        if (_authenticationService.GetCurrentUserId() != userExtendedId && hasAdminReadPermission == false)
-        //            throw new UnauthorizedException();
-        //    });
-        //}
 
         #endregion
 

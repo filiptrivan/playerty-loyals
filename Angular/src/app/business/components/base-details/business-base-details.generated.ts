@@ -24,14 +24,8 @@ import { AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountProductGroup, B
             @defer (when loading === false) {
                 <form class="grid">
                     <ng-content select="[BEFORE]"></ng-content>
-                    <div *ngIf="showNameForBusinessSystem" class="col-12 md:col-6">
+                    <div *ngIf="showNameForBusinessSystem" class="col-12">
                         <spider-textbox [control]="control('name', businessSystemFormGroup)"></spider-textbox>
-                    </div>
-                    <div *ngIf="showGetTransactionsEndpointForBusinessSystem" class="col-12 md:col-6">
-                        <spider-textbox [control]="control('getTransactionsEndpoint', businessSystemFormGroup)"></spider-textbox>
-                    </div>
-                    <div *ngIf="showGetDiscountProductGroupsEndpointForBusinessSystem" class="col-12 md:col-6">
-                        <spider-textbox [control]="control('getDiscountProductGroupsEndpoint', businessSystemFormGroup)"></spider-textbox>
                     </div>
                     <div *ngIf="showCreateUserEndpointForBusinessSystem" class="col-12 md:col-6">
                         <spider-textbox [control]="control('createUserEndpoint', businessSystemFormGroup)"></spider-textbox>
@@ -129,7 +123,7 @@ export class BusinessSystemBaseDetailsComponent {
     discountProductGroupsFormArray: SpiderFormArray<DiscountProductGroup>;
     discountProductGroupsLastIndexClicked = new LastMenuIconIndexClicked();
     discountProductGroupsCrudMenu: MenuItem[] = [];
-    discountProductGroupsPanelCollapsed: boolean = false;
+    @Input() discountProductGroupsPanelCollapsed: boolean = false;
 
 
 
@@ -138,8 +132,6 @@ export class BusinessSystemBaseDetailsComponent {
 
 
     @Input() showNameForBusinessSystem: boolean = true;
-    @Input() showGetTransactionsEndpointForBusinessSystem: boolean = true;
-    @Input() showGetDiscountProductGroupsEndpointForBusinessSystem: boolean = true;
     @Input() showCreateUserEndpointForBusinessSystem: boolean = true;
     @Input() showUpdateUserGroupEndpointForBusinessSystem: boolean = true;
     @Input() showDiscountProductGroupsForBusinessSystem: boolean = true;
@@ -224,8 +216,6 @@ export class BusinessSystemBaseDetailsComponent {
 
                     if (this.isAuthorizedForSave) { 
                         this.businessSystemFormGroup.controls.name.enable();
-                        this.businessSystemFormGroup.controls.getTransactionsEndpoint.enable();
-                        this.businessSystemFormGroup.controls.getDiscountProductGroupsEndpoint.enable();
                         this.businessSystemFormGroup.controls.createUserEndpoint.enable();
                         this.businessSystemFormGroup.controls.updateUserGroupEndpoint.enable();
                         this.baseFormService.enableAllFormControls(this.discountProductGroupsFormArray);
@@ -233,8 +223,6 @@ export class BusinessSystemBaseDetailsComponent {
                     }
                     else{
                         this.businessSystemFormGroup.controls.name.disable();
-                        this.businessSystemFormGroup.controls.getTransactionsEndpoint.disable();
-                        this.businessSystemFormGroup.controls.getDiscountProductGroupsEndpoint.disable();
                         this.businessSystemFormGroup.controls.createUserEndpoint.disable();
                         this.businessSystemFormGroup.controls.updateUserGroupEndpoint.disable();
                         this.baseFormService.disableAllFormControls(this.discountProductGroupsFormArray);
@@ -1596,7 +1584,7 @@ export class SegmentationBaseDetailsComponent {
     segmentationItemsFormArray: SpiderFormArray<SegmentationItem>;
     segmentationItemsLastIndexClicked = new LastMenuIconIndexClicked();
     segmentationItemsCrudMenu: MenuItem[] = [];
-    segmentationItemsPanelCollapsed: boolean = false;
+    @Input() segmentationItemsPanelCollapsed: boolean = false;
 
 
 

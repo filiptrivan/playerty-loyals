@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlayertyLoyals.Infrastructure;
 
@@ -11,9 +12,11 @@ using PlayertyLoyals.Infrastructure;
 namespace PlayertyLoyals.Infrastructure.Migrations
 {
     [DbContext(typeof(PlayertyApplicationDbContext))]
-    partial class PlayertyApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250304170000_UpdatePointsTaskRevert")]
+    partial class UpdatePointsTaskRevert
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -707,6 +710,7 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("ProductCategoryName")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -715,6 +719,7 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("ProductName")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 

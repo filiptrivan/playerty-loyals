@@ -9,48 +9,26 @@
         [discountProductGroupsPanelCollapsed]="true"
         [isFirstMultiplePanel]="true"
         (onBusinessSystemFormGroupInitFinish)="businessSystemFormGroupInitFinish()"
-        [additionalButtons]="additionalButtons"
         (onIsAuthorizedForSaveChange)="isAuthorizedForSaveChange($event)"
         ></business-system-base-details>
 
         <spider-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0" [isMiddleMultiplePanel]="true">
-            <panel-header [tabs]="updatePointsTabs"></panel-header>
-
+            <panel-header [title]="t('ExcelUpdatePoints')" icon="pi pi-file-excel"></panel-header>
             <panel-body>
                 <excel-update-points-body 
-                *ngIf="selectedTab(updatePointsTabs) === 1 && excelUpdatePointsFormGroup != null" 
+                *ngIf="excelUpdatePointsFormGroup != null" 
                 [excelUpdatePointsFormGroup]="excelUpdatePointsFormGroup"
                 [isAuthorizedForSave]="isAuthorizedForSave"
                 ></excel-update-points-body>
-                <automatic-update-points-body 
-                *ngIf="selectedTab(updatePointsTabs) === 2 && automaticUpdatePointsFormGroup != null" 
-                [automaticUpdatePointsFormGroup]="automaticUpdatePointsFormGroup"
-                ></automatic-update-points-body>
-                <manual-update-points-body 
-                *ngIf="selectedTab(updatePointsTabs) === 3 && manualUpdatePointsFormGroup != null" 
-                [manualUpdatePointsFormGroup]="manualUpdatePointsFormGroup"
-                ></manual-update-points-body>
             </panel-body>
 
             <panel-footer>
                 <excel-update-points-footer 
-                *ngIf="selectedTab(updatePointsTabs) === 1 && excelUpdatePointsFormGroup != null" 
+                *ngIf="excelUpdatePointsFormGroup != null" 
                 [excelUpdatePointsFormGroup]="excelUpdatePointsFormGroup"
                 [businessSystemFormGroup]="businessSystemFormGroup"
                 [isAuthorizedForSave]="isAuthorizedForSave"
                 ></excel-update-points-footer>
-                <automatic-update-points-footer 
-                *ngIf="selectedTab(updatePointsTabs) === 2 && automaticUpdatePointsFormGroup != null" 
-                [automaticUpdatePointsFormGroup]="automaticUpdatePointsFormGroup"
-                [businessSystemFormGroup]="businessSystemFormGroup"
-                [isAuthorizedForSave]="isAuthorizedForSave"
-                ></automatic-update-points-footer>
-                <manual-update-points-footer 
-                *ngIf="selectedTab(updatePointsTabs) === 3 && manualUpdatePointsFormGroup != null" 
-                [manualUpdatePointsFormGroup]="manualUpdatePointsFormGroup"
-                [businessSystemFormGroup]="businessSystemFormGroup"
-                [isAuthorizedForSave]="isAuthorizedForSave"
-                ></manual-update-points-footer>
             </panel-footer>
 
         </spider-panel>
@@ -59,9 +37,10 @@
             <panel-header [title]="t('SuccessfullyDoneBusinessSystemUpdatePointsScheduledTaskList')" icon="pi pi-clock"></panel-header>
 
             <panel-body>
-                <form [formGroup]="manualUpdatePointsFormGroup" class="grid">
+                <form class="grid">
                     <div class="col-12">
                         <spider-data-table 
+                        #updatePointsTaskTable
                         [tableTitle]="t('SuccessfullyDoneBusinessSystemUpdatePointsScheduledTaskList')" 
                         [cols]="businessSystemUpdatePointsScheduledTaskTableCols" 
                         [rows]="5"
