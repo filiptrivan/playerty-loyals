@@ -15,5 +15,6 @@ namespace PlayertyLoyals.Business
     {
         public string PartnerHeadersKey { get; set; }
         public int WingsStartingRow { get; set; }
+        public string FrontendUrl { get; set; }
     }
 }

@@ -109,7 +109,7 @@
 //        public async Task<DateTimeOffset?> ScheduleJob(long businessSystemId, int interval, DateTime startDateTime, DateTime now)
 //        {
 //            if (startDateTime <= now)
-//                throw new BusinessException("Vreme početka ažuriranja poena mora biti veće od sadašnjeg trenutka.");
+//                throw new BusinessException("Vreme početka ažuriranja bodova mora biti veće od sadašnjeg trenutka.");
 
 //            DateTimeOffset? result = null;
 

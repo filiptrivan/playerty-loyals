@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System;
 using Serilog.Events;
+using System.Text;
 
 namespace PlayertyLoyals.Business.Services
 {
@@ -1229,7 +1230,7 @@ namespace PlayertyLoyals.Business.Services
         {
             string successMessage = GetSuccessMessageForProcessedTransactions(transactionsProcessingResult, processedTransactionsFrom, processedTransactionsTo);
 
-            await _emailingService.SendEmailAsync(partner.Email, "Uspešno izvršeno ažuriranje poena", successMessage);
+            await _emailingService.SendEmailAsync(partner.Email, "Uspešno izvršeno ažuriranje bodova", successMessage);
         }
 
         private static string GetSuccessMessageForProcessedTransactions(
@@ -1250,7 +1251,7 @@ Neuspešno obrađene transakcije ({{transactionsProcessingResult.TransactionWhic
 Već obrađene transakcije u prosleđenom periodu ({{transactionsProcessingResult.TransactionWhichWeAlreadyUpdatedForThisPeriodList.Count}}): <br>
 {{string.Join("", transactionsProcessingResult.TransactionWhichWeAlreadyUpdatedForThisPeriodList.Select(x => $"    {x}<br>"))}}
 <br>
-Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty program' sistemu ({{transactionsProcessingResult.PartnerUserWhichDoesNotExistList.Count}}): <br>
+Korisnici kojima nismo uspeli da ažuriramo bodove, jer ne postoje u 'loyalty program' sistemu ({{transactionsProcessingResult.PartnerUserWhichDoesNotExistList.Count}}): <br>
 {{string.Join("", transactionsProcessingResult.PartnerUserWhichDoesNotExistList.Select(x => $"    {x}<br>"))}}
 <br>
 """;
@@ -1345,11 +1346,11 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
 
                 IQueryable<BusinessSystemUpdatePointsScheduledTask> tasksQuery = _context.DbSet<BusinessSystemUpdatePointsScheduledTask>()
                     .Include(x => x.Transactions)
-                    .ThenInclude(x => x.PartnerUser)
-                    .ThenInclude(x => x.Tier)
+                        .ThenInclude(x => x.PartnerUser)
+                            .ThenInclude(x => x.Tier)
                     .Where(x =>
                         x.BusinessSystem.Id == taskForRevert.BusinessSystem.Id &&
-                        x.Id > taskForRevert.Id // FT: We don't want to delete current
+                        x.Id >= taskForRevert.Id 
                     );
 
                 List<BusinessSystemUpdatePointsScheduledTask> tasks = await tasksQuery.ToListAsync();
@@ -1367,6 +1368,60 @@ Korisnici kojima nismo uspeli da ažuriramo poene, jer ne postoje u 'loyalty pro
                 await DeleteBusinessSystemUpdatePointsScheduledTaskList(taskIds, false);
 
                 await _context.SaveChangesAsync();
+            });
+        }
+
+        public async Task SendUpdatePointsNotificationToUsers(long taskForNotificationId)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                await _authorizationService.AuthorizeBusinessSystemUpdateAndThrow(null);
+
+                BusinessSystemUpdatePointsScheduledTask task = await _context.DbSet<BusinessSystemUpdatePointsScheduledTask>()
+                    .AsNoTracking()
+                    .Include(x => x.Transactions)
+                        .ThenInclude(x => x.PartnerUser)
+                            .ThenInclude(x => x.User)
+                    .Include(x => x.Transactions)
+                        .ThenInclude(x => x.PartnerUser)
+                            .ThenInclude(x => x.Tier)
+                    .Include(x => x.Transactions)
+                        .ThenInclude(x => x.PartnerUser)
+                            .ThenInclude(x => x.Partner)
+                    .Where(x =>
+                        x.Id == taskForNotificationId
+                    )
+                    .SingleAsync();
+
+                foreach (IGrouping<long, Transaction> transactionsGroup in task.Transactions.GroupBy(x => x.PartnerUser.Id))
+                {
+                    PartnerUser partnerUser = transactionsGroup.Where(x => x.PartnerUser.Id == transactionsGroup.Key).Select(x => x.PartnerUser).First();
+
+                    int totalUpdatePoints = 0;
+
+                    StringBuilder emailBody = new();
+
+                    emailBody.Append("Obrađene kupovine : <br>");
+
+                    foreach (Transaction transaction in transactionsGroup)
+                    {
+                        emailBody.Append($$"""
+• Ostvarenih bodova: {{transaction.Points}}, Cena kupovine: {{transaction.Price}} RSD. <br>
+""");
+
+                        totalUpdatePoints += transaction.Points;
+                    }
+
+                    emailBody.Append($$"""
+<br> Osvojeno bodova ovim ažuriranjem: {{totalUpdatePoints}}. <br>
+<br> Ukupno bodova: {{partnerUser.Points}}. <br>
+<br> Trenutni nivo lojalnosti: {{partnerUser.Tier.Name}} (potrebno Vam je {{partnerUser.Tier.ValidTo - partnerUser.Points}} bodova do sledećeg nivoa lojalnosti). <br>
+<br> Ažuriranje izvršeno u: {{task.CreatedAt.ToString("dd.MM.yyyy. HH:mm")}}. <br>
+<br> Za detaljniju statistiku posetite naš program lojalnosti na: {{SettingsProvider.Current.FrontendUrl}}/auth/login?partner={{partnerUser.Partner.Slug}} <br>
+""");
+
+                    await _emailingService.SendEmailAsync(partnerUser.User.Email, "Uspešno ažurirani bodovi!", emailBody.ToString(), partnerUser.Partner.Email);
+                }
             });
         }
 

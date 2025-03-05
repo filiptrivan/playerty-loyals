@@ -67,7 +67,7 @@
 //                    businessSystem = await _loyalsBusinessService.GetInstanceAsync<BusinessSystem, long>(businessSystemId, null);
 
 //                    if (businessSystem.GetTransactionsEndpoint == null)
-//                        throw new BusinessException($"Na stranici poslovnog sistema '{businessSystem.Name}' morate da sačuvate popunjeno polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje poena.");
+//                        throw new BusinessException($"Na stranici poslovnog sistema '{businessSystem.Name}' morate da sačuvate popunjeno polje 'Putanja za učitavanje transakcija', kako biste pokrenuli ažuriranje bodova.");
 
 //                    PeriodInWhichTransactionsShouldBeProcessed periodInWhichTransactionsShouldBeProcessed = 
 //                        await _loyalsBusinessService.GetPeriodInWhichTransactionsShouldBeProcessed(businessSystem, manualDateFrom, manualDateTo, now);

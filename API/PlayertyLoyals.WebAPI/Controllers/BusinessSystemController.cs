@@ -85,6 +85,13 @@ namespace PlayertyLoyals.WebAPI.Controllers
             await _loyalsBusinessService.RevertToTaskState(taskForRevertId);
         }
 
+        [HttpGet]
+        [AuthGuard]
+        public async Task SendUpdatePointsNotificationToUsers(long taskForNotificationId)
+        {
+            await _loyalsBusinessService.SendUpdatePointsNotificationToUsers(taskForNotificationId);
+        }
+
         [HttpPost]
         [AuthGuard]
         public async Task<TableResponseDTO<BusinessSystemUpdatePointsScheduledTaskDTO>> GetBusinessSystemUpdatePointsScheduledTaskTableDataForBusinessSystem(TableFilterDTO tableFilterDTO)
@@ -97,7 +104,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         public async Task<IActionResult> ExportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelForBusinessSystem(TableFilterDTO tableFilterDTO)
         {
             byte[] fileContent = await _loyalsBusinessService.ExportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelForBusinessSystem(tableFilterDTO);
-            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Izvršena_Ažuriranja_Poena.xlsx"));
+            return File(fileContent, SettingsProvider.Current.ExcelContentType, Uri.EscapeDataString($"Izvršena_Ažuriranja_Bodova.xlsx"));
         }
     }
 }

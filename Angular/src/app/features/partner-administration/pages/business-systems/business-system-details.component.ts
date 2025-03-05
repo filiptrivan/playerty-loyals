@@ -44,13 +44,19 @@ export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnIn
         this.initBusinessSystemUpdatePointsScheduledTaskTableCols();
     }
 
-    notifyUsers = (taskId: number) => {
-        console.log(taskId);
+    notifyUsers = (taskForNotificationId: number) => {
+        this.confirmationService.confirm({
+            accept: () => {
+                this.apiService.sendUpdatePointsNotificationToUsers(taskForNotificationId).subscribe(() => {
+                    this.messageService.successMessage(this.translocoService.translate('SuccessfulAction'));
+                });
+            }
+        });
     }
 
     revert = (taskForRevertId: number) => {
         this.confirmationService.confirm({
-            message: 'Ako prihvatite, obrisaćete sve transakcije i vratiti poene korisnicima do odabranog stanja.',
+            message: 'Ako prihvatite, obrisaćete sve transakcije i vratiti bodove korisnicima do odabranog stanja.',
             accept: () => {
                 this.apiService.revertToTaskState(taskForRevertId).subscribe(() => {
                     this.messageService.successMessage(this.translocoService.translate('SuccessfulAction'));

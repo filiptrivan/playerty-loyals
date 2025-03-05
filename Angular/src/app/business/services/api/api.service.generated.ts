@@ -120,6 +120,10 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.get(`${this.config.apiUrl}/BusinessSystem/RevertToTaskState?taskForRevertId=${taskForRevertId}`, this.config.httpOptions);
     }
 
+    sendUpdatePointsNotificationToUsers = (taskForNotificationId: number): Observable<any> => { 
+        return this.http.get(`${this.config.apiUrl}/BusinessSystem/SendUpdatePointsNotificationToUsers?taskForNotificationId=${taskForNotificationId}`, this.config.httpOptions);
+    }
+
     getBusinessSystemUpdatePointsScheduledTaskTableDataForBusinessSystem = (tableFilterDTO: TableFilter): Observable<TableResponse<BusinessSystemUpdatePointsScheduledTask>> => { 
         return this.http.post<TableResponse<BusinessSystemUpdatePointsScheduledTask>>(`${this.config.apiUrl}/BusinessSystem/GetBusinessSystemUpdatePointsScheduledTaskTableDataForBusinessSystem`, tableFilterDTO, this.config.httpSkipSpinnerOptions);
     }

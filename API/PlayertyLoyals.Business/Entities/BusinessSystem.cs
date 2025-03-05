@@ -43,16 +43,16 @@ namespace PlayertyLoyals.Business.Entities
         /// <summary>
         /// In hours, look if user can pass start time in DTO, so we can initialize scheduler in Azure, it would be nice if we don't have that field in the database.
         /// </summary>
-        [TranslateSingularSrLatnRS("Interval za ažuriranje poena")]
+        [TranslateSingularSrLatnRS("Interval za ažuriranje bodova")]
         [UIDoNotGenerate]
         [GreaterThanOrEqualTo(1)]
         public int? UpdatePointsInterval { get; set; }
 
-        [TranslateSingularSrLatnRS("Datum početka ažuriranja poena")]
+        [TranslateSingularSrLatnRS("Datum početka ažuriranja bodova")]
         [UIDoNotGenerate]
         public DateTime? UpdatePointsStartDate { get; set; }
 
-        [TranslateSingularSrLatnRS("Ažuriranje poena pauzirano")]
+        [TranslateSingularSrLatnRS("Ažuriranje bodova pauzirano")]
         [UIDoNotGenerate]
         public bool? UpdatePointsScheduledTaskIsPaused { get; set; }
 
