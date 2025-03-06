@@ -1417,7 +1417,7 @@ Korisnici kojima nismo uspeli da ažuriramo bodove, jer ne postoje u 'loyalty pr
 <br> Ukupno bodova: {{partnerUser.Points}}. <br>
 <br> Trenutni nivo lojalnosti: {{partnerUser.Tier.Name}} (potrebno Vam je {{partnerUser.Tier.ValidTo - partnerUser.Points}} bodova do sledećeg nivoa lojalnosti). <br>
 <br> Ažuriranje izvršeno u: {{task.CreatedAt.ToString("dd.MM.yyyy. HH:mm")}}. <br>
-<br> Za detaljniju statistiku posetite naš program lojalnosti na: {{SettingsProvider.Current.FrontendUrl}}/auth/login?partner={{partnerUser.Partner.Slug}} <br>
+<br> Za detaljniju statistiku posetite naš program lojalnosti na: {{SettingsProvider.Current.FrontendUrl}}/login?partner={{partnerUser.Partner.Slug}} <br>
 """);
 
                     await _emailingService.SendEmailAsync(partnerUser.User.Email, "Uspešno ažurirani bodovi!", emailBody.ToString(), partnerUser.Partner.Email);

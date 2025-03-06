@@ -51,8 +51,18 @@ import { LayoutComponent } from './business/components/layout/layout.component';
                 path: '',
                 children: [
                     { 
-                        path: 'auth',
+                        path: '',
                         loadChildren: () => import('@playerty/spider').then(m => m.AuthModule),
+                        canActivate: [NotAuthGuard],
+                    },
+                ],
+            },
+            {
+                path: '',
+                children: [
+                    { 
+                        path: '',
+                        loadChildren: () => import('./features/legal/legal.module').then(m => m.LegalModule),
                         canActivate: [NotAuthGuard],
                     },
                 ],
