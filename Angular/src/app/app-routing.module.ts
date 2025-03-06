@@ -63,7 +63,6 @@ import { LayoutComponent } from './business/components/layout/layout.component';
                     { 
                         path: '',
                         loadChildren: () => import('./features/legal/legal.module').then(m => m.LegalModule),
-                        canActivate: [NotAuthGuard],
                     },
                 ],
             },

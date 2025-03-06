@@ -186,7 +186,6 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
         saveBody.genderId = this.genderAndBirthDateFormGroup.getRawValue().genderId;
 
         this.saveBody = saveBody;
-        return;
     }
 
     override onAfterSave = async () => {
