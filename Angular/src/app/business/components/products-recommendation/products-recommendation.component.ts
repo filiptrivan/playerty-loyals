@@ -16,7 +16,8 @@ import { PrimengModule } from '@playerty/spider';
 ]
 })
 export class ProductsRecommendationComponent {
-    productList: Product[] = [];
+    products: Product[] = [];
+    loading = true;
 
     constructor(
         private apiService: ApiService
@@ -25,8 +26,9 @@ export class ProductsRecommendationComponent {
         }
 
     ngOnInit(){
-        this.apiService.getProductListForRecommendation().subscribe((productList) => {
-            this.productList = productList;
+        this.apiService.getProductListForRecommendation().subscribe((products) => {
+            this.products = products;
+            this.loading = false;
         })
     }
 
