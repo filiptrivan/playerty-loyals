@@ -31,12 +31,15 @@ export class AuthService extends AuthBaseService implements OnDestroy {
   override initCompanyAuthDialogDetails = (): Observable<InitCompanyAuthDialogDetails> => {
     return this.partner$.pipe(
       map(partner => {  
+        if (partner === undefined)
+          return null; 
+
         let image = partner?.logoImageData
-          ? getHtmlImgDisplayString64(partner.logoImageData)
-          : `assets/images/logo/logo.svg`;
-  
+        ? getHtmlImgDisplayString64(partner.logoImageData)
+        : `assets/images/logo/logo.svg`;
+        
         let companyName = partner?.name ?? this.config.companyName;
-  
+        
         return new InitCompanyAuthDialogDetails({
           image: image,
           companyName: companyName
