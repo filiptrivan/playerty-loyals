@@ -98,9 +98,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpPost]
         [AuthGuard]
-        public async Task<TableResponseDTO<TransactionDTO>> GetTransactionListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<AchievementDTO>> GetAchievementsForCurrentPartnerUser(TableFilterDTO tableFilterDTO)
         {
-            return await _loyalsBusinessService.GetTransactionListForTheCurrentPartnerUser(tableFilterDTO);
+            return await _loyalsBusinessService.GetAchievementsForCurrentPartnerUser(tableFilterDTO);
         }
 
         [HttpGet]

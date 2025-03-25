@@ -22,6 +22,8 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('PartnerUser');
             case 'transaction':
                 return this.translocoService.translate('Transaction');
+            case 'achievementType':
+                return this.translocoService.translate('AchievementType');
             case 'id':
                 return this.translocoService.translate('Id');
             case 'version':
@@ -32,6 +34,10 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('ModifiedAt');
             case 'achievementDTO':
                 return this.translocoService.translate('AchievementDTO');
+            case 'name':
+                return this.translocoService.translate('Name');
+            case 'achievementTypeDTO':
+                return this.translocoService.translate('AchievementTypeDTO');
             case 'user':
                 return this.translocoService.translate('User');
             case 'email':
@@ -48,8 +54,6 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('UpdatePointsStartDate');
             case 'updatePointsInterval':
                 return this.translocoService.translate('UpdatePointsInterval');
-            case 'name':
-                return this.translocoService.translate('Name');
             case 'nameLatin':
                 return this.translocoService.translate('NameLatin');
             case 'code':

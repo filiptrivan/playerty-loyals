@@ -42,7 +42,7 @@ import { LayoutComponent } from './business/layout/layout.component';
                     },
                     { 
                         path: '',
-                        loadChildren: () => import('./features/transactions/transactions.module').then(m => m.TransactionsModule),
+                        loadChildren: () => import('./features/points-history/points-history.module').then(m => m.PointsHistoryModule),
                         canActivate: [AuthGuard]
                     },
                 ],

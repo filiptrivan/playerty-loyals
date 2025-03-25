@@ -24,6 +24,9 @@ import { PartnerNotificationSaveBody } from '../../entities/business-entities.ge
 import { Achievement } from '../../entities/business-entities.generated';
 import { AchievementSaveBody } from '../../entities/business-entities.generated';
 import { AchievementMainUIForm } from '../../entities/business-entities.generated';
+import { AchievementType } from '../../entities/business-entities.generated';
+import { AchievementTypeSaveBody } from '../../entities/business-entities.generated';
+import { AchievementTypeMainUIForm } from '../../entities/business-entities.generated';
 import { BusinessSystem } from '../../entities/business-entities.generated';
 import { BusinessSystemSaveBody } from '../../entities/business-entities.generated';
 import { BusinessSystemMainUIForm } from '../../entities/business-entities.generated';
@@ -255,8 +258,8 @@ export class ApiGeneratedService extends ApiSecurityService {
         return this.http.get(`${this.config.apiUrl}/PartnerUser/AddPartnerUserForTheCurrentUser?partnerId=${partnerId}`, this.config.httpOptions);
     }
 
-    getTransactionListForTheCurrentPartnerUser = (tableFilterDTO: TableFilter): Observable<TableResponse<Transaction>> => { 
-        return this.http.post<TableResponse<Transaction>>(`${this.config.apiUrl}/PartnerUser/GetTransactionListForTheCurrentPartnerUser`, tableFilterDTO, this.config.httpSkipSpinnerOptions);
+    getAchievementsForCurrentPartnerUser = (tableFilterDTO: TableFilter): Observable<TableResponse<Achievement>> => { 
+        return this.http.post<TableResponse<Achievement>>(`${this.config.apiUrl}/PartnerUser/GetAchievementsForCurrentPartnerUser`, tableFilterDTO, this.config.httpSkipSpinnerOptions);
     }
 
     getTierForCurrentPartnerUser = (): Observable<Tier> => { 

@@ -1,11 +1,11 @@
 import { RouterModule, Routes } from "@angular/router";
 import { NgModule } from "@angular/core";
-import { TransactionsComponent } from "./pages/transactions.component";
+import { PointsHistoryComponent } from "./pages/points-history.component";
 
 const routes: Routes = [
     {
-        path: 'transactions',
-        component: TransactionsComponent,
+        path: 'points-history',
+        component: PointsHistoryComponent,
     },
 ];
 
@@ -17,4 +17,4 @@ const routes: Routes = [
     ],
     providers:[]
 })
-export class TransactionsModule { }
+export class PointsHistoryModule { }

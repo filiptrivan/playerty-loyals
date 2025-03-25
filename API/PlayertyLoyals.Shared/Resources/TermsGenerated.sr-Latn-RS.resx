@@ -79,6 +79,9 @@
   <data name="Transaction" xml:space="preserve">
     <value />
   </data>
+  <data name="AchievementType" xml:space="preserve">
+    <value />
+  </data>
   <data name="Id" xml:space="preserve">
     <value />
   </data>
@@ -91,6 +94,18 @@
   <data name="ModifiedAt" xml:space="preserve">
     <value />
   </data>
+  <data name="AchievementTypeList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AchievementTypeExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Achievements" xml:space="preserve">
+    <value />
+  </data>
   <data name="BusinessSystem" xml:space="preserve">
     <value />
   </data>
@@ -98,9 +113,6 @@
     <value />
   </data>
   <data name="BusinessSystemExcelExportName" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Name" xml:space="preserve">
     <value />
   </data>
   <data name="GetTransactionsEndpoint" xml:space="preserve">
@@ -326,9 +338,6 @@
     <value />
   </data>
   <data name="User" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Achievements" xml:space="preserve">
     <value />
   </data>
   <data name="CheckedSegmentationItems" xml:space="preserve">

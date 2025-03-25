@@ -284,6 +284,9 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
+        /// <summary>
+        /// NOTE: Not persisting in the database
+        /// </summary>
         private async Task UpdatePartnerUserTier(PartnerUser partnerUser)
         {
             await _context.WithTransactionAsync(async () =>
@@ -696,7 +699,12 @@ namespace PlayertyLoyals.Business.Services
         {
             await _context.WithTransactionAsync(async () =>
             {
-                List<Segmentation> segmentationsToCheck = await _context.DbSet<Segmentation>().Where(x => x.SegmentationItems.Any(x => segmentationItemIdsToCheck.Contains(x.Id))).ToListAsync();
+                if (segmentationItemIdsToCheck.Count == 0)
+                    return;
+
+                List<Segmentation> segmentationsToCheck = await _context.DbSet<Segmentation>()
+                    .Where(x => x.SegmentationItems.Any(x => segmentationItemIdsToCheck.Contains(x.Id)))
+                    .ToListAsync();
 
                 foreach (Segmentation segmentation in segmentationsToCheck)
                 {
@@ -753,20 +761,20 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task<TableResponseDTO<TransactionDTO>> GetTransactionListForTheCurrentPartnerUser(TableFilterDTO tableFilterDTO)
+        public async Task<TableResponseDTO<AchievementDTO>> GetAchievementsForCurrentPartnerUser(TableFilterDTO tableFilterDTO)
         {
             long currentUserId = _authenticationService.GetCurrentUserId();
             string currentPartnerSlug = _partnerUserAuthenticationService.GetCurrentPartnerCode();
 
             return await _context.WithTransactionAsync(async () =>
             {
-                TableResponseDTO<TransactionDTO> transactionTableResponse = await GetTransactionTableData(
+                TableResponseDTO<AchievementDTO> achievementTableResponse = await GetAchievementTableData(
                     tableFilterDTO,
-                    _context.DbSet<Transaction>().Where(x => x.PartnerUser.User.Id == currentUserId && x.PartnerUser.Partner.Slug == currentPartnerSlug).OrderByDescending(x => x.Id),
+                    _context.DbSet<Achievement>().Where(x => x.PartnerUser.User.Id == currentUserId && x.PartnerUser.Partner.Slug == currentPartnerSlug).OrderByDescending(x => x.Id),
                     false
                 );
 
-                return transactionTableResponse;
+                return achievementTableResponse;
             });
         }
 
@@ -1117,6 +1125,8 @@ namespace PlayertyLoyals.Business.Services
 
                 await ProccessTransactions(excelUpdatePointsDTO.BusinessSystemId.Value, externalTransactionsExcelParsingResultDTO.ExternalTransactionDTOList);
 
+                await UpdateExpiredAchievements();
+
                 return externalTransactionsExcelParsingResultDTO.WarningAndInfoResultDTO;
             });
         }
@@ -1231,39 +1241,6 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        private async Task NotifyPartnerAboutSuccessfullyProcessedTransactions(
-            Partner partner, TransactionsProcessingResult transactionsProcessingResult, DateTime? processedTransactionsFrom, DateTime? processedTransactionsTo
-        )
-        {
-            string successMessage = GetSuccessMessageForProcessedTransactions(transactionsProcessingResult, processedTransactionsFrom, processedTransactionsTo);
-
-            await _emailingService.SendEmailAsync(partner.Email, "Uspešno izvršeno ažuriranje bodova", successMessage);
-        }
-
-        private static string GetSuccessMessageForProcessedTransactions(
-            TransactionsProcessingResult transactionsProcessingResult, DateTime? processedTransactionsFrom, DateTime? processedTransactionsTo
-        )
-        {
-            return $$"""
-Interval u kom su obrađene transakcije: {{(processedTransactionsFrom?.ToString("dd.MM.yyyy. HH:mm") ?? "?")}} - {{(processedTransactionsTo?.ToString("dd.MM.yyyy. HH:mm") ?? "?")}}. <br>
-<br>
-Ukupan broj obrađenih transakcija: {{transactionsProcessingResult.TotalProcessedTransactionsCount}}. <br>
-<br>
-Uspešno obrađene transakcije ({{transactionsProcessingResult.TransactionWhichUpdateSucceededList.Count}}): <br>
-{{string.Join("", transactionsProcessingResult.TransactionWhichUpdateSucceededList.Select(x => $"    {x}<br>"))}}
-<br>
-Neuspešno obrađene transakcije ({{transactionsProcessingResult.TransactionWhichUpdateFailedList.Count}}): <br>
-{{string.Join("", transactionsProcessingResult.TransactionWhichUpdateFailedList.Select(x => $"    {x}<br>"))}}
-<br>
-Već obrađene transakcije u prosleđenom periodu ({{transactionsProcessingResult.TransactionWhichWeAlreadyUpdatedForThisPeriodList.Count}}): <br>
-{{string.Join("", transactionsProcessingResult.TransactionWhichWeAlreadyUpdatedForThisPeriodList.Select(x => $"    {x}<br>"))}}
-<br>
-Korisnici kojima nismo uspeli da ažuriramo bodove, jer ne postoje u 'loyalty program' sistemu ({{transactionsProcessingResult.PartnerUserWhichDoesNotExistList.Count}}): <br>
-{{string.Join("", transactionsProcessingResult.PartnerUserWhichDoesNotExistList.Select(x => $"    {x}<br>"))}}
-<br>
-""";
-        }
-
         private async Task<TransactionsProcessingResult> ProcessTransactionsAndReturnResult(
             BusinessSystemUpdatePointsScheduledTask savedBusinessSystemUpdatePointsScheduledTask,
             List<ExternalTransactionDTO> externalTransactionDTOList
@@ -1343,6 +1320,71 @@ Korisnici kojima nismo uspeli da ažuriramo bodove, jer ne postoje u 'loyalty pr
                     TransactionWhichWeAlreadyUpdatedForThisPeriodList = transactionWhichWeAlreadyUpdatedForThisPeriodList,
                     TotalProcessedTransactionsCount = externalTransactionDTOList.Count,
                 };
+            });
+        }
+
+        private async Task NotifyPartnerAboutSuccessfullyProcessedTransactions(
+            Partner partner, TransactionsProcessingResult transactionsProcessingResult, DateTime? processedTransactionsFrom, DateTime? processedTransactionsTo
+        )
+        {
+            string successMessage = GetSuccessMessageForProcessedTransactions(transactionsProcessingResult, processedTransactionsFrom, processedTransactionsTo);
+
+            await _emailingService.SendEmailAsync(partner.Email, "Uspešno izvršeno ažuriranje bodova", successMessage);
+        }
+
+        private static string GetSuccessMessageForProcessedTransactions(
+            TransactionsProcessingResult transactionsProcessingResult, DateTime? processedTransactionsFrom, DateTime? processedTransactionsTo
+        )
+        {
+            return $$"""
+Interval u kom su obrađene transakcije: {{(processedTransactionsFrom?.ToString("dd.MM.yyyy. HH:mm") ?? "?")}} - {{(processedTransactionsTo?.ToString("dd.MM.yyyy. HH:mm") ?? "?")}}. <br>
+<br>
+Ukupan broj obrađenih transakcija: {{transactionsProcessingResult.TotalProcessedTransactionsCount}}. <br>
+<br>
+Uspešno obrađene transakcije ({{transactionsProcessingResult.TransactionWhichUpdateSucceededList.Count}}): <br>
+{{string.Join("", transactionsProcessingResult.TransactionWhichUpdateSucceededList.Select(x => $"    {x}<br>"))}}
+<br>
+Neuspešno obrađene transakcije ({{transactionsProcessingResult.TransactionWhichUpdateFailedList.Count}}): <br>
+{{string.Join("", transactionsProcessingResult.TransactionWhichUpdateFailedList.Select(x => $"    {x}<br>"))}}
+<br>
+Već obrađene transakcije u prosleđenom periodu ({{transactionsProcessingResult.TransactionWhichWeAlreadyUpdatedForThisPeriodList.Count}}): <br>
+{{string.Join("", transactionsProcessingResult.TransactionWhichWeAlreadyUpdatedForThisPeriodList.Select(x => $"    {x}<br>"))}}
+<br>
+Korisnici kojima nismo uspeli da ažuriramo bodove, jer ne postoje u 'loyalty program' sistemu ({{transactionsProcessingResult.PartnerUserWhichDoesNotExistList.Count}}): <br>
+{{string.Join("", transactionsProcessingResult.PartnerUserWhichDoesNotExistList.Select(x => $"    {x}<br>"))}}
+<br>
+""";
+        }
+
+        /// <summary>
+        /// NOTE: If you make this method public and call it directly from the UI, you will need to add authorization
+        /// </summary>
+        private async Task UpdateExpiredAchievements()
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                List<Achievement> achievementsForDelete = await _context.DbSet<Achievement>()
+                    .Include(x => x.PartnerUser)
+                    .Where(x => DateTime.Now >= x.ExpirationDate)
+                    .ToListAsync();
+
+                if (achievementsForDelete.Count == 0)
+                    return;
+
+                foreach (Achievement achievement in achievementsForDelete)
+                {
+                    achievement.PartnerUser.Points -= achievement.Points; // FT: If we took points away from the user in achievement, here it will be neutralized
+                    await UpdatePartnerUserTier(achievement.PartnerUser);
+                }
+
+                List<long> achievementIdsForDelete = achievementsForDelete
+                    .Select(x => x.Id)
+                    .ToList();
+
+                // FT: We don't want to delete transactions because of logic with unique transaction codes
+                await DeleteAchievementList(achievementIdsForDelete, false);
+
+                await _context.SaveChangesAsync();
             });
         }
 

@@ -99,6 +99,33 @@ namespace PlayertyLoyals.Shared.Resources {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string AchievementType {
+            get {
+                return ResourceManager.GetString("AchievementType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string AchievementTypeExcelExportName {
+            get {
+                return ResourceManager.GetString("AchievementTypeExcelExportName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string AchievementTypeList {
+            get {
+                return ResourceManager.GetString("AchievementTypeList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string AlreadyFilledSegmentation {
             get {
                 return ResourceManager.GetString("AlreadyFilledSegmentation", resourceCulture);

@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 namespace PlayertyLoyals.Business.Entities
 {
     [UIDoNotGenerate]
+    [ProjectToDTO(".Map(dest => dest.TransactionPrice, src => src.Transaction.Price)")]
     public class Achievement : BusinessObject<long>
     {
         [Required]
@@ -22,5 +23,9 @@ namespace PlayertyLoyals.Business.Entities
         [CascadeDelete]
         [WithMany(nameof(Transaction.Achievements))]
         public virtual Transaction Transaction { get; set; }
+
+        [ManyToOneRequired]
+        [WithMany(nameof(AchievementType.Achievements))]
+        public virtual AchievementType AchievementType { get; set; }
     }
 }

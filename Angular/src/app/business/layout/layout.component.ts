@@ -84,9 +84,9 @@ export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDe
                             visible: partner != null
                         },
                         {
-                            label: this.translocoService.translate('TransactionList'),
-                            icon: 'pi pi-fw pi-wallet',
-                            routerLink: [`/transactions`],
+                            label: this.translocoService.translate('PointsHistory'),
+                            icon: 'pi pi-fw pi-star',
+                            routerLink: [`/points-history`],
                             visible: partner != null
                         },
                         {

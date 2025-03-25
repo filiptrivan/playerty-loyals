@@ -18,8 +18,9 @@ namespace PlayertyLoyals.Business.Entities
         /// <summary>
         /// Unique transaction code for the particular business system, so we don't make it globally unique in SQL Server
         /// </summary>
-        [Required]
         [StringLength(20, MinimumLength = 1)]
+        [DisplayName]
+        [Required]
         public string Code { get; set; }
 
         [StringLength(1000, MinimumLength = 1)]

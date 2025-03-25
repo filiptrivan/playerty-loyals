@@ -25,7 +25,7 @@ namespace PlayertyLoyals.Business.Entities
 
         [CustomValidator("EmailAddress()")]
         [StringLength(70, MinimumLength = 5)]
-        [Required]
+        [Required] 
         public string Email { get; set; }
 
         [StringLength(100, MinimumLength = 1)]
