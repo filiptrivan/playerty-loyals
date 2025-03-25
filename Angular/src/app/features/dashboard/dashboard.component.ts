@@ -1,16 +1,14 @@
 import { PartnerUser, Tier } from 'src/app/business/entities/business-entities.generated';
-import { ApiService } from '../../../business/services/api/api.service';
+import { ApiService } from '../../business/services/api/api.service';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {
-  private partnerSubscription: Subscription | null = null;
   private partnerUserSubscription: Subscription | null = null;
-  private permissionsSubscription: Subscription | null = null;
   
   currentPartnerUser: PartnerUser;
   currentPartnerUserTier: Tier;
@@ -32,30 +30,11 @@ export class DashboardComponent implements OnInit {
         this.currentPartnerUserTier = null; // FT: This line is mandatory.
       }
     });
-    
-    this.partnerSubscription = this.authService.partner$.subscribe(currentPartner => {
-      if (currentPartner === null) {
-        this.handleMissingPartner();
-      } 
-    });
-  }
-
-  private async handleMissingPartner() {
-    const permissionCodes: string[] = await firstValueFrom(this.authService.currentUserPermissionCodes$);
-    if (permissionCodes != null && permissionCodes.length === 0) {
-      // this.authService.navigateToSelectPartner();
-    }
   }
 
   ngOnDestroy(): void {
-    if (this.partnerSubscription) {
-      this.partnerSubscription.unsubscribe();
-    }
     if (this.partnerUserSubscription) {
       this.partnerUserSubscription.unsubscribe();
-    }
-    if (this.permissionsSubscription) {
-      this.permissionsSubscription.unsubscribe();
     }
   }
 

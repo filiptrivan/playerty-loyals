@@ -30,7 +30,7 @@ export class PartnerUserListComponent implements OnInit {
             ]},
             {name: this.translocoService.translate('User'), filterType: 'text', field: 'userDisplayName'},
             {name: this.translocoService.translate('Points'), filterType: 'numeric', field: 'points', showMatchModes: true},
-            {name: this.translocoService.translate('Tier'), filterType: 'multiselect', field: 'tierDisplayName', filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(getPrimengDropdownNamebookOptions(this.apiService.getTierDropdownListForPartnerUser)) },
+            {name: this.translocoService.translate('Tier'), filterType: 'multiselect', field: 'tierDisplayName', filterField: 'tierId', dropdownOrMultiselectValues: await firstValueFrom(getPrimengDropdownNamebookOptions(this.apiService.getTierDropdownList)) },
             {name: this.translocoService.translate('Segmentation'), filterType: 'multiselect', field: 'checkedSegmentationItemsCommaSeparated', dropdownOrMultiselectValues: await firstValueFrom(getPrimengDropdownNamebookOptions(this.apiService.getCheckedSegmentationItemsDropdownListForPartnerUser)) },
             {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true},
         ]

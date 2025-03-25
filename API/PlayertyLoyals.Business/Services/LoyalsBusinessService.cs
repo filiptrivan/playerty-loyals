@@ -276,7 +276,7 @@ namespace PlayertyLoyals.Business.Services
                 foreach (PartnerUser partnerUser in partnerUsers)
                 {
                     int points = partnerUser.Points;
-                    Tier tier = await GetTierForThePoints(points);
+                    Tier tier = await GetTierForPoints(points);
                     partnerUser.Tier = tier;
                 }
 
@@ -289,7 +289,7 @@ namespace PlayertyLoyals.Business.Services
             await _context.WithTransactionAsync(async () =>
             {
                 int points = partnerUser.Points;
-                Tier tier = await GetTierForThePoints(points);
+                Tier tier = await GetTierForPoints(points);
 
                 if (tier == null)
                 {
@@ -300,7 +300,7 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        private async Task<Tier> GetTierForThePoints(int points)
+        private async Task<Tier> GetTierForPoints(int points)
         {
             return await _context.WithTransactionAsync(async () =>
             {
@@ -315,15 +315,28 @@ namespace PlayertyLoyals.Business.Services
                 if (tier == null)
                 {
                     tier = await _context.DbSet<Tier>()
-                    .Where(x =>
-                        points >= x.ValidTo &&
-                        x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()
-                    )
-                    .OrderByDescending(x => x.ValidTo)
-                    .FirstOrDefaultAsync();
+                        .Where(x =>
+                            points >= x.ValidTo &&
+                            x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()
+                        )
+                        .OrderByDescending(x => x.ValidTo)
+                        .FirstOrDefaultAsync();
                 }
 
                 return tier;
+            });
+        }
+
+        private async Task<TierDTO> GetTierDTOForPoints(int points)
+        {
+            return await _context.WithTransactionAsync(async () =>
+            {
+                Tier tier = await GetTierForPoints(points);
+
+                if (tier == null)
+                    return null;
+
+                return tier.Adapt<TierDTO>(Mapper.TierToDTOConfig());
             });
         }
 
@@ -540,13 +553,13 @@ namespace PlayertyLoyals.Business.Services
             {
                 if (currentPartnerSlug != null)
                 {
-                    PartnerUser partnerUser = await _context.DbSet<PartnerUser>().Where(x => x.User.Id == authResultDTO.UserId && x.Partner.Slug == currentPartnerSlug).SingleOrDefaultAsync();
+                    bool partnerUserExists = await _context.DbSet<PartnerUser>().Where(x => x.User.Id == authResultDTO.UserId && x.Partner.Slug == currentPartnerSlug).AnyAsync();
 
-                    if (partnerUser == null)
+                    if (partnerUserExists == false)
                     {
                         Partner currentPartner = await _context.DbSet<Partner>().Where(x => x.Slug == currentPartnerSlug).SingleAsync();
                         UserExtended user = await GetInstanceAsync<UserExtended, long>(authResultDTO.UserId, null);
-                        await AddPartnerUser(partnerUser, user, currentPartner);
+                        await AddPartnerUser(user, currentPartner);
                     }
                 }
             });
@@ -558,34 +571,31 @@ namespace PlayertyLoyals.Business.Services
 
             await _context.WithTransactionAsync(async () =>
             {
-                PartnerUser partnerUser = await _context.DbSet<PartnerUser>().Where(x => x.User.Id == currentUserId && x.Partner.Id == partnerId).SingleOrDefaultAsync();
+                bool partnerUserExists = await _context.DbSet<PartnerUser>().Where(x => x.User.Id == currentUserId && x.Partner.Id == partnerId).AnyAsync();
 
-                if (partnerUser == null)
+                if (partnerUserExists == false)
                 {
                     Partner partner = await GetInstanceAsync<Partner, int>(partnerId, null);
                     UserExtended currentUser = await GetInstanceAsync<UserExtended, long>(currentUserId, null);
-                    await AddPartnerUser(partnerUser, currentUser, partner);
+                    await AddPartnerUser(currentUser, partner);
                 }
             });
         }
 
-        private async Task AddPartnerUser(PartnerUser partnerUser, UserExtended user, Partner partner)
+        private async Task AddPartnerUser(UserExtended user, Partner partner)
         {
             await _context.WithTransactionAsync(async () =>
             {
-                if (partnerUser == null)
+                PartnerUser partnerUser = new PartnerUser
                 {
-                    partnerUser = new PartnerUser
-                    {
-                        User = user,
-                        Partner = partner,
-                        Points = 0,
-                        Tier = partner.Tiers.OrderBy(t => t.ValidTo).FirstOrDefault() // FT: If exists, saving the lowest tier, else null.
-                    };
+                    User = user,
+                    Partner = partner,
+                    Points = 0,
+                    Tier = partner.Tiers.OrderBy(t => t.ValidTo).FirstOrDefault() // FT: If exists, saving the lowest tier, else null.
+                };
 
-                    await _context.DbSet<PartnerUser>().AddAsync(partnerUser);
-                    await _context.SaveChangesAsync();
-                }
+                await _context.DbSet<PartnerUser>().AddAsync(partnerUser);
+                await _context.SaveChangesAsync();
             });
         }
 
@@ -604,14 +614,17 @@ namespace PlayertyLoyals.Business.Services
 
                 PartnerUser savedPartnerUser = await SavePartnerUser(partnerUserSaveBodyDTO.PartnerUserDTO, authorizeUpdate, authorizeInsert); // FT: Here we can let Save after update many to many association because we are sure that we will never send 0 from the UI
 
-                await UpdateFirstTimeFilledPointsForThePartnerUser(savedPartnerUser, partnerUserSaveBodyDTO.SelectedSegmentationItemsIds);
+                await UpdateFirstTimeFilledPointsForPartnerUser(savedPartnerUser, partnerUserSaveBodyDTO.SelectedSegmentationItemsIds);
 
                 // FT: We don't need to authorize, we will authorize everything in SavePartnerUser method
                 await UpdateBirthDateAndGenderForUser(partnerUserSaveBodyDTO.PartnerUserDTO.UserId.Value, partnerUserSaveBodyDTO.BirthDate, partnerUserSaveBodyDTO.GenderId);
 
-                if (pointsBeforeSave != savedPartnerUser.Points)
+                int savedPoints = savedPartnerUser.Points;
+
+                if (pointsBeforeSave != savedPoints)
                 {
                     await UpdatePartnerUserTier(savedPartnerUser);
+                    await AddAchievement(savedPartnerUser, null, savedPoints - pointsBeforeSave);
                     await _context.SaveChangesAsync();
                 }
 
@@ -622,6 +635,23 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
+        private async Task AddAchievement(PartnerUser savedPartnerUser, Transaction transaction, int points)
+        {
+            await _context.WithTransactionAsync(async () =>
+            {
+                Achievement achievement = new Achievement
+                {
+                    PartnerUser = savedPartnerUser,
+                    Transaction = transaction,
+                    Points = points,
+                    ExpirationDate = DateTime.Now.AddDays(savedPartnerUser.Partner.PointsDuration),
+                };
+
+                await _context.DbSet<Achievement>().AddAsync(achievement);
+                await _context.SaveChangesAsync();
+            });
+        }
+
         private async Task ValidateExistingPartnerUserAndThrow(PartnerUserDTO partnerUserDTO)
         {
             await _context.WithTransactionAsync(async () =>
@@ -629,7 +659,8 @@ namespace PlayertyLoyals.Business.Services
                 PartnerUser partnerUser = await GetInstanceAsync<PartnerUser, long>(partnerUserDTO.Id, partnerUserDTO.Version);
 
                 // FT: Noone can change these from the partner user page
-                if (partnerUser.Tier?.Id != partnerUserDTO.TierId ||
+                if (
+                    partnerUser.Tier?.Id != partnerUserDTO.TierId ||
                     partnerUser.User.Id != partnerUserDTO.UserId ||
                     partnerUser.Partner.Id != partnerUserDTO.PartnerId
                 )
@@ -661,7 +692,7 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        private async Task UpdateFirstTimeFilledPointsForThePartnerUser(PartnerUser partnerUser, List<long> segmentationItemIdsToCheck)
+        private async Task UpdateFirstTimeFilledPointsForPartnerUser(PartnerUser partnerUser, List<long> segmentationItemIdsToCheck)
         {
             await _context.WithTransactionAsync(async () =>
             {
@@ -673,23 +704,11 @@ namespace PlayertyLoyals.Business.Services
                     {
                         partnerUser.AlreadyFilledSegmentations.Add(segmentation);
                         partnerUser.Points += segmentation.PointsForTheFirstTimeFill;
+                        await AddAchievement(partnerUser, null, segmentation.PointsForTheFirstTimeFill);
                     }
                 }
 
                 await _context.SaveChangesAsync();
-            });
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="pointsToAdd">Can be negative value also</param>
-        private async Task UpdatePointsForThePartnerUser(PartnerUser partnerUser, int pointsToAdd)
-        {
-            await _context.WithTransactionAsync(async () =>
-            {
-                partnerUser.Points += pointsToAdd;
-
-                await UpdatePartnerUserTier(partnerUser);
             });
         }
 
@@ -753,21 +772,11 @@ namespace PlayertyLoyals.Business.Services
 
         public async Task<TierDTO> GetTierDTOForCurrentPartnerUser()
         {
-            string partnerCode = _partnerUserAuthenticationService.GetCurrentPartnerCode();
-            long userId = _authenticationService.GetCurrentUserId();
-
             return await _context.WithTransactionAsync(async () =>
             {
-                int? tierId = await _context.DbSet<PartnerUser>()
-                    .AsNoTracking()
-                    .Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId)
-                    .Select(x => (int?)x.Tier.Id) // FT: Nullable object must have a value, if we don't add (int?)
-                    .SingleOrDefaultAsync();
+                int points = await _partnerUserAuthenticationService.GetPointsForCurrentPartnerUser();
 
-                if (tierId == null)
-                    return null;
-
-                return await GetTierDTO(tierId.Value, false);
+                return await GetTierDTOForPoints(points);
             });
         }
 
@@ -840,14 +849,12 @@ namespace PlayertyLoyals.Business.Services
 
         public async Task<TableResponseDTO<NotificationDTO>> GetNotificationsForCurrentPartnerUser(TableFilterDTO tableFilterDTO)
         {
-            TableResponseDTO<NotificationDTO> result = new TableResponseDTO<NotificationDTO>();
+            TableResponseDTO<NotificationDTO> result = new();
             long currentUserId = _authenticationService.GetCurrentUserId(); // FT: Not doing user.Notifications, because he could have a lot of them.
             string currentPartnerSlug = _partnerUserAuthenticationService.GetCurrentPartnerCode();
 
             await _context.WithTransactionAsync(async () =>
             {
-                //long currentPartnerUserId = await _partnerUserAuthenticationService.GetCurrentPartnerUserId();
-
                 var notificationUsersQuery = _context.DbSet<UserNotification>()
                     .Where(x => x.User.Id == currentUserId)
                     .Select(x => new
@@ -877,11 +884,11 @@ namespace PlayertyLoyals.Business.Services
                     .Take(tableFilterDTO.Rows)
                     .ToListAsync();
 
-                List<NotificationDTO> notificationsDTO = new List<NotificationDTO>();
+                List<NotificationDTO> notificationsDTO = new();
 
                 foreach (var item in notificationUsers)
                 {
-                    NotificationDTO notificationDTO = new NotificationDTO();
+                    NotificationDTO notificationDTO = new();
 
                     if (item.Discriminator == NotificationDiscriminatorCodes.Notification)
                     {
@@ -1297,8 +1304,8 @@ Korisnici kojima nismo uspeli da ažuriramo bodove, jer ne postoje u 'loyalty pr
                         {
                             User = new UserExtended { Email = externalTransactionDTO.UserEmail },
                             Partner = savedBusinessSystemUpdatePointsScheduledTask.BusinessSystem.Partner,
-                            Points = pointsFromTransaction,
-                            Tier = await GetTierForThePoints(pointsFromTransaction)
+                            Points = 0,
+                            Tier = await GetTierForPoints(pointsFromTransaction)
                         };
 
                         await _context.DbSet<PartnerUser>().AddAsync(partnerUser);
@@ -1319,8 +1326,11 @@ Korisnici kojima nismo uspeli da ažuriramo bodove, jer ne postoje u 'loyalty pr
                         BusinessSystemUpdatePointsScheduledTaskId = savedBusinessSystemUpdatePointsScheduledTask.Id,
                     };
 
-                    await UpdatePointsForThePartnerUser(partnerUser, pointsFromTransaction);
-                    await SaveTransaction(transactionDTO, false, false);
+                    partnerUser.Points += pointsFromTransaction;
+                    await UpdatePartnerUserTier(partnerUser);
+                    Transaction savedTransaction = await SaveTransaction(transactionDTO, false, false);
+                    await AddAchievement(partnerUser, savedTransaction, pointsFromTransaction);
+
                     await _context.SaveChangesAsync();
 
                     transactionWhichUpdateSucceededList.Add($"{externalTransactionDTO.Code} ({externalTransactionDTO.UserEmail})");
@@ -1344,16 +1354,15 @@ Korisnici kojima nismo uspeli da ažuriramo bodove, jer ne postoje u 'loyalty pr
 
                 BusinessSystemUpdatePointsScheduledTask taskForRevert = await GetInstanceAsync<BusinessSystemUpdatePointsScheduledTask, long>(taskForRevertId, null);
 
-                IQueryable<BusinessSystemUpdatePointsScheduledTask> tasksQuery = _context.DbSet<BusinessSystemUpdatePointsScheduledTask>()
+                List<BusinessSystemUpdatePointsScheduledTask> tasks = await _context.DbSet<BusinessSystemUpdatePointsScheduledTask>()
                     .Include(x => x.Transactions)
                         .ThenInclude(x => x.PartnerUser)
                             .ThenInclude(x => x.Tier)
                     .Where(x =>
                         x.BusinessSystem.Id == taskForRevert.BusinessSystem.Id &&
-                        x.Id >= taskForRevert.Id 
-                    );
-
-                List<BusinessSystemUpdatePointsScheduledTask> tasks = await tasksQuery.ToListAsync();
+                        x.Id >= taskForRevert.Id
+                    )
+                    .ToListAsync();
 
                 foreach (BusinessSystemUpdatePointsScheduledTask task in tasks)
                 {
@@ -1364,8 +1373,11 @@ Korisnici kojima nismo uspeli da ažuriramo bodove, jer ne postoje u 'loyalty pr
                     }
                 }
 
-                List<long> taskIds = tasks.Select(x => x.Id).ToList();
-                await DeleteBusinessSystemUpdatePointsScheduledTaskList(taskIds, false);
+                List<long> taskIds = tasks
+                    .Select(x => x.Id)
+                    .ToList();
+
+                await DeleteBusinessSystemUpdatePointsScheduledTaskList(taskIds, false); // FT: Transactions and Achievements will be deleted also
 
                 await _context.SaveChangesAsync();
             });
@@ -1412,10 +1424,12 @@ Korisnici kojima nismo uspeli da ažuriramo bodove, jer ne postoje u 'loyalty pr
                         totalUpdatePoints += transaction.Points;
                     }
 
+                    int partnerUserPoints = partnerUser.Points;
+
                     emailBody.Append($$"""
 <br> Osvojeno bodova ovim ažuriranjem: {{totalUpdatePoints}}. <br>
-<br> Ukupno bodova: {{partnerUser.Points}}. <br>
-<br> Trenutni nivo lojalnosti: {{partnerUser.Tier.Name}} (potrebno Vam je {{partnerUser.Tier.ValidTo - partnerUser.Points}} bodova do sledećeg nivoa lojalnosti). <br>
+<br> Ukupno bodova: {{partnerUserPoints}}. <br>
+<br> Trenutni nivo lojalnosti: {{partnerUser.Tier.Name}} (potrebno Vam je {{partnerUser.Tier.ValidTo - partnerUserPoints}} bodova do sledećeg nivoa lojalnosti). <br>
 <br> Ažuriranje izvršeno u: {{task.CreatedAt.ToString("dd.MM.yyyy. HH:mm")}}. <br>
 <br> Za detaljniju statistiku posetite naš program lojalnosti na: {{SettingsProvider.Current.FrontendUrl}}/login?partner={{partnerUser.Partner.Slug}} <br>
 """);

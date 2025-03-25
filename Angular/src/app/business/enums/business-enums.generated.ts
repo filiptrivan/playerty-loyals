@@ -15,6 +15,10 @@ export enum BusinessPermissionCodes
 {
     ReadCurrentPartner = "ReadCurrentPartner",
 	UpdateCurrentPartner = "UpdateCurrentPartner",
+	ReadAchievement = "ReadAchievement",
+	UpdateAchievement = "UpdateAchievement",
+	InsertAchievement = "InsertAchievement",
+	DeleteAchievement = "DeleteAchievement",
 	ReadBusinessSystem = "ReadBusinessSystem",
 	UpdateBusinessSystem = "UpdateBusinessSystem",
 	InsertBusinessSystem = "InsertBusinessSystem",

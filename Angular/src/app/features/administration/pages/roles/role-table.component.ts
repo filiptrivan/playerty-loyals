@@ -4,11 +4,11 @@ import { ApiService } from 'src/app/business/services/api/api.service';
 import { Column } from '@playerty/spider';
 
 @Component({
-    selector: 'role-list',
-    templateUrl: './role-list.component.html',
+    selector: 'role-table',
+    templateUrl: './role-table.component.html',
     styles: []
 })
-export class RoleListComponent implements OnInit {
+export class RoleTableComponent implements OnInit {
     cols: Column[];
 
     getRoleTableDataObservableMethod = this.apiService.getRoleTableData;

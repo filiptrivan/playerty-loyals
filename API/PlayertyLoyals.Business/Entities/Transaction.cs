@@ -44,6 +44,11 @@ namespace PlayertyLoyals.Business.Entities
         [Required]
         public int Points { get; set; }
 
+        /// <summary>
+        /// FT: Never using, made only to satisfy many to one required, it will always have only single transaction
+        /// </summary>
+        public virtual List<Achievement> Achievements { get; set; } = new();
+
         [ManyToOneRequired]
         [WithMany(nameof(PartnerUser.Transactions))]
         public virtual PartnerUser PartnerUser {  get; set; }

@@ -2,6 +2,96 @@ import { BaseEntity, TableFilter, TableFilterContext, TableFilterSortMeta, MimeT
 import { NotificationDiscriminatorCodes } from "../enums/business-enums.generated";
 
 
+export class Achievement extends BaseEntity
+{
+    points?: number;
+	expirationDate?: Date;
+	partnerUserDisplayName?: string;
+	partnerUserId?: number;
+	transactionDisplayName?: string;
+	transactionId?: number;
+	version?: number;
+	id?: number;
+	createdAt?: Date;
+	modifiedAt?: Date;
+
+    constructor(
+    {
+        points,
+		expirationDate,
+		partnerUserDisplayName,
+		partnerUserId,
+		transactionDisplayName,
+		transactionId,
+		version,
+		id,
+		createdAt,
+		modifiedAt
+    }:{
+        points?: number;
+		expirationDate?: Date;
+		partnerUserDisplayName?: string;
+		partnerUserId?: number;
+		transactionDisplayName?: string;
+		transactionId?: number;
+		version?: number;
+		id?: number;
+		createdAt?: Date;
+		modifiedAt?: Date;     
+    } = {}
+    ) {
+        super('Achievement'); 
+
+        this.points = points;
+		this.expirationDate = expirationDate;
+		this.partnerUserDisplayName = partnerUserDisplayName;
+		this.partnerUserId = partnerUserId;
+		this.transactionDisplayName = transactionDisplayName;
+		this.transactionId = transactionId;
+		this.version = version;
+		this.id = id;
+		this.createdAt = createdAt;
+		this.modifiedAt = modifiedAt;
+    }
+}
+
+
+export class AchievementSaveBody extends BaseEntity
+{
+    achievementDTO?: Achievement;
+
+    constructor(
+    {
+        achievementDTO
+    }:{
+        achievementDTO?: Achievement;     
+    } = {}
+    ) {
+        super('AchievementSaveBody'); 
+
+        this.achievementDTO = achievementDTO;
+    }
+}
+
+
+export class AchievementMainUIForm extends BaseEntity
+{
+    achievementDTO?: Achievement;
+
+    constructor(
+    {
+        achievementDTO
+    }:{
+        achievementDTO?: Achievement;     
+    } = {}
+    ) {
+        super('AchievementMainUIForm'); 
+
+        this.achievementDTO = achievementDTO;
+    }
+}
+
+
 export class AutomaticUpdatePoints extends BaseEntity
 {
     businessSystemId?: number;
@@ -874,6 +964,7 @@ export class Partner extends BaseEntity
 	primaryColor?: string;
 	productsRecommendationEndpoint?: string;
 	pointsMultiplier?: number;
+	pointsDuration?: number;
 	version?: number;
 	id?: number;
 	createdAt?: Date;
@@ -889,6 +980,7 @@ export class Partner extends BaseEntity
 		primaryColor,
 		productsRecommendationEndpoint,
 		pointsMultiplier,
+		pointsDuration,
 		version,
 		id,
 		createdAt,
@@ -902,6 +994,7 @@ export class Partner extends BaseEntity
 		primaryColor?: string;
 		productsRecommendationEndpoint?: string;
 		pointsMultiplier?: number;
+		pointsDuration?: number;
 		version?: number;
 		id?: number;
 		createdAt?: Date;
@@ -918,6 +1011,7 @@ export class Partner extends BaseEntity
 		this.primaryColor = primaryColor;
 		this.productsRecommendationEndpoint = productsRecommendationEndpoint;
 		this.pointsMultiplier = pointsMultiplier;
+		this.pointsDuration = pointsDuration;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { UserListComponent } from './pages/users/user-list.component';
+import { UserTableComponent } from './pages/users/user-table.component';
 import { UserDetailsComponent } from './pages/users/user-details.component';
-import { RoleListComponent } from './pages/roles/role-list.component';
+import { RoleTableComponent } from './pages/roles/role-table.component';
 import { RoleDetailsComponent } from './pages/roles/role-details.component';
 import { NotificationDetailsComponent } from './pages/notifications/notification-details.component';
 import { NotificationTableComponent } from './pages/notifications/notification-table.component';
@@ -18,7 +18,7 @@ import { PrimengModule, SpiderDataTableComponent, SpiderControlsModule, CardSkel
 const routes: Routes = [
     {
         path: 'users',
-        component: UserListComponent,
+        component: UserTableComponent,
     },
     {
         path: 'users/:id',
@@ -26,7 +26,7 @@ const routes: Routes = [
     },
     {
         path: 'roles',
-        component: RoleListComponent,
+        component: RoleTableComponent,
     },
     {
         path: 'roles/:id',
@@ -68,9 +68,9 @@ const routes: Routes = [
     RoleBaseDetailsComponent,
 ],
 declarations: [
-        UserListComponent,
+        UserTableComponent,
         UserDetailsComponent, 
-        RoleListComponent,
+        RoleTableComponent,
         RoleDetailsComponent,
         NotificationTableComponent,
         NotificationDetailsComponent,

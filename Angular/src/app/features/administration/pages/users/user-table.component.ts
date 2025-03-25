@@ -1,14 +1,14 @@
-import { ApiService } from './../../../../business/services/api/api.service';
+import { ApiService } from '../../../../business/services/api/api.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { Component, OnInit } from '@angular/core';
 import { Column } from '@playerty/spider';
 
 @Component({
-    selector: 'user-list',
-    templateUrl: './user-list.component.html',
+    selector: 'user-table',
+    templateUrl: './user-table.component.html',
     styles: []
 })
-export class UserListComponent implements OnInit {
+export class UserTableComponent implements OnInit {
     cols: Column[];
     
     getUserTableDataObservableMethod = this.apiService.getUserExtendedTableData;

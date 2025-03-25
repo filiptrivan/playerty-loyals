@@ -40,7 +40,6 @@ namespace PlayertyLoyals.Business.Entities
         public virtual List<PartnerUser> PartnerUsers { get; } = new();
 
         [ExcludeServiceMethodsFromGeneration]
-        //[UIControlType(nameof(UIControlTypeCodes.MultiSelect))]
         public virtual List<Role> Roles { get; } = new(); // M2M
 
         public virtual List<Notification> Notifications { get; } = new(); // M2M

@@ -4,7 +4,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { CommonModule } from '@angular/common';
 import { PartnerUserListComponent } from './pages/users/partner-user-list.component';
 import { PartnerUserDetailsComponent } from './pages/users/partner-user-details.component';
-import { PartnerRoleListComponent } from './pages/roles/partner-role-list.component';
+import { PartnerRoleTableComponent } from './pages/roles/partner-role-table.component';
 import { PartnerRoleDetailsComponent } from './pages/roles/partner-role-details.component';
 import { TierListComponent } from './pages/tiers/tier-list.component';
 import { PartnerNotificationDetailsComponent } from './pages/notifications/partner-notification-details.component';
@@ -32,7 +32,7 @@ const routes: Routes = [
     },
     {
         path: 'roles',
-        component: PartnerRoleListComponent,
+        component: PartnerRoleTableComponent,
     },
     {
         path: 'roles/:id',
@@ -93,7 +93,7 @@ const routes: Routes = [
     declarations: [
         PartnerUserListComponent,
         PartnerUserDetailsComponent, 
-        PartnerRoleListComponent,
+        PartnerRoleTableComponent,
         PartnerRoleDetailsComponent,
         TierListComponent,
         PartnerNotificationListComponent,

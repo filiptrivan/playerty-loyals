@@ -1,4 +1,3 @@
-import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { TranslocoService } from '@jsverse/transloco';
 import { Component, OnInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
@@ -11,7 +10,6 @@ export class AppComponent implements OnInit {
 
     constructor(
         private primengConfig: PrimeNGConfig, 
-        private authService: AuthService, 
         private translocoService: TranslocoService
     ) {
 
@@ -23,7 +21,5 @@ export class AppComponent implements OnInit {
         this.translocoService.selectTranslateObject('Primeng').subscribe((primengTranslations) => {
             this.primengConfig.setTranslation(primengTranslations);
         });
-
-        // await this.authService.startListening();
     }
 }

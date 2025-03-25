@@ -4,11 +4,6 @@ using Microsoft.Extensions.Options;
 using PlayertyLoyals.Shared.Resources;
 using Spider.Shared.Extensions;
 using Spider.Shared.Resources;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PlayertyLoyals.Shared.FluentValidation
 {

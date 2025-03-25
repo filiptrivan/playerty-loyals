@@ -63,6 +63,42 @@ namespace PlayertyLoyals.Shared.Resources {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string Achievement {
+            get {
+                return ResourceManager.GetString("Achievement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string AchievementExcelExportName {
+            get {
+                return ResourceManager.GetString("AchievementExcelExportName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string AchievementList {
+            get {
+                return ResourceManager.GetString("AchievementList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Achievements {
+            get {
+                return ResourceManager.GetString("Achievements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string AlreadyFilledSegmentation {
             get {
                 return ResourceManager.GetString("AlreadyFilledSegmentation", resourceCulture);
@@ -243,6 +279,15 @@ namespace PlayertyLoyals.Shared.Resources {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string CacheVersion {
+            get {
+                return ResourceManager.GetString("CacheVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string CheckedSegmentationItem {
             get {
                 return ResourceManager.GetString("CheckedSegmentationItem", resourceCulture);
@@ -363,6 +408,15 @@ namespace PlayertyLoyals.Shared.Resources {
         public static string EmailBody {
             get {
                 return ResourceManager.GetString("EmailBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string ExpirationDate {
+            get {
+                return ResourceManager.GetString("ExpirationDate", resourceCulture);
             }
         }
         
@@ -909,6 +963,15 @@ namespace PlayertyLoyals.Shared.Resources {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string PointsDuration {
+            get {
+                return ResourceManager.GetString("PointsDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string PointsForTheFirstTimeFill {
             get {
                 return ResourceManager.GetString("PointsForTheFirstTimeFill", resourceCulture);
@@ -1065,33 +1128,6 @@ namespace PlayertyLoyals.Shared.Resources {
         public static string Roles {
             get {
                 return ResourceManager.GetString("Roles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string ScheduledTaskType {
-            get {
-                return ResourceManager.GetString("ScheduledTaskType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string ScheduledTaskTypeExcelExportName {
-            get {
-                return ResourceManager.GetString("ScheduledTaskTypeExcelExportName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string ScheduledTaskTypeList {
-            get {
-                return ResourceManager.GetString("ScheduledTaskTypeList", resourceCulture);
             }
         }
         

@@ -1,10 +1,6 @@
 ﻿using Spider.Shared.Attributes.EF;
 using Spider.Shared.Attributes.EF.UI;
 using Spider.Shared.BaseEntities;
-using Spider.Shared.Entities;
-using Spider.Shared.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;

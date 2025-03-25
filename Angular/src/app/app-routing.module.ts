@@ -1,7 +1,7 @@
 import { PreloadAllModules, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { AuthGuard, NotAuthGuard, NotFoundComponent } from '@playerty/spider';
-import { LayoutComponent } from './business/components/layout/layout.component';
+import { LayoutComponent } from './business/layout/layout.component';
 
 @NgModule({
     imports: [

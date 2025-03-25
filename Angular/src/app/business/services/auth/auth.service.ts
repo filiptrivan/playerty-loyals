@@ -23,7 +23,7 @@ export class AuthService extends AuthBaseService implements OnDestroy {
     private route: ActivatedRoute,
   ) {
     super(router, http, externalAuthService, apiService, config);
-    this.initCurrentPartnerUserState()
+    this.initCurrentPartnerUserState();
   }
 
   //#region Partner

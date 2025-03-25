@@ -11,7 +11,7 @@ import { combineLatest, firstValueFrom, forkJoin, map, Observable, of, Subscript
 import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../services/auth/auth.service';
 import { PrimengModule, SpiderControlsModule, CardSkeletonComponent, IndexCardComponent, IsAuthorizedForSaveEvent, SpiderDataTableComponent, SpiderFormArray, BaseEntity, LastMenuIconIndexClicked, SpiderFormGroup, SpiderButton, nameof, BaseFormService, getControl, Column, TableFilter, LazyLoadSelectedIdsResult, AllClickEvent, SpiderFileSelectEvent, getPrimengDropdownNamebookOptions, PrimengOption, SpiderFormControl, getPrimengAutocompleteNamebookOptions } from '@playerty/spider';
-import { AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, ExcelUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, GenderAndBirthDate, InfoAndWarningResult, ManualUpdatePoints, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerUser, PartnerUserSaveBody, Product, SegmentationItem, TierSaveBody, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRoleSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserExtendedSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
+import { AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, ExcelUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, GenderAndBirthDate, InfoAndWarningResult, ManualUpdatePoints, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerUser, PartnerUserSaveBody, Product, SegmentationItem, TierSaveBody, Achievement, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, AchievementSaveBody, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRoleSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserExtendedSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
 
 @Component({
     selector: 'business-system-base-details',
@@ -571,6 +571,9 @@ export class NotificationBaseDetailsComponent {
                     <div *ngIf="showPointsMultiplierForPartner" class="col-12 md:col-6">
                         <spider-number [control]="control('pointsMultiplier', partnerFormGroup)" [decimal]="true" [maxFractionDigits]=" 2"></spider-number>
                     </div>
+                    <div *ngIf="showPointsDurationForPartner" class="col-12 md:col-6">
+                        <spider-number [control]="control('pointsDuration', partnerFormGroup)"></spider-number>
+                    </div>
                     <ng-content select="[AFTER]"></ng-content>
                 </form>
             } @placeholder {
@@ -640,6 +643,7 @@ export class PartnerBaseDetailsComponent {
     @Input() showPrimaryColorForPartner: boolean = true;
     @Input() showProductsRecommendationEndpointForPartner: boolean = true;
     @Input() showPointsMultiplierForPartner: boolean = true;
+    @Input() showPointsDurationForPartner: boolean = true;
 
 
     constructor(
@@ -725,6 +729,7 @@ export class PartnerBaseDetailsComponent {
                         this.partnerFormGroup.controls.primaryColor.enable();
                         this.partnerFormGroup.controls.productsRecommendationEndpoint.enable();
                         this.partnerFormGroup.controls.pointsMultiplier.enable();
+                        this.partnerFormGroup.controls.pointsDuration.enable();
 
                     }
                     else{
@@ -735,6 +740,7 @@ export class PartnerBaseDetailsComponent {
                         this.partnerFormGroup.controls.primaryColor.disable();
                         this.partnerFormGroup.controls.productsRecommendationEndpoint.disable();
                         this.partnerFormGroup.controls.pointsMultiplier.disable();
+                        this.partnerFormGroup.controls.pointsDuration.disable();
 
                     }
 

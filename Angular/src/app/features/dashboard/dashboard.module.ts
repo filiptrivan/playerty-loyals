@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { DashboardComponent } from './pages/dashboard.component';
+import { DashboardComponent } from './dashboard.component';
 import { ProductsRecommendationComponent } from 'src/app/business/components/products-recommendation/products-recommendation.component';
 import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
 import { TranslocoDirective } from '@jsverse/transloco';

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlayertyLoyals.Infrastructure;
 
@@ -11,9 +12,11 @@ using PlayertyLoyals.Infrastructure;
 namespace PlayertyLoyals.Infrastructure.Migrations
 {
     [DbContext(typeof(PlayertyApplicationDbContext))]
-    partial class PlayertyApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250323232259_CalculatedFields")]
+    partial class CalculatedFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -509,9 +512,6 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     b.Property<int>("Points")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TierId")
-                        .HasColumnType("int");
-
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
@@ -521,8 +521,6 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PartnerId");
-
-                    b.HasIndex("TierId");
 
                     b.HasIndex("UserId");
 
@@ -1062,11 +1060,6 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("PlayertyLoyals.Business.Entities.Tier", "Tier")
-                        .WithMany("PartnerUsers")
-                        .HasForeignKey("TierId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("PlayertyLoyals.Business.Entities.UserExtended", "User")
                         .WithMany("PartnerUsers")
                         .HasForeignKey("UserId")
@@ -1074,8 +1067,6 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Partner");
-
-                    b.Navigation("Tier");
 
                     b.Navigation("User");
                 });
@@ -1330,8 +1321,6 @@ namespace PlayertyLoyals.Infrastructure.Migrations
             modelBuilder.Entity("PlayertyLoyals.Business.Entities.Tier", b =>
                 {
                     b.Navigation("BusinessSystemTiers");
-
-                    b.Navigation("PartnerUsers");
                 });
 
             modelBuilder.Entity("PlayertyLoyals.Business.Entities.Transaction", b =>

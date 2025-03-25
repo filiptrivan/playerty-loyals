@@ -14,6 +14,24 @@ export class TranslateLabelsGeneratedService {
     translate = (name: string): string => {
         switch(name) 
         {
+            case 'points':
+                return this.translocoService.translate('Points');
+            case 'expirationDate':
+                return this.translocoService.translate('ExpirationDate');
+            case 'partnerUser':
+                return this.translocoService.translate('PartnerUser');
+            case 'transaction':
+                return this.translocoService.translate('Transaction');
+            case 'id':
+                return this.translocoService.translate('Id');
+            case 'version':
+                return this.translocoService.translate('Version');
+            case 'createdAt':
+                return this.translocoService.translate('CreatedAt');
+            case 'modifiedAt':
+                return this.translocoService.translate('ModifiedAt');
+            case 'achievementDTO':
+                return this.translocoService.translate('AchievementDTO');
             case 'user':
                 return this.translocoService.translate('User');
             case 'email':
@@ -38,14 +56,6 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('Code');
             case 'pointsMultiplier':
                 return this.translocoService.translate('PointsMultiplier');
-            case 'id':
-                return this.translocoService.translate('Id');
-            case 'version':
-                return this.translocoService.translate('Version');
-            case 'createdAt':
-                return this.translocoService.translate('CreatedAt');
-            case 'modifiedAt':
-                return this.translocoService.translate('ModifiedAt');
             case 'getTransactionsEndpoint':
                 return this.translocoService.translate('GetTransactionsEndpoint');
             case 'getDiscountProductGroupsEndpoint':
@@ -190,6 +200,8 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('PrimaryColor');
             case 'productsRecommendationEndpoint':
                 return this.translocoService.translate('ProductsRecommendationEndpoint');
+            case 'pointsDuration':
+                return this.translocoService.translate('PointsDuration');
             case 'partnerDTO':
                 return this.translocoService.translate('PartnerDTO');
             case 'partnerNotificationDTO':
@@ -212,16 +224,12 @@ export class TranslateLabelsGeneratedService {
                 return this.translocoService.translate('SelectedPartnerUsersIds');
             case 'selectedPartnerPermissionsIds':
                 return this.translocoService.translate('SelectedPartnerPermissionsIds');
-            case 'points':
-                return this.translocoService.translate('Points');
             case 'checkedSegmentationItems':
                 return this.translocoService.translate('CheckedSegmentationItems');
             case 'partnerUserDTO':
                 return this.translocoService.translate('PartnerUserDTO');
             case 'partnerNotification':
                 return this.translocoService.translate('PartnerNotification');
-            case 'partnerUser':
-                return this.translocoService.translate('PartnerUser');
             case 'partnerUserPartnerNotificationDTO':
                 return this.translocoService.translate('PartnerUserPartnerNotificationDTO');
             case 'partnerUserPartnerRoleDTO':

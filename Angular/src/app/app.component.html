@@ -1,5 +1,6 @@
 <!-- FT HACK: I don't know why, but translations on the layout component work only if we wrap everything with transloco -->
 <ng-container *transloco="let t">
+    
     <router-outlet></router-outlet>
 
     <p-confirmDialog 
@@ -11,6 +12,7 @@
     [message]="t('PleaseConfirmToProceed')"
     icon="pi pi-exclamation-circle"
     ></p-confirmDialog>
+
 </ng-container>
 
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="ball-clip-rotate-multiple" [fullScreen]="true"></ngx-spinner>

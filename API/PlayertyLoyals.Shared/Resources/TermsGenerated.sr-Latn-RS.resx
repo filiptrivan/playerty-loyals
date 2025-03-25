@@ -58,52 +58,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BusinessSystem" xml:space="preserve">
+  <data name="Achievement" xml:space="preserve">
     <value />
   </data>
-  <data name="BusinessSystemList" xml:space="preserve">
+  <data name="AchievementList" xml:space="preserve">
     <value />
   </data>
-  <data name="BusinessSystemExcelExportName" xml:space="preserve">
+  <data name="AchievementExcelExportName" xml:space="preserve">
     <value />
   </data>
-  <data name="Name" xml:space="preserve">
+  <data name="Points" xml:space="preserve">
     <value />
   </data>
-  <data name="GetTransactionsEndpoint" xml:space="preserve">
+  <data name="ExpirationDate" xml:space="preserve">
     <value />
   </data>
-  <data name="GetDiscountProductGroupsEndpoint" xml:space="preserve">
+  <data name="PartnerUser" xml:space="preserve">
     <value />
   </data>
-  <data name="CreateUserEndpoint" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UpdateUserGroupEndpoint" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UpdatePointsInterval" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UpdatePointsStartDate" xml:space="preserve">
-    <value />
-  </data>
-  <data name="UpdatePointsScheduledTaskIsPaused" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Partner" xml:space="preserve">
-    <value />
-  </data>
-  <data name="BusinessSystemTiers" xml:space="preserve">
-    <value />
-  </data>
-  <data name="BusinessSystemUpdatePointsScheduledTasks" xml:space="preserve">
-    <value />
-  </data>
-  <data name="DiscountProductGroups" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Transactions" xml:space="preserve">
+  <data name="Transaction" xml:space="preserve">
     <value />
   </data>
   <data name="Id" xml:space="preserve">
@@ -117,6 +90,51 @@
   </data>
   <data name="ModifiedAt" xml:space="preserve">
     <value />
+  </data>
+  <data name="BusinessSystem" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BusinessSystemList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BusinessSystemExcelExportName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value />
+  </data>
+  <data name="GetTransactionsEndpoint" xml:space="preserve">
+    <value>Putanja za učitavanje transakcija</value>
+  </data>
+  <data name="GetDiscountProductGroupsEndpoint" xml:space="preserve">
+    <value>Putanja učitavanja grupa proizvoda za popust</value>
+  </data>
+  <data name="CreateUserEndpoint" xml:space="preserve">
+    <value>Putanja za kreiranje korisnika</value>
+  </data>
+  <data name="UpdateUserGroupEndpoint" xml:space="preserve">
+    <value>Putanja za ažuriranje grupa korisnika</value>
+  </data>
+  <data name="UpdatePointsInterval" xml:space="preserve">
+    <value>Interval za ažuriranje bodova</value>
+  </data>
+  <data name="UpdatePointsStartDate" xml:space="preserve">
+    <value>Datum početka ažuriranja bodova</value>
+  </data>
+  <data name="UpdatePointsScheduledTaskIsPaused" xml:space="preserve">
+    <value>Ažuriranje bodova pauzirano</value>
+  </data>
+  <data name="Partner" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BusinessSystemTiers" xml:space="preserve">
+    <value />
+  </data>
+  <data name="BusinessSystemUpdatePointsScheduledTasks" xml:space="preserve">
+    <value />
+  </data>
+  <data name="DiscountProductGroups" xml:space="preserve">
+    <value>Grupe proizvoda za popust</value>
   </data>
   <data name="BusinessSystemTier" xml:space="preserve">
     <value />
@@ -169,11 +187,14 @@
   <data name="IsManual" xml:space="preserve">
     <value />
   </data>
-  <data name="DiscountProductGroupList" xml:space="preserve">
+  <data name="Transactions" xml:space="preserve">
     <value />
   </data>
+  <data name="DiscountProductGroupList" xml:space="preserve">
+    <value>Grupa proizvoda za popust</value>
+  </data>
   <data name="DiscountProductGroupExcelExportName" xml:space="preserve">
-    <value />
+    <value>Grupa_Proizvoda_Za_Popust</value>
   </data>
   <data name="Code" xml:space="preserve">
     <value />
@@ -218,7 +239,7 @@
     <value />
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value />
   </data>
   <data name="Slug" xml:space="preserve">
     <value />
@@ -235,8 +256,14 @@
   <data name="PointsMultiplier" xml:space="preserve">
     <value />
   </data>
-  <data name="PartnerUsers" xml:space="preserve">
+  <data name="PointsDuration" xml:space="preserve">
     <value />
+  </data>
+  <data name="CacheVersion" xml:space="preserve">
+    <value />
+  </data>
+  <data name="PartnerUsers" xml:space="preserve">
+    <value>Korisnici</value>
   </data>
   <data name="Tiers" xml:space="preserve">
     <value />
@@ -281,7 +308,7 @@
     <value />
   </data>
   <data name="PartnerPermissions" xml:space="preserve">
-    <value />
+    <value>Permisije</value>
   </data>
   <data name="PartnerRolePartnerPermission" xml:space="preserve">
     <value />
@@ -292,19 +319,16 @@
   <data name="PartnerRolePartnerPermissionExcelExportName" xml:space="preserve">
     <value />
   </data>
-  <data name="PartnerUser" xml:space="preserve">
-    <value />
-  </data>
   <data name="PartnerUserList" xml:space="preserve">
     <value />
   </data>
   <data name="PartnerUserExcelExportName" xml:space="preserve">
     <value />
   </data>
-  <data name="Points" xml:space="preserve">
+  <data name="User" xml:space="preserve">
     <value />
   </data>
-  <data name="User" xml:space="preserve">
+  <data name="Achievements" xml:space="preserve">
     <value />
   </data>
   <data name="CheckedSegmentationItems" xml:space="preserve">
@@ -400,15 +424,6 @@
   <data name="RolePermissionExcelExportName" xml:space="preserve">
     <value />
   </data>
-  <data name="ScheduledTaskType" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ScheduledTaskTypeList" xml:space="preserve">
-    <value />
-  </data>
-  <data name="ScheduledTaskTypeExcelExportName" xml:space="preserve">
-    <value />
-  </data>
   <data name="Segmentation" xml:space="preserve">
     <value />
   </data>
@@ -422,7 +437,7 @@
     <value />
   </data>
   <data name="SegmentationItems" xml:space="preserve">
-    <value />
+    <value>Stavke segmentacije</value>
   </data>
   <data name="PartnerUsersThatHasFilledSegmentation" xml:space="preserve">
     <value />
@@ -446,9 +461,6 @@
     <value />
   </data>
   <data name="ValidTo" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Transaction" xml:space="preserve">
     <value />
   </data>
   <data name="TransactionList" xml:space="preserve">
@@ -476,7 +488,7 @@
     <value />
   </data>
   <data name="UserExtended" xml:space="preserve">
-    <value>Korisnik</value>
+    <value />
   </data>
   <data name="UserExtendedList" xml:space="preserve">
     <value />
@@ -491,7 +503,7 @@
     <value />
   </data>
   <data name="BirthDate" xml:space="preserve">
-    <value>Datum rođenja</value>
+    <value />
   </data>
   <data name="Notifications" xml:space="preserve">
     <value />

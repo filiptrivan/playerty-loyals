@@ -14,6 +14,12 @@ export class TranslateClassNamesGeneratedService {
     translate = (name: string): string => {
         switch(name) 
         {
+            case 'Achievement':
+                return this.translocoService.translate('Achievement');
+            case 'AchievementMainUIForm':
+                return this.translocoService.translate('AchievementMainUIForm');
+            case 'AchievementSaveBody':
+                return this.translocoService.translate('AchievementSaveBody');
             case 'AuthResult':
                 return this.translocoService.translate('AuthResult');
             case 'AutomaticUpdatePoints':

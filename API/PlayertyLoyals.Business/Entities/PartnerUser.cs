@@ -1,6 +1,5 @@
 ﻿using PlayertyLoyals.Business.Enums;
 using Spider.Shared.Attributes.EF;
-using Spider.Shared.Attributes.EF.Translation;
 using Spider.Shared.Attributes.EF.UI;
 using Spider.Shared.BaseEntities;
 using Spider.Shared.Enums;
@@ -27,13 +26,15 @@ namespace PlayertyLoyals.Business.Entities
         public virtual UserExtended User { get; set; }
 
         [UIDoNotGenerate]
-        [UIControlType(nameof(UIControlTypeCodes.Dropdown))]
+        [UIControlType(nameof(UIControlTypeCodes.Dropdown))] // FT: This line is neccesary because of the get dropdown method (should change this behaviour)
         [SetNull]
         [WithMany(nameof(Tier.PartnerUsers))]
         //[CanNotUpdateThroughMainUIForm]
         public virtual Tier Tier { get; set; } // FT: It's not required because when the user just made the account and the administrator didn't make any tiers, he can't be any
 
         public virtual List<Transaction> Transactions { get; } = new();
+
+        public virtual List<Achievement> Achievements { get; } = new();
 
         [GenerateCommaSeparatedDisplayName]
         public virtual List<SegmentationItem> CheckedSegmentationItems { get; } = new(); // M2M

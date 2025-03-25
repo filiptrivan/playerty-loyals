@@ -51,6 +51,13 @@ namespace PlayertyLoyals.Business.Entities
         [Required]
         public decimal PointsMultiplier { get; set; }
 
+        /// <summary>
+        /// In days
+        /// </summary>
+        [Required]
+        [Range(0, 1100)]
+        public int PointsDuration { get; set; } // TODO FT: Add property description on UI, "In days"
+
         [Timestamp]
         [ExcludeFromDTO]
         public byte[] CacheVersion { get; set; }

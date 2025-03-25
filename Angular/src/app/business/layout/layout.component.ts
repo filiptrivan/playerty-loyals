@@ -8,7 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { FooterComponent, LayoutBaseComponent, AppSidebarComponent, AppTopBarComponent, LayoutBaseService, PrimengModule, SpiderMenuItem} from '@playerty/spider';
 import { CommonModule } from '@angular/common';
-import { BusinessPermissionCodes } from '../../enums/business-enums.generated';
+import { BusinessPermissionCodes } from '../enums/business-enums.generated';
 import { SecurityPermissionCodes } from '@playerty/spider';
 
 @Component({

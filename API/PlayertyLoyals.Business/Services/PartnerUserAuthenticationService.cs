@@ -172,25 +172,6 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task<Partner> GetCurrentPartner()
-        {
-            return await _context.WithTransactionAsync(async () =>
-            {
-                return await _context.DbSet<Partner>().Where(x => x.Slug == GetCurrentPartnerCode()).SingleOrDefaultAsync();
-            });
-        }
-
-        public async Task<PartnerUser> GetCurrentPartnerUser()
-        {
-            string partnerCode = GetCurrentPartnerCode();
-            long userId = _authenticationService.GetCurrentUserId();
-
-            return await _context.WithTransactionAsync(async () =>
-            {
-                return await _context.DbSet<PartnerUser>().Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId).SingleOrDefaultAsync();
-            });
-        }
-
         public async Task<List<string>> GetCurrentPartnerUserPermissionCodes()
         {
             string partnerCode = GetCurrentPartnerCode();
@@ -212,7 +193,7 @@ namespace PlayertyLoyals.Business.Services
             });
         }
 
-        public async Task<int> GetCurrentPartnerUserPoints()
+        public async Task<int> GetPointsForCurrentPartnerUser()
         {
             string partnerCode = GetCurrentPartnerCode();
             long userId = _authenticationService.GetCurrentUserId();
@@ -223,7 +204,7 @@ namespace PlayertyLoyals.Business.Services
                     .AsNoTracking()
                     .Where(x => x.Partner.Slug == partnerCode && x.User.Id == userId)
                     .Select(x => x.Points)
-                    .SingleOrDefaultAsync();
+                    .SingleAsync();
             });
         }
 

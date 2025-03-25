@@ -15,6 +15,19 @@ export class ValidatorServiceGenerated {
 
     setValidator = (formControl: SpiderFormControl, className: string): SpiderValidatorFn => {
         switch(formControl.label + className){
+            case 'pointsAchievement':
+                return this.pointsAchievementValidator(formControl);
+            case 'expirationDateAchievement':
+                return this.expirationDateAchievementValidator(formControl);
+            case 'partnerUserIdAchievement':
+                return this.partnerUserIdAchievementValidator(formControl);
+            case 'versionAchievement':
+                return this.versionAchievementValidator(formControl);
+            case 'createdAtAchievement':
+                return this.createdAtAchievementValidator(formControl);
+            case 'modifiedAtAchievement':
+                return this.modifiedAtAchievementValidator(formControl);
+
             case 'businessSystemIdAutomaticUpdatePoints':
                 return this.businessSystemIdAutomaticUpdatePointsValidator(formControl);
             case 'businessSystemVersionAutomaticUpdatePoints':
@@ -156,6 +169,8 @@ export class ValidatorServiceGenerated {
                 return this.productsRecommendationEndpointPartnerValidator(formControl);
             case 'pointsMultiplierPartner':
                 return this.pointsMultiplierPartnerValidator(formControl);
+            case 'pointsDurationPartner':
+                return this.pointsDurationPartnerValidator(formControl);
             case 'versionPartner':
                 return this.versionPartnerValidator(formControl);
             case 'createdAtPartner':
@@ -326,6 +341,109 @@ export class ValidatorServiceGenerated {
                 return null;
         }
     }
+
+    pointsAchievementValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    expirationDateAchievementValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+    partnerUserIdAchievementValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    versionAchievementValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    createdAtAchievementValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+    modifiedAtAchievementValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
 
     businessSystemIdAutomaticUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
@@ -1494,6 +1612,27 @@ export class ValidatorServiceGenerated {
             const valid = notEmptyRule && precisionScaleRule;
 
             return valid ? null : { _ : this.translocoService.translate('NotEmptyPrecisionScale', {precision, scale}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    pointsDurationPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
+        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+            const max = 1100;
+            const numberMaxRangeRule = (value <= max) || (typeof value === 'undefined' || value === null || value === '');
+            const min = 0;
+            const numberMinRangeRule = (value >= min) || (typeof value === 'undefined' || value === null || value === '');
+
+            const valid = notEmptyRule && numberMaxRangeRule && numberMinRangeRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmptyNumberRangeMaxNumberRangeMin', {max, min}) };
         };
         validator.hasNotEmptyRule = true;
         control.required = true;

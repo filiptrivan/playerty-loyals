@@ -44,14 +44,6 @@ namespace PlayertyLoyals.WebAPI.Controllers
         {
             return await _partnerUserAuthenticationService.GetCurrentPartnerUserDTO();
         }
-
-        [HttpGet]
-        [AuthGuard]
-        [SkipSpinner]
-        public async Task<int> GetCurrentPartnerUserPoints()
-        {
-            return await _partnerUserAuthenticationService.GetCurrentPartnerUserPoints();
-        }
         
         [HttpPost]
         [AuthGuard]
@@ -120,12 +112,13 @@ namespace PlayertyLoyals.WebAPI.Controllers
 
         [HttpGet]
         [AuthGuard]
-        public override async Task<List<NamebookDTO<int>>> GetTierDropdownListForPartnerUser(long? partnerUserId)
+        public async Task<List<NamebookDTO<int>>> GetTierDropdownList()
         {
+            // FT HACK: For more details go to the BusinessSystemTier entity, Tier property
             return await _loyalsBusinessService.GetTierDropdownListForPartnerUser(
                 _context.DbSet<Tier>().Where(x => x.Partner.Slug == _partnerUserAuthenticationService.GetCurrentPartnerCode()).OrderBy(x => x.ValidFrom), 
                 true,
-                partnerUserId
+                null
             );
         }
 

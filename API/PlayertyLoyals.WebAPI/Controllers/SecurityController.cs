@@ -3,12 +3,12 @@ using Spider.Security.Interfaces;
 using Spider.Security.Services;
 using Spider.Security.SecurityControllers;
 using Spider.Shared.Interfaces;
-using PlayertyLoyals.Business.Entities;
 using Spider.Shared.Attributes;
-using PlayertyLoyals.Business.Services;
 using Spider.Security.DTO;
 using Spider.Shared.Extensions;
 using Spider.Shared.Attributes.EF.UI;
+using PlayertyLoyals.Business.Entities;
+using PlayertyLoyals.Business.Services;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {

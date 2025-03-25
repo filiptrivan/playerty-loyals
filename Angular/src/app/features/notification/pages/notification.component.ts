@@ -1,7 +1,6 @@
 import { LayoutService } from './../../../business/services/layout/layout.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { MenuItem } from 'primeng/api';
 import { PaginatorState } from 'primeng/paginator';
 import { TranslocoService } from '@jsverse/transloco';
@@ -28,7 +27,6 @@ export class NotificationComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private authService: AuthService,
     private translocoService: TranslocoService,
     private messageService: SpiderMessageService,
     private layoutService: LayoutService,
