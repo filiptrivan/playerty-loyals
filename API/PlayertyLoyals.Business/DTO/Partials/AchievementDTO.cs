@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlayertyLoyals.Business.DTO.Partials
+namespace PlayertyLoyals.Business.DTO
 {
     public partial class AchievementDTO
     {

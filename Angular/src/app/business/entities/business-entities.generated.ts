@@ -10,12 +10,11 @@ export class Achievement extends BaseEntity
 	partnerUserId?: number;
 	transactionDisplayName?: string;
 	transactionId?: number;
-	achievementTypeDisplayName?: string;
-	achievementTypeId?: number;
 	version?: number;
 	id?: number;
 	createdAt?: Date;
 	modifiedAt?: Date;
+	transactionPrice?: number;
 
     constructor(
     {
@@ -25,12 +24,11 @@ export class Achievement extends BaseEntity
 		partnerUserId,
 		transactionDisplayName,
 		transactionId,
-		achievementTypeDisplayName,
-		achievementTypeId,
 		version,
 		id,
 		createdAt,
-		modifiedAt
+		modifiedAt,
+		transactionPrice
     }:{
         points?: number;
 		expirationDate?: Date;
@@ -38,12 +36,11 @@ export class Achievement extends BaseEntity
 		partnerUserId?: number;
 		transactionDisplayName?: string;
 		transactionId?: number;
-		achievementTypeDisplayName?: string;
-		achievementTypeId?: number;
 		version?: number;
 		id?: number;
 		createdAt?: Date;
-		modifiedAt?: Date;     
+		modifiedAt?: Date;
+		transactionPrice?: number;     
     } = {}
     ) {
         super('Achievement'); 
@@ -54,12 +51,11 @@ export class Achievement extends BaseEntity
 		this.partnerUserId = partnerUserId;
 		this.transactionDisplayName = transactionDisplayName;
 		this.transactionId = transactionId;
-		this.achievementTypeDisplayName = achievementTypeDisplayName;
-		this.achievementTypeId = achievementTypeId;
 		this.version = version;
 		this.id = id;
 		this.createdAt = createdAt;
 		this.modifiedAt = modifiedAt;
+		this.transactionPrice = transactionPrice;
     }
 }
 
@@ -96,64 +92,6 @@ export class AchievementMainUIForm extends BaseEntity
         super('AchievementMainUIForm'); 
 
         this.achievementDTO = achievementDTO;
-    }
-}
-
-
-export class AchievementType extends BaseEntity
-{
-    name?: string;
-	id?: number;
-
-    constructor(
-    {
-        name,
-		id
-    }:{
-        name?: string;
-		id?: number;     
-    } = {}
-    ) {
-        super('AchievementType'); 
-
-        this.name = name;
-		this.id = id;
-    }
-}
-
-
-export class AchievementTypeSaveBody extends BaseEntity
-{
-    achievementTypeDTO?: AchievementType;
-
-    constructor(
-    {
-        achievementTypeDTO
-    }:{
-        achievementTypeDTO?: AchievementType;     
-    } = {}
-    ) {
-        super('AchievementTypeSaveBody'); 
-
-        this.achievementTypeDTO = achievementTypeDTO;
-    }
-}
-
-
-export class AchievementTypeMainUIForm extends BaseEntity
-{
-    achievementTypeDTO?: AchievementType;
-
-    constructor(
-    {
-        achievementTypeDTO
-    }:{
-        achievementTypeDTO?: AchievementType;     
-    } = {}
-    ) {
-        super('AchievementTypeMainUIForm'); 
-
-        this.achievementTypeDTO = achievementTypeDTO;
     }
 }
 

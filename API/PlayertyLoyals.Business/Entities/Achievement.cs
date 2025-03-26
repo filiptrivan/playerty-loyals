@@ -23,9 +23,5 @@ namespace PlayertyLoyals.Business.Entities
         [CascadeDelete]
         [WithMany(nameof(Transaction.Achievements))]
         public virtual Transaction Transaction { get; set; }
-
-        [ManyToOneRequired]
-        [WithMany(nameof(AchievementType.Achievements))]
-        public virtual AchievementType AchievementType { get; set; }
     }
 }

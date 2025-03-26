@@ -1,77 +1,10 @@
 <ng-container *transloco="let t">
-  <div class="card dashboard-card-wrapper">
-    <div class="big-header" style="margin-bottom: 10px;">
-      {{t('PointsHistory')}}
-      <div class="bold-header-separator"></div>
-    </div>
-    <div style="display: flex; flex-direction: column; position: relative; z-index: 2;">
-      <div style="display: flex; justify-content: space-between;">
-      </div>
-      @for (achievement of achievementsForCurrentPartnerUser?.data; track $index) {
-        <div class="transparent-card" style="margin: 0px;">
-          <div class="text-wrapper">
-            <!-- <div class="header" style="margin-bottom: 10px; display: flex; justify-content: space-between; position: relative;">
-              <div>
-                <div>{{achievement.productName}}</div>
-                <div class="header-separator"></div>
-              </div>
-            </div> -->
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div style="display: flex; align-items: center; gap: 20px;">
-                <div style="text-align: center;">
-                  <div style="font-size: 16px; font-weight: 700;">
-                    {{achievement.createdAt.getDate()}}
-                  </div>
-                  <div style="font-size: 14px; font-weight: 600;" class="gray-color">
-                    {{getMonth(achievement.createdAt.getMonth() + 1)}}
-                  </div>
-                </div>
-                <div class="vertical-gray-separator" style="height: 40px;"></div>
-                <div>
-                  <div style="font-size: 16px; font-weight: 700;">
-                    <!-- {{achievement.productName}} -->
-                  </div>
-                  <div style="font-size: 14px; font-weight: 600;" class="gray-color">
-                    <!-- {{achievement.productCategoryName}} -->
-                  </div>
-                </div>
-              </div>
-              <div *ngIf="achievement.points < 0" style="text-align: right;">
-                <div class="error-color-font" style="font-size: 19px; font-weight: 700;">
-                  {{achievement.points}} <i class="pi pi-star"></i>
-                </div>
-                <div style="font-size: 14px; font-weight: 600;" class="gray-color">
-                  <!-- {{achievement.price}} RSD  -->
-                </div>
-              </div>
-              <div *ngIf="achievement.points >= 0" style="text-align: right;">
-                <div class="success-color-font" style="font-size: 19px; font-weight: 700;">
-                  +{{achievement.points}} <i class="pi pi-star"></i>
-                </div>
-                <div style="font-size: 14px; font-weight: 600;" class="gray-color">
-                  <!-- {{achievement.price}} RSD  -->
-                </div>
-              </div>
-<!-- {{achievement.productImageUrl}}
-{{achievement.productCategoryImageUrl}}
-{{achievement.points}}
-{{achievement.storeDisplayName}} -->
-            </div>
-          </div>
-        </div>
-      }
-      @if ( achievementsForCurrentPartnerUser?.totalRecords === 0) {
-        {{t('YouDoNotHaveAnyAchievement')}}
-      }
-    </div>
-    <p-paginator
-      (onPageChange)="onLazyLoad($event)"
-      [first]="tableFilter.first"
-      [rows]="tableFilter.rows" 
-      [totalRecords]="achievementsForCurrentPartnerUser?.totalRecords">
-    </p-paginator>
-    <div class="card-overflow-icon">
-      <i class="pi pi-wallet"></i>
-    </div>
-  </div>
+  <spider-data-table 
+  [tableTitle]="t('PointsHistory')" 
+  tableIcon="pi pi-star"
+  [cols]="cols" 
+  [getTableDataObservableMethod]="getAchievementTableDataObservableMethod" 
+  [exportTableDataToExcelObservableMethod]="exportAchievementTableDataToExcelObservableMethod"
+  [showAddButton]="false"
+  ></spider-data-table>
 </ng-container>

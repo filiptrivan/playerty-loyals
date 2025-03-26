@@ -63,6 +63,15 @@ namespace PlayertyLoyals.Shared.Resources {
         /// <summary>
         ///   Looks up a localized string similar to .
         /// </summary>
+        public static string PointsHistoryExcelExportName {
+            get {
+                return ResourceManager.GetString("PointsHistoryExcelExportName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
         public static string Test {
             get {
                 return ResourceManager.GetString("Test", resourceCulture);

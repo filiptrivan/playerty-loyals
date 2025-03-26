@@ -20,12 +20,6 @@ export class TranslateClassNamesGeneratedService {
                 return this.translocoService.translate('AchievementMainUIForm');
             case 'AchievementSaveBody':
                 return this.translocoService.translate('AchievementSaveBody');
-            case 'AchievementType':
-                return this.translocoService.translate('AchievementType');
-            case 'AchievementTypeMainUIForm':
-                return this.translocoService.translate('AchievementTypeMainUIForm');
-            case 'AchievementTypeSaveBody':
-                return this.translocoService.translate('AchievementTypeSaveBody');
             case 'AuthResult':
                 return this.translocoService.translate('AuthResult');
             case 'AutomaticUpdatePoints':

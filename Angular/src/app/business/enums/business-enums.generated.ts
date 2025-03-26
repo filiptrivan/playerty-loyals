@@ -1,3 +1,10 @@
+export enum AchievementTypeCodes
+{
+    Transaction = 1,
+	FillForTheFirstTime = 2,
+	Manually = 3,
+}
+
 export enum NotificationDiscriminatorCodes
 {
     Notification,
@@ -19,10 +26,6 @@ export enum BusinessPermissionCodes
 	UpdateAchievement = "UpdateAchievement",
 	InsertAchievement = "InsertAchievement",
 	DeleteAchievement = "DeleteAchievement",
-	ReadAchievementType = "ReadAchievementType",
-	UpdateAchievementType = "UpdateAchievementType",
-	InsertAchievementType = "InsertAchievementType",
-	DeleteAchievementType = "DeleteAchievementType",
 	ReadBusinessSystem = "ReadBusinessSystem",
 	UpdateBusinessSystem = "UpdateBusinessSystem",
 	InsertBusinessSystem = "InsertBusinessSystem",

@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { Achievement, Transaction } from 'src/app/business/entities/business-entities.generated';
-import { TranslocoDirective } from '@jsverse/transloco';
-import { PaginatorState } from 'primeng/paginator';
+import { Achievement } from 'src/app/business/entities/business-entities.generated';
+import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { CommonModule } from '@angular/common';
-import { PrimengModule, SpiderControlsModule, TableResponse, TableFilter, TableFilterContext, getMonth } from '@playerty/spider';
+import { PrimengModule, SpiderControlsModule, Column, SpiderDataTableComponent } from '@playerty/spider';
 
 @Component({
   selector: 'points-history',
@@ -14,46 +13,29 @@ import { PrimengModule, SpiderControlsModule, TableResponse, TableFilter, TableF
     CommonModule,
     PrimengModule,
     SpiderControlsModule,
+    SpiderDataTableComponent,
     TranslocoDirective,
   ]
 })
 export class PointsHistoryComponent implements OnInit {
-  achievementsForCurrentPartnerUser: TableResponse<Achievement>;
-
-  tableFilter: TableFilter = new TableFilter({
-    first: 0,
-    rows: 10,
-    filters: new Map<string, TableFilterContext[]>()
-  });
+  cols: Column<Achievement>[];
   
+  getAchievementTableDataObservableMethod = this.apiService.getAchievementTableDataForCurrentPartnerUser;
+  exportAchievementTableDataToExcelObservableMethod = this.apiService.exportAchievementTableDataToExcel;
+
   constructor(
-    private apiService: ApiService,
-  ) {}
+      private apiService: ApiService,
+      private translocoService: TranslocoService,
+  ) { }
 
-  ngOnInit() {
-    this.getTransactionList();
-  }
-
-  onLazyLoad(event: PaginatorState){
-    this.tableFilter.first = event.first;
-    this.tableFilter.rows = event.rows;
-    this.getTransactionList();
-  }
-  
-  getTransactionList(){
-    // this.apiService.getTransactionListForTheCurrentPartnerUser(this.tableFilter).subscribe((res) => {
-    //   this.currentPartnerUserTransactions = res;
-    // });
-    this.apiService.getAchievementsForCurrentPartnerUser(this.tableFilter).subscribe((res) => {
-      this.achievementsForCurrentPartnerUser = res;
-    });
-  }
-
-  getMonth(numberOfTheMonth: number){
-    return getMonth(numberOfTheMonth);
-  }
-
-  ngOnDestroy(): void {
+  ngOnInit(){
+      this.cols = [
+        {name: 'Poeni', filterType: 'numeric', field: 'points', showMatchModes: true},
+        {name: 'Vrednost transakcije (RSD)', filterType: 'numeric', field: 'transactionPrice', showMatchModes: true},
+        {name: this.translocoService.translate('CreatedAt'), filterType: 'date', field: 'createdAt', showMatchModes: true, showTime: true},
+        {name: 'Vreme isticanja', filterType: 'date', field: 'expirationDate', showMatchModes: true, showTime: true},
+        {name: 'Šifra transakcije', filterType: 'text', field: 'transactionDisplayName'},
+      ]
   }
 
 }

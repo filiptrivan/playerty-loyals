@@ -21,17 +21,12 @@ export class ValidatorServiceGenerated {
                 return this.expirationDateAchievementValidator(formControl);
             case 'partnerUserIdAchievement':
                 return this.partnerUserIdAchievementValidator(formControl);
-            case 'achievementTypeIdAchievement':
-                return this.achievementTypeIdAchievementValidator(formControl);
             case 'versionAchievement':
                 return this.versionAchievementValidator(formControl);
             case 'createdAtAchievement':
                 return this.createdAtAchievementValidator(formControl);
             case 'modifiedAtAchievement':
                 return this.modifiedAtAchievementValidator(formControl);
-
-            case 'nameAchievementType':
-                return this.nameAchievementTypeValidator(formControl);
 
             case 'businessSystemIdAutomaticUpdatePoints':
                 return this.businessSystemIdAutomaticUpdatePointsValidator(formControl);
@@ -398,23 +393,6 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    achievementTypeIdAchievementValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-
-        return validator;
-    }
-
     versionAchievementValidator = (control: SpiderFormControl): SpiderValidatorFn => {
         const validator: SpiderValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
@@ -463,27 +441,6 @@ export class ValidatorServiceGenerated {
         control.required = true;
         control.validator = validator;
         control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-
-    nameAchievementTypeValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-            const min = 1;
-            const max = 70;
-            const stringLengthRule = (value?.length >= min && value?.length <= max) || (typeof value === 'undefined' || value === null || value === '');
-
-            const valid = notEmptyRule && stringLengthRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmptyLength', {min, max}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-
         return validator;
     }
 
