@@ -20,7 +20,7 @@ namespace PlayertyLoyals.Business.Services
             PartnerUserAuthenticationService partnerUserAuthenticationService,
             AuthorizationBusinessService authorizationService
         )
-            : base(context, null)
+            : base(context)
         {
             _context = context;
             _wingsApiService = wingsApiService;

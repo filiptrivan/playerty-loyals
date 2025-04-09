@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Azure.Storage.Blobs;
 using Spider.Shared.Attributes;
 using Spider.Shared.Interfaces;
-using Spider.Shared.Attributes.EF.UI;
 using PlayertyLoyals.Business.Services;
 using Spider.Shared.DTO;
 using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
 using Spider.Security.Services;
 using PlayertyLoyals.Shared.Resources;
-using Spider.Shared.Extensions;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {
@@ -25,11 +22,10 @@ namespace PlayertyLoyals.WebAPI.Controllers
         public AchievementController(
             IApplicationDbContext context, 
             LoyalsBusinessService loyalsBusinessService, 
-            BlobContainerClient blobContainerClient,
             AuthenticationService authenticationService,
             PartnerUserAuthenticationService partnerUserAuthenticationService
         )
-            : base(context, loyalsBusinessService, blobContainerClient)
+            : base(context, loyalsBusinessService)
         {
             _context = context;
             _loyalsBusinessService = loyalsBusinessService;

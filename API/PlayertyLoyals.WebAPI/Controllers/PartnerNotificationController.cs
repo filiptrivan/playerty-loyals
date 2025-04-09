@@ -20,10 +20,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
         public PartnerNotificationController(
             IApplicationDbContext context, 
             LoyalsBusinessService loyalsBusinessService, 
-            BlobContainerClient blobContainerClient, 
             PartnerUserAuthenticationService partnerUserAuthenticationService
         )
-            : base (context, loyalsBusinessService, blobContainerClient)
+            : base (context, loyalsBusinessService)
         {
             _context = context;
             _loyalsBusinessService = loyalsBusinessService;

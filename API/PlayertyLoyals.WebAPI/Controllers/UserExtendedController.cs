@@ -20,8 +20,12 @@ namespace PlayertyLoyals.WebAPI.Controllers
         private readonly LoyalsBusinessService _loyalsBusinessService;
         private readonly AuthenticationService _authenticationService;
 
-        public UserExtendedController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, BlobContainerClient blobContainerClient, AuthenticationService authenticationService)
-            : base(context, loyalsBusinessService, blobContainerClient)
+        public UserExtendedController(
+            IApplicationDbContext context, 
+            LoyalsBusinessService loyalsBusinessService, 
+            AuthenticationService authenticationService
+        )
+            : base(context, loyalsBusinessService)
         {
             _context = context;
             _loyalsBusinessService = loyalsBusinessService;

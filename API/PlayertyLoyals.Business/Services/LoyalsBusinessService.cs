@@ -36,7 +36,6 @@ namespace PlayertyLoyals.Business.Services
         private readonly SecurityBusinessService<UserExtended> _securityBusinessService;
         private readonly PartnerUserAuthenticationService _partnerUserAuthenticationService;
         private readonly EmailingService _emailingService;
-        private readonly BlobContainerClient _blobContainerClient;
         private readonly WingsApiService _wingsApiService;
 
         public LoyalsBusinessService(
@@ -47,10 +46,10 @@ namespace PlayertyLoyals.Business.Services
             AuthenticationService authenticationService,
             PartnerUserAuthenticationService partnerUserAuthenticationService,
             EmailingService emailingService,
-            BlobContainerClient blobContainerClient,
+            IFileManager fileManager,
             WingsApiService wingsApiService
         )
-            : base(context, excelService, authorizationService, blobContainerClient)
+            : base(context, excelService, authorizationService, fileManager)
         {
             _context = context;
             _authorizationService = authorizationService;
@@ -58,7 +57,6 @@ namespace PlayertyLoyals.Business.Services
             _authenticationService = authenticationService;
             _partnerUserAuthenticationService = partnerUserAuthenticationService;
             _emailingService = emailingService;
-            _blobContainerClient = blobContainerClient;
             _wingsApiService = wingsApiService;
         }
 

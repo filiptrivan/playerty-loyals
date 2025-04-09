@@ -1,15 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Services;
-using Spider.Security.DTO;
-using Spider.Security.Entities;
-using Spider.Security.Services;
 using Spider.Shared.Attributes;
 using Spider.Shared.DTO;
-using Spider.Shared.Helpers;
 using Spider.Shared.Interfaces;
 using PlayertyLoyals.Business.DTO;
-using Azure.Storage.Blobs;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {
@@ -24,10 +19,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
         public PartnerRoleController(
             IApplicationDbContext context, 
             LoyalsBusinessService loyalsBusinessService, 
-            PartnerUserAuthenticationService partnerUserAuthenticationService, 
-            BlobContainerClient blobContainerClient
+            PartnerUserAuthenticationService partnerUserAuthenticationService
         )
-            : base (context, loyalsBusinessService, blobContainerClient)
+            : base (context, loyalsBusinessService)
         {
             _context = context;
             _loyalsBusinessService = loyalsBusinessService;

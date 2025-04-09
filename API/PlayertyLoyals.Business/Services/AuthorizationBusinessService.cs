@@ -20,10 +20,9 @@ namespace PlayertyLoyals.Business.Services
         public AuthorizationBusinessService(
             IApplicationDbContext context,
             AuthenticationService authenticationService,
-            PartnerUserAuthenticationService partnerUserAuthenticationService,
-            BlobContainerClient blobContainerClient
+            PartnerUserAuthenticationService partnerUserAuthenticationService
         )
-            : base(context, authenticationService, blobContainerClient)
+            : base(context, authenticationService)
         {
             _context = context;
             _authenticationService = authenticationService;

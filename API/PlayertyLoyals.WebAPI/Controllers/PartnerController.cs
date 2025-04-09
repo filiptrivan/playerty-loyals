@@ -5,12 +5,6 @@ using Spider.Shared.Attributes;
 using PlayertyLoyals.Business.Services;
 using PlayertyLoyals.Business.DTO;
 using Spider.Shared.DTO;
-using Spider.Shared.Helpers;
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
-using PlayertyLoyals.Shared.Resources;
-using Spider.Security.Services;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {
@@ -25,10 +19,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
         public PartnerController(
             IApplicationDbContext context,
             LoyalsBusinessService loyalsBusinessService,
-            PartnerUserAuthenticationService partnerUserAuthenticationService,
-            BlobContainerClient blobContainerClient
+            PartnerUserAuthenticationService partnerUserAuthenticationService
         )
-            : base(context, loyalsBusinessService, blobContainerClient)
+            : base(context, loyalsBusinessService)
         {
             _context = context;
             _loyalsBusinessService = loyalsBusinessService;

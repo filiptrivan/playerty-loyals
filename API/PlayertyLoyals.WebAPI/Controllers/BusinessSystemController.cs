@@ -1,15 +1,9 @@
-﻿using Azure.Storage.Blobs;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Nucleus.Core.Exceptions;
+﻿using Microsoft.AspNetCore.Mvc;
 using PlayertyLoyals.Business.DTO;
-using PlayertyLoyals.Business.DTO.Helpers;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Services;
-using PlayertyLoyals.Shared.Resources;
 using Spider.Shared.Attributes;
 using Spider.Shared.DTO;
-using Spider.Shared.Helpers;
 using Spider.Shared.Interfaces;
 
 namespace PlayertyLoyals.WebAPI.Controllers
@@ -29,10 +23,9 @@ namespace PlayertyLoyals.WebAPI.Controllers
             LoyalsBusinessService loyalsBusinessService,
             PartnerUserAuthenticationService partnerUserAuthenticationService,
             WingsApiService wingsApiService,
-            SyncService syncService,
-            BlobContainerClient blobContainerClient
+            SyncService syncService
         )
-            : base(context, loyalsBusinessService, blobContainerClient)
+            : base(context, loyalsBusinessService)
         {
             _context = context;
             _loyalsBusinessService = loyalsBusinessService;

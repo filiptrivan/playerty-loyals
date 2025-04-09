@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Azure.Storage.Blobs;
 using Spider.Shared.Attributes;
 using Spider.Shared.Interfaces;
 using Spider.Shared.Attributes.EF.UI;
@@ -14,8 +13,11 @@ namespace PlayertyLoyals.WebAPI.Controllers
         private readonly IApplicationDbContext _context;
         private readonly LoyalsBusinessService _loyalsBusinessService;
 
-        public NotificationController(IApplicationDbContext context, LoyalsBusinessService loyalsBusinessService, BlobContainerClient blobContainerClient)
-            : base(context, loyalsBusinessService, blobContainerClient)
+        public NotificationController(
+            IApplicationDbContext context, 
+            LoyalsBusinessService loyalsBusinessService
+        )
+            : base(context, loyalsBusinessService)
         {
             _context = context;
             _loyalsBusinessService = loyalsBusinessService;

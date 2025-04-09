@@ -13,9 +13,7 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Spider.Shared.Exceptions;
 using Serilog;
-using PlayertyLoyals.Business.BackroundJobs;
 using Spider.Shared.Helpers;
-using System;
 
 namespace PlayertyLoyals.Business.Services
 {
@@ -26,7 +24,7 @@ namespace PlayertyLoyals.Business.Services
         private readonly AuthenticationService _authenticationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMemoryCache _cache;
-        private readonly BlobContainerClient _blobContainerClient;
+        private readonly IFileManager _fileManager;
 
         public PartnerUserAuthenticationService(
             ILogger logger,
@@ -34,16 +32,16 @@ namespace PlayertyLoyals.Business.Services
             AuthenticationService authenticationService,
             IHttpContextAccessor httpContextAccessor,
             IMemoryCache cache,
-            BlobContainerClient blobContainerClient
+            IFileManager fileManager
         )
-            : base(context, blobContainerClient)
+            : base(context)
         {
             _logger = logger;
             _context = context;
             _authenticationService = authenticationService;
             _httpContextAccessor = httpContextAccessor;
             _cache = cache;
-            _blobContainerClient = blobContainerClient;
+            _fileManager = fileManager;
         }
 
         public string GetCurrentPartnerCode()
@@ -130,15 +128,7 @@ namespace PlayertyLoyals.Business.Services
             {
                 try
                 {
-                    BlobClient blobClient = _blobContainerClient.GetBlobClient(partnerDTO.LogoImage);
-
-                    Azure.Response<BlobDownloadResult> blobDownloadInfo = await blobClient.DownloadContentAsync();
-
-                    byte[] byteArray = blobDownloadInfo.Value.Content.ToArray();
-
-                    string base64 = Convert.ToBase64String(byteArray);
-
-                    partnerDTO.LogoImageData = $"filename={partnerDTO.LogoImage};base64,{base64}";
+                    partnerDTO.LogoImageData = await _fileManager.GetFileDataAsync(partnerDTO.LogoImage);
                 }
                 catch (Exception ex)
                 {
