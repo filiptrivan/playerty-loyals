@@ -1,7 +1,7 @@
 import { ReactiveFormsModule } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
 import { ButtonModule } from "primeng/button";
-import { BaseFormService, isNullOrEmpty, SpiderControlsModule, SpiderFormGroup, SpiderMessageService, SpiderPanelsModule } from '@playerty/spider';
+import { BaseFormService, isNullOrEmpty, SpiderlyControlsModule, SpiderlyFormGroup, SpiderlyMessageService, SpiderlyPanelsModule } from 'spiderly';
 import { BusinessSystem, ExcelUpdatePoints } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { TranslocoService, TranslocoDirective } from '@jsverse/transloco';
@@ -12,23 +12,23 @@ import { TranslocoService, TranslocoDirective } from '@jsverse/transloco';
     styles: [],
     standalone: true,
     imports: [
-        SpiderPanelsModule,
+        SpiderlyPanelsModule,
         ReactiveFormsModule,
-        SpiderControlsModule,
+        SpiderlyControlsModule,
         ButtonModule,
         TranslocoDirective
     ]
 })
 export class ExcelUpdatePointsFooterComponent implements OnInit {
-    @Input() excelUpdatePointsFormGroup: SpiderFormGroup<ExcelUpdatePoints>;
-    @Input() businessSystemFormGroup: SpiderFormGroup<BusinessSystem>;
+    @Input() excelUpdatePointsFormGroup: SpiderlyFormGroup<ExcelUpdatePoints>;
+    @Input() businessSystemFormGroup: SpiderlyFormGroup<BusinessSystem>;
     @Input() isAuthorizedForSave: boolean = false;
 
     constructor(
         private baseFormService: BaseFormService,
         private apiService: ApiService,
         private translocoService: TranslocoService,
-        private messageService: SpiderMessageService,
+        private messageService: SpiderlyMessageService,
     ) { 
     }
 

@@ -4,7 +4,7 @@ import { NgModule } from "@angular/core";
 import { IntermediateStepWrapperComponent } from "./partials/intermediate-step-wrapper.component";
 import { TranslocoDirective } from "@jsverse/transloco";
 import { CommonModule } from "@angular/common";
-import { PrimengModule, SpiderDataTableComponent, SpiderControlsModule, CardSkeletonComponent, SpiderAutocompleteComponent } from '@playerty/spider';
+import { PrimengModule, SpiderlyDataTableComponent, SpiderlyControlsModule, CardSkeletonComponent, SpiderlyAutocompleteComponent } from 'spiderly';
 
 const routes: Routes = [
     {
@@ -18,11 +18,11 @@ const routes: Routes = [
         RouterModule.forChild(routes),
         CommonModule,
         PrimengModule,
-        SpiderDataTableComponent,
-        SpiderControlsModule,
+        SpiderlyDataTableComponent,
+        SpiderlyControlsModule,
         CardSkeletonComponent,
         IntermediateStepWrapperComponent,
-        SpiderAutocompleteComponent,
+        SpiderlyAutocompleteComponent,
         TranslocoDirective,
     ],
     declarations: [

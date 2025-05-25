@@ -7,7 +7,7 @@ import { BehaviorSubject, combineLatest, firstValueFrom, forkJoin, map, Observab
 import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
 import { PartnerUser, PartnerUserSaveBody, Segmentation, SegmentationItem, Tier, GenderAndBirthDate } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { BaseFormCopy, SpiderFormGroup, SpiderFormArray, SpiderMessageService, BaseFormService, IsAuthorizedForSaveEvent, getPrimengDropdownNamebookOptions, PrimengOption } from '@playerty/spider';
+import { BaseFormCopy, SpiderlyFormGroup, SpiderlyFormArray, SpiderlyMessageService, BaseFormService, IsAuthorizedForSaveEvent, getPrimengDropdownNamebookOptions, PrimengOption } from 'spiderly';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { BusinessPermissionCodes } from 'src/app/business/enums/business-enums.generated';
 
@@ -17,16 +17,16 @@ import { BusinessPermissionCodes } from 'src/app/business/enums/business-enums.g
     styles: [],
 })
 export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit {
-    genderAndBirthDateFormGroup = new SpiderFormGroup<GenderAndBirthDate>({});
+    genderAndBirthDateFormGroup = new SpiderlyFormGroup<GenderAndBirthDate>({});
     genderOptions: PrimengOption[];
 
-    partnerUserFormGroup = new SpiderFormGroup<PartnerUser>({});
+    partnerUserFormGroup = new SpiderlyFormGroup<PartnerUser>({});
     partnerUserTier: Tier;
 
     segmentations: Segmentation[] = [];
 
-    segmentationItemsFormArray: SpiderFormArray<SegmentationItem>;
-    _segmentationItemsFormArray = new BehaviorSubject<SpiderFormArray<SegmentationItem>>(undefined);
+    segmentationItemsFormArray: SpiderlyFormArray<SegmentationItem>;
+    _segmentationItemsFormArray = new BehaviorSubject<SpiderlyFormArray<SegmentationItem>>(undefined);
     segmentationItemsFormArrayIdentifier: string = crypto.randomUUID(); // FT: Because we are not changing it, we are not using nameof, it's important that it's not the same as property in save body
     segmentationItemsTranslationKey: string = new SegmentationItem().typeName;
     segmentationItemModel = new SegmentationItem();
@@ -43,7 +43,7 @@ export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit 
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SpiderMessageService, 
+        protected override messageService: SpiderlyMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 

@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">
-    <spider-card [title]="t('BusinessSystem')" icon="pi pi-hashtag">
+    <spiderly-card [title]="t('BusinessSystem')" icon="pi pi-hashtag">
 
         <business-system-base-details
         [businessSystemFormGroup]="businessSystemFormGroup" 
@@ -12,7 +12,7 @@
         (onIsAuthorizedForSaveChange)="isAuthorizedForSaveChange($event)"
         ></business-system-base-details>
 
-        <spider-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0" [isMiddleMultiplePanel]="true">
+        <spiderly-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0" [isMiddleMultiplePanel]="true">
             <panel-header [title]="t('ExcelUpdatePoints')" icon="pi pi-file-excel"></panel-header>
             <panel-body>
                 <excel-update-points-body 
@@ -31,15 +31,15 @@
                 ></excel-update-points-footer>
             </panel-footer>
 
-        </spider-panel>
+        </spiderly-panel>
 
-        <spider-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0" [isLastMultiplePanel]="true">
+        <spiderly-panel *ngIf="this.businessSystemFormGroup.controls.id?.getRawValue() > 0" [isLastMultiplePanel]="true">
             <panel-header [title]="t('SuccessfullyDoneBusinessSystemUpdatePointsScheduledTaskList')" icon="pi pi-clock"></panel-header>
 
             <panel-body>
                 <form class="grid">
                     <div class="col-12">
-                        <spider-data-table 
+                        <spiderly-data-table 
                         #updatePointsTaskTable
                         [tableTitle]="t('SuccessfullyDoneBusinessSystemUpdatePointsScheduledTaskList')" 
                         [cols]="businessSystemUpdatePointsScheduledTaskTableCols" 
@@ -51,11 +51,11 @@
                         [getTableDataObservableMethod]="getBusinessSystemUpdatePointsScheduledTaskTableDataObservableMethod" 
                         [exportTableDataToExcelObservableMethod]="exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelObservableMethod"
                         (onTotalRecordsChange)="businessSystemUpdatePointsScheduledTaskTableTotalRecords = $event" 
-                        ></spider-data-table>
+                        ></spiderly-data-table>
                     </div>
                 </form>
             </panel-body>
 
-        </spider-panel>
-    </spider-card>
+        </spiderly-panel>
+    </spiderly-card>
 </ng-container>

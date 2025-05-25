@@ -1,5 +1,5 @@
-﻿using Spider.Shared.Attributes.EF;
-using Spider.Shared.Attributes.EF.UI;
+﻿using Spiderly.Shared.Attributes.EF;
+using Spiderly.Shared.Attributes.EF.UI;
 using System.ComponentModel.DataAnnotations;
 
 namespace PlayertyLoyals.Business.Entities

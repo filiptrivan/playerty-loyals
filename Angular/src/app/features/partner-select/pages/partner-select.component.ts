@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Partner } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { PrimengOption, SpiderMessageService, getHtmlImgDisplayString64, LayoutBaseComponent } from '@playerty/spider';
+import { PrimengOption, SpiderlyMessageService, getHtmlImgDisplayString64, LayoutBaseComponent } from 'spiderly';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -17,7 +17,7 @@ export class PartnerSelectComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private messageService: SpiderMessageService,
+    private messageService: SpiderlyMessageService,
 ) { 
 }
 

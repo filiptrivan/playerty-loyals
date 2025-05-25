@@ -3,7 +3,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { firstValueFrom } from 'rxjs';
 import { PartnerUser } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { Column, getPrimengDropdownNamebookOptions } from '@playerty/spider';
+import { Column, getPrimengDropdownNamebookOptions } from 'spiderly';
 
 @Component({
     selector: 'partner-user-list', 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Spider.Shared.Attributes;
+using Spiderly.Shared.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

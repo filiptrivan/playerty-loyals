@@ -1,5 +1,5 @@
-﻿using Spider.Shared.Attributes;
-using Spider.Shared.Attributes.EF;
+﻿using Spiderly.Shared.Attributes;
+using Spiderly.Shared.Attributes.EF;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

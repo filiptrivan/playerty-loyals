@@ -6,10 +6,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\SpiderFramework\spider-framework\Spider.Infrastructure\Spider.Infrastructure.csproj" />
-		<ProjectReference Include="..\..\..\..\SpiderFramework\spider-framework\Spider.Security\Spider.Security.csproj" />
-		<ProjectReference Include="..\..\..\..\SpiderFramework\spider-framework\Spider.Shared\Spider.Shared.csproj" />
-		<ProjectReference Include="..\..\..\..\SpiderFramework\spider-framework\Spider.SourceGenerators\Spider.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+		<ProjectReference Include="..\..\..\..\Spiderly\spiderly\Spiderly.Infrastructure\Spiderly.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\..\..\Spiderly\spiderly\Spiderly.Security\Spiderly.Security.csproj" />
+		<ProjectReference Include="..\..\..\..\Spiderly\spiderly\Spiderly.Shared\Spiderly.Shared.csproj" />
+		<ProjectReference Include="..\..\..\..\Spiderly\spiderly\Spiderly.SourceGenerators\Spiderly.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
 		<ProjectReference Include="..\PlayertyLoyals.Shared\PlayertyLoyals.Shared.csproj" />
 		<ProjectReference Include="..\PlayertyLoyals.Business\PlayertyLoyals.Business.csproj" />
 	</ItemGroup>

@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">
-    <spider-card [title]="t('{{filename}}')" icon="pi pi-file-edit">
+    <spiderly-card [title]="t('{{filename}}')" icon="pi pi-file-edit">
         
         <{{toKebab filename}}-base-details
         [formGroup]="formGroup" 
@@ -7,5 +7,5 @@
         (onSave)="onSave()"
         />
 
-    </spider-card>
+    </spiderly-card>
 </ng-container>

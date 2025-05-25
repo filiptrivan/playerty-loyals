@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { PartnerNotification } from 'src/app/business/entities/business-entities.generated';
-import { BaseFormCopy, SpiderFormGroup, SpiderFormControl, SpiderButton, SpiderMessageService, BaseFormService, IsAuthorizedForSaveEvent } from '@playerty/spider';
+import { BaseFormCopy, SpiderlyFormGroup, SpiderlyFormControl, SpiderlyButton, SpiderlyMessageService, BaseFormService, IsAuthorizedForSaveEvent } from 'spiderly';
 
 @Component({
     selector: 'partner-notification-details',
@@ -12,17 +12,17 @@ import { BaseFormCopy, SpiderFormGroup, SpiderFormControl, SpiderButton, SpiderM
     styles: [],
 })
 export class PartnerNotificationDetailsComponent extends BaseFormCopy implements OnInit {
-    partnerNotificationFormGroup = new SpiderFormGroup<PartnerNotification>({});
+    partnerNotificationFormGroup = new SpiderlyFormGroup<PartnerNotification>({});
 
-    isMarkedAsRead = new SpiderFormControl<boolean>(true, {updateOn: 'change'})
+    isMarkedAsRead = new SpiderlyFormControl<boolean>(true, {updateOn: 'change'})
 
-    additionalButtons: SpiderButton[] = [];
-    sendEmailNotificationButton = new SpiderButton({label: this.translocoService.translate('SendEmailNotification'), icon: 'pi pi-send', disabled: true});
+    additionalButtons: SpiderlyButton[] = [];
+    sendEmailNotificationButton = new SpiderlyButton({label: this.translocoService.translate('SendEmailNotification'), icon: 'pi pi-send', disabled: true});
 
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SpiderMessageService, 
+        protected override messageService: SpiderlyMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute,

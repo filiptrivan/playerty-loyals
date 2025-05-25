@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using PlayertyLoyals.Shared.Resources;
-using Spider.Shared.Extensions;
-using Spider.Shared.Resources;
+using Spiderly.Shared.Extensions;
+using Spiderly.Shared.Resources;
 
 namespace PlayertyLoyals.Shared.FluentValidation
 {

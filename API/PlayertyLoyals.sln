@@ -15,13 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayertyLoyals.Business", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayertyLoyals.Shared", "PlayertyLoyals.Shared\PlayertyLoyals.Shared.csproj", "{2D65E133-33C4-4169-A175-D744800941D6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spider.Security", "..\..\..\SpiderFramework\spider-framework\Spider.Security\Spider.Security.csproj", "{FB0E9C42-F1F1-4F54-AA33-DA6370A2EAF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spiderly.Security", "..\..\..\Spiderly\spiderly\Spiderly.Security\Spiderly.Security.csproj", "{FB0E9C42-F1F1-4F54-AA33-DA6370A2EAF1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spider.Shared", "..\..\..\SpiderFramework\spider-framework\Spider.Shared\Spider.Shared.csproj", "{57431CC0-414E-47E6-B6B2-03EC76CB8885}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spiderly.Shared", "..\..\..\Spiderly\spiderly\Spiderly.Shared\Spiderly.Shared.csproj", "{57431CC0-414E-47E6-B6B2-03EC76CB8885}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spider.Infrastructure", "..\..\..\SpiderFramework\spider-framework\Spider.Infrastructure\Spider.Infrastructure.csproj", "{49E94E28-13B8-4728-B97E-C6155D08EA95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spiderly.Infrastructure", "..\..\..\Spiderly\spiderly\Spiderly.Infrastructure\Spiderly.Infrastructure.csproj", "{49E94E28-13B8-4728-B97E-C6155D08EA95}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spider.SourceGenerators", "..\..\..\SpiderFramework\spider-framework\Spider.SourceGenerators\Spider.SourceGenerators.csproj", "{8729EDA4-2FE7-450E-AF2C-33A1F4AB520C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spiderly.SourceGenerators", "..\..\..\Spiderly\spiderly\Spiderly.SourceGenerators\Spiderly.SourceGenerators.csproj", "{8729EDA4-2FE7-450E-AF2C-33A1F4AB520C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

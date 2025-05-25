@@ -1,6 +1,6 @@
 using LightInject;
-using Spider.Shared.Helpers;
-using Spider.Shared.Extensions;
+using Spiderly.Shared.Helpers;
+using Spiderly.Shared.Extensions;
 using PlayertyLoyals.WebAPI.DI;
 using PlayertyLoyals.Infrastructure;
 using Quartz;
@@ -23,16 +23,16 @@ public class Startup
 
         PlayertyLoyals.WebAPI.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<PlayertyLoyals.WebAPI.Settings>(_jsonConfigurationFile);
         PlayertyLoyals.Business.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<PlayertyLoyals.Business.Settings>(_jsonConfigurationFile);
-        Spider.Infrastructure.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<Spider.Infrastructure.Settings>(_jsonConfigurationFile);
-        Spider.Security.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<Spider.Security.Settings>(_jsonConfigurationFile);
-        Spider.Shared.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<Spider.Shared.Settings>(_jsonConfigurationFile);
+        Spiderly.Infrastructure.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<Spiderly.Infrastructure.Settings>(_jsonConfigurationFile);
+        Spiderly.Security.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<Spiderly.Security.Settings>(_jsonConfigurationFile);
+        Spiderly.Shared.SettingsProvider.Current = Helper.ReadAssemblyConfiguration<Spiderly.Shared.Settings>(_jsonConfigurationFile);
     }
 
     public IConfiguration Configuration { get; }
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.SpiderConfigureServices<PlayertyApplicationDbContext>();
+        services.SpiderlyConfigureServices<PlayertyApplicationDbContext>();
     }
 
     public void ConfigureContainer(IServiceContainer container)
@@ -44,7 +44,7 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        app.SpiderConfigure(env);
+        app.SpiderlyConfigure(env);
 
         app.UseEndpoints(endpoints =>
         {

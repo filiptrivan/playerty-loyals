@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Spider.Security.Entities;
-using Spider.Security.Interfaces;
-using Spider.Shared.Attributes;
-using Spider.Shared.Attributes.EF;
-using Spider.Shared.Attributes.EF.UI;
-using Spider.Shared.BaseEntities;
-using Spider.Shared.Enums;
+using Spiderly.Security.Entities;
+using Spiderly.Security.Interfaces;
+using Spiderly.Shared.Attributes;
+using Spiderly.Shared.Attributes.EF;
+using Spiderly.Shared.Attributes.EF.UI;
+using Spiderly.Shared.BaseEntities;
+using Spiderly.Shared.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace PlayertyLoyals.Business.Entities

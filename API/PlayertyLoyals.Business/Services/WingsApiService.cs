@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
-using Spider.Shared.Extensions;
-using Spider.Shared.Interfaces;
-using Spider.Shared.Exceptions;
+using Spiderly.Shared.Extensions;
+using Spiderly.Shared.Interfaces;
+using Spiderly.Shared.Exceptions;
 using PlayertyLoyals.Business.ValidationRules;
 using System;
 using System.Collections.Generic;

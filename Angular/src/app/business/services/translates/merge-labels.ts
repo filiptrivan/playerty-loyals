@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { TranslateLabelsGeneratedService } from "./labels.generated";
-import { TranslateLabelsAbstractService } from '@playerty/spider';
+import { TranslateLabelsAbstractService } from 'spiderly';
 
 @Injectable({
     providedIn: 'root',

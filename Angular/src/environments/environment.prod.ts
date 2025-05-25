@@ -3,7 +3,7 @@ export const environment = {
     production: true,
     apiUrl: 'https://playerty-loyals-aagjh0fpgqfddceg.polandcentral-01.azurewebsites.net/api',
     frontendUrl: 'https://playerty-loyals.vercel.app',
-    googleClientId: '24372003240-44eprq8dn4s0b5f30i18tqksep60uk5u.apps.googleusercontent.com',
+    GoogleClientId: '24372003240-44eprq8dn4s0b5f30i18tqksep60uk5u.apps.googleusercontent.com',
     companyName: 'Playerty Loyals',
     primaryColor: '#111b2c',
   };

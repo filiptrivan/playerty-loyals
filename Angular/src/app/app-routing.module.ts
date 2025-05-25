@@ -1,6 +1,6 @@
 import { PreloadAllModules, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { AuthGuard, NotAuthGuard, NotFoundComponent } from '@playerty/spider';
+import { AuthGuard, NotAuthGuard, NotFoundComponent } from 'spiderly';
 import { LayoutComponent } from './business/layout/layout.component';
 
 @NgModule({
@@ -52,7 +52,7 @@ import { LayoutComponent } from './business/layout/layout.component';
                 children: [
                     { 
                         path: '',
-                        loadChildren: () => import('@playerty/spider').then(m => m.AuthModule),
+                        loadChildren: () => import('spiderly').then(m => m.AuthModule),
                         canActivate: [NotAuthGuard],
                     },
                 ],

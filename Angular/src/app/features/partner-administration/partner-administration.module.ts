@@ -17,7 +17,7 @@ import { BusinessSystemTableComponent } from './pages/business-systems/business-
 import { BusinessSystemDetailsComponent } from './pages/business-systems/business-system-details.component';
 import { SegmentationBaseDetailsComponent, PartnerRoleBaseDetailsComponent, PartnerNotificationBaseDetailsComponent, BusinessSystemBaseDetailsComponent, PartnerUserBaseDetailsComponent } from 'src/app/business/components/base-details/business-base-details.generated';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PrimengModule, SpiderDataTableComponent, SpiderControlsModule, CardSkeletonComponent, IndexCardComponent } from '@playerty/spider';
+import { PrimengModule, SpiderlyDataTableComponent, SpiderlyControlsModule, CardSkeletonComponent, IndexCardComponent } from 'spiderly';
 import { ExcelUpdatePointsBodyComponent } from './partials/business-system/excel-update-points/body/excel-update-points-body.component';
 import { ExcelUpdatePointsFooterComponent } from './partials/business-system/excel-update-points/footer/excel-update-points-footer.component';
 
@@ -76,8 +76,8 @@ const routes: Routes = [
     ReactiveFormsModule,
     PrimengModule,
     TranslocoDirective,
-    SpiderDataTableComponent,
-    SpiderControlsModule,
+    SpiderlyDataTableComponent,
+    SpiderlyControlsModule,
     CardSkeletonComponent,
     IndexCardComponent,
     SegmentationSelectComponent,

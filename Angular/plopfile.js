@@ -23,12 +23,12 @@ module.exports = function (plop) {
         {
           type: 'add',
           path: 'plop/output/{{toKebab filename}}-details.component.html',
-          templateFile: 'plop/spider-form-html-template.hbs',
+          templateFile: 'plop/spiderly-form-html-template.hbs',
         },
         {
           type: 'add',
           path: 'plop/output/{{toKebab filename}}-details.component.ts',
-          templateFile: 'plop/spider-form-ts-template.hbs',
+          templateFile: 'plop/spiderly-form-ts-template.hbs',
         },
       ],
     });

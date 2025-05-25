@@ -831,7 +831,7 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     b.ToTable("UserNotification");
                 });
 
-            modelBuilder.Entity("Spider.Security.Entities.Permission", b =>
+            modelBuilder.Entity("Spiderly.Security.Entities.Permission", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -861,7 +861,7 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     b.ToTable("Permission");
                 });
 
-            modelBuilder.Entity("Spider.Security.Entities.Role", b =>
+            modelBuilder.Entity("Spiderly.Security.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -892,7 +892,7 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     b.ToTable("Role");
                 });
 
-            modelBuilder.Entity("Spider.Security.Entities.RolePermission", b =>
+            modelBuilder.Entity("Spiderly.Security.Entities.RolePermission", b =>
                 {
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
@@ -907,7 +907,7 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     b.ToTable("RolePermission");
                 });
 
-            modelBuilder.Entity("Spider.Security.Entities.UserRole", b =>
+            modelBuilder.Entity("Spiderly.Security.Entities.UserRole", b =>
                 {
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
@@ -1228,15 +1228,15 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Spider.Security.Entities.RolePermission", b =>
+            modelBuilder.Entity("Spiderly.Security.Entities.RolePermission", b =>
                 {
-                    b.HasOne("Spider.Security.Entities.Permission", "Permission")
+                    b.HasOne("Spiderly.Security.Entities.Permission", "Permission")
                         .WithMany()
                         .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Spider.Security.Entities.Role", "Role")
+                    b.HasOne("Spiderly.Security.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1247,9 +1247,9 @@ namespace PlayertyLoyals.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Spider.Security.Entities.UserRole", b =>
+            modelBuilder.Entity("Spiderly.Security.Entities.UserRole", b =>
                 {
-                    b.HasOne("Spider.Security.Entities.Role", null)
+                    b.HasOne("Spiderly.Security.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)

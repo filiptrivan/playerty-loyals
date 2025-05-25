@@ -1,5 +1,5 @@
 ﻿//using Quartz;
-//using Spider.Shared.Exceptions;
+//using Spiderly.Shared.Exceptions;
 
 //namespace PlayertyLoyals.Business.BackroundJobs
 //{

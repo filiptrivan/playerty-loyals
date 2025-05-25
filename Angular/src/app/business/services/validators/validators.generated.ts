@@ -1,7 +1,7 @@
 import { ValidationErrors } from '@angular/forms';
 import { TranslocoService } from '@jsverse/transloco';
 import { Injectable } from '@angular/core';
-import { SpiderFormControl, SpiderValidatorFn, validatePrecisionScale } from '@playerty/spider';
+import { SpiderlyFormControl, SpiderlyValidatorFn, validatePrecisionScale } from 'spiderly';
 
 @Injectable({
     providedIn: 'root',
@@ -13,7 +13,7 @@ export class ValidatorServiceGenerated {
     ) {
     }
 
-    setValidator = (formControl: SpiderFormControl, className: string): SpiderValidatorFn => {
+    setValidator = (formControl: SpiderlyFormControl, className: string): SpiderlyValidatorFn => {
         switch(formControl.label + className){
             case 'pointsAchievement':
                 return this.pointsAchievementValidator(formControl);
@@ -342,8 +342,8 @@ export class ValidatorServiceGenerated {
         }
     }
 
-    pointsAchievementValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    pointsAchievementValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -359,59 +359,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    expirationDateAchievementValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    partnerUserIdAchievementValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-
-        return validator;
-    }
-
-    versionAchievementValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-
-        return validator;
-    }
-
-    createdAtAchievementValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    expirationDateAchievementValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -427,8 +376,59 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    modifiedAtAchievementValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    partnerUserIdAchievementValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    versionAchievementValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    createdAtAchievementValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+    modifiedAtAchievementValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -445,8 +445,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    businessSystemIdAutomaticUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    businessSystemIdAutomaticUpdatePointsValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -462,8 +462,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    businessSystemVersionAutomaticUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    businessSystemVersionAutomaticUpdatePointsValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -479,8 +479,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    updatePointsStartDateAutomaticUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    updatePointsStartDateAutomaticUpdatePointsValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -496,8 +496,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    updatePointsIntervalAutomaticUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    updatePointsIntervalAutomaticUpdatePointsValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -516,8 +516,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    nameBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    nameBusinessSystemValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -536,8 +536,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    getTransactionsEndpointBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    getTransactionsEndpointBusinessSystemValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -554,8 +554,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    getDiscountProductGroupsEndpointBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    getDiscountProductGroupsEndpointBusinessSystemValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -572,8 +572,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    createUserEndpointBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    createUserEndpointBusinessSystemValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -590,8 +590,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    updateUserGroupEndpointBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    updateUserGroupEndpointBusinessSystemValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -608,8 +608,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    updatePointsIntervalBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    updatePointsIntervalBusinessSystemValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -625,8 +625,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    partnerIdBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    partnerIdBusinessSystemValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -642,8 +642,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    versionBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    versionBusinessSystemValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -659,25 +659,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    createdAtBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    modifiedAtBusinessSystemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    createdAtBusinessSystemValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -693,9 +676,26 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
+    modifiedAtBusinessSystemValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-    discountBusinessSystemTierDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+
+    discountBusinessSystemTierDiscountProductGroupValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -716,8 +716,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    orderNumberBusinessSystemTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    orderNumberBusinessSystemTierValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -733,8 +733,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    businessSystemIdBusinessSystemTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    businessSystemIdBusinessSystemTierValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -750,8 +750,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    tierIdBusinessSystemTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    tierIdBusinessSystemTierValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -767,8 +767,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    versionBusinessSystemTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    versionBusinessSystemTierValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -784,25 +784,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    createdAtBusinessSystemTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    modifiedAtBusinessSystemTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    createdAtBusinessSystemTierValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -818,77 +801,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-
-    isManualBusinessSystemUpdatePointsScheduledTaskValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-
-        return validator;
-    }
-
-    businessSystemIdBusinessSystemUpdatePointsScheduledTaskValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-
-        return validator;
-    }
-
-    versionBusinessSystemUpdatePointsScheduledTaskValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-
-        return validator;
-    }
-
-    createdAtBusinessSystemUpdatePointsScheduledTaskValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    modifiedAtBusinessSystemUpdatePointsScheduledTaskValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    modifiedAtBusinessSystemTierValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -905,8 +819,94 @@ export class ValidatorServiceGenerated {
     }
 
 
-    nameDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    isManualBusinessSystemUpdatePointsScheduledTaskValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    businessSystemIdBusinessSystemUpdatePointsScheduledTaskValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    versionBusinessSystemUpdatePointsScheduledTaskValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    createdAtBusinessSystemUpdatePointsScheduledTaskValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+    modifiedAtBusinessSystemUpdatePointsScheduledTaskValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+
+    nameDiscountProductGroupValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -925,8 +925,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    codeDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    codeDiscountProductGroupValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -945,8 +945,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    orderNumberDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    orderNumberDiscountProductGroupValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -962,8 +962,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    businessSystemIdDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    businessSystemIdDiscountProductGroupValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -979,8 +979,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    versionDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    versionDiscountProductGroupValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -996,25 +996,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    createdAtDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    modifiedAtDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    createdAtDiscountProductGroupValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1030,9 +1013,26 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
+    modifiedAtDiscountProductGroupValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-    businessSystemIdExcelUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+
+    businessSystemIdExcelUpdatePointsValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1048,8 +1048,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    businessSystemVersionExcelUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    businessSystemVersionExcelUpdatePointsValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1066,8 +1066,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    nameExternalDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    nameExternalDiscountProductGroupValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1086,8 +1086,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    codeExternalDiscountProductGroupValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    codeExternalDiscountProductGroupValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1107,8 +1107,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    userEmailExternalTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    userEmailExternalTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1128,8 +1128,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    codeExternalTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    codeExternalTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1148,8 +1148,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    productNameExternalTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    productNameExternalTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1168,8 +1168,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    productImageUrlExternalTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    productImageUrlExternalTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -1186,8 +1186,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    productCategoryNameExternalTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    productCategoryNameExternalTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1206,8 +1206,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    productCategoryImageUrlExternalTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    productCategoryImageUrlExternalTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -1224,8 +1224,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    priceExternalTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    priceExternalTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1245,8 +1245,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    boughtAtExternalTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    boughtAtExternalTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1263,8 +1263,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    nameGenderValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    nameGenderValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1284,8 +1284,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    emailLoginValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    emailLoginValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1306,8 +1306,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    businessSystemIdManualUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    businessSystemIdManualUpdatePointsValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1323,8 +1323,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    businessSystemVersionManualUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    businessSystemVersionManualUpdatePointsValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1340,25 +1340,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    fromDateManualUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    toDateManualUpdatePointsValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    fromDateManualUpdatePointsValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1374,9 +1357,26 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
+    toDateManualUpdatePointsValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-    titleNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+
+    titleNotificationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1395,8 +1395,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    descriptionNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    descriptionNotificationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1415,8 +1415,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    emailBodyNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    emailBodyNotificationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -1433,8 +1433,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    versionNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    versionNotificationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1450,25 +1450,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    createdAtNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    modifiedAtNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    createdAtNotificationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1484,9 +1467,26 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
+    modifiedAtNotificationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-    namePartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+
+    namePartnerValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1505,8 +1505,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    emailPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    emailPartnerValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1526,8 +1526,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    slugPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    slugPartnerValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1546,8 +1546,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    logoImagePartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    logoImagePartnerValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -1564,8 +1564,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    primaryColorPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    primaryColorPartnerValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const length = 7;
@@ -1581,8 +1581,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    productsRecommendationEndpointPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    productsRecommendationEndpointPartnerValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -1599,8 +1599,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    pointsMultiplierPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    pointsMultiplierPartnerValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1620,8 +1620,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    pointsDurationPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    pointsDurationPartnerValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1641,8 +1641,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    versionPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    versionPartnerValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1658,25 +1658,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    createdAtPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    modifiedAtPartnerValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    createdAtPartnerValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1692,9 +1675,26 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
+    modifiedAtPartnerValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-    titlePartnerNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+
+    titlePartnerNotificationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1713,8 +1713,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    descriptionPartnerNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    descriptionPartnerNotificationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1733,8 +1733,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    emailBodyPartnerNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    emailBodyPartnerNotificationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -1751,8 +1751,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    partnerIdPartnerNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    partnerIdPartnerNotificationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1768,8 +1768,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    versionPartnerNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    versionPartnerNotificationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1785,25 +1785,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    createdAtPartnerNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    modifiedAtPartnerNotificationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    createdAtPartnerNotificationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1819,9 +1802,26 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
+    modifiedAtPartnerNotificationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-    namePartnerPermissionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+
+    namePartnerPermissionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1840,8 +1840,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    descriptionPartnerPermissionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    descriptionPartnerPermissionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -1858,8 +1858,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    codePartnerPermissionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    codePartnerPermissionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1879,8 +1879,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    namePartnerRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    namePartnerRoleValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1899,8 +1899,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    descriptionPartnerRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    descriptionPartnerRoleValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -1917,8 +1917,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    partnerIdPartnerRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    partnerIdPartnerRoleValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1934,8 +1934,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    versionPartnerRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    versionPartnerRoleValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1951,25 +1951,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    createdAtPartnerRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    modifiedAtPartnerRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    createdAtPartnerRoleValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -1985,94 +1968,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-
-    pointsPartnerUserValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-
-        return validator;
-    }
-
-    partnerIdPartnerUserValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-
-        return validator;
-    }
-
-    userIdPartnerUserValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-
-        return validator;
-    }
-
-    versionPartnerUserValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-
-        return validator;
-    }
-
-    createdAtPartnerUserValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    modifiedAtPartnerUserValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    modifiedAtPartnerRoleValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2089,8 +1986,111 @@ export class ValidatorServiceGenerated {
     }
 
 
-    namePermissionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    pointsPartnerUserValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    partnerIdPartnerUserValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    userIdPartnerUserValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    versionPartnerUserValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+
+        return validator;
+    }
+
+    createdAtPartnerUserValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+    modifiedAtPartnerUserValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
+
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+
+    namePermissionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2109,8 +2109,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    nameLatinPermissionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    nameLatinPermissionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2129,8 +2129,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    descriptionPermissionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    descriptionPermissionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -2147,8 +2147,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    descriptionLatinPermissionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    descriptionLatinPermissionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -2165,8 +2165,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    codePermissionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    codePermissionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2186,8 +2186,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    emailRegistrationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    emailRegistrationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2208,8 +2208,8 @@ export class ValidatorServiceGenerated {
     }
 
 
-    nameRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    nameRoleValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2228,8 +2228,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    descriptionRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    descriptionRoleValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -2246,8 +2246,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    versionRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    versionRoleValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2263,25 +2263,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    createdAtRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    modifiedAtRoleValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    createdAtRoleValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2297,9 +2280,26 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
+    modifiedAtRoleValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-    nameSegmentationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+
+    nameSegmentationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2318,8 +2318,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    descriptionSegmentationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    descriptionSegmentationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -2336,8 +2336,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    pointsForTheFirstTimeFillSegmentationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    pointsForTheFirstTimeFillSegmentationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2355,8 +2355,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    partnerIdSegmentationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    partnerIdSegmentationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2372,8 +2372,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    versionSegmentationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    versionSegmentationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2389,25 +2389,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    createdAtSegmentationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    modifiedAtSegmentationValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    createdAtSegmentationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2423,9 +2406,26 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
+    modifiedAtSegmentationValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-    nameSegmentationItemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+
+    nameSegmentationItemValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2444,8 +2444,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    orderNumberSegmentationItemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    orderNumberSegmentationItemValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2461,8 +2461,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    segmentationIdSegmentationItemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    segmentationIdSegmentationItemValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2478,8 +2478,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    versionSegmentationItemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    versionSegmentationItemValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2495,25 +2495,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    createdAtSegmentationItemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    modifiedAtSegmentationItemValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    createdAtSegmentationItemValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2529,9 +2512,26 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
+    modifiedAtSegmentationItemValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-    nameTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+
+    nameTierValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2550,8 +2550,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    descriptionTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    descriptionTierValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -2568,8 +2568,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    validFromTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    validFromTierValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2587,8 +2587,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    validToTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    validToTierValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2606,8 +2606,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    partnerIdTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    partnerIdTierValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2623,8 +2623,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    versionTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    versionTierValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2640,25 +2640,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    createdAtTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    modifiedAtTierValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    createdAtTierValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2674,9 +2657,26 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
+    modifiedAtTierValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-    productNameTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+
+    productNameTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -2693,8 +2693,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    codeTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    codeTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2713,8 +2713,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    productImageUrlTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    productImageUrlTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -2731,8 +2731,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    productCategoryNameTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    productCategoryNameTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -2749,8 +2749,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    productCategoryImageUrlTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    productCategoryImageUrlTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const min = 1;
@@ -2767,8 +2767,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    priceTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    priceTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2788,8 +2788,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    boughtAtTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    boughtAtTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2805,8 +2805,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    pointsTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    pointsTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2822,8 +2822,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    partnerUserIdTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    partnerUserIdTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2839,8 +2839,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    businessSystemUpdatePointsScheduledTaskIdTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    businessSystemUpdatePointsScheduledTaskIdTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2856,8 +2856,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    versionTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    versionTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2873,25 +2873,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    createdAtTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    modifiedAtTransactionValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    createdAtTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2907,9 +2890,26 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
+    modifiedAtTransactionValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-    emailUserExtendedValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+
+    emailUserExtendedValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2929,8 +2929,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    versionUserExtendedValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    versionUserExtendedValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2946,25 +2946,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    createdAtUserExtendedValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
-            const value = control.value;
-
-            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
-
-            const valid = notEmptyRule;
-
-            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
-        };
-        validator.hasNotEmptyRule = true;
-        control.required = true;
-        control.validator = validator;
-        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
-        return validator;
-    }
-
-    modifiedAtUserExtendedValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    createdAtUserExtendedValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -2980,9 +2963,26 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
+    modifiedAtUserExtendedValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
+            const value = control.value;
 
-    verificationCodeVerificationTokenRequestValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+            const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
+
+            const valid = notEmptyRule;
+
+            return valid ? null : { _ : this.translocoService.translate('NotEmpty', {}) };
+        };
+        validator.hasNotEmptyRule = true;
+        control.required = true;
+        control.validator = validator;
+        control.updateValueAndValidity(); // FT: It's necessary only for Date Angular type
+        return validator;
+    }
+
+
+    verificationCodeVerificationTokenRequestValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';
@@ -3000,8 +3000,8 @@ export class ValidatorServiceGenerated {
         return validator;
     }
 
-    emailVerificationTokenRequestValidator = (control: SpiderFormControl): SpiderValidatorFn => {
-        const validator: SpiderValidatorFn = (): ValidationErrors | null => {
+    emailVerificationTokenRequestValidator = (control: SpiderlyFormControl): SpiderlyValidatorFn => {
+        const validator: SpiderlyValidatorFn = (): ValidationErrors | null => {
             const value = control.value;
 
             const notEmptyRule = typeof value !== 'undefined' && value !== null && value !== '';

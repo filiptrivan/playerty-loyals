@@ -7,7 +7,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { Notification } from 'src/app/business/entities/business-entities.generated';
 import { Menu } from 'primeng/menu';
 import { NotificationDiscriminatorCodes } from 'src/app/business/enums/business-enums.generated';
-import { TableResponse, TableFilter, TableFilterContext, SpiderMessageService } from '@playerty/spider';
+import { TableResponse, TableFilter, TableFilterContext, SpiderlyMessageService } from 'spiderly';
 
 @Component({
   templateUrl: './notification.component.html',
@@ -28,7 +28,7 @@ export class NotificationComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private translocoService: TranslocoService,
-    private messageService: SpiderMessageService,
+    private messageService: SpiderlyMessageService,
     private layoutService: LayoutService,
   ) {}
 

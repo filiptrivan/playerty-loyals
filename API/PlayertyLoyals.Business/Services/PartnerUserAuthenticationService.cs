@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Spider.Shared.Interfaces;
-using Spider.Shared.Services;
-using Spider.Security.Services;
-using Spider.Shared.Extensions;
+using Spiderly.Shared.Interfaces;
+using Spiderly.Shared.Services;
+using Spiderly.Security.Services;
+using Spiderly.Shared.Extensions;
 using PlayertyLoyals.Business.Entities;
 using Microsoft.EntityFrameworkCore;
 using PlayertyLoyals.Business.DTO;
@@ -11,9 +11,9 @@ using PlayertyLoyals.Business.DataMappers;
 using Microsoft.Extensions.Caching.Memory;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Spider.Shared.Exceptions;
+using Spiderly.Shared.Exceptions;
 using Serilog;
-using Spider.Shared.Helpers;
+using Spiderly.Shared.Helpers;
 
 namespace PlayertyLoyals.Business.Services
 {

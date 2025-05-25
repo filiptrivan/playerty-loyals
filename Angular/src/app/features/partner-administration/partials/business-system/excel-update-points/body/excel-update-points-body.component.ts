@@ -1,7 +1,7 @@
 import { ReactiveFormsModule } from '@angular/forms';
 import { Component, Input, OnInit } from '@angular/core';
 import { ButtonModule } from "primeng/button";
-import { getControl, SpiderControlsModule, SpiderFileSelectEvent, SpiderFormGroup, SpiderPanelsModule } from '@playerty/spider';
+import { getControl, SpiderlyControlsModule, SpiderlyFileSelectEvent, SpiderlyFormGroup, SpiderlyPanelsModule } from 'spiderly';
 import { ExcelUpdatePoints } from 'src/app/business/entities/business-entities.generated';
 import { TranslocoDirective } from '@jsverse/transloco';
 
@@ -11,15 +11,15 @@ import { TranslocoDirective } from '@jsverse/transloco';
     styles: [],
     standalone: true,
     imports: [
-        SpiderPanelsModule,
+        SpiderlyPanelsModule,
         ReactiveFormsModule,
-        SpiderControlsModule,
+        SpiderlyControlsModule,
         ButtonModule,
         TranslocoDirective
     ]
 })
 export class ExcelUpdatePointsBodyComponent implements OnInit {
-    @Input() excelUpdatePointsFormGroup: SpiderFormGroup<ExcelUpdatePoints>;
+    @Input() excelUpdatePointsFormGroup: SpiderlyFormGroup<ExcelUpdatePoints>;
     @Input() isAuthorizedForSave: boolean = false;
     excels: File[] = [];
 
@@ -32,7 +32,7 @@ export class ExcelUpdatePointsBodyComponent implements OnInit {
 
     }
 
-    onSelectedExcelUpdateFile(event: SpiderFileSelectEvent){
+    onSelectedExcelUpdateFile(event: SpiderlyFileSelectEvent){
         this.excels.push(event.file);
         this.excelUpdatePointsFormGroup.controls.excels.setValue(this.excels);
         this.excelUpdatePointsFormGroup.controls.excels.setErrors(null);
@@ -42,7 +42,7 @@ export class ExcelUpdatePointsBodyComponent implements OnInit {
         this.excelUpdatePointsFormGroup.controls.excels.setValue(null);
     }
 
-    control(formControlName: string, formGroup: SpiderFormGroup){
+    control(formControlName: string, formGroup: SpiderlyFormGroup){
         return getControl(formControlName, formGroup);
     }
 }

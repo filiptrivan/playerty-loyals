@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Spider.Shared.Interfaces;
+using Spiderly.Shared.Interfaces;
 using PlayertyLoyals.Business.Entities;
-using Spider.Shared.Attributes;
+using Spiderly.Shared.Attributes;
 using PlayertyLoyals.Business.Services;
 using PlayertyLoyals.Business.DTO;
-using Spider.Shared.DTO;
+using Spiderly.Shared.DTO;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {
@@ -19,7 +19,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
         public PartnerUserController(
             IApplicationDbContext context, 
             LoyalsBusinessService loyalsBusinessService, 
-            PartnerUserAuthenticationService partnerUserAuthenticationService, 
+            PartnerUserAuthenticationService partnerUserAuthenticationService 
         )
             : base(context, loyalsBusinessService)
         {

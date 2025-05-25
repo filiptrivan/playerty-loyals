@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { BusinessSystem, ExcelUpdatePoints } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { BaseFormCopy, SpiderFormGroup, Column, SpiderMessageService, BaseFormService, IsAuthorizedForSaveEvent, SpiderDataTableComponent } from '@playerty/spider';
+import { BaseFormCopy, SpiderlyFormGroup, Column, SpiderlyMessageService, BaseFormService, IsAuthorizedForSaveEvent, SpiderlyDataTableComponent } from 'spiderly';
 import { ConfirmationService } from 'primeng/api';
 
 @Component({
@@ -13,22 +13,22 @@ import { ConfirmationService } from 'primeng/api';
     styles: [],
 })
 export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnInit {
-    businessSystemFormGroup = new SpiderFormGroup<BusinessSystem>({});
+    businessSystemFormGroup = new SpiderlyFormGroup<BusinessSystem>({});
     
-    @ViewChild('updatePointsTaskTable') updatePointsTaskTable: SpiderDataTableComponent; // FT: Made for refreshing table
+    @ViewChild('updatePointsTaskTable') updatePointsTaskTable: SpiderlyDataTableComponent; // FT: Made for refreshing table
     businessSystemUpdatePointsScheduledTaskTableCols: Column[];
     getBusinessSystemUpdatePointsScheduledTaskTableDataObservableMethod = this.apiService.getBusinessSystemUpdatePointsScheduledTaskTableDataForBusinessSystem;
     exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelObservableMethod = this.apiService.exportBusinessSystemUpdatePointsScheduledTaskTableDataToExcelForBusinessSystem;
     businessSystemUpdatePointsScheduledTaskTableTotalRecords: number;
     
-    excelUpdatePointsFormGroup = new SpiderFormGroup<ExcelUpdatePoints>({});
+    excelUpdatePointsFormGroup = new SpiderlyFormGroup<ExcelUpdatePoints>({});
     
     isAuthorizedForSave: boolean = false;
 
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SpiderMessageService, 
+        protected override messageService: SpiderlyMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 

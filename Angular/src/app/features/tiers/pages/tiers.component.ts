@@ -5,7 +5,7 @@ import { forkJoin, Subscription } from 'rxjs';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { TimelineIndexProgressbarComponent } from 'src/app/features/tiers/partials/tier-timeline-index-progressbar.component';
 import { CommonModule } from '@angular/common';
-import { PrimengModule, SpiderControlsModule } from '@playerty/spider';
+import { PrimengModule, SpiderlyControlsModule } from 'spiderly';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
 
 @Component({
@@ -15,7 +15,7 @@ import { AuthService } from 'src/app/business/services/auth/auth.service';
   imports: [
     CommonModule,
     PrimengModule,
-    SpiderControlsModule,
+    SpiderlyControlsModule,
     TimelineIndexProgressbarComponent,
     TranslocoDirective,
   ]

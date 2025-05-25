@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Spider.Shared.Attributes;
-using Spider.Shared.Interfaces;
-using Spider.Shared.Attributes.EF.UI;
+using Spiderly.Shared.Attributes;
+using Spiderly.Shared.Interfaces;
+using Spiderly.Shared.Attributes.EF.UI;
 using PlayertyLoyals.Business.Services;
 
 namespace PlayertyLoyals.WebAPI.Controllers

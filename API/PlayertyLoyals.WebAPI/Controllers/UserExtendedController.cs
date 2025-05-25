@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlayertyLoyals.Business.Services;
-using Spider.Shared.Attributes;
-using Spider.Shared.Interfaces;
+using Spiderly.Shared.Attributes;
+using Spiderly.Shared.Interfaces;
 using Azure.Storage.Blobs;
 using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
-using Spider.Shared.DTO;
-using Spider.Security.Services;
+using Spiderly.Shared.DTO;
+using Spiderly.Security.Services;
 using PlayertyLoyals.Shared.Resources;
-using Spider.Shared.Extensions;
+using Spiderly.Shared.Extensions;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {

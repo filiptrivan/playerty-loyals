@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { ApiService } from '../../services/api/api.service';
 import { PartnerUser, Tier } from '../../entities/business-entities.generated';
-import { PrimengModule } from '@playerty/spider';
+import { PrimengModule } from 'spiderly';
 
 @Component({
     selector: 'user-progressbar',

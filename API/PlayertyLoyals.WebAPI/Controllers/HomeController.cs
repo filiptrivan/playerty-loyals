@@ -3,12 +3,12 @@ using PlayertyLoyals.Business.DTO;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Enums;
 using PlayertyLoyals.Business.Services;
-using Spider.Security.Interfaces;
-using Spider.Security.Services;
-using Spider.Shared.Attributes;
-using Spider.Shared.DTO;
-using Spider.Shared.Helpers;
-using Spider.Shared.Interfaces;
+using Spiderly.Security.Interfaces;
+using Spiderly.Security.Services;
+using Spiderly.Shared.Attributes;
+using Spiderly.Shared.DTO;
+using Spiderly.Shared.Helpers;
+using Spiderly.Shared.Interfaces;
 
 namespace PlayertyLoyals.WebAPI.Controllers
 {
@@ -89,7 +89,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
             //                        Label = "Roles",
             //                        Icon = "pi pi-fw pi-id-card",
             //                        Url = "/administration/roles",
-            //                        Permissions = new List<Enum> { Spider.Security.Enums.PermissionCodes.ReadRole }
+            //                        Permissions = new List<Enum> { Spiderly.Security.Enums.PermissionCodes.ReadRole }
             //                    },
             //                    new MenuDTO
             //                    {
@@ -103,7 +103,7 @@ namespace PlayertyLoyals.WebAPI.Controllers
             //                        Label = "Notifications",
             //                        Icon = "pi pi-fw pi-bell",
             //                        Url = "/administration/notifications",
-            //                        Permissions = new List<Enum> { Spider.Security.Enums.PermissionCodes.ReadNotification }
+            //                        Permissions = new List<Enum> { Spiderly.Security.Enums.PermissionCodes.ReadNotification }
             //                    },
             //                }
             //            },

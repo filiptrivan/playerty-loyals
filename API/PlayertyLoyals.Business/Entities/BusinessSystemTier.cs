@@ -1,7 +1,7 @@
-﻿using Spider.Shared.Attributes.EF;
-using Spider.Shared.Attributes.EF.UI;
-using Spider.Shared.BaseEntities;
-using Spider.Shared.Enums;
+﻿using Spiderly.Shared.Attributes.EF;
+using Spiderly.Shared.Attributes.EF.UI;
+using Spiderly.Shared.BaseEntities;
+using Spiderly.Shared.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

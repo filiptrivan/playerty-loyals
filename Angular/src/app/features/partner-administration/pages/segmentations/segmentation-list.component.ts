@@ -2,7 +2,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { Segmentation } from 'src/app/business/entities/business-entities.generated';
-import { Column } from '@playerty/spider';
+import { Column } from 'spiderly';
 
 @Component({
     selector: 'segmentation-list',

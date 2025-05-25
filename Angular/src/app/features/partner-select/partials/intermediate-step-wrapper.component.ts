@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { PrimengModule, SpiderControlsModule } from '@playerty/spider';
+import { PrimengModule, SpiderlyControlsModule } from 'spiderly';
 
 @Component({
     selector: 'intermediate-step-wrapper',
@@ -13,7 +13,7 @@ import { PrimengModule, SpiderControlsModule } from '@playerty/spider';
         PrimengModule,
         FormsModule,
         ReactiveFormsModule,
-        SpiderControlsModule,
+        SpiderlyControlsModule,
         TranslocoDirective
     ]
 })

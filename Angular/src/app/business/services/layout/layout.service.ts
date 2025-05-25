@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { ConfigService } from '../config.service';
-import { getPrimengAutocompleteCodebookOptions, InitTopBarData, LayoutBaseService, PrimengOption, User } from '@playerty/spider';
+import { getPrimengAutocompleteCodebookOptions, InitTopBarData, LayoutBaseService, PrimengOption, User } from 'spiderly';
 import { combineLatest, map } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';

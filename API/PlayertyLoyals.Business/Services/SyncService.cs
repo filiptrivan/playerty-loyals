@@ -1,7 +1,7 @@
 ﻿using PlayertyLoyals.Business.Entities;
-using Spider.Shared.Interfaces;
-using Spider.Shared.Services;
-using Spider.Shared.Extensions;
+using Spiderly.Shared.Interfaces;
+using Spiderly.Shared.Services;
+using Spiderly.Shared.Extensions;
 using PlayertyLoyals.Business.DTO;
 using Microsoft.EntityFrameworkCore;
 

@@ -10,14 +10,14 @@ import { ActivatedRoute } from '@angular/router';
 import { combineLatest, firstValueFrom, forkJoin, map, Observable, of, Subscription } from 'rxjs';
 import { MenuItem } from 'primeng/api';
 import { AuthService } from '../../services/auth/auth.service';
-import { PrimengModule, SpiderControlsModule, CardSkeletonComponent, IndexCardComponent, IsAuthorizedForSaveEvent, SpiderDataTableComponent, SpiderFormArray, BaseEntity, LastMenuIconIndexClicked, SpiderFormGroup, SpiderButton, nameof, BaseFormService, getControl, Column, TableFilter, LazyLoadSelectedIdsResult, AllClickEvent, SpiderFileSelectEvent, getPrimengDropdownNamebookOptions, PrimengOption, SpiderFormControl, getPrimengAutocompleteNamebookOptions } from '@playerty/spider';
+import { PrimengModule, SpiderlyControlsModule, CardSkeletonComponent, IndexCardComponent, IsAuthorizedForSaveEvent, SpiderlyDataTableComponent, SpiderlyFormArray, BaseEntity, LastMenuIconIndexClicked, SpiderlyFormGroup, SpiderlyButton, nameof, BaseFormService, getControl, Column, TableFilter, LazyLoadSelectedIdsResult, AllClickEvent, SpiderlyFileSelectEvent, getPrimengDropdownNamebookOptions, PrimengOption, SpiderlyFormControl, getPrimengAutocompleteNamebookOptions } from 'spiderly';
 import { Achievement, AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountProductGroup, BusinessSystemTier, ExcelUpdatePoints, ExternalDiscountProductGroup, ExternalTransaction, GenderAndBirthDate, InfoAndWarningResult, ManualUpdatePoints, Notification, NotificationSaveBody, PartnerNotificationSaveBody, PartnerUser, PartnerUserSaveBody, Product, SegmentationItem, TierSaveBody, BusinessSystem, BusinessSystemUpdatePointsScheduledTask, DiscountProductGroup, Gender, Partner, PartnerNotification, PartnerPermission, PartnerRole, PartnerRolePartnerPermission, PartnerUserPartnerNotification, PartnerUserPartnerRole, PartnerUserSegmentation, PartnerUserSegmentationItem, Segmentation, Tier, Transaction, UserExtended, UserNotification, AchievementSaveBody, BusinessSystemSaveBody, BusinessSystemTierSaveBody, BusinessSystemTierDiscountProductGroupSaveBody, BusinessSystemUpdatePointsScheduledTaskSaveBody, DiscountProductGroupSaveBody, GenderSaveBody, PartnerSaveBody, PartnerPermissionSaveBody, PartnerRoleSaveBody, PartnerRolePartnerPermissionSaveBody, PartnerUserPartnerNotificationSaveBody, PartnerUserPartnerRoleSaveBody, PartnerUserSegmentationSaveBody, PartnerUserSegmentationItemSaveBody, SegmentationSaveBody, SegmentationItemSaveBody, TransactionSaveBody, UserExtendedSaveBody, UserNotificationSaveBody } from '../../entities/business-entities.generated';
 
 @Component({
     selector: 'business-system-base-details',
     template:`
 <ng-container *transloco="let t">
-    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
+    <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
@@ -25,16 +25,16 @@ import { Achievement, AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountPr
                 <form class="grid">
                     <ng-content select="[BEFORE]"></ng-content>
                     <div *ngIf="showNameForBusinessSystem" class="col-12">
-                        <spider-textbox [control]="control('name', businessSystemFormGroup)"></spider-textbox>
+                        <spiderly-textbox [control]="control('name', businessSystemFormGroup)"></spiderly-textbox>
                     </div>
                     <div *ngIf="showCreateUserEndpointForBusinessSystem" class="col-12 md:col-6">
-                        <spider-textbox [control]="control('createUserEndpoint', businessSystemFormGroup)"></spider-textbox>
+                        <spiderly-textbox [control]="control('createUserEndpoint', businessSystemFormGroup)"></spiderly-textbox>
                     </div>
                     <div *ngIf="showUpdateUserGroupEndpointForBusinessSystem" class="col-12 md:col-6">
-                        <spider-textbox [control]="control('updateUserGroupEndpoint', businessSystemFormGroup)"></spider-textbox>
+                        <spiderly-textbox [control]="control('updateUserGroupEndpoint', businessSystemFormGroup)"></spiderly-textbox>
                     </div>
                      <div *ngIf="showDiscountProductGroupsForBusinessSystem" class="col-12">
-                        <spider-panel [toggleable]="true" [collapsed]="discountProductGroupsPanelCollapsed">
+                        <spiderly-panel [toggleable]="true" [collapsed]="discountProductGroupsPanelCollapsed">
                             <panel-header [title]="t('DiscountProductGroups')" icon="pi pi-list"></panel-header>
                             <panel-body [normalBottomPadding]="true">
                                 @for (discountProductGroupFormGroup of getFormArrayGroups(discountProductGroupsFormArray); track discountProductGroupFormGroup; let index = $index; let last = $last) {
@@ -47,21 +47,21 @@ import { Achievement, AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountPr
                                     >
                                         <form [formGroup]="discountProductGroupFormGroup" class="grid">
                     <div  class="col-12 md:col-6">
-                        <spider-textbox [control]="control('name', discountProductGroupFormGroup)"></spider-textbox>
+                        <spiderly-textbox [control]="control('name', discountProductGroupFormGroup)"></spiderly-textbox>
                     </div>
                     <div  class="col-12 md:col-6">
-                        <spider-textbox [control]="control('code', discountProductGroupFormGroup)"></spider-textbox>
+                        <spiderly-textbox [control]="control('code', discountProductGroupFormGroup)"></spiderly-textbox>
                     </div>
                                         </form>
                                     </index-card>
                                 }
 
                                 <div class="panel-add-button">
-                                    <spider-button [disabled]="!isAuthorizedForSave" (onClick)="addNewItemToDiscountProductGroups(null)" [label]="t('AddNewDiscountProductGroup')" icon="pi pi-plus"></spider-button>
+                                    <spiderly-button [disabled]="!isAuthorizedForSave" (onClick)="addNewItemToDiscountProductGroups(null)" [label]="t('AddNewDiscountProductGroup')" icon="pi pi-plus"></spiderly-button>
                                 </div>
 
                             </panel-body>
-                        </spider-panel>
+                        </spiderly-panel>
                     </div>
                     <ng-content select="[AFTER]"></ng-content>
                 </form>
@@ -71,13 +71,13 @@ import { Achievement, AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountPr
         </panel-body>
 
         <panel-footer>
-            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spiderly-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spiderly-button>
             @for (button of additionalButtons; track button.label) {
-                <spider-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spider-button>
+                <spiderly-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spiderly-button>
             }
-            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
+            <return-button *ngIf="showReturnButton" ></return-button>
         </panel-footer>
-    </spider-panel>
+    </spiderly-panel>
 </ng-container>
     `,
     standalone: true,
@@ -86,20 +86,20 @@ import { Achievement, AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountPr
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
-        SpiderControlsModule,
+        SpiderlyControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SpiderDataTableComponent,
+        SpiderlyDataTableComponent,
     ]
 })
 export class BusinessSystemBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onBusinessSystemFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SpiderFormGroup;
-    @Input() businessSystemFormGroup: SpiderFormGroup<BusinessSystem>;
-    @Input() additionalButtons: SpiderButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderlyFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderlyFormGroup;
+    @Input() businessSystemFormGroup: SpiderlyFormGroup<BusinessSystem>;
+    @Input() additionalButtons: SpiderlyButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -120,7 +120,7 @@ export class BusinessSystemBaseDetailsComponent {
     discountProductGroupsModel = new DiscountProductGroup();
     discountProductGroupsSaveBodyName: string = nameof<BusinessSystemSaveBody>('discountProductGroupsDTO');
     discountProductGroupsTranslationKey: string = new DiscountProductGroup().typeName;
-    discountProductGroupsFormArray: SpiderFormArray<DiscountProductGroup>;
+    discountProductGroupsFormArray: SpiderlyFormArray<DiscountProductGroup>;
     discountProductGroupsLastIndexClicked = new LastMenuIconIndexClicked();
     discountProductGroupsCrudMenu: MenuItem[] = [];
     @Input() discountProductGroupsPanelCollapsed: boolean = false;
@@ -265,11 +265,11 @@ export class BusinessSystemBaseDetailsComponent {
 
 
 
-    control(formControlName: string, formGroup: SpiderFormGroup){
+    control(formControlName: string, formGroup: SpiderlyFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderlyFormArray): SpiderlyFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
@@ -289,7 +289,7 @@ export class BusinessSystemBaseDetailsComponent {
     selector: 'notification-base-details',
     template:`
 <ng-container *transloco="let t">
-    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
+    <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
@@ -297,16 +297,16 @@ export class BusinessSystemBaseDetailsComponent {
                 <form class="grid">
                     <ng-content select="[BEFORE]"></ng-content>
                     <div *ngIf="showTitleForNotification" class="col-12">
-                        <spider-textbox [control]="control('title', notificationFormGroup)"></spider-textbox>
+                        <spiderly-textbox [control]="control('title', notificationFormGroup)"></spiderly-textbox>
                     </div>
                     <div *ngIf="showDescriptionForNotification" class="col-12">
-                        <spider-textarea [control]="control('description', notificationFormGroup)"></spider-textarea>
+                        <spiderly-textarea [control]="control('description', notificationFormGroup)"></spiderly-textarea>
                     </div>
                     <div *ngIf="showEmailBodyForNotification" class="col-12">
-                        <spider-editor [control]="control('emailBody', notificationFormGroup)"></spider-editor>
+                        <spiderly-editor [control]="control('emailBody', notificationFormGroup)"></spiderly-editor>
                     </div>
                     <div *ngIf="showRecipientsForNotification" class="col-12">
-                        <spider-data-table 
+                        <spiderly-data-table 
                             [tableTitle]="t('Recipients')" 
                             [cols]="recipientsTableColsForNotification" 
                             [getTableDataObservableMethod]="getRecipientsTableDataObservableMethodForNotification" 
@@ -319,7 +319,7 @@ export class BusinessSystemBaseDetailsComponent {
                             [rows]="5" 
                             (onLazyLoad)="onRecipientsLazyLoadForNotification($event)"
                             [selectedLazyLoadObservableMethod]="selectedRecipientsLazyLoadMethodForNotification" 
-                            (onIsAllSelectedChange)="areAllRecipientsSelectedChangeForNotification($event)"></spider-data-table>
+                            (onIsAllSelectedChange)="areAllRecipientsSelectedChangeForNotification($event)"></spiderly-data-table>
                     </div>
                     <ng-content select="[AFTER]"></ng-content>
                 </form>
@@ -329,13 +329,13 @@ export class BusinessSystemBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spiderly-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spiderly-button>
             @for (button of additionalButtons; track button.label) {
-                <spider-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spider-button>
+                <spiderly-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spiderly-button>
             }
-            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
+            <return-button *ngIf="showReturnButton" ></return-button>
         </panel-footer>
-    </spider-panel>
+    </spiderly-panel>
 </ng-container>
     `,
     standalone: true,
@@ -344,20 +344,20 @@ export class BusinessSystemBaseDetailsComponent {
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
-        SpiderControlsModule,
+        SpiderlyControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SpiderDataTableComponent,
+        SpiderlyDataTableComponent,
     ]
 })
 export class NotificationBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onNotificationFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SpiderFormGroup;
-    @Input() notificationFormGroup: SpiderFormGroup<Notification>;
-    @Input() additionalButtons: SpiderButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderlyFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderlyFormGroup;
+    @Input() notificationFormGroup: SpiderlyFormGroup<Notification>;
+    @Input() additionalButtons: SpiderlyButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -519,11 +519,11 @@ export class NotificationBaseDetailsComponent {
 
 
 
-    control(formControlName: string, formGroup: SpiderFormGroup){
+    control(formControlName: string, formGroup: SpiderlyFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderlyFormArray): SpiderlyFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
@@ -543,7 +543,7 @@ export class NotificationBaseDetailsComponent {
     selector: 'partner-base-details',
     template:`
 <ng-container *transloco="let t">
-    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
+    <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
@@ -551,28 +551,28 @@ export class NotificationBaseDetailsComponent {
                 <form class="grid">
                     <ng-content select="[BEFORE]"></ng-content>
                     <div *ngIf="showLogoImageForPartner" class="col-12">
-                        <spider-file [control]="control('logoImage', partnerFormGroup)" [fileData]="partnerFormGroup.controls.logoImageData.getRawValue()" [objectId]="partnerFormGroup.controls.id.getRawValue()" (onFileSelected)="uploadLogoImageForPartner($event)" [disabled]="!isAuthorizedForSave"></spider-file>
+                        <spiderly-file [control]="control('logoImage', partnerFormGroup)" [fileData]="partnerFormGroup.controls.logoImageData.getRawValue()" [objectId]="partnerFormGroup.controls.id.getRawValue()" (onFileSelected)="uploadLogoImageForPartner($event)" [disabled]="!isAuthorizedForSave"></spiderly-file>
                     </div>
                     <div *ngIf="showNameForPartner" class="col-12 md:col-6">
-                        <spider-textbox [control]="control('name', partnerFormGroup)"></spider-textbox>
+                        <spiderly-textbox [control]="control('name', partnerFormGroup)"></spiderly-textbox>
                     </div>
                     <div *ngIf="showEmailForPartner" class="col-12 md:col-6">
-                        <spider-textbox [control]="control('email', partnerFormGroup)"></spider-textbox>
+                        <spiderly-textbox [control]="control('email', partnerFormGroup)"></spiderly-textbox>
                     </div>
                     <div *ngIf="showSlugForPartner" class="col-12 md:col-6">
-                        <spider-textbox [control]="control('slug', partnerFormGroup)"></spider-textbox>
+                        <spiderly-textbox [control]="control('slug', partnerFormGroup)"></spiderly-textbox>
                     </div>
                     <div *ngIf="showPrimaryColorForPartner" class="col-12 md:col-6">
-                        <spider-colorpick [control]="control('primaryColor', partnerFormGroup)"></spider-colorpick>
+                        <spiderly-colorpick [control]="control('primaryColor', partnerFormGroup)"></spiderly-colorpick>
                     </div>
                     <div *ngIf="showProductsRecommendationEndpointForPartner" class="col-12 md:col-6">
-                        <spider-textbox [control]="control('productsRecommendationEndpoint', partnerFormGroup)"></spider-textbox>
+                        <spiderly-textbox [control]="control('productsRecommendationEndpoint', partnerFormGroup)"></spiderly-textbox>
                     </div>
                     <div *ngIf="showPointsMultiplierForPartner" class="col-12 md:col-6">
-                        <spider-number [control]="control('pointsMultiplier', partnerFormGroup)" [decimal]="true" [maxFractionDigits]=" 2"></spider-number>
+                        <spiderly-number [control]="control('pointsMultiplier', partnerFormGroup)" [decimal]="true" [maxFractionDigits]=" 2"></spiderly-number>
                     </div>
                     <div *ngIf="showPointsDurationForPartner" class="col-12 md:col-6">
-                        <spider-number [control]="control('pointsDuration', partnerFormGroup)"></spider-number>
+                        <spiderly-number [control]="control('pointsDuration', partnerFormGroup)"></spiderly-number>
                     </div>
                     <ng-content select="[AFTER]"></ng-content>
                 </form>
@@ -582,13 +582,13 @@ export class NotificationBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spiderly-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spiderly-button>
             @for (button of additionalButtons; track button.label) {
-                <spider-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spider-button>
+                <spiderly-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spiderly-button>
             }
-            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
+            <return-button *ngIf="showReturnButton" ></return-button>
         </panel-footer>
-    </spider-panel>
+    </spiderly-panel>
 </ng-container>
     `,
     standalone: true,
@@ -597,20 +597,20 @@ export class NotificationBaseDetailsComponent {
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
-        SpiderControlsModule,
+        SpiderlyControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SpiderDataTableComponent,
+        SpiderlyDataTableComponent,
     ]
 })
 export class PartnerBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onPartnerFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SpiderFormGroup;
-    @Input() partnerFormGroup: SpiderFormGroup<Partner>;
-    @Input() additionalButtons: SpiderButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderlyFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderlyFormGroup;
+    @Input() partnerFormGroup: SpiderlyFormGroup<Partner>;
+    @Input() additionalButtons: SpiderlyButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -761,17 +761,17 @@ export class PartnerBaseDetailsComponent {
 
 
 
-    uploadLogoImageForPartner(event: SpiderFileSelectEvent){
+    uploadLogoImageForPartner(event: SpiderlyFileSelectEvent){
         this.apiService.uploadLogoImageForPartner(event.formData).subscribe((completeFileName: string) => {
             this.partnerFormGroup.controls.logoImage.setValue(completeFileName);
         });
     }
 
-    control(formControlName: string, formGroup: SpiderFormGroup){
+    control(formControlName: string, formGroup: SpiderlyFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderlyFormArray): SpiderlyFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
@@ -791,7 +791,7 @@ export class PartnerBaseDetailsComponent {
     selector: 'partner-notification-base-details',
     template:`
 <ng-container *transloco="let t">
-    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
+    <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
@@ -799,16 +799,16 @@ export class PartnerBaseDetailsComponent {
                 <form class="grid">
                     <ng-content select="[BEFORE]"></ng-content>
                     <div *ngIf="showTitleForPartnerNotification" class="col-12">
-                        <spider-textbox [control]="control('title', partnerNotificationFormGroup)"></spider-textbox>
+                        <spiderly-textbox [control]="control('title', partnerNotificationFormGroup)"></spiderly-textbox>
                     </div>
                     <div *ngIf="showDescriptionForPartnerNotification" class="col-12">
-                        <spider-textarea [control]="control('description', partnerNotificationFormGroup)"></spider-textarea>
+                        <spiderly-textarea [control]="control('description', partnerNotificationFormGroup)"></spiderly-textarea>
                     </div>
                     <div *ngIf="showEmailBodyForPartnerNotification" class="col-12">
-                        <spider-editor [control]="control('emailBody', partnerNotificationFormGroup)"></spider-editor>
+                        <spiderly-editor [control]="control('emailBody', partnerNotificationFormGroup)"></spiderly-editor>
                     </div>
                     <div *ngIf="showRecipientsForPartnerNotification" class="col-12">
-                        <spider-data-table 
+                        <spiderly-data-table 
                             [tableTitle]="t('Recipients')" 
                             [cols]="recipientsTableColsForPartnerNotification" 
                             [getTableDataObservableMethod]="getRecipientsTableDataObservableMethodForPartnerNotification" 
@@ -821,7 +821,7 @@ export class PartnerBaseDetailsComponent {
                             [rows]="5" 
                             (onLazyLoad)="onRecipientsLazyLoadForPartnerNotification($event)"
                             [selectedLazyLoadObservableMethod]="selectedRecipientsLazyLoadMethodForPartnerNotification" 
-                            (onIsAllSelectedChange)="areAllRecipientsSelectedChangeForPartnerNotification($event)"></spider-data-table>
+                            (onIsAllSelectedChange)="areAllRecipientsSelectedChangeForPartnerNotification($event)"></spiderly-data-table>
                     </div>
                     <ng-content select="[AFTER]"></ng-content>
                 </form>
@@ -831,13 +831,13 @@ export class PartnerBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spiderly-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spiderly-button>
             @for (button of additionalButtons; track button.label) {
-                <spider-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spider-button>
+                <spiderly-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spiderly-button>
             }
-            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
+            <return-button *ngIf="showReturnButton" ></return-button>
         </panel-footer>
-    </spider-panel>
+    </spiderly-panel>
 </ng-container>
     `,
     standalone: true,
@@ -846,20 +846,20 @@ export class PartnerBaseDetailsComponent {
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
-        SpiderControlsModule,
+        SpiderlyControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SpiderDataTableComponent,
+        SpiderlyDataTableComponent,
     ]
 })
 export class PartnerNotificationBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onPartnerNotificationFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SpiderFormGroup;
-    @Input() partnerNotificationFormGroup: SpiderFormGroup<PartnerNotification>;
-    @Input() additionalButtons: SpiderButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderlyFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderlyFormGroup;
+    @Input() partnerNotificationFormGroup: SpiderlyFormGroup<PartnerNotification>;
+    @Input() additionalButtons: SpiderlyButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -1026,11 +1026,11 @@ export class PartnerNotificationBaseDetailsComponent {
 
 
 
-    control(formControlName: string, formGroup: SpiderFormGroup){
+    control(formControlName: string, formGroup: SpiderlyFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderlyFormArray): SpiderlyFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
@@ -1050,7 +1050,7 @@ export class PartnerNotificationBaseDetailsComponent {
     selector: 'partner-role-base-details',
     template:`
 <ng-container *transloco="let t">
-    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
+    <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
@@ -1058,16 +1058,16 @@ export class PartnerNotificationBaseDetailsComponent {
                 <form class="grid">
                     <ng-content select="[BEFORE]"></ng-content>
                     <div *ngIf="showNameForPartnerRole" class="col-12">
-                        <spider-textbox [control]="control('name', partnerRoleFormGroup)"></spider-textbox>
+                        <spiderly-textbox [control]="control('name', partnerRoleFormGroup)"></spiderly-textbox>
                     </div>
                     <div *ngIf="showPartnerUsersForPartnerRole" class="col-12">
-                        <spider-multiautocomplete [control]="selectedPartnerUsersForPartnerRole" [options]="partnerUsersOptionsForPartnerRole" (onTextInput)="searchPartnerUsersForPartnerRole($event)" [label]="t('PartnerUsers')"></spider-multiautocomplete>
+                        <spiderly-multiautocomplete [control]="selectedPartnerUsersForPartnerRole" [options]="partnerUsersOptionsForPartnerRole" (onTextInput)="searchPartnerUsersForPartnerRole($event)" [label]="t('PartnerUsers')"></spiderly-multiautocomplete>
                     </div>
                     <div *ngIf="showPartnerPermissionsForPartnerRole" class="col-12">
-                        <spider-multiselect [control]="selectedPartnerPermissionsForPartnerRole" [options]="partnerPermissionsOptionsForPartnerRole" [label]="t('PartnerPermissions')"></spider-multiselect>
+                        <spiderly-multiselect [control]="selectedPartnerPermissionsForPartnerRole" [options]="partnerPermissionsOptionsForPartnerRole" [label]="t('PartnerPermissions')"></spiderly-multiselect>
                     </div>
                     <div *ngIf="showDescriptionForPartnerRole" class="col-12">
-                        <spider-textarea [control]="control('description', partnerRoleFormGroup)"></spider-textarea>
+                        <spiderly-textarea [control]="control('description', partnerRoleFormGroup)"></spiderly-textarea>
                     </div>
                     <ng-content select="[AFTER]"></ng-content>
                 </form>
@@ -1077,13 +1077,13 @@ export class PartnerNotificationBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spiderly-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spiderly-button>
             @for (button of additionalButtons; track button.label) {
-                <spider-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spider-button>
+                <spiderly-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spiderly-button>
             }
-            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
+            <return-button *ngIf="showReturnButton" ></return-button>
         </panel-footer>
-    </spider-panel>
+    </spiderly-panel>
 </ng-container>
     `,
     standalone: true,
@@ -1092,20 +1092,20 @@ export class PartnerNotificationBaseDetailsComponent {
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
-        SpiderControlsModule,
+        SpiderlyControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SpiderDataTableComponent,
+        SpiderlyDataTableComponent,
     ]
 })
 export class PartnerRoleBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onPartnerRoleFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SpiderFormGroup;
-    @Input() partnerRoleFormGroup: SpiderFormGroup<PartnerRole>;
-    @Input() additionalButtons: SpiderButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderlyFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderlyFormGroup;
+    @Input() partnerRoleFormGroup: SpiderlyFormGroup<PartnerRole>;
+    @Input() additionalButtons: SpiderlyButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -1128,8 +1128,8 @@ export class PartnerRoleBaseDetailsComponent {
     partnerUsersOptionsForPartnerRole: PrimengOption[];
     partnerPermissionsOptionsForPartnerRole: PrimengOption[];
 
-    selectedPartnerUsersForPartnerRole = new SpiderFormControl<PrimengOption[]>(null, {updateOn: 'change'});
-    selectedPartnerPermissionsForPartnerRole = new SpiderFormControl<number[]>(null, {updateOn: 'change'});
+    selectedPartnerUsersForPartnerRole = new SpiderlyFormControl<PrimengOption[]>(null, {updateOn: 'change'});
+    selectedPartnerPermissionsForPartnerRole = new SpiderlyFormControl<number[]>(null, {updateOn: 'change'});
 
 
 
@@ -1260,11 +1260,11 @@ export class PartnerRoleBaseDetailsComponent {
 
 
 
-    control(formControlName: string, formGroup: SpiderFormGroup){
+    control(formControlName: string, formGroup: SpiderlyFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderlyFormArray): SpiderlyFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
@@ -1284,7 +1284,7 @@ export class PartnerRoleBaseDetailsComponent {
     selector: 'partner-user-base-details',
     template:`
 <ng-container *transloco="let t">
-    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
+    <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
@@ -1292,7 +1292,7 @@ export class PartnerRoleBaseDetailsComponent {
                 <form class="grid">
                     <ng-content select="[BEFORE]"></ng-content>
                     <div *ngIf="showPointsForPartnerUser" class="col-12">
-                        <spider-number [control]="control('points', partnerUserFormGroup)"></spider-number>
+                        <spiderly-number [control]="control('points', partnerUserFormGroup)"></spiderly-number>
                     </div>
                     <ng-content select="[AFTER]"></ng-content>
                 </form>
@@ -1302,13 +1302,13 @@ export class PartnerRoleBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spiderly-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spiderly-button>
             @for (button of additionalButtons; track button.label) {
-                <spider-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spider-button>
+                <spiderly-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spiderly-button>
             }
-            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
+            <return-button *ngIf="showReturnButton" ></return-button>
         </panel-footer>
-    </spider-panel>
+    </spiderly-panel>
 </ng-container>
     `,
     standalone: true,
@@ -1317,20 +1317,20 @@ export class PartnerRoleBaseDetailsComponent {
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
-        SpiderControlsModule,
+        SpiderlyControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SpiderDataTableComponent,
+        SpiderlyDataTableComponent,
     ]
 })
 export class PartnerUserBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onPartnerUserFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SpiderFormGroup;
-    @Input() partnerUserFormGroup: SpiderFormGroup<PartnerUser>;
-    @Input() additionalButtons: SpiderButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderlyFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderlyFormGroup;
+    @Input() partnerUserFormGroup: SpiderlyFormGroup<PartnerUser>;
+    @Input() additionalButtons: SpiderlyButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -1463,11 +1463,11 @@ export class PartnerUserBaseDetailsComponent {
 
 
 
-    control(formControlName: string, formGroup: SpiderFormGroup){
+    control(formControlName: string, formGroup: SpiderlyFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderlyFormArray): SpiderlyFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
@@ -1487,7 +1487,7 @@ export class PartnerUserBaseDetailsComponent {
     selector: 'segmentation-base-details',
     template:`
 <ng-container *transloco="let t">
-    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
+    <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
@@ -1495,16 +1495,16 @@ export class PartnerUserBaseDetailsComponent {
                 <form class="grid">
                     <ng-content select="[BEFORE]"></ng-content>
                     <div *ngIf="showNameForSegmentation" class="col-12 md:col-6">
-                        <spider-textbox [control]="control('name', segmentationFormGroup)"></spider-textbox>
+                        <spiderly-textbox [control]="control('name', segmentationFormGroup)"></spiderly-textbox>
                     </div>
                     <div *ngIf="showPointsForTheFirstTimeFillForSegmentation" class="col-12 md:col-6">
-                        <spider-number [control]="control('pointsForTheFirstTimeFill', segmentationFormGroup)"></spider-number>
+                        <spiderly-number [control]="control('pointsForTheFirstTimeFill', segmentationFormGroup)"></spiderly-number>
                     </div>
                     <div *ngIf="showDescriptionForSegmentation" class="col-12">
-                        <spider-textarea [control]="control('description', segmentationFormGroup)"></spider-textarea>
+                        <spiderly-textarea [control]="control('description', segmentationFormGroup)"></spiderly-textarea>
                     </div>
                      <div *ngIf="showSegmentationItemsForSegmentation" class="col-12">
-                        <spider-panel [toggleable]="true" [collapsed]="segmentationItemsPanelCollapsed">
+                        <spiderly-panel [toggleable]="true" [collapsed]="segmentationItemsPanelCollapsed">
                             <panel-header [title]="t('SegmentationItems')" icon="pi pi-list"></panel-header>
                             <panel-body [normalBottomPadding]="true">
                                 @for (segmentationItemFormGroup of getFormArrayGroups(segmentationItemsFormArray); track segmentationItemFormGroup; let index = $index; let last = $last) {
@@ -1517,18 +1517,18 @@ export class PartnerUserBaseDetailsComponent {
                                     >
                                         <form [formGroup]="segmentationItemFormGroup" class="grid">
                     <div  class="col-12">
-                        <spider-textbox [control]="control('name', segmentationItemFormGroup)"></spider-textbox>
+                        <spiderly-textbox [control]="control('name', segmentationItemFormGroup)"></spiderly-textbox>
                     </div>
                                         </form>
                                     </index-card>
                                 }
 
                                 <div class="panel-add-button">
-                                    <spider-button [disabled]="!isAuthorizedForSave" (onClick)="addNewItemToSegmentationItems(null)" [label]="t('AddNewSegmentationItem')" icon="pi pi-plus"></spider-button>
+                                    <spiderly-button [disabled]="!isAuthorizedForSave" (onClick)="addNewItemToSegmentationItems(null)" [label]="t('AddNewSegmentationItem')" icon="pi pi-plus"></spiderly-button>
                                 </div>
 
                             </panel-body>
-                        </spider-panel>
+                        </spiderly-panel>
                     </div>
                     <ng-content select="[AFTER]"></ng-content>
                 </form>
@@ -1538,13 +1538,13 @@ export class PartnerUserBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spiderly-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spiderly-button>
             @for (button of additionalButtons; track button.label) {
-                <spider-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spider-button>
+                <spiderly-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spiderly-button>
             }
-            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
+            <return-button *ngIf="showReturnButton" ></return-button>
         </panel-footer>
-    </spider-panel>
+    </spiderly-panel>
 </ng-container>
     `,
     standalone: true,
@@ -1553,20 +1553,20 @@ export class PartnerUserBaseDetailsComponent {
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
-        SpiderControlsModule,
+        SpiderlyControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SpiderDataTableComponent,
+        SpiderlyDataTableComponent,
     ]
 })
 export class SegmentationBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onSegmentationFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SpiderFormGroup;
-    @Input() segmentationFormGroup: SpiderFormGroup<Segmentation>;
-    @Input() additionalButtons: SpiderButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderlyFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderlyFormGroup;
+    @Input() segmentationFormGroup: SpiderlyFormGroup<Segmentation>;
+    @Input() additionalButtons: SpiderlyButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -1587,7 +1587,7 @@ export class SegmentationBaseDetailsComponent {
     segmentationItemsModel = new SegmentationItem();
     segmentationItemsSaveBodyName: string = nameof<SegmentationSaveBody>('segmentationItemsDTO');
     segmentationItemsTranslationKey: string = new SegmentationItem().typeName;
-    segmentationItemsFormArray: SpiderFormArray<SegmentationItem>;
+    segmentationItemsFormArray: SpiderlyFormArray<SegmentationItem>;
     segmentationItemsLastIndexClicked = new LastMenuIconIndexClicked();
     segmentationItemsCrudMenu: MenuItem[] = [];
     @Input() segmentationItemsPanelCollapsed: boolean = false;
@@ -1732,11 +1732,11 @@ export class SegmentationBaseDetailsComponent {
 
 
 
-    control(formControlName: string, formGroup: SpiderFormGroup){
+    control(formControlName: string, formGroup: SpiderlyFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderlyFormArray): SpiderlyFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
@@ -1756,7 +1756,7 @@ export class SegmentationBaseDetailsComponent {
     selector: 'tier-base-details',
     template:`
 <ng-container *transloco="let t">
-    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
+    <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
@@ -1764,16 +1764,16 @@ export class SegmentationBaseDetailsComponent {
                 <form class="grid">
                     <ng-content select="[BEFORE]"></ng-content>
                     <div *ngIf="showNameForTier" class="col-12 md:col-6">
-                        <spider-textbox [control]="control('name', tierFormGroup)"></spider-textbox>
+                        <spiderly-textbox [control]="control('name', tierFormGroup)"></spiderly-textbox>
                     </div>
                     <div *ngIf="showDescriptionForTier" class="col-12 md:col-6">
-                        <spider-textbox [control]="control('description', tierFormGroup)"></spider-textbox>
+                        <spiderly-textbox [control]="control('description', tierFormGroup)"></spiderly-textbox>
                     </div>
                     <div *ngIf="showValidFromForTier" class="col-12 md:col-6">
-                        <spider-number [control]="control('validFrom', tierFormGroup)"></spider-number>
+                        <spiderly-number [control]="control('validFrom', tierFormGroup)"></spiderly-number>
                     </div>
                     <div *ngIf="showValidToForTier" class="col-12 md:col-6">
-                        <spider-number [control]="control('validTo', tierFormGroup)"></spider-number>
+                        <spiderly-number [control]="control('validTo', tierFormGroup)"></spiderly-number>
                     </div>
                     <ng-content select="[AFTER]"></ng-content>
                 </form>
@@ -1783,13 +1783,13 @@ export class SegmentationBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spiderly-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spiderly-button>
             @for (button of additionalButtons; track button.label) {
-                <spider-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spider-button>
+                <spiderly-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spiderly-button>
             }
-            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
+            <return-button *ngIf="showReturnButton" ></return-button>
         </panel-footer>
-    </spider-panel>
+    </spiderly-panel>
 </ng-container>
     `,
     standalone: true,
@@ -1798,20 +1798,20 @@ export class SegmentationBaseDetailsComponent {
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
-        SpiderControlsModule,
+        SpiderlyControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SpiderDataTableComponent,
+        SpiderlyDataTableComponent,
     ]
 })
 export class TierBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onTierFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SpiderFormGroup;
-    @Input() tierFormGroup: SpiderFormGroup<Tier>;
-    @Input() additionalButtons: SpiderButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderlyFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderlyFormGroup;
+    @Input() tierFormGroup: SpiderlyFormGroup<Tier>;
+    @Input() additionalButtons: SpiderlyButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -1952,11 +1952,11 @@ export class TierBaseDetailsComponent {
 
 
 
-    control(formControlName: string, formGroup: SpiderFormGroup){
+    control(formControlName: string, formGroup: SpiderlyFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderlyFormArray): SpiderlyFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 
@@ -1976,7 +1976,7 @@ export class TierBaseDetailsComponent {
     selector: 'user-extended-base-details',
     template:`
 <ng-container *transloco="let t">
-    <spider-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
+    <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
 
         <panel-body>
@@ -1984,16 +1984,16 @@ export class TierBaseDetailsComponent {
                 <form class="grid">
                     <ng-content select="[BEFORE]"></ng-content>
                     <div *ngIf="showHasLoggedInWithExternalProviderForUserExtended" class="col-12 md:col-6">
-                        <spider-checkbox [control]="control('hasLoggedInWithExternalProvider', userExtendedFormGroup)"></spider-checkbox>
+                        <spiderly-checkbox [control]="control('hasLoggedInWithExternalProvider', userExtendedFormGroup)"></spiderly-checkbox>
                     </div>
                     <div *ngIf="showIsDisabledForUserExtended" class="col-12 md:col-6">
-                        <spider-checkbox [control]="control('isDisabled', userExtendedFormGroup)"></spider-checkbox>
+                        <spiderly-checkbox [control]="control('isDisabled', userExtendedFormGroup)"></spiderly-checkbox>
                     </div>
                     <div *ngIf="showBirthDateForUserExtended" class="col-12 md:col-6">
-                        <spider-calendar [control]="control('birthDate', userExtendedFormGroup)"></spider-calendar>
+                        <spiderly-calendar [control]="control('birthDate', userExtendedFormGroup)"></spiderly-calendar>
                     </div>
                     <div *ngIf="showGenderForUserExtended" class="col-12 md:col-6">
-                        <spider-dropdown [control]="control('genderId', userExtendedFormGroup)" [options]="genderOptionsForUserExtended"></spider-dropdown>
+                        <spiderly-dropdown [control]="control('genderId', userExtendedFormGroup)" [options]="genderOptionsForUserExtended"></spiderly-dropdown>
                     </div>
                     <ng-content select="[AFTER]"></ng-content>
                 </form>
@@ -2003,13 +2003,13 @@ export class TierBaseDetailsComponent {
         </panel-body>
 
         <panel-footer>
-            <spider-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spider-button>
+            <spiderly-button [disabled]="!isAuthorizedForSave" (onClick)="save()" [label]="t('Save')" icon="pi pi-save"></spiderly-button>
             @for (button of additionalButtons; track button.label) {
-                <spider-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spider-button>
+                <spiderly-button (onClick)="button.onClick()" [disabled]="button.disabled" [label]="button.label" [icon]="button.icon"></spiderly-button>
             }
-            <spider-return-button *ngIf="showReturnButton" ></spider-return-button>
+            <return-button *ngIf="showReturnButton" ></return-button>
         </panel-footer>
-    </spider-panel>
+    </spiderly-panel>
 </ng-container>
     `,
     standalone: true,
@@ -2018,20 +2018,20 @@ export class TierBaseDetailsComponent {
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
-        SpiderControlsModule,
+        SpiderlyControlsModule,
         TranslocoDirective,
         CardSkeletonComponent,
         IndexCardComponent,
-        SpiderDataTableComponent,
+        SpiderlyDataTableComponent,
     ]
 })
 export class UserExtendedBaseDetailsComponent {
     @Output() onSave = new EventEmitter<void>();
     @Output() onUserExtendedFormGroupInitFinish = new EventEmitter<void>();
-    @Input() getCrudMenuForOrderedData: (formArray: SpiderFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
-    @Input() formGroup: SpiderFormGroup;
-    @Input() userExtendedFormGroup: SpiderFormGroup<UserExtended>;
-    @Input() additionalButtons: SpiderButton[] = [];
+    @Input() getCrudMenuForOrderedData: (formArray: SpiderlyFormArray, modelConstructor: BaseEntity, lastMenuIconIndexClicked: LastMenuIconIndexClicked, adjustFormArrayManually: boolean) => MenuItem[];
+    @Input() formGroup: SpiderlyFormGroup;
+    @Input() userExtendedFormGroup: SpiderlyFormGroup<UserExtended>;
+    @Input() additionalButtons: SpiderlyButton[] = [];
     @Input() isFirstMultiplePanel: boolean = false;
     @Input() isMiddleMultiplePanel: boolean = false;
     @Input() isLastMultiplePanel: boolean = false;
@@ -2174,11 +2174,11 @@ export class UserExtendedBaseDetailsComponent {
 
 
 
-    control(formControlName: string, formGroup: SpiderFormGroup){
+    control(formControlName: string, formGroup: SpiderlyFormGroup){
         return getControl(formControlName, formGroup);
     }
 
-    getFormArrayGroups<T>(formArray: SpiderFormArray): SpiderFormGroup<T>[]{
+    getFormArrayGroups<T>(formArray: SpiderlyFormArray): SpiderlyFormGroup<T>[]{
         return this.baseFormService.getFormArrayGroups<T>(formArray);
     }
 

@@ -1,4 +1,4 @@
-import { BaseEntity, TableFilter, TableFilterContext, TableFilterSortMeta, MimeTypes, Namebook } from '@playerty/spider';
+import { BaseEntity, TableFilter, TableFilterContext, TableFilterSortMeta, MimeTypes, Namebook } from 'spiderly';
 import { NotificationDiscriminatorCodes } from "../enums/business-enums.generated";
 
 

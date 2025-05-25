@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { ConfigService } from './business/services/config.service';
 import { AppRoutingModule } from './app-routing.module';
 import { MessageService } from 'primeng/api';
-import { AuthBaseService, ConfigBaseService, CoreModule, LayoutBaseService, SpiderTranslocoModule, TranslateLabelsAbstractService, ValidatorAbstractService } from '@playerty/spider';
+import { AuthBaseService, ConfigBaseService, CoreModule, LayoutBaseService, SpiderlyTranslocoModule, TranslateLabelsAbstractService, ValidatorAbstractService } from 'spiderly';
 import { LayoutService } from './business/services/layout/layout.service';
 
 @NgModule({
@@ -20,7 +20,14 @@ import { LayoutService } from './business/services/layout/layout.service';
   ],
   imports: [
     AppRoutingModule,
-    SpiderTranslocoModule.forRoot(),
+    SpiderlyTranslocoModule.forRoot({ 
+      availableLangs: [
+        'sr-Latn-RS', 'sr-Latn-RS.generated', 
+        'en', 'en.generated',
+      ],
+      defaultLang: 'sr-Latn-RS',
+      fallbackLang: 'sr-Latn-RS.generated',
+    }),
     NgxSpinnerModule.forRoot({ type: 'ball-clip-rotate-multiple' }),
     BusinessModule,
     CoreModule,
@@ -35,7 +42,7 @@ import { LayoutService } from './business/services/layout/layout.service';
           {
             id: GoogleLoginProvider.PROVIDER_ID,
             provider: new GoogleLoginProvider(
-              environment.googleClientId, 
+              environment.GoogleClientId, 
               {
                 scopes: 'email',
                 oneTapEnabled: false,

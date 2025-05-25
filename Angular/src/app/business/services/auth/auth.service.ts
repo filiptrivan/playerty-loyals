@@ -6,7 +6,7 @@ import { filter, map, shareReplay, switchMap } from 'rxjs/operators';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { ConfigService } from '../config.service';
-import { adjustColor, AuthBaseService, getHtmlImgDisplayString64, InitCompanyAuthDialogDetails } from '@playerty/spider';
+import { adjustColor, AuthBaseService, getHtmlImgDisplayString64, InitCompanyAuthDialogDetails } from 'spiderly';
 import { Partner, PartnerUser } from '../../entities/business-entities.generated';
 
 @Injectable({

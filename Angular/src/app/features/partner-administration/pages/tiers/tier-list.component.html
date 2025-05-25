@@ -1,6 +1,6 @@
 <ng-container *transloco="let t">
     @defer (when tierFormArray != null && businessSystemTierFormArray != null && businessSystemTierDiscountProductGroupFormArray != null) {
-        <spider-panel>
+        <spiderly-panel>
             <panel-header [title]="t('TierList')" [showBigTitle]="true" icon="pi pi-crown"></panel-header>
     
             <panel-body [normalBottomPadding]="true">
@@ -9,16 +9,16 @@
                     <index-card [index]="tierIndex" [last]="false" [crudMenu]="tierCrudMenu" (onMenuIconClick)="tierLastIndexClicked.index = $event">
                         <form [formGroup]="tierFormGroup" class="grid">
                             <div class="col-12 md:col-4">
-                                <spider-textbox [control]="control('name', tierFormGroup)"></spider-textbox>
+                                <spiderly-textbox [control]="control('name', tierFormGroup)"></spiderly-textbox>
                             </div>
                             <div class="col-12 md:col-4">
-                                <spider-number [control]="control('validFrom', tierFormGroup)"></spider-number>
+                                <spiderly-number [control]="control('validFrom', tierFormGroup)"></spiderly-number>
                             </div>
                             <div class="col-12 md:col-4">
-                                <spider-number [control]="control('validTo', tierFormGroup)"></spider-number>
+                                <spiderly-number [control]="control('validTo', tierFormGroup)"></spiderly-number>
                             </div>
                             <div class="col-12">
-                                <spider-textarea [control]="control('description', tierFormGroup)"></spider-textarea>
+                                <spiderly-textarea [control]="control('description', tierFormGroup)"></spiderly-textarea>
                             </div>
 
                             <div class="col-12">
@@ -26,10 +26,10 @@
                                     <index-card [index]="businessSystemTierIndex" [crudMenu]="businessSystemTierCrudMenu" (onMenuIconClick)="businessSystemTierLastIndexClicked.index = $event; tierLastIndexClicked.index = tierIndex" [last]="false">
                                         <form [formGroup]="businessSystemTierFormGroup" class="grid">
                                             <div class="col-12">
-                                                <spider-dropdown [control]="control('businessSystemId', businessSystemTierFormGroup)" (onChange)="businessSystemChange($event, tierIndex, businessSystemTierIndex)" [options]="businessSystemOptions"></spider-dropdown>
+                                                <spiderly-dropdown [control]="control('businessSystemId', businessSystemTierFormGroup)" (onChange)="businessSystemChange($event, tierIndex, businessSystemTierIndex)" [options]="businessSystemOptions"></spiderly-dropdown>
                                             </div>
                                             <div class="col-12">
-                                                <spider-data-table 
+                                                <spiderly-data-table 
                                                 [tableTitle]="t('DiscountProductGroupList')" 
                                                 #businessSystemTierDiscountProductGroupTable
                                                 (onIsAllSelectedChange)="allSelected($event)"
@@ -46,14 +46,14 @@
                                                 [getAlreadySelectedItemIds]="getAlreadySelectedBusinessSystemTierDiscountProductGroupIdsForBusinessSystem" 
                                                 [getAlreadySelectedItems]="getAlreadySelectedDiscountProductGroupListForBusinessSystem"
                                                 [additionalIndexes]="getBusinessSystemTierDiscountProductGroupAdditionalIndexes(tierIndex, businessSystemTierIndex)"
-                                                ></spider-data-table>
+                                                ></spiderly-data-table>
                                             </div>
                                         </form>
                                     </index-card>
                                 }
 
                                 <div>
-                                    <spider-button (onClick)="addNewBusinessSystemTier(tierIndex)" [label]="t('AddNewBusinessSystemTier')" icon="pi pi-plus"></spider-button>
+                                    <spiderly-button (onClick)="addNewBusinessSystemTier(tierIndex)" [label]="t('AddNewBusinessSystemTier')" icon="pi pi-plus"></spiderly-button>
                                 </div>
                             </div>
     
@@ -62,16 +62,16 @@
                 }
     
                 <div class="panel-add-button">
-                    <spider-button (onClick)="addNewTier(null)" [label]="t('AddNewTier')" icon="pi pi-plus"></spider-button>
+                    <spiderly-button (onClick)="addNewTier(null)" [label]="t('AddNewTier')" icon="pi pi-plus"></spiderly-button>
                 </div>
     
             </panel-body>
     
             <panel-footer>
-                <spider-button [disabled]="!isAuthorizedForSave" (onClick)="onSave(false)" [label]="t('Save')" icon="pi pi-save"></spider-button>
+                <spiderly-button [disabled]="!isAuthorizedForSave" (onClick)="onSave(false)" [label]="t('Save')" icon="pi pi-save"></spiderly-button>
             </panel-footer>
     
-        </spider-panel>
+        </spiderly-panel>
     } @placeholder {
         <card-skeleton [height]="502"></card-skeleton>
     }

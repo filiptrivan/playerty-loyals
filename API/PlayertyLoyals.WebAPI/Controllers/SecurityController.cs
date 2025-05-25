@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using Spider.Security.Interfaces;
-using Spider.Security.Services;
-using Spider.Security.SecurityControllers;
-using Spider.Shared.Interfaces;
-using Spider.Shared.Attributes;
-using Spider.Security.DTO;
-using Spider.Shared.Extensions;
-using Spider.Shared.Attributes.EF.UI;
+using Spiderly.Security.Interfaces;
+using Spiderly.Security.Services;
+using Spiderly.Security.SecurityControllers;
+using Spiderly.Shared.Interfaces;
+using Spiderly.Shared.Attributes;
+using Spiderly.Security.DTO;
+using Spiderly.Shared.Extensions;
+using Spiderly.Shared.Attributes.EF.UI;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Services;
 

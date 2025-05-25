@@ -1,7 +1,7 @@
 ﻿using PlayertyLoyals.Business.Entities;
-using Spider.Shared.Attributes;
-using Spider.Shared.BaseEntities;
-using Spider.Shared.DTO;
+using Spiderly.Shared.Attributes;
+using Spiderly.Shared.BaseEntities;
+using Spiderly.Shared.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;

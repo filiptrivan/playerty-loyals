@@ -7,7 +7,7 @@ import { DropdownChangeEvent } from 'primeng/dropdown';
 import { combineLatest, forkJoin, map, Subscription } from 'rxjs';
 import { DiscountProductGroup, BusinessSystemTier, BusinessSystemTierDiscountProductGroup, Tier, TierSaveBody } from 'src/app/business/entities/business-entities.generated';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { BaseFormCopy, nameof, SpiderFormArray, LastMenuIconIndexClicked, PrimengOption, Column, SpiderDataTableComponent, SpiderMessageService, BaseFormService, SpiderFormGroup, AllClickEvent, RowClickEvent } from '@playerty/spider';
+import { BaseFormCopy, nameof, SpiderlyFormArray, LastMenuIconIndexClicked, PrimengOption, Column, SpiderlyDataTableComponent, SpiderlyMessageService, BaseFormService, SpiderlyFormGroup, AllClickEvent, RowClickEvent } from 'spiderly';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { BusinessPermissionCodes } from 'src/app/business/enums/business-enums.generated';
 
@@ -21,7 +21,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     tierModel = new Tier();
     tierDTOListSaveBodyName: string = nameof<TierSaveBody>('tierDTOList');
     tierTranslationKey: string = new Tier().typeName;
-    tierFormArray: SpiderFormArray<Tier>;
+    tierFormArray: SpiderlyFormArray<Tier>;
     tierCrudMenu: MenuItem[];
     tierLastIndexClicked = new LastMenuIconIndexClicked();
 
@@ -29,7 +29,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     businessSystemTierModel = new BusinessSystemTier();
     businessSystemTierDTOListSaveBodyName: string = nameof<TierSaveBody>('businessSystemTierDTOList');
     businessSystemTierTranslationKey: string = new BusinessSystemTier().typeName;
-    businessSystemTierFormArray: SpiderFormArray<BusinessSystemTier>;
+    businessSystemTierFormArray: SpiderlyFormArray<BusinessSystemTier>;
     businessSystemTierCrudMenu: MenuItem[];
     businessSystemOptions: PrimengOption[];
     businessSystemTierLastIndexClicked = new LastMenuIconIndexClicked();
@@ -39,10 +39,10 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     businessSystemTierDiscountProductGroupModel = new BusinessSystemTierDiscountProductGroup();
     businessSystemTierDiscountProductGroupSaveBodyName: string = nameof<TierSaveBody>('businessSystemTierDiscountProductGroupDTOList');
     businessSystemTierDiscountProductGroupTranslationKey: string = new BusinessSystemTierDiscountProductGroup().typeName;
-    businessSystemTierDiscountProductGroupFormArray: SpiderFormArray<BusinessSystemTierDiscountProductGroup>;
+    businessSystemTierDiscountProductGroupFormArray: SpiderlyFormArray<BusinessSystemTierDiscountProductGroup>;
     alreadySelectedDiscountProductGroupListForBusinessSystem: BusinessSystemTierDiscountProductGroup[] = [];
     alreadySelectedBusinessSystemTierDiscountProductGroupIdsForBusinessSystem: number[] = [];
-    @ViewChildren('businessSystemTierDiscountProductGroupTable') businessSystemTierDiscountProductGroupTables: QueryList<SpiderDataTableComponent>; // FT: Made for refreshing table
+    @ViewChildren('businessSystemTierDiscountProductGroupTable') businessSystemTierDiscountProductGroupTables: QueryList<SpiderlyDataTableComponent>; // FT: Made for refreshing table
 
     // Authorization
     authorizationForSaveSubscription: Subscription;
@@ -51,7 +51,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SpiderMessageService, 
+        protected override messageService: SpiderlyMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 
@@ -150,13 +150,13 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
             this.disableDiscount(formGroup);
         });
 
-        const businessSystemTierDiscountProductGroupTable: SpiderDataTableComponent = this.findBusinessSystemTierDiscountProductGroupTable(tierIndex, businessSystemTierIndex);
+        const businessSystemTierDiscountProductGroupTable: SpiderlyDataTableComponent = this.findBusinessSystemTierDiscountProductGroupTable(tierIndex, businessSystemTierIndex);
 
         businessSystemTierDiscountProductGroupTable.clientLoad();
     }
 
     getBusinessSystemTierFormArrayGroups(tierIndex: number){
-        let formGroups: SpiderFormGroup<BusinessSystemTier>[] = this.getFormArrayGroups(this.businessSystemTierFormArray);
+        let formGroups: SpiderlyFormGroup<BusinessSystemTier>[] = this.getFormArrayGroups(this.businessSystemTierFormArray);
         return formGroups.filter(x => x.controls.tierClientIndex.value === tierIndex)
     }
 
@@ -194,7 +194,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         );
 
         this.businessSystemTierDiscountProductGroupFormArray.controls.forEach(control => {
-            let formGroup = control as SpiderFormGroup<BusinessSystemTierDiscountProductGroup>;
+            let formGroup = control as SpiderlyFormGroup<BusinessSystemTierDiscountProductGroup>;
 
             this.disableDiscount(formGroup);
         });
@@ -210,7 +210,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         return this.businessSystemTierDiscountProductGroupFormArray.value.filter(x => x.businessSystemTierClientIndex === additionalIndexes.businessSystemTierIndex && x.tierClientIndex === additionalIndexes.tierIndex && x.selectedForBusinessSystem);
     }
 
-    disableDiscount = (formGroup: SpiderFormGroup<BusinessSystemTierDiscountProductGroup>) => {
+    disableDiscount = (formGroup: SpiderlyFormGroup<BusinessSystemTierDiscountProductGroup>) => {
         if (formGroup.controls.selectedForBusinessSystem.getRawValue() !== true) {
             formGroup.controls.discount.disable();
         }
@@ -223,11 +223,11 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     allSelected(event: AllClickEvent){
         const additionalIndexes = event.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes;
 
-        const discountFormControls = this.getFormArrayControls<BusinessSystemTierDiscountProductGroup>('discount', this.businessSystemTierDiscountProductGroupFormArray, (formGroups: SpiderFormGroup<BusinessSystemTierDiscountProductGroup>[]): SpiderFormGroup[] => {
+        const discountFormControls = this.getFormArrayControls<BusinessSystemTierDiscountProductGroup>('discount', this.businessSystemTierDiscountProductGroupFormArray, (formGroups: SpiderlyFormGroup<BusinessSystemTierDiscountProductGroup>[]): SpiderlyFormGroup[] => {
             return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
-        const selectedFormControls = this.getFormArrayControls<BusinessSystemTierDiscountProductGroup>('selectedForBusinessSystem', this.businessSystemTierDiscountProductGroupFormArray, (formGroups: SpiderFormGroup<BusinessSystemTierDiscountProductGroup>[]): SpiderFormGroup[] => {
+        const selectedFormControls = this.getFormArrayControls<BusinessSystemTierDiscountProductGroup>('selectedForBusinessSystem', this.businessSystemTierDiscountProductGroupFormArray, (formGroups: SpiderlyFormGroup<BusinessSystemTierDiscountProductGroup>[]): SpiderlyFormGroup[] => {
             return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
@@ -254,11 +254,11 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     rowSelect(event: RowClickEvent){
         const additionalIndexes = event.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes;
 
-        const discountFormControl = this.getFormArrayControlByIndex('discount', this.businessSystemTierDiscountProductGroupFormArray, event.index, (formGroups: SpiderFormGroup<BusinessSystemTierDiscountProductGroup>[]): SpiderFormGroup[] => {
+        const discountFormControl = this.getFormArrayControlByIndex('discount', this.businessSystemTierDiscountProductGroupFormArray, event.index, (formGroups: SpiderlyFormGroup<BusinessSystemTierDiscountProductGroup>[]): SpiderlyFormGroup[] => {
             return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
-        const selectedFormControl = this.getFormArrayControlByIndex('selectedForBusinessSystem', this.businessSystemTierDiscountProductGroupFormArray, event.index, (formGroups: SpiderFormGroup<BusinessSystemTierDiscountProductGroup>[]): SpiderFormGroup[] => {
+        const selectedFormControl = this.getFormArrayControlByIndex('selectedForBusinessSystem', this.businessSystemTierDiscountProductGroupFormArray, event.index, (formGroups: SpiderlyFormGroup<BusinessSystemTierDiscountProductGroup>[]): SpiderlyFormGroup[] => {
             return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
@@ -269,11 +269,11 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
     rowUnselect(event: RowClickEvent){
         const additionalIndexes = event.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes;
 
-        const discountFormControl = this.getFormArrayControlByIndex('discount', this.businessSystemTierDiscountProductGroupFormArray, event.index, (formGroups: SpiderFormGroup<BusinessSystemTierDiscountProductGroup>[]): SpiderFormGroup[] => {
+        const discountFormControl = this.getFormArrayControlByIndex('discount', this.businessSystemTierDiscountProductGroupFormArray, event.index, (formGroups: SpiderlyFormGroup<BusinessSystemTierDiscountProductGroup>[]): SpiderlyFormGroup[] => {
             return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
-        const selectedFormControl = this.getFormArrayControlByIndex('selectedForBusinessSystem', this.businessSystemTierDiscountProductGroupFormArray, event.index, (formGroups: SpiderFormGroup<BusinessSystemTierDiscountProductGroup>[]): SpiderFormGroup[] => {
+        const selectedFormControl = this.getFormArrayControlByIndex('selectedForBusinessSystem', this.businessSystemTierDiscountProductGroupFormArray, event.index, (formGroups: SpiderlyFormGroup<BusinessSystemTierDiscountProductGroup>[]): SpiderlyFormGroup[] => {
             return formGroups.filter(x => x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex && x.controls.tierClientIndex.value === additionalIndexes.tierIndex);
         });
 
@@ -283,7 +283,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
 
     getDiscountProductGroupFormArrayControl = (formControlName: keyof BusinessSystemTierDiscountProductGroup & string, index: number, additionalIndexes: BusinessSystemTierDiscountProductGroupAdditionalIndexes) => {
         return this.getFormArrayControlByIndex(formControlName, this.businessSystemTierDiscountProductGroupFormArray, index, 
-            (formGroups: SpiderFormGroup<BusinessSystemTierDiscountProductGroup>[]): SpiderFormGroup[] => {
+            (formGroups: SpiderlyFormGroup<BusinessSystemTierDiscountProductGroup>[]): SpiderlyFormGroup[] => {
                 return formGroups.filter(x => x.controls.tierClientIndex.value === additionalIndexes.tierIndex && x.controls.businessSystemTierClientIndex.value === additionalIndexes.businessSystemTierIndex);
             });
     }
@@ -292,7 +292,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         return new BusinessSystemTierDiscountProductGroupAdditionalIndexes({tierIndex: tierIndex, businessSystemTierIndex: businessSystemTierIndex});
     }
 
-    setBusinessSystemTierDiscountProductGroupAdditionalIndexes(table: SpiderDataTableComponent, tierIndex: number, businessSystemTierIndex: number){
+    setBusinessSystemTierDiscountProductGroupAdditionalIndexes(table: SpiderlyDataTableComponent, tierIndex: number, businessSystemTierIndex: number){
         (table.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).tierIndex = tierIndex;
         (table.additionalIndexes as BusinessSystemTierDiscountProductGroupAdditionalIndexes).businessSystemTierIndex = businessSystemTierIndex;
     }
@@ -323,7 +323,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
 
     //#endregion
 
-    override onBeforeRemove = (formArray: SpiderFormArray, modelConstructor: any, lastMenuIconIndexClicked: number): void => {
+    override onBeforeRemove = (formArray: SpiderlyFormArray, modelConstructor: any, lastMenuIconIndexClicked: number): void => {
         if (modelConstructor.typeName === this.tierModel.typeName) {
             let businessSystemTierIndexesForRemove: number[] = [];
             let businessSystemTierDiscountProductGroupIndexesForRemove: number[] = [];
@@ -336,7 +336,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
                 if (businessSystemTier.tierClientIndex == null || businessSystemTier.tierClientIndex <= this.tierLastIndexClicked.index)
                     return;
                 
-                (this.businessSystemTierFormArray.controls[index] as SpiderFormGroup<BusinessSystemTier>).controls.tierClientIndex.setValue(businessSystemTier.tierClientIndex - 1);
+                (this.businessSystemTierFormArray.controls[index] as SpiderlyFormGroup<BusinessSystemTier>).controls.tierClientIndex.setValue(businessSystemTier.tierClientIndex - 1);
             });
 
             // FT: Adjusting indexes for businessSystemTierDiscountProductGroupFormArray
@@ -347,7 +347,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
                 if (businessSystemTierDiscountProductGroup.tierClientIndex == null || businessSystemTierDiscountProductGroup.tierClientIndex <= this.tierLastIndexClicked.index)
                     return;
                 
-                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SpiderFormGroup<BusinessSystemTierDiscountProductGroup>).controls.tierClientIndex.setValue(businessSystemTierDiscountProductGroup.tierClientIndex - 1);
+                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SpiderlyFormGroup<BusinessSystemTierDiscountProductGroup>).controls.tierClientIndex.setValue(businessSystemTierDiscountProductGroup.tierClientIndex - 1);
             });
 
             this.removeFormControlsFromTheFormArray(this.businessSystemTierDiscountProductGroupFormArray, businessSystemTierDiscountProductGroupIndexesForRemove);
@@ -376,7 +376,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
                     return;
                 }
                 
-                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SpiderFormGroup<BusinessSystemTierDiscountProductGroup>).controls.businessSystemTierClientIndex.setValue(businessSystemTierDiscountProductGroup.businessSystemTierClientIndex - 1);
+                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SpiderlyFormGroup<BusinessSystemTierDiscountProductGroup>).controls.businessSystemTierClientIndex.setValue(businessSystemTierDiscountProductGroup.businessSystemTierClientIndex - 1);
            });
 
            this.removeFormControlsFromTheFormArray(this.businessSystemTierDiscountProductGroupFormArray, businessSystemTierDiscountProductGroupIndexesForRemove);
@@ -395,14 +395,14 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         }
     }
 
-    override onBeforeAddBelow = (formArray: SpiderFormArray, modelConstructor: any, lastMenuIconIndexClicked: number): void => {
+    override onBeforeAddBelow = (formArray: SpiderlyFormArray, modelConstructor: any, lastMenuIconIndexClicked: number): void => {
         if (modelConstructor.typeName === this.tierModel.typeName) {
             // FT: Adjusting indexes for businessSystemTierFormArray
             this.businessSystemTierFormArray.value.forEach((businessSystemTier, index) => {
                 if (businessSystemTier.tierClientIndex == null || businessSystemTier.tierClientIndex <= this.tierLastIndexClicked.index)
                     return;
                 
-                (this.businessSystemTierFormArray.controls[index] as SpiderFormGroup<BusinessSystemTier>).controls.tierClientIndex.setValue(businessSystemTier.tierClientIndex + 1);
+                (this.businessSystemTierFormArray.controls[index] as SpiderlyFormGroup<BusinessSystemTier>).controls.tierClientIndex.setValue(businessSystemTier.tierClientIndex + 1);
             });
 
             // FT: Adjusting indexes for businessSystemTierDiscountProductGroupFormArray
@@ -410,7 +410,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
                 if (businessSystemTierDiscountProductGroup.tierClientIndex == null || businessSystemTierDiscountProductGroup.tierClientIndex <= this.tierLastIndexClicked.index)
                     return;
                 
-                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SpiderFormGroup<BusinessSystemTierDiscountProductGroup>).controls.tierClientIndex.setValue(businessSystemTierDiscountProductGroup.tierClientIndex + 1);
+                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SpiderlyFormGroup<BusinessSystemTierDiscountProductGroup>).controls.tierClientIndex.setValue(businessSystemTierDiscountProductGroup.tierClientIndex + 1);
             });
 
             // FT: We don't need to do this because change detection from the html does it for us.
@@ -435,7 +435,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
                     return;
                 }
                 
-                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SpiderFormGroup<BusinessSystemTierDiscountProductGroup>).controls.businessSystemTierClientIndex.setValue(businessSystemTierDiscountProductGroup.businessSystemTierClientIndex + 1);
+                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SpiderlyFormGroup<BusinessSystemTierDiscountProductGroup>).controls.businessSystemTierClientIndex.setValue(businessSystemTierDiscountProductGroup.businessSystemTierClientIndex + 1);
             });
 
             // FT: Adjust all additional indexes on tables where businessSystemTierIndex is greater then last clicked
@@ -452,14 +452,14 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
         }
     }
 
-    override onBeforeAddAbove = (formArray: SpiderFormArray, modelConstructor: any, lastMenuIconIndexClicked: number): void => {
+    override onBeforeAddAbove = (formArray: SpiderlyFormArray, modelConstructor: any, lastMenuIconIndexClicked: number): void => {
         if (modelConstructor.typeName === this.tierModel.typeName) {
             // FT: Adjusting indexes for businessSystemTierFormArray
             this.businessSystemTierFormArray.value.forEach((businessSystemTier, index) => { // FT: Adjusting businessSystemTier indexes
                 if (businessSystemTier.tierClientIndex == null || businessSystemTier.tierClientIndex < this.tierLastIndexClicked.index)
                     return;
                 
-                (this.businessSystemTierFormArray.controls[index] as SpiderFormGroup<BusinessSystemTier>).controls.tierClientIndex.setValue(businessSystemTier.tierClientIndex + 1);
+                (this.businessSystemTierFormArray.controls[index] as SpiderlyFormGroup<BusinessSystemTier>).controls.tierClientIndex.setValue(businessSystemTier.tierClientIndex + 1);
             });
 
             // FT: Adjusting indexes for businessSystemTierDiscountProductGroupFormArray
@@ -467,7 +467,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
                 if (businessSystemTierDiscountProductGroup.tierClientIndex == null || businessSystemTierDiscountProductGroup.tierClientIndex < this.tierLastIndexClicked.index)
                     return;
                 
-                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SpiderFormGroup<BusinessSystemTierDiscountProductGroup>).controls.tierClientIndex.setValue(businessSystemTierDiscountProductGroup.tierClientIndex + 1);
+                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SpiderlyFormGroup<BusinessSystemTierDiscountProductGroup>).controls.tierClientIndex.setValue(businessSystemTierDiscountProductGroup.tierClientIndex + 1);
             });
 
             // FT: We don't need to do this because change detection from the html does it for us.
@@ -491,7 +491,7 @@ export class TierListComponent extends BaseFormCopy implements OnInit {
                     return;
                 }
                 
-                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SpiderFormGroup<BusinessSystemTierDiscountProductGroup>).controls.businessSystemTierClientIndex.setValue(businessSystemTierDiscountProductGroup.businessSystemTierClientIndex + 1);
+                (this.businessSystemTierDiscountProductGroupFormArray.controls[index] as SpiderlyFormGroup<BusinessSystemTierDiscountProductGroup>).controls.businessSystemTierClientIndex.setValue(businessSystemTierDiscountProductGroup.businessSystemTierClientIndex + 1);
             });
 
             // FT: Adjust all additional indexes on tables where businessSystemTierIndex is greater then last clicked

@@ -1,12 +1,12 @@
-﻿using Spider.Shared.Attributes.EF;
-using Spider.Shared.Attributes.EF.UI;
+﻿using Spiderly.Shared.Attributes.EF;
+using Spiderly.Shared.Attributes.EF.UI;
 using PlayertyLoyals.Business.DTO;
 using System.ComponentModel.DataAnnotations;
-using Spider.Shared.Interfaces;
-using Spider.Shared.Enums;
-using Spider.Shared.BaseEntities;
+using Spiderly.Shared.Interfaces;
+using Spiderly.Shared.Enums;
+using Spiderly.Shared.BaseEntities;
 using PlayertyLoyals.Business.Enums;
-using Spider.Shared.Attributes.EF.Translation;
+using Spiderly.Shared.Attributes.EF.Translation;
 
 namespace PlayertyLoyals.Business.Entities
 {

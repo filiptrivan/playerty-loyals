@@ -1,13 +1,13 @@
 ﻿using Azure.Storage.Blobs;
-using Spider.Security.Services;
-using Spider.Shared.Interfaces;
-using Spider.Shared.Extensions;
+using Spiderly.Security.Services;
+using Spiderly.Shared.Interfaces;
+using Spiderly.Shared.Extensions;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.Enums;
-using Spider.Shared.Exceptions;
+using Spiderly.Shared.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using PlayertyLoyals.Business.DTO;
-using Spider.Shared.Helpers;
+using Spiderly.Shared.Helpers;
 
 namespace PlayertyLoyals.Business.Services
 {

@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { ApiService } from '../../services/api/api.service';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Product } from '../../entities/business-entities.generated';
-import { PrimengModule } from '@playerty/spider';
+import { PrimengModule } from 'spiderly';
 
 @Component({
     selector: 'products-recommendation',

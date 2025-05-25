@@ -1,7 +1,7 @@
 <ng-container *transloco="let t">
     <form [formGroup]="excelUpdatePointsFormGroup" class="grid">
         <div class="col-12">
-            <spider-file 
+            <spiderly-file 
             [label]="t('File')"
             [required]="true"
             [multiple]="true"
@@ -11,7 +11,7 @@
             (onFileRemoved)="onRemovedExcelUpdateFile()"
             [control]="excelUpdatePointsFormGroup.controls.excels"
             [disabled]="!isAuthorizedForSave"
-            ></spider-file>
+            ></spiderly-file>
         </div>
     </form>
 </ng-container>

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { combineLatest, map, Observable } from 'rxjs';
 import { Partner } from 'src/app/business/entities/business-entities.generated';
-import { BaseFormCopy, SpiderFormGroup, SpiderMessageService, BaseFormService } from '@playerty/spider';
+import { BaseFormCopy, SpiderlyFormGroup, SpiderlyMessageService, BaseFormService } from 'spiderly';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { BusinessPermissionCodes } from 'src/app/business/enums/business-enums.generated';
 
@@ -14,14 +14,14 @@ import { BusinessPermissionCodes } from 'src/app/business/enums/business-enums.g
     styles: [],
 })
 export class PartnerDetailsComponent extends BaseFormCopy implements OnInit {
-    partnerFormGroup = new SpiderFormGroup<Partner>({});
+    partnerFormGroup = new SpiderlyFormGroup<Partner>({});
 
     override successfulSaveToastDescription = this.translocoService.translate('SuccessfulSaveAndRefreshThePageToastDescription');
 
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SpiderMessageService, 
+        protected override messageService: SpiderlyMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 

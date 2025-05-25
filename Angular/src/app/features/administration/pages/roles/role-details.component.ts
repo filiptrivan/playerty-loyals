@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { Role, SpiderMessageService, BaseFormCopy, BaseFormService, SpiderFormGroup } from '@playerty/spider';
+import { Role, SpiderlyMessageService, BaseFormCopy, BaseFormService, SpiderlyFormGroup } from 'spiderly';
 
 @Component({
     selector: 'role-details',
@@ -10,12 +10,12 @@ import { Role, SpiderMessageService, BaseFormCopy, BaseFormService, SpiderFormGr
     styles: [],
 })
 export class RoleDetailsComponent extends BaseFormCopy implements OnInit {
-    roleFormGroup = new SpiderFormGroup<Role>({});
+    roleFormGroup = new SpiderlyFormGroup<Role>({});
 
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SpiderMessageService, 
+        protected override messageService: SpiderlyMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 

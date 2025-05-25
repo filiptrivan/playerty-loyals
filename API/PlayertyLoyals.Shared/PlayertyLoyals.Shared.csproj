@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\SpiderFramework\spider-framework\Spider.Shared\Spider.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\Spiderly\spiderly\Spiderly.Shared\Spiderly.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

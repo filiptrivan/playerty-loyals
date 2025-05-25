@@ -1,14 +1,14 @@
 <ng-container *transloco="let t">
-    <spider-card [title]="t('PartnerNotification')" icon="pi pi-bell">
-        <spider-panel [isFirstMultiplePanel]="true" [showPanelHeader]="false">
+    <spiderly-card [title]="t('PartnerNotification')" icon="pi pi-bell">
+        <spiderly-panel [isFirstMultiplePanel]="true" [showPanelHeader]="false">
             <panel-body>
                 <div class="grid">
                     <div class="col-12">
-                        <spider-checkbox [control]="isMarkedAsRead" [label]="t('NotifyUsers')" [fakeLabel]="false"></spider-checkbox>
+                        <spiderly-checkbox [control]="isMarkedAsRead" [label]="t('NotifyUsers')" [fakeLabel]="false"></spiderly-checkbox>
                     </div>
                 </div>
             </panel-body>
-        </spider-panel>
+        </spiderly-panel>
         
         <partner-notification-base-details
         [formGroup]="formGroup" 
@@ -19,5 +19,5 @@
         (onIsAuthorizedForSaveChange)="isAuthorizedForSaveChange($event)"
         />
 
-    </spider-card>
+    </spiderly-card>
 </ng-container>

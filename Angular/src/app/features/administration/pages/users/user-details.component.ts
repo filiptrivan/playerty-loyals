@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { UserExtended } from 'src/app/business/entities/business-entities.generated';
-import { BaseFormCopy, SpiderFormGroup, SpiderMessageService, BaseFormService, IsAuthorizedForSaveEvent } from '@playerty/spider';
+import { BaseFormCopy, SpiderlyFormGroup, SpiderlyMessageService, BaseFormService, IsAuthorizedForSaveEvent } from 'spiderly';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { combineLatest, map, Observable } from 'rxjs';
 import { BusinessPermissionCodes } from 'src/app/business/enums/business-enums.generated';
@@ -14,7 +14,7 @@ import { BusinessPermissionCodes } from 'src/app/business/enums/business-enums.g
     styles: [],
 })
 export class UserDetailsComponent extends BaseFormCopy implements OnInit {
-    userExtendedFormGroup = new SpiderFormGroup<UserExtended>({});
+    userExtendedFormGroup = new SpiderlyFormGroup<UserExtended>({});
 
     showIsDisabledControl: boolean = false;
     showHasLoggedInWithExternalProvider: boolean = false;
@@ -24,7 +24,7 @@ export class UserDetailsComponent extends BaseFormCopy implements OnInit {
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SpiderMessageService, 
+        protected override messageService: SpiderlyMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 

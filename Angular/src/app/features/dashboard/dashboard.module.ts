@@ -4,7 +4,7 @@ import { ProductsRecommendationComponent } from 'src/app/business/components/pro
 import { UserProgressbarComponent } from 'src/app/business/components/user-progressbar/user-progressbar.component';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { RouterModule, Routes } from '@angular/router';
-import { InfoCardComponent } from '@playerty/spider';
+import { InfoCardComponent } from 'spiderly';
 
 const routes: Routes = [
     {

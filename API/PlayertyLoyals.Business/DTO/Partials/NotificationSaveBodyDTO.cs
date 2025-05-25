@@ -1,5 +1,5 @@
-﻿using Spider.Shared.DTO;
-using Spider.Shared.Interfaces;
+﻿using Spiderly.Shared.DTO;
+using Spiderly.Shared.Interfaces;
 
 namespace PlayertyLoyals.Business.DTO
 {

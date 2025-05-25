@@ -3,7 +3,7 @@ import { ApiService } from 'src/app/business/services/api/api.service';
 import { Achievement } from 'src/app/business/entities/business-entities.generated';
 import { TranslocoDirective, TranslocoService } from '@jsverse/transloco';
 import { CommonModule } from '@angular/common';
-import { PrimengModule, SpiderControlsModule, Column, SpiderDataTableComponent } from '@playerty/spider';
+import { PrimengModule, SpiderlyControlsModule, Column, SpiderlyDataTableComponent } from 'spiderly';
 
 @Component({
   selector: 'points-history',
@@ -12,8 +12,8 @@ import { PrimengModule, SpiderControlsModule, Column, SpiderDataTableComponent }
   imports: [
     CommonModule,
     PrimengModule,
-    SpiderControlsModule,
-    SpiderDataTableComponent,
+    SpiderlyControlsModule,
+    SpiderlyDataTableComponent,
     TranslocoDirective,
   ]
 })

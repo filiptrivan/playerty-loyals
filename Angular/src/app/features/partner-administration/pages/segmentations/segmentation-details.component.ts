@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, KeyValueDiffers, OnInit } from '@angular/
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { Segmentation } from 'src/app/business/entities/business-entities.generated';
-import { BaseFormCopy, SpiderFormGroup, SpiderMessageService, BaseFormService } from '@playerty/spider';
+import { BaseFormCopy, SpiderlyFormGroup, SpiderlyMessageService, BaseFormService } from 'spiderly';
 
 @Component({
     selector: 'segmentation-details',
@@ -11,12 +11,12 @@ import { BaseFormCopy, SpiderFormGroup, SpiderMessageService, BaseFormService } 
     styles: [],
 })
 export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit {
-    segmentationFormGroup = new SpiderFormGroup<Segmentation>({});
+    segmentationFormGroup = new SpiderlyFormGroup<Segmentation>({});
 
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SpiderMessageService, 
+        protected override messageService: SpiderlyMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute, 

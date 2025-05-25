@@ -1,4 +1,4 @@
-﻿using Spider.Shared.Attributes.EF;
+﻿using Spiderly.Shared.Attributes.EF;
 
 namespace PlayertyLoyals.Business.Entities
 {

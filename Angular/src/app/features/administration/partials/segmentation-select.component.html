@@ -2,7 +2,7 @@
     @defer (when segmentation.segmentationItemsDTOList.length > 0) {
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
             @for (segmentationItemFormGroup of getSegmentationItemFormArrayGroups(segmentationItemsFormArray); track segmentationItemFormGroup) {
-                <spider-checkbox [control]="control('checked', segmentationItemFormGroup)" [label]="segmentationItemFormGroup.getRawValue().name" [inlineLabel]="true"></spider-checkbox>
+                <spiderly-checkbox [control]="control('checked', segmentationItemFormGroup)" [label]="segmentationItemFormGroup.getRawValue().name" [inlineLabel]="true"></spiderly-checkbox>
             }
         </div>
     }

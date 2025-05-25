@@ -1,4 +1,4 @@
-using Spider.Shared.Attributes;
+using Spiderly.Shared.Attributes;
 
 namespace PlayertyLoyals.Business.GeneratorSettings
 {

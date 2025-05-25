@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslocoService } from '@jsverse/transloco';
 import { ApiService } from 'src/app/business/services/api/api.service';
-import { Column } from '@playerty/spider';
+import { Column } from 'spiderly';
 import { Partner } from 'src/app/business/entities/business-entities.generated';
 
 @Component({

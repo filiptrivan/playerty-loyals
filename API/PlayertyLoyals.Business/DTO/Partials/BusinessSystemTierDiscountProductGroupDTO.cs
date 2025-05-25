@@ -1,4 +1,4 @@
-﻿using Spider.Shared.Attributes;
+﻿using Spiderly.Shared.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;

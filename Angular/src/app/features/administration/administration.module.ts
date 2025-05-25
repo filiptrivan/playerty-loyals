@@ -13,7 +13,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { NotificationBaseDetailsComponent, PartnerBaseDetailsComponent, UserExtendedBaseDetailsComponent } from 'src/app/business/components/base-details/business-base-details.generated';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PrimengModule, SpiderDataTableComponent, SpiderControlsModule, CardSkeletonComponent, RoleBaseDetailsComponent } from '@playerty/spider';
+import { PrimengModule, SpiderlyDataTableComponent, SpiderlyControlsModule, CardSkeletonComponent, RoleBaseDetailsComponent } from 'spiderly';
 
 const routes: Routes = [
     {
@@ -57,8 +57,8 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     PrimengModule,
-    SpiderDataTableComponent,
-    SpiderControlsModule,
+    SpiderlyDataTableComponent,
+    SpiderlyControlsModule,
     CardSkeletonComponent,
     SegmentationSelectComponent,
     TranslocoDirective,

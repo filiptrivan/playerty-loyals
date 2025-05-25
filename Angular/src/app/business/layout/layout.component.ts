@@ -6,10 +6,10 @@ import { ConfigService } from 'src/app/business/services/config.service';
 import { Subscription } from 'rxjs';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { FooterComponent, LayoutBaseComponent, AppSidebarComponent, AppTopBarComponent, LayoutBaseService, PrimengModule, SpiderMenuItem} from '@playerty/spider';
+import { FooterComponent, LayoutBaseComponent, AppSidebarComponent, AppTopBarComponent, LayoutBaseService, PrimengModule, SpiderlyMenuItem} from 'spiderly';
 import { CommonModule } from '@angular/common';
 import { BusinessPermissionCodes } from '../enums/business-enums.generated';
-import { SecurityPermissionCodes } from '@playerty/spider';
+import { SecurityPermissionCodes } from 'spiderly';
 
 @Component({
     selector: 'layout',
@@ -29,7 +29,7 @@ import { SecurityPermissionCodes } from '@playerty/spider';
 export class LayoutComponent extends LayoutBaseComponent implements OnInit, OnDestroy {
     private partnerSubscription: Subscription | null = null;
 
-    menu: SpiderMenuItem[];
+    menu: SpiderlyMenuItem[];
 
     constructor(
         protected override layoutService: LayoutBaseService, 

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 import { ApiService } from 'src/app/business/services/api/api.service';
 import { {{filename}} } from 'src/app/business/entities/business-entities.generated';
-import { BaseFormCopy, SpiderFormGroup, SpiderMessageService, BaseFormService } from '@playerty/spider';
+import { BaseFormCopy, SpiderlyFormGroup, SpiderlyMessageService, BaseFormService } from 'spiderly';
 
 @Component({
     selector: '{{toKebab filename}}-details',
@@ -12,12 +12,12 @@ import { BaseFormCopy, SpiderFormGroup, SpiderMessageService, BaseFormService } 
     styles: [],
 })
 export class {{filename}}DetailsComponent extends BaseFormCopy implements OnInit {
-    {{firstCharToLower filename}}FormGroup = new SpiderFormGroup<{{filename}}>({});
+    {{firstCharToLower filename}}FormGroup = new SpiderlyFormGroup<{{filename}}>({});
 
     constructor(
         protected override differs: KeyValueDiffers,
         protected override http: HttpClient,
-        protected override messageService: SpiderMessageService, 
+        protected override messageService: SpiderlyMessageService, 
         protected override changeDetectorRef: ChangeDetectorRef,
         protected override router: Router, 
         protected override route: ActivatedRoute,

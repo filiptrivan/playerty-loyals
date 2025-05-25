@@ -1,5 +1,5 @@
-﻿using Spider.Shared.DTO;
-using Spider.Shared.Interfaces;
+﻿using Spiderly.Shared.DTO;
+using Spiderly.Shared.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

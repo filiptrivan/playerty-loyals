@@ -1,14 +1,16 @@
 ﻿using LightInject;
-using Spider.Security.Interfaces;
-using Spider.Shared.Excel;
-using Spider.Security.Services;
+using Spiderly.Security.Interfaces;
+using Spiderly.Shared.Excel;
+using Spiderly.Security.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc;
-using Spider.Shared.Emailing;
+using Spiderly.Shared.Emailing;
 using PlayertyLoyals.Business.Services;
 using PlayertyLoyals.Business.Entities;
 using PlayertyLoyals.Business.BackroundJobs;
 using PlayertyLoyals.Shared.FluentValidation;
+using Spiderly.Shared.Interfaces;
+using Spiderly.Shared.Services;
 
 namespace PlayertyLoyals.WebAPI.DI
 {
@@ -20,11 +22,12 @@ namespace PlayertyLoyals.WebAPI.DI
             registry.Register<AuthenticationService>();
             registry.Register<AuthorizationService>();
             registry.Register<SecurityBusinessService<UserExtended>>();
-            registry.Register<Spider.Security.Services.BusinessServiceGenerated<UserExtended>>();
-            registry.Register<Spider.Security.Services.AuthorizationBusinessService<UserExtended>>();
-            registry.Register<Spider.Security.Services.AuthorizationBusinessServiceGenerated<UserExtended>>();
+            registry.Register<Spiderly.Security.Services.BusinessServiceGenerated<UserExtended>>();
+            registry.Register<Spiderly.Security.Services.AuthorizationBusinessService<UserExtended>>();
+            registry.Register<Spiderly.Security.Services.AuthorizationBusinessServiceGenerated<UserExtended>>();
             registry.Register<ExcelService>();
             registry.Register<EmailingService>();
+            registry.Register<IFileManager, DiskStorageService>();
             registry.RegisterSingleton<IConfigureOptions<MvcOptions>, TranslatePropertiesConfiguration>();
             registry.RegisterSingleton<IJwtAuthManager, JwtAuthManagerService>();
 
