@@ -4,7 +4,6 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { ConfigService } from 'src/app/business/services/config.service';
 import { Subscription } from 'rxjs';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { FooterComponent, LayoutBaseComponent, AppSidebarComponent, AppTopBarComponent, LayoutBaseService, PrimengModule, SpiderlyMenuItem} from 'spiderly';
 import { CommonModule } from '@angular/common';
@@ -18,7 +17,6 @@ import { SecurityPermissionCodes } from 'spiderly';
     imports: [
         CommonModule,
         FormsModule,
-        HttpClientModule,
         RouterModule,
         PrimengModule,
         FooterComponent,
