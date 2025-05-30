@@ -8,6 +8,7 @@ import { Role, SpiderlyMessageService, BaseFormCopy, BaseFormService, SpiderlyFo
     selector: 'role-details',
     templateUrl: './role-details.component.html',
     styles: [],
+    standalone: false
 })
 export class RoleDetailsComponent extends BaseFormCopy implements OnInit {
     roleFormGroup = new SpiderlyFormGroup<Role>({});

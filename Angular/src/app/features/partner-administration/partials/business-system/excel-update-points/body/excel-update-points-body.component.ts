@@ -9,7 +9,6 @@ import { TranslocoDirective } from '@jsverse/transloco';
     selector: 'excel-update-points-body',
     templateUrl: './excel-update-points-body.component.html',
     styles: [],
-    standalone: true,
     imports: [
         SpiderlyPanelsModule,
         ReactiveFormsModule,

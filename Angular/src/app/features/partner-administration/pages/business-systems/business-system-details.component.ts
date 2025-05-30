@@ -11,6 +11,7 @@ import { ConfirmationService } from 'primeng/api';
     selector: 'business-system-details',
     templateUrl: './business-system-details.component.html',
     styles: [],
+    standalone: false
 })
 export class BusinessSystemDetailsComponent extends BaseFormCopy implements OnInit {
     businessSystemFormGroup = new SpiderlyFormGroup<BusinessSystem>({});

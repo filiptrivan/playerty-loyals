@@ -15,6 +15,7 @@ import { BusinessPermissionCodes } from 'src/app/business/enums/business-enums.g
     selector: 'partner-user-details',
     templateUrl: './partner-user-details.component.html',
     styles: [],
+    standalone: false
 })
 export class PartnerUserDetailsComponent extends BaseFormCopy implements OnInit {
     genderAndBirthDateFormGroup = new SpiderlyFormGroup<GenderAndBirthDate>({});

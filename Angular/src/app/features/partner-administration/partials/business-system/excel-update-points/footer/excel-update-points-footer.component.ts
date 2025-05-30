@@ -10,7 +10,6 @@ import { TranslocoService, TranslocoDirective } from '@jsverse/transloco';
     selector: 'excel-update-points-footer',
     templateUrl: './excel-update-points-footer.component.html',
     styles: [],
-    standalone: true,
     imports: [
         SpiderlyPanelsModule,
         ReactiveFormsModule,

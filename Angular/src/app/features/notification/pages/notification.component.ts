@@ -10,7 +10,8 @@ import { NotificationDiscriminatorCodes } from 'src/app/business/enums/business-
 import { TableResponse, TableFilter, TableFilterContext, SpiderlyMessageService } from 'spiderly';
 
 @Component({
-  templateUrl: './notification.component.html',
+    templateUrl: './notification.component.html',
+    standalone: false
 })
 export class NotificationComponent implements OnInit {
   currentUserNotifications: TableResponse<Notification>;

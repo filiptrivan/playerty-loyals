@@ -8,12 +8,11 @@ import { TierWithIndex } from '../pages/tiers.component';
 @Component({
     selector: 'tier-timeline-index-progressbar',
     templateUrl: './tier-timeline-index-progressbar.component.html',
-    standalone: true,
     imports: [
-    CommonModule,
-    PrimengModule,
-    SpiderlyPanelsModule
-]
+        CommonModule,
+        PrimengModule,
+        SpiderlyPanelsModule
+    ]
 })
 export class TimelineIndexProgressbarComponent {
     @Input() tiers: TierWithIndex[];

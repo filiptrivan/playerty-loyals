@@ -7,7 +7,8 @@ import { Column } from 'spiderly';
 @Component({
     selector: 'segmentation-list',
     templateUrl: './segmentation-list.component.html',
-    styles: []
+    styles: [],
+    standalone: false
 })
 export class SegmentationListComponent implements OnInit {
     cols: Column<Segmentation>[];

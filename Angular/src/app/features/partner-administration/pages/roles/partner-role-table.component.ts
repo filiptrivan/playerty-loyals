@@ -6,7 +6,8 @@ import { Column } from 'spiderly';
 @Component({
     selector: 'partner-role-table',
     templateUrl: './partner-role-table.component.html',
-    styles: []
+    styles: [],
+    standalone: false
 })
 export class PartnerRoleTableComponent implements OnInit {
     cols: Column[];

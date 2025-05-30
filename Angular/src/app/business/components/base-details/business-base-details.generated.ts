@@ -15,7 +15,7 @@ import { Achievement, AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountPr
 
 @Component({
     selector: 'business-system-base-details',
-    template:`
+    template: `
 <ng-container *transloco="let t">
     <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
@@ -80,9 +80,8 @@ import { Achievement, AutomaticUpdatePoints, Brand, BusinessSystemTierDiscountPr
     </spiderly-panel>
 </ng-container>
     `,
-    standalone: true,
     imports: [
-        CommonModule, 
+        CommonModule,
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
@@ -287,7 +286,7 @@ export class BusinessSystemBaseDetailsComponent {
 
 @Component({
     selector: 'notification-base-details',
-    template:`
+    template: `
 <ng-container *transloco="let t">
     <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
@@ -338,9 +337,8 @@ export class BusinessSystemBaseDetailsComponent {
     </spiderly-panel>
 </ng-container>
     `,
-    standalone: true,
     imports: [
-        CommonModule, 
+        CommonModule,
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
@@ -541,7 +539,7 @@ export class NotificationBaseDetailsComponent {
 
 @Component({
     selector: 'partner-base-details',
-    template:`
+    template: `
 <ng-container *transloco="let t">
     <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
@@ -591,9 +589,8 @@ export class NotificationBaseDetailsComponent {
     </spiderly-panel>
 </ng-container>
     `,
-    standalone: true,
     imports: [
-        CommonModule, 
+        CommonModule,
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
@@ -789,7 +786,7 @@ export class PartnerBaseDetailsComponent {
 
 @Component({
     selector: 'partner-notification-base-details',
-    template:`
+    template: `
 <ng-container *transloco="let t">
     <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
@@ -840,9 +837,8 @@ export class PartnerBaseDetailsComponent {
     </spiderly-panel>
 </ng-container>
     `,
-    standalone: true,
     imports: [
-        CommonModule, 
+        CommonModule,
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
@@ -1048,7 +1044,7 @@ export class PartnerNotificationBaseDetailsComponent {
 
 @Component({
     selector: 'partner-role-base-details',
-    template:`
+    template: `
 <ng-container *transloco="let t">
     <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
@@ -1086,9 +1082,8 @@ export class PartnerNotificationBaseDetailsComponent {
     </spiderly-panel>
 </ng-container>
     `,
-    standalone: true,
     imports: [
-        CommonModule, 
+        CommonModule,
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
@@ -1282,7 +1277,7 @@ export class PartnerRoleBaseDetailsComponent {
 
 @Component({
     selector: 'partner-user-base-details',
-    template:`
+    template: `
 <ng-container *transloco="let t">
     <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
@@ -1311,9 +1306,8 @@ export class PartnerRoleBaseDetailsComponent {
     </spiderly-panel>
 </ng-container>
     `,
-    standalone: true,
     imports: [
-        CommonModule, 
+        CommonModule,
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
@@ -1485,7 +1479,7 @@ export class PartnerUserBaseDetailsComponent {
 
 @Component({
     selector: 'segmentation-base-details',
-    template:`
+    template: `
 <ng-container *transloco="let t">
     <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
@@ -1547,9 +1541,8 @@ export class PartnerUserBaseDetailsComponent {
     </spiderly-panel>
 </ng-container>
     `,
-    standalone: true,
     imports: [
-        CommonModule, 
+        CommonModule,
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
@@ -1754,7 +1747,7 @@ export class SegmentationBaseDetailsComponent {
 
 @Component({
     selector: 'tier-base-details',
-    template:`
+    template: `
 <ng-container *transloco="let t">
     <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
@@ -1792,9 +1785,8 @@ export class SegmentationBaseDetailsComponent {
     </spiderly-panel>
 </ng-container>
     `,
-    standalone: true,
     imports: [
-        CommonModule, 
+        CommonModule,
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,
@@ -1974,7 +1966,7 @@ export class TierBaseDetailsComponent {
 
 @Component({
     selector: 'user-extended-base-details',
-    template:`
+    template: `
 <ng-container *transloco="let t">
     <spiderly-panel [isFirstMultiplePanel]="isFirstMultiplePanel" [isMiddleMultiplePanel]="isMiddleMultiplePanel" [isLastMultiplePanel]="isLastMultiplePanel" [showPanelHeader]="showPanelHeader" >
         <panel-header [title]="panelTitle" [icon]="panelIcon"></panel-header>
@@ -2012,9 +2004,8 @@ export class TierBaseDetailsComponent {
     </spiderly-panel>
 </ng-container>
     `,
-    standalone: true,
     imports: [
-        CommonModule, 
+        CommonModule,
         FormsModule,
         ReactiveFormsModule,
         PrimengModule,

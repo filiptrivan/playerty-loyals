@@ -116,7 +116,7 @@ export class AuthService extends AuthBaseService implements OnDestroy {
         const primaryDarkerColor = adjustColor(primaryColor, -20);
         
          // FT: I need to validate color on the server
-        document.documentElement.style.setProperty('--primary-color', primaryColor);
+        document.documentElement.style.setProperty('--p-primary-color', primaryColor);
         document.documentElement.style.setProperty('--primary-light-color', primaryLightColor);
         document.documentElement.style.setProperty('--primary-lighter-color', primaryLighterColor);
         document.documentElement.style.setProperty('--primary-dark-color', primaryDarkColor);
@@ -129,7 +129,7 @@ export class AuthService extends AuthBaseService implements OnDestroy {
         const primaryDarkColor = adjustColor(primaryColor, -10);
         const primaryDarkerColor = adjustColor(primaryColor, -20);
         
-        document.documentElement.style.setProperty('--primary-color', primaryColor);
+        document.documentElement.style.setProperty('--p-primary-color', primaryColor);
         document.documentElement.style.setProperty('--primary-light-color', primaryLightColor);
         document.documentElement.style.setProperty('--primary-lighter-color', primaryLighterColor);
         document.documentElement.style.setProperty('--primary-dark-color', primaryDarkColor);

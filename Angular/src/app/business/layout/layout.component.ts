@@ -13,7 +13,6 @@ import { SecurityPermissionCodes } from 'spiderly';
 @Component({
     selector: 'layout',
     templateUrl: './layout.component.html',
-    standalone: true,
     imports: [
         CommonModule,
         FormsModule,

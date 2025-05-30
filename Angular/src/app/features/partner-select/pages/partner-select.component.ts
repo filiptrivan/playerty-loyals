@@ -5,7 +5,8 @@ import { PrimengOption, SpiderlyMessageService, getHtmlImgDisplayString64, Layou
 import { forkJoin } from 'rxjs';
 
 @Component({
-  templateUrl: './partner-select.component.html',
+    templateUrl: './partner-select.component.html',
+    standalone: false
 })
 export class PartnerSelectComponent implements OnInit {
   partners: Partner[] = [];

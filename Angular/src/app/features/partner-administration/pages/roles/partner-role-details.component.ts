@@ -9,6 +9,7 @@ import { BaseFormCopy, SpiderlyFormGroup, SpiderlyMessageService, BaseFormServic
     selector: 'partner-role-details',
     templateUrl: './partner-role-details.component.html',
     styles: [],
+    standalone: false
 })
 export class PartnerRoleDetailsComponent extends BaseFormCopy implements OnInit {
     partnerRoleFormGroup = new SpiderlyFormGroup<PartnerRole>({});

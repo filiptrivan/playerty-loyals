@@ -9,16 +9,15 @@ import { PrimengModule, SpiderlyControlsModule } from 'spiderly';
 import { AuthService } from 'src/app/business/services/auth/auth.service';
 
 @Component({
-  selector: 'tiers',
-  templateUrl: './tiers.component.html',
-  standalone: true,
-  imports: [
-    CommonModule,
-    PrimengModule,
-    SpiderlyControlsModule,
-    TimelineIndexProgressbarComponent,
-    TranslocoDirective,
-  ]
+    selector: 'tiers',
+    templateUrl: './tiers.component.html',
+    imports: [
+        CommonModule,
+        PrimengModule,
+        SpiderlyControlsModule,
+        TimelineIndexProgressbarComponent,
+        TranslocoDirective,
+    ]
 })
 export class TiersComponent implements OnInit {
   currentPartnerUserSubscription: Subscription;

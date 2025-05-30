@@ -1,20 +1,13 @@
 //#region PrimeNG
 
-@import "../../node_modules/primeng/resources/primeng.min.css";
-$gutter: 1rem; // FT: For primeflex grid system, it needs to be rigth above primeflex import!
-@import "../../node_modules/primeflex/primeflex.scss";
-@import "../../node_modules/primeicons/primeicons.css";
-/* PrimeNG editor */
-@import "../../node_modules/quill/dist/quill.core.css";
-@import "../../node_modules/quill/dist/quill.snow.css";
+@use "../../node_modules/primeflex/primeflex.scss";
+@use "../../node_modules/primeicons/primeicons.css";
 
 //#endregion
 
-//#region Spider
+//#region Spiderly
 
-@import "../../../../../Spiderly/spiderly/Angular/projects/spiderly/src/lib/styles/styles.scss";
+@use "../../../../../Spiderly/spiderly/Angular/projects/spiderly/src/lib/styles/styles.scss";
 // @import "../../node_modules/spiderly/styles/styles/styles.scss";
 
 //#endregion
-
-@import "shared.scss";

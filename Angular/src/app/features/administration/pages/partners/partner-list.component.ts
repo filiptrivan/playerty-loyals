@@ -7,7 +7,8 @@ import { Partner } from 'src/app/business/entities/business-entities.generated';
 @Component({
     selector: 'partner-list',
     templateUrl: './partner-list.component.html',
-    styles: []
+    styles: [],
+    standalone: false
 })
 export class PartnerListComponent implements OnInit {
     cols: Column<Partner>[];

@@ -7,7 +7,8 @@ import { Column } from 'spiderly';
 @Component({
     selector: 'business-system-list',
     templateUrl: './business-system-list.component.html',
-    styles: []
+    styles: [],
+    standalone: false
 })
 export class BusinessSystemTableComponent implements OnInit {
     cols: Column<BusinessSystem>[];

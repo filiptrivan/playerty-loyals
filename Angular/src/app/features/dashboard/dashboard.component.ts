@@ -5,7 +5,8 @@ import { AuthService } from 'src/app/business/services/auth/auth.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  templateUrl: './dashboard.component.html',
+    templateUrl: './dashboard.component.html',
+    standalone: false
 })
 export class DashboardComponent implements OnInit {
   private partnerUserSubscription: Subscription | null = null;

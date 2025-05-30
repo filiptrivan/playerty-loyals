@@ -10,6 +10,7 @@ import { BaseFormCopy, SpiderlyFormGroup, SpiderlyFormControl, SpiderlyButton, S
     selector: 'partner-notification-details',
     templateUrl: './partner-notification-details.component.html',
     styles: [],
+    standalone: false
 })
 export class PartnerNotificationDetailsComponent extends BaseFormCopy implements OnInit {
     partnerNotificationFormGroup = new SpiderlyFormGroup<PartnerNotification>({});

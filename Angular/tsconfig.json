@@ -7,6 +7,7 @@
       "spiderly": ["../../../Spiderly/spiderly/Angular/projects/spiderly/src/public-api"]
     },
     "outDir": "./dist/out-tsc",
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": false,
     "noImplicitOverride": true,
@@ -15,7 +16,6 @@
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
-    "downlevelIteration": true,
     "importHelpers": true,
     "module": "ES2022",
     "moduleResolution": "node",

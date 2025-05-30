@@ -6,9 +6,10 @@ import { ApiService } from 'src/app/business/services/api/api.service';
 import { Column, getPrimengDropdownNamebookOptions } from 'spiderly';
 
 @Component({
-    selector: 'partner-user-list', 
+    selector: 'partner-user-list',
     templateUrl: './partner-user-list.component.html',
-    styles: []
+    styles: [],
+    standalone: false
 })
 export class PartnerUserListComponent implements OnInit {
     cols: Column<PartnerUser>[];

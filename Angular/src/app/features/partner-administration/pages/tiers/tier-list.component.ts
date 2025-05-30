@@ -15,6 +15,7 @@ import { BusinessPermissionCodes } from 'src/app/business/enums/business-enums.g
     selector: 'tier-list',
     templateUrl: './tier-list.component.html',
     styles: [],
+    standalone: false
 })
 export class TierListComponent extends BaseFormCopy implements OnInit {
     // Tier

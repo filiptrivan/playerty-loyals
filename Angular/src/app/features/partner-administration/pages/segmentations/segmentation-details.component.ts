@@ -9,6 +9,7 @@ import { BaseFormCopy, SpiderlyFormGroup, SpiderlyMessageService, BaseFormServic
     selector: 'segmentation-details',
     templateUrl: './segmentation-details.component.html',
     styles: [],
+    standalone: false
 })
 export class SegmentationDetailsComponent extends BaseFormCopy implements OnInit {
     segmentationFormGroup = new SpiderlyFormGroup<Segmentation>({});

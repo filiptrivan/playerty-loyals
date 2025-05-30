@@ -6,7 +6,8 @@ import { Column } from 'spiderly';
 @Component({
     selector: 'notification-table',
     templateUrl: './notification-table.component.html',
-    styles: []
+    styles: [],
+    standalone: false
 })
 export class NotificationTableComponent implements OnInit {
     cols: Column[];

@@ -6,7 +6,8 @@ import { Column } from 'spiderly';
 @Component({
     selector: 'user-table',
     templateUrl: './user-table.component.html',
-    styles: []
+    styles: [],
+    standalone: false
 })
 export class UserTableComponent implements OnInit {
     cols: Column[];

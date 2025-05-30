@@ -7,7 +7,6 @@ import { PrimengModule, SpiderlyControlsModule } from 'spiderly';
 @Component({
     selector: 'intermediate-step-wrapper',
     templateUrl: './intermediate-step-wrapper.component.html',
-    standalone: true,
     imports: [
         CommonModule,
         PrimengModule,

@@ -10,6 +10,7 @@ import { BaseFormCopy, SpiderlyFormGroup, SpiderlyFormControl, SpiderlyButton, S
     selector: 'notification-details',
     templateUrl: './notification-details.component.html',
     styles: [],
+    standalone: false
 })
 export class NotificationDetailsComponent extends BaseFormCopy implements OnInit {
     notificationFormGroup = new SpiderlyFormGroup<Notification>({});
@@ -35,7 +36,6 @@ export class NotificationDetailsComponent extends BaseFormCopy implements OnInit
          
     override ngOnInit() {
         this.sendEmailNotificationButton.onClick = this.sendEmailNotification;
-        this.additionalButtons.push(this.sendEmailNotificationButton);
     }
 
     isAuthorizedForSaveChange = (event: IsAuthorizedForSaveEvent) => {
@@ -46,6 +46,12 @@ export class NotificationDetailsComponent extends BaseFormCopy implements OnInit
         }
         else{
             this.isMarkedAsRead.disable();
+        }
+    }
+
+    onNotificationFormGroupInitFinish() {
+        if (this.notificationFormGroup.controls.id.value > 0) {
+            this.additionalButtons.push(this.sendEmailNotificationButton);
         }
     }
 

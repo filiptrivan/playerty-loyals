@@ -6,16 +6,15 @@ import { CommonModule } from '@angular/common';
 import { PrimengModule, SpiderlyControlsModule, Column, SpiderlyDataTableComponent } from 'spiderly';
 
 @Component({
-  selector: 'points-history',
-  templateUrl: './points-history.component.html',
-  standalone: true,
-  imports: [
-    CommonModule,
-    PrimengModule,
-    SpiderlyControlsModule,
-    SpiderlyDataTableComponent,
-    TranslocoDirective,
-  ]
+    selector: 'points-history',
+    templateUrl: './points-history.component.html',
+    imports: [
+        CommonModule,
+        PrimengModule,
+        SpiderlyControlsModule,
+        SpiderlyDataTableComponent,
+        TranslocoDirective,
+    ]
 })
 export class PointsHistoryComponent implements OnInit {
   cols: Column<Achievement>[];

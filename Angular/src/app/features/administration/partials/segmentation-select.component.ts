@@ -6,7 +6,6 @@ import { CardSkeletonComponent, SpiderlyCheckboxComponent, SpiderlyFormGroup, Sp
     selector: 'segmentation-select',
     templateUrl: './segmentation-select.component.html',
     styles: [],
-    standalone: true,
     imports: [
         CardSkeletonComponent,
         SpiderlyCheckboxComponent,

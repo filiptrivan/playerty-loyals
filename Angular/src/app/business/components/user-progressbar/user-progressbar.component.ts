@@ -7,11 +7,10 @@ import { PrimengModule } from 'spiderly';
 @Component({
     selector: 'user-progressbar',
     templateUrl: './user-progressbar.component.html',
-    standalone: true,
     imports: [
-    CommonModule,
-    PrimengModule,
-]
+        CommonModule,
+        PrimengModule,
+    ]
 })
 export class UserProgressbarComponent {
     @Input() partnerUser: PartnerUser;

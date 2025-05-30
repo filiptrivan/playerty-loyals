@@ -8,12 +8,11 @@ import { PrimengModule } from 'spiderly';
 @Component({
     selector: 'products-recommendation',
     templateUrl: './products-recommendation.component.html',
-    standalone: true,
     imports: [
-    CommonModule,
-    PrimengModule,
-    TranslocoDirective,
-]
+        CommonModule,
+        PrimengModule,
+        TranslocoDirective,
+    ]
 })
 export class ProductsRecommendationComponent {
     products: Product[] = [];

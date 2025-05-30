@@ -6,7 +6,8 @@ import { Column } from 'spiderly';
 @Component({
     selector: 'partner-notification-list',
     templateUrl: './partner-notification-list.component.html',
-    styles: []
+    styles: [],
+    standalone: false
 })
 export class PartnerNotificationListComponent implements OnInit {
     cols: Column[];
